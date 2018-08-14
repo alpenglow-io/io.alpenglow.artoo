@@ -8,9 +8,12 @@
   <version>1.0-SNAPSHOT</version>
   <modules>
     <module>oak-base</module>
+    <module>oak-desktop</module>
   </modules>
 
   <properties>
+    <oak.version>1.0-SNAPSHOT</oak.version>
+
     <java.version>11</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>

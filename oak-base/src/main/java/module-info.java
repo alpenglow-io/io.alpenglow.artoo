@@ -17,7 +17,7 @@ open module oak.base {
   exports oak.func.pre;
   exports oak.func.sup;
 
-  exports oak.sys;
+  exports oak.system;
   exports oak.type;
   exports oak.type.tuple;
 }

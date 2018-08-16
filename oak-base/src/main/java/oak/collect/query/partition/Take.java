@@ -1,8 +1,8 @@
 package oak.collect.query.partition;
 
-import io.ibex.collect.seq.Sequence;
 import oak.collect.query.Queryable;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 final class Take<S> implements Queryable<S> {
@@ -17,8 +17,8 @@ final class Take<S> implements Queryable<S> {
   @Override
   public final Iterator<S> iterator() {
     var take = 0;
-    var seq = Sequence.<S>empty();
-    for (final var it : source) if (take++ < until) seq = seq.add(it);
+    var seq = new ArrayList<S>();
+    for (final var it : source) if (take++ < until) seq.add(it);
     return seq.iterator();
   }
 }

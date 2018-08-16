@@ -1,9 +1,9 @@
 package oak.collect.query.project;
 
-import io.ibex.collect.seq.Sequence;
-import oak.func.fun.Function1;
 import oak.collect.query.Queryable;
+import oak.func.fun.Function1;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 final class SelectMany<T, R> implements Queryable<R> {
@@ -16,11 +16,10 @@ final class SelectMany<T, R> implements Queryable<R> {
   }
 
   @Override
-  @SuppressWarnings("unchecked")
   public final Iterator<R> iterator() {
-    var mapped = Sequence.<R>empty();
+    var mapped = new ArrayList<R>();
     for (final var value : some) {
-      mapped = mapped.add(map.apply(value));
+      mapped.add(map.apply(value));
     }
     return mapped.iterator();
   }

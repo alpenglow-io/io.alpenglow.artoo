@@ -8,6 +8,6 @@ final class None<T> implements Cursor<T> {
 
   @Override
   public final T next() {
-    throw new UnsupportedOperationException();
+    return null;
   }
 }

@@ -15,8 +15,8 @@ final class LookMaybe<S> implements Maybe<S> {
   }
 
   @Override
-  public final Iterator<S> iterator() {
+  public final S get() {
     if (maybe.iterator().hasNext()) peek.accept(maybe.iterator().next());
-    return maybe.iterator();
+    return maybe.iterator().next();
   }
 }

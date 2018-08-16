@@ -1,10 +1,7 @@
 package oak.collect.query.project;
 
-import oak.collect.cursor.Cursor;
-import oak.func.fun.Function1;
 import oak.collect.query.Maybe;
-
-import java.util.Iterator;
+import oak.func.fun.Function1;
 
 final class SelectMaybe<S, R> implements Maybe<R> {
   private final Maybe<S> maybe;
@@ -16,9 +13,9 @@ final class SelectMaybe<S, R> implements Maybe<R> {
   }
 
   @Override
-  public final Iterator<R> iterator() {
+  public final R get() {
     return maybe.iterator().hasNext()
-      ? Cursor.once(map.apply(maybe.iterator().next()))
-      : Cursor.none();
+      ? map.apply(maybe.iterator().next())
+      : null;
   }
 }

@@ -1,9 +1,9 @@
 package oak.collect.query.partition;
 
-import io.ibex.collect.seq.Sequence;
-import oak.func.pre.Predicate1;
 import oak.collect.query.Queryable;
+import oak.func.pre.Predicate1;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 final class SkipWhile<S> implements Queryable<S> {
@@ -17,11 +17,11 @@ final class SkipWhile<S> implements Queryable<S> {
 
   @Override
   public final Iterator<S> iterator() {
-    var s = Sequence.<S>empty();
+    var s = new ArrayList<S>();
     var keepSkipping = true;
     for (var it : some) {
       if (!expression.test(it) || !keepSkipping) {
-        s = s.add(it);
+        s.add(it);
         keepSkipping = false;
       }
     }

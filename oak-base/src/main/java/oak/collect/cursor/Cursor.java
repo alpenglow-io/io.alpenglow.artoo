@@ -4,8 +4,8 @@ import java.util.Enumeration;
 import java.util.Iterator;
 
 import static java.util.Arrays.copyOf;
-import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
+import static oak.type.Any.nonNullOrElse;
 
 public interface Cursor<E> extends Iterator<E>, Enumeration<E> {
   static <T> Cursor<T> forward(T[] values) {
@@ -23,7 +23,7 @@ public interface Cursor<E> extends Iterator<E>, Enumeration<E> {
   }
 
   static <R> Cursor<R> maybe(final R value) {
-    return isNull(value) ? Cursor.none() : Cursor.once(value);
+    return nonNullOrElse(value, Cursor::once, Cursor::none);
   }
 
   @Override

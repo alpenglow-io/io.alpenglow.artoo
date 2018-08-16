@@ -1,10 +1,5 @@
 package oak.collect.query;
 
-import oak.func.con.Consumer1;
-import oak.func.fun.Function1;
-import oak.func.fun.Function2;
-import oak.func.pre.Predicate1;
-import oak.func.sup.Supplier1;
 import oak.collect.query.aggregate.Aggregation;
 import oak.collect.query.concat.Concatenation;
 import oak.collect.query.element.Element;
@@ -13,6 +8,11 @@ import oak.collect.query.partition.Partitioning;
 import oak.collect.query.project.Projection;
 import oak.collect.query.project.Projection.IndexFunction1;
 import oak.collect.query.project.Projection.IndexManyFunction1;
+import oak.func.con.Consumer1;
+import oak.func.fun.Function1;
+import oak.func.fun.Function2;
+import oak.func.pre.Predicate1;
+import oak.func.sup.Supplier1;
 
 public interface Queryable<T> extends Functor<T, Queryable<T>> {
   @SafeVarargs
@@ -42,7 +42,8 @@ public interface Queryable<T> extends Functor<T, Queryable<T>> {
   // aggregation
   default <S> Maybe<S> aggregate(final S seed, final Function2<S, T, S> reduce) { return Aggregation.seed(this, seed, reduce); }
   default <S> Maybe<S> aggregate(final Function1<T, S> identity, final Function2<S, T, S> reduce) { return Aggregation.identity(this, identity, reduce); }
-  default Maybe<Integer> count() { return Aggregation.count(this); }
+  default Maybe<Long> count() { return Aggregation.count(this); }
+  default Maybe<Integer> countAsInt() { return count().select(Long::intValue); }
 
   // concatenation
   @SuppressWarnings("unchecked")

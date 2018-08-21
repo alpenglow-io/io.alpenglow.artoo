@@ -1,8 +1,8 @@
 package oak.collect.query.filter;
 
-import io.ibex.collect.seq.Sequence;
 import oak.collect.query.Queryable;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 final class OfType<T, C> implements Filtering<C, Queryable<C>>, Queryable<C> {
@@ -16,10 +16,10 @@ final class OfType<T, C> implements Filtering<C, Queryable<C>>, Queryable<C> {
 
   @Override
   public final Iterator<C> iterator() {
-    var typed = Sequence.<C>empty();
+    var typeds = new ArrayList<C>();
     for (final var value : some) {
-      if (type.isInstance(value)) typed = typed.add(type.cast(value));
+      if (type.isInstance(value)) typeds.add(type.cast(value));
     }
-    return typed.iterator();
+    return typeds.iterator();
   }
 }

@@ -1,10 +1,10 @@
 package oak.desktop.component;
 
-import io.martian.internal.fx.dsl.event.ControlEvent;
-import io.martian.internal.fx.dsl.property.ControlProperty;
-import io.martian.internal.fx.dsl.property.IdProperty;
 import javafx.scene.control.Control;
 import javafx.scene.control.ScrollPane;
+import oak.desktop.event.ControlEvent;
+import oak.desktop.property.ControlProperty;
+import oak.desktop.property.IdProperty;
 
 import static java.util.Objects.nonNull;
 

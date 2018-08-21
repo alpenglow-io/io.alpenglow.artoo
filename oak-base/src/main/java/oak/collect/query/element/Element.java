@@ -24,10 +24,6 @@ public interface Element<T, M extends Iterable<T>> extends Functor<T, M> {
   }
 
   static <S> Queryable<S> last(final Queryable<S> some) {
-    requireNonNull(some, "Some is null");
-    return new Last<>(
-      Aggregation.count(some),
-      it -> new At<>(some, it - 1)
-    );
+    return new Last<>(requireNonNull(some, "Some is null"));
   }
 }

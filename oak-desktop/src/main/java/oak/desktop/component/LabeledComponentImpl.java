@@ -1,8 +1,8 @@
 package oak.desktop.component;
 
-import io.martian.internal.fx.dsl.event.LabeledEvent;
-import io.martian.internal.fx.dsl.property.LabeledProperty;
 import javafx.scene.control.Labeled;
+import oak.desktop.event.LabeledEvent;
+import oak.desktop.property.LabeledProperty;
 
 import static java.util.Objects.nonNull;
 

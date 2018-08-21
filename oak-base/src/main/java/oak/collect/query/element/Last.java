@@ -1,23 +1,21 @@
 package oak.collect.query.element;
 
-import oak.collect.query.Maybe.MaybeFunction1;
+import oak.collect.cursor.Cursor;
 import oak.collect.query.Queryable;
-import oak.collect.query.aggregate.Aggregation;
 
 import java.util.Iterator;
 
 final class Last<S> implements Element<S, Queryable<S>>, Queryable<S> {
-  private final Aggregation<Integer> count;
-  private final MaybeFunction1<Integer, S> last;
+  private final Queryable<S> some;
 
-  Last(final Aggregation<Integer> count, final MaybeFunction1<Integer, S> last) {
-    this.count = count;
-    this.last = last;
+  Last(final Queryable<S> some) {
+    this.some = some;
   }
 
   @Override
   public final Iterator<S> iterator() {
-    return count.selectJust(last)
-      .iterator();
+    S last = null;
+    for (final var one : some) last = one;
+    return Cursor.maybe(last);
   }
 }

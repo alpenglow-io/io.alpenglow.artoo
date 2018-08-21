@@ -1,6 +1,6 @@
 package oak.desktop.component;
 
-import io.martian.internal.fx.dsl.property.NamedProperty;
+import oak.desktop.property.NamedProperty;
 
 import java.util.function.Supplier;
 

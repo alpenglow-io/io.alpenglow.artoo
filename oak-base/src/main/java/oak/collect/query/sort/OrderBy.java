@@ -21,17 +21,6 @@ final class OrderBy<S, K> implements Sorting<S> {
   @SuppressWarnings("unchecked")
   @Override
   public final Iterator<S> iterator() {
-
-    for (final var count : many.count()) {
-      final var values = (S[]) new Object[count];
-      var index = 0;
-      for (final var it : many) {
-        values[index] = it;
-
-
-      }
-    }
-
     return Cursor.none();
   }
 }

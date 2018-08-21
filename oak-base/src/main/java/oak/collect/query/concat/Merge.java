@@ -1,8 +1,8 @@
 package oak.collect.query.concat;
 
-import io.ibex.collect.seq.Sequence;
 import oak.collect.query.Queryable;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 final class Merge<S> implements Concatenation<S, Queryable<S>>, Queryable<S> {
@@ -16,11 +16,11 @@ final class Merge<S> implements Concatenation<S, Queryable<S>>, Queryable<S> {
 
   @Override
   public final Iterator<S> iterator() {
-    var seq = Sequence.<S>empty();
-    for (final var it : source) seq = seq.add(it);
+    var seq = new ArrayList<S>();
+    for (final var it : source) seq.add(it);
     for (final var many : seconds) {
       for (final var it : many) {
-        seq = seq.add(it);
+        seq.add(it);
       }
     }
     return seq.iterator();

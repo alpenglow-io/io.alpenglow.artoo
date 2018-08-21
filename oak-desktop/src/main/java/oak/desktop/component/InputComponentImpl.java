@@ -1,8 +1,8 @@
 package oak.desktop.component;
 
-import io.martian.internal.fx.dsl.property.InputProperty;
 import javafx.scene.Parent;
 import javafx.scene.control.TextInputControl;
+import oak.desktop.property.InputProperty;
 
 import static java.util.Objects.nonNull;
 

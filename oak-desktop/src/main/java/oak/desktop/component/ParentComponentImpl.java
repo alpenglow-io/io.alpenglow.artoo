@@ -1,8 +1,8 @@
 package oak.desktop.component;
 
-import io.martian.internal.fx.dsl.property.IdProperty;
-import io.martian.internal.fx.dsl.property.ParentProperty;
 import javafx.scene.Parent;
+import oak.desktop.property.IdProperty;
+import oak.desktop.property.ParentProperty;
 
 import java.util.function.Supplier;
 

@@ -1,7 +1,7 @@
 package oak.desktop.property;
 
-import io.martian.internal.lang.Consumer1;
 import javafx.scene.control.ToggleGroup;
+import oak.func.con.Consumer1;
 
 public interface NamedProperty extends Consumer1<ToggleGroup> {
   static NamedProperty named(String name) {

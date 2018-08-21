@@ -1,8 +1,8 @@
 package oak.desktop.component;
 
-import io.martian.internal.fx.dsl.event.ControlEvent;
-import io.martian.internal.fx.dsl.property.ControlProperty;
 import javafx.scene.control.Control;
+import oak.desktop.event.ControlEvent;
+import oak.desktop.property.ControlProperty;
 
 import static java.util.Objects.nonNull;
 

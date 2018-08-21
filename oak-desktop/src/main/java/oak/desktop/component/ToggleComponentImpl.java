@@ -1,7 +1,7 @@
 package oak.desktop.component;
 
-import io.martian.internal.fx.dsl.property.ToggleProperty;
 import javafx.scene.control.ToggleButton;
+import oak.desktop.property.ToggleProperty;
 
 import static java.util.Objects.nonNull;
 

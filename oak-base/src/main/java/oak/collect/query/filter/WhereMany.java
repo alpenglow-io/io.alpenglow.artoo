@@ -1,9 +1,9 @@
 package oak.collect.query.filter;
 
-import io.ibex.collect.seq.Sequence;
 import oak.func.pre.Predicate1;
 import oak.collect.query.Queryable;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 final class WhereMany<T> implements Filtering<T, Queryable<T>>, Queryable<T> {
@@ -18,9 +18,9 @@ final class WhereMany<T> implements Filtering<T, Queryable<T>>, Queryable<T> {
   @Override
   @SuppressWarnings("unchecked")
   public Iterator<T> iterator() {
-    var filtered = Sequence.<T>empty();
+    var filtered = new ArrayList<T>();
     for (final var value : some) {
-      if (filter.test(value)) filtered = filtered.add(value);
+      if (filter.test(value)) filtered.add(value);
     }
     return filtered.iterator();
   }

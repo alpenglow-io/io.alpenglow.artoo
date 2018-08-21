@@ -1,7 +1,7 @@
 package oak.desktop.property;
 
-import io.martian.internal.fx.dsl.component.Component;
 import javafx.scene.layout.BorderPane;
+import oak.desktop.component.Component;
 
 public interface BorderPosition {
   static BorderPosition top(Component component) {

@@ -1,7 +1,7 @@
 package oak.desktop.component;
 
-import io.martian.internal.fx.dsl.property.NamedProperty;
 import javafx.scene.control.ToggleGroup;
+import oak.desktop.property.NamedProperty;
 
 import static java.util.Objects.nonNull;
 

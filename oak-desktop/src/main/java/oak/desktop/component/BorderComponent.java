@@ -1,9 +1,9 @@
 package oak.desktop.component;
 
-import io.martian.internal.fx.dsl.property.BorderPosition;
-import io.martian.internal.fx.dsl.property.IdProperty;
-import io.martian.internal.fx.dsl.property.ParentProperty;
 import javafx.scene.layout.BorderPane;
+import oak.desktop.property.BorderPosition;
+import oak.desktop.property.IdProperty;
+import oak.desktop.property.ParentProperty;
 
 public interface BorderComponent extends Source<BorderPane> {
   static BorderComponent border(IdProperty id, ParentProperty... properties) {

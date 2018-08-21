@@ -44,6 +44,9 @@ public interface Maybe<T> extends Functor<T, Maybe<T>>, Value<T> {
   default T otherwise(Supplier1<T> another) {
     return requireNonNull(another, "Another is null").get();
   }
+  default <E extends Throwable> T otherwise(final String message, final Function1<String, E> exception) {
+    return requireNonNull(exception, "Exception is null").apply(requireNonNull(message, "Message is null"));
+  }
 
   @FunctionalInterface
   interface MaybeSupplier<T> extends Supplier1<Maybe<T>> {}

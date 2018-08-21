@@ -1,10 +1,10 @@
 package oak.desktop.component;
 
-import io.martian.internal.fx.dsl.property.IdProperty;
-import io.martian.internal.fx.dsl.property.ParentProperty;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import oak.desktop.property.IdProperty;
+import oak.desktop.property.ParentProperty;
 
 public interface PaneComponent extends Component {
   static PaneComponent vertical(IdProperty id, ParentProperty... properties) {

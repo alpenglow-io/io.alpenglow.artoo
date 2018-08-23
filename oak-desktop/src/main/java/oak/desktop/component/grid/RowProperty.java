@@ -1,7 +1,7 @@
 package oak.desktop.component.grid;
 
-import io.martian.internal.lang.Consumer1;
 import javafx.scene.layout.RowConstraints;
+import oak.func.con.Consumer1;
 
 import static javafx.geometry.VPos.BASELINE;
 import static javafx.geometry.VPos.BOTTOM;

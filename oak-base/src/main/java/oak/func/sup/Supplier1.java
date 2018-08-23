@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 @FunctionalInterface
 public interface Supplier1<T> extends Supplier<T>, Function1<Void, T>, Functional.Sup {
   @Override
-  default T apply(Void none) {
+  default T apply(final Void none) {
     return get();
   }
 }

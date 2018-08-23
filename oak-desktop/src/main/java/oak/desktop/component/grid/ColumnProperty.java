@@ -1,7 +1,7 @@
 package oak.desktop.component.grid;
 
-import io.martian.internal.lang.Consumer1;
 import javafx.scene.layout.ColumnConstraints;
+import oak.func.con.Consumer1;
 
 import static javafx.geometry.HPos.CENTER;
 import static javafx.geometry.HPos.LEFT;

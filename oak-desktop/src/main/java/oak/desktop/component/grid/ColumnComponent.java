@@ -1,9 +1,9 @@
 package oak.desktop.component.grid;
 
-import io.martian.internal.fx.dsl.component.Component;
-import io.martian.internal.lang.Consumer3;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import oak.desktop.component.Component;
+import oak.func.con.Consumer3;
 
 import java.util.function.Supplier;
 

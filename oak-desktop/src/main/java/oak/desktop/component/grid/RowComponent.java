@@ -1,8 +1,8 @@
 package oak.desktop.component.grid;
 
-import io.martian.internal.lang.Consumer2;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import oak.func.con.Consumer2;
 
 import static javafx.scene.layout.ConstraintsBase.CONSTRAIN_TO_PREF;
 

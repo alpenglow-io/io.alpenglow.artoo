@@ -20,7 +20,7 @@ final class ToggleComponentImpl<T extends ToggleButton> implements ToggleCompone
   }
 
   @Override
-  public T origin() {
+  public final T origin() {
     final T origin = toggle.origin();
     if (nonNull(properties)) for (ToggleProperty property : properties) property.onToggle(origin);
     return origin;

@@ -16,7 +16,7 @@ public interface Element<T, M extends Iterable<T>> extends Functor<T, M> {
   }
 
   static <S> Queryable<S> first(final Queryable<S> some) {
-    return new First<>(new At<>(requireNonNull(some, "Some is null"), 0));
+    return new First<>(requireNonNull(some, "Some is null"));
   }
 
   static <S> Maybe<S> single(final Queryable<S> some) {

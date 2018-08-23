@@ -1,5 +1,7 @@
 package oak.collect.cursor;
 
+import oak.type.Value;
+
 import java.util.Enumeration;
 import java.util.Iterator;
 
@@ -24,6 +26,10 @@ public interface Cursor<E> extends Iterator<E>, Enumeration<E> {
 
   static <R> Cursor<R> maybe(final R value) {
     return nonNullOrElse(value, Cursor::once, Cursor::none);
+  }
+
+  static <T> Cursor<T> maybe(final Iterable<T> iterable) {
+    return maybe(requireNonNull(iterable, "Iterable is null").iterator().next());
   }
 
   @Override

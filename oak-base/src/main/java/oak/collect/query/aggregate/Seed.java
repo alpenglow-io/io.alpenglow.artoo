@@ -1,10 +1,7 @@
 package oak.collect.query.aggregate;
 
-import oak.collect.cursor.Cursor;
-import oak.func.fun.Function2;
 import oak.collect.query.Queryable;
-
-import java.util.Iterator;
+import oak.func.fun.Function2;
 
 final class Seed<S, R> implements Aggregation<R> {
   private final Queryable<S> some;
@@ -18,11 +15,11 @@ final class Seed<S, R> implements Aggregation<R> {
   }
 
   @Override
-  public final Iterator<R> iterator() {
+  public final R get() {
     var reduced = seed;
     for (final var value : some) {
       reduced = reduce.apply(reduced, value);
     }
-    return Cursor.maybe(reduced);
+    return reduced;
   }
 }

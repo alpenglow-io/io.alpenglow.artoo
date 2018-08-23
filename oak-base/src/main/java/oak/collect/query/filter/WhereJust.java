@@ -1,10 +1,7 @@
 package oak.collect.query.filter;
 
-import oak.collect.cursor.Cursor;
-import oak.func.pre.Predicate1;
 import oak.collect.query.Maybe;
-
-import java.util.Iterator;
+import oak.func.pre.Predicate1;
 
 final class WhereJust<S> implements Filtering<S, Maybe<S>>, Maybe<S> {
   private final Maybe<S> maybe;
@@ -16,7 +13,7 @@ final class WhereJust<S> implements Filtering<S, Maybe<S>>, Maybe<S> {
   }
 
   @Override
-  public final Iterator<S> iterator() {
-    return Cursor.maybe(maybe.iterator().next());
+  public final S get() {
+    return maybe.get();
   }
 }

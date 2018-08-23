@@ -1,11 +1,8 @@
 package oak.collect.query.aggregate;
 
-import oak.collect.cursor.Cursor;
+import oak.collect.query.Queryable;
 import oak.func.fun.Function1;
 import oak.func.fun.Function2;
-import oak.collect.query.Queryable;
-
-import java.util.Iterator;
 
 final class Identity<S, R> implements Aggregation<R> {
   private final Queryable<S> some;
@@ -19,7 +16,7 @@ final class Identity<S, R> implements Aggregation<R> {
   }
 
   @Override
-  public final Iterator<R> iterator() {
+  public final R get() {
     var initial = true;
     R reduced = null;
     for (final var value : some) {
@@ -30,6 +27,6 @@ final class Identity<S, R> implements Aggregation<R> {
         reduced = reduce.apply(reduced, value);
       }
     }
-    return Cursor.maybe(reduced);
+    return reduced;
   }
 }

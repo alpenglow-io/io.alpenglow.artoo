@@ -1,10 +1,10 @@
 package oak.desktop.event;
 
-import io.martian.internal.fx.dsl.property.LabeledProperty;
-import io.martian.internal.lang.Consumer2;
-import io.martian.internal.lang.Function1;
 import javafx.scene.control.Labeled;
 import javafx.scene.input.MouseEvent;
+import oak.desktop.property.LabeledProperty;
+import oak.func.con.Consumer2;
+import oak.func.fun.Function1;
 
 @FunctionalInterface
 public interface LabeledEvent {

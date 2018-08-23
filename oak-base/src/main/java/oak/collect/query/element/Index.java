@@ -20,8 +20,4 @@ final class Index implements AsLong {
       .where(it -> it >= 0)
       .select(Index::new);
   }
-
-  static Index index(final long value) {
-    return of(value).otherwise()
-  }
 }

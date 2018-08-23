@@ -1,9 +1,9 @@
 package oak.desktop.component.grid;
 
-import io.martian.internal.fx.dsl.property.IdProperty;
-import io.martian.internal.fx.dsl.property.ParentProperty;
 import javafx.scene.Parent;
 import javafx.scene.layout.GridPane;
+import oak.desktop.property.IdProperty;
+import oak.desktop.property.ParentProperty;
 
 import static java.util.Objects.nonNull;
 

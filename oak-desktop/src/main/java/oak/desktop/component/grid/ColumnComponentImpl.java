@@ -1,8 +1,8 @@
 package oak.desktop.component.grid;
 
-import io.martian.internal.fx.dsl.component.Component;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import oak.desktop.component.Component;
 
 import static java.util.Objects.nonNull;
 

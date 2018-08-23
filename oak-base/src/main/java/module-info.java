@@ -1,4 +1,6 @@
 open module oak.base {
+  requires org.apache.commons.lang3;
+
   exports oak.collect.cursor;
   exports oak.collect.query;
   exports oak.collect.query.aggregate;

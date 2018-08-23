@@ -10,4 +10,9 @@ class FirstTest {
   void shouldRetrieveFirstElement() {
     assertThat(Q(1, 2, 3).first()).contains(1);
   }
+
+  @Test
+  void shouldRetrieveNone() {
+    assertThat(Q().first()).isEmpty();
+  }
 }

@@ -1,32 +1,27 @@
 package oak.collect.cursor;
 
-import static java.lang.ThreadLocal.withInitial;
 import static java.util.Objects.nonNull;
+import static oak.collect.cursor.LocalIndex.zero;
 
 final class Forward<E> implements Cursor<E> {
   private final E[] es;
-  private final ThreadLocal<Integer> index;
+  private final LocalIndex index;
 
   Forward(E[] es) {
-    this(es, -1);
+    this(es, zero());
   }
-  private Forward(E[] es, int index) {
+  private Forward(E[] es, LocalIndex index) {
     this.es = es;
-    this.index = withInitial(() -> index);
+    this.index = index;
   }
 
   @Override
   public final boolean hasNext() {
-    return nonNull(es) && es.length > 0 && current() < es.length;
+    return nonNull(es) && es.length > 0 && index.get() + 1 < es.length;
   }
 
   @Override
   public final E next() {
-    index.set(current());
-    return es[index.get()];
-  }
-
-  private int current() {
-    return index.get() + 1;
+    return es.length > 0 ? es[index.inc()] : null;
   }
 }

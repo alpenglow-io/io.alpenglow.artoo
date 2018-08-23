@@ -1,7 +1,5 @@
 package oak.collect.cursor;
 
-import oak.type.Value;
-
 import java.util.Enumeration;
 import java.util.Iterator;
 

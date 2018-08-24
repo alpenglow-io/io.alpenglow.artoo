@@ -16,7 +16,7 @@ import oak.func.sup.Supplier1;
 
 public interface Queryable<T> extends Functor<T, Queryable<T>> {
   @SafeVarargs
-  static <S> Queryable<S> Q(final S... values) {
+  static <S> Queryable<S> asQueryable(final S... values) {
     return new Many<>(values);
   }
   

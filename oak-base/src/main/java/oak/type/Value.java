@@ -8,6 +8,6 @@ import java.util.Iterator;
 public interface Value<T> extends Iterable<T>, Supplier1<T> {
   @Override
   default Iterator<T> iterator() {
-    return Cursor.maybe(this);
+    return Cursor.maybe(this.get());
   }
 }

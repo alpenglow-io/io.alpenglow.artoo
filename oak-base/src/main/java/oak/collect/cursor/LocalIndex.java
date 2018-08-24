@@ -10,13 +10,14 @@ public final class LocalIndex implements AsInt {
     this.value = value;
   }
 
-  public final int inc() {
+  public final int incThenGet() {
     this.value.set(this.value.get() + 1);
     return this.value.get();
   }
-  public final int incBy(final int value) {
-    this.value.set(this.value.get() + value);
-    return this.value.get();
+  public final int getThenInc() {
+    final var current = this.value.get();
+    this.incThenGet();
+    return current;
   }
 
   @Override

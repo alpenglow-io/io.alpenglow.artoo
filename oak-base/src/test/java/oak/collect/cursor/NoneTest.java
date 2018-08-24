@@ -6,7 +6,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class NoneTest {
   @Test
-  void shouldBeEmpty() {
-    assertThat(new None<Integer>()).isEmpty();
+  void shouldNotHaveNext() {
+    assertThat(new None<Integer>().hasNext()).isFalse();
+  }
+
+  @Test
+  void shouldNotRetrieveNext() {
+    assertThat(new None<String>().next()).isNull();
   }
 }

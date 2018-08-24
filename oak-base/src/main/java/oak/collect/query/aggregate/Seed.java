@@ -17,9 +17,12 @@ final class Seed<S, R> implements Aggregation<R> {
   @Override
   public final R get() {
     var reduced = seed;
-    for (final var value : some) {
-      reduced = reduce.apply(reduced, value);
-    }
+    for (final var value : some) reduced = reduce.apply(reduced, value);
     return reduced;
+  }
+
+  @Override
+  public String toString() {
+    return String.format("Seed{some=%s, seed=%s, reduce=%s}", some, seed, reduce);
   }
 }

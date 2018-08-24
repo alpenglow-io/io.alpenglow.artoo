@@ -17,11 +17,11 @@ final class Forward<E> implements Cursor<E> {
 
   @Override
   public final boolean hasNext() {
-    return nonNull(es) && es.length > 0 && index.get() + 1 < es.length;
+    return nonNull(es) && es.length > 0 && index.get() < es.length;
   }
 
   @Override
   public final E next() {
-    return es.length > 0 ? es[index.inc()] : null;
+    return es.length > 0 ? es[index.getThenInc()] : null;
   }
 }

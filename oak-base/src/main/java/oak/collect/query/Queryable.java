@@ -19,7 +19,10 @@ public interface Queryable<T> extends Functor<T, Queryable<T>> {
   static <S> Queryable<S> asQueryable(final S... values) {
     return new Many<>(values);
   }
-  
+
+  @SafeVarargs
+  static <S> Queryable<S> from(final S... values) { return new Many<>(values); }
+
   static <S> Queryable<S> empty() { return new Empty<>(); }
 
   // projection

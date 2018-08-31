@@ -9,15 +9,11 @@ import static java.util.Objects.requireNonNull;
 
 public interface Aggregation<T> extends Maybe<T> {
   static <S, R> Aggregation<R> seed(final Queryable<S> some, final R seed, final Function2<R, S, R> reduce) {
-    return new Seed<>(
-      requireNonNull(some, "Some is null"),
-      requireNonNull(seed, "Seed is null"),
-      requireNonNull(reduce, "Reduce is null")
-    );
+    return identity(some, it -> seed, reduce);
   }
 
   static <S, R> Aggregation<R> identity(final Queryable<S> some, final Function1<S, R> identity, final Function2<R, S, R> reduce) {
-    return new Identity<>(
+    return new Aggregate<>(
       requireNonNull(some, "Sequence is null"),
       requireNonNull(identity, "Identity is null"),
       requireNonNull(reduce, "Reduce is null")

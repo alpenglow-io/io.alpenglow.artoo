@@ -43,8 +43,11 @@ public interface Queryable<T> extends Functor<T, Queryable<T>> {
   default Maybe<T> single() { return Element.single(this); }
 
   // aggregation
+  default Maybe<T> aggregate(final Function2<T, T, T> reduce) { return Aggregation.accumulate(this, reduce); }
   default <S> Maybe<S> aggregate(final S seed, final Function2<S, T, S> reduce) { return Aggregation.seed(this, seed, reduce); }
-  default <S> Maybe<S> aggregate(final Function1<T, S> identity, final Function2<S, T, S> reduce) { return Aggregation.identity(this, identity, reduce); }
+  default <S> Maybe<S> aggregate(final S seed, final Predicate1<T> expression, Function2<S, T, S> reduce) {
+    return Aggregation.expression(this, seed, expression, reduce);
+  }
   default Maybe<Long> count() { return Aggregation.count(this); }
   default Maybe<Integer> countAsInt() { return count().select(Long::intValue); }
 

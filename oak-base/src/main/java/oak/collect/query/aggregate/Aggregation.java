@@ -1,21 +1,33 @@
 package oak.collect.query.aggregate;
 
-import oak.func.fun.Function1;
-import oak.func.fun.Function2;
 import oak.collect.query.Maybe;
 import oak.collect.query.Queryable;
+import oak.func.fun.Function2;
+import oak.func.pre.Predicate1;
 
 import static java.util.Objects.requireNonNull;
 
 public interface Aggregation<T> extends Maybe<T> {
-  static <S, R> Aggregation<R> seed(final Queryable<S> some, final R seed, final Function2<R, S, R> reduce) {
-    return identity(some, it -> seed, reduce);
+  static <S> Aggregation<S> accumulate(final Queryable<S> queryable, final Function2<S, S, S> reduce) {
+    return new Accumulate<>(
+      requireNonNull(queryable, "Queryable is null"),
+      requireNonNull(reduce, "Reduce is null")
+    );
   }
 
-  static <S, R> Aggregation<R> identity(final Queryable<S> some, final Function1<S, R> identity, final Function2<R, S, R> reduce) {
-    return new Aggregate<>(
-      requireNonNull(some, "Sequence is null"),
-      requireNonNull(identity, "Identity is null"),
+  static <S, R> Aggregation<R> seed(final Queryable<S> queryable, final R seed, final Function2<R, S, R> reduce) {
+    return new Seed<>(
+      requireNonNull(queryable, "Queryable is null"),
+      requireNonNull(seed, "Seed is null"),
+      requireNonNull(reduce, "Reduce is null")
+    );
+  }
+
+  static <S, R> Aggregation<R> expression(final Queryable<S> queryable, final R seed, final Predicate1<S> expression, final Function2<R, S, R> reduce) {
+    return new Expression<>(
+      requireNonNull(queryable, "Queryable is null"),
+      requireNonNull(seed, "Seed is null"),
+      requireNonNull(expression, "Expression is null"),
       requireNonNull(reduce, "Reduce is null")
     );
   }

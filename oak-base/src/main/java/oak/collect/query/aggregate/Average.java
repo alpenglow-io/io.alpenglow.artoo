@@ -14,8 +14,8 @@ final class Average<T> implements Maybe<T> {
 
   @Override
   public final T get() {
-    var size = 0;
-    int hashCode = 0;
+    long size = 0;
+    long hashCode = 0;
     for (final var it : some) {
       hashCode += Objects.hashCode(it);
       size++;

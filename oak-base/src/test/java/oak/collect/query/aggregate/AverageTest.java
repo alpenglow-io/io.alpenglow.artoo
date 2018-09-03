@@ -1,6 +1,5 @@
 package oak.collect.query.aggregate;
 
-import oak.collect.query.Queryable;
 import org.junit.jupiter.api.Test;
 
 import static oak.collect.query.Queryable.from;
@@ -23,16 +22,31 @@ class AverageTest {
   }
 
   @Test
-  void shouldFoundId2() {
-    final Queryable<Any> anys = from(
-      any(1, "A"),
-      any(2, "B"),
-      any(3, "C"),
-      any(4, "D")
+  void shouldBe2_0() {
+    final var average = new Average<>(
+      from(
+        any(1, 1.0),
+        any(2, 2.0),
+        any(3, 3.0),
+        any(4, 4.0)
+      )
     );
-    final var average = new Average<>(anys);
 
-    System.out.println(average);
-    assertThat(average).containsExactly(any(3, "C"));
+    for (final var value : average) System.out.println(value);
+    assertThat(average).containsExactly(any(2, 2.0));
+  }
+
+  @Test
+  void shouldBeB() {
+    final var average = new Average<>(
+      from(
+        any(1, "A"),
+        any(2, "B"),
+        any(3, "C"),
+        any(4, "D")
+      )
+    );
+
+    assertThat(average).containsExactly(any(2, "B"));
   }
 }

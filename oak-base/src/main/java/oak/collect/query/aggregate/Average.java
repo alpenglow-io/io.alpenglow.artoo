@@ -22,7 +22,7 @@ final class Average<T> implements Maybe<T> {
     }
     hashCode /= size;
     T found = null;
-    for (final var it : some) found = it.hashCode() == hashCode ? it : found;
+    for (final var it : some) found = it.hashCode() <= hashCode ? it : found;
     return found;
   }
 }

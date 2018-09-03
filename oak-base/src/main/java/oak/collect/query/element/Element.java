@@ -3,7 +3,6 @@ package oak.collect.query.element;
 import oak.collect.query.Functor;
 import oak.collect.query.Maybe;
 import oak.collect.query.Queryable;
-import oak.collect.query.aggregate.Aggregation;
 
 import static java.util.Objects.requireNonNull;
 

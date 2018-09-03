@@ -16,7 +16,7 @@ public final class LocalIndex implements AsInt {
   }
   public final int getThenInc() {
     final var current = this.value.get();
-    this.incThenGet();
+    this.value.set(this.value.get() + 1);
     return current;
   }
 

@@ -11,7 +11,7 @@
 
   <properties>
     <controlsfx.version>9.0.0</controlsfx.version>
-    <javafx.version>11-ea+19</javafx.version>
+    <javafx.version>11-ea+25</javafx.version>
   </properties>
 
   <dependencies>

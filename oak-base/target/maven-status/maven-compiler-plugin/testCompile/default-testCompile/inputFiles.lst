@@ -1,9 +1,0 @@
-/home/lug/prjs/trydent/oak/oak-base/src/test/java/oak/collect/cursor/LocalIndexTest.java
-/home/lug/prjs/trydent/oak/oak-base/src/test/java/oak/collect/query/aggregate/ExpressionTest.java
-/home/lug/prjs/trydent/oak/oak-base/src/test/java/oak/collect/cursor/NoneTest.java
-/home/lug/prjs/trydent/oak/oak-base/src/test/java/oak/collect/query/aggregate/AccumulateTest.java
-/home/lug/prjs/trydent/oak/oak-base/src/test/java/oak/collect/query/aggregate/SeedTest.java
-/home/lug/prjs/trydent/oak/oak-base/src/test/java/oak/collect/cursor/ForwardTest.java
-/home/lug/prjs/trydent/oak/oak-base/src/test/java/oak/collect/query/aggregate/Any.java
-/home/lug/prjs/trydent/oak/oak-base/src/test/java/oak/collect/query/element/FirstTest.java
-/home/lug/prjs/trydent/oak/oak-base/src/test/java/oak/collect/query/aggregate/AverageTest.java

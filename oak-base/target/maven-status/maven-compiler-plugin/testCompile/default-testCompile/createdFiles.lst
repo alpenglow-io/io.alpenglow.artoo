@@ -1,9 +1,0 @@
-oak/collect/cursor/LocalIndexTest.class
-oak/collect/query/aggregate/AverageTest.class
-oak/collect/query/aggregate/Any.class
-oak/collect/query/aggregate/SeedTest.class
-oak/collect/cursor/ForwardTest.class
-oak/collect/query/element/FirstTest.class
-oak/collect/query/aggregate/AccumulateTest.class
-oak/collect/query/aggregate/ExpressionTest.class
-oak/collect/cursor/NoneTest.class

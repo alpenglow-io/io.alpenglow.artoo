@@ -1,0 +1,4 @@
+--patch-module
+oak.base=_
+--add-reads
+oak.base=ALL-UNNAMED

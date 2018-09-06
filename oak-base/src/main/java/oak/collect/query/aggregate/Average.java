@@ -2,8 +2,7 @@ package oak.collect.query.aggregate;
 
 import oak.collect.query.Maybe;
 import oak.collect.query.Queryable;
-
-import java.util.Objects;
+import oak.collect.query.aggregate.mean.Mean;
 
 final class Average<T> implements Maybe<T> {
   private final Queryable<T> some;
@@ -14,15 +13,6 @@ final class Average<T> implements Maybe<T> {
 
   @Override
   public final T get() {
-    long size = 0;
-    long hashCode = 0;
-    for (final var it : some) {
-      hashCode += Objects.hashCode(it);
-      size++;
-    }
-    hashCode /= size;
-    T found = null;
-    for (final var it : some) found = it.hashCode() <= hashCode ? it : found;
-    return found;
+    return ClosestMean.of(some, Mean.withHashCode(some)).get();
   }
 }

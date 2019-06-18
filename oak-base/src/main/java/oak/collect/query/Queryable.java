@@ -26,7 +26,9 @@ public interface Queryable<T> extends Functor<T, Queryable<T>> {
   static <S> Queryable<S> empty() { return new Empty<>(); }
 
   // projection
-  default <S> Queryable<S> select(final Function1<T, S> map) { return Projection.select(this, map); }
+  default <S> Queryable<S> select(final Function1<T, S> map) {
+    return Projection.select(this, map);
+  }
   default <S> Queryable<S> select(final IndexFunction1<T, S> indexMap) { return Projection.selectIndex(this, indexMap); }
   default <S> Queryable<S> selectMany(final ManyFunction<T, S> flatMap) { return Projection.selectMany(this, flatMap); }
   default <S> Queryable<S> selectMany(final IndexManyFunction1<T, S> flatMap) { return Projection.selectMany(this, flatMap); }
@@ -49,7 +51,7 @@ public interface Queryable<T> extends Functor<T, Queryable<T>> {
     return Aggregation.expression(this, seed, expression, reduce);
   }
   default Maybe<Long> count() { return Aggregation.count(this); }
-  default Maybe<Integer> countAsInt() { return count().select(Long::intValue); }
+  default Maybe<Integer> countAsInteger() { return count().select(Long::intValue); }
 
   // concatenation
   @SuppressWarnings("unchecked")

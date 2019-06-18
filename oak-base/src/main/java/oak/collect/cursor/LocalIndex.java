@@ -3,6 +3,8 @@ package oak.collect.cursor;
 import oak.collect.query.Maybe;
 import oak.func.sup.AsInt;
 
+import static java.lang.ThreadLocal.withInitial;
+
 public final class LocalIndex implements AsInt {
   private final ThreadLocal<Integer> value;
 
@@ -28,13 +30,12 @@ public final class LocalIndex implements AsInt {
   public static Maybe<LocalIndex> of(final int value) {
     return Maybe.of(value)
       .where(it -> it >= 0)
-      .select(it -> ThreadLocal.withInitial(() -> it))
-      .select(LocalIndex::new);
+      .select(it -> new LocalIndex(withInitial(() -> it)));
   }
 
   public static LocalIndex localIndex(final int value) {
     return of(value).otherwise("Index has a negative value", IllegalArgumentException::new);
   }
 
-  public static LocalIndex zero() { return new LocalIndex(ThreadLocal.withInitial(() -> 0)); }
+  public static LocalIndex zero() { return new LocalIndex(withInitial(() -> 0)); }
 }

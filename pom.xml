@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>oak</groupId>
-  <artifactId>oak-parent</artifactId>
+  <artifactId>oak</artifactId>
   <packaging>pom</packaging>
   <version>1.0-SNAPSHOT</version>
   <modules>
@@ -11,25 +11,27 @@
     <module>oak-desktop</module>
   </modules>
 
+  <name>oak</name>
+
   <properties>
     <oak.version>1.0-SNAPSHOT</oak.version>
 
     <java.version>11</java.version>
+    <maven.version>3.6.1</maven.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <encoding>UTF-8</encoding>
 
-    <asm.version>6.2.1</asm.version>
     <assertj.version>3.11.1</assertj.version>
-    <cglib.version>3.2.7</cglib.version>
     <compiler.plugin.version>3.7.0</compiler.plugin.version>
-    <junit.version>5.3.0</junit.version>
-    <junit.platform.version>1.3.0</junit.platform.version>
+    <junit.version>5.4.0-M1</junit.version>
+    <junit.platform.version>1.3.2</junit.platform.version>
     <log4j.version>2.11.1</log4j.version>
     <mockito.version>2.21.0</mockito.version>
     <slf4j.version>1.8.0-beta2</slf4j.version>
     <surefire.plugin.version>2.21.0</surefire.plugin.version>
-    <toolchains.plugin.version>1.1</toolchains.plugin.version>
+    <enforcer.plugin.version>3.0.0-M2</enforcer.plugin.version>
+    <asm.version>7.1</asm.version>
   </properties>
 
   <dependencies>
@@ -82,40 +84,45 @@
       <plugins>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-toolchains-plugin</artifactId>
-          <version>${toolchains.plugin.version}</version>
+          <artifactId>maven-enforcer-plugin</artifactId>
+          <version>${enforcer.plugin.version}</version>
           <executions>
             <execution>
+              <id>enforce-maven</id>
               <goals>
-                <goal>toolchain</goal>
+                <goal>enforce</goal>
               </goals>
+              <configuration>
+                <rules>
+                  <requireMavenVersion>
+                    <version>${maven.version}</version>
+                  </requireMavenVersion>
+                </rules>
+              </configuration>
             </execution>
           </executions>
-          <configuration>
-            <toolchains>
-              <jdk>
-                <version>${java.version}</version>
-              </jdk>
-            </toolchains>
-          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>${compiler.plugin.version}</version>
-          <configuration>
-            <source>${java.version}</source>
-            <target>${java.version}</target>
-            <release>${java.version}</release>
-            <showWarnings>true</showWarnings>
-            <showDeprecation>true</showDeprecation>
-          </configuration>
+          <executions>
+            <execution>
+              <id>compile</id>
+              <phase>compile</phase>
+              <goals>
+                <goal>compile</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>testCompile</id>
+              <phase>test-compile</phase>
+              <goals>
+                <goal>testCompile</goal>
+              </goals>
+            </execution>
+          </executions>
           <dependencies>
-            <dependency>
-              <groupId>cglib</groupId>
-              <artifactId>cglib</artifactId>
-              <version>${cglib.version}</version>
-            </dependency>
             <dependency>
               <groupId>org.ow2.asm</groupId>
               <artifactId>asm</artifactId>
@@ -143,19 +150,15 @@
               <version>${junit.platform.version}</version>
             </dependency>
             <dependency>
-              <groupId>org.ow2.asm</groupId>
-              <artifactId>asm</artifactId>
-              <version>${asm.version}</version>
+              <groupId>cglib</groupId>
+              <artifactId>cglib</artifactId>
+              <version>3.2.10</version>
             </dependency>
           </dependencies>
         </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-toolchains-plugin</artifactId>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>

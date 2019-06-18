@@ -8,8 +8,6 @@ import oak.collect.query.filter.Filtering;
 import oak.collect.query.project.Projection;
 import oak.type.Value;
 
-import java.util.Optional;
-
 import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 
@@ -40,19 +38,19 @@ public interface Maybe<T> extends Functor<T, Maybe<T>>, Value<T> {
   default Maybe<T> or(Supplier1<T> or) {
     return Maybe.of(requireNonNull(or, "Or is null").get());
   }
-  default Maybe<T> or(MaybeSupplier<T> or) {
+  default Maybe<T> or(MaybeSupplier1<T> or) {
     return requireNonNull(or, "Or is null").get();
   }
   default T otherwise(Supplier1<T> another) {
     return requireNonNull(another, "Another is null").get();
   }
   default <E extends Throwable> T otherwise(final String message, final Function1<String, E> exception) throws E {
-    for (final var value : this) return value;
+    for (T value : this) return value;
     throw requireNonNull(exception, "Exception is null").apply(requireNonNull(message, "Message is null"));
   }
 
   @FunctionalInterface
-  interface MaybeSupplier<T> extends Supplier1<Maybe<T>> {}
+  interface MaybeSupplier1<T> extends Supplier1<Maybe<T>> {}
 
   @FunctionalInterface
   interface MaybeFunction1<T, R> extends Function1<T, Maybe<R>> {}

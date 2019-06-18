@@ -12,12 +12,12 @@ import static javafx.scene.layout.Priority.SOMETIMES;
 
 @FunctionalInterface
 public interface ColumnProperty extends Consumer1<ColumnConstraints> {
-  static ColumnProperty width(Percent value) {
-    return it -> it.setPercentWidth(value.get());
+  static ColumnProperty width(Percent percent) {
+    return it -> it.setPercentWidth(percent.get());
   }
 
-  static ColumnProperty width(Pixel value) {
-    return it -> it.setPrefWidth(value.get());
+  static ColumnProperty width(Pixel pixel) {
+    return it -> it.setPrefWidth(pixel.get());
   }
 
   static ColumnProperty alignLeft() {

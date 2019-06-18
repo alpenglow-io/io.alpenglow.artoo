@@ -2,8 +2,6 @@ package oak.type;
 
 import oak.func.sup.Supplier1;
 
-import java.awt.*;
-
 import static oak.type.Emptyness.None;
 
 public interface Lazy<T> extends Supplier1<T> {
@@ -13,10 +11,6 @@ public interface Lazy<T> extends Supplier1<T> {
 
   static <V> Lazy<V> lazy(final Supplier1<V> initialization) {
     return of(initialization);
-  }
-
-  class Suppk {
-    private final Lazy<Button> button = lazy(Button::new);
   }
 }
 

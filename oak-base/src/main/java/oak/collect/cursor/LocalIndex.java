@@ -1,7 +1,7 @@
 package oak.collect.cursor;
 
 import oak.collect.query.Maybe;
-import oak.func.sup.AsInt;
+import oak.type.AsInt;
 
 import static java.lang.ThreadLocal.withInitial;
 

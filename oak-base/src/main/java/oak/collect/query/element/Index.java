@@ -1,7 +1,7 @@
 package oak.collect.query.element;
 
 import oak.collect.query.Maybe;
-import oak.func.sup.AsLong;
+import oak.type.AsLong;
 
 final class Index implements AsLong {
   private final long value;

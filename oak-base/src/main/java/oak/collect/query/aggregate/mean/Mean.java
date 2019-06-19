@@ -1,6 +1,6 @@
 package oak.collect.query.aggregate.mean;
 
-import oak.func.sup.AsLong;
+import oak.type.AsLong;
 
 import static java.util.Objects.requireNonNull;
 

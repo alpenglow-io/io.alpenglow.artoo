@@ -2,11 +2,11 @@ package oak.collect.query.aggregate;
 
 import java.util.Objects;
 
-final class Any<A, B> {
+final class Dummy<A, B> {
   private final A id;
   private final B hash;
 
-  private Any(final A id, final B hash) {
+  private Dummy(final A id, final B hash) {
     this.id = id;
     this.hash = hash;
   }
@@ -15,9 +15,9 @@ final class Any<A, B> {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    Any<?, ?> any = (Any<?, ?>) o;
-    return Objects.equals(id, any.id) &&
-      Objects.equals(hash, any.hash);
+    var dummy = (Dummy<?, ?>) o;
+    return Objects.equals(id, dummy.id) &&
+      Objects.equals(hash, dummy.hash);
   }
 
   @Override
@@ -30,7 +30,7 @@ final class Any<A, B> {
     return String.format("Any{id=%s, hash=%s}", id, hash);
   }
 
-  static <T, U> Any<T,U> any(final T id, final U hash) {
-    return new Any<>(id, hash);
+  static <T, U> Dummy<T,U> any(final T id, final U hash) {
+    return new Dummy<>(id, hash);
   }
 }

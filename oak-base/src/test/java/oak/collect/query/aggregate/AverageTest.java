@@ -3,7 +3,7 @@ package oak.collect.query.aggregate;
 import org.junit.jupiter.api.Test;
 
 import static oak.collect.query.Queryable.from;
-import static oak.collect.query.aggregate.Any.any;
+import static oak.collect.query.aggregate.Dummy.any;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class AverageTest {

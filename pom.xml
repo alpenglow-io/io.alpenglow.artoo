@@ -17,21 +17,31 @@
     <oak.version>1.0-SNAPSHOT</oak.version>
 
     <java.version>11</java.version>
-    <maven.version>3.6.1</maven.version>
+    <maven.max.version>3.6.1</maven.max.version>
+    <maven.min.version>3.3.9</maven.min.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <encoding>UTF-8</encoding>
 
-    <assertj.version>3.11.1</assertj.version>
-    <compiler.plugin.version>3.7.0</compiler.plugin.version>
-    <junit.version>5.4.0-M1</junit.version>
-    <junit.platform.version>1.3.2</junit.platform.version>
-    <log4j.version>2.11.1</log4j.version>
-    <mockito.version>2.21.0</mockito.version>
-    <slf4j.version>1.8.0-beta2</slf4j.version>
-    <surefire.plugin.version>2.21.0</surefire.plugin.version>
-    <enforcer.plugin.version>3.0.0-M2</enforcer.plugin.version>
-    <asm.version>7.1</asm.version>
+    <assertj.version>3.13.2</assertj.version>
+    <junit.version>5.5.1</junit.version>
+    <junit.platform.version>1.5.1</junit.platform.version>
+    <log4j.version>2.12.1</log4j.version>
+    <mockito.version>3.0.0</mockito.version>
+    <slf4j.version>2.0.0-alpha0</slf4j.version>
+
+    <asm.version>7.2-beta</asm.version>
+
+    <plugin-clean.version>3.1.0</plugin-clean.version>
+    <plugin-compiler.version>3.8.0</plugin-compiler.version>
+    <plugin-deploy.version>3.0.0-M1</plugin-deploy.version>
+    <plugin-enforcer.version>3.0.0-M2</plugin-enforcer.version>
+    <plugin-install.version>3.0.0-M1</plugin-install.version>
+    <plugin-jar.version>3.1.2</plugin-jar.version>
+    <plugin-resources.version>3.1.0</plugin-resources.version>
+    <plugin-site.version>3.8.2</plugin-site.version>
+    <plugin-surefire.version>3.0.0-M3</plugin-surefire.version>
+    <plugin-versions.version>2.7</plugin-versions.version>
   </properties>
 
   <dependencies>
@@ -85,7 +95,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-enforcer-plugin</artifactId>
-          <version>${enforcer.plugin.version}</version>
+          <version>${plugin-enforcer.version}</version>
           <executions>
             <execution>
               <id>enforce-maven</id>
@@ -95,7 +105,7 @@
               <configuration>
                 <rules>
                   <requireMavenVersion>
-                    <version>${maven.version}</version>
+                    <version>${maven.max.version}</version>
                   </requireMavenVersion>
                 </rules>
               </configuration>
@@ -104,8 +114,13 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>${plugin-clean.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>${compiler.plugin.version}</version>
+          <version>${plugin-compiler.version}</version>
           <executions>
             <execution>
               <id>compile</id>
@@ -126,14 +141,14 @@
             <dependency>
               <groupId>org.ow2.asm</groupId>
               <artifactId>asm</artifactId>
-              <version>${asm.version}</version>
+              <version>7.2-beta</version>
             </dependency>
           </dependencies>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>${surefire.plugin.version}</version>
+          <version>${plugin-surefire.version}</version>
           <goals>
             <goal>test</goal>
           </goals>
@@ -143,22 +158,54 @@
               <include>*Test</include>
             </includes>
           </configuration>
-          <dependencies>
-            <dependency>
-              <groupId>org.junit.platform</groupId>
-              <artifactId>junit-platform-surefire-provider</artifactId>
-              <version>${junit.platform.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>cglib</groupId>
-              <artifactId>cglib</artifactId>
-              <version>3.2.10</version>
-            </dependency>
-          </dependencies>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>${plugin-deploy.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>${plugin-install.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>${plugin-jar.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>${plugin-resources.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>${plugin-site.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>versions-maven-plugin</artifactId>
+          <version>${plugin-versions.version}</version>
+          <executions>
+            <execution>
+              <id>versions</id>
+              <phase>test</phase>
+              <goals>
+                <goal>display-dependency-updates</goal>
+                <goal>display-plugin-updates</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -166,6 +213,10 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>versions-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </build>

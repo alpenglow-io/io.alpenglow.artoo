@@ -10,8 +10,10 @@
   <artifactId>oak-desktop</artifactId>
 
   <properties>
-    <controlsfx.version>9.0.0</controlsfx.version>
-    <javafx.version>11-ea+25</javafx.version>
+    <java.version>12</java.version>
+
+    <controlsfx.version>11.0.0</controlsfx.version>
+    <javafx.version>12.0.2</javafx.version>
   </properties>
 
   <dependencies>

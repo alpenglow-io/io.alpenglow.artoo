@@ -3,12 +3,14 @@ package oak.collect.query.aggregate;
 import oak.collect.query.Queryable;
 import oak.func.fun.Function1;
 import oak.func.fun.Function2;
+import org.jetbrains.annotations.Contract;
 
 final class Aggregate<S, R> implements Aggregation<R> {
   private final Queryable<S> some;
   private final Function1<S, R> identity;
   private final Function2<R, S, R> reduce;
 
+  @Contract(pure = true)
   Aggregate(final Queryable<S> some, final Function1<S, R> identity, final Function2<R, S, R> reduce) {
     this.some = some;
     this.identity = identity;

@@ -2,12 +2,13 @@ package oak.collect.query.element;
 
 import oak.collect.query.Maybe;
 import oak.collect.query.Queryable;
+import org.jetbrains.annotations.Contract;
 
 final class At<T> implements Element<T, Maybe<T>>, Maybe<T> {
   private final Queryable<T> some;
   private final long index;
 
-  @org.jetbrains.annotations.Contract(pure = true)
+  @Contract(pure = true)
   At(final Queryable<T> some, final long index) {
     this.some = some;
     this.index = index;

@@ -9,17 +9,22 @@
 
   <artifactId>oak-base</artifactId>
 
+  <properties>
+    <annotations.version>17.0.0</annotations.version>
+    <commons-lang.version>3.9</commons-lang.version>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.jetbrains</groupId>
       <artifactId>annotations</artifactId>
-      <version>17.0.0</version>
+      <version>${annotations.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.9</version>
+      <version>${commons-lang.version}</version>
     </dependency>
   </dependencies>
 </project>

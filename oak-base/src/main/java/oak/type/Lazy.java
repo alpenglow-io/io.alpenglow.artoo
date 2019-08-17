@@ -16,7 +16,7 @@ public interface Lazy<T> extends Supplier1<T> {
 
 enum Emptyness { None }
 
-class SyncLazy<T> implements Lazy<T> {
+final class SyncLazy<T> implements Lazy<T> {
   private final Supplier1<T> initialization;
   private volatile Object value;
 

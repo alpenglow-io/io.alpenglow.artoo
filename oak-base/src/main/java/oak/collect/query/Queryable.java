@@ -1,18 +1,21 @@
 package oak.collect.query;
 
+import oak.collect.cursor.Cursor;
 import oak.collect.query.aggregate.Aggregation;
 import oak.collect.query.concat.Concatenation;
-import oak.collect.query.element.Element;
 import oak.collect.query.filter.Filtering;
-import oak.collect.query.partition.Partitioning;
-import oak.collect.query.project.Projection;
-import oak.collect.query.project.Projection.IndexFunction1;
-import oak.collect.query.project.Projection.IndexManyFunction1;
+import oak.collect.query.Projection.IndexFunction1;
+import oak.collect.query.Projection.IndexManyFunction1;
 import oak.func.con.Consumer1;
 import oak.func.fun.Function1;
 import oak.func.fun.Function2;
 import oak.func.pre.Predicate1;
 import oak.func.sup.Supplier1;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
+import java.util.Iterator;
 
 public interface Queryable<T> extends Functor<T, Queryable<T>> {
   @SafeVarargs
@@ -69,4 +72,42 @@ public interface Queryable<T> extends Functor<T, Queryable<T>> {
 
   @FunctionalInterface
   interface ManySupplier<T> extends Supplier1<Queryable<T>> {}
+}
+
+abstract class QueriedArray<Q> implements Queryable<Q> {
+  private final Q[] array;
+
+  protected QueriedArray(final Q[] array) {
+    this.array = array;
+  }
+
+  final Q arrayAt(final int index) { return this.array.length > index ? this.array[index] : null; }
+  final long arrayLength() { return this.array.length; }
+}
+
+final class Empty<Q> implements Queryable<Q> {
+  @Override
+  public final Iterator<Q> iterator() {
+    return Cursor.none();
+  }
+}
+
+final class Many<T> implements Queryable<T> {
+  private final T[] values;
+
+  @Contract(pure = true)
+  Many(final T[] values) {
+    this.values = values;
+  }
+
+  @NotNull
+  @Override
+  public final Iterator<T> iterator() {
+    return Cursor.forward(values);
+  }
+
+  @Override
+  public String toString() {
+    return String.format("Many{values=%s}", Arrays.toString(values));
+  }
 }

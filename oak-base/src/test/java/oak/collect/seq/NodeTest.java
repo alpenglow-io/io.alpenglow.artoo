@@ -1,6 +1,5 @@
-package oak.collect.rope;
+package oak.collect.seq;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

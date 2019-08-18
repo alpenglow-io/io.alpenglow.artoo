@@ -1,4 +1,4 @@
-package oak.collect.rope;
+package oak.collect.seq;
 
 import org.junit.jupiter.api.Test;
 

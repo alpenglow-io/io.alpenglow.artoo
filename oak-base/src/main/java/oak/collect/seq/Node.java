@@ -1,4 +1,4 @@
-package oak.collect.rope;
+package oak.collect.seq;
 
 import oak.collect.cursor.Cursor;
 import org.jetbrains.annotations.NotNull;

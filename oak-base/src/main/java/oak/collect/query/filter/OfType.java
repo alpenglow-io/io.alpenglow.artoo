@@ -5,7 +5,7 @@ import oak.collect.query.Queryable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-final class OfType<T, C> implements Filtering<C, Queryable<C>>, Queryable<C> {
+final class OfType<T, C> implements Filtering<C>, Queryable<C> {
   private final Queryable<T> some;
   private final Class<C> type;
 

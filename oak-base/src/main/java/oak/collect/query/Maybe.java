@@ -1,18 +1,21 @@
 package oak.collect.query;
 
+import oak.collect.cursor.Cursor;
 import oak.func.con.Consumer1;
+import oak.func.exe.Executable;
 import oak.func.fun.Function1;
 import oak.func.pre.Predicate1;
 import oak.func.sup.Supplier1;
 import oak.collect.query.filter.Filtering;
-import oak.type.Value;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Iterator;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 
-public interface Maybe<T> extends Functor<T, Maybe<T>>, Value<T> {
+public interface Maybe<T> extends Iterable<T> {
   static <L> Maybe<L> of(final L value) {
     return isNull(value) ? Maybe.none() : Maybe.just(value);
   }
@@ -29,7 +32,7 @@ public interface Maybe<T> extends Functor<T, Maybe<T>>, Value<T> {
   default <M> Maybe<M> select(final Function1<T, M> map) { return Projection.select(this, map); }
   default <M> Maybe<M> selectJust(final MaybeFunction1<T, M> flatMap) { return Projection.selectJust(this, flatMap); }
   default Maybe<T> look(Consumer1<T> peek) {
-    return Projection.look(this, peek);
+    return Projection.peek(this, peek);
   }
 
   default Maybe<T> where(Predicate1<T> filter) {
@@ -50,6 +53,18 @@ public interface Maybe<T> extends Functor<T, Maybe<T>>, Value<T> {
     throw requireNonNull(exception, "Exception is null").apply(requireNonNull(message, "Message is null"));
   }
 
+  default void eventually(final Consumer1<T> then) {
+    eventually(then, () -> {});
+  }
+
+  default void eventually(final Consumer1<T> then, final Executable eventually) {
+    if (this.iterator().hasNext()) {
+      for (final var value : this) requireNonNull(then, "Then is null").accept(value);
+    } else {
+      requireNonNull(eventually, "Eventually is null").run();
+    }
+  }
+
   @FunctionalInterface
   interface MaybeSupplier1<T> extends Supplier1<Maybe<T>> {}
 
@@ -58,24 +73,25 @@ public interface Maybe<T> extends Functor<T, Maybe<T>>, Value<T> {
 }
 
 final class None<T> implements Maybe<T> {
-  @Nullable
-  @Contract(pure = true)
   @Override
-  public final T get() {
-    return null;
+  @NotNull
+  @Contract(pure = true)
+  public final Iterator<T> iterator() {
+    return Cursor.none();
   }
 }
 
 final class Just<T> implements Maybe<T> {
   private final T value;
 
+  @Contract(pure = true)
   Just(final T value) {
     this.value = value;
   }
 
   @Override
-  public final T get() {
-    return value;
+  @NotNull
+  public final Iterator<T> iterator() {
+    return Cursor.maybe(value);
   }
 }
-

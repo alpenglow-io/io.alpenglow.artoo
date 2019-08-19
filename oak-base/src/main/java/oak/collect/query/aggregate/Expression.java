@@ -3,6 +3,7 @@ package oak.collect.query.aggregate;
 import oak.collect.query.Queryable;
 import oak.func.fun.Function2;
 import oak.func.pre.Predicate1;
+import org.jetbrains.annotations.Contract;
 
 final class Expression<T, S> implements Aggregation<S> {
   private final Queryable<T> some;
@@ -10,6 +11,7 @@ final class Expression<T, S> implements Aggregation<S> {
   private final Predicate1<T> expression;
   private final Function2<S, T, S> reduce;
 
+  @Contract(pure = true)
   Expression(final Queryable<T> some, final S seed, final Predicate1<T> expression, final Function2<S, T, S> reduce) {
     this.some = some;
     this.seed = seed;

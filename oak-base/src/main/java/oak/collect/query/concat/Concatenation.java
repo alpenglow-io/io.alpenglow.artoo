@@ -1,11 +1,10 @@
 package oak.collect.query.concat;
 
-import oak.collect.query.Functor;
 import oak.collect.query.Queryable;
 
 import static java.util.Objects.requireNonNull;
 
-public interface Concatenation<T, M extends Iterable<T>> extends Functor<T, M> {
+public interface Concatenation<T, M extends Iterable<T>> extends Iterable<T> {
   @SafeVarargs
   static <S> Queryable<S> concat(Queryable<S> some, final S... values) {
     return new Concat<>(

@@ -7,7 +7,7 @@ import java.util.Iterator;
 
 import static java.util.Objects.requireNonNull;
 
-public interface Partitioning<T, M extends Iterable<T>> extends Functor<T, M> {
+public interface Partitioning<T, M extends Iterable<T>> extends Iterable<T> {
   static <S> Queryable<S> skip(final Queryable<S> source, final int until) {
     return new Skip<>(
       requireNonNull(source, "Source is null"),

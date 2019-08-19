@@ -2,6 +2,7 @@ package oak.collect.cursor;
 
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.Objects;
 
 import static java.util.Arrays.copyOf;
 import static java.util.Objects.requireNonNull;

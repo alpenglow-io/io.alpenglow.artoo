@@ -1,20 +1,23 @@
 package oak.type;
 
+import oak.collect.cursor.Cursor;
 import oak.collect.query.Maybe;
+import oak.func.con.Consumer1;
+import oak.func.exe.Executable;
 import oak.func.fun.Function1;
 import oak.func.pre.Predicate1;
 import oak.func.sup.Supplier1;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Iterator;
 import java.util.Objects;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNullElse;
-import static oak.collect.query.Maybe.just;
 import static oak.collect.query.Maybe.maybe;
-import static oak.collect.query.Maybe.none;
 
-public interface Any<T> extends Supplier1<T> {
+public interface Any<T> extends Iterable<T>, Supplier1<T> {
   static <T, R> R nonNull(final T any, final Function1<T, R> then) {
     return nonNull(any, then, null);
   }
@@ -30,9 +33,24 @@ public interface Any<T> extends Supplier1<T> {
   }
 
   default Maybe<T> filter(final Predicate1<T> predicate) {
-    maybe(get()).where(predicate);
-    requireNonNull(get());
-    requireNonNull(predicate);
-    return predicate.apply(get()) ? just(get()) : none();
+    return maybe(get()).where(predicate);
+  }
+
+  default void eventually(final Consumer1<T> then) {
+    eventually(then, () -> {});
+  }
+
+  default void eventually(final Consumer1<T> then, final Executable eventually) {
+    if (this.iterator().hasNext()) {
+      for (final var value : this) requireNonNull(then, "Then is null").accept(value);
+    } else {
+      requireNonNull(eventually, "Eventually is null").run();
+    }
+  }
+
+  @NotNull
+  @Override
+  default Iterator<T> iterator() {
+    return Cursor.maybe(this.get());
   }
 }

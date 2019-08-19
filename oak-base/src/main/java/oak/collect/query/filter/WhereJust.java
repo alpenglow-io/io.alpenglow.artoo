@@ -1,9 +1,13 @@
 package oak.collect.query.filter;
 
+import oak.collect.cursor.Cursor;
 import oak.collect.query.Maybe;
 import oak.func.pre.Predicate1;
+import org.jetbrains.annotations.NotNull;
 
-final class WhereJust<S> implements Filtering<S, Maybe<S>>, Maybe<S> {
+import java.util.Iterator;
+
+final class WhereJust<S> implements Filtering<S>, Maybe<S> {
   private final Maybe<S> maybe;
   private final Predicate1<S> filter;
 
@@ -12,8 +16,12 @@ final class WhereJust<S> implements Filtering<S, Maybe<S>>, Maybe<S> {
     this.filter = filter;
   }
 
+  @NotNull
   @Override
-  public final S get() {
-    return maybe.get();
+  public final Iterator<S> iterator() {
+    for (var value : maybe) {
+      return filter.test(value) ? Cursor.maybe(value) : Cursor.none();
+    }
+    return Cursor.none();
   }
 }

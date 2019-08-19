@@ -1,20 +1,19 @@
 package oak.collect.query;
 
+import oak.collect.cursor.Cursor;
 import oak.collect.query.Projection.IndexFunction1;
 import oak.func.con.Consumer1;
 import oak.func.fun.Function1;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.util.Objects.requireNonNull;
 
-public interface Projection<T, M extends Iterable<T>> extends Functor<T, M> {
+public interface Projection<T> extends Iterable<T> {
   static <S, R> Queryable<R> select(final Queryable<S> some, final Function1<S, R> map) {
     return new SelectMany<>(
       requireNonNull(some, "Some is null"),
@@ -40,8 +39,8 @@ public interface Projection<T, M extends Iterable<T>> extends Functor<T, M> {
     );
   }
 
-  static <S> Queryable<S> look(final Queryable<S> some, final Consumer1<S> peek) {
-    return new LookMany<>(
+  static <S> Queryable<S> peek(final Queryable<S> some, final Consumer1<S> peek) {
+    return new PeekMany<>(
       requireNonNull(some, "Some is null"),
       requireNonNull(peek, "Peek is null")
     );
@@ -63,8 +62,8 @@ public interface Projection<T, M extends Iterable<T>> extends Functor<T, M> {
     );
   }
 
-  static <S> Maybe<S> look(final Maybe<S> maybe, final Consumer1<S> peek) {
-    return new LookMaybe<>(
+  static <S> Maybe<S> peek(final Maybe<S> maybe, final Consumer1<S> peek) {
+    return new PeekMaybe<>(
       requireNonNull(maybe, "Maybe is null"),
       requireNonNull(peek, "Peek is null")
     );
@@ -85,11 +84,11 @@ public interface Projection<T, M extends Iterable<T>> extends Functor<T, M> {
   @FunctionalInterface
   interface IndexManyFunction1<S, R> extends IndexFunction1<S, Queryable<R>> {}
 
-  final class LookMany<T> implements Queryable<T> {
+  final class PeekMany<T> implements Queryable<T> {
     private final Queryable<T> some;
     private final Consumer1<T> peek;
 
-    LookMany(final Queryable<T> some, final Consumer1<T> peek) {
+    PeekMany(final Queryable<T> some, final Consumer1<T> peek) {
       this.some = some;
       this.peek = peek;
     }
@@ -103,20 +102,21 @@ public interface Projection<T, M extends Iterable<T>> extends Functor<T, M> {
   }
 }
 
-final class LookMaybe<S> implements Maybe<S> {
+final class PeekMaybe<S> implements Maybe<S> {
   private final Maybe<S> maybe;
   private final Consumer1<S> peek;
 
   @Contract(pure = true)
-  LookMaybe(final Maybe<S> maybe, final Consumer1<S> peek) {
+  PeekMaybe(final Maybe<S> maybe, final Consumer1<S> peek) {
     this.maybe = maybe;
     this.peek = peek;
   }
 
+  @NotNull
   @Override
-  public final S get() {
-    if (maybe.iterator().hasNext()) peek.accept(maybe.iterator().next());
-    return maybe.iterator().next();
+  public final Iterator<S> iterator() {
+    for (var value : maybe) peek.accept(value);
+    return maybe.iterator();
   }
 }
 
@@ -148,12 +148,11 @@ final class SelectJust<R, S> implements Maybe<R> {
     this.maybes = maybes;
   }
 
-  @Nullable
   @Override
-  public final R get() {
-    return maybes.iterator().hasNext()
-      ? maybes.iterator().next().iterator().next()
-      : null;
+  @NotNull
+  public final Iterator<R> iterator() {
+    for (var maybe : maybes) return maybe.iterator();
+    return Cursor.none();
   }
 }
 
@@ -206,10 +205,10 @@ final class SelectMaybe<S, R> implements Maybe<R> {
     this.map = map;
   }
 
+  @NotNull
   @Override
-  public final R get() {
-    return maybe.iterator().hasNext()
-      ? map.apply(maybe.iterator().next())
-      : null;
+  public final Iterator<R> iterator() {
+    for (var value : maybe) return Cursor.maybe(map.apply(value));
+    return Cursor.none();
   }
 }

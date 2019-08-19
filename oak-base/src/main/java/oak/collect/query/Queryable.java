@@ -1,11 +1,11 @@
 package oak.collect.query;
 
 import oak.collect.cursor.Cursor;
+import oak.collect.query.Projection.IndexFunction1;
+import oak.collect.query.Projection.IndexManyFunction1;
 import oak.collect.query.aggregate.Aggregation;
 import oak.collect.query.concat.Concatenation;
 import oak.collect.query.filter.Filtering;
-import oak.collect.query.Projection.IndexFunction1;
-import oak.collect.query.Projection.IndexManyFunction1;
 import oak.func.con.Consumer1;
 import oak.func.fun.Function1;
 import oak.func.fun.Function2;
@@ -17,10 +17,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.Iterator;
 
-public interface Queryable<T> extends Functor<T, Queryable<T>> {
+import static java.util.Arrays.copyOf;
+
+public interface Queryable<T> extends Iterable<T> {
   @SafeVarargs
   static <S> Queryable<S> asQueryable(final S... values) {
-    return new Many<>(values);
+    return new Many<>(copyOf(values, values.length));
   }
 
   @SafeVarargs
@@ -35,7 +37,7 @@ public interface Queryable<T> extends Functor<T, Queryable<T>> {
   default <S> Queryable<S> select(final IndexFunction1<T, S> indexMap) { return Projection.selectIndex(this, indexMap); }
   default <S> Queryable<S> selectMany(final ManyFunction<T, S> flatMap) { return Projection.selectMany(this, flatMap); }
   default <S> Queryable<S> selectMany(final IndexManyFunction1<T, S> flatMap) { return Projection.selectMany(this, flatMap); }
-  default Queryable<T> look(final Consumer1<T> peek) { return Projection.look(this, peek); }
+  default Queryable<T> peek(final Consumer1<T> peek) { return Projection.peek(this, peek); }
 
   // filtering
   default Queryable<T> where(final Predicate1<T> filter) { return Filtering.where(this, filter); }
@@ -43,9 +45,9 @@ public interface Queryable<T> extends Functor<T, Queryable<T>> {
 
   // element
   default Maybe<T> at(final int index) { return Element.at(this, index); }
-  default Queryable<T> first() { return Element.first(this); }
-  default Queryable<T> last() { return Element.last(this); }
-  default Maybe<T> single() { return Element.single(this); }
+  default Maybe<T> first() { return Element.first(this); }
+  default Maybe<T> last() { return Element.last(this); }
+  default T single() { return Element.single(this); }
 
   // aggregation
   default Maybe<T> aggregate(final Function2<T, T, T> reduce) { return Aggregation.accumulate(this, reduce); }
@@ -53,8 +55,10 @@ public interface Queryable<T> extends Functor<T, Queryable<T>> {
   default <S> Maybe<S> aggregate(final S seed, final Predicate1<T> expression, Function2<S, T, S> reduce) {
     return Aggregation.expression(this, seed, expression, reduce);
   }
-  default Maybe<Long> count() { return Aggregation.count(this); }
-  default Maybe<Integer> countAsInteger() { return count().select(Long::intValue); }
+  default int count() { return Aggregation.count(this); }
+  default long countAsLong() { return Aggregation.countAsLong(this); }
+  default int count(final Predicate1<T> filter) { return Aggregation.count(this, filter); }
+  default long countAsLong(final Predicate1<T> filter) { return Aggregation.countAsLong(this, filter); }
 
   // concatenation
   @SuppressWarnings("unchecked")
@@ -74,15 +78,11 @@ public interface Queryable<T> extends Functor<T, Queryable<T>> {
   interface ManySupplier<T> extends Supplier1<Queryable<T>> {}
 }
 
-abstract class QueriedArray<Q> implements Queryable<Q> {
-  private final Q[] array;
-
-  protected QueriedArray(final Q[] array) {
-    this.array = array;
+interface QueryableArray<Q> extends Queryable<Q>, Supplier1<Q[]> {
+  @Override
+  default Maybe<Q> at(final int index) {
+    return null;
   }
-
-  final Q arrayAt(final int index) { return this.array.length > index ? this.array[index] : null; }
-  final long arrayLength() { return this.array.length; }
 }
 
 final class Empty<Q> implements Queryable<Q> {
@@ -92,12 +92,18 @@ final class Empty<Q> implements Queryable<Q> {
   }
 }
 
-final class Many<T> implements Queryable<T> {
+final class Many<T> implements QueryableArray<T> {
   private final T[] values;
 
   @Contract(pure = true)
   Many(final T[] values) {
     this.values = values;
+  }
+
+  @Override
+  @Contract(pure = true)
+  public final T[] get() {
+    return values;
   }
 
   @NotNull

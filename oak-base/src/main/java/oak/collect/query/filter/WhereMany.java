@@ -6,7 +6,7 @@ import oak.collect.query.Queryable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-final class WhereMany<T> implements Filtering<T, Queryable<T>>, Queryable<T> {
+final class WhereMany<T> implements Filtering<T>, Queryable<T> {
   private final Queryable<T> some;
   private final Predicate1<T> filter;
 

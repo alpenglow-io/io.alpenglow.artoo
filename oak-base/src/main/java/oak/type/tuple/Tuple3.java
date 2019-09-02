@@ -18,7 +18,7 @@ public final class Tuple3<V1, V2, V3> implements Tuple {
   }
 
   public <R> Tuple1<R> map(Function3<? super V1, ? super V2, ? super V3, ? extends R> f) {
-    return Tuple.of(requireNonNull(f, "Mapping must be not null").apply(v1, v2, v3));
+    return Tuple.tuple(requireNonNull(f, "Mapping must be not null").apply(v1, v2, v3));
   }
 
   public <T extends Tuple> T flatMap(Function3<? super V1, ? super V2, ? super V3, ? extends T> f) {

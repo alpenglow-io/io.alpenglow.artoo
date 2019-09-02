@@ -1,7 +1,5 @@
 package oak.system;
 
-import oak.collect.query.Queryable;
-
 import static java.lang.System.out;
 
 public interface Shell {

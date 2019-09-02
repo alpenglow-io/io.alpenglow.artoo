@@ -2,7 +2,6 @@ package oak.type;
 
 import oak.collect.cursor.Cursor;
 import oak.func.Functional;
-import oak.func.sup.Supplier1;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
@@ -17,5 +16,5 @@ public interface AsBoolean extends Iterable<Boolean>, BooleanSupplier, Functiona
 
   @NotNull
   @Override
-  default Iterator<Boolean> iterator() { return Cursor.once(get()); }
+  default Iterator<Boolean> iterator() { return Cursor.of(get()); }
 }

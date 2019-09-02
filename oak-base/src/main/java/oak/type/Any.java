@@ -1,7 +1,7 @@
 package oak.type;
 
 import oak.collect.cursor.Cursor;
-import oak.collect.query.Maybe;
+import oak.quill.single.Nullable;
 import oak.func.con.Consumer1;
 import oak.func.exe.Executable;
 import oak.func.fun.Function1;
@@ -15,9 +15,10 @@ import java.util.Objects;
 import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNullElse;
-import static oak.collect.query.Maybe.maybe;
+import static oak.quill.single.Nullable.of;
 
 public interface Any<T> extends Iterable<T>, Supplier1<T> {
+
   static <T, R> R nonNull(final T any, final Function1<T, R> then) {
     return nonNull(any, then, null);
   }
@@ -32,8 +33,8 @@ public interface Any<T> extends Iterable<T>, Supplier1<T> {
       : requireNonNull(otherwise, "Otherwise is null").get();
   }
 
-  default Maybe<T> filter(final Predicate1<T> predicate) {
-    return maybe(get()).where(predicate);
+  default Nullable<T> filter(final Predicate1<T> predicate) {
+    return of(get()).where(predicate);
   }
 
   default void eventually(final Consumer1<T> then) {
@@ -51,6 +52,6 @@ public interface Any<T> extends Iterable<T>, Supplier1<T> {
   @NotNull
   @Override
   default Iterator<T> iterator() {
-    return Cursor.maybe(this.get());
+    return Cursor.ofNullable(this.get());
   }
 }

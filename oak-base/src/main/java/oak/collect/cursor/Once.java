@@ -1,28 +1,28 @@
 package oak.collect.cursor;
 
+import org.jetbrains.annotations.Contract;
+
 final class Once<T> implements Cursor<T> {
   private final T value;
-  private final ThreadLocal<Boolean> read;
+  private final ThreadLocal<Boolean> notRead;
 
   Once(final T value) {
-    this(value, true);
+    this(value, ThreadLocal.withInitial(() -> true));
   }
-  private Once(final T value, final boolean read) {
-    this(value, ThreadLocal.withInitial(() -> read));
-  }
-  private Once(final T value, ThreadLocal<Boolean> read) {
+  @Contract(pure = true)
+  private Once(final T value, ThreadLocal<Boolean> notRead) {
     this.value = value;
-    this.read = read;
+    this.notRead = notRead;
   }
 
   @Override
   public final boolean hasNext() {
-    return read.get();
+    return notRead.get();
   }
 
   @Override
   public final T next() {
-    read.set(false);
+    notRead.set(false);
     return value;
   }
 }

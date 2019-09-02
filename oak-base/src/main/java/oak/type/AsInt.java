@@ -16,5 +16,5 @@ public interface AsInt extends Iterable<Integer>, IntSupplier, Functional.Sup {
 
   @NotNull
   @Override
-  default Iterator<Integer> iterator() { return Cursor.once(get()); }
+  default Iterator<Integer> iterator() { return Cursor.of(get()); }
 }

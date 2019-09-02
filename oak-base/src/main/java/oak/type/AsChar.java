@@ -3,7 +3,6 @@ package oak.type;
 import oak.collect.cursor.Cursor;
 import oak.func.Functional;
 import oak.func.sup.CharSupplier;
-import oak.func.sup.StringSupplier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
@@ -17,5 +16,5 @@ public interface AsChar extends Iterable<Character>, CharSupplier, Functional.Su
 
   @NotNull
   @Override
-  default Iterator<Character> iterator() { return Cursor.once(get()); }
+  default Iterator<Character> iterator() { return Cursor.of(get()); }
 }

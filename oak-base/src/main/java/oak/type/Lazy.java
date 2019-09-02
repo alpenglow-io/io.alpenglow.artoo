@@ -6,7 +6,7 @@ import static oak.type.Emptyness.None;
 
 public interface Lazy<T> extends Supplier1<T> {
   static <V> Lazy<V> of(final Supplier1<V> initialization) {
-    return new SyncLazy<>(initialization, None);
+    return new SyncLazy<>(initialization);
   }
 
   static <V> Lazy<V> lazy(final Supplier1<V> initialization) {
@@ -20,7 +20,13 @@ final class SyncLazy<T> implements Lazy<T> {
   private final Supplier1<T> initialization;
   private volatile Object value;
 
-  SyncLazy(final Supplier1<T> initialization, final Object initial) {
+  SyncLazy(final Supplier1<T> initialization) {
+    this(
+      initialization,
+      None
+    );
+  }
+  private SyncLazy(final Supplier1<T> initialization, final Object initial) {
     this.initialization = initialization;
     this.value = initial;
   }
@@ -38,8 +44,8 @@ final class SyncLazy<T> implements Lazy<T> {
   }
 
   private T initialize() {
-    final var initializated = initialization.get();
-    this.value = initializated;
-    return initializated;
+    final var initialized = initialization.get();
+    this.value = initialized;
+    return initialized;
   }
 }

@@ -6,7 +6,6 @@ import oak.func.sup.StringSupplier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
-import java.util.function.IntSupplier;
 
 @FunctionalInterface
 public interface AsString extends Iterable<String>, StringSupplier, Functional.Sup {
@@ -17,5 +16,5 @@ public interface AsString extends Iterable<String>, StringSupplier, Functional.S
 
   @NotNull
   @Override
-  default Iterator<String> iterator() { return Cursor.once(get()); }
+  default Iterator<String> iterator() { return Cursor.of(get()); }
 }

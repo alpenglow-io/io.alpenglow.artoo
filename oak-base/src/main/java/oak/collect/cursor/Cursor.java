@@ -28,6 +28,12 @@ public interface Cursor<E> extends Iterator<E>, Enumeration<E> {
   }
 
   @NotNull
+  @Contract("_ -> new")
+  static <T> Cursor<T> ofAny(T value) {
+    return new Once<>(nonNullable(value, "value"));
+  }
+
+  @NotNull
   @Contract(value = " -> new", pure = true)
   static <T> Cursor<T> none() {
     return new None<>();

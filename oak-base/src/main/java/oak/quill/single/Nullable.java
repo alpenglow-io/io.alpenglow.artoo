@@ -8,7 +8,7 @@ import java.util.Iterator;
 
 import static java.util.Objects.isNull;
 
-public interface Nullable<T> extends Projection<T>, Filtering<T> {
+public interface Nullable<T> extends Projection<T>, Filtering<T>, Casing<T> {
   static <L> Nullable<L> of(final L value) {
     return isNull(value) ? Nullable.none() : Single.of(value);
   }

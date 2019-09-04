@@ -24,7 +24,8 @@ public interface Aggregatable<T> extends Structable<T> {
     return new Aggregate<>(
       this,
       nonNullable(filter, "filter"),
-      nonNullable(map, "map"), seed,
+      nonNullable(map, "map"),
+      seed,
       nonNullable(reduce, "reduce")
     );
   }
@@ -103,7 +104,7 @@ final class Aggregate<T, A, R> implements Single<A> {
     var returned = seed;
     for (final var value : structable) {
       if (filter.test(value)) {
-        final R apply = map.apply(value);
+        final var apply = map.apply(value);
         returned = reduce.apply(returned, apply);
       }
     }

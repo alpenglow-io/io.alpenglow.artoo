@@ -10,7 +10,7 @@ import java.util.Iterator;
 
 import static oak.type.Nullability.nonNullable;
 
-public interface Queryable<T> extends Projectable<T>, Filterable<T>, Partitionable<T>, Uniquable<T>, Aggregatable<T> {
+public interface Queryable<T> extends Projectable<T>, Filterable<T>, Partitionable<T>, Uniquable<T>, Aggregatable<T>, Concatenatable<T>, Groupable<T> {
   @NotNull
   @Contract(value = " -> new", pure = true)
   static <S> Queryable<S> empty() {
@@ -25,6 +25,8 @@ public interface Queryable<T> extends Projectable<T>, Filterable<T>, Partitionab
 }
 
 final class Empty<Q> implements Queryable<Q> {
+  @NotNull
+  @Contract(pure = true)
   @Override
   public final Iterator<Q> iterator() {
     return Cursor.none();
@@ -35,6 +37,7 @@ final class Repeat<T> implements Queryable<T> {
   private final Supplier1<? extends T> supplier;
   private final int count;
 
+  @Contract(pure = true)
   Repeat(final Supplier1<? extends T> supplier, final int count) {
     this.supplier = supplier;
     this.count = count;

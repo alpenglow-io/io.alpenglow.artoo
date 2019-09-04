@@ -1,15 +1,18 @@
 package oak.collect;
 
 import oak.collect.cursor.Cursor;
+import oak.func.sup.Supplier1;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
+import static java.lang.System.*;
 import static java.util.Arrays.copyOf;
 import static oak.type.Nullability.nonNullable;
 
 public interface Array<T> extends Iterable<T> {
+  T at(int index);
   Array<T> add(T element);
 
   @NotNull
@@ -18,9 +21,16 @@ public interface Array<T> extends Iterable<T> {
 
   long length();
 
+  @NotNull
+  @Contract("_ -> new")
   @SafeVarargs
   static <S> Array<S> of(S... elements) {
     return new SafeArray<>(copyOf(nonNullable(elements, "elements"), elements.length));
+  }
+
+  @NotNull
+  static <S> Array<S> empty() {
+    return of();
   }
 }
 
@@ -34,6 +44,12 @@ final class SafeArray<T> implements Array<T> {
   @Contract(pure = true)
   private SafeArray(final ThreadLocal<T[]> array) {
     this.array = array;
+  }
+
+  @Override
+  public T at(int index) {
+    if (index >= array.get().length) throw new IndexOutOfBoundsException("index is greater than length - 1");
+    return array.get()[index];
   }
 
   @Override
@@ -54,9 +70,7 @@ final class SafeArray<T> implements Array<T> {
     if (index > array.get().length + 1) throw new IllegalArgumentException("Index can't point to more than array.length + 1");
     synchronized (array) {
       final var copied = copyOf(array.get(), array.get().length + 1);
-      for (var i = copied.length - 1; i > index; i--) {
-        copied[i] = copied[i - 1];
-      }
+      if (copied.length - 1 - index >= 0) arraycopy(copied, index, copied, index + 1, copied.length - 1 - index);
       copied[index] = element;
       array.set(copied);
     }

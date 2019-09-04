@@ -12,7 +12,7 @@ import static java.util.Objects.requireNonNull;
 
 public interface UniquableArray<T> extends Uniquable<T>, StructableArray<T> {
   @Override
-  default Nullable<T> at(final int index) {
+  default Nullable<T> elementAt(final int index) {
     return new At<>(this, index);
   }
 

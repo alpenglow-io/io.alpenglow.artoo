@@ -10,7 +10,16 @@ import java.util.Iterator;
 
 import static oak.type.Nullability.nonNullable;
 
-public interface Queryable<T> extends Projectable<T>, Filterable<T>, Partitionable<T>, Uniquable<T>, Aggregatable<T>, Concatenatable<T>, Groupable<T> {
+public interface Queryable<T> extends
+  Projectable<T>,
+  Filterable<T>,
+  Partitionable<T>,
+  Uniquable<T>,
+  Aggregatable<T>,
+  Concatenatable<T>,
+  Groupable<T>,
+  Joinable<T>
+{
   @NotNull
   @Contract(value = " -> new", pure = true)
   static <S> Queryable<S> empty() {

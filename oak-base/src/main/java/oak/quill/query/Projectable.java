@@ -16,7 +16,7 @@ interface Projectable<T> extends Structable<T> {
   default <R> Queryable<R> select(final Function1<? super T, ? extends R> map) {
     return new Select<>(this, nonNullable(map, "map"));
   }
-  default <R, Q extends Queryable<? extends R>> Queryable<R> selection(final Function1<? super T, Q> flatMap) {
+  default <R, Q extends Queryable<? extends R>> Queryable<R> selection(final Function1<? super T, ? extends Q> flatMap) {
     return new Selection<>(new Select<>(this, nonNullable(flatMap, "flatMap")));
   }
   default Queryable<T> peek(final Consumer1<? super T> peek) {

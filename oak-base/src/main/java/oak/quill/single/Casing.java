@@ -2,6 +2,7 @@ package oak.quill.single;
 
 import oak.collect.cursor.Cursor;
 import oak.func.fun.Function1;
+import oak.func.sup.Supplier1;
 import oak.quill.Structable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -12,15 +13,15 @@ import static oak.func.fun.Function1.identity;
 import static oak.type.Nullability.nonNullable;
 
 public interface Casing<T> extends Structable<T> {
-  default Nullable<T> or(final T value) {
-    return new Or<>(this, nonNullable(value, "value"));
+  default T or(final T value) {
+    return new Or<>(this, nonNullable(value, "value")).get();
   }
   default <E extends RuntimeException> Nullable<T> or(final String message, final Function1<String, E> exception) {
     return new OrException<>(this, nonNullable(message, "message"), nonNullable(exception, "exception"));
   }
 }
 
-final class Or<T> implements Nullable<T> {
+final class Or<T> implements Supplier1<T> {
   private final Structable<T> structable;
   private final T otherwise;
 
@@ -30,10 +31,12 @@ final class Or<T> implements Nullable<T> {
     this.otherwise = otherwise;
   }
 
-  @NotNull
   @Override
-  public final Iterator<T> iterator() {
-    return Cursor.ofSingle(structable, identity(), () -> otherwise);
+  @Contract(pure = true)
+  public final T get() {
+    T result = null;
+    for (final var value : structable) result = value;
+    return result != null ? result : otherwise;
   }
 }
 

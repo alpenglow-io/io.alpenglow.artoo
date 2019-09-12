@@ -3,6 +3,8 @@ package oak.quill.query;
 import org.jetbrains.annotations.Contract;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collection;
+
 import static java.lang.Math.floor;
 import static java.lang.System.out;
 import static java.util.Collections.max;
@@ -48,39 +50,43 @@ class GroupableSuiteTest {
       }
     }
 
-    final var pets = new Pet[] {
+    final var pets = new Pet[]{
       new Pet("Barley", 8.3),
       new Pet("Boots", 4.9),
       new Pet("Whiskey", 1.5),
       new Pet("Daisy", 4.3)
     };
 
-    final var query = from(pets).groupBy(
-      pet -> floor(pet.age),
-      pet -> pet.age,
-      (baseAge, ages) -> new Result(
-        baseAge,
-        ages.size(),
-        min(ages),
-        max(ages)
-      )
-    );
+    final var query =
+      from(pets)
+        .groupBy(pet -> floor(pet.age), pet -> pet.age)
+        .select((age, ages) -> new Result(
+            age,
+            ages.size(),
+            min(ages),
+            max(ages)
+          )
+        );
 
     for (final var result : query) {
       out.println(result);
     }
 
     final var query2 = from(pets)
-      .where(pet -> pet.name.contains("W"))
+      //.where(pet -> pet.name.contains("W"))
       .groupBy(
         pet -> floor(pet.age),
         pet -> pet.name
-      );
+      )
+      .select((key, elements) -> new Object() {
+        Double key() { return key; }
+        Collection<String> elements() { return elements; }
+      });
 
     for (final var grouping : query2) {
       out.println(grouping.key());
 
-      for (String element : grouping.elements()) {
+      for (final var element : grouping.elements()) {
         out.format("    %s\n", element);
       }
     }

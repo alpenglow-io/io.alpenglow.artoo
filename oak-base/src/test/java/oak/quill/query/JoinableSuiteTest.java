@@ -39,19 +39,7 @@ class JoinableSuiteTest {
     final var people = from(ken, terry, faust);
     final var pets = from(barley, boots, whiskers, daisy);
 
-    final var query = people.join(
-      pets,
-      person -> person,
-      pet -> pet.owner,
-      (person, pet) -> new Object() {
-        String owner = person.name;
-        String animal = pet.name;
-      }
-    );
-
-    for (final var o : query) out.format("%s - %s\n", o.owner, o.animal);
-
-    final var query2 = people
+    final var query = people
       .join(pets)
       .on((person, pet) -> person.equals(pet.owner))
       .select((person, pet) -> new Object() {
@@ -59,6 +47,6 @@ class JoinableSuiteTest {
         String animal = pet.name;
       });
 
-    for (final var o : query2) out.format("%s - %s\n", o.owner, o.animal);
+    for (final var o : query) out.format("%s - %s\n", o.owner, o.animal);
   }
 }

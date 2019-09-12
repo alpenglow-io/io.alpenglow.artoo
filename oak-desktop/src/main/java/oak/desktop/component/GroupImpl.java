@@ -16,10 +16,10 @@ final class GroupImpl implements Group {
 
   @Override
   public Component[] get() {
-    final ToggleGroup g = new ToggleGroup();
+    final var g = new ToggleGroup();
     named.accept(g);
     if (nonNull(components)) {
-      for (ToggleComponent component : components) {
+      for (final var component : components) {
         component.element().setToggleGroup(g);
       }
     }

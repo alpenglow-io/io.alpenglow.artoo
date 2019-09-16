@@ -1,14 +1,9 @@
 package oak.quill.query.array;
 
-import oak.collect.cursor.Cursor;
-import oak.quill.single.Nullable;
 import oak.quill.query.Uniquable;
+import oak.quill.single.Nullable;
+import oak.quill.single.Single;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Iterator;
-
-import static java.util.Objects.requireNonNull;
 
 public interface UniquableArray<T> extends Uniquable<T>, StructableArray<T> {
   @Override
@@ -27,8 +22,8 @@ public interface UniquableArray<T> extends Uniquable<T>, StructableArray<T> {
   }
 
   @Override
-  default oak.quill.single.Single<T> single() {
-    return new Single<>(this);
+  default Single<T> single() {
+    return new Just<>(this);
   }
 }
 
@@ -43,21 +38,25 @@ final class At<T> implements Nullable<T> {
   }
 
   @Override
-  @NotNull
-  public Iterator<T> iterator() {
-    return array.get().length > index ? Cursor.of(array.get()[index]) : Cursor.none();
+  @org.jetbrains.annotations.Nullable
+  public final T get() {
+    return array.get().length > index ? array.get()[index] : null;
   }
 }
 
-final class Single<T> implements oak.quill.single.Single<T> {
+final class Just<T> implements Single<T> {
   private final StructableArray<T> array;
 
   @Contract(pure = true)
-  Single(final StructableArray<T> array) {this.array = array;}
+  Just(final StructableArray<T> array) {this.array = array;}
 
-  @NotNull
   @Override
-  public final Iterator<T> iterator() {
-    return array.get().length == 1 ? Cursor.of(array.get()[0]) : Cursor.none();
+  @org.jetbrains.annotations.Nullable
+  public final T get() {
+    return switch (array.get().length) {
+      case 0 -> throw new IllegalStateException("Query can't be satisfied, Queryable has no elements.");
+      case 1 -> throw new IllegalStateException("Query can't be satisfied, Queryable has more than one elements.");
+      default -> array.get()[0];
+    };
   }
 }

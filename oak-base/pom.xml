@@ -11,7 +11,6 @@
 
   <properties>
     <annotations.version>17.0.0</annotations.version>
-    <commons-lang.version>3.9</commons-lang.version>
   </properties>
 
   <dependencies>
@@ -20,11 +19,6 @@
       <artifactId>annotations</artifactId>
       <version>${annotations.version}</version>
       <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <version>${commons-lang.version}</version>
     </dependency>
   </dependencies>
 </project>

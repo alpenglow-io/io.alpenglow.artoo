@@ -1,14 +1,10 @@
 package oak.quill.query;
 
 import oak.collect.Array;
-import oak.collect.cursor.Cursor;
 import oak.func.pre.Predicate1;
 import oak.quill.Structable;
 import oak.quill.single.Nullable;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Iterator;
 
 import static oak.func.pre.Predicate1.tautology;
 import static oak.type.Nullability.nonNullable;
@@ -53,9 +49,8 @@ final class ElementAt<T> implements Nullable<T> {
     this.index = index;
   }
 
-  @NotNull
   @Override
-  public final Iterator<T> iterator() {
+  public final T get() {
     var count = 0;
     T returned = null;
     for (var iterator = structable.iterator(); iterator.hasNext() && count < index; count++) {
@@ -63,7 +58,7 @@ final class ElementAt<T> implements Nullable<T> {
     }
     if (count < index)
       returned = null;
-    return Cursor.ofNullable(returned);
+    return returned;
   }
 }
 
@@ -77,16 +72,15 @@ final class First<T> implements Nullable<T> {
     this.filter = filter;
   }
 
-  @NotNull
   @Override
-  public final Iterator<T> iterator() {
+  public final T get() {
     T returned = null;
     for (var iterator = structable.iterator(); iterator.hasNext() && returned == null; ) {
       final var next = iterator.next();
       if (filter.test(next))
         returned = next;
     }
-    return Cursor.ofNullable(returned);
+    return returned;
   }
 }
 
@@ -100,15 +94,14 @@ final class Last<T> implements Nullable<T> {
     this.filter = filter;
   }
 
-  @NotNull
   @Override
-  public final Iterator<T> iterator() {
+  public final T get() {
     T last = null;
     for (final var value : structable) {
       if (filter.test(value))
         last = value;
     }
-    return Cursor.of(last);
+    return last;
   }
 }
 
@@ -122,15 +115,14 @@ final class Single<T> implements oak.quill.single.Single<T> {
     this.filter = filter;
   }
 
-  @NotNull
   @Override
-  public final Iterator<T> iterator() {
+  public final T get() {
     if (filter.equals(tautology())) {
       final var cursor = structable.iterator();
       final var returned = cursor.next();
       if (cursor.hasNext())
         throw new IllegalStateException("Queryable must contain one element.");
-      return Cursor.of(returned);
+      return returned;
     } else {
       final var array = Array.<T>of();
       for (final var cursor = structable.iterator(); cursor.hasNext() && array.length() < 2; ) {
@@ -139,8 +131,9 @@ final class Single<T> implements oak.quill.single.Single<T> {
           array.add(next);
         }
       }
-      if (array.length() > 1) throw new IllegalStateException("Queryable must satisfy the condition once.");
-      return Cursor.of(array.at(0));
+      if (array.length() > 1)
+        throw new IllegalStateException("Queryable must satisfy the condition once.");
+      return array.at(0);
     }
   }
 }

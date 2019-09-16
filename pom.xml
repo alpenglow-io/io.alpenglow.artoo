@@ -16,7 +16,7 @@
   <properties>
     <oak.version>1.0-SNAPSHOT</oak.version>
 
-    <java.version>11</java.version>
+    <java.version>13</java.version>
     <maven.max.version>3.6.1</maven.max.version>
     <maven.min.version>3.3.9</maven.min.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
@@ -24,8 +24,8 @@
     <encoding>UTF-8</encoding>
 
     <assertj.version>3.13.2</assertj.version>
-    <junit.version>5.5.1</junit.version>
-    <junit.platform.version>1.5.1</junit.platform.version>
+    <junit.version>5.5.2</junit.version>
+    <junit.platform.version>1.5.2</junit.platform.version>
     <log4j.version>2.12.1</log4j.version>
     <mockito.version>3.0.0</mockito.version>
     <slf4j.version>2.0.0-alpha0</slf4j.version>
@@ -33,7 +33,7 @@
     <asm.version>7.2-beta</asm.version>
 
     <plugin-clean.version>3.1.0</plugin-clean.version>
-    <plugin-compiler.version>3.8.0</plugin-compiler.version>
+    <plugin-compiler.version>3.8.1</plugin-compiler.version>
     <plugin-deploy.version>3.0.0-M1</plugin-deploy.version>
     <plugin-enforcer.version>3.0.0-M2</plugin-enforcer.version>
     <plugin-install.version>3.0.0-M1</plugin-install.version>
@@ -121,6 +121,13 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>${plugin-compiler.version}</version>
+          <configuration>
+            <release>${java.version}</release>
+            <compilerArgs>
+              <arg>--enable-preview</arg>
+            </compilerArgs>
+            <forceJavacCompilerUse>true</forceJavacCompilerUse>
+          </configuration>
           <executions>
             <execution>
               <id>compile</id>
@@ -135,26 +142,20 @@
               <goals>
                 <goal>testCompile</goal>
               </goals>
+              <configuration>
+                <testExcludes>
+                  <exclude>
+                    **/module-info.java
+                  </exclude>
+                </testExcludes>
+              </configuration>
             </execution>
           </executions>
-          <dependencies>
-            <dependency>
-              <groupId>org.ow2.asm</groupId>
-              <artifactId>asm</artifactId>
-              <version>7.2-beta</version>
-            </dependency>
-          </dependencies>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>${plugin-surefire.version}</version>
-          <executions>
-            <execution>
-              <id>default-test</id>
-              <phase>none</phase>
-            </execution>
-          </executions>
           <goals>
             <goal>test</goal>
           </goals>

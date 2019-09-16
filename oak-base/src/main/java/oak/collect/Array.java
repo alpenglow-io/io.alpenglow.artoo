@@ -5,7 +5,9 @@ import oak.func.sup.Supplier1;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Objects;
 
 import static java.lang.System.*;
 import static java.util.Arrays.copyOf;
@@ -87,5 +89,18 @@ final class SafeArray<T> implements Array<T> {
   @NotNull
   public final Iterator<T> iterator() {
     return Cursor.of(array.get());
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    final var safeArray = (SafeArray<?>) o;
+    return Arrays.equals(array.get(), safeArray.array.get());
+  }
+
+  @Override
+  public int hashCode() {
+    return array != null ? array.hashCode() : 0;
   }
 }

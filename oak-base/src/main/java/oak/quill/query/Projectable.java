@@ -5,6 +5,8 @@ import oak.func.con.Consumer1;
 import oak.func.fun.Function1;
 import oak.func.fun.IntFunction2;
 import oak.quill.Structable;
+import oak.quill.single.Nullable;
+import oak.quill.single.StructableSingle;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,14 +18,20 @@ interface Projectable<T> extends Structable<T> {
   default <R> Queryable<R> select(final Function1<? super T, ? extends R> map) {
     return new Select<>(this, nonNullable(map, "map"));
   }
-  default <R, Q extends Queryable<? extends R>> Queryable<R> selection(final Function1<? super T, ? extends Q> flatMap) {
-    return new Selection<>(new Select<>(this, nonNullable(flatMap, "flatMap")));
+  default <R, S extends Structable<? extends R>> Queryable<R> selection(final Function1<? super T, ? extends S> flatMap) {
+    return asQueryable(new Selection<>(new Select<>(this, nonNullable(flatMap, "flatMap"))));
   }
   default Queryable<T> peek(final Consumer1<? super T> peek) {
     return new Peek<>(this, nonNullable(peek, "peek"));
   }
-  default <R> Queryable<R> selectIndex(final IntFunction2<? super T, ? extends R> mapIndex) {
+  default <R> Queryable<R> select(final IntFunction2<? super T, ? extends R> mapIndex) {
     return new SelectIndex<>(this, nonNullable(mapIndex, "mapIndex"));
+  }
+
+  @NotNull
+  @Contract(pure = true)
+  private <R> Queryable<R> asQueryable(final Structable<R> structable) {
+    return () -> nonNullable(structable, "structable").iterator();
   }
 }
 
@@ -46,7 +54,7 @@ final class Select<S, R> implements Queryable<R> {
   }
 }
 
-final class Selection<R, S extends Structable<? extends R>> implements Queryable<R> {
+final class Selection<R, S extends Structable<? extends R>> implements Structable<R> {
   private final Structable<S> structables;
 
   @Contract(pure = true)

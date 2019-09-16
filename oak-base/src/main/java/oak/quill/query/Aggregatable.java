@@ -97,10 +97,8 @@ final class Aggregate<T, A, R> implements Single<A> {
     this.reduce = reduce;
   }
 
-  @Contract(pure = true)
-  @NotNull
   @Override
-  public final Iterator<A> iterator() {
+  public final A get() {
     var returned = seed;
     for (final var value : structable) {
       if (filter.test(value)) {
@@ -108,6 +106,6 @@ final class Aggregate<T, A, R> implements Single<A> {
         returned = reduce.apply(returned, apply);
       }
     }
-    return Cursor.ofNullable(returned);
+    return returned;
   }
 }

@@ -55,14 +55,14 @@ final class AsMap<T, K, E> implements Single<Map<K, E>> {
     this.element = element;
   }
 
-  @NotNull
   @Override
-  public final Iterator<Map<K, E>> iterator() {
+  @NotNull
+  public final Map<K, E> get() {
     final var map = new ConcurrentHashMap<K, E>();
     for (final var value : structable) {
       map.put(key.apply(value), element.apply(value));
     }
-    return Cursor.of(map);
+    return map;
   }
 }
 
@@ -74,12 +74,11 @@ final class AsList<T> implements Single<List<T>> {
 
   @NotNull
   @Override
-  @Contract(pure = true)
-  public final Iterator<List<T>> iterator() {
+  public final List<T> get() {
     final List<T> list = new ArrayList<>();
     for (final var value : structable)
       list.add(value);
-    return Single.of(list).iterator();
+    return list;
   }
 }
 
@@ -95,12 +94,11 @@ final class AsArray<T> implements Single<T[]> {
     this.initializer = initializer;
   }
 
-  @NotNull
   @Override
-  public final Iterator<T[]> iterator() {
+  public final T[] get() {
     final var array = count.select(initializer).iterator().next();
     var index = 0;
     for (final var value : structable) array[index++] = value;
-    return Cursor.ofAny(array);
+    return array;
   }
 }

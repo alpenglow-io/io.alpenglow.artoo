@@ -18,7 +18,9 @@ public interface Queryable<T> extends
   Aggregatable<T>,
   Concatenatable<T>,
   Groupable<T>,
-  Joinable<T>
+  Joinable<T>,
+  Quantifiable<T>,
+  Castable<T>
 {
   @NotNull
   @Contract(value = " -> new", pure = true)

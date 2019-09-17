@@ -1,26 +1,26 @@
 package oak.quill.query;
 
-import oak.collect.cursor.Cursor;
 import oak.func.fun.Function1;
 import oak.func.fun.Function2;
-import oak.func.fun.IntFunction1;
 import oak.func.pre.Predicate1;
 import oak.quill.Structable;
 import oak.quill.single.Single;
+import oak.quill.tuple.Tuple;
+import oak.quill.tuple.Tuple2;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Iterator;
 
-import static java.lang.Integer.MIN_VALUE;
 import static oak.func.fun.Function1.identity;
 import static oak.func.pre.Predicate1.tautology;
 import static oak.type.Nullability.nonNullable;
 
 public interface Aggregatable<T> extends Structable<T> {
-  default <A, R> Single<A> aggregate(final Predicate1<? super T> filter, final Function1<? super T, ? extends R> map, final A seed, final Function2<? super A, ? super R, ? extends A> reduce) {
+  @NotNull
+  @Contract("_, _, _, _ -> new")
+  private <A, R> Single<A> aggregate(final Predicate1<? super T> filter, final Function1<? super T, ? extends R> map, final A seed, final Function2<? super A, ? super R, ? extends A> reduce) {
     return new Aggregate<>(
       this,
       nonNullable(filter, "filter"),
@@ -28,6 +28,30 @@ public interface Aggregatable<T> extends Structable<T> {
       seed,
       nonNullable(reduce, "reduce")
     );
+  }
+
+  default <A, R> Single<A> aggregate(final Function1<? super T, ? extends R> map, final A seed, final Function2<? super A, ? super R, ? extends A> reduce) {
+    return new Aggregate<>(
+      this,
+      tautology(),
+      nonNullable(map, "map"),
+      seed,
+      nonNullable(reduce, "reduce")
+    );
+  }
+
+  default <A> Single<A> aggregate(final A seed, final Function2<? super A, ? super T, ? extends A> reduce) {
+    return new Aggregate<>(
+      this,
+      tautology(),
+      identity(),
+      seed,
+      nonNullable(reduce, "reduce")
+    );
+  }
+
+  default Single<T> aggregate(final Function2<? super T, ? super T, ? extends T> reduce) {
+    return new NoSeed<>(this, nonNullable(reduce, "reduce"));
   }
 
   default Single<Integer> count(final Predicate1<? super T> filter) {
@@ -38,16 +62,16 @@ public interface Aggregatable<T> extends Structable<T> {
     return count(tautology());
   }
 
-  default <R> Single<R> max(final Function1<? super T, ? extends R> reduce) {
-    return aggregate(tautology(), reduce, null, (max, next) -> max == null || max.hashCode() < next.hashCode() ? next : max);
+  default <R> Single<R> max(final Function1<? super T, ? extends R> map) {
+    return aggregate(tautology(), map, null, (max, next) -> max == null || max.hashCode() < next.hashCode() ? next : max);
   }
 
   default Single<T> max() {
     return max(identity());
   }
 
-  default <R> Single<R> min(final Function1<? super T, ? extends R> reduce) {
-    return aggregate(tautology(), reduce, null, (min, next) -> min == null || min.hashCode() > next.hashCode() ? next : min);
+  default <R> Single<R> min(final Function1<? super T, ? extends R> map) {
+    return aggregate(tautology(), map, null, (min, next) -> min == null || min.hashCode() > next.hashCode() ? next : min);
   }
 
   default Single<T> min() {
@@ -105,6 +129,26 @@ final class Aggregate<T, A, R> implements Single<A> {
         final var apply = map.apply(value);
         returned = reduce.apply(returned, apply);
       }
+    }
+    return returned;
+  }
+}
+
+final class NoSeed<T> implements Single<T> {
+  private final Structable<T> structable;
+  private final Function2<? super T, ? super T, ? extends T> reduce;
+
+  @Contract(pure = true)
+  NoSeed(final Structable<T> structable, final Function2<? super T, ? super T, ? extends T> reduce) {
+    this.structable = structable;
+    this.reduce = reduce;
+  }
+
+  @Override
+  public final T get() {
+    T returned = null;
+    for (final var value : structable) {
+      returned = returned == null ? value : reduce.apply(returned, value);
     }
     return returned;
   }

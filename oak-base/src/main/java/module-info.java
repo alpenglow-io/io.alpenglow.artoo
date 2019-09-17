@@ -7,6 +7,8 @@ module oak.base {
   exports oak.func.sup;
   exports oak.quill.single;
   exports oak.quill.query;
+  exports oak.quill.query.array;
+  exports oak.quill.query.spec;
   exports oak.collect;
 
   requires org.jetbrains.annotations;

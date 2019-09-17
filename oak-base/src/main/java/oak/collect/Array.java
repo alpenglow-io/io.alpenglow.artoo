@@ -1,6 +1,8 @@
 package oak.collect;
 
 import oak.collect.cursor.Cursor;
+import oak.func.fun.Function1;
+import oak.func.fun.IntFunction1;
 import oak.func.sup.Supplier1;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +15,7 @@ import static java.lang.System.*;
 import static java.util.Arrays.copyOf;
 import static oak.type.Nullability.nonNullable;
 
-public interface Array<T> extends Iterable<T> {
+public interface Array<T> extends Iterable<T>, Supplier1<T[]> {
   T at(int index);
   Array<T> add(T element);
 
@@ -102,5 +104,10 @@ final class SafeArray<T> implements Array<T> {
   @Override
   public int hashCode() {
     return array != null ? array.hashCode() : 0;
+  }
+
+  @Override
+  public final T[] get() {
+    return this.array.get();
   }
 }

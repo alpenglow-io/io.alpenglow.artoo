@@ -1,5 +1,7 @@
 package oak.collect.cursor;
 
+import org.jetbrains.annotations.Contract;
+
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -13,6 +15,7 @@ final class Forward<E> implements Cursor<E> {
   Forward(E[] es) {
     this(es, new AtomicInteger(0));
   }
+  @Contract(pure = true)
   private Forward(E[] es, AtomicInteger index) {
     this.es = es;
     this.index = index;

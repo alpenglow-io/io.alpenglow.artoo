@@ -88,7 +88,7 @@ class ProjectableTest {
         flowers1.add(flower);
       }
     }
-
+  
     for (final var flower : selectionQuery) {
       flowers2.add(flower);
     }

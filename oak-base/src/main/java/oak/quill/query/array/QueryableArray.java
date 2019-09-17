@@ -12,12 +12,12 @@ import java.util.Iterator;
 
 import static oak.type.Nullability.nonNullable;
 
-public interface QueryableArray<Q> extends Queryable<Q>, Supplier1<Q[]> {
+public interface QueryableArray<Q> extends UniquableArray<Q> {
   @NotNull
   @Contract("_ -> new")
   @SafeVarargs
   static <T> Queryable<T> from(final T... elements) {
-    return new QueriedArray<>(Arrays.copyOf(nonNullable(elements, "elements"), elements.length));
+    return () -> new QueriedArray<>(Arrays.copyOf(nonNullable(elements, "elements"), elements.length)).iterator();
   }
 }
 
@@ -27,12 +27,6 @@ final class QueriedArray<T> implements QueryableArray<T> {
   @Contract(pure = true)
   QueriedArray(final T[] elements) {
     this.elements = elements;
-  }
-
-  @NotNull
-  @Override
-  public final Iterator<T> iterator() {
-    return Cursor.of(elements);
   }
 
   @Override

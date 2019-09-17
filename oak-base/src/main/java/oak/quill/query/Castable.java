@@ -9,12 +9,17 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
+import static java.util.Objects.isNull;
+
 public interface Castable<T> extends Structable<T> {
   default QueryableNumbers<Double> asDoubles() {
     return new AsNumbers<>(this, Double.class);
   }
   default QueryableNumbers<Integer> asIntegers() {
     return new AsNumbers<>(this, Integer.class);
+  }
+  default QueryableNumbers<Long> asLongs() {
+    return new AsNumbers<>(this, Long.class);
   }
 }
 
@@ -36,7 +41,7 @@ final class AsNumbers<T, N extends Number> implements QueryableNumbers<N> {
     final var cursor = structable.iterator();
     while (cursor.hasNext() && all) {
       final var next = cursor.next();
-      all = type.isInstance(next);
+      all = isNull(next) || type.isInstance(next);
       if (all) {
         array.add(type.cast(next));
       }

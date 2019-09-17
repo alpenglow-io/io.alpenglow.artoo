@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Objects;
 
+import static java.util.Objects.isNull;
+
 @SuppressWarnings("unchecked")
 public interface AggregatableNumbers<N extends Number> extends StructableNumber<N> {
   default Single<Double> average() {
@@ -58,7 +60,8 @@ final class NumbersAverage<N extends Number, R extends Number> implements Single
     var total = seed;
     var count = 0;
     for (final var cursor = structable.iterator(); cursor.hasNext(); count++) {
-      total = add.apply(seed, cursor.next());
+      final var next = cursor.next();
+      total = isNull(next) ? total : add.apply(total, next);
     }
     if (count == 0) throw new IllegalStateException("Query can't be satisfied, Queryable is empty.");
     return divide.apply(count, total);

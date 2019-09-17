@@ -53,6 +53,18 @@ class AggregatableTest {
       .asIntegers()
       .average();
 
-    assertThat(integersAvg.or(-1.0)).isEqualTo(doublesAvg.or(-2.0));
+    final var expected = 77.6;
+    assertThat(integersAvg).containsOnly(expected);
+    assertThat(doublesAvg).containsOnly(expected);
+  }
+
+  @Test
+  @DisplayName("should reduce to average even with nullables")
+  void shouldReduceAverageWithNullables() {
+    final var average = from(null, 10007L, 37L, 399846234235L)
+      .asLongs()
+      .average();
+
+    assertThat(average).containsOnly(133282081426.333);
   }
 }

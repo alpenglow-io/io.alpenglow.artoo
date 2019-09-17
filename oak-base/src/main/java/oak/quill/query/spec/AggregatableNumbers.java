@@ -63,29 +63,5 @@ final class NumbersAverage<N extends Number, R extends Number> implements Single
     if (count == 0) throw new IllegalStateException("Query can't be satisfied, Queryable is empty.");
     return divide.apply(count, total);
   }
-
-  @Override
-  @Contract(value = "null -> false", pure = true)
-  public boolean equals(Object o) {
-    if (this == o)
-      return true;
-    if (o == null || getClass() != o.getClass())
-      return false;
-
-    final var that = (NumbersAverage<?, ?>) o;
-    return Objects.equals(structable, that.structable)
-      && Objects.equals(seed, that.seed)
-      && Objects.equals(add, that.add)
-      && Objects.equals(divide, that.divide);
-  }
-
-  @Override
-  public int hashCode() {
-    var result = structable != null ? structable.hashCode() : 0;
-    result = 31 * result + (seed != null ? seed.hashCode() : 0);
-    result = 31 * result + (add != null ? add.hashCode() : 0);
-    result = 31 * result + (divide != null ? divide.hashCode() : 0);
-    return result;
-  }
 }
 

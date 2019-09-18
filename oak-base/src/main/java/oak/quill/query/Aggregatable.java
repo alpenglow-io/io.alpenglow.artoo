@@ -5,17 +5,34 @@ import oak.func.fun.Function2;
 import oak.func.pre.Predicate1;
 import oak.quill.Structable;
 import oak.quill.single.Single;
-import oak.quill.tuple.Tuple;
-import oak.quill.tuple.Tuple2;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 import static oak.func.fun.Function1.identity;
 import static oak.func.pre.Predicate1.tautology;
 import static oak.type.Nullability.nonNullable;
+
+enum NumberType {
+  NaN,
+  Double,
+  Integer,
+  Long,
+  BigInteger,
+  BigDecimal;
+
+  static <N> NumberType from(@NotNull final Class<N> number) {
+    try {
+      return NumberType.valueOf(number.getSimpleName());
+    } catch (Exception e) {
+      return NumberType.NaN;
+    }
+  }
+}
 
 public interface Aggregatable<T> extends Structable<T> {
   @NotNull
@@ -97,6 +114,29 @@ public interface Aggregatable<T> extends Structable<T> {
   default Single<BigDecimal> sumAsBigDecimal(final Function1<? super T, BigDecimal> map) {
     return aggregate(tautology(), map, null, (acc, next) -> acc == null ? next : acc.add(next));
   }
+
+  default <N extends Number> Single<Double> average(final Function1<? super T, ? extends N> map) {
+    return new Average<>(this, nonNullable(map, "map"), asDouble());
+  }
+
+  default Single<Double> average() {
+    return new Average<>(this, identity(), asDouble());
+  }
+
+  @NotNull
+  @Contract(pure = true)
+  private <V> Function1<? super V, Double> asDouble() {
+    return it -> isNull(it)
+      ? null
+      : switch (NumberType.from(it.getClass())) {
+      case Double -> (Double) it;
+      case Integer -> ((Integer) it).doubleValue();
+      case Long -> ((Long) it).doubleValue();
+      case BigInteger -> ((BigInteger) it).doubleValue();
+      case BigDecimal -> ((BigDecimal) it).doubleValue();
+      case NaN -> null;
+    };
+  }
 }
 
 final class Aggregate<T, A, R> implements Single<A> {
@@ -151,5 +191,40 @@ final class NoSeed<T> implements Single<T> {
       returned = returned == null ? value : reduce.apply(returned, value);
     }
     return returned;
+  }
+}
+
+final class Average<T, V> implements Single<Double> {
+  private final Structable<T> structable;
+  private final Function1<? super T, ? extends V> map;
+  private final Function1<? super V, Double> asDouble;
+
+  @Contract(pure = true)
+  Average(
+    final Structable<T> structable,
+    final Function1<? super T, ? extends V> map,
+    final Function1<? super V, Double> asDouble
+  ) {
+    this.structable = structable;
+    this.map = map;
+    this.asDouble = asDouble;
+  }
+
+  @NotNull
+  @Override
+  public final Double get() {
+    var total = 0.0;
+    var count = 0;
+    for (final var next : structable) {
+      if (nonNull(next)) {
+        final var value = map.andThen(asDouble).apply(next);
+        if (nonNull(value)) {
+          total += value;
+          count++;
+        }
+      }
+    }
+    if (count == 0) throw new IllegalStateException("Query can't be satisfied, Queryable is empty.");
+    return total / count;
   }
 }

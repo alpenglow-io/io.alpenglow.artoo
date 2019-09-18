@@ -1,11 +1,16 @@
 package oak.quill.query;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.Iterator;
 
 import static oak.func.fun.Function1.identity;
 import static oak.quill.Quill.from;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.shouldHaveThrown;
+import static org.junit.jupiter.api.Assertions.*;
 
 class AggregatableTest {
   @Test
@@ -45,13 +50,9 @@ class AggregatableTest {
   @Test
   @DisplayName("should reduce doubles and integers to same average")
   void shouldReduceDoublesAverage() {
-    final var doublesAvg = from(78.0, 92.0, 100.0, 37.0, 81.0)
-      .asDoubles()
-      .average();
+    final var doublesAvg = from(78.0, 92.0, 100.0, 37.0, 81.0).average();
 
-    final var integersAvg = from(78, 92, 100, 37, 81)
-      .asIntegers()
-      .average();
+    final var integersAvg = from(78, 92, 100, 37, 81).average();
 
     final var expected = 77.6;
     assertThat(integersAvg).containsOnly(expected);
@@ -61,10 +62,27 @@ class AggregatableTest {
   @Test
   @DisplayName("should reduce to average even with nullables")
   void shouldReduceAverageWithNullables() {
-    final var average = from(null, 10007L, 37L, 399846234235L)
-      .asLongs()
-      .average();
+    final var average = from(null, 10007L, 37L, 399846234235L).average();
 
-    assertThat(average).containsOnly(133282081426.333);
+    assertThat(average).containsOnly(133282081426.33333);
+  }
+
+  @Test
+  @DisplayName("should reduce to average with a selector")
+  void shouldReduceAverageWithSelector() {
+    final var average = from("apple", "banana", "mango", "orange", "passionfruit", "grape")
+      .average(String::length);
+
+    assertThat(average).containsOnly(6.5);
+  }
+
+  @Test
+  @DisplayName("should not reduce since there's no numbers")
+  void shouldNotReduceSinceNoNumbers() {
+    assertThrows(IllegalStateException.class, () ->
+      from("apple", "banana", "mango", "orange", "passionfruit", "grape")
+        .average()
+        .get()
+    );
   }
 }

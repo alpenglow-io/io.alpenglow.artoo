@@ -4,6 +4,7 @@ import oak.collect.Array;
 import oak.func.pre.Predicate1;
 import oak.quill.Structable;
 import oak.quill.single.Nullable;
+import oak.quill.single.Single;
 import org.jetbrains.annotations.Contract;
 
 import static oak.func.pre.Predicate1.tautology;
@@ -30,12 +31,12 @@ public interface Uniquable<T> extends Structable<T> {
     return new Last<>(this, nonNullable(filter, "filter"));
   }
 
-  default oak.quill.single.Single<T> single() {
-    return new Single<>(this, tautology());
+  default Single<T> single() {
+    return new Just<>(this, tautology());
   }
 
-  default oak.quill.single.Single<T> single(final Predicate1<? super T> filter) {
-    return new Single<>(this, nonNullable(filter, "filter"));
+  default Single<T> single(final Predicate1<? super T> filter) {
+    return new Just<>(this, nonNullable(filter, "filter"));
   }
 }
 
@@ -105,12 +106,12 @@ final class Last<T> implements Nullable<T> {
   }
 }
 
-final class Single<T> implements oak.quill.single.Single<T> {
+final class Just<T> implements Single<T> {
   private final Structable<T> structable;
   private final Predicate1<? super T> filter;
 
   @Contract(pure = true)
-  Single(final Structable<T> structable, final Predicate1<? super T> filter) {
+  Just(final Structable<T> structable, final Predicate1<? super T> filter) {
     this.structable = structable;
     this.filter = filter;
   }

@@ -121,6 +121,13 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>${plugin-compiler.version}</version>
+          <dependencies>
+            <dependency>
+              <groupId>org.ow2.asm</groupId>
+              <artifactId>asm</artifactId>
+              <version>7.2-beta</version>
+            </dependency>
+          </dependencies>
           <configuration>
             <release>${java.version}</release>
             <compilerArgs>
@@ -156,14 +163,44 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>${plugin-surefire.version}</version>
+          <dependencies>
+            <dependency>
+              <groupId>org.junit.platform</groupId>
+              <artifactId>junit-platform-surefire-provider</artifactId>
+              <version>1.3.2</version>
+              <exclusions>
+                <exclusion>
+                  <groupId>org.apache.maven.surefire</groupId>
+                  <artifactId>surefire-api</artifactId>
+                </exclusion>
+                <exclusion>
+                  <groupId>org.apache.maven.surefire</groupId>
+                  <artifactId>common-java5</artifactId>
+                </exclusion>
+              </exclusions>
+            </dependency>
+            <dependency>
+              <groupId>org.apache.maven.surefire</groupId>
+              <artifactId>common-java5</artifactId>
+              <version>${plugin-surefire.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>org.apache.maven.surefire</groupId>
+              <artifactId>surefire-api</artifactId>
+              <version>${plugin-surefire.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>org.ow2.asm</groupId>
+              <artifactId>asm</artifactId>
+              <version>7.2-beta</version>
+            </dependency>
+          </dependencies>
           <goals>
             <goal>test</goal>
           </goals>
           <configuration>
-            <includes>
-              <include>*IT</include>
-              <include>*Test</include>
-            </includes>
+            <forkCount>0</forkCount>
+            <argLine>--enable-preview</argLine>
           </configuration>
         </plugin>
         <plugin>

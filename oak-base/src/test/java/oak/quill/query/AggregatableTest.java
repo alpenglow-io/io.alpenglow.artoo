@@ -1,16 +1,14 @@
 package oak.quill.query;
 
-import org.junit.jupiter.api.Assertions;
+import oak.system.Console;
+import org.jetbrains.annotations.Contract;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.Iterator;
-
-import static oak.func.fun.Function1.identity;
+import static oak.func.pre.Predicate1.*;
 import static oak.quill.Quill.from;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.shouldHaveThrown;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AggregatableTest {
   @Test
@@ -79,10 +77,100 @@ class AggregatableTest {
   @Test
   @DisplayName("should not reduce since there's no numbers")
   void shouldNotReduceSinceNoNumbers() {
-    assertThrows(IllegalStateException.class, () ->
-      from("apple", "banana", "mango", "orange", "passionfruit", "grape")
-        .average()
-        .get()
+    assertThrows(IllegalStateException.class, () -> {
+        for (final var value : from("apple", "banana", "mango", "orange", "passionfruit", "grape").average()) {
+          Console.writeLine(value);
+        }
+      }
     );
+  }
+
+  @Test
+  @DisplayName("should reduce counting items")
+  void shouldReduceAsCount() {
+    final var count = from("apple", "banana", "mango", "orange", "passionfruit", "grape").count();
+
+    assertThat(count).containsOnly(6);
+  }
+
+  @Test
+  @DisplayName("should count non vaxed pets")
+  void shouldCountNonVaxedPets() {
+    final class Pet {
+      private final String name;
+      private final boolean vaxed;
+
+      @Contract(pure = true)
+      private Pet(String name, boolean vaxed) {
+        this.name = name;
+        this.vaxed = vaxed;
+      }
+    }
+
+    final var count = from(
+      new Pet("Barley", true),
+      new Pet("Boots", false),
+      new Pet("Whiskers", false)
+    ).count(not(pet -> pet.vaxed));
+
+    assertThat(count).containsOnly(2);
+  }
+
+  @Test
+  @DisplayName("should find the max by selector")
+  void shouldFindMax() {
+    final class Pet {
+      private final String name;
+      private final int age;
+
+      @Contract(pure = true)
+      private Pet(String name, int age) {
+        this.name = name;
+        this.age = age;
+      }
+    }
+
+    final var max = from(
+      new Pet("Barley", 8),
+      new Pet("Boots", 4),
+      new Pet("Whiskers", 1)
+    ).max(pet -> pet.age + pet.name.length());
+
+    assertThat(max).containsOnly(14);
+  }
+
+  @Test
+  @DisplayName("should find the max by hash-code")
+  void shouldFindMaxByIdentity() {
+    final class Pet {
+      private final String name;
+      private final int age;
+
+      @Contract(pure = true)
+      private Pet(String name, int age) {
+        this.name = name;
+        this.age = age;
+      }
+
+      @Override
+      public int hashCode() {
+        return name.length() + age;
+      }
+    }
+
+    final Pet[] pets = {
+      new Pet("Barley", 8),
+      new Pet("Boots", 4),
+      new Pet("Whiskers", 1)
+    };
+
+    final var max = from(pets).max();
+
+    assertThat(max).containsOnly(14L);
+  }
+
+  @Test
+  void shouldFindMaxByNumber() {
+    assertThat(from(4294967296L, 466855135L, 81125L).max()).contains(4294967296L);
   }
 }

@@ -3,8 +3,11 @@ package oak.quill.query;
 import oak.func.fun.Function1;
 import oak.func.fun.Function2;
 import oak.func.pre.Predicate1;
+import oak.func.pre.Predicate2;
 import oak.quill.Structable;
+import oak.quill.single.Nullable;
 import oak.quill.single.Single;
+import oak.quill.tuple.Tuple;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -79,20 +82,20 @@ public interface Aggregatable<T> extends Structable<T> {
     return count(tautology());
   }
 
-  default <R> Single<R> max(final Function1<? super T, ? extends R> map) {
-    return aggregate(tautology(), map, null, (max, next) -> max == null || max.hashCode() < next.hashCode() ? next : max);
+  default <N extends Number> Nullable<N> max(final Function1<? super T, ? extends N> map) {
+    return new MinMax<>(this, map, (next, acc) -> next.doubleValue() > acc.doubleValue());
   }
 
-  default Single<T> max() {
-    return max(identity());
+  default Nullable<Long> max() {
+    return max(t -> Long.valueOf(t.hashCode()));
   }
 
-  default <R> Single<R> min(final Function1<? super T, ? extends R> map) {
-    return aggregate(tautology(), map, null, (min, next) -> min == null || min.hashCode() > next.hashCode() ? next : min);
+  default <N extends Number> Nullable<N> min(final Function1<? super T, ? extends N> map) {
+    return new MinMax<>(this, map, (next, acc) -> next.doubleValue() < acc.doubleValue());
   }
 
-  default Single<T> min() {
-    return min(identity());
+  default Nullable<Long> min() {
+    return min(t -> Long.valueOf(t.hashCode()));
   }
 
   default Single<Integer> sum(final Function1<? super T, Integer> map) {
@@ -224,7 +227,38 @@ final class Average<T, V> implements Single<Double> {
         }
       }
     }
-    if (count == 0) throw new IllegalStateException("Query can't be satisfied, Queryable is empty.");
+    if (count == 0)
+      throw new IllegalStateException("Query can't be satisfied, Queryable is empty.");
     return total / count;
+  }
+}
+
+final class MinMax<T, R> implements Nullable<R> {
+  private final Structable<T> structable;
+  private final Function1<? super T, ? extends R> map;
+  private final Predicate2<? super R, ? super R> operator;
+
+  @Contract(pure = true)
+  MinMax(
+    final Structable<T> structable,
+    final Function1<? super T, ? extends R> map,
+    final Predicate2<? super R, ? super R> operator
+  ) {
+    this.structable = structable;
+    this.map = map;
+    this.operator = operator;
+  }
+
+  @Override
+  public final R get() {
+    R minMax = null;
+    for (final var value : structable) {
+      if (nonNull(value)) {
+        final var mapped = map.apply(value);
+        if (isNull(minMax) || nonNull(mapped) && operator.apply(mapped, minMax))
+          minMax = mapped;
+      }
+    }
+    return minMax;
   }
 }

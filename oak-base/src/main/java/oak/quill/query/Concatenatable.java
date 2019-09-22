@@ -1,6 +1,6 @@
 package oak.quill.query;
 
-import oak.collect.Array;
+import oak.collect.Many;
 import oak.quill.Structable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +28,7 @@ final class Concat<T> implements Queryable<T> {
   @NotNull
   @Override
   public final Iterator<T> iterator() {
-    final var array = Array.<T>empty();
+    final var array = Many.<T>empty();
     for (final var value : first) array.add(value);
     for (final var value : second) array.add(value);
     return array.iterator();

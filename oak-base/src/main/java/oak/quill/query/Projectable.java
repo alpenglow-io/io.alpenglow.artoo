@@ -1,12 +1,10 @@
 package oak.quill.query;
 
-import oak.collect.Array;
+import oak.collect.Many;
 import oak.func.con.Consumer1;
 import oak.func.fun.Function1;
 import oak.func.fun.IntFunction2;
 import oak.quill.Structable;
-import oak.quill.single.Nullable;
-import oak.quill.single.StructableSingle;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,7 +46,7 @@ final class Select<S, R> implements Queryable<R> {
   @NotNull
   @Override
   public final Iterator<R> iterator() {
-    final var array = Array.<R>of();
+    final var array = Many.<R>of();
     for (var value : structable) array.add(map.apply(value));
     return array.iterator();
   }
@@ -65,7 +63,7 @@ final class Selection<R, S extends Structable<? extends R>> implements Structabl
   @NotNull
   @Override
   public final Iterator<R> iterator() {
-    final var array = Array.<R>of();
+    final var array = Many.<R>of();
     for (var structable : structables) {
       for (R value : structable) {
         array.add(value);
@@ -106,7 +104,7 @@ final class SelectIndex<S, R> implements Queryable<R> {
   @NotNull
   @Override
   public final Iterator<R> iterator() {
-    final var array = Array.<R>of();
+    final var array = Many.<R>of();
     var index = 0;
     for (var iterator = structable.iterator(); iterator.hasNext(); index++) {
       array.add(mapIndex.applyInt(index, iterator.next()));

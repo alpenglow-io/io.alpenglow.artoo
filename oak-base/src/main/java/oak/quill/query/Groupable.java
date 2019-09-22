@@ -1,6 +1,6 @@
 package oak.quill.query;
 
-import oak.collect.Array;
+import oak.collect.Many;
 import oak.func.fun.Function1;
 import oak.quill.Structable;
 import oak.quill.tuple.Tuple;
@@ -50,7 +50,7 @@ final class GroupBy<T, K, E> implements Selectable<K, Collection<E>> {
       map.putIfAbsent(k, new ArrayList<>());
       map.get(k).add(element.apply(value));
     }
-    final var array = Array.<Tuple2<K, Collection<E>>>of();
+    final var array = Many.<Tuple2<K, Collection<E>>>of();
     for (final var entry : map.entrySet()) array.add(Tuple.of(entry.getKey(), entry.getValue()));
     return array.iterator();
   }

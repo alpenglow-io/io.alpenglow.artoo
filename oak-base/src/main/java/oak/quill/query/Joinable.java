@@ -4,6 +4,7 @@ import oak.quill.Structable;
 import oak.quill.tuple.Tuple;
 import oak.quill.tuple.Tuple2;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 public interface Joinable<O> extends Structable<O> {
   default <I> Joining<O, I> join(final Structable<I> second) {
@@ -22,6 +23,8 @@ final class Join<O, I> implements Joining<O, I> {
   }
 
   @Override
+  @NotNull
+  @Contract(pure = true)
   public final Tuple2<Structable<O>, Structable<I>> get() {
     return Tuple.of(first, second);
   }

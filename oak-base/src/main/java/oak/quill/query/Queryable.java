@@ -1,6 +1,6 @@
 package oak.quill.query;
 
-import oak.collect.Array;
+import oak.collect.Many;
 import oak.collect.cursor.Cursor;
 import oak.func.sup.Supplier1;
 import org.jetbrains.annotations.Contract;
@@ -56,7 +56,7 @@ final class Repeat<T> implements Queryable<T> {
   @NotNull
   @Override
   public final Iterator<T> iterator() {
-    final var array = Array.<T>of();
+    final var array = Many.<T>of();
     for (var index = 0; index < count; index++) {
       array.add(supplier.get());
     }

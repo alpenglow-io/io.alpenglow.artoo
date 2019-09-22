@@ -1,6 +1,6 @@
 package oak.quill.query;
 
-import oak.collect.Array;
+import oak.collect.Many;
 import org.jetbrains.annotations.Contract;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -80,15 +80,15 @@ class ProjectableTest {
     final var selectQuery = from(bouquets).select(bouquet -> bouquet.flowers);
     final var selectionQuery = from(bouquets).selection(bouquet -> from(bouquet.flowers));
 
-    final var flowers1 = Array.<String>of();
-    final var flowers2 = Array.<String>of();
+    final var flowers1 = Many.<String>of();
+    final var flowers2 = Many.<String>of();
 
     for (final var flowers : selectQuery) {
       for (final var flower : flowers) {
         flowers1.add(flower);
       }
     }
-  
+
     for (final var flower : selectionQuery) {
       flowers2.add(flower);
     }

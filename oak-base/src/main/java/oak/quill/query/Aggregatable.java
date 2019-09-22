@@ -7,7 +7,6 @@ import oak.func.pre.Predicate2;
 import oak.quill.Structable;
 import oak.quill.single.Nullable;
 import oak.quill.single.Single;
-import oak.quill.tuple.Tuple;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,23 +18,7 @@ import static java.util.Objects.nonNull;
 import static oak.func.fun.Function1.identity;
 import static oak.func.pre.Predicate1.tautology;
 import static oak.type.Nullability.nonNullable;
-
-enum NumberType {
-  NaN,
-  Double,
-  Integer,
-  Long,
-  BigInteger,
-  BigDecimal;
-
-  static <N> NumberType from(@NotNull final Class<N> number) {
-    try {
-      return NumberType.valueOf(number.getSimpleName());
-    } catch (Exception e) {
-      return NumberType.NaN;
-    }
-  }
-}
+import static oak.type.Numeric.asDouble;
 
 public interface Aggregatable<T> extends Structable<T> {
   @NotNull
@@ -86,8 +69,10 @@ public interface Aggregatable<T> extends Structable<T> {
     return new MinMax<>(this, map, (next, acc) -> next.doubleValue() > acc.doubleValue());
   }
 
-  default Nullable<Long> max() {
-    return max(t -> Long.valueOf(t.hashCode()));
+  default Nullable<T> max() {
+    return new MinMax<>(this, identity(), (next, acc) -> (next instanceof Number && acc instanceof Number)
+      && ((Number) next).doubleValue() > ((Number) acc).doubleValue()
+    );
   }
 
   default <N extends Number> Nullable<N> min(final Function1<? super T, ? extends N> map) {
@@ -124,21 +109,6 @@ public interface Aggregatable<T> extends Structable<T> {
 
   default Single<Double> average() {
     return new Average<>(this, identity(), asDouble());
-  }
-
-  @NotNull
-  @Contract(pure = true)
-  private <V> Function1<? super V, Double> asDouble() {
-    return it -> isNull(it)
-      ? null
-      : switch (NumberType.from(it.getClass())) {
-      case Double -> (Double) it;
-      case Integer -> ((Integer) it).doubleValue();
-      case Long -> ((Long) it).doubleValue();
-      case BigInteger -> ((BigInteger) it).doubleValue();
-      case BigDecimal -> ((BigDecimal) it).doubleValue();
-      case NaN -> null;
-    };
   }
 }
 
@@ -251,14 +221,14 @@ final class MinMax<T, R> implements Nullable<R> {
 
   @Override
   public final R get() {
-    R minMax = null;
+    R result = null;
     for (final var value : structable) {
       if (nonNull(value)) {
         final var mapped = map.apply(value);
-        if (isNull(minMax) || nonNull(mapped) && operator.apply(mapped, minMax))
-          minMax = mapped;
+        if (isNull(result) || nonNull(mapped) && operator.apply(mapped, result))
+          result = mapped;
       }
     }
-    return minMax;
+    return result;
   }
 }

@@ -1,6 +1,6 @@
 package oak.quill.query;
 
-import oak.collect.Array;
+import oak.collect.Many;
 import oak.func.fun.Function2;
 import oak.quill.Structable;
 import oak.quill.tuple.Tuple2;
@@ -31,7 +31,7 @@ final class TupleSelect<O, I, R> implements Queryable<R> {
   @Override
   @Contract(pure = true)
   public final Iterator<R> iterator() {
-    final var array = Array.<R>of();
+    final var array = Many.<R>of();
     for (final var tuple : selectable) {
       for (final R value : tuple.select(map)) {
         array.add(value);

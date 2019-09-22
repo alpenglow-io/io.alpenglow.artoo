@@ -55,8 +55,8 @@ final class Just<T> implements Single<T> {
   public final T get() {
     return switch (array.get().length) {
       case 0 -> throw new IllegalStateException("Query can't be satisfied, Queryable has no elements.");
-      case 1 -> throw new IllegalStateException("Query can't be satisfied, Queryable has more than one elements.");
-      default -> array.get()[0];
+      case 1 -> array.get()[0];
+      default -> throw new IllegalStateException("Query can't be satisfied, Queryable has more than one elements.");
     };
   }
 }

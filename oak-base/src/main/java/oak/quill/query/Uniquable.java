@@ -1,6 +1,6 @@
 package oak.quill.query;
 
-import oak.collect.Array;
+import oak.collect.Many;
 import oak.func.pre.Predicate1;
 import oak.quill.Structable;
 import oak.quill.single.Nullable;
@@ -125,7 +125,7 @@ final class Just<T> implements Single<T> {
         throw new IllegalStateException("Queryable must contain one element.");
       return returned;
     } else {
-      final var array = Array.<T>of();
+      final var array = Many.<T>of();
       for (final var cursor = structable.iterator(); cursor.hasNext() && array.length() < 2; ) {
         final var next = cursor.next();
         if (filter.test(next)) {

@@ -1,23 +1,19 @@
 package oak.quill.query.array;
 
-import oak.collect.cursor.Cursor;
-import oak.func.sup.Supplier1;
 import oak.quill.query.Queryable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.ref.SoftReference;
 import java.util.Arrays;
-import java.util.Iterator;
 
 import static oak.type.Nullability.nonNullable;
 
-public interface QueryableArray<Q> extends UniquableArray<Q> {
+public interface QueryableArray<Q> extends Queryable<Q>, UniquableArray<Q> {
   @NotNull
   @Contract("_ -> new")
   @SafeVarargs
   static <T> Queryable<T> from(final T... elements) {
-    return () -> new QueriedArray<>(Arrays.copyOf(nonNullable(elements, "elements"), elements.length)).iterator();
+    return new QueriedArray<>(Arrays.copyOf(nonNullable(elements, "elements"), elements.length));
   }
 }
 

@@ -1,7 +1,6 @@
 package oak.quill.query;
 
-import oak.collect.Array;
-import oak.func.fun.Function2;
+import oak.collect.Many;
 import oak.func.pre.Predicate2;
 import oak.quill.Structables2;
 import oak.quill.tuple.Tuple;
@@ -32,7 +31,7 @@ final class On<O, I> implements Selectable<O, I> {
   @NotNull
   @Override
   public final Iterator<Tuple2<O, I>> iterator() {
-    final var array = Array.<Tuple2<O, I>>of();
+    final var array = Many.<Tuple2<O, I>>of();
     structable.get().peek((first, second) -> {
       for (final var fst : first) {
         for (final var snd : second) {

@@ -1,11 +1,15 @@
 package oak.quill.query;
 
 import oak.collect.Many;
+import oak.collect.cursor.Cursor;
 import oak.func.pre.Predicate1;
 import oak.quill.Structable;
 import oak.quill.single.Nullable;
 import oak.quill.single.Single;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Iterator;
 
 import static oak.func.pre.Predicate1.tautology;
 import static oak.type.Nullability.nonNullable;
@@ -32,11 +36,11 @@ public interface Uniquable<T> extends Structable<T> {
   }
 
   default Single<T> single() {
-    return new Just<>(this, tautology());
+    return new Some<>(this, tautology());
   }
 
   default Single<T> single(final Predicate1<? super T> filter) {
-    return new Just<>(this, nonNullable(filter, "filter"));
+    return new Some<>(this, nonNullable(filter, "filter"));
   }
 }
 
@@ -50,8 +54,9 @@ final class ElementAt<T> implements Nullable<T> {
     this.index = index;
   }
 
+  @NotNull
   @Override
-  public final T get() {
+  public final Iterator<T> iterator() {
     var count = 0;
     T returned = null;
     for (var iterator = structable.iterator(); iterator.hasNext() && count < index; count++) {
@@ -59,7 +64,7 @@ final class ElementAt<T> implements Nullable<T> {
     }
     if (count < index)
       returned = null;
-    return returned;
+    return Cursor.ofNullable(returned);
   }
 }
 
@@ -73,15 +78,16 @@ final class First<T> implements Nullable<T> {
     this.filter = filter;
   }
 
+  @NotNull
   @Override
-  public final T get() {
+  public final Iterator<T> iterator() {
     T returned = null;
     for (var iterator = structable.iterator(); iterator.hasNext() && returned == null; ) {
       final var next = iterator.next();
       if (filter.test(next))
         returned = next;
     }
-    return returned;
+    return Cursor.ofNullable(returned);
   }
 }
 
@@ -95,23 +101,24 @@ final class Last<T> implements Nullable<T> {
     this.filter = filter;
   }
 
+  @NotNull
   @Override
-  public final T get() {
+  public final Iterator<T> iterator() {
     T last = null;
     for (final var value : structable) {
       if (filter.test(value))
         last = value;
     }
-    return last;
+    return Cursor.ofNullable(last);
   }
 }
 
-final class Just<T> implements Single<T> {
+final class Some<T> implements Single<T> {
   private final Structable<T> structable;
   private final Predicate1<? super T> filter;
 
   @Contract(pure = true)
-  Just(final Structable<T> structable, final Predicate1<? super T> filter) {
+  Some(final Structable<T> structable, final Predicate1<? super T> filter) {
     this.structable = structable;
     this.filter = filter;
   }

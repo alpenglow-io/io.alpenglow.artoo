@@ -1,14 +1,18 @@
 package oak.quill.single;
 
+import oak.collect.cursor.Cursor;
 import oak.func.con.Consumer1;
 import oak.func.fun.Function1;
+import oak.quill.Structable;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Iterator;
 import java.util.List;
 
 import static oak.type.Nullability.nonNullable;
 
-public interface ProjectableSingle<T> extends StructableSingle<T> {
+public interface Projectable<T> extends Structable<T> {
   default <R> Nullable<R> select(final Function1<? super T, ? extends R> map) {
     return new Select<>(this, nonNullable(map, "map"));
   }
@@ -21,49 +25,52 @@ public interface ProjectableSingle<T> extends StructableSingle<T> {
 }
 
 final class Select<S, R> implements Nullable<R> {
-  private final StructableSingle<S> structable;
+  private final Structable<S> structable;
   private final Function1<? super S, ? extends R> map;
 
   @Contract(pure = true)
-  Select(final StructableSingle<S> structable, Function1<? super S, ? extends R> map) {
+  Select(final Structable<S> structable, Function1<? super S, ? extends R> map) {
     this.structable = structable;
     this.map = map;
   }
 
+  @NotNull
   @Override
-  public final R get() {
-    return map.apply(structable.get());
+  public final Iterator<R> iterator() {
+    return Cursor.ofNullable(map.apply(structable.iterator().next()));
   }
 }
 
-final class Selection<R, S extends StructableSingle<? extends R>> implements Nullable<R> {
-  private final StructableSingle<S> structable;
+final class Selection<R, S extends Structable<? extends R>> implements Nullable<R> {
+  private final Structable<S> structable;
 
   @Contract(pure = true)
-  Selection(StructableSingle<S> structable) {
+  Selection(Structable<S> structable) {
     this.structable = structable;
   }
 
+  @NotNull
   @Override
-  public final R get() {
-    return structable.get().get();
+  public final Iterator<R> iterator() {
+    return Cursor.ofNullable(structable.iterator().next().iterator().next());
   }
 }
 
 final class Peek<T> implements Nullable<T> {
-  private final StructableSingle<T> structable;
+  private final Structable<T> structable;
   private final Consumer1<? super T> peek;
 
   @Contract(pure = true)
-  Peek(final StructableSingle<T> structable, final Consumer1<? super T> peek) {
+  Peek(final Structable<T> structable, final Consumer1<? super T> peek) {
     this.structable = structable;
     this.peek = peek;
   }
 
+  @NotNull
   @Override
-  public final T get() {
-    final var value = structable.get();
+  public final Iterator<T> iterator() {
+    final var value = structable.iterator().next();
     peek.accept(value);
-    return value;
+    return Cursor.ofNullable(value);
   }
 }

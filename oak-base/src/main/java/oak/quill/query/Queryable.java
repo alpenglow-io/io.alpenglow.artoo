@@ -6,6 +6,8 @@ import oak.func.sup.Supplier1;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 import static oak.type.Nullability.nonNullable;
@@ -21,6 +23,11 @@ public interface Queryable<T> extends
   Joinable<T>,
   Quantifiable<T>
 {
+  @SafeVarargs
+  static <S> Queryable<S> from(final S... items) {
+    return new Query<>(Arrays.asList(Arrays.copyOf(items, items.length)));
+  }
+
   @NotNull
   @Contract(value = " -> new", pure = true)
   static <S> Queryable<S> empty() {
@@ -61,5 +68,18 @@ final class Repeat<T> implements Queryable<T> {
       array.add(supplier.get());
     }
     return array.iterator();
+  }
+}
+
+final class Query<T> implements Queryable<T> {
+  private final Iterable<T> iterable;
+
+  @Contract(pure = true)
+  Query(final Iterable<T> iterable) {this.iterable = iterable;}
+
+  @NotNull
+  @Override
+  public final Iterator<T> iterator() {
+    return iterable.iterator();
   }
 }

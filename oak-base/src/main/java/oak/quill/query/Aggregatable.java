@@ -3,21 +3,18 @@ package oak.quill.query;
 import oak.func.fun.Function1;
 import oak.func.fun.Function2;
 import oak.func.pre.Predicate1;
-import oak.func.pre.Predicate2;
 import oak.quill.Structable;
-import oak.quill.single.Nullable;
 import oak.quill.single.Single;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-
-import java.math.BigDecimal;
-import java.math.BigInteger;
+import org.jetbrains.annotations.Nullable;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static oak.func.fun.Function1.identity;
 import static oak.func.pre.Predicate1.tautology;
 import static oak.type.Nullability.nonNullable;
+import static oak.type.Nullability.nonNullableState;
 import static oak.type.Numeric.asDouble;
 
 public interface Aggregatable<T> extends Structable<T> {
@@ -65,42 +62,20 @@ public interface Aggregatable<T> extends Structable<T> {
     return count(tautology());
   }
 
-  default <N extends Number> Nullable<N> max(final Function1<? super T, ? extends N> map) {
-    return new MinMax<>(this, map, (next, acc) -> next.doubleValue() > acc.doubleValue());
+  default <R, C extends Comparable<R>, V extends C> Single<V> max(final Function1<? super T, ? extends V> map) {
+    return new ComparableMinMax<>(this, map, 1);
   }
 
-  default Nullable<T> max() {
-    return new MinMax<>(this, identity(), (next, acc) -> (next instanceof Number && acc instanceof Number)
-      && ((Number) next).doubleValue() > ((Number) acc).doubleValue()
-    );
+  default Single<T> max() {
+    return new MinMax<>(this, 1);
   }
 
-  default <N extends Number> Nullable<N> min(final Function1<? super T, ? extends N> map) {
-    return new MinMax<>(this, map, (next, acc) -> next.doubleValue() < acc.doubleValue());
+  default <R, C extends Comparable<R>, V extends C> Single<V> min(final Function1<? super T, ? extends V> map) {
+    return new ComparableMinMax<>(this, map, -1);
   }
 
-  default Nullable<Long> min() {
-    return min(t -> Long.valueOf(t.hashCode()));
-  }
-
-  default Single<Integer> sum(final Function1<? super T, Integer> map) {
-    return aggregate(tautology(), map, null, (acc, next) -> acc == null ? next : acc + next);
-  }
-
-  default Single<Long> sumAsLong(final Function1<? super T, Long> map) {
-    return aggregate(tautology(), map, null, (acc, next) -> acc == null ? next : acc + next);
-  }
-
-  default Single<Double> sumAsDouble(final Function1<? super T, Double> map) {
-    return aggregate(tautology(), map, null, (acc, next) -> acc == null ? next : acc + next);
-  }
-
-  default Single<BigInteger> sumAsBigInteger(final Function1<? super T, BigInteger> map) {
-    return aggregate(tautology(), map, null, (acc, next) -> acc == null ? next : acc.add(next));
-  }
-
-  default Single<BigDecimal> sumAsBigDecimal(final Function1<? super T, BigDecimal> map) {
-    return aggregate(tautology(), map, null, (acc, next) -> acc == null ? next : acc.add(next));
+  default Single<T> min() {
+    return new MinMax<>(this, -1);
   }
 
   default <N extends Number> Single<Double> average(final Function1<? super T, ? extends N> map) {
@@ -203,32 +178,61 @@ final class Average<T, V> implements Single<Double> {
   }
 }
 
-final class MinMax<T, R> implements Nullable<R> {
+final class ComparableMinMax<T, R, C extends Comparable<R>, V extends C> implements Single<V> {
   private final Structable<T> structable;
-  private final Function1<? super T, ? extends R> map;
-  private final Predicate2<? super R, ? super R> operator;
+  private final Function1<? super T, ? extends V> map;
+  private final int operation;
 
   @Contract(pure = true)
-  MinMax(
+  ComparableMinMax(
     final Structable<T> structable,
-    final Function1<? super T, ? extends R> map,
-    final Predicate2<? super R, ? super R> operator
+    final Function1<? super T, ? extends V> map,
+    final int operation
   ) {
     this.structable = structable;
     this.map = map;
-    this.operator = operator;
+    this.operation = operation;
   }
 
   @Override
-  public final R get() {
-    R result = null;
+  @SuppressWarnings("unchecked")
+  public final V get() {
+    V result = null;
     for (final var value : structable) {
       if (nonNull(value)) {
         final var mapped = map.apply(value);
-        if (isNull(result) || nonNull(mapped) && operator.apply(mapped, result))
+        if (isNull(result) || nonNull(mapped) && mapped.compareTo((R) result) == operation)
           result = mapped;
       }
     }
-    return result;
+    return nonNullableState(result, operation == 1 ? "Max" : "Min");
+  }
+}
+
+final class MinMax<T> implements Single<T> {
+  private final Structable<T> structable;
+  private final int operation;
+
+  @Contract(pure = true)
+  MinMax(final Structable<T> structable, final int operation) {
+    this.structable = structable;
+    this.operation = operation;
+  }
+
+  @Nullable
+  @Contract(pure = true)
+  @Override
+  @SuppressWarnings("unchecked")
+  public final T get() {
+    T result = null;
+    for (final var value : structable) {
+      if (nonNull(value) && value instanceof Comparable) {
+        final var mapped = (Comparable<T>) value;
+        if (isNull(result) || mapped.compareTo(result) == operation) {
+          result = value;
+        }
+      }
+    }
+    return nonNullableState(result, operation == 1 ? "Max" : "Min", "%s must have at least one Comparable implementation item.");
   }
 }

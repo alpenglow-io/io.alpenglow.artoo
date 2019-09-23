@@ -22,12 +22,14 @@ public interface Nullability {
 
   @Contract("_, _ -> param1")
   static <T> T nonNullableState(final T any, final String argument) {
+    return nonNullableState(any, argument, "%s can't have a null-state.");
+  }
+
+  @Contract("_, _, _ -> param1")
+  static <T> T nonNullableState(final T any, final String argument, final String formatted) {
     if (isNull(any)) {
       throw new IllegalStateException(
-        requireNonNullElse(
-          argument,
-          str("%s has been passed as null argument.").format(argument) + ""
-        )
+        str(nonNullable(formatted, "formatted")).format(nonNullable(argument, "argument")) + ""
       );
     }
     return any;

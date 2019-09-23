@@ -2,8 +2,12 @@ package oak.quill.query;
 
 import oak.system.Console;
 import org.jetbrains.annotations.Contract;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+import java.util.Objects;
 
 import static oak.func.pre.Predicate1.*;
 import static oak.quill.Quill.from;
@@ -86,11 +90,11 @@ class AggregatableTest {
   }
 
   @Test
-  @DisplayName("should reduce counting items")
+  @DisplayName("should count items")
   void shouldReduceAsCount() {
     final var count = from("apple", "banana", "mango", "orange", "passionfruit", "grape").count();
 
-    assertThat(count).containsOnly(6);
+    for (final var value : count) assertThat(value).isEqualTo(6);
   }
 
   @Test
@@ -113,12 +117,12 @@ class AggregatableTest {
       new Pet("Whiskers", false)
     ).count(not(pet -> pet.vaxed));
 
-    assertThat(count).containsOnly(2);
+    for (final var value : count) assertThat(value).isEqualTo(2);
   }
 
   @Test
-  @DisplayName("should find the max by selector")
-  void shouldFindMax() {
+  @DisplayName("should find the max and min by selector")
+  void shouldFindMaxAndMin() {
     final class Pet {
       private final String name;
       private final int age;
@@ -136,12 +140,19 @@ class AggregatableTest {
       new Pet("Whiskers", 1)
     ).max(pet -> pet.age + pet.name.length());
 
-    assertThat(max).containsOnly(14);
+    final var min = from(
+      new Pet("Barley", 8),
+      new Pet("Boots", 4),
+      new Pet("Whiskers", 1)
+    ).min(pet -> pet.name.length());
+
+    for (final var value : max) assertThat(value).isEqualTo(14);
+    for (final var value : min) assertThat(value).isEqualTo(5);
   }
 
   @Test
-  @DisplayName("should find the max by hash-code")
-  void shouldFindMaxByIdentity() {
+  @DisplayName("should throw an exception when no comparable item found")
+  void shouldThrowExceptionSinceThereIsNoComparableItem() {
     final class Pet {
       private final String name;
       private final int age;
@@ -151,11 +162,6 @@ class AggregatableTest {
         this.name = name;
         this.age = age;
       }
-
-      @Override
-      public int hashCode() {
-        return name.length() + age;
-      }
     }
 
     final Pet[] pets = {
@@ -164,13 +170,9 @@ class AggregatableTest {
       new Pet("Whiskers", 1)
     };
 
-    final var max = from(pets).max();
-
-    for (Pet pet : max) {
-      Console.writeLine(pet);
-    }
-
-    assertThat(max).isNotEmpty();
+    final var Default = new Pet("None", -1);
+    assertThrows(IllegalStateException.class, from(pets).max()::get, "Max must have at least one Comparable implementation item.");
+    assertThat(from(pets).max().or(Default)).isEqualTo(Default);
   }
 
   @Test

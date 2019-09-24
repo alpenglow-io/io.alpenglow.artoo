@@ -11,6 +11,7 @@ import static oak.func.pre.Predicate1.*;
 import static oak.quill.Quill.from;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class AggregatableTest {
   @Test
@@ -77,14 +78,9 @@ class AggregatableTest {
   }
 
   @Test
-  @DisplayName("should not reduce since there's no numbers")
-  void shouldNotReduceSinceNoNumbers() {
-    assertThrows(IllegalStateException.class, () -> {
-        for (final var value : from("apple", "banana", "mango", "orange", "passionfruit", "grape").average()) {
-          Console.writeLine(value);
-        }
-      }
-    );
+  @DisplayName("should be null average since there's no numbers")
+  void shouldBeNullSinceNoNumbers() {
+    for (final var ignored : from("apple", "banana", "mango", "orange", "passionfruit", "grape").average()) fail();
   }
 
   @Test

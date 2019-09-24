@@ -1,14 +1,17 @@
 package oak.quill.query;
 
+import oak.collect.cursor.Cursor;
 import oak.func.fun.Function1;
 import oak.func.fun.Function2;
 import oak.func.pre.Predicate1;
 import oak.quill.Structable;
+import oak.quill.single.Nullable;
 import oak.quill.single.Single;
 import oak.type.Numeric;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.Iterator;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -87,11 +90,11 @@ public interface Aggregatable<T> extends Structable<T> {
     return new Sum<>(this);
   }
 
-  default <N extends Number> Single<Double> average(final Function1<? super T, ? extends N> selector) {
+  default <N extends Number> Nullable<Double> average(final Function1<? super T, ? extends N> selector) {
     return new Average<>(this, nonNullable(selector, "selector"), asDouble());
   }
 
-  default Single<Double> average() {
+  default Nullable<Double> average() {
     return new Average<>(this, identity(), asDouble());
   }
 }
@@ -151,7 +154,7 @@ final class NoSeed<T> implements Single<T> {
   }
 }
 
-final class Average<T, V> implements Single<Double> {
+final class Average<T, V> implements Nullable<Double> {
   private final Structable<T> structable;
   private final Function1<? super T, ? extends V> map;
   private final Function1<? super V, Double> asDouble;
@@ -167,9 +170,10 @@ final class Average<T, V> implements Single<Double> {
     this.asDouble = asDouble;
   }
 
+  @Contract(pure = true)
   @NotNull
   @Override
-  public final Double get() {
+  public final Iterator<Double> iterator() {
     var total = 0.0;
     var count = 0;
     for (final var next : structable) {
@@ -181,9 +185,7 @@ final class Average<T, V> implements Single<Double> {
         }
       }
     }
-    if (count == 0)
-      throw new IllegalStateException("Query can't be satisfied, Queryable is empty.");
-    return total / count;
+    return count == 0 ? Cursor.none() : Cursor.of(total / count);
   }
 }
 
@@ -277,7 +279,6 @@ final class Sum<T> implements Single<T> {
   Sum(final Structable<T> structable) {this.structable = structable;}
 
   @SuppressWarnings("unchecked")
-  @Nullable
   @Contract(pure = true)
   @Override
   public final T get() {

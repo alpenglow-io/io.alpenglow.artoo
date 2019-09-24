@@ -36,11 +36,11 @@ public interface Uniquable<T> extends Structable<T> {
   }
 
   default Single<T> single() {
-    return new Some<>(this, tautology());
+    return new One<>(this, tautology());
   }
 
   default Single<T> single(final Predicate1<? super T> filter) {
-    return new Some<>(this, nonNullable(filter, "filter"));
+    return new One<>(this, nonNullable(filter, "filter"));
   }
 }
 
@@ -113,12 +113,12 @@ final class Last<T> implements Nullable<T> {
   }
 }
 
-final class Some<T> implements Single<T> {
+final class One<T> implements Single<T> {
   private final Structable<T> structable;
   private final Predicate1<? super T> filter;
 
   @Contract(pure = true)
-  Some(final Structable<T> structable, final Predicate1<? super T> filter) {
+  One(final Structable<T> structable, final Predicate1<? super T> filter) {
     this.structable = structable;
     this.filter = filter;
   }

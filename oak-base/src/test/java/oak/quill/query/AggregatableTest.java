@@ -2,12 +2,10 @@ package oak.quill.query;
 
 import oak.system.Console;
 import org.jetbrains.annotations.Contract;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-import java.util.Objects;
+import java.math.BigInteger;
 
 import static oak.func.pre.Predicate1.*;
 import static oak.quill.Quill.from;
@@ -176,7 +174,42 @@ class AggregatableTest {
   }
 
   @Test
+  @DisplayName("should find max")
   void shouldFindMaxByNumber() {
-    assertThat(from(4294967296L, 466855135L, 81125L).max()).contains(4294967296L);
+    for (final var value : from(4294967296L, 466855135L, 81125L).max()) assertThat(value).isEqualTo(4294967296L);
+    for (final var value : from(4294967296L, 466855135L, 81125L).min()) assertThat(value).isEqualTo(81125L);
+  }
+
+  @Test
+  @DisplayName("should sum on numbers only")
+  void shouldSumIfNumbers() {
+    final class Package {
+      private final String company;
+      private final float weight;
+
+      @Contract(pure = true)
+      private Package(String company, float weight) {
+        this.company = company;
+        this.weight = weight;
+      }
+    }
+
+    final Package[] packages = {
+      new Package("Coho Vineyard", 25.2f),
+      new Package("Lucerne Publishing", 18.7f),
+      new Package("Wingtip Toys", 6.0f),
+      new Package("Adventure Works", 33.8f)
+    };
+
+    for (final var value : from(packages).sum(pack -> pack.weight)) assertThat(value).isEqualTo(83.7f);
+    for (final var value : from(25.2f, 18.7f, 6.0f, 33.8f).sum()) assertThat(value).isEqualTo(83.7f);
+    for (final var value : from(25.2f, "Coho Vineyard", "Lucerne Publishing", BigInteger.valueOf(12)).sum()) assertThat(value).isEqualTo(25.2f);
+    for (final var value : from(null, "Coho Vineyard", "Lucerne Publishing", BigInteger.valueOf(12)).sum()) assertThat(value).isEqualTo(BigInteger.valueOf(12));
+  }
+
+  @Test
+  @DisplayName("should fail if there are no numbers")
+  void shouldFailIfNoNumbers() {
+    assertThrows(IllegalStateException.class, from("Coho Vineyard", "Wingtip Toys", "Adventure Works").sum()::get);
   }
 }

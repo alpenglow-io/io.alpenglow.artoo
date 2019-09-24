@@ -5,6 +5,7 @@ import oak.func.fun.Function2;
 import oak.func.pre.Predicate1;
 import oak.quill.Structable;
 import oak.quill.single.Single;
+import oak.type.Numeric;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,6 +17,7 @@ import static oak.func.pre.Predicate1.tautology;
 import static oak.type.Nullability.nonNullable;
 import static oak.type.Nullability.nonNullableState;
 import static oak.type.Numeric.asDouble;
+import static oak.type.Numeric.sum;
 
 public interface Aggregatable<T> extends Structable<T> {
   @NotNull
@@ -63,7 +65,7 @@ public interface Aggregatable<T> extends Structable<T> {
   }
 
   default <R, C extends Comparable<R>, V extends C> Single<V> max(final Function1<? super T, ? extends V> map) {
-    return new ComparableMinMax<>(this, map, 1);
+    return new SelectorMinMax<>(this, map, 1);
   }
 
   default Single<T> max() {
@@ -71,11 +73,19 @@ public interface Aggregatable<T> extends Structable<T> {
   }
 
   default <R, C extends Comparable<R>, V extends C> Single<V> min(final Function1<? super T, ? extends V> map) {
-    return new ComparableMinMax<>(this, map, -1);
+    return new SelectorMinMax<>(this, map, -1);
   }
 
   default Single<T> min() {
     return new MinMax<>(this, -1);
+  }
+
+  default <N extends Number> Single<N> sum(final Function1<? super T, ? extends N> map) {
+    return new SelectorSum<>(this, map);
+  }
+
+  default Single<T> sum() {
+    return new Sum<>(this);
   }
 
   default <N extends Number> Single<Double> average(final Function1<? super T, ? extends N> map) {
@@ -178,13 +188,13 @@ final class Average<T, V> implements Single<Double> {
   }
 }
 
-final class ComparableMinMax<T, R, C extends Comparable<R>, V extends C> implements Single<V> {
+final class SelectorMinMax<T, R, C extends Comparable<R>, V extends C> implements Single<V> {
   private final Structable<T> structable;
   private final Function1<? super T, ? extends V> map;
   private final int operation;
 
   @Contract(pure = true)
-  ComparableMinMax(
+  SelectorMinMax(
     final Structable<T> structable,
     final Function1<? super T, ? extends V> map,
     final int operation
@@ -219,7 +229,6 @@ final class MinMax<T> implements Single<T> {
     this.operation = operation;
   }
 
-  @Nullable
   @Contract(pure = true)
   @Override
   @SuppressWarnings("unchecked")
@@ -234,5 +243,55 @@ final class MinMax<T> implements Single<T> {
       }
     }
     return nonNullableState(result, operation == 1 ? "Max" : "Min", "%s must have at least one Comparable implementation item.");
+  }
+}
+
+final class SelectorSum<T, N extends Number> implements Single<N> {
+  private final Structable<T> structable;
+  private final Function1<? super T, ? extends N> map;
+
+  @Contract(pure = true)
+  SelectorSum(final Structable<T> structable, final Function1<? super T, ? extends N> map) {
+    this.structable = structable;
+    this.map = map;
+  }
+
+  @Override
+  public final N get() {
+    N result = null;
+    for (final var value : structable) {
+      final var mapped = map.apply(value);
+      if (isNull(result)) {
+        result = mapped;
+      } else if (nonNull(mapped)) {
+        result = Numeric.sum(result, mapped);
+      }
+    }
+    return nonNullableState(result, "Sum", "%s must have at least one non-null number.");
+  }
+}
+
+final class Sum<T> implements Single<T> {
+  private final Structable<T> structable;
+
+  @Contract(pure = true)
+  Sum(final Structable<T> structable) {this.structable = structable;}
+
+  @SuppressWarnings("unchecked")
+  @Nullable
+  @Contract(pure = true)
+  @Override
+  public final T get() {
+    T result = null;
+    for (final var value : structable) {
+      if (value instanceof Number) {
+        if (result != null && result.getClass().equals(value.getClass())) {
+          result = (T) Numeric.sum((Number) result, (Number) value);
+        } else if (result == null) {
+          result = value;
+        }
+      }
+    }
+    return nonNullableState(result, "Sum", "%s must have at least one non-null number.");
   }
 }

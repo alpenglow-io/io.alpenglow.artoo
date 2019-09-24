@@ -17,7 +17,6 @@ import static oak.func.pre.Predicate1.tautology;
 import static oak.type.Nullability.nonNullable;
 import static oak.type.Nullability.nonNullableState;
 import static oak.type.Numeric.asDouble;
-import static oak.type.Numeric.sum;
 
 public interface Aggregatable<T> extends Structable<T> {
   @NotNull
@@ -56,40 +55,40 @@ public interface Aggregatable<T> extends Structable<T> {
     return new NoSeed<>(this, nonNullable(reduce, "reduce"));
   }
 
-  default Single<Integer> count(final Predicate1<? super T> filter) {
-    return aggregate(filter, identity(), 0, (acc, next) -> acc + 1);
+  default Single<Long> count(final Predicate1<? super T> filter) {
+    return new Count<>(this, nonNullable(filter, "filter"));
   }
 
-  default Single<Integer> count() {
+  default Single<Long> count() {
     return count(tautology());
   }
 
-  default <R, C extends Comparable<R>, V extends C> Single<V> max(final Function1<? super T, ? extends V> map) {
-    return new SelectorMinMax<>(this, map, 1);
+  default <R, C extends Comparable<R>, V extends C> Single<V> max(final Function1<? super T, ? extends V> selector) {
+    return new SelectorMinMax<>(this, nonNullable(selector, "selector"), 1);
   }
 
   default Single<T> max() {
     return new MinMax<>(this, 1);
   }
 
-  default <R, C extends Comparable<R>, V extends C> Single<V> min(final Function1<? super T, ? extends V> map) {
-    return new SelectorMinMax<>(this, map, -1);
+  default <R, C extends Comparable<R>, V extends C> Single<V> min(final Function1<? super T, ? extends V> selector) {
+    return new SelectorMinMax<>(this, nonNullable(selector, "selector"), -1);
   }
 
   default Single<T> min() {
     return new MinMax<>(this, -1);
   }
 
-  default <N extends Number> Single<N> sum(final Function1<? super T, ? extends N> map) {
-    return new SelectorSum<>(this, map);
+  default <N extends Number> Single<N> sum(final Function1<? super T, ? extends N> selector) {
+    return new SelectorSum<>(this, nonNullable(selector, "selector"));
   }
 
   default Single<T> sum() {
     return new Sum<>(this);
   }
 
-  default <N extends Number> Single<Double> average(final Function1<? super T, ? extends N> map) {
-    return new Average<>(this, nonNullable(map, "map"), asDouble());
+  default <N extends Number> Single<Double> average(final Function1<? super T, ? extends N> selector) {
+    return new Average<>(this, nonNullable(selector, "selector"), asDouble());
   }
 
   default Single<Double> average() {
@@ -293,5 +292,27 @@ final class Sum<T> implements Single<T> {
       }
     }
     return nonNullableState(result, "Sum", "%s must have at least one non-null number.");
+  }
+}
+
+final class Count<T> implements Single<Long> {
+  private final Structable<T> structable;
+  private final Predicate1<? super T> filter;
+
+  @Contract(pure = true)
+  Count(final Structable<T> structable, final Predicate1<? super T> filter) {
+    this.structable = structable;
+    this.filter = filter;
+  }
+
+  @NotNull
+  @Contract(pure = true)
+  @Override
+  public final Long get() {
+    long count = 0;
+    for (final var value : structable) {
+      if (filter.test(value)) count++;
+    }
+    return count;
   }
 }

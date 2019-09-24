@@ -89,7 +89,7 @@ class AggregatableTest {
 
   @Test
   @DisplayName("should count items")
-  void shouldReduceAsCount() {
+  void shouldCountItems() {
     final var count = from("apple", "banana", "mango", "orange", "passionfruit", "grape").count();
 
     for (final var value : count) assertThat(value).isEqualTo(6);

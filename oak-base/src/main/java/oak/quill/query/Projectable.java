@@ -16,8 +16,9 @@ interface Projectable<T> extends Structable<T> {
   default <R> Queryable<R> select(final Function1<? super T, ? extends R> map) {
     return new Select<>(this, nonNullable(map, "map"));
   }
-  default <R, S extends Structable<? extends R>> Queryable<R> selection(final Function1<? super T, ? extends S> flatMap) {
-    return asQueryable(new Selection<>(new Select<>(this, nonNullable(flatMap, "flatMap"))));
+  @SuppressWarnings("unchecked")
+  default <R, S extends Structable<R>> S selection(final Function1<? super T, ? extends S> flatMap) {
+    return (S) new Selection<>(new Select<>(this, nonNullable(flatMap, "flatMap")));
   }
   default Queryable<T> peek(final Consumer1<? super T> peek) {
     return new Peek<>(this, nonNullable(peek, "peek"));
@@ -28,31 +29,31 @@ interface Projectable<T> extends Structable<T> {
 
   @NotNull
   @Contract(pure = true)
-  private <R> Queryable<R> asQueryable(final Structable<R> structable) {
+  private <R, S extends Structable<R>> Queryable<R> asQueryable(final S structable) {
     return () -> nonNullable(structable, "structable").iterator();
   }
 }
 
-final class Select<S, R> implements Queryable<R> {
-  private final Structable<S> structable;
-  private final Function1<? super S, ? extends R> map;
+final class Select<T, S> implements Queryable<S> {
+  private final Structable<T> structable;
+  private final Function1<? super T, ? extends S> map;
 
   @Contract(pure = true)
-  Select(final Structable<S> structable, Function1<? super S, ? extends R> map) {
+  Select(final Structable<T> structable, Function1<? super T, ? extends S> map) {
     this.structable = structable;
     this.map = map;
   }
 
   @NotNull
   @Override
-  public final Iterator<R> iterator() {
-    final var array = Many.<R>of();
+  public final Iterator<S> iterator() {
+    final var array = Many.<S>of();
     for (var value : structable) array.add(map.apply(value));
     return array.iterator();
   }
 }
 
-final class Selection<R, S extends Structable<? extends R>> implements Structable<R> {
+final class Selection<R, S extends Structable<R>> implements Structable<R> {
   private final Structable<S> structables;
 
   @Contract(pure = true)

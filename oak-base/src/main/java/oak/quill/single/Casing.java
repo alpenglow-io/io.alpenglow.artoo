@@ -10,15 +10,15 @@ import static java.util.Objects.requireNonNullElse;
 import static oak.type.Nullability.nonNullable;
 
 public interface Casing<T> extends Structable<T> {
-  default T or(final T value) {
-    return new Or<>(this, nonNullable(value, "value")).get();
+  default Single<T> or(final T value) {
+    return new Or<>(this, nonNullable(value, "value"));
   }
-  default <E extends RuntimeException> T or(final String message, final Function1<String, E> exception) {
-    return new OrException<>(this, nonNullable(message, "message"), nonNullable(exception, "exception")).get();
+  default <E extends RuntimeException> Single<T> or(final String message, final Function1<String, E> exception) {
+    return new OrException<>(this, nonNullable(message, "message"), nonNullable(exception, "exception"));
   }
 }
 
-final class Or<T> implements Supplier1<T> {
+final class Or<T> implements Single<T> {
   private final Structable<T> structable;
   private final T otherwise;
 
@@ -35,7 +35,7 @@ final class Or<T> implements Supplier1<T> {
   }
 }
 
-final class OrException<T, E extends RuntimeException> implements Supplier1<T> {
+final class OrException<T, E extends RuntimeException> implements Single<T> {
   private final Structable<T> structable;
   private final String message;
   private final Function1<String, E> exception;

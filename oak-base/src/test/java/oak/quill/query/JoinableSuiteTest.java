@@ -42,10 +42,10 @@ class JoinableSuiteTest {
     final var query = people
       .join(pets)
       .on((person, pet) -> person.equals(pet.owner))
-      .select((person, pet) -> new Object() {
+      .selection(tuple -> tuple.select((person, pet) -> new Object() {
         String owner = person.name;
         String animal = pet.name;
-      });
+      }));
 
     for (final var o : query) out.format("%s - %s\n", o.owner, o.animal);
   }

@@ -10,13 +10,15 @@ import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
 import static oak.type.Nullability.nonNullable;
 
-public final class Tuple3<V1, V2, V3> implements Projection3<V1, V2, V3> {
+public interface Tuple3<V1, V2, V3> extends Projection3<V1, V2, V3> { }
+
+final class Triple<V1, V2, V3> implements Tuple3<V1, V2, V3> {
   private final V1 v1;
   private final V2 v2;
   private final V3 v3;
 
   @Contract(pure = true)
-  Tuple3(V1 v1, V2 v2, V3 v3) {
+  Triple(V1 v1, V2 v2, V3 v3) {
     this.v1 = v1;
     this.v2 = v2;
     this.v3 = v3;

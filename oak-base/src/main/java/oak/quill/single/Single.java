@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
+import static oak.type.Nullability.nonNullable;
 import static oak.type.Nullability.nonNullableState;
 
 public interface Single<T> extends Nullable<T>, Supplier1<T> {
@@ -18,13 +19,13 @@ public interface Single<T> extends Nullable<T>, Supplier1<T> {
   }
 
   @Override
-  default T or(final T value) {
-    return new OrSingle<>(this, value).get();
+  default Single<T> or(final T value) {
+    return new OrSingle<>(this, value);
   }
 
   @Override
-  default <E extends RuntimeException> T or(final String message, final Function1<String, E> exception) {
-    return null;
+  default <E extends RuntimeException> Single<T> or(final String message, final Function1<String, E> exception) {
+    return new OrSingleException<>(this, nonNullable(message, "message"), nonNullable(exception, "exception"));
   }
 
   @NotNull

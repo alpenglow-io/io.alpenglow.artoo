@@ -59,7 +59,7 @@ final class ElementAt<T> implements Nullable<T> {
   public final Iterator<T> iterator() {
     var count = 0;
     T returned = null;
-    for (var iterator = structable.iterator(); iterator.hasNext() && count < index; count++) {
+    for (final var iterator = structable.iterator(); iterator.hasNext() && count <= index; count++) {
       returned = iterator.next();
     }
     if (count < index)
@@ -81,13 +81,11 @@ final class First<T> implements Nullable<T> {
   @NotNull
   @Override
   public final Iterator<T> iterator() {
-    T returned = null;
-    for (var iterator = structable.iterator(); iterator.hasNext() && returned == null; ) {
-      final var next = iterator.next();
-      if (filter.test(next))
-        returned = next;
-    }
-    return Cursor.ofNullable(returned);
+    T result = null;
+    final var cursor = structable.iterator();
+    if (cursor.hasNext()) result = cursor.next();
+    if (cursor.hasNext()) result = null;
+    return Cursor.ofNullable(result);
   }
 }
 

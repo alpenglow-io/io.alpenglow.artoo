@@ -1,10 +1,11 @@
 package oak.quill.query;
 
 import oak.collect.Many;
-import oak.func.con.Consumer2;
 import oak.func.fun.Function2;
+import oak.func.pre.Predicate2;
 import oak.quill.Structable;
-import oak.quill.single.Nullable;
+import oak.quill.query.Joinable.Joining;
+import oak.quill.query.tuple.Queryables2;
 import oak.quill.tuple.Tuple;
 import oak.quill.tuple.Tuple2;
 import org.jetbrains.annotations.Contract;
@@ -15,6 +16,10 @@ import java.util.Iterator;
 public interface Joinable<O> extends Structable<O> {
   default <I> Joining<O, I> join(final Structable<I> second) {
     return new Join<>(this, second);
+  }
+
+  interface Joining<O, I> {
+    Queryables2<O, I> on(final Predicate2<? super O, ? super I> expression);
   }
 }
 
@@ -30,13 +35,14 @@ final class Join<O, I> implements Joining<O, I> {
 
   @NotNull
   @Override
-  public Iterator<Tuple2<O, I>> iterator() {
+  public final Queryables2<O, I> on(final Predicate2<? super O, ? super I> expression) {
     final var many = Many.<Tuple2<O, I>>of();
     for (final var o : first) {
       for (final var i : second) {
-        many.add(Tuple.of(o, i));
+        if (expression.test(o, i))
+          many.add(Tuple.of(o, i));
       }
     }
-    return many.iterator();
+    return Queryables2.of(many);
   }
 }

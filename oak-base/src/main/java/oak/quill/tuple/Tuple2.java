@@ -3,7 +3,6 @@ package oak.quill.tuple;
 import oak.func.con.Consumer2;
 import oak.func.fun.Function2;
 import oak.func.pre.Predicate2;
-import oak.quill.Structable;
 import oak.quill.single.Nullable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +11,12 @@ import static java.util.Objects.requireNonNull;
 import static oak.type.Nullability.nonNullable;
 import static oak.type.Nullability.nonNullableState;
 
-public interface Tuple2<V1, V2> extends Projection2<V1, V2>, Filterable2<V1, V2> {}
+public interface Tuple2<V1, V2> extends Tuple {
+  <R> Nullable<R> select(Function2<? super V1, ? super V2, ? extends R> map);
+  Tuple2<V1, V2> peek(Consumer2<? super V1, ? super V2> peek);
+  <T extends Tuple> Nullable<T> selection(Function2<? super V1, ? super V2, ? extends T> flatMap);
+  Tuple2<V1, V2> where(Predicate2<? super V1, ? super V2> filter);
+}
 
 final class Pair<V1, V2> implements Tuple2<V1, V2> {
   private final V1 v1;

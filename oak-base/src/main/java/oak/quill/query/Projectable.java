@@ -16,21 +16,17 @@ interface Projectable<T> extends Structable<T> {
   default <R> Queryable<R> select(final Function1<? super T, ? extends R> map) {
     return new Select<>(this, nonNullable(map, "map"));
   }
-  @SuppressWarnings("unchecked")
-  default <R, S extends Structable<R>> S selection(final Function1<? super T, ? extends S> flatMap) {
-    return (S) new Selection<>(new Select<>(this, nonNullable(flatMap, "flatMap")));
+
+  default <R, S extends Structable<R>> Queryable<R> selection(final Function1<? super T, ? extends S> flatMap) {
+    return new Selection<>(new Select<>(this, nonNullable(flatMap, "flatMap")));
   }
+
+  @Deprecated(forRemoval = true)
   default Queryable<T> peek(final Consumer1<? super T> peek) {
     return new Peek<>(this, nonNullable(peek, "peek"));
   }
   default <R> Queryable<R> select(final IntFunction2<? super T, ? extends R> mapIndex) {
     return new SelectIndex<>(this, nonNullable(mapIndex, "mapIndex"));
-  }
-
-  @NotNull
-  @Contract(pure = true)
-  private <R, S extends Structable<R>> Queryable<R> asQueryable(final S structable) {
-    return () -> nonNullable(structable, "structable").iterator();
   }
 }
 
@@ -53,7 +49,7 @@ final class Select<T, S> implements Queryable<S> {
   }
 }
 
-final class Selection<R, S extends Structable<R>> implements Structable<R> {
+final class Selection<R, S extends Structable<R>> implements Queryable<R> {
   private final Structable<S> structables;
 
   @Contract(pure = true)
@@ -65,8 +61,8 @@ final class Selection<R, S extends Structable<R>> implements Structable<R> {
   @Override
   public final Iterator<R> iterator() {
     final var array = Many.<R>of();
-    for (var structable : structables) {
-      for (R value : structable) {
+    for (final var structable : structables) {
+      for (final var value : structable) {
         array.add(value);
       }
     }

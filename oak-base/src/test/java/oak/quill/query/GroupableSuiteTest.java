@@ -7,11 +7,11 @@ import java.util.Collection;
 
 import static java.lang.Math.floor;
 import static java.lang.System.out;
-import static java.util.Collections.max;
-import static java.util.Collections.min;
 import static oak.quill.Quill.from;
+import static oak.quill.query.CustomerDefault.customers;
 
 class GroupableSuiteTest {
+
   @Test
   void shouldGroup() {
     class Pet {
@@ -41,12 +41,7 @@ class GroupableSuiteTest {
 
       @Override
       public String toString() {
-        return "Result{" +
-          "key=" + key +
-          ", count=" + count +
-          ", min=" + min +
-          ", max=" + max +
-          '}';
+        return String.format("Result{key=%s, count=%d, min=%s, max=%s}", key, count, min, max);
       }
     }
 
@@ -57,20 +52,16 @@ class GroupableSuiteTest {
       new Pet("Daisy", 4.3)
     };
 
-    final var query =
-      from(pets)
-        .groupBy(pet -> floor(pet.age), pet -> pet.age)
-        .select((age, ages) -> new Result(
-            age,
-            ages.size(),
-            min(ages),
-            max(ages)
-          )
-        );
+    final var query = from(customers())
+      .groupBy(customer -> customer.country)
+      .select((country, customers) -> new Object() {
+          String ctry = country;
+          int count = customers.size();
+        }
+      );
 
-    for (final var result : query) {
-      out.println(result);
-    }
+    for (final var result : query)
+      out.format("Count: %02d,\tCountry: %s\n", result.count, result.ctry);
 
     final var query2 = from(pets)
       //.where(pet -> pet.name.contains("W"))
@@ -80,6 +71,7 @@ class GroupableSuiteTest {
       )
       .select((key, elements) -> new Object() {
         Double key() { return key; }
+
         Collection<String> elements() { return elements; }
       });
 

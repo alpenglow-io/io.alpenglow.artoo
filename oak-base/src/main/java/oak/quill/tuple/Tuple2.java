@@ -49,11 +49,11 @@ final class Pair<V1, V2> implements Tuple2<V1, V2> {
   @Contract(pure = true)
   @Override
   public final Tuple2<V1, V2> where(Predicate2<? super V1, ? super V2> filter) {
-    return nonNullable(filter, "filter").test(v1, v2) ? this : new Empty2<>();
+    return nonNullable(filter, "filter").test(v1, v2) ? this : new None2<>();
   }
 }
 
-final class Empty2<V1, V2> implements Tuple2<V1, V2> {
+final class None2<V1, V2> implements Tuple2<V1, V2> {
   @Contract(value = "_ -> this", pure = true)
   @Override
   public final Tuple2<V1, V2> where(Predicate2<? super V1, ? super V2> filter) {

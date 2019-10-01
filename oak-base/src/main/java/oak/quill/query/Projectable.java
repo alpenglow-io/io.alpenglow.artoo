@@ -12,7 +12,7 @@ import java.util.Iterator;
 
 import static oak.type.Nullability.nonNullable;
 
-interface Projectable<T> extends Structable<T> {
+public interface Projectable<T> extends Structable<T> {
   default <R> Queryable<R> select(final Function1<? super T, ? extends R> map) {
     return new Select<>(this, nonNullable(map, "map"));
   }
@@ -25,7 +25,7 @@ interface Projectable<T> extends Structable<T> {
   default Queryable<T> peek(final Consumer1<? super T> peek) {
     return new Peek<>(this, nonNullable(peek, "peek"));
   }
-  default <R> Queryable<R> select(final IntFunction2<? super T, ? extends R> mapIndex) {
+  default <R> Queryable<R> selectIndex(final IntFunction2<? super T, ? extends R> mapIndex) {
     return new SelectIndex<>(this, nonNullable(mapIndex, "mapIndex"));
   }
 }

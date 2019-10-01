@@ -14,7 +14,7 @@ class ProjectableTest {
   @DisplayName("should select with index")
   void shouldSelectWithIndex() {
     final var query = from("apple", "banana", "mango", "orange", "passionfruit", "grape")
-      .select((index, fruit) -> String.format("%d - %s", index, fruit));
+      .selectIndex((index, fruit) -> String.format("%d - %s", index, fruit));
 
     assertThat(query).containsOnly(
       "0 - apple",

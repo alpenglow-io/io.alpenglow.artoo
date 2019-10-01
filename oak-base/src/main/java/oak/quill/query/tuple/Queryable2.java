@@ -10,25 +10,24 @@ import java.util.Iterator;
 import static oak.type.Nullability.nonNullable;
 
 @FunctionalInterface
-public interface Queryable2<V1, V2> extends Projectable2<V1, V2> {
+public interface Queryable2<V1, V2> extends Projectable2<V1, V2>, Filterable2<V1, V2> {
   @NotNull
   @Contract("_ -> new")
   @SafeVarargs
-  static <T1, T2, T extends Tuple2<T1, T2>> Queryable2<T1, T2> of(final T... tuples) {
+  static <T1, T2> Queryable2<T1, T2> of(final Tuple2<T1, T2>... tuples) {
     return new QueryTuple2<>(Many.of(nonNullable(tuples, "tuples")));
   }
 }
 
-final class QueryTuple2<V1, V2, T extends Tuple2<V1, V2>> implements Queryable2<V1, V2> {
-  private final Many<T> tuples;
+final class QueryTuple2<V1, V2> implements Queryable2<V1, V2> {
+  private final Many<Tuple2<V1, V2>> tuples;
 
   @Contract(pure = true)
-  QueryTuple2(final Many<T> tuples) {this.tuples = tuples;}
+  QueryTuple2(final Many<Tuple2<V1, V2>> tuples) {this.tuples = tuples;}
 
-  @SuppressWarnings("unchecked")
   @NotNull
   @Override
   public final Iterator<Tuple2<V1, V2>> iterator() {
-    return (Iterator<Tuple2<V1, V2>>) tuples.iterator();
+    return tuples.iterator();
   }
 }

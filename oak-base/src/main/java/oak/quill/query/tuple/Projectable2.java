@@ -1,6 +1,7 @@
 package oak.quill.query.tuple;
 
 import oak.collect.Many;
+import oak.func.con.Consumer2;
 import oak.func.fun.Function2;
 import oak.quill.Structable;
 import oak.quill.query.Projectable;
@@ -19,6 +20,10 @@ public interface Projectable2<V1, V2> extends Projectable<Tuple2<V1, V2>> {
 
   default <T1, T2, T extends Tuple2<T1, T2>, S extends Structable<T>> Queryable2<T1, T2> selection2(final Function2<? super V1, ? super V2, ? extends S> flatMap) {
     return new Selection2<>(this, nonNullable(flatMap, "flatMap"));
+  }
+
+  default Queryable2<V1, V2> peek2(final Consumer2<? super V1, ? super V2> peek) {
+    return new Peek2<>(this, nonNullable(peek, "peek"));
   }
 }
 
@@ -66,5 +71,23 @@ final class Selection2<V1, V2, T1, T2, T extends Tuple2<T1, T2>, S extends Struc
         .peek(struct -> struct.forEach(result::add));
     }
     return result.iterator();
+  }
+}
+
+final class Peek2<V1, V2> implements Queryable2<V1, V2> {
+  private final Structable<Tuple2<V1, V2>> structable;
+  private final Consumer2<? super V1, ? super V2> peek;
+
+  @Contract(pure = true)
+  Peek2(Structable<Tuple2<V1, V2>> structable, Consumer2<? super V1, ? super V2> peek) {
+    this.structable = structable;
+    this.peek = peek;
+  }
+
+  @NotNull
+  @Override
+  public Iterator<Tuple2<V1, V2>> iterator() {
+    for (final var value : structable) value.peek(peek);
+    return structable.iterator();
   }
 }

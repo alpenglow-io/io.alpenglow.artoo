@@ -49,9 +49,7 @@ class GroupableTest {
           double max = max(ages);
         }
       )
-      .select(result -> String.format("key:%s,count:%s,min:%s,max:%s", result.key, result.count, result.min, result.max))
-      .select2(it -> Tuple.of(it, "ciao"))
-      .select((str, greeting) -> str);
+      .select(result -> String.format("key:%s,count:%s,min:%s,max:%s", result.key, result.count, result.min, result.max));
 
     assertThat(query).containsExactly(
       "key:8.0,count:1,min:8.3,max:8.3",

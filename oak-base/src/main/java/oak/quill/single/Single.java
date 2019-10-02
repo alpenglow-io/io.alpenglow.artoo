@@ -20,12 +20,12 @@ public interface Single<T> extends Nullable<T>, Supplier1<T> {
 
   @Override
   default Single<T> or(final T value) {
-    return new OrSingle<>(this, value);
+    return new EitherSingle<>(this, value);
   }
 
   @Override
-  default <E extends RuntimeException> Single<T> or(final String message, final Function1<String, E> exception) {
-    return new OrSingleException<>(this, nonNullable(message, "message"), nonNullable(exception, "exception"));
+  default <E extends RuntimeException> Single<T> or(final String message, final Function1<? super String, ? extends E> exception) {
+    return new EitherSingleException<>(this, nonNullable(message, "message"), nonNullable(exception, "exception"));
   }
 
   @NotNull
@@ -50,12 +50,12 @@ final class Some<T> implements Single<T> {
   }
 }
 
-final class OrSingle<T> implements Single<T> {
+final class EitherSingle<T> implements Single<T> {
   private final Single<T> single;
   private final T otherwise;
 
   @Contract(pure = true)
-  OrSingle(final Single<T> single, final T otherwise) {
+  EitherSingle(final Single<T> single, final T otherwise) {
     this.single = single;
     this.otherwise = otherwise;
   }
@@ -70,13 +70,13 @@ final class OrSingle<T> implements Single<T> {
   }
 }
 
-final class OrSingleException<T, E extends RuntimeException> implements Single<T> {
+final class EitherSingleException<T, E extends RuntimeException> implements Single<T> {
   private final Single<T> single;
   private final String message;
-  private final Function1<String, E> exception;
+  private final Function1<? super String, ? extends E> exception;
 
   @Contract(pure = true)
-  OrSingleException(final Single<T> single, final String message, final Function1<String, E> exception) {
+  EitherSingleException(final Single<T> single, final String message, final Function1<? super String, ? extends E> exception) {
     this.single = single;
     this.message = message;
     this.exception = exception;

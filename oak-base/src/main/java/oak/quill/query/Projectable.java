@@ -5,6 +5,8 @@ import oak.func.con.Consumer1;
 import oak.func.fun.Function1;
 import oak.func.fun.IntFunction2;
 import oak.quill.Structable;
+import oak.quill.query.tuple.Queryable2;
+import oak.quill.tuple.Tuple2;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,6 +17,10 @@ import static oak.type.Nullability.nonNullable;
 public interface Projectable<T> extends Structable<T> {
   default <R> Queryable<R> select(final Function1<? super T, ? extends R> map) {
     return new Select<>(this, nonNullable(map, "map"));
+  }
+
+  default <T1, T2, U extends Tuple2<T1, T2>> Queryable2<T1, T2> select2(final Function1<? super T, ? extends U> map) {
+    return new Select2<>(this, nonNullable(map, "map"));
   }
 
   default <R, S extends Structable<R>> Queryable<R> selection(final Function1<? super T, ? extends S> flatMap) {
@@ -107,5 +113,24 @@ final class SelectIndex<S, R> implements Queryable<R> {
       array.add(mapIndex.applyInt(index, iterator.next()));
     }
     return array.iterator();
+  }
+}
+
+final class Select2<V, T1, T2, T extends Tuple2<T1, T2>> implements Queryable2<T1, T2> {
+  private final Structable<V> structable;
+  private final Function1<? super V, ? extends T> map;
+
+  @Contract(pure = true)
+  Select2(final Structable<V> structable, final Function1<? super V, ? extends T> map) {
+    this.structable = structable;
+    this.map = map;
+  }
+
+  @NotNull
+  @Override
+  public final Iterator<Tuple2<T1, T2>> iterator() {
+    final var result = Many.<Tuple2<T1, T2>>of();
+    for (final var value : structable) result.add(map.apply(value));
+    return result.iterator();
   }
 }

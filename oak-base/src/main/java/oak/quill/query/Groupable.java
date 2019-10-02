@@ -3,6 +3,7 @@ package oak.quill.query;
 import oak.collect.Many;
 import oak.func.fun.Function1;
 import oak.quill.Structable;
+import oak.quill.query.tuple.Queryable2;
 import oak.quill.tuple.Tuple;
 import oak.quill.tuple.Tuple2;
 import org.jetbrains.annotations.Contract;
@@ -18,16 +19,16 @@ import static java.lang.Integer.compare;
 import static oak.func.fun.Function1.identity;
 
 public interface Groupable<T> extends Structable<T> {
-  default <K> Selectable<K, Collection<T>> groupBy(final Function1<? super T, ? extends K> key) {
+  default <K> Queryable2<K, Collection<T>> groupBy(final Function1<? super T, ? extends K> key) {
     return groupBy(key, identity());
   }
 
-  default <K, E> Selectable<K, Collection<E>> groupBy(final Function1<? super T, ? extends K> key, final Function1<? super T, ? extends E> element) {
+  default <K, E> Queryable2<K, Collection<E>> groupBy(final Function1<? super T, ? extends K> key, final Function1<? super T, ? extends E> element) {
     return new GroupBy<>(this, key, element);
   }
 }
 
-final class GroupBy<T, K, E> implements Selectable<K, Collection<E>> {
+final class GroupBy<T, K, E> implements Queryable2<K, Collection<E>> {
   private final Comparator<? super K> comparator = (first, second) -> compare(second.hashCode(), first.hashCode());
 
   private final Structable<T> structable;

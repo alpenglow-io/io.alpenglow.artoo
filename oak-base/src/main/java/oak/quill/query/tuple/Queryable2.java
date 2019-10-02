@@ -17,6 +17,12 @@ public interface Queryable2<V1, V2> extends Projectable2<V1, V2>, Filterable2<V1
   static <T1, T2> Queryable2<T1, T2> of(final Tuple2<T1, T2>... tuples) {
     return new QueryTuple2<>(Many.of(nonNullable(tuples, "tuples")));
   }
+
+  @NotNull
+  @Contract("_ -> new")
+  static <T1, T2> Queryable2<T1, T2> of(final Many<Tuple2<T1, T2>> tuples) {
+    return new QueryTuple2<>(nonNullable(tuples, "tuples"));
+  }
 }
 
 final class QueryTuple2<V1, V2> implements Queryable2<V1, V2> {

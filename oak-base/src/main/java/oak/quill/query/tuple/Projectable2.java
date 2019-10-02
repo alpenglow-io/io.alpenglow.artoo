@@ -5,6 +5,7 @@ import oak.func.con.Consumer2;
 import oak.func.fun.Function2;
 import oak.quill.Structable;
 import oak.quill.query.Projectable;
+import oak.quill.query.Queryable;
 import oak.quill.tuple.Tuple2;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +15,10 @@ import java.util.Iterator;
 import static oak.type.Nullability.nonNullable;
 
 public interface Projectable2<V1, V2> extends Projectable<Tuple2<V1, V2>> {
+  default <R> Queryable<R> select(final Function2<? super V1, ? super V2, ? extends R> map) {
+    return new Select<>(this, nonNullable(map, "map"));
+  }
+
   default <T1, T2, T extends Tuple2<T1, T2>> Queryable2<T1, T2> select2(final Function2<? super V1, ? super V2, ? extends T> map) {
     return new Select2<>(this, nonNullable(map, "map"));
   }
@@ -24,6 +29,29 @@ public interface Projectable2<V1, V2> extends Projectable<Tuple2<V1, V2>> {
 
   default Queryable2<V1, V2> peek2(final Consumer2<? super V1, ? super V2> peek) {
     return new Peek2<>(this, nonNullable(peek, "peek"));
+  }
+}
+
+final class Select<V1, V2, R> implements Queryable<R> {
+  private final Structable<Tuple2<V1, V2>> structable;
+  private final Function2<? super V1, ? super V2, ? extends R> map;
+
+  @Contract(pure = true)
+  Select(final Structable<Tuple2<V1, V2>> structable, final Function2<? super V1, ? super V2, ? extends R> map) {
+    this.structable = structable;
+    this.map = map;
+  }
+
+  @NotNull
+  @Override
+  public final Iterator<R> iterator() {
+    final var result = Many.<R>of();
+    for (final var tuple2 : structable) {
+      tuple2
+        .select(map)
+        .forEach(result::add);
+    }
+    return result.iterator();
   }
 }
 
@@ -87,7 +115,8 @@ final class Peek2<V1, V2> implements Queryable2<V1, V2> {
   @NotNull
   @Override
   public Iterator<Tuple2<V1, V2>> iterator() {
-    for (final var value : structable) value.peek(peek);
+    for (final var value : structable)
+      value.peek(peek);
     return structable.iterator();
   }
 }

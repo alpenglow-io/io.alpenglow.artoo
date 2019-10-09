@@ -44,9 +44,10 @@ class GroupableTest {
   }
 
   @Test
-  @DisplayName("should group by country ordered by count") // (since it's the group-key)
+  @DisplayName("should group by country ordered by count")
+    // (since it's the group-key)
   void shouldGroupByCountry() {
-    final var query = from(customers())
+    final var query = from(customers)
       .groupBy(customer -> customer.country)
       .select((cntry, customs) -> new Object() {
         long count = customs.size();
@@ -114,7 +115,7 @@ class GroupableTest {
   @Test
   @DisplayName("should group by country having count of customer-id greater than 5")
   void shouldGroupByCountryHavingCountGreaterThan5() {
-    final var query = from(customers())
+    final var query = from(customers)
       .groupBy(customer -> customer.country)
       .having((cntry, customers) -> customers.size() > 5)
       .select((cntry, customs) -> new Object() {
@@ -129,6 +130,33 @@ class GroupableTest {
       "11;Germany",
       "7;UK",
       "13;USA"
+    );
+  }
+
+  @Test
+  @DisplayName("should group by country and city")
+  void shouldGroupByCountryAndCity() {
+    final var query =
+      from(customers)
+        .groupBy(customer -> customer.country, customer -> customer.city)
+        .having((country, city, customers) -> customers.size() >= 2)
+        .select((country, city, customers) -> String.format("%d;%s;%s",
+          customers.size(),
+          country.trim(),
+          city.trim()
+        ));
+
+    assertThat(query).contains(
+      "6;UK;London",
+      "4;Brazil;São Paulo",
+      "3;Argentina;Buenos Aires",
+      "2;Portugal;Lisboa",
+      "3;Spain;Madrid",
+      "3;Brazil;Rio de Janeiro",
+      "5;Mexico;México D.F.",
+      "2;France;Nantes",
+      "2;France;Paris",
+      "2;USA;Portland"
     );
   }
 }

@@ -16,7 +16,7 @@ import static oak.type.Nullability.nonNullable;
 
 public interface Projectable2<V1, V2> extends Projectable<Tuple2<V1, V2>> {
   default <R> Queryable<R> select(final Function2<? super V1, ? super V2, ? extends R> map) {
-    return new Select<>(this, nonNullable(map, "map"));
+    return new SelectT2<>(this, nonNullable(map, "map"));
   }
 
   default <T1, T2, T extends Tuple2<T1, T2>> Queryable2<T1, T2> select2(final Function2<? super V1, ? super V2, ? extends T> map) {
@@ -32,12 +32,12 @@ public interface Projectable2<V1, V2> extends Projectable<Tuple2<V1, V2>> {
   }
 }
 
-final class Select<V1, V2, R> implements Queryable<R> {
+final class SelectT2<V1, V2, R> implements Queryable<R> {
   private final Structable<Tuple2<V1, V2>> structable;
   private final Function2<? super V1, ? super V2, ? extends R> map;
 
   @Contract(pure = true)
-  Select(final Structable<Tuple2<V1, V2>> structable, final Function2<? super V1, ? super V2, ? extends R> map) {
+  SelectT2(final Structable<Tuple2<V1, V2>> structable, final Function2<? super V1, ? super V2, ? extends R> map) {
     this.structable = structable;
     this.map = map;
   }

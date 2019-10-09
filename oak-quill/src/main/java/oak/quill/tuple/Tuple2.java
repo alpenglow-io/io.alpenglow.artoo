@@ -51,6 +51,22 @@ final class Pair<V1, V2> implements Tuple2<V1, V2> {
   public final Tuple2<V1, V2> where(Predicate2<? super V1, ? super V2> filter) {
     return nonNullable(filter, "filter").test(v1, v2) ? this : new None2<>();
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    final var pair = (Pair<?, ?>) o;
+    if (!v1.equals(pair.v1)) return false;
+    return v2.equals(pair.v2);
+  }
+
+  @Override
+  public int hashCode() {
+    var result = v1.hashCode();
+    result = 31 * result + v2.hashCode();
+    return result;
+  }
 }
 
 final class None2<V1, V2> implements Tuple2<V1, V2> {

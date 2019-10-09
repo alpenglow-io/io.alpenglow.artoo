@@ -4,7 +4,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("SpellCheckingInspection")
-interface CustomerDefault {
+interface Customers {
   @NotNull
   @Contract(value = " -> new", pure = true)
   static Customer[] customers() {

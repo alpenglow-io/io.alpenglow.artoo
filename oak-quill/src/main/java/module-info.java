@@ -1,9 +1,4 @@
-module oak.base {
-  exports oak.func.con;
-  exports oak.func.exe;
-  exports oak.func.fun;
-  exports oak.func.pre;
-  exports oak.func.sup;
+module oak.quill {
   exports oak.quill;
   exports oak.quill.single;
   exports oak.quill.query;
@@ -11,5 +6,6 @@ module oak.base {
   exports oak.quill.tuple;
   exports oak.collect;
 
+  requires oak.func;
   requires org.jetbrains.annotations;
 }

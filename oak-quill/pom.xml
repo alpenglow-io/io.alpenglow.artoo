@@ -4,21 +4,16 @@
     <groupId>oak</groupId>
     <artifactId>oak</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>oak-base</artifactId>
-
-  <properties>
-    <annotations.version>17.0.0</annotations.version>
-  </properties>
+  <artifactId>oak-quill</artifactId>
 
   <dependencies>
     <dependency>
-      <groupId>org.jetbrains</groupId>
-      <artifactId>annotations</artifactId>
-      <version>${annotations.version}</version>
-      <scope>compile</scope>
+      <groupId>oak</groupId>
+      <artifactId>oak-func</artifactId>
     </dependency>
   </dependencies>
 </project>

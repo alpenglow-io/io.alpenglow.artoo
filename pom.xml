@@ -30,10 +30,10 @@
     <junit.version>5.5.2</junit.version>
     <junit.platform.version>1.5.2</junit.platform.version>
     <log4j.version>2.12.1</log4j.version>
-    <mockito.version>3.0.0</mockito.version>
-    <slf4j.version>2.0.0-alpha0</slf4j.version>
+    <mockito.version>3.1.0</mockito.version>
+    <slf4j.version>2.0.0-alpha1</slf4j.version>
 
-    <asm.version>7.2-beta</asm.version>
+    <asm.version>7.2</asm.version>
 
     <plugin-clean.version>3.1.0</plugin-clean.version>
     <plugin-compiler.version>3.8.1</plugin-compiler.version>

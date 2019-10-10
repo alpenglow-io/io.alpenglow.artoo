@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
-class UniquableSuiteTest {
+class UniquableTest {
   @Test
   @DisplayName("should get element at index 4 or default if out of bound")
   void shouldGetElementAt4() {

@@ -94,16 +94,17 @@ class GroupableTest {
       }
     }
 
-    final var query = from(orders())
-      .join(from(shippers()))
+    final var query = from(orders)
+      .join(from(shippers))
       .on((order, shipper) -> order.shipperId == shipper.id)
       .select(ShippedOrder::new)
       .groupBy(joined -> joined.shipperName)
-      .select((name, orders) -> new Object() {
-        String shipperName = name;
-        long ordersCount = orders.size();
-      })
-      .select(grouped -> String.format("%s;%d", grouped.shipperName, grouped.ordersCount));
+      .select((name, orders) ->
+        String.format("%s;%d",
+          name,
+          orders.size()
+        )
+      );
 
     assertThat(query).contains(
       "Federal Shipping;68",
@@ -115,14 +116,16 @@ class GroupableTest {
   @Test
   @DisplayName("should group by country having count of customer-id greater than 5")
   void shouldGroupByCountryHavingCountGreaterThan5() {
-    final var query = from(customers)
-      .groupBy(customer -> customer.country)
-      .having((cntry, customers) -> customers.size() > 5)
-      .select((cntry, customs) -> new Object() {
-        long count = customs.size();
-        String country = cntry;
-      })
-      .select(grouped -> String.format("%d;%s", grouped.count, grouped.country));
+    final var query =
+      from(customers)
+        .groupBy(customer -> customer.country)
+        .having((cntry, customers) -> customers.size() > 5)
+        .select((country, customers) ->
+          String.format("%d;%s",
+            customers.size(),
+            country
+          )
+        );
 
     assertThat(query).contains(
       "9;Brazil",
@@ -140,11 +143,13 @@ class GroupableTest {
       from(customers)
         .groupBy(customer -> customer.country, customer -> customer.city)
         .having((country, city, customers) -> customers.size() >= 2)
-        .select((country, city, customers) -> String.format("%d;%s;%s",
-          customers.size(),
-          country.trim(),
-          city.trim()
-        ));
+        .select((country, city, customers) ->
+          String.format("%d;%s;%s",
+            customers.size(),
+            country.trim(),
+            city.trim()
+          )
+        );
 
     assertThat(query).contains(
       "6;UK;London",
@@ -158,16 +163,5 @@ class GroupableTest {
       "2;France;Paris",
       "2;USA;Portland"
     );
-  }
-}
-
-final class Pet {
-  final String name;
-  final double age;
-
-  @Contract(pure = true)
-  Pet(String name, double age) {
-    this.name = name;
-    this.age = age;
   }
 }

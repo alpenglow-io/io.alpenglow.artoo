@@ -2,7 +2,7 @@ package oak.quill.query;
 
 import oak.collect.Many;
 import oak.func.pre.Predicate1;
-import oak.func.pre.WithLongAnd;
+import oak.func.pre.LongPredicate2;
 import oak.quill.Structable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +20,7 @@ public interface Partitionable<T> extends Structable<T> {
     final var expression = nonNullable(filter, "filter");
     return new SkipWhile<>(this, (index, param) -> expression.test(param));
   }
-  default Queryable<T> skipWhile(final WithLongAnd<? super T> filter) {
+  default Queryable<T> skipWhile(final LongPredicate2<? super T> filter) {
     final var expression = nonNullable(filter, "filter");
     return new SkipWhile<>(this, expression);
   }
@@ -31,13 +31,8 @@ public interface Partitionable<T> extends Structable<T> {
     final var expression = nonNullable(filter, "filter");
     return new TakeWhile<>(this, (index, param) -> expression.test(param));
   }
-  default Queryable<T> takeWhile(final WithLongAnd<? super T> filter) {
+  default Queryable<T> takeWhile(final LongPredicate2<? super T> filter) {
     return new TakeWhile<>(this, nonNullable(filter, "filter"));
-  }
-
-  @Contract(value = "_ -> param1", pure = true)
-  static <T> WithLongAnd<? super T> with(final WithLongAnd<? super T> filter) {
-    return filter;
   }
 }
 
@@ -63,10 +58,10 @@ final class Skip<S> implements Queryable<S> {
 
 final class SkipWhile<S> implements Queryable<S> {
   private final Structable<S> structable;
-  private final WithLongAnd<? super S> filter;
+  private final LongPredicate2<? super S> filter;
 
   @Contract(pure = true)
-  SkipWhile(final Structable<S> structable, final WithLongAnd<? super S> filter) {
+  SkipWhile(final Structable<S> structable, final LongPredicate2<? super S> filter) {
     this.structable = structable;
     this.filter = filter;
   }
@@ -110,10 +105,10 @@ final class Take<S> implements Queryable<S> {
 
 final class TakeWhile<S> implements Queryable<S> {
   private final Structable<S> some;
-  private final WithLongAnd<? super S> expression;
+  private final LongPredicate2<? super S> expression;
 
   @Contract(pure = true)
-  TakeWhile(final Structable<S> some, final WithLongAnd<? super S> expression) {
+  TakeWhile(final Structable<S> some, final LongPredicate2<? super S> expression) {
     this.some = some;
     this.expression = expression;
   }

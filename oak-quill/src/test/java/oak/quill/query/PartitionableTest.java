@@ -28,6 +28,7 @@ class PartitionableTest {
   }
 
   @Test
+  @DisplayName("should take all fruits until fruit.length is greater than index")
   void shouldTakeWithIndex() {
     final var fruits = new String[] {
       "apple", "passionfruit", "banana", "mango",

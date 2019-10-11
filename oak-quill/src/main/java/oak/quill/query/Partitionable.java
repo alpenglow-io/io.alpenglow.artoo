@@ -17,7 +17,12 @@ public interface Partitionable<T> extends Structable<T> {
     return new Skip<>(this, until);
   }
   default Queryable<T> skipWhile(final Predicate1<? super T> filter) {
-    return new SkipWhile<>(this, nonNullable(filter, "filter"));
+    final var expression = nonNullable(filter, "filter");
+    return new SkipWhile<>(this, (index, param) -> expression.test(param));
+  }
+  default Queryable<T> skipWhile(final WithLongAnd<? super T> filter) {
+    final var expression = nonNullable(filter, "filter");
+    return new SkipWhile<>(this, expression);
   }
   default Queryable<T> take(final int until) {
     return new Take<>(this, until);
@@ -28,6 +33,11 @@ public interface Partitionable<T> extends Structable<T> {
   }
   default Queryable<T> takeWhile(final WithLongAnd<? super T> filter) {
     return new TakeWhile<>(this, nonNullable(filter, "filter"));
+  }
+
+  @Contract(value = "_ -> param1", pure = true)
+  static <T> WithLongAnd<? super T> with(final WithLongAnd<? super T> filter) {
+    return filter;
   }
 }
 
@@ -53,10 +63,10 @@ final class Skip<S> implements Queryable<S> {
 
 final class SkipWhile<S> implements Queryable<S> {
   private final Structable<S> structable;
-  private final Predicate1<? super S> filter;
+  private final WithLongAnd<? super S> filter;
 
   @Contract(pure = true)
-  SkipWhile(final Structable<S> structable, final Predicate1<? super S> filter) {
+  SkipWhile(final Structable<S> structable, final WithLongAnd<? super S> filter) {
     this.structable = structable;
     this.filter = filter;
   }
@@ -64,15 +74,17 @@ final class SkipWhile<S> implements Queryable<S> {
   @NotNull
   @Override
   public final Iterator<S> iterator() {
-    var s = new ArrayList<S>();
+    final var result = Many.<S>of();
     var keepSkipping = true;
-    for (var it : structable) {
-      if (!filter.test(it) || !keepSkipping) {
-        s.add(it);
+    var index = 0L;
+    for (final var cursor = structable.iterator(); cursor.hasNext(); index++) {
+      S value = cursor.next();
+      if (!filter.verify(index, value) || !keepSkipping) {
+        result.add(value);
         keepSkipping = false;
       }
     }
-    return s.iterator();
+    return result.iterator();
   }
 }
 

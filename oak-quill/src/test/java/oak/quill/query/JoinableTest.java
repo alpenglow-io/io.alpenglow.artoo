@@ -1,6 +1,5 @@
 package oak.quill.query;
 
-import oak.system.Console;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -45,22 +44,20 @@ class JoinableTest {
   @DisplayName("should show for every order what shipper has been selected by customer")
   void shouldShowForEveryOrderWhatShipperHasBeenSelectedByCustomer() {
     final var query = from(orders)
-      .join(from(customers))
-      .on((order, customer) -> order.customerId == customer.id)
+      .join(from(customers)).on((order, customer) -> order.customerId == customer.id)
       // such select can be avoided?
       .select((order, customer) -> new Object() {
         long orderId = order.id;
         String customerName = customer.name;
         long shipperId = order.shipperId;
       })
-      .join(from(shippers))
-      .on((order, shipper) -> order.shipperId == shipper.id)
-      .select((order, shipper) -> new Object() {
-        long orderId = order.orderId;
-        String customerName = order.customerName.trim();
-        String shipperName = shipper.name.trim();
-      })
-      .select(order -> String.format("%s;%s", order.customerName, order.shipperName).trim());
+      .join(from(shippers)).on((order, shipper) -> order.shipperId == shipper.id)
+      .select((order, shipper) ->
+        String.format("%s;%s",
+          order.customerName.trim(),
+          shipper.name.trim()
+        ).trim()
+      );
 
     assertThat(query).contains(
       "Comércio Mineiro;Speedy Express",

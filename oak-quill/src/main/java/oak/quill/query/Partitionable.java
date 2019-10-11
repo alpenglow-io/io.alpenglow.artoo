@@ -1,6 +1,8 @@
 package oak.quill.query;
 
+import oak.collect.Many;
 import oak.func.pre.Predicate1;
+import oak.func.pre.WithLongAnd;
 import oak.quill.Structable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -21,6 +23,10 @@ public interface Partitionable<T> extends Structable<T> {
     return new Take<>(this, until);
   }
   default Queryable<T> takeWhile(final Predicate1<? super T> filter) {
+    final var expression = nonNullable(filter, "filter");
+    return new TakeWhile<>(this, (index, param) -> expression.test(param));
+  }
+  default Queryable<T> takeWhile(final WithLongAnd<? super T> filter) {
     return new TakeWhile<>(this, nonNullable(filter, "filter"));
   }
 }
@@ -92,10 +98,10 @@ final class Take<S> implements Queryable<S> {
 
 final class TakeWhile<S> implements Queryable<S> {
   private final Structable<S> some;
-  private final Predicate1<? super S> expression;
+  private final WithLongAnd<? super S> expression;
 
   @Contract(pure = true)
-  TakeWhile(final Structable<S> some, final Predicate1<? super S> expression) {
+  TakeWhile(final Structable<S> some, final WithLongAnd<? super S> expression) {
     this.some = some;
     this.expression = expression;
   }
@@ -103,18 +109,17 @@ final class TakeWhile<S> implements Queryable<S> {
   @NotNull
   @Override
   public final Iterator<S> iterator() {
-    if (!expression.test(some.iterator().next())) return some.iterator();
-
-    var s = new ArrayList<S>();
+    final var result = Many.<S>of();
     var keepTaking = true;
-    for (var iterator = some.iterator(); iterator.hasNext() && keepTaking;) {
-      var it = iterator.next();
-      if (expression.test(it)) {
-        s.add(it);
+    var index = 0L;
+    for (var cursor = some.iterator(); cursor.hasNext() && keepTaking; index++) {
+      final var it = cursor.next();
+      if (expression.verify(index, it)) {
+        result.add(it);
       } else {
         keepTaking = false;
       }
     }
-    return s.iterator();
+    return result.iterator();
   }
 }

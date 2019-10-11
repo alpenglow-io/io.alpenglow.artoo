@@ -13,6 +13,7 @@ public interface Str {
   default Str format(Object... objects) {
     return new Format(this, objects);
   }
+  default boolean notEquals(String value) { return !this.toString().equals(value); }
 }
 
 final class StrImpl implements Str {

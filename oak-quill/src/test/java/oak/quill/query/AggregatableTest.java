@@ -7,8 +7,9 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
 
-import static oak.func.pre.Predicate1.*;
-import static oak.quill.Quill.from;
+import static oak.func.pre.Predicate1.not;
+import static oak.quill.Q.from;
+import static oak.quill.query.Queryable.query;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -17,12 +18,11 @@ class AggregatableTest {
   @Test
   @DisplayName("should reduce to the longest name")
   void shouldReduceLongestName() {
-    final var query = from("apple", "mango", "orange", "passionfruit", "grape")
-      .aggregate(
-        String::toUpperCase,
-        "banana",
-        (longest, next) -> longest.length() > next.length() ? longest : next
-      );
+    final var query = query("apple", "mango", "orange", "passionfruit", "grape").aggregate(
+      String::toUpperCase,
+      "banana",
+      (longest, next) -> longest.length() > next.length() ? longest : next
+    );
 
     assertThat(query).containsOnly("PASSIONFRUIT");
   }
@@ -30,11 +30,7 @@ class AggregatableTest {
   @Test
   @DisplayName("should reduce to the total for even numbers")
   void shouldReduceTotalForEvens() {
-    final var query = from(4, 8, 8, 3, 9, 0, 7, 8, 2)
-      .aggregate(
-        0,
-        (total, next) -> next % 2 == 0 ? total + 1 : total
-      );
+    final var query = query(4, 8, 8, 3, 9, 0, 7, 8, 2).aggregate(0, (total, next) -> next % 2 == 0 ? total + 1 : total);
 
     assertThat(query).containsOnly(6);
   }
@@ -42,8 +38,7 @@ class AggregatableTest {
   @Test
   @DisplayName("should reduce to reversed phrase")
   void shouldReduceReversePhrase() {
-    final var query = from("the quick brown fox jumps over the lazy dog".split(" "))
-      .aggregate((reversed, next) -> next + " " + reversed);
+    final var query = query("the quick brown fox jumps over the lazy dog".split(" ")).aggregate((reversed, next) -> next + " " + reversed);
 
     assertThat(query).containsOnly("dog lazy the over jumps fox brown quick the");
   }
@@ -51,9 +46,9 @@ class AggregatableTest {
   @Test
   @DisplayName("should reduce doubles and integers to same average")
   void shouldReduceDoublesAverage() {
-    final var doublesAvg = from(78.0, 92.0, 100.0, 37.0, 81.0).average();
+    final var doublesAvg = query(78.0, 92.0, 100.0, 37.0, 81.0).average();
 
-    final var integersAvg = from(78, 92, 100, 37, 81).average();
+    final var integersAvg = query(78, 92, 100, 37, 81).average();
 
     final var expected = 77.6;
     assertThat(integersAvg).containsOnly(expected);
@@ -63,7 +58,7 @@ class AggregatableTest {
   @Test
   @DisplayName("should reduce to average even with nullables")
   void shouldReduceAverageWithNullables() {
-    final var average = from(null, 10007L, 37L, 399846234235L).average();
+    final var average = query(null, 10007L, 37L, 399846234235L).average();
 
     assertThat(average).containsOnly(133282081426.33333);
   }
@@ -71,7 +66,7 @@ class AggregatableTest {
   @Test
   @DisplayName("should reduce to average with a selector")
   void shouldReduceAverageWithSelector() {
-    final var average = from("apple", "banana", "mango", "orange", "passionfruit", "grape")
+    final var average = query("apple", "banana", "mango", "orange", "passionfruit", "grape")
       .average(String::length);
 
     assertThat(average).containsOnly(6.5);
@@ -80,13 +75,13 @@ class AggregatableTest {
   @Test
   @DisplayName("should be null average since there's no numbers")
   void shouldBeNullSinceNoNumbers() {
-    for (final var ignored : from("apple", "banana", "mango", "orange", "passionfruit", "grape").average()) fail();
+    for (final var ignored : query("apple", "banana", "mango", "orange", "passionfruit", "grape").average()) fail();
   }
 
   @Test
   @DisplayName("should count items")
   void shouldCountItems() {
-    final var count = from("apple", "banana", "mango", "orange", "passionfruit", "grape").count();
+    final var count = query("apple", "banana", "mango", "orange", "passionfruit", "grape").count();
 
     for (final var value : count) assertThat(value).isEqualTo(6);
   }
@@ -105,7 +100,7 @@ class AggregatableTest {
       }
     }
 
-    final var count = from(
+    final var count = query(
       new Pet("Barley", true),
       new Pet("Boots", false),
       new Pet("Whiskers", false)
@@ -128,13 +123,13 @@ class AggregatableTest {
       }
     }
 
-    final var max = from(
+    final var max = query(
       new Pet("Barley", 8),
       new Pet("Boots", 4),
       new Pet("Whiskers", 1)
     ).max(pet -> pet.age + pet.name.length());
 
-    final var min = from(
+    final var min = query(
       new Pet("Barley", 8),
       new Pet("Boots", 4),
       new Pet("Whiskers", 1)
@@ -165,15 +160,16 @@ class AggregatableTest {
     };
 
     final var Default = new Pet("None", -1);
-    assertThrows(IllegalStateException.class, from(pets).max()::get, "Max must have at least one Comparable implementation item.");
-    assertThat(from(pets).max().or(Default)).isEqualTo(Default);
+
+    assertThrows(IllegalStateException.class, query(pets).max()::get, "Max must have at least one Comparable implementation item.");
+    assertThat(query(pets).max().or(Default).get()).isEqualTo(Default);
   }
 
   @Test
   @DisplayName("should find max")
   void shouldFindMaxByNumber() {
-    for (final var value : from(4294967296L, 466855135L, 81125L).max()) assertThat(value).isEqualTo(4294967296L);
-    for (final var value : from(4294967296L, 466855135L, 81125L).min()) assertThat(value).isEqualTo(81125L);
+    for (final var value : query(4294967296L, 466855135L, 81125L).max()) assertThat(value).isEqualTo(4294967296L);
+    for (final var value : query(4294967296L, 466855135L, 81125L).min()) assertThat(value).isEqualTo(81125L);
   }
 
   @Test
@@ -197,15 +193,17 @@ class AggregatableTest {
       new Package("Adventure Works", 33.8f)
     };
 
-    for (final var value : from(packages).sum(pack -> pack.weight)) assertThat(value).isEqualTo(83.7f);
-    for (final var value : from(25.2f, 18.7f, 6.0f, 33.8f).sum()) assertThat(value).isEqualTo(83.7f);
-    for (final var value : from(25.2f, "Coho Vineyard", "Lucerne Publishing", BigInteger.valueOf(12)).sum()) assertThat(value).isEqualTo(25.2f);
-    for (final var value : from(null, "Coho Vineyard", "Lucerne Publishing", BigInteger.valueOf(12)).sum()) assertThat(value).isEqualTo(BigInteger.valueOf(12));
+    for (final var value : query(packages).sum(pack -> pack.weight)) assertThat(value).isEqualTo(83.7f);
+    for (final var value : query(25.2f, 18.7f, 6.0f, 33.8f).sum()) assertThat(value).isEqualTo(83.7f);
+    for (final var value : query(25.2f, "Coho Vineyard", "Lucerne Publishing", BigInteger.valueOf(12)).sum())
+      assertThat(value).isEqualTo(25.2f);
+    for (final var value : query(null, "Coho Vineyard", "Lucerne Publishing", BigInteger.valueOf(12)).sum())
+      assertThat(value).isEqualTo(BigInteger.valueOf(12));
   }
 
   @Test
   @DisplayName("should fail if there are no numbers")
   void shouldFailIfNoNumbers() {
-    assertThrows(IllegalStateException.class, from("Coho Vineyard", "Wingtip Toys", "Adventure Works").sum()::get);
+    assertThrows(IllegalStateException.class, query("Coho Vineyard", "Wingtip Toys", "Adventure Works").sum()::get);
   }
 }

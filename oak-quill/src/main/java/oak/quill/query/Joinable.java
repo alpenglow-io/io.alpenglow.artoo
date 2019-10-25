@@ -10,9 +10,16 @@ import oak.quill.tuple.Tuple2;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import static oak.quill.query.Queryable.query;
+
 public interface Joinable<O> extends Structable<O> {
   default <I> Joining<O, I> join(final Structable<I> second) {
     return new Join<>(this, second);
+  }
+
+  @SuppressWarnings("unchecked")
+  default <I> Joining<O, I> join(final I... values) {
+    return join(query(values));
   }
 
   interface Joining<O, I> {

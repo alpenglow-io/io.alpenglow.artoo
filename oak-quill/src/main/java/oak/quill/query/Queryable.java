@@ -3,6 +3,7 @@ package oak.quill.query;
 import oak.collect.Many;
 import oak.collect.cursor.Cursor;
 import oak.func.sup.Supplier1;
+import oak.quill.Structable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,7 +26,7 @@ public interface Queryable<T> extends
   @NotNull
   @Contract("_ -> new")
   @SafeVarargs
-  static <S> Queryable<S> from(final S... items) {
+  static <S> Queryable<S> query(final S... items) {
     return new Query<>(Arrays.asList(Arrays.copyOf(items, items.length)));
   }
 

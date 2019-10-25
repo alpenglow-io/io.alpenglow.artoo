@@ -7,9 +7,10 @@ import org.junit.jupiter.api.Test;
 
 import static java.util.Collections.max;
 import static java.util.Collections.min;
-import static oak.quill.Quill.from;
+import static oak.quill.Q.just;
 import static oak.quill.query.Customers.customers;
 import static oak.quill.query.Orders.orders;
+import static oak.quill.query.Queryable.query;
 import static oak.quill.query.Shippers.shippers;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,17 +25,18 @@ class GroupableTest {
       new Pet("Daisy", 4.3)
     };
 
-    final var query = from(pets)
-      .select(pet -> pet.age)
+    final var query = query(pets)
+      .select(just(pet -> pet.age))
       .groupBy(Math::floor)
-      .select((age, ages) -> new Object() {
-          double key = age;
-          long count = ages.size();
-          double min = min(ages);
-          double max = max(ages);
-        }
-      )
-      .select(result -> String.format("key:%s,count:%s,min:%s,max:%s", result.key, result.count, result.min, result.max));
+      .select(just((age, ages) ->
+        String.format(
+          "key:%s,count:%s,min:%s,max:%s",
+          age,
+          ages.size(),
+          min(ages),
+          max(ages)
+        )
+      ));
 
     assertThat(query).containsExactly(
       "key:8.0,count:1,min:8.3,max:8.3",
@@ -43,17 +45,19 @@ class GroupableTest {
     );
   }
 
+  // (since it's the group-key)
   @Test
   @DisplayName("should group by country ordered by count")
-    // (since it's the group-key)
   void shouldGroupByCountry() {
-    final var query = from(customers)
+    final var query = query(customers)
       .groupBy(customer -> customer.country)
-      .select((cntry, customs) -> new Object() {
-        long count = customs.size();
-        String country = cntry;
-      })
-      .select(grouped -> String.format("%d;%s", grouped.count, grouped.country));
+      .select(just((country, customers) ->
+        String.format(
+          "%d;%s",
+          customers.size(),
+          country
+        )
+      ));
 
     assertThat(query).contains(
       "3;Argentina",
@@ -94,17 +98,17 @@ class GroupableTest {
       }
     }
 
-    final var query = from(orders)
-      .join(from(shippers))
-      .on((order, shipper) -> order.shipperId == shipper.id)
-      .select(ShippedOrder::new)
-      .groupBy(joined -> joined.shipperName)
-      .select((name, orders) ->
-        String.format("%s;%d",
-          name,
-          orders.size()
-        )
-      );
+    final var query =
+      query(orders)
+        .join(shippers).on((order, shipper) -> order.shipperId == shipper.id)
+        .select(ShippedOrder::new)
+        .groupBy(joined -> joined.shipperName)
+        .select(just((name, orders) ->
+          String.format("%s;%d",
+            name,
+            orders.size()
+          )
+        ));
 
     assertThat(query).contains(
       "Federal Shipping;68",
@@ -117,15 +121,15 @@ class GroupableTest {
   @DisplayName("should group by country having count of customer-id greater than 5")
   void shouldGroupByCountryHavingCountGreaterThan5() {
     final var query =
-      from(customers)
+      query(customers)
         .groupBy(customer -> customer.country)
         .having((cntry, customers) -> customers.size() > 5)
-        .select((country, customers) ->
+        .select(just((country, customers) ->
           String.format("%d;%s",
             customers.size(),
             country
           )
-        );
+        ));
 
     assertThat(query).contains(
       "9;Brazil",
@@ -140,7 +144,7 @@ class GroupableTest {
   @DisplayName("should group by country and city")
   void shouldGroupByCountryAndCity() {
     final var query =
-      from(customers)
+      query(customers)
         .groupBy(customer -> customer.country, customer -> customer.city)
         .having((country, city, customers) -> customers.size() >= 2)
         .select((country, city, customers) ->

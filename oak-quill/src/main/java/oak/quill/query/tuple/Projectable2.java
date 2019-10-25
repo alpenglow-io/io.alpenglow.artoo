@@ -3,6 +3,9 @@ package oak.quill.query.tuple;
 import oak.collect.Many;
 import oak.func.con.Consumer2;
 import oak.func.fun.Function2;
+import oak.quill.Q;
+import oak.quill.Q.Just2AsManyTuple2;
+import oak.quill.Q.Just2AsTuple2;
 import oak.quill.Structable;
 import oak.quill.query.Projectable;
 import oak.quill.query.Queryable;
@@ -15,15 +18,15 @@ import java.util.Iterator;
 import static oak.type.Nullability.nonNullable;
 
 public interface Projectable2<V1, V2> extends Projectable<Tuple2<V1, V2>> {
-  default <R> Queryable<R> select(final Function2<? super V1, ? super V2, ? extends R> map) {
+  default <R> Queryable<R> select(final Q.AsJust2<? super V1, ? super V2, ? extends R> map) {
     return new SelectT2<>(this, nonNullable(map, "map"));
   }
 
-  default <T1, T2, T extends Tuple2<T1, T2>> Queryable2<T1, T2> select2(final Function2<? super V1, ? super V2, ? extends T> map) {
+  default <T1, T2, T extends Tuple2<T1, T2>> Queryable2<T1, T2> select(final Just2AsTuple2<? super V1, ? super V2, ? extends T> map) {
     return new Select2<>(this, nonNullable(map, "map"));
   }
 
-  default <T1, T2, T extends Tuple2<T1, T2>, S extends Structable<T>> Queryable2<T1, T2> selection2(final Function2<? super V1, ? super V2, ? extends S> flatMap) {
+  default <T1, T2, T extends Tuple2<T1, T2>, S extends Structable<T>> Queryable2<T1, T2> select(final Just2AsManyTuple2<? super V1, ? super V2, ? extends S> flatMap) {
     return new Selection2<>(this, nonNullable(flatMap, "flatMap"));
   }
 

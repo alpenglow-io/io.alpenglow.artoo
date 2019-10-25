@@ -3,7 +3,7 @@ package oak.quill.query;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static oak.quill.Quill.from;
+import static oak.quill.Q.just;
 import static oak.quill.query.Customers.customers;
 import static oak.quill.query.Orders.orders;
 import static oak.quill.query.Shippers.shippers;
@@ -22,15 +22,14 @@ class JoinableTest {
     final var whiskers = new Pet("Whiskers", charlotte);
     final var daisy = new Pet("Daisy", magnus);
 
-    final var query = from(magnus, terry, charlotte)
-      .join(from(barley, boots, whiskers, daisy))
-      .on((person, pet) -> person.equals(pet.owner))
-      .select((person, pet) ->
+    final var query = Queryable.query(magnus, terry, charlotte)
+      .join(barley, boots, whiskers, daisy).on((person, pet) -> person.equals(pet.owner))
+      .select(just((person, pet) ->
         String.format("%s - %s",
           person.name.trim(),
           pet.name.trim()
         )
-      );
+      ));
 
     assertThat(query).contains(
       "Hedlund, Magnus - Daisy",
@@ -43,21 +42,21 @@ class JoinableTest {
   @Test
   @DisplayName("should show for every order what shipper has been selected by customer")
   void shouldShowForEveryOrderWhatShipperHasBeenSelectedByCustomer() {
-    final var query = from(orders)
-      .join(from(customers)).on((order, customer) -> order.customerId == customer.id)
+    final var query = Queryable.query(orders)
+      .join(customers).on((order, customer) -> order.customerId == customer.id)
       // such select can be avoided?
-      .select((order, customer) -> new Object() {
+      .select(just((order, customer) -> new Object() {
         long orderId = order.id;
         String customerName = customer.name;
         long shipperId = order.shipperId;
-      })
-      .join(from(shippers)).on((order, shipper) -> order.shipperId == shipper.id)
-      .select((order, shipper) ->
+      }))
+      .join(shippers).on((order, shipper) -> order.shipperId == shipper.id)
+      .select(just((order, shipper) ->
         String.format("%s;%s",
           order.customerName.trim(),
           shipper.name.trim()
         ).trim()
-      );
+      ));
 
     assertThat(query).contains(
       "Comércio Mineiro;Speedy Express",

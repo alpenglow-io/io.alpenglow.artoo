@@ -1,16 +1,13 @@
 package oak.quill.query;
 
-import oak.collect.cursor.Cursor;
 import oak.func.fun.Function1;
 import oak.func.fun.IntFunction1;
-import oak.quill.Quill;
 import oak.quill.Structable;
 import oak.quill.single.Single;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

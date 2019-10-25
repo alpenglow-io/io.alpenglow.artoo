@@ -15,7 +15,8 @@ public interface Function1<T, R> extends Function<T, R>, Functional.Fun {
   }
 
   default <V> Function<T, V> after(Function<? super R, ? extends V> after) {
-    return andThen(requireNonNull(after, "After is null"));
+    final var nonNull = requireNonNull(after, "After is null");
+    return andThen(nonNull);
   }
 
   @NotNull

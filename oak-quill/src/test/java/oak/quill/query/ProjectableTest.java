@@ -5,16 +5,16 @@ import org.jetbrains.annotations.Contract;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static oak.func.fun.Function1.identity;
-import static oak.quill.Quill.from;
+import static oak.quill.Q.*;
+import static oak.quill.query.Queryable.query;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ProjectableTest {
   @Test
   @DisplayName("should select with index")
   void shouldSelectWithIndex() {
-    final var query = from("apple", "banana", "mango", "orange", "passionfruit", "grape")
-      .selectIndex((index, fruit) -> String.format("%d - %s", index, fruit));
+    final var query = query("apple", "banana", "mango", "orange", "passionfruit", "grape")
+      .select(ith((index, fruit) -> String.format("%d - %s", index, fruit)));
 
     assertThat(query).containsOnly(
       "0 - apple",
@@ -29,8 +29,7 @@ class ProjectableTest {
   @Test
   @DisplayName("should say every fruit is a fruit")
   void shouldSelect() {
-    final var query = from("apple", "banana", "mango", "orange", "passionfruit", "grape")
-      .select(fruit -> fruit + " is a fruit.");
+    final var query = query("apple", "banana", "mango", "orange", "passionfruit", "grape").select(just(fruit -> fruit + " is a fruit."));
 
     assertThat(query).containsOnly(
       "apple is a fruit.",
@@ -45,9 +44,7 @@ class ProjectableTest {
   @Test
   @DisplayName("should split every word")
   void shouldDoASelection() {
-    final var query = from("an apple a day", "the quick brown fox" )
-      .selection(phrase -> from(phrase.split(" ")))
-      .select(identity());
+    final var query = query("an apple a day", "the quick brown fox").select(from(phrase -> phrase.split(" ")));
 
     assertThat(query).containsOnly(
       "an",
@@ -67,18 +64,20 @@ class ProjectableTest {
       private final String[] flowers;
 
       @Contract(pure = true)
-      private Bouquet(String... flowers) {this.flowers = flowers;}
+      private Bouquet(String... flowers) {
+        this.flowers = flowers;
+      }
     }
 
-    final var bouquets = new Bouquet[] {
+    final var bouquets = new Bouquet[]{
       new Bouquet("sunflower", "daisy", "daffodil", "larkspur"),
       new Bouquet("tulip", "rose", "orchid"),
       new Bouquet("gladiolis", "lily", "snapdragon", "aster", "protea"),
       new Bouquet("larkspur", "lilac", "iris", "dahlia")
     };
 
-    final var selectQuery = from(bouquets).select(bouquet -> bouquet.flowers);
-    final var selectionQuery = from(bouquets).selection(bouquet -> from(bouquet.flowers));
+    final var selectQuery = query(bouquets).select(just(bouquet -> bouquet.flowers));
+    final var selectionQuery = query(bouquets).select(from(bouquet -> bouquet.flowers));
 
     final var flowers1 = Many.<String>of();
     final var flowers2 = Many.<String>of();

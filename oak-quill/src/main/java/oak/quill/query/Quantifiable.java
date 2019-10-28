@@ -6,6 +6,7 @@ import oak.quill.Structable;
 import oak.quill.single.Single;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
 
@@ -19,6 +20,12 @@ public interface Quantifiable<T> extends Structable<T> {
 
   default Single<Boolean> all(final Predicate1<T> filter) {
     return new All<>(this, nonNullable(filter, "filter"));
+  }
+
+  default Single<Boolean> any() { return this.any(it -> true); }
+
+  default Single<Boolean> any(final Predicate1<? super T> filter) {
+    return new Any<>(this, nonNullable(filter, "filter"));
   }
 }
 
@@ -46,10 +53,10 @@ final class AllOfType<T, C> implements Queryable<T> {
 
 final class All<T> implements Single<Boolean> {
   private final Structable<T> structable;
-  private final Predicate1<T> filter;
+  private final Predicate1<? super T> filter;
 
   @Contract(pure = true)
-  All(final Structable<T> structable, final Predicate1<T> filter) {
+  All(final Structable<T> structable, final Predicate1<? super T> filter) {
     this.structable = structable;
     this.filter = filter;
   }
@@ -62,5 +69,28 @@ final class All<T> implements Single<Boolean> {
       all = nonNull(next) && filter.test(next);
     }
     return all;
+  }
+}
+
+final class Any<T> implements Single<Boolean> {
+  private final Structable<T> structable;
+  private final Predicate1<? super T> filter;
+
+  @Contract(pure = true)
+  Any(final Structable<T> structable, final Predicate1<? super T> filter) {
+    this.structable = structable;
+    this.filter = filter;
+  }
+
+  @NotNull
+  @Contract(pure = true)
+  @Override
+  public final Boolean get() {
+    var any = false;
+    for (final var iterator = structable.iterator(); iterator.hasNext() && !any; ) {
+      final var next = iterator.next();
+      any = nonNull(next) && filter.test(next);
+    }
+    return any;
   }
 }

@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>oak</groupId>
+  <groupId>dev.lug</groupId>
   <artifactId>oak</artifactId>
   <packaging>pom</packaging>
   <version>1.0-SNAPSHOT</version>
@@ -13,20 +13,21 @@
     <module>oak-func</module>
   </modules>
 
-  <name>oak</name>
+  <name>OAK</name>
 
   <properties>
     <oak.version>1.0-SNAPSHOT</oak.version>
 
+    <encoding>UTF-8</encoding>
     <java.version>13</java.version>
-    <maven.max.version>3.6.1</maven.max.version>
+    <maven.max.version>3.6.2</maven.max.version>
     <maven.min.version>3.3.9</maven.min.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
-    <encoding>UTF-8</encoding>
+    <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
 
     <annotations.version>17.0.0</annotations.version>
-    <assertj.version>3.13.2</assertj.version>
+    <assertj.version>3.14.0</assertj.version>
     <junit.version>5.6.0-M1</junit.version>
     <junit.platform.version>1.6.0-M1</junit.platform.version>
     <log4j.version>2.12.1</log4j.version>
@@ -45,7 +46,6 @@
     <plugin-site.version>3.8.2</plugin-site.version>
     <plugin-surefire.version>3.0.0-M3</plugin-surefire.version>
     <plugin-versions.version>2.7</plugin-versions.version>
-    <oakk.version>1.0-SNAPSHOT</oakk.version>
   </properties>
 
   <dependencies>

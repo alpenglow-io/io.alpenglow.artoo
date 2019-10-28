@@ -1,10 +1,10 @@
-module oak.func {
-  exports oak.func;
-  exports oak.func.con;
-  exports oak.func.exe;
-  exports oak.func.fun;
-  exports oak.func.pre;
-  exports oak.func.sup;
+module dev.lug.oak.func {
+  exports dev.lug.oak.func;
+  exports dev.lug.oak.func.con;
+  exports dev.lug.oak.func.exe;
+  exports dev.lug.oak.func.fun;
+  exports dev.lug.oak.func.pre;
+  exports dev.lug.oak.func.sup;
 
   requires org.jetbrains.annotations;
 }

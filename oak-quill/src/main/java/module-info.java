@@ -1,11 +1,11 @@
-module oak.quill {
-  exports oak.quill;
-  exports oak.quill.single;
-  exports oak.quill.query;
-  exports oak.quill.query.tuple;
-  exports oak.quill.tuple;
-  exports oak.collect;
+module dev.lug.oak.quill {
+  exports dev.lug.oak.quill;
+  exports dev.lug.oak.quill.single;
+  exports dev.lug.oak.quill.query;
+  exports dev.lug.oak.quill.query.tuple;
+  exports dev.lug.oak.quill.tuple;
+  exports dev.lug.oak.collect;
 
-  requires oak.func;
+  requires dev.lug.oak.func;
   requires org.jetbrains.annotations;
 }

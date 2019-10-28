@@ -6,14 +6,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static oak.quill.Q.*;
-import static oak.quill.query.Queryable.query;
+import static oak.quill.query.Queryable.from;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ProjectableTest {
   @Test
   @DisplayName("should select with index")
   void shouldSelectWithIndex() {
-    final var query = query("apple", "banana", "mango", "orange", "passionfruit", "grape")
+    final var query = from("apple", "banana", "mango", "orange", "passionfruit", "grape")
       .select(ith((index, fruit) -> String.format("%d - %s", index, fruit)));
 
     assertThat(query).containsOnly(
@@ -29,7 +29,7 @@ class ProjectableTest {
   @Test
   @DisplayName("should say every fruit is a fruit")
   void shouldSelect() {
-    final var query = query("apple", "banana", "mango", "orange", "passionfruit", "grape").select(just(fruit -> fruit + " is a fruit."));
+    final var query = from("apple", "banana", "mango", "orange", "passionfruit", "grape").select(just(fruit -> fruit + " is a fruit."));
 
     assertThat(query).containsOnly(
       "apple is a fruit.",
@@ -44,7 +44,7 @@ class ProjectableTest {
   @Test
   @DisplayName("should split every word")
   void shouldDoASelection() {
-    final var query = query("an apple a day", "the quick brown fox").select(from(phrase -> phrase.split(" ")));
+    final var query = from("an apple a day", "the quick brown fox").select(many(phrase -> phrase.split(" ")));
 
     assertThat(query).containsOnly(
       "an",
@@ -76,8 +76,8 @@ class ProjectableTest {
       new Bouquet("larkspur", "lilac", "iris", "dahlia")
     };
 
-    final var selectQuery = query(bouquets).select(just(bouquet -> bouquet.flowers));
-    final var selectionQuery = query(bouquets).select(from(bouquet -> bouquet.flowers));
+    final var selectQuery = from(bouquets).select(just(bouquet -> bouquet.flowers));
+    final var selectionQuery = from(bouquets).select(many(bouquet -> bouquet.flowers));
 
     final var flowers1 = Many.<String>of();
     final var flowers2 = Many.<String>of();

@@ -25,8 +25,8 @@ public enum Q {
 
   @NotNull
   @Contract(pure = true)
-  public static <T, R> AsMany<T, Structable<R>> from(final FromArray<T, R> array) {
-    return it -> Queryable.query(array.apply(it));
+  public static <T, R> AsMany<T, Structable<R>> many(final FromArray<T, R> array) {
+    return it -> Queryable.from(array.apply(it));
   }
 
   @Contract(value = "_ -> param1", pure = true)

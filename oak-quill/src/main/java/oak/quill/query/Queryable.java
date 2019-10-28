@@ -26,7 +26,7 @@ public interface Queryable<T> extends
   @NotNull
   @Contract("_ -> new")
   @SafeVarargs
-  static <S> Queryable<S> query(final S... items) {
+  static <S> Queryable<S> from(final S... items) {
     return new Query<>(Arrays.asList(Arrays.copyOf(items, items.length)));
   }
 

@@ -10,7 +10,7 @@ import static java.util.Collections.min;
 import static oak.quill.Q.just;
 import static oak.quill.query.Customers.customers;
 import static oak.quill.query.Orders.orders;
-import static oak.quill.query.Queryable.query;
+import static oak.quill.query.Queryable.from;
 import static oak.quill.query.Shippers.shippers;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,7 +25,7 @@ class GroupableTest {
       new Pet("Daisy", 4.3)
     };
 
-    final var query = query(pets)
+    final var query = from(pets)
       .select(just(pet -> pet.age))
       .groupBy(Math::floor)
       .select(just((age, ages) ->
@@ -49,7 +49,7 @@ class GroupableTest {
   @Test
   @DisplayName("should group by country ordered by count")
   void shouldGroupByCountry() {
-    final var query = query(customers)
+    final var query = from(customers)
       .groupBy(customer -> customer.country)
       .select(just((country, customers) ->
         String.format(
@@ -99,7 +99,7 @@ class GroupableTest {
     }
 
     final var query =
-      query(orders)
+      from(orders)
         .join(shippers).on((order, shipper) -> order.shipperId == shipper.id)
         .select(ShippedOrder::new)
         .groupBy(joined -> joined.shipperName)
@@ -121,7 +121,7 @@ class GroupableTest {
   @DisplayName("should group by country having count of customer-id greater than 5")
   void shouldGroupByCountryHavingCountGreaterThan5() {
     final var query =
-      query(customers)
+      from(customers)
         .groupBy(customer -> customer.country)
         .having((cntry, customers) -> customers.size() > 5)
         .select(just((country, customers) ->
@@ -144,7 +144,7 @@ class GroupableTest {
   @DisplayName("should group by country and city")
   void shouldGroupByCountryAndCity() {
     final var query =
-      query(customers)
+      from(customers)
         .groupBy(customer -> customer.country, customer -> customer.city)
         .having((country, city, customers) -> customers.size() >= 2)
         .select((country, city, customers) ->

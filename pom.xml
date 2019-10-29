@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>dev.lug</groupId>
-  <artifactId>oak</artifactId>
+  <artifactId>dev.lug.oak</artifactId>
   <packaging>pom</packaging>
   <version>1.0-SNAPSHOT</version>
   <modules>

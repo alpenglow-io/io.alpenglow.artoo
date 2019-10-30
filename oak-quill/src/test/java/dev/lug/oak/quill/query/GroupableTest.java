@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import static java.util.Collections.max;
 import static java.util.Collections.min;
-import static dev.lug.oak.quill.Q.just;
+import static dev.lug.oak.quill.Q.P.just;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class GroupableTest {

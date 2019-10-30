@@ -1,6 +1,7 @@
 package dev.lug.oak.quill.query;
 
 import dev.lug.oak.collect.Many;
+import dev.lug.oak.func.pre.IntPredicate2;
 import dev.lug.oak.type.Nullability;
 import dev.lug.oak.func.pre.Predicate1;
 import dev.lug.oak.quill.Structable;
@@ -9,9 +10,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
+import static java.util.Objects.nonNull;
+
 public interface Filterable<T> extends Structable<T> {
   default Queryable<T> where(final Predicate1<? super T> filter) {
     return new Where<>(this, Nullability.nonNullable(filter, "filter"));
+  }
+
+  default Queryable<T> where(final IntPredicate2<? super T> filter) {
+    return new WhereIth<>(this, Nullability.nonNullable(filter, "filter"));
   }
 
   default <C> Queryable<C> ofType(final Class<? extends C> type) {
@@ -61,5 +68,30 @@ final class OfType<T, C> implements Queryable<C> {
         typeds.add(type.cast(value));
     }
     return typeds.iterator();
+  }
+}
+
+final class WhereIth<T> implements Queryable<T> {
+  private final Structable<T> structable;
+  private final IntPredicate2<? super T> filter;
+
+  @Contract(pure = true)
+  WhereIth(final Structable<T> structable, final IntPredicate2<? super T> filter) {
+    this.structable = structable;
+    this.filter = filter;
+  }
+
+  @NotNull
+  @Override
+  public final Iterator<T> iterator() {
+    final var result = Many.<T>of();
+    var index = 0;
+    for (final var cursor = structable.iterator(); cursor.hasNext(); index++) {
+      final var value = cursor.next();
+      if (nonNull(value) && filter.verify(index, value)) {
+        result.add(value);
+      }
+    }
+    return result.iterator();
   }
 }

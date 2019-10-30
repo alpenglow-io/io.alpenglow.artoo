@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Contract;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static dev.lug.oak.quill.Q.*;
+import static dev.lug.oak.quill.Q.P.*;
 import static dev.lug.oak.quill.query.Queryable.from;
 import static org.assertj.core.api.Assertions.assertThat;
 

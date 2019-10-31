@@ -1,6 +1,5 @@
 package dev.lug.oak.collect.cursor;
 
-import dev.lug.oak.type.Nullability;
 import dev.lug.oak.func.fun.Function1;
 import dev.lug.oak.func.sup.Supplier1;
 import org.jetbrains.annotations.Contract;
@@ -12,15 +11,15 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static java.util.Arrays.copyOf;
-import static java.util.Objects.requireNonNull;
 import static dev.lug.oak.type.Any.nonNullOrElse;
+import static dev.lug.oak.type.Nullability.nonNullable;
+import static java.util.Arrays.copyOf;
 
 public interface Cursor<E> extends Iterator<E>, Enumeration<E> {
   @NotNull
   @Contract("_ -> new")
   static <T> Cursor<T> of(final T[] values) {
-    return new Forward<>(Arrays.copyOf(Nullability.nonNullable(values, "values"), values.length));
+    return new Forward<>(Arrays.copyOf(nonNullable(values, "values"), values.length));
   }
 
   @NotNull
@@ -32,13 +31,13 @@ public interface Cursor<E> extends Iterator<E>, Enumeration<E> {
   @NotNull
   @Contract("_ -> new")
   static <T> Cursor<T> of(T value) {
-    return new Once<>(Nullability.nonNullable(value, "value"));
+    return new Once<>(nonNullable(value, "value"));
   }
 
   @NotNull
   @Contract("_ -> new")
   static <T> Cursor<T> ofAny(T value) {
-    return new Once<>(Nullability.nonNullable(value, "value"));
+    return new Once<>(nonNullable(value, "value"));
   }
 
   @NotNull
@@ -50,7 +49,7 @@ public interface Cursor<E> extends Iterator<E>, Enumeration<E> {
   @NotNull
   @Contract("_, _ -> new")
   static <T> Cursor<T> jump(final Iterator<T> first, final Iterator<T> next) {
-    return new Jump<>(Nullability.nonNullable(first, "first"), Nullability.nonNullable(next, "next"));
+    return new Jump<>(nonNullable(first, "first"), nonNullable(next, "next"));
   }
 
   static <R> Cursor<R> ofNullable(final R value) {
@@ -62,8 +61,8 @@ public interface Cursor<E> extends Iterator<E>, Enumeration<E> {
   }
 
   static <T, R> Cursor<R> ofSingle(final Iterable<T> iterable, Function1<? super T, ? extends R> then, Supplier1<? extends R> otherwise) {
-    final var iter = Nullability.nonNullable(iterable, "iterable").iterator();
-    return Cursor.ofNullable(iter.hasNext() ? Nullability.nonNullable(then, "then").apply(iter.next()) : Nullability.nonNullable(otherwise, "otherwise").get());
+    final var iter = nonNullable(iterable, "iterable").iterator();
+    return Cursor.ofNullable(iter.hasNext() ? nonNullable(then, "then").apply(iter.next()) : nonNullable(otherwise, "otherwise").get());
   }
 
   @Override

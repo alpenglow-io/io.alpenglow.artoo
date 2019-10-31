@@ -1,6 +1,9 @@
 package dev.lug.oak.quill.query;
 
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 // data taken from https://www.w3schools.com/sql/trysql.asp?filename=trysql_select_join_inner2
 
@@ -338,6 +341,41 @@ final class Pet {
     this.name = name;
     this.owner = null;
     this.age = age;
+  }
+
+  @Override
+  @Contract(value = "null -> false", pure = true)
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    var pet = (Pet) o;
+
+    if (Double.compare(pet.age, age) != 0) return false;
+    if (!Objects.equals(name, pet.name)) return false;
+    return Objects.equals(owner, pet.owner);
+  }
+
+  @Override
+  public int hashCode() {
+    int result;
+    long temp;
+    result = name != null ? name.hashCode() : 0;
+    result = 31 * result + (owner != null ? owner.hashCode() : 0);
+    temp = Double.doubleToLongBits(age);
+    result = 31 * result + (int) (temp ^ (temp >>> 32));
+    return result;
+  }
+
+  @NotNull
+  @Contract(pure = true)
+  @Override
+  public String toString() {
+    return "Pet{" +
+      "name='" + name + '\'' +
+      ", owner=" + owner +
+      ", age=" + age +
+      '}';
   }
 }
 

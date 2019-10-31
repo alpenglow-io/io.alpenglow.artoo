@@ -10,6 +10,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import static dev.lug.oak.type.Nullability.nonNullable;
+
 public interface Queryable<T> extends
   Projectable<T>,
   Filterable<T>,
@@ -30,6 +32,12 @@ public interface Queryable<T> extends
   }
 
   @NotNull
+  @Contract("_ -> new")
+  static <S> Queryable<S> from(final Iterable<S> iterable) {
+    return new Query<>(nonNullable(iterable, "iterable"));
+  }
+
+  @NotNull
   @Contract(value = " -> new", pure = true)
   static <S> Queryable<S> empty() {
     return new Empty<>();
@@ -38,7 +46,7 @@ public interface Queryable<T> extends
   @NotNull
   @Contract("_, _ -> new")
   static <S> Queryable<S> repeat(final Supplier1<? extends S> supplier, final int count) {
-    return new Repeat<>(Nullability.nonNullable(supplier, "supplier"), count);
+    return new Repeat<>(nonNullable(supplier, "supplier"), count);
   }
 }
 

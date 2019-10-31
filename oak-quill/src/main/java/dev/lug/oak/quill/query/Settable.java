@@ -1,6 +1,5 @@
 package dev.lug.oak.quill.query;
 
-import dev.lug.oak.collect.Many;
 import dev.lug.oak.func.pre.Predicate1;
 import dev.lug.oak.quill.Structable;
 import org.jetbrains.annotations.Contract;

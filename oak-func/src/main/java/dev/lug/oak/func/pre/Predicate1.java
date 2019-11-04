@@ -22,5 +22,7 @@ public interface Predicate1<T> extends Predicate<T>, Function1<T, Boolean>, Func
     return it -> !requireNonNull(predicate, "Predicate is null").test(it);
   }
 
+  @NotNull
+  @Contract(pure = true)
   static <S> Predicate1<S> tautology() { return it -> true; }
 }

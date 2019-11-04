@@ -22,6 +22,9 @@ public interface Many<T> extends Iterable<T>, Supplier1<T[]> {
 
   long length();
 
+  boolean has(T element);
+  default boolean hasNot(T element) { return !has(element); }
+
   @NotNull
   @Contract("_ -> new")
   @SafeVarargs
@@ -48,7 +51,7 @@ final class SafeMany<T> implements Many<T> {
   }
 
   @Override
-  public T at(int index) {
+  public final T at(int index) {
     if (index >= array.get().length) throw new IndexOutOfBoundsException("index is greater than length - 1");
     return array.get()[index];
   }
@@ -67,7 +70,7 @@ final class SafeMany<T> implements Many<T> {
   @Override
   @NotNull
   @Contract(pure = true)
-  public Many<T> addAt(int index, T element) {
+  public final Many<T> addAt(int index, T element) {
     if (index > array.get().length + 1) throw new IllegalArgumentException("Index can't point to more than array.length + 1");
     synchronized (array) {
       final var copied = copyOf(array.get(), array.get().length + 1);
@@ -80,8 +83,20 @@ final class SafeMany<T> implements Many<T> {
 
   @Override
   @Contract(pure = true)
-  public long length() {
+  public final long length() {
     return array.get().length;
+  }
+
+  @Override
+  @Contract(pure = true)
+  public final boolean has(final T element) {
+    var found = false;
+    var get = array.get();
+    int i = 0, length = get.length;
+    while (i < length && !found) {
+      found = get[i++].equals(element);
+    }
+    return found;
   }
 
   @Override

@@ -1,13 +1,14 @@
 package dev.lug.oak.quill.query;
 
+import dev.lug.oak.collect.Many;
 import dev.lug.oak.func.pre.Predicate1;
 import dev.lug.oak.quill.Structable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
 import java.util.Iterator;
 
+import static dev.lug.oak.func.pre.Predicate1.tautology;
 import static dev.lug.oak.type.Nullability.nonNullable;
 import static java.util.Objects.nonNull;
 
@@ -29,7 +30,7 @@ final class Distinct<T> implements Queryable<T> {
   Distinct(final Structable<T> structable) {
     this(
       structable,
-      it -> true
+      tautology()
     );
   }
   @Contract(pure = true)
@@ -41,9 +42,9 @@ final class Distinct<T> implements Queryable<T> {
   @NotNull
   @Override
   public final Iterator<T> iterator() {
-    final var result = new HashSet<T>();
+    final var result = Many.<T>of();
     for (final var value : structable) {
-      if (nonNull(value) && filter.test(value))
+      if (nonNull(value) && filter.test(value) && result.hasNot(value) || !filter.test(value))
         result.add(value);
     }
     return result.iterator();

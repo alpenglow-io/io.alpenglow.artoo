@@ -24,6 +24,6 @@ class SettableTest {
 
     final var query = from(numbers).distinct(number -> number < 50);
 
-    assertThat(query).containsOnly(21, 46, 17);
+    assertThat(query).containsOnly(21, 46, 55, 17, 55, 55);
   }
 }

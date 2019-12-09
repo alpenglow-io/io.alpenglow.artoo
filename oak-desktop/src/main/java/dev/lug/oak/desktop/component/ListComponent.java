@@ -1,9 +1,9 @@
 package dev.lug.oak.desktop.component;
 
-import javafx.scene.control.Control;
-import javafx.scene.control.ListView;
 import dev.lug.oak.desktop.event.ControlEvent;
 import dev.lug.oak.desktop.property.ControlProperty;
+import javafx.scene.control.Control;
+import javafx.scene.control.ListView;
 
 import static java.util.Objects.nonNull;
 

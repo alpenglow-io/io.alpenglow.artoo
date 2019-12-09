@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class SafeManyTest {
+class SyncManyTest {
   @Test
   void shouldAddAt() {
     final var array = Many.of(1, 2, 3, 4, 5);

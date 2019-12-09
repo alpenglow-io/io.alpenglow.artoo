@@ -1,8 +1,8 @@
 package dev.lug.oak.quill.query;
 
 import dev.lug.oak.collect.Many;
-import dev.lug.oak.type.Nullability;
 import dev.lug.oak.quill.Structable;
+import dev.lug.oak.type.Nullability;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

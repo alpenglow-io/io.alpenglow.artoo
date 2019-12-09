@@ -1,10 +1,10 @@
 package dev.lug.oak.quill.query;
 
+import dev.lug.oak.func.fun.Function1;
+import dev.lug.oak.func.fun.IntFunction1;
 import dev.lug.oak.quill.Structable;
 import dev.lug.oak.quill.single.Single;
 import dev.lug.oak.type.Nullability;
-import dev.lug.oak.func.fun.Function1;
-import dev.lug.oak.func.fun.IntFunction1;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,10 +1,10 @@
 package dev.lug.oak.desktop.event;
 
 import dev.lug.oak.desktop.property.LabeledProperty;
-import javafx.scene.control.Labeled;
-import javafx.scene.input.MouseEvent;
 import dev.lug.oak.func.con.Consumer2;
 import dev.lug.oak.func.fun.Function1;
+import javafx.scene.control.Labeled;
+import javafx.scene.input.MouseEvent;
 
 @FunctionalInterface
 public interface LabeledEvent {

@@ -23,7 +23,7 @@ public final class LocalIndex implements AsInt {
   }
 
   @Override
-  public final int get() {
+  public final int eval() {
     return value.get();
   }
 

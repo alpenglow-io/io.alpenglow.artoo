@@ -1,7 +1,7 @@
 package dev.lug.oak.desktop.component.grid;
 
-import javafx.scene.layout.RowConstraints;
 import dev.lug.oak.func.con.Consumer1;
+import javafx.scene.layout.RowConstraints;
 
 import static javafx.geometry.VPos.BASELINE;
 import static javafx.geometry.VPos.BOTTOM;

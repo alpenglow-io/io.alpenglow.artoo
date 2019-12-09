@@ -1,15 +1,15 @@
 package dev.lug.oak.quill.query;
 
 import dev.lug.oak.collect.Many;
+import dev.lug.oak.func.fun.Function1;
+import dev.lug.oak.func.pre.Predicate2;
+import dev.lug.oak.func.pre.Predicate3;
+import dev.lug.oak.quill.Structable;
 import dev.lug.oak.quill.query.tuple.Queryable2;
 import dev.lug.oak.quill.query.tuple.Queryable3;
 import dev.lug.oak.quill.tuple.Tuple;
 import dev.lug.oak.quill.tuple.Tuple2;
 import dev.lug.oak.quill.tuple.Tuple3;
-import dev.lug.oak.func.fun.Function1;
-import dev.lug.oak.func.pre.Predicate2;
-import dev.lug.oak.func.pre.Predicate3;
-import dev.lug.oak.quill.Structable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +20,6 @@ import java.util.Iterator;
 import java.util.TreeMap;
 
 import static java.lang.Integer.compare;
-import static dev.lug.oak.func.fun.Function1.identity;
 
 public interface Groupable<T> extends Structable<T> {
   default <K> Grouping<K, T> groupBy(final Function1<? super T, ? extends K> key) {

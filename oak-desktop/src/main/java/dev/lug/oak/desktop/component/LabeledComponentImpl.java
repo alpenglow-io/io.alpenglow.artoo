@@ -1,8 +1,8 @@
 package dev.lug.oak.desktop.component;
 
-import javafx.scene.control.Labeled;
 import dev.lug.oak.desktop.event.LabeledEvent;
 import dev.lug.oak.desktop.property.LabeledProperty;
+import javafx.scene.control.Labeled;
 
 import static java.util.Objects.nonNull;
 

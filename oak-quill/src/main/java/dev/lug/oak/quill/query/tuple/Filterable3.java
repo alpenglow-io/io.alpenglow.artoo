@@ -1,9 +1,7 @@
 package dev.lug.oak.quill.query.tuple;
 
 import dev.lug.oak.collect.Many;
-import dev.lug.oak.func.fun.Function2;
 import dev.lug.oak.func.fun.Function3;
-import dev.lug.oak.func.pre.Predicate2;
 import dev.lug.oak.func.pre.Predicate3;
 import dev.lug.oak.quill.Structable;
 import dev.lug.oak.quill.query.Filterable;
@@ -15,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Iterator;
 
 import static dev.lug.oak.type.Nullability.nonNullable;
-import static dev.lug.oak.type.Nullability.nonNullableState;
 
 public interface Filterable3<V1, V2, V3> extends Filterable<Tuple3<V1, V2, V3>> {
   default Queryable3<V1, V2, V3> where(final Predicate3<? super V1, ? super V2, ? super V3> filter) {

@@ -1,8 +1,8 @@
 package dev.lug.oak.desktop.component;
 
-import javafx.scene.control.ToggleButton;
 import dev.lug.oak.desktop.property.IdProperty;
 import dev.lug.oak.desktop.property.ToggleProperty;
+import javafx.scene.control.ToggleButton;
 
 public interface ToggleComponent extends Source<ToggleButton> {
   static ToggleComponent toggle(IdProperty id, ToggleProperty... properties) {

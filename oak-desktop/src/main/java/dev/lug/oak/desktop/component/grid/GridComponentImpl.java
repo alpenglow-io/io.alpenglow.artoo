@@ -1,9 +1,9 @@
 package dev.lug.oak.desktop.component.grid;
 
-import javafx.scene.Parent;
-import javafx.scene.layout.GridPane;
 import dev.lug.oak.desktop.property.IdProperty;
 import dev.lug.oak.desktop.property.ParentProperty;
+import javafx.scene.Parent;
+import javafx.scene.layout.GridPane;
 
 import static java.util.Objects.nonNull;
 

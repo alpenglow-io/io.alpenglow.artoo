@@ -5,6 +5,8 @@ module dev.lug.oak.quill {
   exports dev.lug.oak.quill.query.tuple;
   exports dev.lug.oak.quill.tuple;
   exports dev.lug.oak.collect;
+  exports dev.lug.oak.type;
+  exports dev.lug.oak.collect.cursor;
 
   requires dev.lug.oak.func;
   requires org.jetbrains.annotations;

@@ -1,8 +1,8 @@
 package dev.lug.oak.desktop.component;
 
-import javafx.scene.control.ListView;
 import dev.lug.oak.desktop.property.ControlProperty;
 import dev.lug.oak.desktop.property.IdProperty;
+import javafx.scene.control.ListView;
 
 public interface CompositeComponent extends ControlComponent {
   static CompositeComponent list(IdProperty id, ControlProperty... properties) {

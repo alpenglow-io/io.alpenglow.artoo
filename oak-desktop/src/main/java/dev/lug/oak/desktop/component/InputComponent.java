@@ -1,10 +1,10 @@
 package dev.lug.oak.desktop.component;
 
+import dev.lug.oak.desktop.property.IdProperty;
+import dev.lug.oak.desktop.property.InputProperty;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import dev.lug.oak.desktop.property.IdProperty;
-import dev.lug.oak.desktop.property.InputProperty;
 
 public interface InputComponent extends Component {
   static InputComponent textField(IdProperty id, InputProperty... properties) {

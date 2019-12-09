@@ -1,6 +1,9 @@
 package dev.lug.oak.quill.query;
 
 import dev.lug.oak.collect.Many;
+import dev.lug.oak.func.con.Consumer1;
+import dev.lug.oak.func.fun.Function1;
+import dev.lug.oak.func.fun.IntFunction2;
 import dev.lug.oak.quill.Q;
 import dev.lug.oak.quill.Structable;
 import dev.lug.oak.quill.query.tuple.Queryable2;
@@ -8,9 +11,6 @@ import dev.lug.oak.quill.query.tuple.Queryable3;
 import dev.lug.oak.quill.tuple.Tuple2;
 import dev.lug.oak.quill.tuple.Tuple3;
 import dev.lug.oak.type.Nullability;
-import dev.lug.oak.func.con.Consumer1;
-import dev.lug.oak.func.fun.Function1;
-import dev.lug.oak.func.fun.IntFunction2;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

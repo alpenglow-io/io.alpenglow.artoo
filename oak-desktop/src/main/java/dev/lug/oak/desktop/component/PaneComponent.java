@@ -1,10 +1,10 @@
 package dev.lug.oak.desktop.component;
 
+import dev.lug.oak.desktop.property.IdProperty;
+import dev.lug.oak.desktop.property.ParentProperty;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import dev.lug.oak.desktop.property.IdProperty;
-import dev.lug.oak.desktop.property.ParentProperty;
 
 public interface PaneComponent extends Component {
   static PaneComponent vertical(IdProperty id, ParentProperty... properties) {

@@ -2,7 +2,6 @@ package dev.lug.oak.quill.query;
 
 import dev.lug.oak.collect.Many;
 import dev.lug.oak.collect.cursor.Cursor;
-import dev.lug.oak.type.Nullability;
 import dev.lug.oak.func.sup.Supplier1;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

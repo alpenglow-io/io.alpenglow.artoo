@@ -1,7 +1,7 @@
 package dev.lug.oak.desktop.component;
 
-import javafx.scene.control.ToggleGroup;
 import dev.lug.oak.desktop.property.NamedProperty;
+import javafx.scene.control.ToggleGroup;
 
 import static java.util.Objects.nonNull;
 

@@ -1,12 +1,12 @@
 package dev.lug.oak.type;
 
 import dev.lug.oak.collect.cursor.Cursor;
-import dev.lug.oak.quill.single.Nullable;
 import dev.lug.oak.func.con.Consumer1;
 import dev.lug.oak.func.exe.Executable;
 import dev.lug.oak.func.fun.Function1;
 import dev.lug.oak.func.pre.Predicate1;
 import dev.lug.oak.func.sup.Supplier1;
+import dev.lug.oak.quill.single.Nullable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;

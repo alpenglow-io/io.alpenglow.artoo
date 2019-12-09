@@ -1,24 +1,23 @@
 package dev.lug.oak.quill.query;
 
 import dev.lug.oak.collect.cursor.Cursor;
-import dev.lug.oak.type.Nullability;
-import dev.lug.oak.type.Numeric;
 import dev.lug.oak.func.fun.Function1;
 import dev.lug.oak.func.fun.Function2;
 import dev.lug.oak.func.pre.Predicate1;
 import dev.lug.oak.quill.Structable;
 import dev.lug.oak.quill.single.Nullable;
 import dev.lug.oak.quill.single.Single;
+import dev.lug.oak.type.Nullability;
+import dev.lug.oak.type.Numeric;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
-import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
 import static dev.lug.oak.func.fun.Function1.identity;
 import static dev.lug.oak.func.pre.Predicate1.tautology;
-import static dev.lug.oak.type.Nullability.nonNullableState;
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 public interface Aggregatable<T> extends Structable<T> {
   @NotNull

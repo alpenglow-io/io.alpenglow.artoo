@@ -1,10 +1,10 @@
 package dev.lug.oak.desktop.component;
 
-import javafx.scene.control.Control;
-import javafx.scene.control.ScrollPane;
 import dev.lug.oak.desktop.event.ControlEvent;
 import dev.lug.oak.desktop.property.ControlProperty;
 import dev.lug.oak.desktop.property.IdProperty;
+import javafx.scene.control.Control;
+import javafx.scene.control.ScrollPane;
 
 import static java.util.Objects.nonNull;
 

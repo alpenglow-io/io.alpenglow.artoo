@@ -2,11 +2,11 @@ package dev.lug.oak.quill.query;
 
 import dev.lug.oak.collect.Many;
 import dev.lug.oak.collect.cursor.Cursor;
-import dev.lug.oak.type.Nullability;
 import dev.lug.oak.func.pre.Predicate1;
 import dev.lug.oak.quill.Structable;
 import dev.lug.oak.quill.single.Nullable;
 import dev.lug.oak.quill.single.Single;
+import dev.lug.oak.type.Nullability;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -131,15 +131,17 @@ final class One<T> implements Single<T> {
       return returned;
     } else {
       final var array = Many.<T>of();
-      for (final var cursor = structable.iterator(); cursor.hasNext() && array.length() < 2; ) {
+      for (final var cursor = structable.iterator(); cursor.hasNext() && array.size() < 2; ) {
         final var next = cursor.next();
         if (filter.test(next)) {
           array.add(next);
         }
       }
-      if (array.length() > 1)
+      if (array.size() > 1)
         throw new IllegalStateException("Queryable must satisfy the condition once.");
-      return array.at(0);
+      return array.at(0)
+        .or("Element not found", IllegalStateException::new)
+        .get();
     }
   }
 }

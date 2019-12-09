@@ -1,8 +1,8 @@
 package dev.lug.oak.desktop.component.grid;
 
+import dev.lug.oak.desktop.component.Component;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import dev.lug.oak.desktop.component.Component;
 
 import static java.util.Objects.nonNull;
 

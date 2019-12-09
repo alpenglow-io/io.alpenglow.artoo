@@ -1,8 +1,8 @@
 package dev.lug.oak.desktop.component.grid;
 
+import dev.lug.oak.func.con.Consumer2;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
-import dev.lug.oak.func.con.Consumer2;
 
 import static javafx.scene.layout.ConstraintsBase.CONSTRAIN_TO_PREF;
 

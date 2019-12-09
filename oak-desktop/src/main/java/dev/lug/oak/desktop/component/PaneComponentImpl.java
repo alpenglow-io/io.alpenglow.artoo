@@ -1,9 +1,9 @@
 package dev.lug.oak.desktop.component;
 
-import javafx.scene.Parent;
-import javafx.scene.layout.Pane;
 import dev.lug.oak.desktop.property.IdProperty;
 import dev.lug.oak.desktop.property.ParentProperty;
+import javafx.scene.Parent;
+import javafx.scene.layout.Pane;
 
 final class PaneComponentImpl implements PaneComponent {
   private final IdProperty id;

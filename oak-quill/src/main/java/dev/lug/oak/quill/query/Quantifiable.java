@@ -9,8 +9,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
-import static java.util.Objects.nonNull;
 import static dev.lug.oak.type.Nullability.nonNullable;
+import static java.util.Objects.nonNull;
 
 public interface Quantifiable<T> extends Structable<T> {
   default <C> Queryable<T> allOfType(final Class<C> type) {

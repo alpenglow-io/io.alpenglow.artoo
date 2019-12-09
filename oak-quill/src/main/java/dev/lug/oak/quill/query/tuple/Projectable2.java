@@ -1,8 +1,6 @@
 package dev.lug.oak.quill.query.tuple;
 
 import dev.lug.oak.collect.Many;
-import dev.lug.oak.quill.query.Queryable;
-import dev.lug.oak.type.Nullability;
 import dev.lug.oak.func.con.Consumer2;
 import dev.lug.oak.func.fun.Function2;
 import dev.lug.oak.quill.Q;
@@ -10,7 +8,9 @@ import dev.lug.oak.quill.Q.Just2AsManyTuple2;
 import dev.lug.oak.quill.Q.Just2AsTuple2;
 import dev.lug.oak.quill.Structable;
 import dev.lug.oak.quill.query.Projectable;
+import dev.lug.oak.quill.query.Queryable;
 import dev.lug.oak.quill.tuple.Tuple2;
+import dev.lug.oak.type.Nullability;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

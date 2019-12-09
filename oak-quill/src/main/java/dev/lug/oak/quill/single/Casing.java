@@ -1,19 +1,20 @@
 package dev.lug.oak.quill.single;
 
-import dev.lug.oak.type.Nullability;
 import dev.lug.oak.func.fun.Function1;
 import dev.lug.oak.quill.Structable;
+import dev.lug.oak.type.Nullability;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import static dev.lug.oak.type.Nullability.*;
 import static java.util.Objects.requireNonNullElse;
 
 public interface Casing<T> extends Structable<T> {
   default Single<T> or(final T value) {
-    return new Either<>(this, Nullability.nonNullable(value, "value"));
+    return new Either<>(this, nonNullable(value, "value"));
   }
   default <E extends RuntimeException> Single<T> or(final String message, final Function1<? super String, ? extends E> exception) {
-    return new EitherException<>(this, Nullability.nonNullable(message, "message"), Nullability.nonNullable(exception, "exception"));
+    return new EitherException<>(this, nonNullable(message, "message"), nonNullable(exception, "exception"));
   }
 }
 

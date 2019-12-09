@@ -1,8 +1,8 @@
 package dev.lug.oak.desktop.component;
 
-import javafx.scene.Parent;
 import dev.lug.oak.desktop.property.IdProperty;
 import dev.lug.oak.desktop.property.ParentProperty;
+import javafx.scene.Parent;
 
 import java.util.function.Supplier;
 

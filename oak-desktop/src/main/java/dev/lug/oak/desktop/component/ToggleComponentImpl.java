@@ -1,7 +1,7 @@
 package dev.lug.oak.desktop.component;
 
-import javafx.scene.control.ToggleButton;
 import dev.lug.oak.desktop.property.ToggleProperty;
+import javafx.scene.control.ToggleButton;
 
 import static java.util.Objects.nonNull;
 

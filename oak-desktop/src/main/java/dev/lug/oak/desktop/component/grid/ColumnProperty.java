@@ -1,7 +1,7 @@
 package dev.lug.oak.desktop.component.grid;
 
-import javafx.scene.layout.ColumnConstraints;
 import dev.lug.oak.func.con.Consumer1;
+import javafx.scene.layout.ColumnConstraints;
 
 import static javafx.geometry.HPos.CENTER;
 import static javafx.geometry.HPos.LEFT;

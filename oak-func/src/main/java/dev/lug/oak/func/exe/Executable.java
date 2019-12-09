@@ -1,7 +1,7 @@
 package dev.lug.oak.func.exe;
 
-import dev.lug.oak.func.fun.Function1;
 import dev.lug.oak.func.Functional;
+import dev.lug.oak.func.fun.Function1;
 
 @FunctionalInterface
 public interface Executable extends Runnable, Function1<Void, Void>, Functional.Exe {

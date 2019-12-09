@@ -6,10 +6,9 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.TreeSet;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 import static dev.lug.oak.quill.Q.P.just;
 import static dev.lug.oak.quill.query.Queryable.from;
@@ -28,11 +27,7 @@ final class OrderBy<T, K> implements Queryable<T> {
     }
   }
 
-  private final Comparator<? super Couple> comparison = (Comparator<Couple>) (first, second) -> {
-    final var f = first.order.apply(first.value).hashCode();
-    final var s = second.order.apply(second.value).hashCode();
-    return f > s ? 1 : f == s ? 0 : -1;
-  };
+  private final Comparator<? super Couple> comparison = comparingInt(couple -> couple.order.apply(couple.value).hashCode());
 
   private final Structable<T> structable;
   private final Function1<? super T, ? extends K> order;
@@ -46,6 +41,7 @@ final class OrderBy<T, K> implements Queryable<T> {
   @NotNull
   @Override
   public Iterator<T> iterator() {
+    new ConcurrentSkipListMap<String, String>();
     final var result = new ArrayList<Couple>();
     for (final var value : structable) {
       if (nonNull(value)) {

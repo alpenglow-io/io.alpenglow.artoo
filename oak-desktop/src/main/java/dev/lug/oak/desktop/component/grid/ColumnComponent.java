@@ -1,9 +1,9 @@
 package dev.lug.oak.desktop.component.grid;
 
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
 import dev.lug.oak.desktop.component.Component;
 import dev.lug.oak.func.con.Consumer3;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
 
 import java.util.function.Supplier;
 

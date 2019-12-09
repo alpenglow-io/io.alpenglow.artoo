@@ -6,7 +6,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -16,10 +15,11 @@ import static dev.lug.oak.type.Nullability.nonNullable;
 import static java.util.Arrays.copyOf;
 
 public interface Cursor<E> extends Iterator<E>, Enumeration<E> {
+  @SafeVarargs
   @NotNull
   @Contract("_ -> new")
-  static <T> Cursor<T> of(final T[] values) {
-    return new Forward<>(Arrays.copyOf(nonNullable(values, "values"), values.length));
+  static <T> Cursor<T> of(final T... values) {
+    return new Forward<>(copyOf(nonNullable(values, "values"), values.length));
   }
 
   @NotNull

@@ -1,10 +1,10 @@
 package dev.lug.oak.quill.single;
 
 import dev.lug.oak.collect.cursor.Cursor;
-import dev.lug.oak.type.Nullability;
 import dev.lug.oak.func.con.Consumer1;
 import dev.lug.oak.func.fun.Function1;
 import dev.lug.oak.quill.Structable;
+import dev.lug.oak.type.Nullability;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

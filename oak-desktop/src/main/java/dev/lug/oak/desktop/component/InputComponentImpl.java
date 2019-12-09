@@ -1,8 +1,8 @@
 package dev.lug.oak.desktop.component;
 
+import dev.lug.oak.desktop.property.InputProperty;
 import javafx.scene.Parent;
 import javafx.scene.control.TextInputControl;
-import dev.lug.oak.desktop.property.InputProperty;
 
 import static java.util.Objects.nonNull;
 

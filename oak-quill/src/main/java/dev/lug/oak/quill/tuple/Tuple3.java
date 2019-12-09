@@ -1,14 +1,12 @@
 package dev.lug.oak.quill.tuple;
 
-import dev.lug.oak.quill.single.Nullable;
-import dev.lug.oak.type.Nullability;
 import dev.lug.oak.func.con.Consumer3;
 import dev.lug.oak.func.fun.Function3;
 import dev.lug.oak.func.pre.Predicate3;
+import dev.lug.oak.quill.single.Nullable;
+import dev.lug.oak.type.Nullability;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-
-import static java.util.Objects.requireNonNull;
 
 public interface Tuple3<V1, V2, V3> extends Tuple {
   <R> Nullable<R> select(Function3<? super V1, ? super V2, ? super V3, ? extends R> map);

@@ -1,8 +1,8 @@
 package dev.lug.oak.desktop.component;
 
-import javafx.scene.layout.BorderPane;
 import dev.lug.oak.desktop.property.BorderPosition;
 import dev.lug.oak.desktop.property.ParentProperty;
+import javafx.scene.layout.BorderPane;
 
 final class BorderComponentImpl<B extends BorderPane> implements BorderComponent, Base<B> {
   private final Base<B> border;

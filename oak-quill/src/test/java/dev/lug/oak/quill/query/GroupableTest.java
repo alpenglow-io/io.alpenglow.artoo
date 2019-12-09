@@ -6,9 +6,9 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static dev.lug.oak.quill.Q.P.just;
 import static java.util.Collections.max;
 import static java.util.Collections.min;
-import static dev.lug.oak.quill.Q.P.just;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class GroupableTest {

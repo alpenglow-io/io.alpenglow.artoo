@@ -1,12 +1,13 @@
 package dev.lug.oak.calisthenics.currency;
 
-import dev.lug.oak.calisthenics.crud.Id;
 import dev.lug.oak.quill.single.Nullable;
 import dev.lug.oak.quill.tuple.Tuple;
 import dev.lug.oak.type.AsDouble;
 import dev.lug.oak.type.AsString;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 import static dev.lug.oak.quill.tuple.Tuple.areNonNull;
 
@@ -15,65 +16,55 @@ public interface Currency {
   @NotNull
   @Contract("_, _, _ -> new")
   static Currency of(@NotNull final Id id, @NotNull final Name name, @NotNull final Amount amount) {
-    return new SingleCurrency(id.eval(), name.eval(), amount.eval());
+    return new SingleCurrency(record(id, name, amount));
   }
 
-  boolean has(Id id);
-  Nullable<Currency> set(Name name, Amount amount);
+  @NotNull
+  @Contract("_, _, _ -> new")
+  static RawCurrency record(@NotNull final Id id, @NotNull final Name name, @NotNull final Amount amount) {
+    return new RawCurrency(
+      id.eval(),
+      name.eval(),
+      amount.eval()
+    );
+  }
 
+  Nullable<Currency> edit(Name name, Amount amount);
+
+  interface Id extends AsString {}
   interface Name extends AsString {}
   interface Amount extends AsDouble {}
 }
 
 final class SingleCurrency implements Currency {
-  private final String id;
-  private final String name;
-  private final double amount;
+  private final RawCurrency currency;
 
-  SingleCurrency(final String id, final String name, final double amount) {
-    this.id = id;
-    this.name = name;
-    this.amount = amount;
+  public SingleCurrency(final RawCurrency currency) {
+    this.currency = currency;
   }
 
   @Override
-  public boolean has(@NotNull Id id) {
-    return this.id.equals(id.eval());
-  }
-
-  @Override
-  public Nullable<Currency> set(Name name, Amount amount) {
+  public Nullable<Currency> edit(Name name, Amount amount) {
     return Tuple.of(name, amount)
       .where(areNonNull())
-      .select((n, a) -> new SingleCurrency(id, n.eval(), a.eval()));
+      .select((n, a) -> new SingleCurrency(Currency.record(currency::id, n, a)));
   }
 
   @Override
-  public String toString() {
-    return String.format("Currency {id='%s', name='%s', amount=%s}", id, name, amount);
-  }
-
-  @Override
-  @Contract(value = "null -> false", pure = true)
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-
-    var currency = (SingleCurrency) o;
-
-    if (Double.compare(currency.amount, amount) != 0) return false;
-    if (!id.equals(currency.id)) return false;
-    return name.equals(currency.name);
+    var that = (SingleCurrency) o;
+    return Objects.equals(currency, that.currency);
   }
 
   @Override
   public int hashCode() {
-    int result;
-    long temp;
-    result = id.hashCode();
-    result = 31 * result + name.hashCode();
-    temp = Double.doubleToLongBits(amount);
-    result = 31 * result + (int) (temp ^ (temp >>> 32));
-    return result;
+    return currency != null ? currency.hashCode() : 0;
+  }
+
+  @Override
+  public String toString() {
+    return currency.toString();
   }
 }

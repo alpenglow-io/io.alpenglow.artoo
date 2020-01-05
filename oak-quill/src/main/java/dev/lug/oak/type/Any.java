@@ -6,7 +6,7 @@ import dev.lug.oak.func.exe.Executable;
 import dev.lug.oak.func.fun.Function1;
 import dev.lug.oak.func.pre.Predicate1;
 import dev.lug.oak.func.sup.Supplier1;
-import dev.lug.oak.quill.single.Nullable;
+import dev.lug.oak.quill.single.One;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
@@ -32,8 +32,8 @@ public interface Any<T> extends Iterable<T>, Supplier1<T> {
       : requireNonNull(otherwise, "Otherwise is null").get();
   }
 
-  default Nullable<T> filter(final Predicate1<T> predicate) {
-    return Nullable.of(get()).where(predicate);
+  default One<T> filter(final Predicate1<T> predicate) {
+    return One.of(get()).where(predicate);
   }
 
   default void eventually(final Consumer1<T> then) {

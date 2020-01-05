@@ -13,15 +13,4 @@ public interface Supplier1<T> extends Supplier<T>, Function1<Void, T>, Functiona
   default T apply(final Void none) {
     return get();
   }
-
-  T tryGet() throws Throwable;
-
-  default T get() {
-    try {
-      return tryGet();
-    } catch (final Throwable throwable) {
-      throwable.printStackTrace();
-      return null;
-    }
-  }
 }

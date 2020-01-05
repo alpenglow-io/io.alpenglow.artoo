@@ -2,17 +2,19 @@ package dev.lug.oak.collect;
 
 import dev.lug.oak.collect.cursor.Cursor;
 import dev.lug.oak.func.sup.Supplier1;
-import dev.lug.oak.quill.single.Nullable;
+import dev.lug.oak.quill.single.One;
 import dev.lug.oak.type.Lazy;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.concurrent.locks.StampedLock;
 
 import static dev.lug.oak.type.Nullability.nonNullable;
 import static java.lang.System.arraycopy;
 import static java.util.Arrays.copyOf;
+import static java.util.Objects.nonNull;
 
 @SuppressWarnings("unused")
 public interface Many<T> extends Iterable<T> {
@@ -28,7 +30,7 @@ public interface Many<T> extends Iterable<T> {
     return of();
   }
 
-  Nullable<T> at(int index);
+  One<T> at(int index);
 
   Many<T> add(T value);
   Many<T> addAt(int index, T value);
@@ -49,6 +51,68 @@ public interface Many<T> extends Iterable<T> {
   //Collection<T> asCollection();
 }
 
+final class Element<T> {
+  final T value;
+  Element<T> next;
+
+  Element(final T value) {
+    this(value, null);
+  }
+  Element(final T value, final Element<T> next) {
+    this.value = value;
+    this.next = next;
+  }
+}
+
+final class SafeMany<T> implements Many<T> {
+  private Element<T> first;
+  private Element<T> last;
+  private long length;
+  private final StampedLock stamp;
+
+  SafeMany(final Element<T> first, final Element<T> last, final long length, final StampedLock stamp) {
+    this.first = first;
+    this.last = last;
+    this.length = length;
+    this.stamp = stamp;
+  }
+
+  @Override
+  public final Many<T> add(final T value) {
+    final var write = this.stamp.asWriteLock();
+    write.lock();
+    try {
+      this.last.next = new Element<>(value);
+      this.last = this.last.next;
+      this.length++;
+      return this;
+    } finally {
+      write.unlock();
+    }
+  }
+
+  @Override
+  public Many<T> addAt(int index, T value) {
+    final var write = this.stamp.asWriteLock();
+    write.lock();
+
+    try {
+      var current = this.first;
+      var cursor = 0;
+      while (cursor < index && nonNull(current.next)) current = current.next;
+      current.next = new Element<>(value, current.next);
+      return this;
+    } finally {
+      write.unlock();
+    }
+  }
+
+  @Override
+  public One<T> at(int index) {
+    return null;
+  }
+}
+
 final class SyncMany<T> implements Many<T> {
   private final Lazy<T[]> array;
 
@@ -63,9 +127,9 @@ final class SyncMany<T> implements Many<T> {
   }
 
   @Override
-  public final Nullable<T> at(int index) {
+  public final One<T> at(int index) {
     if (index >= array.get().length) throw new IndexOutOfBoundsException("index is greater than length - 1");
-    return Nullable.of(array.get()[index]);
+    return One.of(array.get()[index]);
   }
 
   @Override

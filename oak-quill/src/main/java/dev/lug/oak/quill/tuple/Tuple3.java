@@ -3,15 +3,15 @@ package dev.lug.oak.quill.tuple;
 import dev.lug.oak.func.con.Consumer3;
 import dev.lug.oak.func.fun.Function3;
 import dev.lug.oak.func.pre.Predicate3;
-import dev.lug.oak.quill.single.Nullable;
+import dev.lug.oak.quill.single.One;
 import dev.lug.oak.type.Nullability;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public interface Tuple3<V1, V2, V3> extends Tuple {
-  <R> Nullable<R> select(Function3<? super V1, ? super V2, ? super V3, ? extends R> map);
+  <R> One<R> select(Function3<? super V1, ? super V2, ? super V3, ? extends R> map);
   Tuple3<V1, V2, V3> peek(Consumer3<? super V1, ? super V2, ? super V3> peek);
-  <T extends Tuple> Nullable<T> selection(Function3<? super V1, ? super V2, ? super V3, ? extends T> flatMap);
+  <T extends Tuple> One<T> selection(Function3<? super V1, ? super V2, ? super V3, ? extends T> flatMap);
   Tuple3<V1, V2, V3> where(Predicate3<? super V1, ? super V2, ? super V3> filter);
 }
 
@@ -28,8 +28,8 @@ final class Triple<V1, V2, V3> implements Tuple3<V1, V2, V3> {
   }
 
   @Override
-  public final <R> Nullable<R> select(Function3<? super V1, ? super V2, ? super V3, ? extends R> map) {
-    return Nullable.of(Nullability.nonNullable(map, "map").apply(v1, v2, v3));
+  public final <R> One<R> select(Function3<? super V1, ? super V2, ? super V3, ? extends R> map) {
+    return One.of(Nullability.nonNullable(map, "map").apply(v1, v2, v3));
   }
 
   @Override
@@ -40,8 +40,8 @@ final class Triple<V1, V2, V3> implements Tuple3<V1, V2, V3> {
   }
 
   @Override
-  public final <T extends Tuple> Nullable<T> selection(Function3<? super V1, ? super V2, ? super V3, ? extends T> flatMap) {
-    return Nullable.of(Nullability.nonNullable(flatMap, "flatMap").apply(v1, v2, v3));
+  public final <T extends Tuple> One<T> selection(Function3<? super V1, ? super V2, ? super V3, ? extends T> flatMap) {
+    return One.of(Nullability.nonNullable(flatMap, "flatMap").apply(v1, v2, v3));
   }
 
   @Override
@@ -72,8 +72,8 @@ final class None3<V1, V2, V3> implements Tuple3<V1, V2, V3> {
   @NotNull
   @Contract(pure = true)
   @Override
-  public final  <R> Nullable<R> select(Function3<? super V1, ? super V2, ? super V3, ? extends R> map) {
-    return Nullable.none();
+  public final  <R> One<R> select(Function3<? super V1, ? super V2, ? super V3, ? extends R> map) {
+    return One.none();
   }
 
   @Contract(value = "_ -> this", pure = true)
@@ -83,8 +83,8 @@ final class None3<V1, V2, V3> implements Tuple3<V1, V2, V3> {
   }
 
   @Override
-  public final  <T extends Tuple> Nullable<T> selection(Function3<? super V1, ? super V2, ? super V3, ? extends T> flatMap) {
-    return Nullable.none();
+  public final  <T extends Tuple> One<T> selection(Function3<? super V1, ? super V2, ? super V3, ? extends T> flatMap) {
+    return One.none();
   }
 
   @Override

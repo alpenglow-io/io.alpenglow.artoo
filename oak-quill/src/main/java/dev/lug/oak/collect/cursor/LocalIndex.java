@@ -1,6 +1,6 @@
 package dev.lug.oak.collect.cursor;
 
-import dev.lug.oak.quill.single.Nullable;
+import dev.lug.oak.quill.single.One;
 import dev.lug.oak.type.AsInt;
 
 import static java.lang.ThreadLocal.withInitial;
@@ -27,8 +27,8 @@ public final class LocalIndex implements AsInt {
     return value.get();
   }
 
-  public static Nullable<LocalIndex> of(final int value) {
-    return Nullable.of(value)
+  public static One<LocalIndex> of(final int value) {
+    return One.of(value)
       .where(it -> it >= 0)
       .select(it -> new LocalIndex(withInitial(() -> it)));
   }

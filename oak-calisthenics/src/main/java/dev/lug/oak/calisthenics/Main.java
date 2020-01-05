@@ -52,7 +52,7 @@ public interface Main {
       () -> 10.0
     );
 
-    Currencies.of(lira, dollaro).findBy(() -> "dsa")
+    Currencies.of(lira, dollaro).one(() -> "dsa")
       .or("Dollaro has not been found.", IllegalArgumentException::new)
       .eventually(currency -> currency.edit(Sterlina, () -> 50.0));
   }

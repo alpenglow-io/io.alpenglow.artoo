@@ -11,18 +11,18 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Iterator;
 
 public interface Projectable<T> extends Structable<T> {
-  default <R> Nullable<R> select(final Function1<? super T, ? extends R> map) {
+  default <R> One<R> select(final Function1<? super T, ? extends R> map) {
     return new Select<>(this, Nullability.nonNullable(map, "map"));
   }
 
-  default <R, M extends Nullable<? extends R>> Nullable<R> selection(final Function1<? super T, M> flatMap) {
+  default <R, M extends One<? extends R>> One<R> selection(final Function1<? super T, M> flatMap) {
     return new Selection<>(new Select<>(this, Nullability.nonNullable(flatMap, "flatMap")));
   }
 
-  default Nullable<T> peek(final Consumer1<? super T> peek) { return new Peek<>(this, Nullability.nonNullable(peek, "peek")); }
+  default One<T> peek(final Consumer1<? super T> peek) { return new Peek<>(this, Nullability.nonNullable(peek, "peek")); }
 }
 
-final class Select<S, R> implements Nullable<R> {
+final class Select<S, R> implements One<R> {
   private final Structable<S> structable;
   private final Function1<? super S, ? extends R> map;
 
@@ -39,7 +39,7 @@ final class Select<S, R> implements Nullable<R> {
   }
 }
 
-final class Selection<R, S extends Structable<? extends R>> implements Nullable<R> {
+final class Selection<R, S extends Structable<? extends R>> implements One<R> {
   private final Structable<S> structable;
 
   @Contract(pure = true)
@@ -54,7 +54,7 @@ final class Selection<R, S extends Structable<? extends R>> implements Nullable<
   }
 }
 
-final class Peek<T> implements Nullable<T> {
+final class Peek<T> implements One<T> {
   private final Structable<T> structable;
   private final Consumer1<? super T> peek;
 

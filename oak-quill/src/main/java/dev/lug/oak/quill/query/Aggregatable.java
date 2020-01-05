@@ -5,10 +5,8 @@ import dev.lug.oak.func.fun.Function1;
 import dev.lug.oak.func.fun.Function2;
 import dev.lug.oak.func.pre.Predicate1;
 import dev.lug.oak.quill.Structable;
-import dev.lug.oak.quill.single.Nullable;
-import dev.lug.oak.quill.single.Single;
+import dev.lug.oak.quill.single.One;
 import dev.lug.oak.type.Nullability;
-import dev.lug.oak.type.Numeric;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,13 +14,16 @@ import java.util.Iterator;
 
 import static dev.lug.oak.func.fun.Function1.identity;
 import static dev.lug.oak.func.pre.Predicate1.tautology;
+import static dev.lug.oak.type.Nullability.nonNullableState;
+import static dev.lug.oak.type.Numeric.asDouble;
+import static dev.lug.oak.type.Numeric.sum;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 public interface Aggregatable<T> extends Structable<T> {
   @NotNull
   @Contract("_, _, _, _ -> new")
-  private <A, R> Single<A> aggregate(final Predicate1<? super T> filter, final Function1<? super T, ? extends R> map, final A seed, final Function2<? super A, ? super R, ? extends A> reduce) {
+  private <A, R> One<A> aggregate(final Predicate1<? super T> filter, final Function1<? super T, ? extends R> map, final A seed, final Function2<? super A, ? super R, ? extends A> reduce) {
     return new Aggregate<>(
       this,
       Nullability.nonNullable(filter, "filter"),
@@ -32,7 +33,7 @@ public interface Aggregatable<T> extends Structable<T> {
     );
   }
 
-  default <A, R> Single<A> aggregate(final Function1<? super T, ? extends R> map, final A seed, final Function2<? super A, ? super R, ? extends A> reduce) {
+  default <A, R> One<A> aggregate(final Function1<? super T, ? extends R> map, final A seed, final Function2<? super A, ? super R, ? extends A> reduce) {
     return new Aggregate<>(
       this,
       tautology(),
@@ -42,7 +43,7 @@ public interface Aggregatable<T> extends Structable<T> {
     );
   }
 
-  default <A> Single<A> aggregate(final A seed, final Function2<? super A, ? super T, ? extends A> reduce) {
+  default <A> One<A> aggregate(final A seed, final Function2<? super A, ? super T, ? extends A> reduce) {
     return new Aggregate<>(
       this,
       tautology(),
@@ -52,52 +53,52 @@ public interface Aggregatable<T> extends Structable<T> {
     );
   }
 
-  default Single<T> aggregate(final Function2<? super T, ? super T, ? extends T> reduce) {
+  default One<T> aggregate(final Function2<? super T, ? super T, ? extends T> reduce) {
     return new NoSeed<>(this, Nullability.nonNullable(reduce, "reduce"));
   }
 
-  default Single<Long> count(final Predicate1<? super T> filter) {
+  default One<Long> count(final Predicate1<? super T> filter) {
     return new Count<>(this, Nullability.nonNullable(filter, "filter"));
   }
 
-  default Single<Long> count() {
+  default One<Long> count() {
     return count(tautology());
   }
 
-  default <R, C extends Comparable<R>, V extends C> Single<V> max(final Function1<? super T, ? extends V> selector) {
+  default <R, C extends Comparable<R>, V extends C> One<V> max(final Function1<? super T, ? extends V> selector) {
     return new SelectorMinMax<>(this, Nullability.nonNullable(selector, "selector"), 1);
   }
 
-  default Single<T> max() {
+  default One<T> max() {
     return new MinMax<>(this, 1);
   }
 
-  default <R, C extends Comparable<R>, V extends C> Single<V> min(final Function1<? super T, ? extends V> selector) {
+  default <R, C extends Comparable<R>, V extends C> One<V> min(final Function1<? super T, ? extends V> selector) {
     return new SelectorMinMax<>(this, Nullability.nonNullable(selector, "selector"), -1);
   }
 
-  default Single<T> min() {
+  default One<T> min() {
     return new MinMax<>(this, -1);
   }
 
-  default <N extends Number> Single<N> sum(final Function1<? super T, ? extends N> selector) {
+  default <N extends Number> One<N> sum(final Function1<? super T, ? extends N> selector) {
     return new SelectorSum<>(this, Nullability.nonNullable(selector, "selector"));
   }
 
-  default Single<T> sum() {
+  default One<T> sum() {
     return new Sum<>(this);
   }
 
-  default <N extends Number> Nullable<Double> average(final Function1<? super T, ? extends N> selector) {
-    return new Average<>(this, Nullability.nonNullable(selector, "selector"), Numeric.asDouble());
+  default <N extends Number> One<Double> average(final Function1<? super T, ? extends N> selector) {
+    return new Average<>(this, Nullability.nonNullable(selector, "selector"), asDouble());
   }
 
-  default Nullable<Double> average() {
-    return new Average<>(this, identity(), Numeric.asDouble());
+  default One<Double> average() {
+    return new Average<>(this, identity(), asDouble());
   }
 }
 
-final class Aggregate<T, A, R> implements Single<A> {
+final class Aggregate<T, A, R> implements One<A> {
   private final Structable<T> structable;
   private final Predicate1<? super T> filter;
   private final Function1<? super T, ? extends R> map;
@@ -120,7 +121,7 @@ final class Aggregate<T, A, R> implements Single<A> {
   }
 
   @Override
-  public final A get() {
+  public final Iterator<A> iterator() {
     var returned = seed;
     for (final var value : structable) {
       if (filter.test(value)) {
@@ -128,11 +129,11 @@ final class Aggregate<T, A, R> implements Single<A> {
         returned = reduce.apply(returned, apply);
       }
     }
-    return returned;
+    return Cursor.of(returned);
   }
 }
 
-final class NoSeed<T> implements Single<T> {
+final class NoSeed<T> implements One<T> {
   private final Structable<T> structable;
   private final Function2<? super T, ? super T, ? extends T> reduce;
 
@@ -143,16 +144,16 @@ final class NoSeed<T> implements Single<T> {
   }
 
   @Override
-  public final T get() {
+  public final Iterator<T> iterator() {
     T returned = null;
     for (final var value : structable) {
       returned = returned == null ? value : reduce.apply(returned, value);
     }
-    return returned;
+    return Cursor.of(returned);
   }
 }
 
-final class Average<T, V> implements Nullable<Double> {
+final class Average<T, V> implements One<Double> {
   private final Structable<T> structable;
   private final Function1<? super T, ? extends V> map;
   private final Function1<? super V, Double> asDouble;
@@ -187,7 +188,7 @@ final class Average<T, V> implements Nullable<Double> {
   }
 }
 
-final class SelectorMinMax<T, R, C extends Comparable<R>, V extends C> implements Single<V> {
+final class SelectorMinMax<T, R, C extends Comparable<R>, V extends C> implements One<V> {
   private final Structable<T> structable;
   private final Function1<? super T, ? extends V> map;
   private final int operation;
@@ -205,7 +206,7 @@ final class SelectorMinMax<T, R, C extends Comparable<R>, V extends C> implement
 
   @Override
   @SuppressWarnings("unchecked")
-  public final V get() {
+  public final Iterator<V> iterator() {
     V result = null;
     for (final var value : structable) {
       if (nonNull(value)) {
@@ -214,11 +215,11 @@ final class SelectorMinMax<T, R, C extends Comparable<R>, V extends C> implement
           result = mapped;
       }
     }
-    return Nullability.nonNullableState(result, operation == 1 ? "Max" : "Min");
+    return Cursor.of(nonNullableState(result, operation == 1 ? "Max" : "Min"));
   }
 }
 
-final class MinMax<T> implements Single<T> {
+final class MinMax<T> implements One<T> {
   private final Structable<T> structable;
   private final int operation;
 
@@ -228,10 +229,11 @@ final class MinMax<T> implements Single<T> {
     this.operation = operation;
   }
 
+  @NotNull
   @Contract(pure = true)
   @Override
   @SuppressWarnings("unchecked")
-  public final T get() {
+  public final Iterator<T> iterator() {
     T result = null;
     for (final var value : structable) {
       if (nonNull(value) && value instanceof Comparable) {
@@ -241,11 +243,11 @@ final class MinMax<T> implements Single<T> {
         }
       }
     }
-    return Nullability.nonNullableState(result, operation == 1 ? "Max" : "Min", "%s must have at least one Comparable implementation item.");
+    return Cursor.of(nonNullableState(result, operation == 1 ? "Max" : "Min", "%s must have at least one Comparable implementation item."));
   }
 }
 
-final class SelectorSum<T, N extends Number> implements Single<N> {
+final class SelectorSum<T, N extends Number> implements One<N> {
   private final Structable<T> structable;
   private final Function1<? super T, ? extends N> map;
 
@@ -255,46 +257,48 @@ final class SelectorSum<T, N extends Number> implements Single<N> {
     this.map = map;
   }
 
+  @NotNull
   @Override
-  public final N get() {
+  public final Iterator<N> iterator() {
     N result = null;
     for (final var value : structable) {
       final var mapped = map.apply(value);
       if (isNull(result)) {
         result = mapped;
       } else if (nonNull(mapped)) {
-        result = Numeric.sum(result, mapped);
+        result = sum(result, mapped);
       }
     }
-    return Nullability.nonNullableState(result, "Sum", "%s must have at least one non-null number.");
+    return Cursor.of(nonNullableState(result, "Sum", "%s must have at least one non-null number."));
   }
 }
 
-final class Sum<T> implements Single<T> {
+@SuppressWarnings("unchecked")
+final class Sum<T> implements One<T> {
   private final Structable<T> structable;
 
   @Contract(pure = true)
   Sum(final Structable<T> structable) {this.structable = structable;}
 
-  @SuppressWarnings("unchecked")
+  @NotNull
   @Contract(pure = true)
   @Override
-  public final T get() {
+  public final Iterator<T> iterator() {
     T result = null;
     for (final var value : structable) {
       if (value instanceof Number) {
         if (result != null && result.getClass().equals(value.getClass())) {
-          result = (T) Numeric.sum((Number) result, (Number) value);
+          result = (T) sum((Number) result, (Number) value);
         } else if (result == null) {
           result = value;
         }
       }
     }
-    return Nullability.nonNullableState(result, "Sum", "%s must have at least one non-null number.");
+    return Cursor.of(nonNullableState(result, "Sum", "%s must have at least one non-null number."));
   }
 }
 
-final class Count<T> implements Single<Long> {
+final class Count<T> implements One<Long> {
   private final Structable<T> structable;
   private final Predicate1<? super T> filter;
 
@@ -307,11 +311,11 @@ final class Count<T> implements Single<Long> {
   @NotNull
   @Contract(pure = true)
   @Override
-  public final Long get() {
+  public final Iterator<Long> iterator() {
     long count = 0;
     for (final var value : structable) {
       if (filter.test(value)) count++;
     }
-    return count;
+    return Cursor.of(count);
   }
 }

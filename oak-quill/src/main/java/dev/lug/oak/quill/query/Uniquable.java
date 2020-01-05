@@ -4,8 +4,7 @@ import dev.lug.oak.collect.Many;
 import dev.lug.oak.collect.cursor.Cursor;
 import dev.lug.oak.func.pre.Predicate1;
 import dev.lug.oak.quill.Structable;
-import dev.lug.oak.quill.single.Nullable;
-import dev.lug.oak.quill.single.Single;
+import dev.lug.oak.quill.single.One;
 import dev.lug.oak.type.Nullability;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -15,36 +14,36 @@ import java.util.Iterator;
 import static dev.lug.oak.func.pre.Predicate1.tautology;
 
 public interface Uniquable<T> extends Structable<T> {
-  default Nullable<T> elementAt(final int index) {
+  default One<T> elementAt(final int index) {
     return new ElementAt<>(this, index);
   }
 
-  default Nullable<T> first() {
+  default One<T> first() {
     return new First<>(this, tautology());
   }
 
-  default Nullable<T> first(final Predicate1<? super T> filter) {
+  default One<T> first(final Predicate1<? super T> filter) {
     return new First<>(this, Nullability.nonNullable(filter, "filter"));
   }
 
-  default Nullable<T> last() {
+  default One<T> last() {
     return new Last<>(this, tautology());
   }
 
-  default Nullable<T> last(final Predicate1<? super T> filter) {
+  default One<T> last(final Predicate1<? super T> filter) {
     return new Last<>(this, Nullability.nonNullable(filter, "filter"));
   }
 
-  default Single<T> single() {
-    return new One<>(this, tautology());
+  default One<T> single() {
+    return new Single<>(this, tautology());
   }
 
-  default Single<T> single(final Predicate1<? super T> filter) {
-    return new One<>(this, Nullability.nonNullable(filter, "filter"));
+  default One<T> single(final Predicate1<? super T> filter) {
+    return new Single<>(this, Nullability.nonNullable(filter, "filter"));
   }
 }
 
-final class ElementAt<T> implements Nullable<T> {
+final class ElementAt<T> implements One<T> {
   private final Structable<T> structable;
   private final int index;
 
@@ -68,7 +67,7 @@ final class ElementAt<T> implements Nullable<T> {
   }
 }
 
-final class First<T> implements Nullable<T> {
+final class First<T> implements One<T> {
   private final Structable<T> structable;
   private final Predicate1<? super T> filter;
 
@@ -89,7 +88,7 @@ final class First<T> implements Nullable<T> {
   }
 }
 
-final class Last<T> implements Nullable<T> {
+final class Last<T> implements One<T> {
   private final Structable<T> structable;
   private final Predicate1<? super T> filter;
 
@@ -111,24 +110,25 @@ final class Last<T> implements Nullable<T> {
   }
 }
 
-final class One<T> implements Single<T> {
+final class Single<T> implements One<T> {
   private final Structable<T> structable;
   private final Predicate1<? super T> filter;
 
   @Contract(pure = true)
-  One(final Structable<T> structable, final Predicate1<? super T> filter) {
+  Single(final Structable<T> structable, final Predicate1<? super T> filter) {
     this.structable = structable;
     this.filter = filter;
   }
 
+  @NotNull
   @Override
-  public final T get() {
+  public final Iterator<T> iterator() {
     if (filter.equals(tautology())) {
       final var cursor = structable.iterator();
       final var returned = cursor.next();
       if (cursor.hasNext())
         throw new IllegalStateException("Queryable must contain one element.");
-      return returned;
+      return Cursor.of(returned);
     } else {
       final var array = Many.<T>of();
       for (final var cursor = structable.iterator(); cursor.hasNext() && array.size() < 2; ) {
@@ -141,7 +141,7 @@ final class One<T> implements Single<T> {
         throw new IllegalStateException("Queryable must satisfy the condition once.");
       return array.at(0)
         .or("Element not found", IllegalStateException::new)
-        .get();
+        .iterator();
     }
   }
 }

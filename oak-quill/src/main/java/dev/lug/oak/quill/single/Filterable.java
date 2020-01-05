@@ -10,12 +10,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Iterator;
 
 public interface Filterable<T> extends Structable<T> {
-  default Nullable<T> where(Predicate1<? super T> filter) { return new Where<>(this, Nullability.nonNullable(filter, "filter")); }
+  default One<T> where(Predicate1<? super T> filter) { return new Where<>(this, Nullability.nonNullable(filter, "filter")); }
 
-  default <R> Nullable<R> ofType(Class<? extends R> type) { return new OfType<>(this, Nullability.nonNullable(type, "type")); }
+  default <R> One<R> ofType(Class<? extends R> type) { return new OfType<>(this, Nullability.nonNullable(type, "type")); }
 }
 
-final class Where<T> implements Nullable<T> {
+final class Where<T> implements One<T> {
   private final Structable<T> structable;
   private final Predicate1<? super T> filter;
 
@@ -33,7 +33,7 @@ final class Where<T> implements Nullable<T> {
   }
 }
 
-final class OfType<T, R> implements Nullable<R> {
+final class OfType<T, R> implements One<R> {
   private final Structable<T> structable;
   private final Class<? extends R> type;
 

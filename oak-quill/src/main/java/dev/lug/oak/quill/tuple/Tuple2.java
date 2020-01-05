@@ -3,8 +3,7 @@ package dev.lug.oak.quill.tuple;
 import dev.lug.oak.func.con.Consumer2;
 import dev.lug.oak.func.fun.Function2;
 import dev.lug.oak.func.pre.Predicate2;
-import dev.lug.oak.quill.single.Nullable;
-import dev.lug.oak.quill.single.Single;
+import dev.lug.oak.quill.single.One;
 import dev.lug.oak.type.AsInt;
 import dev.lug.oak.type.AsString;
 import org.jetbrains.annotations.Contract;
@@ -13,25 +12,25 @@ import org.jetbrains.annotations.NotNull;
 import static dev.lug.oak.type.Nullability.nonNullable;
 
 public interface Tuple2<V1, V2> extends Tuple {
-  <R> Nullable<R> select(Function2<? super V1, ? super V2, ? extends R> map);
+  <R> One<R> select(Function2<? super V1, ? super V2, ? extends R> map);
   Tuple2<V1, V2> peek(Consumer2<? super V1, ? super V2> peek);
-  <T extends Tuple> Nullable<T> selection(Function2<? super V1, ? super V2, ? extends T> flatMap);
+  <T extends Tuple> One<T> selection(Function2<? super V1, ? super V2, ? extends T> flatMap);
   Tuple2<V1, V2> where(Predicate2<? super V1, ? super V2> filter);
   void eventually(Consumer2<? super V1, ? super V2> then);
 
   interface Id extends AsInt {
     @NotNull
     @Contract(pure = true)
-    static Nullable<Id> of(final int value) {
-      return Single.of(value)
+    static One<Id> of(final int value) {
+      return One.of(value)
         .where(it -> it >= 0)
         .select(it -> () -> it);
     }
   }
 
   interface FirstName extends AsString {
-    static Nullable<FirstName> of(final String value) {
-      return Nullable.of(value)
+    static One<FirstName> of(final String value) {
+      return One.of(value)
         .where(it -> it.length() > 0 && it.length() <= 255)
         .select(it -> () -> it);
     }
@@ -49,8 +48,8 @@ final class Pair<V1, V2> implements Tuple2<V1, V2> {
   }
 
   @Override
-  public final <R> Nullable<R> select(final Function2<? super V1, ? super V2, ? extends R> map) {
-    return Nullable.of(nonNullable(map, "map").apply(v1, v2));
+  public final <R> One<R> select(final Function2<? super V1, ? super V2, ? extends R> map) {
+    return One.of(nonNullable(map, "map").apply(v1, v2));
   }
 
   @Override
@@ -61,8 +60,8 @@ final class Pair<V1, V2> implements Tuple2<V1, V2> {
   }
 
   @Override
-  public final <T extends Tuple> Nullable<T> selection(Function2<? super V1, ? super V2, ? extends T> flatMap) {
-    return Nullable.of(nonNullable(flatMap, "flatMap").apply(v1, v2));
+  public final <T extends Tuple> One<T> selection(Function2<? super V1, ? super V2, ? extends T> flatMap) {
+    return One.of(nonNullable(flatMap, "flatMap").apply(v1, v2));
   }
 
   @NotNull
@@ -110,8 +109,8 @@ final class None2<V1, V2> implements Tuple2<V1, V2> {
   @NotNull
   @Contract(pure = true)
   @Override
-  public final <R> Nullable<R> select(Function2<? super V1, ? super V2, ? extends R> map) {
-    return Nullable.none();
+  public final <R> One<R> select(Function2<? super V1, ? super V2, ? extends R> map) {
+    return One.none();
   }
 
   @Contract("_ -> this")
@@ -123,7 +122,7 @@ final class None2<V1, V2> implements Tuple2<V1, V2> {
   @NotNull
   @Contract(pure = true)
   @Override
-  public final <T extends Tuple> Nullable<T> selection(Function2<? super V1, ? super V2, ? extends T> flatMap) {
-    return Nullable.none();
+  public final <T extends Tuple> One<T> selection(Function2<? super V1, ? super V2, ? extends T> flatMap) {
+    return One.none();
   }
 }

@@ -4,7 +4,11 @@ import dev.lug.oak.func.fun.Function1;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import static dev.lug.oak.type.Nullability.nonNullable;
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
+import static java.util.Objects.requireNonNullElse;
+import static java.util.Objects.requireNonNullElseGet;
 
 public enum Numeric {
   NaN,
@@ -44,7 +48,19 @@ public enum Numeric {
   }
 
   @Contract(pure = true)
-  public static <T> Number asNumber(final T value) { return (Number) value; }
+  public static <T> Number asNumber(final T value) {
+    return (Number) value;
+  }
+
+  public static <T> Number asNumber(final T value, final String message, final Function1<? super String, ? extends RuntimeException> throwing) {
+    final var error = requireNonNullElse(message, "Can't cast to number.");
+    final Function1<? super String, ? extends RuntimeException> thrown = requireNonNullElseGet(throwing, () -> ((Function1<? super String, ? extends RuntimeException>) ClassCastException::new));
+    try {
+      return asNumber(value);
+    } catch (ClassCastException e) {
+      throw thrown.apply(error);
+    }
+  }
 
   @NotNull
   @Contract(pure = true)

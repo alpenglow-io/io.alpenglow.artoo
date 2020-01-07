@@ -7,6 +7,7 @@ import dev.lug.oak.func.pre.Predicate1;
 import dev.lug.oak.quill.Structable;
 import dev.lug.oak.quill.single.One;
 import dev.lug.oak.type.Nullability;
+import dev.lug.oak.type.Numeric;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,11 +16,10 @@ import java.util.Iterator;
 import static dev.lug.oak.func.fun.Function1.identity;
 import static dev.lug.oak.func.pre.Predicate1.tautology;
 import static dev.lug.oak.type.Nullability.nonNullableState;
-import static dev.lug.oak.type.Numeric.asDouble;
-import static dev.lug.oak.type.Numeric.sum;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
+@SuppressWarnings("unused")
 public interface Aggregatable<T> extends Structable<T> {
   @NotNull
   @Contract("_, _, _, _ -> new")
@@ -90,11 +90,11 @@ public interface Aggregatable<T> extends Structable<T> {
   }
 
   default <N extends Number> One<Double> average(final Function1<? super T, ? extends N> selector) {
-    return new Average<>(this, Nullability.nonNullable(selector, "selector"), asDouble());
+    return new Average<>(this, Nullability.nonNullable(selector, "selector"), Numeric.asDouble());
   }
 
   default One<Double> average() {
-    return new Average<>(this, identity(), asDouble());
+    return new Average<>(this, identity(), Numeric.asDouble());
   }
 }
 
@@ -143,6 +143,7 @@ final class NoSeed<T> implements One<T> {
     this.reduce = reduce;
   }
 
+  @NotNull
   @Override
   public final Iterator<T> iterator() {
     T returned = null;
@@ -204,6 +205,7 @@ final class SelectorMinMax<T, R, C extends Comparable<R>, V extends C> implement
     this.operation = operation;
   }
 
+  @NotNull
   @Override
   @SuppressWarnings("unchecked")
   public final Iterator<V> iterator() {
@@ -229,7 +231,6 @@ final class MinMax<T> implements One<T> {
     this.operation = operation;
   }
 
-  @NotNull
   @Contract(pure = true)
   @Override
   @SuppressWarnings("unchecked")
@@ -266,21 +267,20 @@ final class SelectorSum<T, N extends Number> implements One<N> {
       if (isNull(result)) {
         result = mapped;
       } else if (nonNull(mapped)) {
-        result = sum(result, mapped);
+        result = Numeric.sum(result, mapped);
       }
     }
     return Cursor.of(nonNullableState(result, "Sum", "%s must have at least one non-null number."));
   }
 }
 
-@SuppressWarnings("unchecked")
 final class Sum<T> implements One<T> {
   private final Structable<T> structable;
 
   @Contract(pure = true)
   Sum(final Structable<T> structable) {this.structable = structable;}
 
-  @NotNull
+  @SuppressWarnings("unchecked")
   @Contract(pure = true)
   @Override
   public final Iterator<T> iterator() {
@@ -288,7 +288,7 @@ final class Sum<T> implements One<T> {
     for (final var value : structable) {
       if (value instanceof Number) {
         if (result != null && result.getClass().equals(value.getClass())) {
-          result = (T) sum((Number) result, (Number) value);
+          result = (T) Numeric.sum((Number) result, (Number) value);
         } else if (result == null) {
           result = value;
         }

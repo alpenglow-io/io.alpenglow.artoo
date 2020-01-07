@@ -3,16 +3,17 @@ package dev.lug.oak.quill.single;
 import dev.lug.oak.collect.cursor.Cursor;
 import dev.lug.oak.func.pre.Predicate1;
 import dev.lug.oak.quill.Structable;
-import dev.lug.oak.type.Nullability;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
-public interface Filterable<T> extends Structable<T> {
-  default One<T> where(Predicate1<? super T> filter) { return new Where<>(this, Nullability.nonNullable(filter, "filter")); }
+import static dev.lug.oak.type.Nullability.nonNullable;
 
-  default <R> One<R> ofType(Class<? extends R> type) { return new OfType<>(this, Nullability.nonNullable(type, "type")); }
+public interface Filterable<T> extends Structable<T> {
+  default One<T> where(Predicate1<? super T> filter) { return new Where<>(this, nonNullable(filter, "filter")); }
+
+  default <R> One<R> ofType(Class<? extends R> type) { return new OfType<>(this, nonNullable(type, "type")); }
 }
 
 final class Where<T> implements One<T> {

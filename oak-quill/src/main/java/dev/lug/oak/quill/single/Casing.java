@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Iterator;
 
 import static dev.lug.oak.type.Nullability.*;
-import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNullElse;
 
 public interface Casing<T> extends Structable<T> {
@@ -32,8 +31,8 @@ final class Either<T> implements One<T> {
     this.otherwise = otherwise;
   }
 
-  @NotNull
   @Override
+  @Contract(pure = true)
   public final Iterator<T> iterator() {
     return Cursor.of(requireNonNullElse(structable.iterator().next(), otherwise));
   }
@@ -53,9 +52,9 @@ final class EitherException<T, E extends RuntimeException> implements One<T> {
 
   @NotNull
   @Override
-  public Iterator<T> iterator() {
+  public final Iterator<T> iterator() {
     final var value = structable.iterator().next();
-    if (isNull(value)) throw exception.apply(message);
+    if (value == null) throw exception.apply(message);
     return Cursor.of(value);
   }
 }

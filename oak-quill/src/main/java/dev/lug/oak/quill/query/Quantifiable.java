@@ -87,7 +87,7 @@ final class Any<T> implements One<Boolean> {
   @Override
   public final Iterator<Boolean> iterator() {
     var any = false;
-    for (final var iterator = structable.iterator(); iterator.hasNext() && !any; ) {
+    for (final var iterator = structable.iterator(); iterator.hasNext() && !any;) {
       final var next = iterator.next();
       any = nonNull(next) && filter.test(next);
     }

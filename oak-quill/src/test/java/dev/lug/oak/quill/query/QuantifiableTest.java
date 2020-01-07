@@ -50,7 +50,7 @@ class QuantifiableTest {
 
     final var query = Queryable.from(pets).all(pet -> pet.name.startsWith("B"));
 
-    assertThat(query.get()).isFalse();
+    assertThat(query.eval()).isFalse();
   }
 
   @Test
@@ -79,7 +79,7 @@ class QuantifiableTest {
     };
 
     final var query = Queryable.from(people)
-      .where(person -> Queryable.from(person.pets).all(pet -> pet.age > 5).get())
+      .where(person -> Queryable.from(person.pets).all(pet -> pet.age > 5).eval())
       .select(just(person -> person.name));
 
     assertThat(query).containsOnly("Haas", "Antebi");
@@ -127,7 +127,7 @@ class QuantifiableTest {
     };
 
     final var query = Queryable.from(people)
-      .where(person -> Queryable.from(person.pets).any().get())
+      .where(person -> Queryable.from(person.pets).any().eval())
       .select(just(person -> person.name));
 
     assertThat(query).containsOnly(

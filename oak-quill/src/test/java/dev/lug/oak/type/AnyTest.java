@@ -3,7 +3,7 @@ package dev.lug.oak.type;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import static dev.lug.oak.quill.single.One.of;
+import static dev.lug.oak.query.one.One.of;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class AnyTest {

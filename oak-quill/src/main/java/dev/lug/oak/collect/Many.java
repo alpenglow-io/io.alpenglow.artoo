@@ -2,7 +2,8 @@ package dev.lug.oak.collect;
 
 import dev.lug.oak.collect.cursor.Cursor;
 import dev.lug.oak.func.sup.Supplier1;
-import dev.lug.oak.quill.single.One;
+import dev.lug.oak.query.Structable;
+import dev.lug.oak.query.one.One;
 import dev.lug.oak.type.Lazy;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +18,7 @@ import static java.util.Arrays.copyOf;
 import static java.util.Objects.nonNull;
 
 @SuppressWarnings("unused")
-public interface Many<T> extends Iterable<T> {
+public interface Many<T> extends Structable<T> {
   @NotNull
   @Contract("_ -> new")
   @SafeVarargs
@@ -26,7 +27,7 @@ public interface Many<T> extends Iterable<T> {
   }
 
   @NotNull
-  static <S> Many<S> empty() {
+  static <S> Many<S> none() {
     return of();
   }
 

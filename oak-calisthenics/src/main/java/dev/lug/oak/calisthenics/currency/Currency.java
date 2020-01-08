@@ -1,22 +1,17 @@
 package dev.lug.oak.calisthenics.currency;
 
-import dev.lug.oak.quill.single.One;
-import dev.lug.oak.func.con.Consumer3;
-import dev.lug.oak.func.fun.Function3;
-import dev.lug.oak.func.pre.Predicate3;
-import dev.lug.oak.quill.single.Nullable;
-import dev.lug.oak.quill.tuple.Tuple;
-import dev.lug.oak.quill.tuple.Tuple3;
+import dev.lug.oak.query.one.One;
+import dev.lug.oak.query.one.Nullable;
+import dev.lug.oak.query.tuple.Tuple;
+import dev.lug.oak.query.tuple.Tuple3;
 import dev.lug.oak.type.AsDouble;
 import dev.lug.oak.type.AsString;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
-import java.util.Objects;
 
 import static dev.lug.oak.calisthenics.currency.Currency.*;
-import static dev.lug.oak.type.Nullability.areNonNullable;
 
 @SuppressWarnings("UnusedReturnValue")
 public interface Currency extends Tuple3<Id, Name, Amount> {

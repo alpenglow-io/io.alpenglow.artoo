@@ -1,6 +1,6 @@
 package dev.lug.oak.collect.cursor;
 
-import dev.lug.oak.quill.single.One;
+import dev.lug.oak.query.one.One;
 import dev.lug.oak.type.AsInt;
 
 import static java.lang.ThreadLocal.withInitial;

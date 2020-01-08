@@ -1,9 +1,9 @@
 module dev.lug.oak.quill {
-  exports dev.lug.oak.quill;
-  exports dev.lug.oak.quill.single;
-  exports dev.lug.oak.quill.query;
-  exports dev.lug.oak.quill.query.tuple;
-  exports dev.lug.oak.quill.tuple;
+  exports dev.lug.oak.query;
+  exports dev.lug.oak.query.one;
+  exports dev.lug.oak.query.many;
+  exports dev.lug.oak.query.many.tuple;
+  exports dev.lug.oak.query.tuple;
   exports dev.lug.oak.collect;
   exports dev.lug.oak.type;
   exports dev.lug.oak.collect.cursor;

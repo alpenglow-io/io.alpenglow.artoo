@@ -3,6 +3,7 @@ package dev.lug.oak.collect;
 import dev.lug.oak.collect.cursor.Cursor;
 import dev.lug.oak.func.sup.Supplier1;
 import dev.lug.oak.query.Structable;
+import dev.lug.oak.query.many.Queryable;
 import dev.lug.oak.query.one.One;
 import dev.lug.oak.type.Lazy;
 import org.jetbrains.annotations.Contract;
@@ -18,7 +19,7 @@ import static java.util.Arrays.copyOf;
 import static java.util.Objects.nonNull;
 
 @SuppressWarnings("unused")
-public interface Many<T> extends Structable<T> {
+public interface Many<T> extends QueryableMany<T> {
   @NotNull
   @Contract("_ -> new")
   @SafeVarargs
@@ -31,25 +32,19 @@ public interface Many<T> extends Structable<T> {
     return of();
   }
 
-  One<T> at(int index);
-
-  Many<T> add(T value);
-  Many<T> addAt(int index, T value);
-  Many<T> remove(T value);
-  Many<T> removeAt(int index);
-
-  int size();
-
   boolean has(T element);
   default boolean hasNot(T element) {
     return !has(element);
   }
-  int indexOf(T element);
 
   default boolean isEmpty() { return size() == 0; }
   default boolean isNotEmpty() { return size() > 0; }
 
   //Collection<T> asCollection();
+}
+
+final class Empty<T> implements Many<T> {
+
 }
 
 final class Element<T> {

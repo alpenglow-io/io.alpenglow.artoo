@@ -1,6 +1,5 @@
 package dev.lug.oak.query.many;
 
-import dev.lug.oak.collect.Many;
 import dev.lug.oak.collect.cursor.Cursor;
 import dev.lug.oak.func.pre.Predicate1;
 import dev.lug.oak.query.Structable;
@@ -8,6 +7,7 @@ import dev.lug.oak.query.one.One;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import static dev.lug.oak.func.pre.Predicate1.tautology;
@@ -130,7 +130,7 @@ final class Single<T> implements One<T> {
         throw new IllegalStateException("Queryable must contain one element.");
       return Cursor.of(returned);
     } else {
-      final var array = Many.<T>of();
+      final var array = new ArrayList<T>();
       for (final var cursor = structable.iterator(); cursor.hasNext() && array.size() < 2; ) {
         final var next = cursor.next();
         if (filter.test(next)) {
@@ -139,9 +139,7 @@ final class Single<T> implements One<T> {
       }
       if (array.size() > 1)
         throw new IllegalStateException("Queryable must satisfy the condition once.");
-      return array.at(0)
-        .or("Element not found", IllegalStateException::new)
-        .iterator();
+      return Cursor.of(array.get(0));
     }
   }
 }

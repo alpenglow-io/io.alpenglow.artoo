@@ -10,6 +10,9 @@ import dev.lug.oak.query.tuple.Tuple2;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.function.IntFunction;
+
 public interface Joinable<O> extends Structable<O> {
   default <I> Joining<O, I> join(final Structable<I> second) {
     return new Join<>(this, second);
@@ -38,13 +41,13 @@ final class Join<O, I> implements Joining<O, I> {
   @NotNull
   @Override
   public final Queryable2<O, I> on(final Predicate2<? super O, ? super I> expression) {
-    final var many = Many.<Tuple2<O, I>>of();
+    final var array = new ArrayList<Tuple2<O, I>>();
     for (final var o : first) {
       for (final var i : second) {
         if (expression.test(o, i))
-          many.add(Tuple.of(o, i));
+          array.add(Tuple.of(o, i));
       }
     }
-    return Queryable2.of(many);
+    return Queryable2.of(array.toArray((IntFunction<Tuple2<O, I>[]>) Tuple2[]::new));
   }
 }

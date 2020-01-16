@@ -1,6 +1,5 @@
 package dev.lug.oak.query.many.tuple;
 
-import dev.lug.oak.collect.Many;
 import dev.lug.oak.func.con.Consumer3;
 import dev.lug.oak.func.fun.Function3;
 import dev.lug.oak.query.Structable;
@@ -10,6 +9,7 @@ import dev.lug.oak.query.tuple.Tuple3;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import static dev.lug.oak.type.Nullability.nonNullable;
@@ -45,7 +45,7 @@ final class SelectT3<V1, V2, V3, R> implements Queryable<R> {
   @NotNull
   @Override
   public final Iterator<R> iterator() {
-    final var result = Many.<R>of();
+    final var result = new ArrayList<R>();
     for (final var tuple3 : structable) {
       tuple3
         .select(map)
@@ -69,7 +69,7 @@ final class Select3<V1, V2, V3, T1, T2, T3, T extends Tuple3<T1, T2, T3>> implem
   @Override
   @Contract(pure = true)
   public final Iterator<Tuple3<T1, T2, T3>> iterator() {
-    final var result = Many.<Tuple3<T1, T2, T3>>of();
+    final var result = new ArrayList<Tuple3<T1, T2, T3>>();
     for (final var tuple3 : structable) {
       tuple3
         .select(map)
@@ -92,7 +92,7 @@ final class Selection3<V1, V2, V3, T1, T2, T3, T extends Tuple3<T1, T2, T3>, S e
   @NotNull
   @Override
   public final Iterator<Tuple3<T1, T2, T3>> iterator() {
-    final var result = Many.<Tuple3<T1, T2, T3>>of();
+    final var result = new ArrayList<Tuple3<T1, T2, T3>>();
     for (final var tuple3 : structable) {
       tuple3
         .select(flatMap)

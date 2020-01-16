@@ -1,6 +1,5 @@
 package dev.lug.oak.query.many.tuple;
 
-import dev.lug.oak.collect.Many;
 import dev.lug.oak.func.con.Consumer2;
 import dev.lug.oak.func.fun.Function2;
 import dev.lug.oak.query.Q;
@@ -14,6 +13,7 @@ import dev.lug.oak.type.Nullability;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public interface Projectable2<V1, V2> extends Projectable<Tuple2<V1, V2>> {
@@ -47,7 +47,7 @@ final class SelectT2<V1, V2, R> implements Queryable<R> {
   @NotNull
   @Override
   public final Iterator<R> iterator() {
-    final var result = Many.<R>of();
+    final var result = new ArrayList<R>();
     for (final var tuple2 : structable) {
       tuple2
         .select(map)
@@ -71,7 +71,7 @@ final class Select2<V1, V2, T1, T2, T extends Tuple2<T1, T2>> implements Queryab
   @Override
   @Contract(pure = true)
   public final Iterator<Tuple2<T1, T2>> iterator() {
-    final var result = Many.<Tuple2<T1, T2>>of();
+    final var result = new ArrayList<Tuple2<T1, T2>>();
     for (final var tuple : structable) {
       tuple
         .select(map)
@@ -94,7 +94,7 @@ final class Selection2<V1, V2, T1, T2, T extends Tuple2<T1, T2>, S extends Struc
   @NotNull
   @Override
   public final Iterator<Tuple2<T1, T2>> iterator() {
-    final var result = Many.<Tuple2<T1, T2>>of();
+    final var result = new ArrayList<Tuple2<T1, T2>>();
     for (final var value : structable) {
       value
         .select(flatMap)

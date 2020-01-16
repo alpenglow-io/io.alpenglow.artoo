@@ -1,6 +1,5 @@
 package dev.lug.oak.query.many.tuple;
 
-import dev.lug.oak.collect.Many;
 import dev.lug.oak.func.fun.Function2;
 import dev.lug.oak.func.pre.Predicate2;
 import dev.lug.oak.query.Structable;
@@ -11,6 +10,7 @@ import dev.lug.oak.type.Nullability;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public interface Filterable2<V1, V2> extends Filterable<Tuple2<V1, V2>> {
@@ -36,7 +36,7 @@ final class Where2<V1, V2> implements Queryable2<V1, V2> {
   @NotNull
   @Override
   public final Iterator<Tuple2<V1, V2>> iterator() {
-    final var many = Many.<Tuple2<V1, V2>>of();
+    final var many = new ArrayList<Tuple2<V1, V2>>();
     for (final var tuple2 : structable) {
       tuple2
         .where(filter)
@@ -69,7 +69,7 @@ final class OfType2<V1, V2, T1, T2> implements Queryable2<T1, T2> {
   @NotNull
   @Override
   public final Iterator<Tuple2<T1, T2>> iterator() {
-    final var result = Many.<Tuple2<T1, T2>>of();
+    final var result = new ArrayList<Tuple2<T1, T2>>();
     for (final var tuple2 : structable) {
       tuple2
         .where(areTypes)

@@ -1,6 +1,5 @@
 package dev.lug.oak.query.many;
 
-import dev.lug.oak.collect.Many;
 import dev.lug.oak.func.con.Consumer1;
 import dev.lug.oak.func.fun.Function1;
 import dev.lug.oak.func.fun.IntFunction2;
@@ -14,6 +13,7 @@ import dev.lug.oak.type.Nullability;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public interface Projectable<T> extends Structable<T> {
@@ -57,7 +57,7 @@ final class Select<T, S> implements Queryable<S> {
   @NotNull
   @Override
   public final Iterator<S> iterator() {
-    final var array = Many.<S>of();
+    final var array = new ArrayList<S>();
     for (var value : structable) array.add(map.apply(value));
     return array.iterator();
   }
@@ -74,7 +74,7 @@ final class Selection<R, S extends Structable<R>> implements Queryable<R> {
   @NotNull
   @Override
   public final Iterator<R> iterator() {
-    final var array = Many.<R>of();
+    final var array = new ArrayList<R>();
     for (final var structable : structables) {
       for (final var value : structable) {
         array.add(value);
@@ -115,7 +115,7 @@ final class SelectIth<S, R> implements Queryable<R> {
   @NotNull
   @Override
   public final Iterator<R> iterator() {
-    final var array = Many.<R>of();
+    final var array = new ArrayList<R>();
     var index = 0;
     for (var iterator = structable.iterator(); iterator.hasNext(); index++) {
       array.add(mapIndex.applyInt(index, iterator.next()));
@@ -137,7 +137,7 @@ final class SelectTuple2<V, T1, T2, T extends Tuple2<T1, T2>> implements Queryab
   @NotNull
   @Override
   public final Iterator<Tuple2<T1, T2>> iterator() {
-    final var result = Many.<Tuple2<T1, T2>>of();
+    final var result = new ArrayList<Tuple2<T1, T2>>();
     for (final var value : structable) result.add(map.apply(value));
     return result.iterator();
   }
@@ -156,7 +156,7 @@ final class SelectTuple3<V, T1, T2, T3, T extends Tuple3<T1, T2, T3>> implements
   @NotNull
   @Override
   public final Iterator<Tuple3<T1, T2, T3>> iterator() {
-    final var result = Many.<Tuple3<T1, T2, T3>>of();
+    final var result = new ArrayList<Tuple3<T1, T2, T3>>();
     for (final var value : structable) result.add(map.apply(value));
     return result.iterator();
   }

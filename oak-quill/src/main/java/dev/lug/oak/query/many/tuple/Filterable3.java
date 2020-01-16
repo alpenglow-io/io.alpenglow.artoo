@@ -10,6 +10,7 @@ import dev.lug.oak.query.tuple.Tuple3;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import static dev.lug.oak.type.Nullability.nonNullable;
@@ -37,7 +38,7 @@ final class Where3<V1, V2, V3> implements Queryable3<V1, V2, V3> {
   @NotNull
   @Override
   public final Iterator<Tuple3<V1, V2, V3>> iterator() {
-    final var many = Many.<Tuple3<V1, V2, V3>>of();
+    final var many = new ArrayList<Tuple3<V1, V2, V3>>();
     for (final var tuple3 : structable) {
       tuple3
         .where(filter)
@@ -70,7 +71,7 @@ final class OfType3<V1, V2, V3, T1, T2, T3> implements Queryable3<T1, T2, T3> {
   @NotNull
   @Override
   public final Iterator<Tuple3<T1, T2, T3>> iterator() {
-    final var result = Many.<Tuple3<T1, T2, T3>>of();
+    final var result = new ArrayList<Tuple3<T1, T2, T3>>();
     for (final var tuple3 : structable) {
       tuple3
         .where(areTypes)

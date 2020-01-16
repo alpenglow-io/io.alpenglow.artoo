@@ -1,11 +1,11 @@
 package dev.lug.oak.query.many;
 
-import dev.lug.oak.collect.Many;
 import dev.lug.oak.collect.cursor.Cursor;
 import dev.lug.oak.func.sup.Supplier1;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -71,7 +71,7 @@ final class Repeat<T> implements Queryable<T> {
   @NotNull
   @Override
   public final Iterator<T> iterator() {
-    final var array = Many.<T>of();
+    final var array = new ArrayList<T>();
     for (var index = 0; index < count; index++) {
       array.add(supplier.get());
     }

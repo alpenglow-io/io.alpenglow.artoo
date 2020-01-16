@@ -6,6 +6,7 @@ import dev.lug.oak.query.Structable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import static dev.lug.oak.func.pre.Predicate1.tautology;
@@ -42,9 +43,9 @@ final class Distinct<T> implements Queryable<T> {
   @NotNull
   @Override
   public final Iterator<T> iterator() {
-    final var result = Many.<T>of();
+    final var result = new ArrayList<T>();
     for (final var value : structable) {
-      if (nonNull(value) && filter.test(value) && result.hasNot(value) || !filter.test(value))
+      if (nonNull(value) && filter.test(value) && !result.contains(value) || !filter.test(value))
         result.add(value);
     }
     return result.iterator();

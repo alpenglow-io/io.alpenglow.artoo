@@ -67,7 +67,7 @@ final class GroupBy<T, K> implements Groupable.Grouping<K, T> {
       map.putIfAbsent(k, new ArrayList<>());
       map.get(k).add(value);
     }
-    final var array = Many.<Tuple2<K, Collection<T>>>of();
+    final var array = new ArrayList<Tuple2<K, Collection<T>>>();
     for (final var entry : map.entrySet()) array.add(Tuple.of(entry.getKey(), entry.getValue()));
     return array.iterator();
   }
@@ -96,7 +96,7 @@ final class GroupBy2<T, K1, K2> implements Groupable.Grouping2<K1, K2, T> {
       map.putIfAbsent(key, new ArrayList<>());
       map.get(key).add(value);
     }
-    final var array = Many.<Tuple3<K1, K2, Collection<T>>>of();
+    final var array = new ArrayList<Tuple3<K1, K2, Collection<T>>>();
     for (final var entry : map.entrySet()) {
       entry
         .getKey()

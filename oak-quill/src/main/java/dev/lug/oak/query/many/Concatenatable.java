@@ -6,6 +6,7 @@ import dev.lug.oak.type.Nullability;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public interface Concatenatable<T> extends Structable<T> {
@@ -27,7 +28,7 @@ final class Concat<T, S extends Structable<T>> implements Queryable<T> {
   @NotNull
   @Override
   public final Iterator<T> iterator() {
-    final var array = Many.<T>none();
+    final var array = new ArrayList<T>();
     for (final var value : first) array.add(value);
     for (final var value : second) array.add(value);
     return array.iterator();

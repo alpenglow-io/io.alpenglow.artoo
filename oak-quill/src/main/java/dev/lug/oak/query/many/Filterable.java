@@ -8,6 +8,7 @@ import dev.lug.oak.type.Nullability;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import static java.util.Objects.nonNull;
@@ -39,7 +40,7 @@ final class Where<T> implements Queryable<T> {
   @NotNull
   @Override
   public final Iterator<T> iterator() {
-    final var array = Many.<T>of();
+    final var array = new ArrayList<T>();
     for (final var value : structable) {
       if (filter.test(value))
         array.add(value);
@@ -62,7 +63,7 @@ final class OfType<T, C> implements Queryable<C> {
   @NotNull
   @Override
   public final Iterator<C> iterator() {
-    final var typeds = Many.<C>of();
+    final var typeds = new ArrayList<C>();
     for (final var value : structable) {
       if (type.isInstance(value))
         typeds.add(type.cast(value));
@@ -84,7 +85,7 @@ final class WhereIth<T> implements Queryable<T> {
   @NotNull
   @Override
   public final Iterator<T> iterator() {
-    final var result = Many.<T>of();
+    final var result = new ArrayList<T>();
     var index = 0;
     for (final var cursor = structable.iterator(); cursor.hasNext(); index++) {
       final var value = cursor.next();

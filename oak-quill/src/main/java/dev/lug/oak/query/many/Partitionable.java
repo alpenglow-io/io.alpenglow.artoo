@@ -1,6 +1,5 @@
 package dev.lug.oak.query.many;
 
-import dev.lug.oak.collect.Many;
 import dev.lug.oak.func.pre.LongPredicate2;
 import dev.lug.oak.func.pre.Predicate1;
 import dev.lug.oak.query.Structable;
@@ -68,11 +67,11 @@ final class SkipWhile<S> implements Queryable<S> {
   @NotNull
   @Override
   public final Iterator<S> iterator() {
-    final var result = Many.<S>of();
+    final var result = new ArrayList<S>();
     var keepSkipping = true;
     var index = 0L;
     for (final var cursor = structable.iterator(); cursor.hasNext(); index++) {
-      S value = cursor.next();
+      var value = cursor.next();
       if (!filter.verify(index, value) || !keepSkipping) {
         result.add(value);
         keepSkipping = false;
@@ -115,7 +114,7 @@ final class TakeWhile<S> implements Queryable<S> {
   @NotNull
   @Override
   public final Iterator<S> iterator() {
-    final var result = Many.<S>of();
+    final var result = new ArrayList<S>();
     var keepTaking = true;
     var index = 0L;
     for (var cursor = some.iterator(); cursor.hasNext() && keepTaking; index++) {

@@ -1,6 +1,5 @@
 package dev.lug.oak.query.many.tuple;
 
-import dev.lug.oak.collect.Many;
 import dev.lug.oak.func.fun.Function3;
 import dev.lug.oak.func.pre.Predicate3;
 import dev.lug.oak.query.Structable;

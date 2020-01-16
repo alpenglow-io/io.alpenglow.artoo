@@ -16,7 +16,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import static dev.lug.oak.func.fun.Function1.identity;
 import static dev.lug.oak.func.pre.Predicate1.tautology;
 import static dev.lug.oak.type.Nullability.nonNullable;
-import static dev.lug.oak.type.Numeric.asNumber;
 
 public interface Convertable<T> extends Structable<T> {
   default @NotNull <K, E> Map<? extends K, ? extends E> asMap(final Function1<? super T, ? extends K> key, final Function1<? super T, ? extends E> element) {

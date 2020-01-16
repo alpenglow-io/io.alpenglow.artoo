@@ -33,7 +33,7 @@ final class Either<T> implements One<T> {
   @Override
   @Contract(pure = true)
   public final Iterator<T> iterator() {
-    return Cursor.of(requireNonNullElse(structable.iterator().next(), otherwise));
+    return Cursor.once(requireNonNullElse(structable.iterator().next(), otherwise));
   }
 }
 
@@ -54,6 +54,6 @@ final class EitherException<T, E extends RuntimeException> implements One<T> {
   public final Iterator<T> iterator() {
     final var value = structable.iterator().next();
     if (value == null) throw exception.apply(message);
-    return Cursor.of(value);
+    return Cursor.once(value);
   }
 }

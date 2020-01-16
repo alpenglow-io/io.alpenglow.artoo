@@ -1,9 +1,11 @@
 package dev.lug.oak.query.many;
 
-import dev.lug.oak.collect.Many;
 import org.jetbrains.annotations.Contract;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 import static dev.lug.oak.query.Q.P.ith;
 import static dev.lug.oak.query.Q.P.just;
@@ -81,13 +83,11 @@ class ProjectableTest {
     final var selectQuery = from(bouquets).select(just(bouquet -> bouquet.flowers));
     final var selectionQuery = from(bouquets).select(many(bouquet -> bouquet.flowers));
 
-    final var flowers1 = Many.<String>of();
-    final var flowers2 = Many.<String>of();
+    final var flowers1 = new ArrayList<String>();
+    final var flowers2 = new ArrayList<String>();
 
     for (final var flowers : selectQuery) {
-      for (final var flower : flowers) {
-        flowers1.add(flower);
-      }
+      Collections.addAll(flowers1, flowers);
     }
 
     for (final var flower : selectionQuery) {

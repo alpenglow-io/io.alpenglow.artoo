@@ -1,6 +1,5 @@
 package dev.lug.oak.query.many;
 
-import dev.lug.oak.collect.Many;
 import dev.lug.oak.func.fun.Function1;
 import dev.lug.oak.func.pre.Predicate2;
 import dev.lug.oak.func.pre.Predicate3;

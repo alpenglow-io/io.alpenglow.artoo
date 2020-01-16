@@ -13,7 +13,7 @@ import static java.util.Arrays.copyOf;
 public interface Currencies extends Iterable<Currency> {
   @NotNull
   @Contract("_ -> new")
-  static Currencies of(final Currency... entries) {
+  static Currencies from(final Currency.Entry... entries) {
     return new ManyCurrencies(copyOf(entries, entries.length));
   }
 
@@ -21,21 +21,21 @@ public interface Currencies extends Iterable<Currency> {
 }
 
 final class ManyCurrencies implements Currencies {
-  private final Currency[] currencies;
+  private final Currency.Entry[] currencies;
 
   @Contract(pure = true)
-  ManyCurrencies(final Currency... currencies) {
+  ManyCurrencies(final Currency.Entry... currencies) {
     this.currencies = currencies;
   }
 
   @NotNull
   @Override
   public final Iterator<Currency> iterator() {
-    return Cursor.of(currencies);
+    return Cursor.none();
   }
 
   @Override
   public final One<Currency> one(Currency.Id id) {
-    return from(currencies).first(currency -> currency.id().is(id));
+    return One.none();
   }
 }

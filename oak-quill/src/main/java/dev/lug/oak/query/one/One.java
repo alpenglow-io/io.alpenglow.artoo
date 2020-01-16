@@ -52,6 +52,6 @@ final class Just<T> implements One<T> {
   @Contract(pure = true)
   @Override
   public final Iterator<T> iterator() {
-    return Cursor.of(nonNullableState(this.value, "One"));
+    return Cursor.once(nonNullableState(this.value, "One"));
   }
 }

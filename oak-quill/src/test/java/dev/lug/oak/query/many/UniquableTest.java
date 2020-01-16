@@ -74,8 +74,8 @@ class UniquableTest {
   void shouldFailIfThereIsMoreThanSingleElement() {
     final Integer[] numbers = { 9, 65, 87, 435, 3, 83, 23, 87, 435, 67, 19 };
 
-    assertThrows(IllegalStateException.class, from(numbers).single()::eval, "Queryable must have one element only.");
-    assertThrows(IllegalStateException.class, from(numbers).single(number -> number < 20)::eval, "Queryable must have one element only.");
+    assertThrows(IllegalStateException.class, from(numbers)::single, "Queryable must have one element only.");
+    assertThrows(IllegalStateException.class, () -> from(numbers).single(number -> number < 20), "Queryable must have one element only.");
   }
 
   @Test

@@ -68,7 +68,7 @@ final class All<T> implements One<Boolean> {
       final var next = iterator.next();
       all = nonNull(next) && filter.test(next);
     }
-    return Cursor.of(all);
+    return Cursor.once(all);
   }
 }
 
@@ -91,6 +91,6 @@ final class Any<T> implements One<Boolean> {
       final var next = iterator.next();
       any = nonNull(next) && filter.test(next);
     }
-    return Cursor.of(any);
+    return Cursor.once(any);
   }
 }

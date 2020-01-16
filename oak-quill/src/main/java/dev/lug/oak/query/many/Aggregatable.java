@@ -129,7 +129,7 @@ final class Aggregate<T, A, R> implements One<A> {
         returned = reduce.apply(returned, apply);
       }
     }
-    return Cursor.of(returned);
+    return Cursor.once(returned);
   }
 }
 
@@ -150,7 +150,7 @@ final class NoSeed<T> implements One<T> {
     for (final var value : structable) {
       returned = returned == null ? value : reduce.apply(returned, value);
     }
-    return Cursor.of(returned);
+    return Cursor.once(returned);
   }
 }
 
@@ -185,7 +185,7 @@ final class Average<T, V> implements One<Double> {
         }
       }
     }
-    return count == 0 ? Cursor.none() : Cursor.of(total / count);
+    return count == 0 ? Cursor.none() : Cursor.once(total / count);
   }
 }
 
@@ -217,7 +217,7 @@ final class SelectorMinMax<T, R, C extends Comparable<R>, V extends C> implement
           result = mapped;
       }
     }
-    return Cursor.of(nonNullableState(result, operation == 1 ? "Max" : "Min"));
+    return Cursor.once(nonNullableState(result, operation == 1 ? "Max" : "Min"));
   }
 }
 
@@ -244,7 +244,7 @@ final class MinMax<T> implements One<T> {
         }
       }
     }
-    return Cursor.of(nonNullableState(result, operation == 1 ? "Max" : "Min", "%s must have at least one Comparable implementation item."));
+    return Cursor.once(nonNullableState(result, operation == 1 ? "Max" : "Min", "%s must have at least one Comparable implementation item."));
   }
 }
 
@@ -270,7 +270,7 @@ final class SelectorSum<T, N extends Number> implements One<N> {
         result = Numeric.sum(result, mapped);
       }
     }
-    return Cursor.of(nonNullableState(result, "Sum", "%s must have at least one non-null number."));
+    return Cursor.once(nonNullableState(result, "Sum", "%s must have at least one non-null number."));
   }
 }
 
@@ -294,7 +294,7 @@ final class Sum<T> implements One<T> {
         }
       }
     }
-    return Cursor.of(nonNullableState(result, "Sum", "%s must have at least one non-null number."));
+    return Cursor.once(nonNullableState(result, "Sum", "%s must have at least one non-null number."));
   }
 }
 
@@ -316,6 +316,6 @@ final class Count<T> implements One<Long> {
     for (final var value : structable) {
       if (filter.test(value)) count++;
     }
-    return Cursor.of(count);
+    return Cursor.once(count);
   }
 }

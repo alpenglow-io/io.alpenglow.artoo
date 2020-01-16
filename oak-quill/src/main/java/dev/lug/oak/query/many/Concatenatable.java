@@ -1,6 +1,5 @@
 package dev.lug.oak.query.many;
 
-import dev.lug.oak.collect.Many;
 import dev.lug.oak.query.Structable;
 import dev.lug.oak.type.Nullability;
 import org.jetbrains.annotations.Contract;

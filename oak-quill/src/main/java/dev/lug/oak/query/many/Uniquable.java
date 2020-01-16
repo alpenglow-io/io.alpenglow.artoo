@@ -128,7 +128,7 @@ final class Single<T> implements One<T> {
       final var returned = cursor.next();
       if (cursor.hasNext())
         throw new IllegalStateException("Queryable must contain one element.");
-      return Cursor.of(returned);
+      return Cursor.once(returned);
     } else {
       final var array = new ArrayList<T>();
       for (final var cursor = structable.iterator(); cursor.hasNext() && array.size() < 2; ) {
@@ -139,7 +139,7 @@ final class Single<T> implements One<T> {
       }
       if (array.size() > 1)
         throw new IllegalStateException("Queryable must satisfy the condition once.");
-      return Cursor.of(array.get(0));
+      return Cursor.once(array.get(0));
     }
   }
 }

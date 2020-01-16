@@ -30,7 +30,7 @@ public interface Cursor<E> extends Iterator<E>, Enumeration<E> {
 
   @NotNull
   @Contract("_ -> new")
-  static <T> Cursor<T> of(T value) {
+  static <T> Cursor<T> once(T value) {
     return new Once<>(nonNullable(value, "value"));
   }
 
@@ -53,7 +53,7 @@ public interface Cursor<E> extends Iterator<E>, Enumeration<E> {
   }
 
   static <R> Cursor<R> ofNullable(final R value) {
-    return nonNullOrElse(value, Cursor::of, Cursor::none);
+    return nonNullOrElse(value, Cursor::once, Cursor::none);
   }
 
   static <T, R> Cursor<R> ofSingle(final Iterable<T> iterable, Function1<? super T, ? extends R> then) {

@@ -160,7 +160,7 @@ class AggregatableTest {
 
     final var Default = new Pet("None", -1);
 
-    assertThrows(IllegalStateException.class, from(pets).max()::eval, "Max must have at least one Comparable implementation item.");
+    assertThrows(IllegalStateException.class, () -> from(pets).max(), "Max must have at least one Comparable implementation item.");
     Assertions.assertThat(from(pets).max().or(Default)).containsOnly(Default);
   }
 
@@ -203,6 +203,6 @@ class AggregatableTest {
   @Test
   @DisplayName("should fail if there are no numbers")
   void shouldFailIfNoNumbers() {
-    assertThrows(IllegalStateException.class, from("Coho Vineyard", "Wingtip Toys", "Adventure Works").sum()::eval);
+    assertThrows(IllegalStateException.class, from("Coho Vineyard", "Wingtip Toys", "Adventure Works")::sum);
   }
 }

@@ -35,7 +35,7 @@ final class ManyCurrencies implements Currencies {
   }
 
   @Override
-  public final One<Currency> one(Currency.Id id) {
+  public final Currency one(Currency.Id id) {
     return One.none();
   }
 }

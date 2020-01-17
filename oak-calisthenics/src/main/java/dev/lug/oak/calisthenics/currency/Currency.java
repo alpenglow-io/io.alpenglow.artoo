@@ -1,18 +1,35 @@
 package dev.lug.oak.calisthenics.currency;
 
+import dev.lug.oak.collect.cursor.Cursor;
+import dev.lug.oak.query.one.One;
 import dev.lug.oak.type.AsDouble;
 import dev.lug.oak.type.AsString;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-public interface Currency {
+import java.util.Iterator;
+
+@SuppressWarnings("UnusedReturnValue")
+public interface Currency extends One<Currency.Entry> {
   @NotNull
   @Contract("_, _, _ -> new")
   static Currency of(@NotNull final Id id, @NotNull final Name name, @NotNull final Amount amount) {
-    return new SingleCurrency(id.eval(), name.eval(), amount.eval());
+    return new OneCurrency(id.eval(), name.eval(), amount.eval());
   }
 
-  Currency replace(Name name);
+  default Currency replace(Name name) {
+    return () -> this.select(currency -> new Currency.Entry(currency.id, name, currency.amount)).iterator();
+  }
+
+  default Currency increase(Amount amount) {
+    return () -> this
+      .select(currency -> new Currency.Entry(
+        currency.id,
+        currency.name,
+        () -> amount.eval() + currency.amount.eval())
+      )
+      .iterator();
+  }
 
   interface Id extends AsString {}
   interface Name extends AsString {}
@@ -43,19 +60,20 @@ public interface Currency {
   }
 }
 
-final class SingleCurrency implements Currency {
+final class OneCurrency implements Currency {
   private final String id;
   private final String name;
   private final double amount;
 
-  SingleCurrency(String id, String name, double amount) {
+  OneCurrency(String id, String name, double amount) {
     this.id = id;
     this.name = name;
     this.amount = amount;
   }
 
+  @NotNull
   @Override
-  public Currency replace(Name name) {
-    return new SingleCurrency(id, name.eval(), amount);
+  public final Iterator<Entry> iterator() {
+    return Cursor.of(new Currency.Entry(() -> id, () -> name, () -> amount));
   }
 }

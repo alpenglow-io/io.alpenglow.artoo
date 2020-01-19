@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
-import static dev.lug.oak.query.many.Queryable.from;
+import static dev.lug.oak.query.many.Many.from;
 import static java.util.Arrays.copyOf;
 
 public interface Currencies extends Iterable<Currency> {

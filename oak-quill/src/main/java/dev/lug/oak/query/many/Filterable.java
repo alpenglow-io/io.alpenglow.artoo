@@ -2,7 +2,7 @@ package dev.lug.oak.query.many;
 
 import dev.lug.oak.func.pre.IntPredicate2;
 import dev.lug.oak.func.pre.Predicate1;
-import dev.lug.oak.query.Structable;
+import dev.lug.oak.query.Queryable;
 import dev.lug.oak.type.Nullability;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -12,27 +12,27 @@ import java.util.Iterator;
 
 import static java.util.Objects.nonNull;
 
-public interface Filterable<T> extends Structable<T> {
-  default Queryable<T> where(final Predicate1<? super T> filter) {
+public interface Filterable<T> extends Queryable<T> {
+  default Many<T> where(final Predicate1<? super T> filter) {
     return new Where<>(this, Nullability.nonNullable(filter, "filter"));
   }
 
-  default Queryable<T> where(final IntPredicate2<? super T> filter) {
+  default Many<T> where(final IntPredicate2<? super T> filter) {
     return new WhereIth<>(this, Nullability.nonNullable(filter, "filter"));
   }
 
-  default <C> Queryable<C> ofType(final Class<? extends C> type) {
+  default <C> Many<C> ofType(final Class<? extends C> type) {
     return new OfType<>(this, Nullability.nonNullable(type, "type"));
   }
 }
 
-final class Where<T> implements Queryable<T> {
-  private final Structable<T> structable;
+final class Where<T> implements Many<T> {
+  private final Queryable<T> queryable;
   private final Predicate1<? super T> filter;
 
   @Contract(pure = true)
-  Where(final Structable<T> structable, final Predicate1<? super T> filter) {
-    this.structable = structable;
+  Where(final Queryable<T> queryable, final Predicate1<? super T> filter) {
+    this.queryable = queryable;
     this.filter = filter;
   }
 
@@ -40,7 +40,7 @@ final class Where<T> implements Queryable<T> {
   @Override
   public final Iterator<T> iterator() {
     final var array = new ArrayList<T>();
-    for (final var value : structable) {
+    for (final var value : queryable) {
       if (filter.test(value))
         array.add(value);
     }
@@ -49,13 +49,13 @@ final class Where<T> implements Queryable<T> {
 }
 
 
-final class OfType<T, C> implements Queryable<C> {
-  private final Structable<T> structable;
+final class OfType<T, C> implements Many<C> {
+  private final Queryable<T> queryable;
   private final Class<? extends C> type;
 
   @Contract(pure = true)
-  OfType(final Structable<T> structable, final Class<? extends C> type) {
-    this.structable = structable;
+  OfType(final Queryable<T> queryable, final Class<? extends C> type) {
+    this.queryable = queryable;
     this.type = type;
   }
 
@@ -63,7 +63,7 @@ final class OfType<T, C> implements Queryable<C> {
   @Override
   public final Iterator<C> iterator() {
     final var typeds = new ArrayList<C>();
-    for (final var value : structable) {
+    for (final var value : queryable) {
       if (type.isInstance(value))
         typeds.add(type.cast(value));
     }
@@ -71,13 +71,13 @@ final class OfType<T, C> implements Queryable<C> {
   }
 }
 
-final class WhereIth<T> implements Queryable<T> {
-  private final Structable<T> structable;
+final class WhereIth<T> implements Many<T> {
+  private final Queryable<T> queryable;
   private final IntPredicate2<? super T> filter;
 
   @Contract(pure = true)
-  WhereIth(final Structable<T> structable, final IntPredicate2<? super T> filter) {
-    this.structable = structable;
+  WhereIth(final Queryable<T> queryable, final IntPredicate2<? super T> filter) {
+    this.queryable = queryable;
     this.filter = filter;
   }
 
@@ -86,7 +86,7 @@ final class WhereIth<T> implements Queryable<T> {
   public final Iterator<T> iterator() {
     final var result = new ArrayList<T>();
     var index = 0;
-    for (final var cursor = structable.iterator(); cursor.hasNext(); index++) {
+    for (final var cursor = queryable.iterator(); cursor.hasNext(); index++) {
       final var value = cursor.next();
       if (nonNull(value) && filter.verify(index, value)) {
         result.add(value);

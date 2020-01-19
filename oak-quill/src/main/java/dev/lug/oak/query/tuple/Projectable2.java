@@ -1,14 +1,12 @@
-package dev.lug.oak.query.many.tuple;
+package dev.lug.oak.query.tuple;
 
 import dev.lug.oak.func.con.Consumer2;
 import dev.lug.oak.func.fun.Function2;
-import dev.lug.oak.query.Q;
 import dev.lug.oak.query.Q.Just2AsManyTuple2;
 import dev.lug.oak.query.Q.Just2AsTuple2;
-import dev.lug.oak.query.Structable;
+import dev.lug.oak.query.Queryable;
 import dev.lug.oak.query.many.Projectable;
-import dev.lug.oak.query.many.Queryable;
-import dev.lug.oak.query.tuple.Tuple2;
+import dev.lug.oak.query.many.Many;
 import dev.lug.oak.type.Nullability;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public interface Projectable2<V1, V2> extends Projectable<Tuple2<V1, V2>> {
-  default <R> Queryable<R> select(final Q.AsJust2<? super V1, ? super V2, ? extends R> map) {
+  default <R> Many<R> select(final dev.lug.oak.query.Q.AsJust2<? super V1, ? super V2, ? extends R> map) {
     return new SelectT2<>(this, Nullability.nonNullable(map, "map"));
   }
 
@@ -25,7 +23,7 @@ public interface Projectable2<V1, V2> extends Projectable<Tuple2<V1, V2>> {
     return new Select2<>(this, Nullability.nonNullable(map, "map"));
   }
 
-  default <T1, T2, T extends Tuple2<T1, T2>, S extends Structable<T>> Queryable2<T1, T2> select(final Just2AsManyTuple2<? super V1, ? super V2, ? extends S> flatMap) {
+  default <T1, T2, T extends Tuple2<T1, T2>, Q extends Queryable<T>> Queryable2<T1, T2> select(final Just2AsManyTuple2<? super V1, ? super V2, ? extends Q> flatMap) {
     return new Selection2<>(this, Nullability.nonNullable(flatMap, "flatMap"));
   }
 
@@ -34,13 +32,13 @@ public interface Projectable2<V1, V2> extends Projectable<Tuple2<V1, V2>> {
   }
 }
 
-final class SelectT2<V1, V2, R> implements Queryable<R> {
-  private final Structable<Tuple2<V1, V2>> structable;
+final class SelectT2<V1, V2, R> implements Many<R> {
+  private final Queryable<Tuple2<V1, V2>> queryable;
   private final Function2<? super V1, ? super V2, ? extends R> map;
 
   @Contract(pure = true)
-  SelectT2(final Structable<Tuple2<V1, V2>> structable, final Function2<? super V1, ? super V2, ? extends R> map) {
-    this.structable = structable;
+  SelectT2(final Queryable<Tuple2<V1, V2>> queryable, final Function2<? super V1, ? super V2, ? extends R> map) {
+    this.queryable = queryable;
     this.map = map;
   }
 
@@ -48,7 +46,7 @@ final class SelectT2<V1, V2, R> implements Queryable<R> {
   @Override
   public final Iterator<R> iterator() {
     final var result = new ArrayList<R>();
-    for (final var tuple2 : structable) {
+    for (final var tuple2 : queryable) {
       tuple2
         .select(map)
         .forEach(result::add);
@@ -58,12 +56,12 @@ final class SelectT2<V1, V2, R> implements Queryable<R> {
 }
 
 final class Select2<V1, V2, T1, T2, T extends Tuple2<T1, T2>> implements Queryable2<T1, T2> {
-  private final Structable<Tuple2<V1, V2>> structable;
+  private final Queryable<Tuple2<V1, V2>> queryable;
   private final Function2<? super V1, ? super V2, ? extends T> map;
 
   @Contract(pure = true)
-  Select2(final Structable<Tuple2<V1, V2>> structable, final Function2<? super V1, ? super V2, ? extends T> map) {
-    this.structable = structable;
+  Select2(final Queryable<Tuple2<V1, V2>> queryable, final Function2<? super V1, ? super V2, ? extends T> map) {
+    this.queryable = queryable;
     this.map = map;
   }
 
@@ -72,7 +70,7 @@ final class Select2<V1, V2, T1, T2, T extends Tuple2<T1, T2>> implements Queryab
   @Contract(pure = true)
   public final Iterator<Tuple2<T1, T2>> iterator() {
     final var result = new ArrayList<Tuple2<T1, T2>>();
-    for (final var tuple : structable) {
+    for (final var tuple : queryable) {
       tuple
         .select(map)
         .peek(result::add);
@@ -81,13 +79,13 @@ final class Select2<V1, V2, T1, T2, T extends Tuple2<T1, T2>> implements Queryab
   }
 }
 
-final class Selection2<V1, V2, T1, T2, T extends Tuple2<T1, T2>, S extends Structable<T>> implements Queryable2<T1, T2> {
-  private final Structable<Tuple2<V1, V2>> structable;
+final class Selection2<V1, V2, T1, T2, T extends Tuple2<T1, T2>, S extends Queryable<T>> implements Queryable2<T1, T2> {
+  private final Queryable<Tuple2<V1, V2>> queryable;
   private final Function2<? super V1, ? super V2, ? extends S> flatMap;
 
   @Contract(pure = true)
-  Selection2(Structable<Tuple2<V1, V2>> structable, Function2<? super V1, ? super V2, ? extends S> flatMap) {
-    this.structable = structable;
+  Selection2(Queryable<Tuple2<V1, V2>> queryable, Function2<? super V1, ? super V2, ? extends S> flatMap) {
+    this.queryable = queryable;
     this.flatMap = flatMap;
   }
 
@@ -95,7 +93,7 @@ final class Selection2<V1, V2, T1, T2, T extends Tuple2<T1, T2>, S extends Struc
   @Override
   public final Iterator<Tuple2<T1, T2>> iterator() {
     final var result = new ArrayList<Tuple2<T1, T2>>();
-    for (final var value : structable) {
+    for (final var value : queryable) {
       value
         .select(flatMap)
         .peek(struct -> struct.forEach(result::add));
@@ -105,20 +103,20 @@ final class Selection2<V1, V2, T1, T2, T extends Tuple2<T1, T2>, S extends Struc
 }
 
 final class Peek2<V1, V2> implements Queryable2<V1, V2> {
-  private final Structable<Tuple2<V1, V2>> structable;
+  private final Queryable<Tuple2<V1, V2>> queryable;
   private final Consumer2<? super V1, ? super V2> peek;
 
   @Contract(pure = true)
-  Peek2(Structable<Tuple2<V1, V2>> structable, Consumer2<? super V1, ? super V2> peek) {
-    this.structable = structable;
+  Peek2(Queryable<Tuple2<V1, V2>> queryable, Consumer2<? super V1, ? super V2> peek) {
+    this.queryable = queryable;
     this.peek = peek;
   }
 
   @NotNull
   @Override
   public Iterator<Tuple2<V1, V2>> iterator() {
-    for (final var value : structable)
+    for (final var value : queryable)
       value.peek(peek);
-    return structable.iterator();
+    return queryable.iterator();
   }
 }

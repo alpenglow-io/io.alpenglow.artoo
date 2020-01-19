@@ -4,7 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static dev.lug.oak.func.pre.Predicate1.not;
-import static dev.lug.oak.query.many.Queryable.from;
+import static dev.lug.oak.query.many.Many.from;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class PartitionableTest {

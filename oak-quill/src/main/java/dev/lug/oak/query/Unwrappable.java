@@ -1,4 +1,4 @@
 package dev.lug.oak.query;
 
-public interface Unwrappable<T, S extends Structable<T>> extends Structable<T> {
+public interface Unwrappable<T, S extends Queryable<T>> extends Queryable<T> {
 }

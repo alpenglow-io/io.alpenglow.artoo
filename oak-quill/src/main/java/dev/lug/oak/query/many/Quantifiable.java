@@ -2,7 +2,7 @@ package dev.lug.oak.query.many;
 
 import dev.lug.oak.collect.cursor.Cursor;
 import dev.lug.oak.func.pre.Predicate1;
-import dev.lug.oak.query.Structable;
+import dev.lug.oak.query.Queryable;
 import dev.lug.oak.query.one.One;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -12,8 +12,8 @@ import java.util.Iterator;
 import static dev.lug.oak.type.Nullability.nonNullable;
 import static java.util.Objects.nonNull;
 
-public interface Quantifiable<T> extends Structable<T> {
-  default <C> Queryable<T> allOf(final Class<C> type) {
+public interface Quantifiable<T> extends Queryable<T> {
+  default <C> Many<T> allOf(final Class<C> type) {
     return new AllOf<>(this, type);
   }
 
@@ -28,13 +28,13 @@ public interface Quantifiable<T> extends Structable<T> {
   }
 }
 
-final class AllOf<T, C> implements Queryable<T> {
-  private final Structable<T> structable;
+final class AllOf<T, C> implements Many<T> {
+  private final Queryable<T> queryable;
   private final Class<C> type;
 
   @Contract(pure = true)
-  AllOf(final Structable<T> structable, final Class<C> type) {
-    this.structable = structable;
+  AllOf(final Queryable<T> queryable, final Class<C> type) {
+    this.queryable = queryable;
     this.type = type;
   }
 
@@ -42,21 +42,21 @@ final class AllOf<T, C> implements Queryable<T> {
   @Override
   public final Iterator<T> iterator() {
     var all = true;
-    final var cursor = structable.iterator();
+    final var cursor = queryable.iterator();
     while (cursor.hasNext() && all) {
       all = type.isInstance(cursor.next());
     }
-    return all ? structable.iterator() : Cursor.none();
+    return all ? queryable.iterator() : Cursor.none();
   }
 }
 
 final class All<T> implements One<Boolean> {
-  private final Structable<T> structable;
+  private final Queryable<T> queryable;
   private final Predicate1<? super T> filter;
 
   @Contract(pure = true)
-  All(final Structable<T> structable, final Predicate1<? super T> filter) {
-    this.structable = structable;
+  All(final Queryable<T> queryable, final Predicate1<? super T> filter) {
+    this.queryable = queryable;
     this.filter = filter;
   }
 
@@ -64,7 +64,7 @@ final class All<T> implements One<Boolean> {
   @Override
   public final Iterator<Boolean> iterator() {
     var all = true;
-    for (final var iterator = structable.iterator(); iterator.hasNext() && all;) {
+    for (final var iterator = queryable.iterator(); iterator.hasNext() && all;) {
       final var next = iterator.next();
       all = nonNull(next) && filter.test(next);
     }
@@ -73,12 +73,12 @@ final class All<T> implements One<Boolean> {
 }
 
 final class Any<T> implements One<Boolean> {
-  private final Structable<T> structable;
+  private final Queryable<T> queryable;
   private final Predicate1<? super T> filter;
 
   @Contract(pure = true)
-  Any(final Structable<T> structable, final Predicate1<? super T> filter) {
-    this.structable = structable;
+  Any(final Queryable<T> queryable, final Predicate1<? super T> filter) {
+    this.queryable = queryable;
     this.filter = filter;
   }
 
@@ -87,7 +87,7 @@ final class Any<T> implements One<Boolean> {
   @Override
   public final Iterator<Boolean> iterator() {
     var any = false;
-    for (final var iterator = structable.iterator(); iterator.hasNext() && !any;) {
+    for (final var iterator = queryable.iterator(); iterator.hasNext() && !any;) {
       final var next = iterator.next();
       any = nonNull(next) && filter.test(next);
     }

@@ -1,6 +1,5 @@
-package dev.lug.oak.query.many.tuple;
+package dev.lug.oak.query.tuple;
 
-import dev.lug.oak.query.tuple.Tuple3;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

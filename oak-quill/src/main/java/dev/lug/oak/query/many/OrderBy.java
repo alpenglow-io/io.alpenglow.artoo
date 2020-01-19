@@ -1,7 +1,7 @@
 package dev.lug.oak.query.many;
 
 import dev.lug.oak.func.fun.Function1;
-import dev.lug.oak.query.Structable;
+import dev.lug.oak.query.Queryable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,11 +11,11 @@ import java.util.Iterator;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 import static dev.lug.oak.query.Q.P.just;
-import static dev.lug.oak.query.many.Queryable.from;
+import static dev.lug.oak.query.many.Many.from;
 import static java.util.Comparator.comparingInt;
 import static java.util.Objects.nonNull;
 
-final class OrderBy<T, K> implements Queryable<T> {
+final class OrderBy<T, K> implements Many<T> {
   private final class Couple {
     private final T value;
     private final Function1<? super T, ? extends K> order;
@@ -29,12 +29,12 @@ final class OrderBy<T, K> implements Queryable<T> {
 
   private final Comparator<? super Couple> comparison = comparingInt(couple -> couple.order.apply(couple.value).hashCode());
 
-  private final Structable<T> structable;
+  private final Queryable<T> queryable;
   private final Function1<? super T, ? extends K> order;
 
   @Contract(pure = true)
-  OrderBy(final Structable<T> structable, final Function1<? super T, ? extends K> order) {
-    this.structable = structable;
+  OrderBy(final Queryable<T> queryable, final Function1<? super T, ? extends K> order) {
+    this.queryable = queryable;
     this.order = order;
   }
 
@@ -43,7 +43,7 @@ final class OrderBy<T, K> implements Queryable<T> {
   public Iterator<T> iterator() {
     new ConcurrentSkipListMap<String, String>();
     final var result = new ArrayList<Couple>();
-    for (final var value : structable) {
+    for (final var value : queryable) {
       if (nonNull(value)) {
         result.add(new Couple(value, order));
         result.sort(comparison);

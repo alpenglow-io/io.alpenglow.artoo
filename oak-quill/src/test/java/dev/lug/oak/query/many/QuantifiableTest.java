@@ -48,7 +48,7 @@ class QuantifiableTest {
       new Pet("Whiskers", 6)
     };
 
-    final var query = Queryable.from(pets).all(pet -> pet.name.startsWith("B"));
+    final var query = Many.from(pets).all(pet -> pet.name.startsWith("B"));
 
     query.eventually(result -> assertThat(result).isFalse());
   }
@@ -78,8 +78,8 @@ class QuantifiableTest {
       )
     };
 
-    final var query = Queryable.from(people)
-      .where(person -> Queryable.from(person.pets).all(pet -> pet.age > 5) != null)
+    final var query = Many.from(people)
+      .where(person -> Many.from(person.pets).all(pet -> pet.age > 5) != null)
       .select(just(person -> person.name));
 
     assertThat(query).containsOnly("Haas", "Antebi");
@@ -91,8 +91,8 @@ class QuantifiableTest {
     final Integer[] numbers = { 1, 2 };
     final Integer[] empty = { };
 
-    final var query1 = Queryable.from(numbers).any();
-    final var query2 = Queryable.from(empty).any();
+    final var query1 = Many.from(numbers).any();
+    final var query2 = Many.from(empty).any();
 
     Assertions.assertThat(query1).containsOnly(true);
     Assertions.assertThat(query2).containsOnly(false);
@@ -103,7 +103,7 @@ class QuantifiableTest {
   void shouldHaveEvenNumber() {
     final Integer[] numbers = { 1, 2 };
 
-    final var query = Queryable.from(numbers).any(number -> number % 2 == 0);
+    final var query = Many.from(numbers).any(number -> number % 2 == 0);
 
     Assertions.assertThat(query).containsOnly(true);
   }
@@ -126,8 +126,8 @@ class QuantifiableTest {
       )
     };
 
-    final var query = Queryable.from(people)
-      .where(person -> Queryable.from(person.pets).any() != null)
+    final var query = Many.from(people)
+      .where(person -> Many.from(person.pets).any() != null)
       .select(just(person -> person.name));
 
     assertThat(query).containsOnly(
@@ -146,7 +146,7 @@ class QuantifiableTest {
       new Pet("Whiskers", 1, false)
     };
 
-    final var query = Queryable.from(pets).any(pet -> pet.age > 1 && !pet.vaccinated);
+    final var query = Many.from(pets).any(pet -> pet.age > 1 && !pet.vaccinated);
 
     Assertions.assertThat(query).containsOnly(true);
   }

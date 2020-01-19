@@ -22,7 +22,7 @@ class GroupableTest {
       new Pet("Daisy", 4.3)
     };
 
-    final var query = Queryable.from(pets)
+    final var query = Many.from(pets)
       .select(just(pet -> pet.age))
       .groupBy(Math::floor)
       .select(just((age, ages) ->
@@ -46,7 +46,7 @@ class GroupableTest {
   @Test
   @DisplayName("should group by country ordered by count")
   void shouldGroupByCountry() {
-    final var query = Queryable.from(Customers.customers)
+    final var query = Many.from(Customers.customers)
       .groupBy(customer -> customer.country)
       .select(just((country, customers) ->
         String.format(
@@ -96,7 +96,7 @@ class GroupableTest {
     }
 
     final var query =
-      Queryable.from(Orders.orders)
+      Many.from(Orders.orders)
         .join(Shippers.shippers).on((order, shipper) -> order.shipperId == shipper.id)
         .select(ShippedOrder::new)
         .groupBy(joined -> joined.shipperName)
@@ -118,7 +118,7 @@ class GroupableTest {
   @DisplayName("should group by country having count of customer-id greater than 5")
   void shouldGroupByCountryHavingCountGreaterThan5() {
     final var query =
-      Queryable.from(Customers.customers)
+      Many.from(Customers.customers)
         .groupBy(customer -> customer.country)
         .having((cntry, customers) -> customers.size() > 5)
         .select(just((country, customers) ->
@@ -141,7 +141,7 @@ class GroupableTest {
   @DisplayName("should group by country and city")
   void shouldGroupByCountryAndCity() {
     final var query =
-      Queryable.from(Customers.customers)
+      Many.from(Customers.customers)
         .groupBy(customer -> customer.country, customer -> customer.city)
         .having((country, city, customers) -> customers.size() >= 2)
         .select((country, city, customers) ->

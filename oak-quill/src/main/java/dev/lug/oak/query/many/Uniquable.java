@@ -2,7 +2,7 @@ package dev.lug.oak.query.many;
 
 import dev.lug.oak.collect.cursor.Cursor;
 import dev.lug.oak.func.pre.Predicate1;
-import dev.lug.oak.query.Structable;
+import dev.lug.oak.query.Queryable;
 import dev.lug.oak.query.one.One;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +13,7 @@ import java.util.Iterator;
 import static dev.lug.oak.func.pre.Predicate1.tautology;
 import static dev.lug.oak.type.Nullability.nonNullable;
 
-public interface Uniquable<T> extends Structable<T> {
+public interface Uniquable<T> extends Queryable<T> {
   default One<T> at(final int index) {
     return new At<>(this, index);
   }
@@ -44,12 +44,12 @@ public interface Uniquable<T> extends Structable<T> {
 }
 
 final class At<T> implements One<T> {
-  private final Structable<T> structable;
+  private final Queryable<T> queryable;
   private final int index;
 
   @Contract(pure = true)
-  At(final Structable<T> structable, final int index) {
-    this.structable = structable;
+  At(final Queryable<T> queryable, final int index) {
+    this.queryable = queryable;
     this.index = index;
   }
 
@@ -58,7 +58,7 @@ final class At<T> implements One<T> {
   public final Iterator<T> iterator() {
     var count = 0;
     T returned = null;
-    for (final var iterator = structable.iterator(); iterator.hasNext() && count <= index; count++) {
+    for (final var iterator = queryable.iterator(); iterator.hasNext() && count <= index; count++) {
       returned = iterator.next();
     }
     if (count < index)
@@ -68,12 +68,12 @@ final class At<T> implements One<T> {
 }
 
 final class First<T> implements One<T> {
-  private final Structable<T> structable;
+  private final Queryable<T> queryable;
   private final Predicate1<? super T> filter;
 
   @Contract(pure = true)
-  First(final Structable<T> structable, final Predicate1<? super T> filter) {
-    this.structable = structable;
+  First(final Queryable<T> queryable, final Predicate1<? super T> filter) {
+    this.queryable = queryable;
     this.filter = filter;
   }
 
@@ -81,7 +81,7 @@ final class First<T> implements One<T> {
   @Override
   public final Iterator<T> iterator() {
     T result = null;
-    final var cursor = structable.iterator();
+    final var cursor = queryable.iterator();
     if (cursor.hasNext()) result = cursor.next();
     if (cursor.hasNext()) result = null;
     return Cursor.ofNullable(result);
@@ -89,12 +89,12 @@ final class First<T> implements One<T> {
 }
 
 final class Last<T> implements One<T> {
-  private final Structable<T> structable;
+  private final Queryable<T> queryable;
   private final Predicate1<? super T> filter;
 
   @Contract(pure = true)
-  Last(final Structable<T> structable, final Predicate1<? super T> filter) {
-    this.structable = structable;
+  Last(final Queryable<T> queryable, final Predicate1<? super T> filter) {
+    this.queryable = queryable;
     this.filter = filter;
   }
 
@@ -102,7 +102,7 @@ final class Last<T> implements One<T> {
   @Override
   public final Iterator<T> iterator() {
     T last = null;
-    for (final var value : structable) {
+    for (final var value : queryable) {
       if (filter.test(value))
         last = value;
     }
@@ -111,12 +111,12 @@ final class Last<T> implements One<T> {
 }
 
 final class Single<T> implements One<T> {
-  private final Structable<T> structable;
+  private final Queryable<T> queryable;
   private final Predicate1<? super T> filter;
 
   @Contract(pure = true)
-  Single(final Structable<T> structable, final Predicate1<? super T> filter) {
-    this.structable = structable;
+  Single(final Queryable<T> queryable, final Predicate1<? super T> filter) {
+    this.queryable = queryable;
     this.filter = filter;
   }
 
@@ -124,14 +124,14 @@ final class Single<T> implements One<T> {
   @Override
   public final Iterator<T> iterator() {
     if (filter.equals(tautology())) {
-      final var cursor = structable.iterator();
+      final var cursor = queryable.iterator();
       final var returned = cursor.next();
       if (cursor.hasNext())
         throw new IllegalStateException("Queryable must contain one element.");
       return Cursor.once(returned);
     } else {
       final var array = new ArrayList<T>();
-      for (final var cursor = structable.iterator(); cursor.hasNext() && array.size() < 2; ) {
+      for (final var cursor = queryable.iterator(); cursor.hasNext() && array.size() < 2; ) {
         final var next = cursor.next();
         if (filter.test(next)) {
           array.add(next);

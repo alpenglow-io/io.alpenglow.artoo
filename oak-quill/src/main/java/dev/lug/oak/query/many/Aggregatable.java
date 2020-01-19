@@ -4,7 +4,7 @@ import dev.lug.oak.collect.cursor.Cursor;
 import dev.lug.oak.func.fun.Function1;
 import dev.lug.oak.func.fun.Function2;
 import dev.lug.oak.func.pre.Predicate1;
-import dev.lug.oak.query.Structable;
+import dev.lug.oak.query.Queryable;
 import dev.lug.oak.query.one.One;
 import dev.lug.oak.type.Nullability;
 import dev.lug.oak.type.Numeric;
@@ -20,7 +20,7 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @SuppressWarnings("unused")
-public interface Aggregatable<T> extends Structable<T> {
+public interface Aggregatable<T> extends Queryable<T> {
   @NotNull
   @Contract("_, _, _, _ -> new")
   private <A, R> One<A> aggregate(final Predicate1<? super T> filter, final Function1<? super T, ? extends R> map, final A seed, final Function2<? super A, ? super R, ? extends A> reduce) {
@@ -99,7 +99,7 @@ public interface Aggregatable<T> extends Structable<T> {
 }
 
 final class Aggregate<T, A, R> implements One<A> {
-  private final Structable<T> structable;
+  private final Queryable<T> queryable;
   private final Predicate1<? super T> filter;
   private final Function1<? super T, ? extends R> map;
   private final A seed;
@@ -107,13 +107,13 @@ final class Aggregate<T, A, R> implements One<A> {
 
   @Contract(pure = true)
   Aggregate(
-    final Structable<T> structable,
+    final Queryable<T> queryable,
     final Predicate1<? super T> filter,
     final Function1<? super T, ? extends R> map,
     final A seed,
     final Function2<? super A, ? super R, ? extends A> reduce
   ) {
-    this.structable = structable;
+    this.queryable = queryable;
     this.filter = filter;
     this.map = map;
     this.seed = seed;
@@ -123,7 +123,7 @@ final class Aggregate<T, A, R> implements One<A> {
   @Override
   public final Iterator<A> iterator() {
     var returned = seed;
-    for (final var value : structable) {
+    for (final var value : queryable) {
       if (filter.test(value)) {
         final var apply = map.apply(value);
         returned = reduce.apply(returned, apply);
@@ -134,12 +134,12 @@ final class Aggregate<T, A, R> implements One<A> {
 }
 
 final class NoSeed<T> implements One<T> {
-  private final Structable<T> structable;
+  private final Queryable<T> queryable;
   private final Function2<? super T, ? super T, ? extends T> reduce;
 
   @Contract(pure = true)
-  NoSeed(final Structable<T> structable, final Function2<? super T, ? super T, ? extends T> reduce) {
-    this.structable = structable;
+  NoSeed(final Queryable<T> queryable, final Function2<? super T, ? super T, ? extends T> reduce) {
+    this.queryable = queryable;
     this.reduce = reduce;
   }
 
@@ -147,7 +147,7 @@ final class NoSeed<T> implements One<T> {
   @Override
   public final Iterator<T> iterator() {
     T returned = null;
-    for (final var value : structable) {
+    for (final var value : queryable) {
       returned = returned == null ? value : reduce.apply(returned, value);
     }
     return Cursor.once(returned);
@@ -155,17 +155,17 @@ final class NoSeed<T> implements One<T> {
 }
 
 final class Average<T, V> implements One<Double> {
-  private final Structable<T> structable;
+  private final Queryable<T> queryable;
   private final Function1<? super T, ? extends V> map;
   private final Function1<? super V, Double> asDouble;
 
   @Contract(pure = true)
   Average(
-    final Structable<T> structable,
+    final Queryable<T> queryable,
     final Function1<? super T, ? extends V> map,
     final Function1<? super V, Double> asDouble
   ) {
-    this.structable = structable;
+    this.queryable = queryable;
     this.map = map;
     this.asDouble = asDouble;
   }
@@ -176,7 +176,7 @@ final class Average<T, V> implements One<Double> {
   public final Iterator<Double> iterator() {
     var total = 0.0;
     var count = 0;
-    for (final var next : structable) {
+    for (final var next : queryable) {
       if (nonNull(next)) {
         final var value = map.andThen(asDouble).apply(next);
         if (nonNull(value)) {
@@ -190,17 +190,17 @@ final class Average<T, V> implements One<Double> {
 }
 
 final class SelectorMinMax<T, R, C extends Comparable<R>, V extends C> implements One<V> {
-  private final Structable<T> structable;
+  private final Queryable<T> queryable;
   private final Function1<? super T, ? extends V> map;
   private final int operation;
 
   @Contract(pure = true)
   SelectorMinMax(
-    final Structable<T> structable,
+    final Queryable<T> queryable,
     final Function1<? super T, ? extends V> map,
     final int operation
   ) {
-    this.structable = structable;
+    this.queryable = queryable;
     this.map = map;
     this.operation = operation;
   }
@@ -210,7 +210,7 @@ final class SelectorMinMax<T, R, C extends Comparable<R>, V extends C> implement
   @SuppressWarnings("unchecked")
   public final Iterator<V> iterator() {
     V result = null;
-    for (final var value : structable) {
+    for (final var value : queryable) {
       if (nonNull(value)) {
         final var mapped = map.apply(value);
         if (isNull(result) || nonNull(mapped) && mapped.compareTo((R) result) == operation)
@@ -222,12 +222,12 @@ final class SelectorMinMax<T, R, C extends Comparable<R>, V extends C> implement
 }
 
 final class MinMax<T> implements One<T> {
-  private final Structable<T> structable;
+  private final Queryable<T> queryable;
   private final int operation;
 
   @Contract(pure = true)
-  MinMax(final Structable<T> structable, final int operation) {
-    this.structable = structable;
+  MinMax(final Queryable<T> queryable, final int operation) {
+    this.queryable = queryable;
     this.operation = operation;
   }
 
@@ -236,7 +236,7 @@ final class MinMax<T> implements One<T> {
   @SuppressWarnings("unchecked")
   public final Iterator<T> iterator() {
     T result = null;
-    for (final var value : structable) {
+    for (final var value : queryable) {
       if (nonNull(value) && value instanceof Comparable) {
         final var mapped = (Comparable<T>) value;
         if (isNull(result) || mapped.compareTo(result) == operation) {
@@ -249,12 +249,12 @@ final class MinMax<T> implements One<T> {
 }
 
 final class SelectorSum<T, N extends Number> implements One<N> {
-  private final Structable<T> structable;
+  private final Queryable<T> queryable;
   private final Function1<? super T, ? extends N> map;
 
   @Contract(pure = true)
-  SelectorSum(final Structable<T> structable, final Function1<? super T, ? extends N> map) {
-    this.structable = structable;
+  SelectorSum(final Queryable<T> queryable, final Function1<? super T, ? extends N> map) {
+    this.queryable = queryable;
     this.map = map;
   }
 
@@ -262,7 +262,7 @@ final class SelectorSum<T, N extends Number> implements One<N> {
   @Override
   public final Iterator<N> iterator() {
     N result = null;
-    for (final var value : structable) {
+    for (final var value : queryable) {
       final var mapped = map.apply(value);
       if (isNull(result)) {
         result = mapped;
@@ -275,17 +275,17 @@ final class SelectorSum<T, N extends Number> implements One<N> {
 }
 
 final class Sum<T> implements One<T> {
-  private final Structable<T> structable;
+  private final Queryable<T> queryable;
 
   @Contract(pure = true)
-  Sum(final Structable<T> structable) {this.structable = structable;}
+  Sum(final Queryable<T> queryable) {this.queryable = queryable;}
 
   @SuppressWarnings("unchecked")
   @Contract(pure = true)
   @Override
   public final Iterator<T> iterator() {
     T result = null;
-    for (final var value : structable) {
+    for (final var value : queryable) {
       if (value instanceof Number) {
         if (result != null && result.getClass().equals(value.getClass())) {
           result = (T) Numeric.sum((Number) result, (Number) value);
@@ -299,12 +299,12 @@ final class Sum<T> implements One<T> {
 }
 
 final class Count<T> implements One<Long> {
-  private final Structable<T> structable;
+  private final Queryable<T> queryable;
   private final Predicate1<? super T> filter;
 
   @Contract(pure = true)
-  Count(final Structable<T> structable, final Predicate1<? super T> filter) {
-    this.structable = structable;
+  Count(final Queryable<T> queryable, final Predicate1<? super T> filter) {
+    this.queryable = queryable;
     this.filter = filter;
   }
 
@@ -313,7 +313,7 @@ final class Count<T> implements One<Long> {
   @Override
   public final Iterator<Long> iterator() {
     long count = 0;
-    for (final var value : structable) {
+    for (final var value : queryable) {
       if (filter.test(value)) count++;
     }
     return Cursor.once(count);

@@ -1,12 +1,12 @@
 package dev.lug.oak.query.many;
 
-import dev.lug.oak.query.Structable;
+import dev.lug.oak.query.Queryable;
 import dev.lug.oak.type.Numeric;
 
 import static java.lang.String.format;
 import static java.util.Objects.isNull;
 
-public interface Unwrappable<T> extends Structable<T> {
+public interface Unwrappable<T> extends Queryable<T> {
   private T unwrap() {
     final var cursor = this.iterator();
     final var value = cursor.next();

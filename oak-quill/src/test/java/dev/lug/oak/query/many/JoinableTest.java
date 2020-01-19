@@ -19,7 +19,7 @@ class JoinableTest {
     final var whiskers = new Pet("Whiskers", charlotte);
     final var daisy = new Pet("Daisy", magnus);
 
-    final var query = Queryable.from(magnus, terry, charlotte)
+    final var query = Many.from(magnus, terry, charlotte)
       .join(barley, boots, whiskers, daisy).on((person, pet) -> person.equals(pet.owner))
       .select(just((person, pet) ->
         String.format("%s - %s",
@@ -39,7 +39,7 @@ class JoinableTest {
   @Test
   @DisplayName("should show for every order what shipper has been selected by customer")
   void shouldShowForEveryOrderWhatShipperHasBeenSelectedByCustomer() {
-    final var query = Queryable.from(Orders.orders)
+    final var query = Many.from(Orders.orders)
       .join(Customers.customers).on((order, customer) -> order.customerId == customer.id)
       // such select can be avoided?
       .select(just((order, customer) -> new Object() {

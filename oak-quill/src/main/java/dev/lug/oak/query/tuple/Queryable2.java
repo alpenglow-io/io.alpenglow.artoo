@@ -1,6 +1,5 @@
-package dev.lug.oak.query.many.tuple;
+package dev.lug.oak.query.tuple;
 
-import dev.lug.oak.query.tuple.Tuple2;
 import dev.lug.oak.type.Nullability;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

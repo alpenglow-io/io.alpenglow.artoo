@@ -5,7 +5,7 @@ import dev.lug.oak.func.fun.Function2;
 import dev.lug.oak.func.fun.Function3;
 import dev.lug.oak.func.fun.IntFunction2;
 import dev.lug.oak.func.pre.IntPredicate2;
-import dev.lug.oak.query.many.Queryable;
+import dev.lug.oak.query.many.Many;
 import dev.lug.oak.query.tuple.Tuple;
 import dev.lug.oak.query.tuple.Tuple2;
 import dev.lug.oak.query.tuple.Tuple3;
@@ -32,12 +32,12 @@ public enum Q {
 
     @NotNull
     @Contract(pure = true)
-    public static <T, R> AsMany<T, Structable<R>> many(final FromArray<T, R> array) {
-      return it -> Queryable.from(array.apply(it));
+    public static <T, R> AsMany<T, Queryable<R>> many(final FromArray<T, R> array) {
+      return it -> Many.from(array.apply(it));
     }
 
     @Contract(value = "_ -> param1", pure = true)
-    public static <T, U extends Tuple, S extends Structable<U>> Function1<T, S> tuples2(final Function1<T, S> many) { return many; }
+    public static <T, U extends Tuple, Q extends Queryable<U>> Function1<T, Q> tuples2(final Function1<T, Q> many) { return many; }
 
     @Contract(value = "_ -> param1", pure = true)
     public static <V, R1, R2, T extends Tuple2<R1, R2>> Function1<V, T> tuple2(final Function1<V, T> tuple2) { return tuple2; }
@@ -57,9 +57,9 @@ public enum Q {
   public interface AsJust2<T1, T2, R> extends Function2<T1, T2, R> {}
   public interface AsJust3<T1, T2, T3, R> extends Function3<T1, T2, T3, R> {}
 
-  public interface AsMany<T, S extends Structable> extends Function1<T, S> {}
+  public interface AsMany<T, S extends Queryable> extends Function1<T, S> {}
   public interface FromArray<T, R> extends Function1<T, R[]> {}
-  public interface Just2AsManyTuple2<V1, V2, S extends Structable> extends Function2<V1, V2, S> {}
+  public interface Just2AsManyTuple2<V1, V2, S extends Queryable> extends Function2<V1, V2, S> {}
 
   public interface JustAsTuple2<V, T extends Tuple> extends Function1<V, T> {}
   public interface Just2AsTuple2<V1, V2, T extends Tuple> extends Function2<V1, V2, T> {}

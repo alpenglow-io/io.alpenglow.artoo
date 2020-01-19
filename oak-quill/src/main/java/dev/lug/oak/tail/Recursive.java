@@ -17,45 +17,14 @@ public interface Recursive<T> extends Iterable<T> {
   }
 
   @SuppressWarnings("SwitchStatementWithTooFewBranches")
-  static Tail<Integer> strange(final int... numbers) {
+  static Integer strange(final int... numbers) {
     return switch (numbers.length) {
-      case 1 -> Tail.done(numbers[0] + 1);
-      default -> () -> strange(Arrays.copyOf(numbers, numbers.length - 1));
+      case 1 -> numbers[0] + 1;
+      default -> strange(Arrays.copyOf(numbers, numbers.length - 1));
     };
   }
 
   static void main(String... args) {
     System.out.println(strange(range(0, 8000).toArray()));
-  }
-}
-
-interface Tail<T> extends Iterator<Tail<T>> {
-  default boolean hasNext() { return true; }
-
-  static <R> Tail<R> done(final R value) {
-    return new Tail<>() {
-      @Override
-      public final boolean hasNext() {
-        return false;
-      }
-
-      @Override
-      public final R next() {
-        return value;
-      }
-    };
-  }
-}
-
-interface Trampoline<T> extends Iterable<Trampoline<T>> {
-
-}
-
-final class Begin<T> implements Trampoline<T> {
-
-  @NotNull
-  @Override
-  public Iterator<Trampoline<T>> iterator() {
-    return Cursor.of();
   }
 }

@@ -3,9 +3,9 @@ package dev.lug.oak.query.many;
 import dev.lug.oak.func.fun.Function1;
 import dev.lug.oak.func.pre.Predicate2;
 import dev.lug.oak.func.pre.Predicate3;
-import dev.lug.oak.query.Structable;
-import dev.lug.oak.query.many.tuple.Queryable2;
-import dev.lug.oak.query.many.tuple.Queryable3;
+import dev.lug.oak.query.Queryable;
+import dev.lug.oak.query.tuple.Queryable2;
+import dev.lug.oak.query.tuple.Queryable3;
 import dev.lug.oak.query.tuple.Tuple;
 import dev.lug.oak.query.tuple.Tuple2;
 import dev.lug.oak.query.tuple.Tuple3;
@@ -20,7 +20,7 @@ import java.util.TreeMap;
 
 import static java.lang.Integer.compare;
 
-public interface Groupable<T> extends Structable<T> {
+public interface Groupable<T> extends Queryable<T> {
   default <K> Grouping<K, T> groupBy(final Function1<? super T, ? extends K> key) {
     return new GroupBy<>(this, key);
   }
@@ -48,12 +48,12 @@ public interface Groupable<T> extends Structable<T> {
 final class GroupBy<T, K> implements Groupable.Grouping<K, T> {
   private final Comparator<? super K> comparator = (first, second) -> compare(second.hashCode(), first.hashCode());
 
-  private final Structable<T> structable;
+  private final Queryable<T> queryable;
   private final Function1<? super T, ? extends K> key;
 
   @Contract(pure = true)
-  GroupBy(final Structable<T> structable, final Function1<? super T, ? extends K> key) {
-    this.structable = structable;
+  GroupBy(final Queryable<T> queryable, final Function1<? super T, ? extends K> key) {
+    this.queryable = queryable;
     this.key = key;
   }
 
@@ -61,7 +61,7 @@ final class GroupBy<T, K> implements Groupable.Grouping<K, T> {
   @Override
   public final Iterator<Tuple2<K, Collection<T>>> iterator() {
     final var map = new TreeMap<K, Collection<T>>(comparator);
-    for (final var value : structable) {
+    for (final var value : queryable) {
       final var k = key.apply(value);
       map.putIfAbsent(k, new ArrayList<>());
       map.get(k).add(value);
@@ -75,13 +75,13 @@ final class GroupBy<T, K> implements Groupable.Grouping<K, T> {
 final class GroupBy2<T, K1, K2> implements Groupable.Grouping2<K1, K2, T> {
   private final Comparator<? super Tuple2<? extends K1, ? extends K2>> comparator = (first, second) -> compare(second.hashCode(), first.hashCode());
 
-  private final Structable<T> structable;
+  private final Queryable<T> queryable;
   private final Function1<? super T, ? extends K1> key1;
   private final Function1<? super T, ? extends K2> key2;
 
   @Contract(pure = true)
-  GroupBy2(final Structable<T> structable, final Function1<? super T, ? extends K1> key1, final Function1<? super T, ? extends K2> key2) {
-    this.structable = structable;
+  GroupBy2(final Queryable<T> queryable, final Function1<? super T, ? extends K1> key1, final Function1<? super T, ? extends K2> key2) {
+    this.queryable = queryable;
     this.key1 = key1;
     this.key2 = key2;
   }
@@ -90,7 +90,7 @@ final class GroupBy2<T, K1, K2> implements Groupable.Grouping2<K1, K2, T> {
   @Override
   public final Iterator<Tuple3<K1, K2, Collection<T>>> iterator() {
     final var map = new TreeMap<Tuple2<? extends K1, ? extends K2>, Collection<T>>(comparator);
-    for (final var value : structable) {
+    for (final var value : queryable) {
       final var key = Tuple.of(key1.apply(value), key2.apply(value));
       map.putIfAbsent(key, new ArrayList<>());
       map.get(key).add(value);

@@ -26,6 +26,7 @@ public interface One<T> extends Projectable<T>, Filterable<T>, Casing<T> {
     return new None<>();
   }
 
+  @Override
   default void eventually(@NotNull final Consumer1<T> consumer) {
     for (final var value : this) nonNullable(consumer, "consumer").accept(value);
   }

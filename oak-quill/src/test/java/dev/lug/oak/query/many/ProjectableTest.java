@@ -10,7 +10,7 @@ import java.util.Collections;
 import static dev.lug.oak.query.Q.P.ith;
 import static dev.lug.oak.query.Q.P.just;
 import static dev.lug.oak.query.Q.P.many;
-import static dev.lug.oak.query.many.Queryable.from;
+import static dev.lug.oak.query.many.Many.from;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ProjectableTest {

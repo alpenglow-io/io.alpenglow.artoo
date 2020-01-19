@@ -18,23 +18,6 @@ public interface Tuple2<V1, V2> extends Tuple {
   Tuple2<V1, V2> where(Predicate2<? super V1, ? super V2> filter);
   void eventually(Consumer2<? super V1, ? super V2> then);
 
-  interface Id extends AsInt {
-    @NotNull
-    @Contract(pure = true)
-    static One<Id> of(final int value) {
-      return One.of(value)
-        .where(it -> it >= 0)
-        .select(it -> () -> it);
-    }
-  }
-
-  interface FirstName extends AsString {
-    static One<FirstName> of(final String value) {
-      return One.of(value)
-        .where(it -> it.length() > 0 && it.length() <= 255)
-        .select(it -> () -> it);
-    }
-  }
 }
 
 final class Pair<V1, V2> implements Tuple2<V1, V2> {

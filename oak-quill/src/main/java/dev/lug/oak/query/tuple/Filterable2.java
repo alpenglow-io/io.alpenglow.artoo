@@ -1,11 +1,9 @@
-package dev.lug.oak.query.many.tuple;
+package dev.lug.oak.query.tuple;
 
 import dev.lug.oak.func.fun.Function2;
 import dev.lug.oak.func.pre.Predicate2;
-import dev.lug.oak.query.Structable;
+import dev.lug.oak.query.Queryable;
 import dev.lug.oak.query.many.Filterable;
-import dev.lug.oak.query.tuple.Tuple;
-import dev.lug.oak.query.tuple.Tuple2;
 import dev.lug.oak.type.Nullability;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -24,12 +22,12 @@ public interface Filterable2<V1, V2> extends Filterable<Tuple2<V1, V2>> {
 }
 
 final class Where2<V1, V2> implements Queryable2<V1, V2> {
-  private final Structable<Tuple2<V1, V2>> structable;
+  private final Queryable<Tuple2<V1, V2>> queryable;
   private final Predicate2<? super V1, ? super V2> filter;
 
   @Contract(pure = true)
-  Where2(final Structable<Tuple2<V1, V2>> structable, final Predicate2<? super V1, ? super V2> filter) {
-    this.structable = structable;
+  Where2(final Queryable<Tuple2<V1, V2>> queryable, final Predicate2<? super V1, ? super V2> filter) {
+    this.queryable = queryable;
     this.filter = filter;
   }
 
@@ -37,7 +35,7 @@ final class Where2<V1, V2> implements Queryable2<V1, V2> {
   @Override
   public final Iterator<Tuple2<V1, V2>> iterator() {
     final var many = new ArrayList<Tuple2<V1, V2>>();
-    for (final var tuple2 : structable) {
+    for (final var tuple2 : queryable) {
       tuple2
         .where(filter)
         .peek((v1, v2) -> many.add(Tuple.of(v1, v2)));
@@ -50,19 +48,19 @@ final class OfType2<V1, V2, T1, T2> implements Queryable2<T1, T2> {
   @SuppressWarnings("unchecked")
   private final Function2<V1, V2, @NotNull Tuple2<T1, T2>> asTuple = (v1, v2) -> Tuple.of((T1) v1, (T2) v2);
 
-  private final Structable<Tuple2<V1, V2>> structable;
+  private final Queryable<Tuple2<V1, V2>> queryable;
   private final Predicate2<? super V1, ? super V2> areTypes;
 
   @Contract(pure = true)
-  OfType2(final Structable<Tuple2<V1, V2>> structable, final Class<T1> type1, final Class<T2> type2) {
+  OfType2(final Queryable<Tuple2<V1, V2>> queryable, final Class<T1> type1, final Class<T2> type2) {
     this(
-      structable,
+      queryable,
       (v1, v2) -> type1.isInstance(v1) && type2.isInstance(v2)
     );
   }
   @Contract(pure = true)
-  private OfType2(final Structable<Tuple2<V1, V2>> structable, final Predicate2<? super V1, ? super V2> areTypes) {
-    this.structable = structable;
+  private OfType2(final Queryable<Tuple2<V1, V2>> queryable, final Predicate2<? super V1, ? super V2> areTypes) {
+    this.queryable = queryable;
     this.areTypes = areTypes;
   }
 
@@ -70,7 +68,7 @@ final class OfType2<V1, V2, T1, T2> implements Queryable2<T1, T2> {
   @Override
   public final Iterator<Tuple2<T1, T2>> iterator() {
     final var result = new ArrayList<Tuple2<T1, T2>>();
-    for (final var tuple2 : structable) {
+    for (final var tuple2 : queryable) {
       tuple2
         .where(areTypes)
         .selection(asTuple)

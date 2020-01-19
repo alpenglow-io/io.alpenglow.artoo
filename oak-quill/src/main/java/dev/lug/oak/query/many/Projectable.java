@@ -33,7 +33,7 @@ public interface Projectable<T> extends Queryable<T> {
     return new SelectTuple3<>(this, Nullability.nonNullable(tuple, "tuple"));
   }
 
-  default <R, S extends Queryable<R>> Many<R> select(final Q.AsMany<? super T, ? extends S> flatMap) {
+  default <R, S extends Queryable<R>> Many<R> select(final Q.AsQueryable<? super T, ? super R, ? extends S> flatMap) {
     return new Selection<>(new Select<>(this, Nullability.nonNullable(flatMap, "flatMap")));
   }
 

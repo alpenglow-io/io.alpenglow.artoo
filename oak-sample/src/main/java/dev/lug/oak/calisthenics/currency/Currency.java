@@ -14,10 +14,16 @@ public interface Currency extends One<Currency.Entry> {
   @NotNull
   @Contract("_, _, _ -> new")
   static Currency of(@NotNull final Id id, @NotNull final Name name, @NotNull final Amount amount) {
-    return new OneCurrency(id.eval(), name.eval(), amount.eval());
+    return () -> Cursor.once(new Entry(id, name, amount));
   }
 
-  default Currency replace(Name name) {
+  @NotNull
+  @Contract(pure = true)
+  static Currency from(final Currency.Entry entry) {
+    return () -> Cursor.once(entry);
+  }
+
+  default Currency change(Name name) {
     return () -> this.select(currency -> new Currency.Entry(currency.id, name, currency.amount)).iterator();
   }
 
@@ -57,23 +63,10 @@ public interface Currency extends One<Currency.Entry> {
     public Amount amount() {
       return amount;
     }
-  }
-}
 
-final class OneCurrency implements Currency {
-  private final String id;
-  private final String name;
-  private final double amount;
-
-  OneCurrency(String id, String name, double amount) {
-    this.id = id;
-    this.name = name;
-    this.amount = amount;
-  }
-
-  @NotNull
-  @Override
-  public final Iterator<Entry> iterator() {
-    return Cursor.of(new Currency.Entry(() -> id, () -> name, () -> amount));
+    @Override
+    public final String toString() {
+      return String.format("Currency.Entry {id=%s, name=%s, amount=%s}", id.eval(), name.eval(), amount.eval());
+    }
   }
 }

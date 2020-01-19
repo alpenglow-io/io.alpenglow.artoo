@@ -9,7 +9,7 @@ import java.util.Collections;
 
 import static dev.lug.oak.query.Q.P.ith;
 import static dev.lug.oak.query.Q.P.just;
-import static dev.lug.oak.query.Q.P.many;
+import static dev.lug.oak.query.Q.P.array;
 import static dev.lug.oak.query.many.Many.from;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -48,7 +48,7 @@ class ProjectableTest {
   @Test
   @DisplayName("should split every word")
   void shouldDoASelection() {
-    final var query = from("an apple a day", "the quick brown fox").select(many(phrase -> phrase.split(" ")));
+    final var query = from("an apple a day", "the quick brown fox").select(array(phrase -> phrase.split(" ")));
 
     assertThat(query).containsOnly(
       "an",
@@ -81,7 +81,7 @@ class ProjectableTest {
     };
 
     final var selectQuery = from(bouquets).select(just(bouquet -> bouquet.flowers));
-    final var selectionQuery = from(bouquets).select(many(bouquet -> bouquet.flowers));
+    final var selectionQuery = from(bouquets).select(array(bouquet -> bouquet.flowers));
 
     final var flowers1 = new ArrayList<String>();
     final var flowers2 = new ArrayList<String>();

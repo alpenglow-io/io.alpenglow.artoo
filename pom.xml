@@ -11,7 +11,7 @@
     <module>oak-quill</module>
     <module>oak-desktop</module>
     <module>oak-func</module>
-    <module>oak-calisthenics</module>
+    <module>oak-sample</module>
   </modules>
 
   <name>OAK</name>

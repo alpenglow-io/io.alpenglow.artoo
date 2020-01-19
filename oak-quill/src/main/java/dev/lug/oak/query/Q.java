@@ -32,8 +32,13 @@ public enum Q {
 
     @NotNull
     @Contract(pure = true)
-    public static <T, R> AsMany<T, Queryable<R>> many(final FromArray<T, R> array) {
-      return it -> Many.from(array.apply(it));
+    @SuppressWarnings("unchecked")
+    public static <T, R, Q extends Queryable<R>> AsQueryable<T, R, Q> array(final FromArray<T, R> array) {
+      return it -> (Q) Many.from(array.apply(it));
+    }
+
+    public static <T, R, Q extends Queryable<R>> AsQueryable<T, R, Q> many(final AsQueryable<T, R, Q> many) {
+      return many;
     }
 
     @Contract(value = "_ -> param1", pure = true)
@@ -57,7 +62,7 @@ public enum Q {
   public interface AsJust2<T1, T2, R> extends Function2<T1, T2, R> {}
   public interface AsJust3<T1, T2, T3, R> extends Function3<T1, T2, T3, R> {}
 
-  public interface AsMany<T, S extends Queryable> extends Function1<T, S> {}
+  public interface AsQueryable<T, R, Q extends Queryable<R>> extends Function1<T, Q> {}
   public interface FromArray<T, R> extends Function1<T, R[]> {}
   public interface Just2AsManyTuple2<V1, V2, S extends Queryable> extends Function2<V1, V2, S> {}
 

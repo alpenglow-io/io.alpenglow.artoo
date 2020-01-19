@@ -2,6 +2,8 @@ package dev.lug.oak.query.one;
 
 import dev.lug.oak.collect.cursor.Cursor;
 import dev.lug.oak.func.con.Consumer1;
+import dev.lug.oak.func.fun.Function1;
+import dev.lug.oak.query.Queryable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,9 +28,9 @@ public interface One<T> extends Projectable<T>, Filterable<T>, Casing<T> {
     return new None<>();
   }
 
-  @Override
-  default void eventually(@NotNull final Consumer1<T> consumer) {
-    for (final var value : this) nonNullable(consumer, "consumer").accept(value);
+
+  default <R, Q extends Queryable<R>> Q as(final Function1<? super T, ? extends Q> asQueryable) {
+    return asQueryable.apply(this.iterator().next());
   }
 }
 

@@ -1,6 +1,7 @@
 package dev.lug.oak.query;
 
 import dev.lug.oak.func.con.Consumer1;
+import dev.lug.oak.func.fun.Function1;
 import dev.lug.oak.query.many.Many;
 import dev.lug.oak.type.Nullability;
 import org.jetbrains.annotations.Contract;

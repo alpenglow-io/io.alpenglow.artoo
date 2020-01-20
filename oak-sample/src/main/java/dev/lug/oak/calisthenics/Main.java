@@ -8,7 +8,7 @@ import static dev.lug.oak.calisthenics.Main.DefaultCurrency.Lira;
 import static dev.lug.oak.calisthenics.Main.DefaultCurrency.Pound;
 import static java.lang.System.out;
 
-public interface Main {
+public enum Main {;
 
   enum DefaultCurrency implements Currency.Name {
     Lira("Lira"), Dollar("Dollar"), Pound("Pound");
@@ -25,7 +25,7 @@ public interface Main {
     }
   }
 
-  static void main(String... args) {
+  public static void main(String... args) {
     final var lira = new Currency.Entry(
       () -> "asd",
       Lira,
@@ -37,8 +37,9 @@ public interface Main {
       () -> 10.0
     );
 
+    final Currency.Id id = () -> "dsa";
     Currencies.from(lira, dollaro)
-      .one(() -> "dsa")
+      .one(id)
       .change(Pound)
       .increase(() -> 32.3)
       .eventually(out::println);

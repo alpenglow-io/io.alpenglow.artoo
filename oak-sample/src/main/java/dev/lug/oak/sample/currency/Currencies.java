@@ -1,10 +1,8 @@
-package dev.lug.oak.calisthenics.currency;
+package dev.lug.oak.sample.currency;
 
 import dev.lug.oak.collect.cursor.Cursor;
-import dev.lug.oak.func.fun.Function1;
 import dev.lug.oak.func.pre.Predicate1;
 import dev.lug.oak.query.many.Many;
-import dev.lug.oak.query.one.One;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,4 +1,4 @@
-package dev.lug.oak.calisthenics.currency;
+package dev.lug.oak.sample.currency;
 
 import dev.lug.oak.collect.cursor.Cursor;
 import dev.lug.oak.query.one.One;
@@ -6,8 +6,6 @@ import dev.lug.oak.type.AsDouble;
 import dev.lug.oak.type.AsString;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Iterator;
 
 @SuppressWarnings("UnusedReturnValue")
 public interface Currency extends One<Currency.Entry> {

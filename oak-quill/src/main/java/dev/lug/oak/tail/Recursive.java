@@ -3,25 +3,25 @@ package dev.lug.oak.tail;
 import java.util.Iterator;
 
 import static dev.lug.oak.tail.Recursive.Trampoline.head;
-import static dev.lug.oak.tail.Recursive.Trampoline.tailrec;
+import static dev.lug.oak.tail.Recursive.Trampoline.tail;
 import static dev.lug.oak.tail.Recursive.Trampoline.solve;
 
 public interface Recursive<T> extends Iterable<T> {
   static Trampoline<Boolean> recHas(final char character, int index, final String chars) {
     return switch (chars.length()) {
-      case 0 -> tailrec(false);
-      case 1 -> tailrec(chars.charAt(index) == character);
+      case 0 -> tail(false);
+      case 1 -> tail(chars.charAt(index) == character);
       default -> chars.charAt(index) == character
-        ? tailrec(true)
+        ? tail(true)
         : head(recHas(character, index - 1, chars.substring(0, index)));
     };
   }
 
   static Trampoline<Integer> fib(final int value) {
     return switch (value) {
-      case 0 -> tailrec(0);
-      case 1 -> tailrec(1);
-      default -> tailrec(solve(fib(value - 1)) + solve(fib(value - 2)));
+      case 0 -> tail(0);
+      case 1 -> tail(1);
+      default -> tail(solve(fib(value - 1)) + solve(fib(value - 2)));
     };
   }
 
@@ -54,7 +54,6 @@ public interface Recursive<T> extends Iterable<T> {
     start = System.currentTimeMillis();
     System.out.println(solve(fib(41)));
     System.out.println(System.currentTimeMillis() - start);
-    
   }
 
   interface Trampoline<T> extends Iterator<Trampoline<T>> {
@@ -62,7 +61,7 @@ public interface Recursive<T> extends Iterable<T> {
       return head;
     }
 
-    static <T> Trampoline<T> tailrec(final T tail) {
+    static <T> Trampoline<T> tail(final T tail) {
       return new Tail<>() {
         @Override
         public T result() {

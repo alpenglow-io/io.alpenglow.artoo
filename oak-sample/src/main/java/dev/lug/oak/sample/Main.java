@@ -1,12 +1,11 @@
-package dev.lug.oak.calisthenics;
+package dev.lug.oak.sample;
 
-import dev.lug.oak.calisthenics.currency.Currencies;
-import dev.lug.oak.calisthenics.currency.Currency;
+import dev.lug.oak.sample.currency.Currencies;
+import dev.lug.oak.sample.currency.Currency;
 
-import static dev.lug.oak.calisthenics.Main.DefaultCurrency.Dollar;
-import static dev.lug.oak.calisthenics.Main.DefaultCurrency.Lira;
-import static dev.lug.oak.calisthenics.Main.DefaultCurrency.Pound;
-import static dev.lug.oak.calisthenics.currency.Currencies.entry;
+import static dev.lug.oak.sample.Main.DefaultCurrency.Dollar;
+import static dev.lug.oak.sample.Main.DefaultCurrency.Lira;
+import static dev.lug.oak.sample.Main.DefaultCurrency.Pound;
 import static java.lang.System.out;
 
 public enum Main {;
@@ -38,10 +37,9 @@ public enum Main {;
       () -> 10.0
     );
 
-    final Currency.Name dollar = () -> "dollaro";
+    final Currency.Id dollar = () -> "dollaro";
     Currencies.from(lira, dollaro)
-      .single(entry -> entry.id().is(dollar))
-      .select()
+      .one(dollar)
       .change(Pound)
       .increase(() -> 32.3)
       .eventually(out::println);

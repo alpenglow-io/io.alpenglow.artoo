@@ -22,6 +22,8 @@ public interface One<T> extends Projectable<T>, Filterable<T>, Casing<T> {
   @Contract("_ -> new")
   static <L> One<L> just(final L value) { return new Just<>(nonNullable(value, "value")); }
 
+  default T asIs() { return null; }
+
   @NotNull
   @Contract(value = " -> new", pure = true)
   @SuppressWarnings("unchecked")
@@ -61,5 +63,10 @@ final class Just<T> implements One<T> {
   @Override
   public final Iterator<T> iterator() {
     return Cursor.once(nonNullableState(this.value, "One"));
+  }
+
+  @Override
+  public T asIs() {
+    return value;
   }
 }

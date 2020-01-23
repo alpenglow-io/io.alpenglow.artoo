@@ -1,6 +1,8 @@
 package dev.lug.oak.calisthenics.currency;
 
 import dev.lug.oak.collect.cursor.Cursor;
+import dev.lug.oak.func.fun.Function1;
+import dev.lug.oak.func.pre.Predicate1;
 import dev.lug.oak.query.many.Many;
 import dev.lug.oak.query.one.One;
 import org.jetbrains.annotations.Contract;
@@ -13,9 +15,11 @@ public interface Currencies extends Many<Currency.Entry> {
     return () -> Cursor.of(entries);
   }
 
-  default Currency one(Currency.Id id) {
+  default Currency one(final Currency.Id id) {
     return this
       .single(entry -> entry.id().is(id))
       .as(Currency::from);
   }
 }
+
+interface IdPredicate extends Predicate1<Currency.Id> {}

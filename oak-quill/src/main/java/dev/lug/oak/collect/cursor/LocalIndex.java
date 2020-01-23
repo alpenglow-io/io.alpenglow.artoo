@@ -1,6 +1,5 @@
 package dev.lug.oak.collect.cursor;
 
-import dev.lug.oak.query.one.One;
 import dev.lug.oak.type.AsInt;
 
 import static java.lang.ThreadLocal.withInitial;
@@ -27,11 +26,13 @@ public final class LocalIndex implements AsInt {
     return value.get();
   }
 
+/*
   public static One<LocalIndex> of(final int value) {
     return One.of(value)
       .where(it -> it >= 0)
-      .select(it -> new LocalIndex(withInitial(() -> it)));
+      .select(Q.P.just(it -> new LocalIndex(withInitial(() -> it))));
   }
+*/
 
   public static LocalIndex zero() { return new LocalIndex(withInitial(() -> 0)); }
 }

@@ -3,6 +3,7 @@ package dev.lug.oak.query.one;
 import dev.lug.oak.collect.cursor.Cursor;
 import dev.lug.oak.func.con.Consumer1;
 import dev.lug.oak.func.fun.Function1;
+import dev.lug.oak.query.Q;
 import dev.lug.oak.query.Queryable;
 import dev.lug.oak.type.Nullability;
 import org.jetbrains.annotations.Contract;
@@ -11,11 +12,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Iterator;
 
 public interface Projectable<T> extends Queryable<T> {
-  default <R> One<R> select(final Function1<? super T, ? extends R> map) {
+  default <R> One<R> select(final Q.AsJust<? super T, ? extends R> map) {
     return new Select<>(this, Nullability.nonNullable(map, "map"));
   }
 
-  default <R, M extends One<? extends R>> One<R> selection(final Function1<? super T, M> flatMap) {
+  default <R, M extends One<? extends R>> One<R> select(final Function1<? super T, M> flatMap) {
     return new Selection<>(new Select<>(this, Nullability.nonNullable(flatMap, "flatMap")));
   }
 

@@ -4,7 +4,7 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @FunctionalInterface
-public interface AsString {
+public interface AsString extends AsAny {
   String eval();
 
   default boolean is(final AsString asString) {

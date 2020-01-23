@@ -26,7 +26,7 @@ public interface Convertable<T> extends Queryable<T> {
     return new AsList<>(this).eval();
   }
 
-  default T[] asArray(final IntFunction1<T[]> initializer) {
+/*  default T[] asArray(final IntFunction1<T[]> initializer) {
     return new AsArray<>(
       new Aggregate<>(
         this,
@@ -38,7 +38,7 @@ public interface Convertable<T> extends Queryable<T> {
       this,
       nonNullable(initializer, "initializer")
     ).eval();
-  }
+  }*/
 }
 
 final class AsMap<T, K, E> implements As<Map<K, E>> {
@@ -79,6 +79,7 @@ final class AsList<T> implements As<List<T>> {
     return list;
   }
 }
+/*
 
 final class AsArray<T> implements dev.lug.oak.type.AsArray<T> {
   private final One<Integer> count;
@@ -100,3 +101,4 @@ final class AsArray<T> implements dev.lug.oak.type.AsArray<T> {
     return array;
   }
 }
+*/

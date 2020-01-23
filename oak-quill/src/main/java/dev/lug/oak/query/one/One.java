@@ -24,14 +24,19 @@ public interface One<T> extends Projectable<T>, Filterable<T>, Casing<T> {
 
   @NotNull
   @Contract(value = " -> new", pure = true)
+  @SuppressWarnings("unchecked")
   static <L> One<L> none() {
-    return new None<>();
+    return (One<L>) DefaultOne.None;
   }
-
 
   default <R, Q extends Queryable<R>> Q as(final Function1<? super T, ? extends Q> asQueryable) {
     return asQueryable.apply(this.iterator().next());
   }
+}
+
+enum DefaultOne {
+  ;
+  static final One<?> None = new None<>();
 }
 
 final class None<T> implements One<T> {

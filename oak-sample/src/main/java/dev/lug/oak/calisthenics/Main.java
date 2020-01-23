@@ -6,6 +6,7 @@ import dev.lug.oak.calisthenics.currency.Currency;
 import static dev.lug.oak.calisthenics.Main.DefaultCurrency.Dollar;
 import static dev.lug.oak.calisthenics.Main.DefaultCurrency.Lira;
 import static dev.lug.oak.calisthenics.Main.DefaultCurrency.Pound;
+import static dev.lug.oak.calisthenics.currency.Currencies.entry;
 import static java.lang.System.out;
 
 public enum Main {;
@@ -27,19 +28,20 @@ public enum Main {;
 
   public static void main(String... args) {
     final var lira = new Currency.Entry(
-      () -> "asd",
+      () -> "lira",
       Lira,
       () -> 1000.0
     );
     final var dollaro = new Currency.Entry(
-      () -> "dsa",
+      () -> "dollaro",
       Dollar,
       () -> 10.0
     );
 
-    final Currency.Id id = () -> "dsa";
+    final Currency.Name dollar = () -> "dollaro";
     Currencies.from(lira, dollaro)
-      .one(id)
+      .single(entry -> entry.id().is(dollar))
+      .select()
       .change(Pound)
       .increase(() -> 32.3)
       .eventually(out::println);

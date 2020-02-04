@@ -2,11 +2,10 @@ package dev.lug.oak.query.tuple;
 
 import dev.lug.oak.func.con.Consumer2;
 import dev.lug.oak.func.fun.Function2;
-import dev.lug.oak.query.Q.Just2AsManyTuple2;
-import dev.lug.oak.query.Q.Just2AsTuple2;
 import dev.lug.oak.query.Queryable;
+import dev.lug.oak.query.Tuple2;
 import dev.lug.oak.query.many.Projectable;
-import dev.lug.oak.query.many.Many;
+import dev.lug.oak.query.Many;
 import dev.lug.oak.type.Nullability;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public interface Projectable2<V1, V2> extends Projectable<Tuple2<V1, V2>> {
-  default <R> Many<R> select(final dev.lug.oak.query.Q.AsJust2<? super V1, ? super V2, ? extends R> map) {
+  default <R> Many<R> select(final AsJust2<? super V1, ? super V2, ? extends R> map) {
     return new SelectT2<>(this, Nullability.nonNullable(map, "map"));
   }
 

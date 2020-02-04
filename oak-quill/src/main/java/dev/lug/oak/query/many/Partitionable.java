@@ -2,6 +2,7 @@ package dev.lug.oak.query.many;
 
 import dev.lug.oak.func.pre.LongPredicate2;
 import dev.lug.oak.func.pre.Predicate1;
+import dev.lug.oak.query.Many;
 import dev.lug.oak.query.Queryable;
 import dev.lug.oak.type.Nullability;
 import org.jetbrains.annotations.Contract;

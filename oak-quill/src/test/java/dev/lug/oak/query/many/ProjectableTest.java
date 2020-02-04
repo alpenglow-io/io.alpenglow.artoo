@@ -7,10 +7,10 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static dev.lug.oak.query.Q.P.ith;
-import static dev.lug.oak.query.Q.P.just;
-import static dev.lug.oak.query.Q.P.array;
-import static dev.lug.oak.query.many.Many.from;
+import static dev.lug.oak.query.Queryable.P.ith;
+import static dev.lug.oak.query.Queryable.P.just;
+import static dev.lug.oak.query.Queryable.P.array;
+import static dev.lug.oak.query.Many.from;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ProjectableTest {

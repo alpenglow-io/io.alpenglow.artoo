@@ -1,11 +1,12 @@
 package dev.lug.oak.query.many;
 
+import dev.lug.oak.query.Many;
 import org.assertj.core.api.Assertions;
 import org.jetbrains.annotations.Contract;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static dev.lug.oak.query.Q.P.just;
+import static dev.lug.oak.query.Queryable.P.just;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class QuantifiableTest {

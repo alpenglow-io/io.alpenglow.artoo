@@ -1,9 +1,10 @@
-package dev.lug.oak.query.one;
+package dev.lug.oak.query;
 
 import dev.lug.oak.collect.cursor.Cursor;
-import dev.lug.oak.func.con.Consumer1;
 import dev.lug.oak.func.fun.Function1;
-import dev.lug.oak.query.Queryable;
+import dev.lug.oak.query.one.Either;
+import dev.lug.oak.query.one.Filterable;
+import dev.lug.oak.query.one.Projectable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,7 +14,7 @@ import static dev.lug.oak.type.Nullability.nonNullable;
 import static dev.lug.oak.type.Nullability.nonNullableState;
 import static java.util.Objects.isNull;
 
-public interface One<T> extends Projectable<T>, Filterable<T>, Casing<T> {
+public interface One<T> extends Projectable<T>, Filterable<T>, Either<T> {
   static <L> One<L> of(final L value) {
     return isNull(value) ? One.none() : One.just(value);
   }

@@ -14,6 +14,7 @@ import static dev.lug.oak.type.Any.nonNullOrElse;
 import static dev.lug.oak.type.Nullability.nonNullable;
 import static java.util.Arrays.copyOf;
 
+@SuppressWarnings("unchecked")
 public interface Cursor<E> extends Iterator<E>, Enumeration<E> {
   @SafeVarargs
   @NotNull
@@ -43,7 +44,12 @@ public interface Cursor<E> extends Iterator<E>, Enumeration<E> {
   @NotNull
   @Contract(value = " -> new", pure = true)
   static <T> Cursor<T> none() {
-    return new None<>();
+    return (Cursor<T>) DefaultCursor.None;
+  }
+
+  enum DefaultCursor {
+    ;
+    public static Cursor<?> None = new None<>();
   }
 
   @NotNull

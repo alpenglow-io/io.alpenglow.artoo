@@ -2,27 +2,28 @@ package dev.lug.oak.query.many;
 
 import dev.lug.oak.func.pre.IntPredicate2;
 import dev.lug.oak.func.pre.Predicate1;
+import dev.lug.oak.query.Many;
 import dev.lug.oak.query.Queryable;
-import dev.lug.oak.type.Nullability;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import static dev.lug.oak.type.Nullability.nonNullable;
 import static java.util.Objects.nonNull;
 
 public interface Filterable<T> extends Queryable<T> {
   default Many<T> where(final Predicate1<? super T> filter) {
-    return new Where<>(this, Nullability.nonNullable(filter, "filter"));
+    return new Where<>(this, nonNullable(filter, "filter"));
   }
 
   default Many<T> where(final IntPredicate2<? super T> filter) {
-    return new WhereIth<>(this, Nullability.nonNullable(filter, "filter"));
+    return new WhereIth<>(this, nonNullable(filter, "filter"));
   }
 
   default <C> Many<C> ofType(final Class<? extends C> type) {
-    return new OfType<>(this, Nullability.nonNullable(type, "type"));
+    return new OfType<>(this, nonNullable(type, "type"));
   }
 }
 

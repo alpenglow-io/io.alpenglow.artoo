@@ -1,11 +1,11 @@
 package dev.lug.oak.query.many;
 
-import dev.lug.oak.query.one.One;
+import dev.lug.oak.query.Many;
+import dev.lug.oak.query.One;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class InsertableTest {
   @Test

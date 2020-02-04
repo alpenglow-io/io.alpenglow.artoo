@@ -6,9 +6,9 @@ import dev.lug.oak.func.pre.Predicate3;
 import dev.lug.oak.query.Queryable;
 import dev.lug.oak.query.tuple.Queryable2;
 import dev.lug.oak.query.tuple.Queryable3;
-import dev.lug.oak.query.tuple.Tuple;
-import dev.lug.oak.query.tuple.Tuple2;
-import dev.lug.oak.query.tuple.Tuple3;
+import dev.lug.oak.query.Tuple;
+import dev.lug.oak.query.Tuple2;
+import dev.lug.oak.query.Tuple3;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

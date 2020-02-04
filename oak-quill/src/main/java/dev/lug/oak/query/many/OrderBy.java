@@ -1,6 +1,7 @@
 package dev.lug.oak.query.many;
 
 import dev.lug.oak.func.fun.Function1;
+import dev.lug.oak.query.Many;
 import dev.lug.oak.query.Queryable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -10,8 +11,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentSkipListMap;
 
-import static dev.lug.oak.query.Q.P.just;
-import static dev.lug.oak.query.many.Many.from;
+import static dev.lug.oak.query.Queryable.P.just;
+import static dev.lug.oak.query.Many.from;
 import static java.util.Comparator.comparingInt;
 import static java.util.Objects.nonNull;
 

@@ -1,11 +1,12 @@
 package dev.lug.oak.query.many;
 
 import dev.lug.oak.func.pre.Predicate2;
+import dev.lug.oak.query.Many;
 import dev.lug.oak.query.Queryable;
 import dev.lug.oak.query.many.Joinable.Joining;
 import dev.lug.oak.query.tuple.Queryable2;
-import dev.lug.oak.query.tuple.Tuple;
-import dev.lug.oak.query.tuple.Tuple2;
+import dev.lug.oak.query.Tuple;
+import dev.lug.oak.query.Tuple2;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

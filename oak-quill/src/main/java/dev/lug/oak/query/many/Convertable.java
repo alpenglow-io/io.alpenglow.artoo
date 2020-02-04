@@ -1,9 +1,7 @@
 package dev.lug.oak.query.many;
 
 import dev.lug.oak.func.fun.Function1;
-import dev.lug.oak.func.fun.IntFunction1;
 import dev.lug.oak.query.Queryable;
-import dev.lug.oak.query.one.One;
 import dev.lug.oak.type.As;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +12,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static dev.lug.oak.func.fun.Function1.identity;
-import static dev.lug.oak.func.pre.Predicate1.tautology;
 import static dev.lug.oak.type.Nullability.nonNullable;
 
 public interface Convertable<T> extends Queryable<T> {

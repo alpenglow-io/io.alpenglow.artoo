@@ -3,7 +3,7 @@ package dev.lug.oak.query.many;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static dev.lug.oak.query.many.Many.from;
+import static dev.lug.oak.query.Many.from;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class SettableTest {

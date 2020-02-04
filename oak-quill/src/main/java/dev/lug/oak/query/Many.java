@@ -1,7 +1,18 @@
-package dev.lug.oak.query.many;
+package dev.lug.oak.query;
 
 import dev.lug.oak.collect.cursor.Cursor;
 import dev.lug.oak.func.sup.Supplier1;
+import dev.lug.oak.query.many.Aggregatable;
+import dev.lug.oak.query.many.Concatenatable;
+import dev.lug.oak.query.many.Filterable;
+import dev.lug.oak.query.many.Groupable;
+import dev.lug.oak.query.many.Insertable;
+import dev.lug.oak.query.many.Joinable;
+import dev.lug.oak.query.many.Partitionable;
+import dev.lug.oak.query.many.Projectable;
+import dev.lug.oak.query.many.Quantifiable;
+import dev.lug.oak.query.many.Settable;
+import dev.lug.oak.query.many.Uniquable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

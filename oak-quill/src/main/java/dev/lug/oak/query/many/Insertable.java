@@ -1,5 +1,6 @@
 package dev.lug.oak.query.many;
 
+import dev.lug.oak.query.Many;
 import dev.lug.oak.query.Queryable;
 import org.jetbrains.annotations.NotNull;
 

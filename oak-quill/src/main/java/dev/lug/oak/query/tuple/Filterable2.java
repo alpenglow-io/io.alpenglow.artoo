@@ -3,6 +3,8 @@ package dev.lug.oak.query.tuple;
 import dev.lug.oak.func.fun.Function2;
 import dev.lug.oak.func.pre.Predicate2;
 import dev.lug.oak.query.Queryable;
+import dev.lug.oak.query.Tuple;
+import dev.lug.oak.query.Tuple2;
 import dev.lug.oak.query.many.Filterable;
 import dev.lug.oak.type.Nullability;
 import org.jetbrains.annotations.Contract;

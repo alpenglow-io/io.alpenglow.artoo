@@ -3,7 +3,7 @@ package dev.lug.oak.query.one;
 import dev.lug.oak.collect.cursor.Cursor;
 import dev.lug.oak.func.con.Consumer1;
 import dev.lug.oak.func.fun.Function1;
-import dev.lug.oak.query.Q;
+import dev.lug.oak.query.One;
 import dev.lug.oak.query.Queryable;
 import dev.lug.oak.type.Nullability;
 import org.jetbrains.annotations.Contract;
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Iterator;
 
 public interface Projectable<T> extends Queryable<T> {
-  default <R> One<R> select(final Q.AsJust<? super T, ? extends R> map) {
+  default <R> One<R> select(final AsJust<? super T, ? extends R> map) {
     return new Select<>(this, Nullability.nonNullable(map, "map"));
   }
 

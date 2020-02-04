@@ -5,7 +5,7 @@ import dev.lug.oak.func.fun.Function1;
 import dev.lug.oak.func.fun.Function2;
 import dev.lug.oak.func.pre.Predicate1;
 import dev.lug.oak.query.Queryable;
-import dev.lug.oak.query.one.One;
+import dev.lug.oak.query.One;
 import dev.lug.oak.type.Nullability;
 import dev.lug.oak.type.Numeric;
 import org.jetbrains.annotations.Contract;

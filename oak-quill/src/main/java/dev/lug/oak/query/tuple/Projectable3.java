@@ -3,8 +3,9 @@ package dev.lug.oak.query.tuple;
 import dev.lug.oak.func.con.Consumer3;
 import dev.lug.oak.func.fun.Function3;
 import dev.lug.oak.query.Queryable;
+import dev.lug.oak.query.Tuple3;
 import dev.lug.oak.query.many.Projectable;
-import dev.lug.oak.query.many.Many;
+import dev.lug.oak.query.Many;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

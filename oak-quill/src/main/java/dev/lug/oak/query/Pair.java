@@ -1,31 +1,19 @@
-package dev.lug.oak.query.tuple;
+package dev.lug.oak.query;
 
 import dev.lug.oak.func.con.Consumer2;
 import dev.lug.oak.func.fun.Function2;
 import dev.lug.oak.func.pre.Predicate2;
-import dev.lug.oak.query.one.One;
-import dev.lug.oak.type.AsInt;
-import dev.lug.oak.type.AsString;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import static dev.lug.oak.type.Nullability.nonNullable;
 
-public interface Tuple2<V1, V2> extends Tuple {
-  <R> One<R> select(Function2<? super V1, ? super V2, ? extends R> map);
-  Tuple2<V1, V2> peek(Consumer2<? super V1, ? super V2> peek);
-  <T extends Tuple> One<T> selection(Function2<? super V1, ? super V2, ? extends T> flatMap);
-  Tuple2<V1, V2> where(Predicate2<? super V1, ? super V2> filter);
-  void eventually(Consumer2<? super V1, ? super V2> then);
-
-}
-
-final class Pair<V1, V2> implements Tuple2<V1, V2> {
+public abstract class Pair<V1, V2> implements Tuple2<V1, V2> {
   private final V1 v1;
   private final V2 v2;
 
   @Contract(pure = true)
-  Pair(final V1 v1, final V2 v2) {
+  protected Pair(final V1 v1, final V2 v2) {
     this.v1 = v1;
     this.v2 = v2;
   }
@@ -74,38 +62,5 @@ final class Pair<V1, V2> implements Tuple2<V1, V2> {
     var result = v1.hashCode();
     result = 31 * result + v2.hashCode();
     return result;
-  }
-}
-
-final class None2<V1, V2> implements Tuple2<V1, V2> {
-  @Contract(value = "_ -> this", pure = true)
-  @Override
-  public final Tuple2<V1, V2> where(Predicate2<? super V1, ? super V2> filter) {
-    return this;
-  }
-
-  @Override
-  public final void eventually(Consumer2<? super V1, ? super V2> then) {
-    // nothing
-  }
-
-  @NotNull
-  @Contract(pure = true)
-  @Override
-  public final <R> One<R> select(Function2<? super V1, ? super V2, ? extends R> map) {
-    return One.none();
-  }
-
-  @Contract("_ -> this")
-  @Override
-  public final Tuple2<V1, V2> peek(Consumer2<? super V1, ? super V2> peek) {
-    return this;
-  }
-
-  @NotNull
-  @Contract(pure = true)
-  @Override
-  public final <T extends Tuple> One<T> selection(Function2<? super V1, ? super V2, ? extends T> flatMap) {
-    return One.none();
   }
 }

@@ -6,7 +6,7 @@ import dev.lug.oak.func.exe.Executable;
 import dev.lug.oak.func.fun.Function1;
 import dev.lug.oak.func.pre.Predicate1;
 import dev.lug.oak.func.sup.Supplier1;
-import dev.lug.oak.query.one.One;
+import dev.lug.oak.query.One;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;

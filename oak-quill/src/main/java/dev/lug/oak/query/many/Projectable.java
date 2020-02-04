@@ -3,12 +3,12 @@ package dev.lug.oak.query.many;
 import dev.lug.oak.func.con.Consumer1;
 import dev.lug.oak.func.fun.Function1;
 import dev.lug.oak.func.fun.IntFunction2;
-import dev.lug.oak.query.Q;
+import dev.lug.oak.query.Many;
 import dev.lug.oak.query.Queryable;
 import dev.lug.oak.query.tuple.Queryable2;
 import dev.lug.oak.query.tuple.Queryable3;
-import dev.lug.oak.query.tuple.Tuple2;
-import dev.lug.oak.query.tuple.Tuple3;
+import dev.lug.oak.query.Tuple2;
+import dev.lug.oak.query.Tuple3;
 import dev.lug.oak.type.Nullability;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public interface Projectable<T> extends Queryable<T> {
-  default <R> Many<R> select(final Q.AsJust<? super T, ? extends R> map) {
+  default <R> Many<R> select(final AsJust<? super T, ? extends R> map) {
     return new Select<>(this, Nullability.nonNullable(map, "map"));
   }
 
@@ -25,15 +25,15 @@ public interface Projectable<T> extends Queryable<T> {
     return new SelectIth<>(this, Nullability.nonNullable(mapIndex, "mapIndex"));
   }
 
-  default <T1, T2, U extends Tuple2<T1, T2>> Queryable2<T1, T2> select(final Q.JustAsTuple2<? super T, ? extends U> tuple) {
+  default <T1, T2, U extends Tuple2<T1, T2>> Queryable2<T1, T2> select(final JustAsTuple2<? super T, ? extends U> tuple) {
     return new SelectTuple2<>(this, Nullability.nonNullable(tuple, "tuple"));
   }
 
-  default <T1, T2, T3, U extends Tuple3<T1, T2, T3>> Queryable3<T1, T2, T3> select(final Q.JustAsTuple3<? super T, ? extends U> tuple) {
+  default <T1, T2, T3, U extends Tuple3<T1, T2, T3>> Queryable3<T1, T2, T3> select(final JustAsTuple3<? super T, ? extends U> tuple) {
     return new SelectTuple3<>(this, Nullability.nonNullable(tuple, "tuple"));
   }
 
-  default <R, S extends Queryable<R>> Many<R> select(final Q.AsQueryable<? super T, ? super R, ? extends S> flatMap) {
+  default <R, S extends Queryable<R>> Many<R> select(final AsQueryable<? super T, ? super R, ? extends S> flatMap) {
     return new Selection<>(new Select<>(this, Nullability.nonNullable(flatMap, "flatMap")));
   }
 

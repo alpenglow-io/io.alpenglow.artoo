@@ -3,7 +3,7 @@ package dev.lug.oak.query.many;
 import dev.lug.oak.collect.cursor.Cursor;
 import dev.lug.oak.func.pre.Predicate1;
 import dev.lug.oak.query.Queryable;
-import dev.lug.oak.query.one.One;
+import dev.lug.oak.query.One;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

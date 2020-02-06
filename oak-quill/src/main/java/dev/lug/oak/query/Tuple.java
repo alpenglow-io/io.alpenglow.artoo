@@ -1,17 +1,17 @@
 package dev.lug.oak.query;
 
-import dev.lug.oak.func.pre.Predicate2;
+import dev.lug.oak.query.tuple3.Default3;
+import dev.lug.oak.query.tuple3.None3;
+import dev.lug.oak.query.tuple3.Tuple3;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-
-import static java.util.Objects.nonNull;
 
 @SuppressWarnings("unchecked")
 public interface Tuple {
   @NotNull
   @Contract(value = "_, _ -> new", pure = true)
   static <V1, V2> Tuple2<V1, V2> of(V1 v1, V2 v2) {
-    return new Default2<>(v1, v2);
+    return new Pair<>(v1, v2);
   }
 
   @NotNull

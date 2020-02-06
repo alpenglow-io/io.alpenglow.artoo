@@ -15,7 +15,7 @@ import static dev.lug.oak.type.Nullability.nonNullable;
 import static java.util.Arrays.copyOf;
 
 @SuppressWarnings("unchecked")
-public interface Cursor<E> extends Iterator<E>, Enumeration<E> {
+public interface Cursor<E> extends Iterator<E> {
   @SafeVarargs
   @NotNull
   @Contract("_ -> new")
@@ -44,12 +44,21 @@ public interface Cursor<E> extends Iterator<E>, Enumeration<E> {
   @NotNull
   @Contract(value = " -> new", pure = true)
   static <T> Cursor<T> none() {
-    return (Cursor<T>) DefaultCursor.None;
+    return (Cursor<T>) Default.None;
   }
 
-  enum DefaultCursor {
-    ;
-    public static Cursor<?> None = new None<>();
+  enum Default implements Cursor<Object> {
+    None;
+
+    @Override
+    public boolean hasNext() {
+      return false;
+    }
+
+    @Override
+    public Object next() {
+      return null;
+    }
   }
 
   @NotNull
@@ -69,21 +78,6 @@ public interface Cursor<E> extends Iterator<E>, Enumeration<E> {
   static <T, R> Cursor<R> ofSingle(final Iterable<T> iterable, Function1<? super T, ? extends R> then, Supplier1<? extends R> otherwise) {
     final var iter = nonNullable(iterable, "iterable").iterator();
     return Cursor.ofNullable(iter.hasNext() ? nonNullable(then, "then").apply(iter.next()) : nonNullable(otherwise, "otherwise").get());
-  }
-
-  @Override
-  default boolean hasMoreElements() {
-    return hasNext();
-  }
-
-  @Override
-  default E nextElement() {
-    return next();
-  }
-
-  @Override
-  default Iterator<E> asIterator() {
-    return this;
   }
 }
 

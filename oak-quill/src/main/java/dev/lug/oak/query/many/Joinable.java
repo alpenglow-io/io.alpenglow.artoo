@@ -4,7 +4,7 @@ import dev.lug.oak.func.pre.Predicate2;
 import dev.lug.oak.query.Many;
 import dev.lug.oak.query.Queryable;
 import dev.lug.oak.query.many.Joinable.Joining;
-import dev.lug.oak.query.tuple.Queryable2;
+import dev.lug.oak.query.many2.Many2;
 import dev.lug.oak.query.Tuple;
 import dev.lug.oak.query.Tuple2;
 import org.jetbrains.annotations.Contract;
@@ -24,7 +24,7 @@ public interface Joinable<O> extends Queryable<O> {
   }
 
   interface Joining<O, I> {
-    Queryable2<O, I> on(final Predicate2<? super O, ? super I> expression);
+    Many2<O, I> on(final Predicate2<? super O, ? super I> expression);
   }
 }
 
@@ -40,7 +40,7 @@ final class Join<O, I> implements Joining<O, I> {
 
   @NotNull
   @Override
-  public final Queryable2<O, I> on(final Predicate2<? super O, ? super I> expression) {
+  public final Many2<O, I> on(final Predicate2<? super O, ? super I> expression) {
     final var array = new ArrayList<Tuple2<O, I>>();
     for (final var o : first) {
       for (final var i : second) {
@@ -48,6 +48,6 @@ final class Join<O, I> implements Joining<O, I> {
           array.add(Tuple.of(o, i));
       }
     }
-    return Queryable2.of(array.toArray((IntFunction<Tuple2<O, I>[]>) Tuple2[]::new));
+    return Many2.of(array.toArray((IntFunction<Tuple2<O, I>[]>) Tuple2[]::new));
   }
 }

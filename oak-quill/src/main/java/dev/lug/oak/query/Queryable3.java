@@ -1,10 +1,12 @@
-package dev.lug.oak.query.tuple;
+package dev.lug.oak.query;
 
-import dev.lug.oak.query.Tuple3;
+import dev.lug.oak.query.many3.Filterable3;
+import dev.lug.oak.query.many3.Projectable3;
+import dev.lug.oak.query.many3.QueryTuple3;
+import dev.lug.oak.query.tuple3.Tuple3;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Iterator;
 import java.util.List;
 
 import static dev.lug.oak.type.Nullability.nonNullable;
@@ -25,17 +27,3 @@ public interface Queryable3<V1, V2, V3> extends Projectable3<V1, V2, V3>, Filter
   }
 }
 
-final class QueryTuple3<V1, V2, V3> implements Queryable3<V1, V2, V3> {
-  private final Iterable<Tuple3<V1, V2, V3>> tuples;
-
-  @Contract(pure = true)
-  QueryTuple3(final Iterable<Tuple3<V1, V2, V3>> tuples) {
-    this.tuples = tuples;
-  }
-
-  @NotNull
-  @Override
-  public final Iterator<Tuple3<V1, V2, V3>> iterator() {
-    return tuples.iterator();
-  }
-}

@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Iterator;
 
 public interface Projectable<T> extends Queryable<T> {
-  default <R> One<R> select(final AsJust<? super T, ? extends R> map) {
+  default <R> One<R> select(final AnyAsAny<? super T, ? extends R> map) {
     return new Select<>(this, Nullability.nonNullable(map, "map"));
   }
 

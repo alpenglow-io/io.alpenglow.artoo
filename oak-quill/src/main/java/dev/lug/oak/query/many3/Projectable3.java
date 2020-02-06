@@ -1,9 +1,10 @@
-package dev.lug.oak.query.tuple;
+package dev.lug.oak.query.many3;
 
 import dev.lug.oak.func.con.Consumer3;
 import dev.lug.oak.func.fun.Function3;
 import dev.lug.oak.query.Queryable;
-import dev.lug.oak.query.Tuple3;
+import dev.lug.oak.query.Queryable3;
+import dev.lug.oak.query.tuple3.Tuple3;
 import dev.lug.oak.query.many.Projectable;
 import dev.lug.oak.query.Many;
 import org.jetbrains.annotations.Contract;
@@ -14,7 +15,7 @@ import java.util.Iterator;
 
 import static dev.lug.oak.type.Nullability.nonNullable;
 
-public interface Projectable3<V1, V2, V3> extends Projectable<Tuple3<V1, V2, V3>> {
+public interface Projectable3<V1, V2, V3> extends Queryable3<V1, V2, V3> {
   default <R> Many<R> select(final Function3<? super V1, ? super V2, ? super V3, ? extends R> map) {
     return new SelectT3<>(this, nonNullable(map, "map"));
   }

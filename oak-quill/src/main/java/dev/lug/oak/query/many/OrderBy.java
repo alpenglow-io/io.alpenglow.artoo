@@ -11,7 +11,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentSkipListMap;
 
-import static dev.lug.oak.query.Queryable.P.just;
+import static dev.lug.oak.query.Queryable.P.as;
 import static dev.lug.oak.query.Many.from;
 import static java.util.Comparator.comparingInt;
 import static java.util.Objects.nonNull;
@@ -50,6 +50,6 @@ final class OrderBy<T, K> implements Many<T> {
         result.sort(comparison);
       }
     }
-    return from(result).select(just(it -> it.value)).iterator();
+    return from(result).select(P.as(it -> it.value)).iterator();
   }
 }

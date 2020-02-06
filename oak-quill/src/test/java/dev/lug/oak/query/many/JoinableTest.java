@@ -1,10 +1,11 @@
 package dev.lug.oak.query.many;
 
 import dev.lug.oak.query.Many;
+import dev.lug.oak.query.Queryable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static dev.lug.oak.query.Queryable.P.just;
+import static dev.lug.oak.query.Queryable.P.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class JoinableTest {
@@ -22,7 +23,7 @@ class JoinableTest {
 
     final var query = Many.from(magnus, terry, charlotte)
       .join(barley, boots, whiskers, daisy).on((person, pet) -> person.equals(pet.owner))
-      .select(just((person, pet) ->
+      .select(Queryable.P.as((person, pet) ->
         String.format("%s - %s",
           person.name.trim(),
           pet.name.trim()
@@ -43,13 +44,13 @@ class JoinableTest {
     final var query = Many.from(Orders.orders)
       .join(Customers.customers).on((order, customer) -> order.customerId == customer.id)
       // such select can be avoided?
-      .select(just((order, customer) -> new Object() {
+      .select(Queryable.P.as((order, customer) -> new Object() {
         long orderId = order.id;
         String customerName = customer.name;
         long shipperId = order.shipperId;
       }))
       .join(Shippers.shippers).on((order, shipper) -> order.shipperId == shipper.id)
-      .select(just((order, shipper) ->
+      .select(Queryable.P.as((order, shipper) ->
         String.format("%s;%s",
           order.customerName.trim(),
           shipper.name.trim()

@@ -1,13 +1,14 @@
 package dev.lug.oak.query.many;
 
 import dev.lug.oak.query.Many;
+import dev.lug.oak.query.Queryable;
 import org.assertj.core.api.Assertions;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static dev.lug.oak.query.Queryable.P.just;
+import static dev.lug.oak.query.Queryable.P.as;
 import static java.util.Collections.max;
 import static java.util.Collections.min;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,9 +25,9 @@ class GroupableTest {
     };
 
     final var query = Many.from(pets)
-      .select(just(pet -> pet.age))
+      .select(Queryable.P.as(pet -> pet.age))
       .groupBy(Math::floor)
-      .select(just((age, ages) ->
+      .select(Queryable.P.as((age, ages) ->
         String.format(
           "key:%s,count:%s,min:%s,max:%s",
           age,
@@ -49,7 +50,7 @@ class GroupableTest {
   void shouldGroupByCountry() {
     final var query = Many.from(Customers.customers)
       .groupBy(customer -> customer.country)
-      .select(just((country, customers) ->
+      .select(Queryable.P.as((country, customers) ->
         String.format(
           "%d;%s",
           customers.size(),
@@ -101,7 +102,7 @@ class GroupableTest {
         .join(Shippers.shippers).on((order, shipper) -> order.shipperId == shipper.id)
         .select(ShippedOrder::new)
         .groupBy(joined -> joined.shipperName)
-        .select(just((name, orders) ->
+        .select(Queryable.P.as((name, orders) ->
           String.format("%s;%d",
             name,
             orders.size()
@@ -122,7 +123,7 @@ class GroupableTest {
       Many.from(Customers.customers)
         .groupBy(customer -> customer.country)
         .having((cntry, customers) -> customers.size() > 5)
-        .select(just((country, customers) ->
+        .select(Queryable.P.as((country, customers) ->
           String.format("%d;%s",
             customers.size(),
             country

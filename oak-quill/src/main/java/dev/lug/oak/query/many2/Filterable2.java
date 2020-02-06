@@ -1,4 +1,4 @@
-package dev.lug.oak.query.tuple;
+package dev.lug.oak.query.many2;
 
 import dev.lug.oak.func.fun.Function2;
 import dev.lug.oak.func.pre.Predicate2;
@@ -14,16 +14,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public interface Filterable2<V1, V2> extends Filterable<Tuple2<V1, V2>> {
-  default Queryable2<V1, V2> where(final Predicate2<? super V1, ? super V2> filter) {
+  default Many2<V1, V2> where(final Predicate2<? super V1, ? super V2> filter) {
     return new Where2<>(this, Nullability.nonNullable(filter, "filter"));
   }
 
-  default <T1, T2> Queryable2<T1, T2> ofType(final Class<T1> type1, final Class<T2> type2) {
+  default <T1, T2> Many2<T1, T2> ofType(final Class<T1> type1, final Class<T2> type2) {
     return new OfType2<>(this, Nullability.nonNullable(type1, "type1"), Nullability.nonNullable(type2, "type2"));
   }
 }
 
-final class Where2<V1, V2> implements Queryable2<V1, V2> {
+final class Where2<V1, V2> implements Many2<V1, V2> {
   private final Queryable<Tuple2<V1, V2>> queryable;
   private final Predicate2<? super V1, ? super V2> filter;
 
@@ -46,7 +46,7 @@ final class Where2<V1, V2> implements Queryable2<V1, V2> {
   }
 }
 
-final class OfType2<V1, V2, T1, T2> implements Queryable2<T1, T2> {
+final class OfType2<V1, V2, T1, T2> implements Many2<T1, T2> {
   @SuppressWarnings("unchecked")
   private final Function2<V1, V2, @NotNull Tuple2<T1, T2>> asTuple = (v1, v2) -> Tuple.of((T1) v1, (T2) v2);
 
@@ -73,7 +73,7 @@ final class OfType2<V1, V2, T1, T2> implements Queryable2<T1, T2> {
     for (final var tuple2 : queryable) {
       tuple2
         .where(areTypes)
-        .selection(asTuple)
+        .select(asTuple)
         .forEach(result::add);
     }
     return result.iterator();

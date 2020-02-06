@@ -1,8 +1,11 @@
-package dev.lug.oak.query;
+package dev.lug.oak.query.tuple3;
 
 import dev.lug.oak.func.con.Consumer3;
 import dev.lug.oak.func.fun.Function3;
 import dev.lug.oak.func.pre.Predicate3;
+import dev.lug.oak.query.None3;
+import dev.lug.oak.query.One;
+import dev.lug.oak.query.Tuple;
 import org.jetbrains.annotations.Contract;
 
 import static dev.lug.oak.type.Nullability.nonNullable;

@@ -1,12 +1,12 @@
-package dev.lug.oak.query;
+package dev.lug.oak.query.tuple3;
 
 import dev.lug.oak.func.con.Consumer3;
 import dev.lug.oak.func.fun.Function3;
 import dev.lug.oak.func.pre.Predicate3;
+import dev.lug.oak.query.One;
+import dev.lug.oak.query.Tuple;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-
-import static dev.lug.oak.type.Nullability.*;
 
 public interface Tuple3<V1, V2, V3> extends Tuple {
   <R> One<R> select(Function3<? super V1, ? super V2, ? super V3, ? extends R> map);

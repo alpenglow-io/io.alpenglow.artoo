@@ -1,42 +1,47 @@
-package dev.lug.oak.query.tuple;
+package dev.lug.oak.query.many2;
 
 import dev.lug.oak.func.con.Consumer2;
 import dev.lug.oak.func.fun.Function2;
-import dev.lug.oak.query.Queryable;
-import dev.lug.oak.query.Tuple2;
-import dev.lug.oak.query.many.Projectable;
 import dev.lug.oak.query.Many;
-import dev.lug.oak.type.Nullability;
+import dev.lug.oak.query.Queryable;
+import dev.lug.oak.query.Queryable.Tuple2AsAny;
+import dev.lug.oak.query.Queryable.Tuple2AsQueryable;
+import dev.lug.oak.query.Queryable.Tuple2AsTuple;
+import dev.lug.oak.query.Queryable2;
+import dev.lug.oak.query.Tuple2;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public interface Projectable2<V1, V2> extends Projectable<Tuple2<V1, V2>> {
-  default <R> Many<R> select(final AsJust2<? super V1, ? super V2, ? extends R> map) {
-    return new SelectT2<>(this, Nullability.nonNullable(map, "map"));
+import static dev.lug.oak.query.Queryable.P.as;
+import static dev.lug.oak.type.Nullability.nonNullable;
+
+public interface Projectable2<V1, V2> extends Queryable2<V1, V2> {
+  default <R> Many<R> select(final Tuple2AsAny<? super V1, ? super V2, ? extends R> map) {
+    return new Select2AsAny<>(this, nonNullable(map, "map"));
   }
 
-  default <T1, T2, T extends Tuple2<T1, T2>> Queryable2<T1, T2> select(final Just2AsTuple2<? super V1, ? super V2, ? extends T> map) {
-    return new Select2<>(this, Nullability.nonNullable(map, "map"));
+  default <T1, T2, T extends Tuple2<T1, T2>> Many2<T1, T2> select(final Tuple2AsTuple<? super V1, ? super V2, ? extends T> map) {
+    return new Select2As2<>(this, nonNullable(map, "map"));
   }
 
-  default <T1, T2, T extends Tuple2<T1, T2>, Q extends Queryable<T>> Queryable2<T1, T2> select(final Just2AsManyTuple2<? super V1, ? super V2, ? extends Q> flatMap) {
-    return new Selection2<>(this, Nullability.nonNullable(flatMap, "flatMap"));
+  default <T1, T2, T extends Tuple2<T1, T2>, Q extends Queryable<T>> Many2<T1, T2> select(final Tuple2AsQueryable<? super V1, ? super V2, ? extends T, ? extends Q> flatMap) {
+    return new Selection2<>(this, nonNullable(flatMap, "flatMap"));
   }
 
-  default Queryable2<V1, V2> peek2(final Consumer2<? super V1, ? super V2> peek) {
-    return new Peek2<>(this, Nullability.nonNullable(peek, "peek"));
+  default Many2<V1, V2> peek2(final Consumer2<? super V1, ? super V2> peek) {
+    return new Peek2<>(this, nonNullable(peek, "peek"));
   }
 }
 
-final class SelectT2<V1, V2, R> implements Many<R> {
-  private final Queryable<Tuple2<V1, V2>> queryable;
+final class Select2AsAny<V1, V2, R> implements Many<R> {
+  private final Queryable2<V1, V2> queryable;
   private final Function2<? super V1, ? super V2, ? extends R> map;
 
   @Contract(pure = true)
-  SelectT2(final Queryable<Tuple2<V1, V2>> queryable, final Function2<? super V1, ? super V2, ? extends R> map) {
+  Select2AsAny(final Queryable2<V1, V2> queryable, final Function2<? super V1, ? super V2, ? extends R> map) {
     this.queryable = queryable;
     this.map = map;
   }
@@ -54,12 +59,12 @@ final class SelectT2<V1, V2, R> implements Many<R> {
   }
 }
 
-final class Select2<V1, V2, T1, T2, T extends Tuple2<T1, T2>> implements Queryable2<T1, T2> {
-  private final Queryable<Tuple2<V1, V2>> queryable;
+final class Select2As2<V1, V2, T1, T2, T extends Tuple2<T1, T2>> implements Many2<T1, T2> {
+  private final Queryable2<V1, V2> queryable;
   private final Function2<? super V1, ? super V2, ? extends T> map;
 
   @Contract(pure = true)
-  Select2(final Queryable<Tuple2<V1, V2>> queryable, final Function2<? super V1, ? super V2, ? extends T> map) {
+  Select2As2(final Queryable2<V1, V2> queryable, final Function2<? super V1, ? super V2, ? extends T> map) {
     this.queryable = queryable;
     this.map = map;
   }
@@ -67,18 +72,19 @@ final class Select2<V1, V2, T1, T2, T extends Tuple2<T1, T2>> implements Queryab
   @NotNull
   @Override
   @Contract(pure = true)
-  public final Iterator<Tuple2<T1, T2>> iterator() {
-    final var result = new ArrayList<Tuple2<T1, T2>>();
+  public final Iterator<Nominal2<T1, T2>> iterator() {
+    final var result = new ArrayList<Nominal2<T1, T2>>();
     for (final var tuple : queryable) {
-      tuple
-        .select(map)
-        .peek(result::add);
+      map
+        .apply(tuple.value1, tuple.value2)
+        .select(as(Nominal2::new))
+        .eventually(result::add);
     }
     return result.iterator();
   }
 }
 
-final class Selection2<V1, V2, T1, T2, T extends Tuple2<T1, T2>, S extends Queryable<T>> implements Queryable2<T1, T2> {
+final class Selection2<V1, V2, T1, T2, T extends Tuple2<T1, T2>, S extends Queryable<T>> implements Many2<T1, T2> {
   private final Queryable<Tuple2<V1, V2>> queryable;
   private final Function2<? super V1, ? super V2, ? extends S> flatMap;
 
@@ -101,7 +107,7 @@ final class Selection2<V1, V2, T1, T2, T extends Tuple2<T1, T2>, S extends Query
   }
 }
 
-final class Peek2<V1, V2> implements Queryable2<V1, V2> {
+final class Peek2<V1, V2> implements Many2<V1, V2> {
   private final Queryable<Tuple2<V1, V2>> queryable;
   private final Consumer2<? super V1, ? super V2> peek;
 

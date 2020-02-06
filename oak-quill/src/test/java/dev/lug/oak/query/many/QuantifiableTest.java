@@ -1,12 +1,13 @@
 package dev.lug.oak.query.many;
 
 import dev.lug.oak.query.Many;
+import dev.lug.oak.query.Queryable;
 import org.assertj.core.api.Assertions;
 import org.jetbrains.annotations.Contract;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static dev.lug.oak.query.Queryable.P.just;
+import static dev.lug.oak.query.Queryable.P.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class QuantifiableTest {
@@ -81,7 +82,7 @@ class QuantifiableTest {
 
     final var query = Many.from(people)
       .where(person -> Many.from(person.pets).all(pet -> pet.age > 5) != null)
-      .select(just(person -> person.name));
+      .select(Queryable.P.as(person -> person.name));
 
     assertThat(query).containsOnly("Haas", "Antebi");
   }
@@ -129,7 +130,7 @@ class QuantifiableTest {
 
     final var query = Many.from(people)
       .where(person -> Many.from(person.pets).any() != null)
-      .select(just(person -> person.name));
+      .select(Queryable.P.as(person -> person.name));
 
     assertThat(query).containsOnly(
       "Haas",

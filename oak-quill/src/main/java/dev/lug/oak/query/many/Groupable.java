@@ -4,11 +4,11 @@ import dev.lug.oak.func.fun.Function1;
 import dev.lug.oak.func.pre.Predicate2;
 import dev.lug.oak.func.pre.Predicate3;
 import dev.lug.oak.query.Queryable;
-import dev.lug.oak.query.tuple.Queryable2;
-import dev.lug.oak.query.tuple.Queryable3;
+import dev.lug.oak.query.many2.Many2;
+import dev.lug.oak.query.Queryable3;
 import dev.lug.oak.query.Tuple;
 import dev.lug.oak.query.Tuple2;
-import dev.lug.oak.query.Tuple3;
+import dev.lug.oak.query.tuple3.Tuple3;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,8 +32,8 @@ public interface Groupable<T> extends Queryable<T> {
     return new GroupBy2<>(this, key1, key2);
   }
 
-  interface Grouping<K, T> extends Queryable2<K, Collection<T>> {
-    default Queryable2<K, Collection<T>> having(final Predicate2<? super K, ? super Collection<T>> filter) {
+  interface Grouping<K, T> extends Many2<K, Collection<T>> {
+    default Many2<K, Collection<T>> having(final Predicate2<? super K, ? super Collection<T>> filter) {
       return where(filter);
     }
   }

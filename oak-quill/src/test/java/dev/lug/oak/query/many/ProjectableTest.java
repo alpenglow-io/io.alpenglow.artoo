@@ -1,5 +1,6 @@
 package dev.lug.oak.query.many;
 
+import dev.lug.oak.query.Queryable;
 import org.jetbrains.annotations.Contract;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import static dev.lug.oak.query.Queryable.P.ith;
-import static dev.lug.oak.query.Queryable.P.just;
+import static dev.lug.oak.query.Queryable.P.as;
 import static dev.lug.oak.query.Queryable.P.array;
 import static dev.lug.oak.query.Many.from;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,7 +34,7 @@ class ProjectableTest {
   @Test
   @DisplayName("should say every fruit is a fruit")
   void shouldSelect() {
-    final var query = from("apple", "banana", "mango", "orange", "passionfruit", "grape").select(just(fruit -> fruit + " is a fruit."));
+    final var query = from("apple", "banana", "mango", "orange", "passionfruit", "grape").select(Queryable.P.as(fruit -> fruit + " is a fruit."));
 
     assertThat(query).containsOnly(
       "apple is a fruit.",
@@ -80,7 +81,7 @@ class ProjectableTest {
       new Bouquet("larkspur", "lilac", "iris", "dahlia")
     };
 
-    final var selectQuery = from(bouquets).select(just(bouquet -> bouquet.flowers));
+    final var selectQuery = from(bouquets).select(Queryable.P.as(bouquet -> bouquet.flowers));
     final var selectionQuery = from(bouquets).select(array(bouquet -> bouquet.flowers));
 
     final var flowers1 = new ArrayList<String>();

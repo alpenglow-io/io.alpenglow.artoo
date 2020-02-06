@@ -1,6 +1,5 @@
 package dev.lug.oak.collect.cursor;
 
-import dev.lug.oak.collect.Iterable2;
 import dev.lug.oak.collect.Iterator2;
 import dev.lug.oak.func.as.As2;
 import dev.lug.oak.func.fun.Function2;
@@ -20,79 +19,29 @@ public interface Cursor2<V1, V2> extends Iterator2<V1, V2>, As2<V1, V2> {
     return new Once2<>(value1, value2);
   }
 
-  @Nullable
+  @NotNull
   @Contract(pure = true)
-  static <V2, V1> Cursor2<V1, V2> none() {
+  static <V1, V2> Cursor2<V1, V2> none() {
     return (Cursor2<V1, V2>) Default.None;
-  }
-
-  final class T2<V1, V2> implements Iterable2<V1, V2> {
-    private final V1 value1;
-    private final V2 value2;
-
-    public T2(V1 value1, V2 value2) {
-      this.value1 = value1;
-      this.value2 = value2;
-    }
-
-    @NotNull
-    @Override
-    public Iterator<As2<V1, V2>> iterator() {
-      return Cursor2.once(value1, value2);
-    }
-  }
-
-  static void main(String[] args) {
-    final var t2 = new T2<>(12, 13);
-
-    for (final var tuple : t2)
-      System.out.println(tuple.<String>as((v1, v2) -> String.format("Ciao %d, %d", v1, v2)));
-
   }
 }
 
 enum Default {
   ;
-  public static None2<?, ?> None = new None2<>();
+  public static Cursor2<?, ?> None = new None2<>();
+  public static As2<?, ?> Nothing = new As2<>() {
+    @Override
+    public <T> T as(Function2<? super Object, ? super Object, T> as) {
+      return null;
+    }
+  };
 }
 
-final class Index implements AsInt {
-  private int value;
-  private final StampedLock stamp;
-
-  Index() { this(0, new StampedLock()); }
-  private Index(final int value, StampedLock stamp) {
-    this.value = value;
-    this.stamp = stamp;
-  }
-
-  public final Index inc() {
-    final var write = this.stamp.asWriteLock();
-    try {
-      write.lock();
-      value++;
-    } finally {
-      write.unlock();
-    }
-    return this;
-  }
-
-  @Override
-  public final int eval() {
-    final var read = this.stamp.asReadLock();
-    try {
-      read.lock();
-      return this.value;
-    } finally {
-      read.unlock();
-    }
-  }
-}
-
+@SuppressWarnings("unchecked")
 final class None2<V1, V2> implements Cursor2<V1, V2> {
   @Override
   public final <T> T as(Function2<V1, V2, T> as) {
-    throw new IllegalStateException("None has no state.");
+    return null;
   }
 
   @Override
@@ -102,7 +51,7 @@ final class None2<V1, V2> implements Cursor2<V1, V2> {
 
   @Override
   public final As2<V1, V2> next() {
-    throw new IllegalStateException("None has no state.");
+    return (As2<V1, V2>) Default.Nothing;
   }
 }
 

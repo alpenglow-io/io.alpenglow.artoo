@@ -2,7 +2,7 @@ package dev.lug.oak.query;
 
 import dev.lug.oak.collect.cursor.Cursor2;
 import dev.lug.oak.func.as.As2;
-import dev.lug.oak.query.many2.Projectable2;
+import dev.lug.oak.query.tuple2.Projectable2;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;

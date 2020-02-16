@@ -4,6 +4,7 @@ import dev.lug.oak.func.con.Consumer1;
 import dev.lug.oak.func.fun.Function1;
 import dev.lug.oak.func.fun.Function2;
 import dev.lug.oak.func.fun.Function3;
+import dev.lug.oak.func.fun.Function4;
 import dev.lug.oak.func.fun.IntFunction2;
 import dev.lug.oak.func.pre.IntPredicate2;
 import dev.lug.oak.query.tuple3.Tuple3;
@@ -27,6 +28,10 @@ public interface Queryable<T> extends Iterable<T> {
 
     @Contract(value = "_ -> param1", pure = true)
     public static <T1, T2, R> Tuple2AsAny<T1, T2, R> as(final Tuple2AsAny<T1, T2, R> asAny) { return asAny; }
+
+    public static <V1, V2, T1, T2, T extends Tuple2<T1, T2>> Tuple2AsTuple2<V1, V2, T1, T2, T> as(final Tuple2AsTuple2<V1, V2, T1, T2, T> as) {
+      return as;
+    }
 
     @Contract(value = "_ -> param1", pure = true)
     public static <T1, T2, T3, R> Function3<T1, T2, T3, R> as(final Function3<T1, T2, T3, R> asAny) { return asAny; }

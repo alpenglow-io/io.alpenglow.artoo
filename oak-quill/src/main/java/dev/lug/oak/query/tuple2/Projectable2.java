@@ -13,6 +13,7 @@ import static dev.lug.oak.type.Nullability.nonNullable;
 
 public interface Projectable2<V1, V2> extends Queryable2<V1, V2> {
   default <T> One<T> select(final Tuple2AsAny<? super V1, ? super V2, ? extends T> map) {
+    nonNullable(map, "map");
     return () -> {
       Iterable<T> result = Cursor::none;
       for (final var tuple : this) result = () -> Cursor.once(tuple.as(map::apply));

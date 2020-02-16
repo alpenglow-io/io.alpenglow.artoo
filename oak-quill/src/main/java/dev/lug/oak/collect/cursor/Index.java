@@ -25,6 +25,17 @@ final class Index implements AsInt {
     return this;
   }
 
+  public final Index dec() {
+    final var write = this.stamp.asWriteLock();
+    try {
+      write.lock();
+      value++;
+    } finally {
+      write.unlock();
+    }
+    return this;
+  }
+
   @Override
   public final int eval() {
     final var read = this.stamp.asReadLock();

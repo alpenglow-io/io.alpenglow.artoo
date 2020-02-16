@@ -1,6 +1,6 @@
 package dev.lug.oak.query.many2;
 
-import dev.lug.oak.func.as.Unity2;
+import dev.lug.oak.type.union.Union2;
 import dev.lug.oak.func.con.Consumer2;
 import dev.lug.oak.func.fun.Function2;
 import dev.lug.oak.query.Many;
@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import static dev.lug.oak.query.Queryable.P.as;
-import static dev.lug.oak.query.Queryable.P.many;
 import static dev.lug.oak.type.Nullability.nonNullable;
 
 public interface Projectable2<V1, V2> extends Queryable2<V1, V2> {
@@ -35,11 +34,11 @@ public interface Projectable2<V1, V2> extends Queryable2<V1, V2> {
   default <T1, T2, T extends Tuple2<T1, T2>> Many2<T1, T2> select(final Tuple2AsTuple<? super V1, ? super V2, ? extends T> map) {
     nonNullable(map, "map");
     return () -> {
-      final var array = new ArrayList<Unity2<T1, T2>>();
+      final var array = new ArrayList<Union2<T1, T2>>();
       for (final var tuple : this)
         tuple
           .as(map::apply)
-          .select(as(Unity2::of))
+          .select(as(Union2::of))
           .eventually(array::add);
       return array.iterator();
     };
@@ -48,11 +47,11 @@ public interface Projectable2<V1, V2> extends Queryable2<V1, V2> {
   default <T1, T2, M extends Many2<T1, T2>> M select(final Tuple2AsMany<? super V1, ? super V2, ? extends M> flatMap) {
     nonNullable(flatMap, "flatMap");
     return () -> {
-      final var array = new ArrayList<Unity2<T1, T2>>();
+      final var array = new ArrayList<Union2<T1, T2>>();
       for (final var tuple : this)
         tuple
           .as(flatMap::apply)
-          .select(as(t -> t.select(as(Unity2::of))))
+          .select(as(t -> t.select(as(Union2::of))))
           .select(as(One::asIs))
           .eventually(t -> t.);
       return array.iterator();

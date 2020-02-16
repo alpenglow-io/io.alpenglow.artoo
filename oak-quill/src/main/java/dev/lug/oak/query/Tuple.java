@@ -2,7 +2,6 @@ package dev.lug.oak.query;
 
 import dev.lug.oak.collect.cursor.Cursor2;
 import dev.lug.oak.collect.cursor.Cursor3;
-import dev.lug.oak.query.tuple3.Tuple3;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

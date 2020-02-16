@@ -1,7 +1,7 @@
 package dev.lug.oak.query.many2;
 
 import dev.lug.oak.collect.cursor.Cursor;
-import dev.lug.oak.func.as.Unity2;
+import dev.lug.oak.type.union.Union2;
 import dev.lug.oak.query.Tuple2;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -26,10 +26,10 @@ public interface Many2<V1, V2> extends Projectable2<V1, V2>, Filterable2<V1, V2>
   static <T1, T2> Many2<T1, T2> of(final Iterable<Tuple2<T1, T2>> tuples) {
     nonNullable(tuples, "tuples");
     return () -> {
-      final var array = new ArrayList<Unity2<T1, T2>>();
+      final var array = new ArrayList<Union2<T1, T2>>();
       for (final var tuple : tuples)
         tuple
-          .select(as(Unity2::of))
+          .select(as(Union2::of))
           .eventually(array::add);
       return array.iterator();
     };

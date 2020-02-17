@@ -1,7 +1,9 @@
 package dev.lug.oak.func.fun;
 
+import dev.lug.oak.func.$2.Fun;
+
 @FunctionalInterface
-public interface IntFunction2<T, R> extends Function2<Integer, T, R> {
+public interface IntFunction2<T, R> extends Fun<Integer, T, R> {
   R applyInt(final int param1, T param2);
 
   @Override

@@ -1,13 +1,12 @@
 package dev.lug.oak.query.many;
 
-import dev.lug.oak.func.con.Consumer1;
-import dev.lug.oak.func.fun.Function1;
+import dev.lug.oak.func.Con;
+import dev.lug.oak.func.Fun;
 import dev.lug.oak.func.fun.IntFunction2;
 import dev.lug.oak.query.Many;
 import dev.lug.oak.query.Queryable;
-import dev.lug.oak.query.many2.Many2;
-import dev.lug.oak.query.Queryable3;
-import dev.lug.oak.query.Tuple2;
+import dev.lug.oak.query.many.$2.Many2;
+import dev.lug.oak.query.$3.Queryable3;
 import dev.lug.oak.query.tuple3.Tuple3;
 import dev.lug.oak.type.Nullability;
 import org.jetbrains.annotations.Contract;
@@ -25,7 +24,7 @@ public interface Projectable<T> extends Queryable<T> {
     return new SelectIth<>(this, Nullability.nonNullable(mapIndex, "mapIndex"));
   }
 
-  default <T1, T2, U extends Tuple2<T1, T2>> Many2<T1, T2> select(final AnyAsTuple<? super T, ? extends U> tuple) {
+  default <T1, T2, U extends Projectable2<V1, V2> & Filterable2<V1, V2> & Peekable2<V1, V2>> Many2<T1, T2> select(final AnyAsTuple<? super T, ? extends U> tuple) {
     return new SelectTuple2<>(this, Nullability.nonNullable(tuple, "tuple"));
   }
 
@@ -38,7 +37,7 @@ public interface Projectable<T> extends Queryable<T> {
   }
 
   @Deprecated(forRemoval = true)
-  default Many<T> peek(final Consumer1<? super T> peek) {
+  default Many<T> peek(final Con<? super T> peek) {
     return new Peek<>(this, Nullability.nonNullable(peek, "peek"));
   }
 
@@ -46,10 +45,10 @@ public interface Projectable<T> extends Queryable<T> {
 
 final class Select<T, S> implements Many<S> {
   private final Queryable<T> queryable;
-  private final Function1<? super T, ? extends S> map;
+  private final Fun<? super T, ? extends S> map;
 
   @Contract(pure = true)
-  Select(final Queryable<T> queryable, Function1<? super T, ? extends S> map) {
+  Select(final Queryable<T> queryable, Fun<? super T, ? extends S> map) {
     this.queryable = queryable;
     this.map = map;
   }
@@ -86,10 +85,10 @@ final class Selection<R, S extends Queryable<R>> implements Many<R> {
 
 final class Peek<T> implements Many<T> {
   private final Queryable<T> queryable;
-  private final Consumer1<? super T> peek;
+  private final Con<? super T> peek;
 
   @Contract(pure = true)
-  Peek(final Queryable<T> queryable, final Consumer1<? super T> peek) {
+  Peek(final Queryable<T> queryable, final Con<? super T> peek) {
     this.queryable = queryable;
     this.peek = peek;
   }
@@ -124,12 +123,12 @@ final class SelectIth<S, R> implements Many<R> {
   }
 }
 
-final class SelectTuple2<V, T1, T2, T extends Tuple2<T1, T2>> implements Many2<T1, T2> {
+final class SelectTuple2<V, T1, T2, T extends Projectable2<V1, V2> & Filterable2<V1, V2> & Peekable2<V1, V2>> implements Many2<T1, T2> {
   private final Queryable<V> queryable;
-  private final Function1<? super V, ? extends T> map;
+  private final Fun<? super V, ? extends T> map;
 
   @Contract(pure = true)
-  SelectTuple2(final Queryable<V> queryable, final Function1<? super V, ? extends T> map) {
+  SelectTuple2(final Queryable<V> queryable, final Fun<? super V, ? extends T> map) {
     this.queryable = queryable;
     this.map = map;
   }
@@ -145,10 +144,10 @@ final class SelectTuple2<V, T1, T2, T extends Tuple2<T1, T2>> implements Many2<T
 
 final class SelectTuple3<V, T1, T2, T3, T extends Tuple3<T1, T2, T3>> implements Queryable3<T1, T2, T3> {
   private final Queryable<V> queryable;
-  private final Function1<? super V, ? extends T> map;
+  private final Fun<? super V, ? extends T> map;
 
   @Contract(pure = true)
-  SelectTuple3(final Queryable<V> queryable, final Function1<? super V, ? extends T> map) {
+  SelectTuple3(final Queryable<V> queryable, final Fun<? super V, ? extends T> map) {
     this.queryable = queryable;
     this.map = map;
   }

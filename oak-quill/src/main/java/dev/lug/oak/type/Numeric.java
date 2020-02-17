@@ -1,12 +1,10 @@
 package dev.lug.oak.type;
 
-import dev.lug.oak.func.fun.Function1;
+import dev.lug.oak.func.Fun;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import static dev.lug.oak.type.Nullability.nonNullable;
 import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNullElse;
 import static java.util.Objects.requireNonNullElseGet;
 
@@ -52,9 +50,9 @@ public enum Numeric {
     return (Number) value;
   }
 
-  public static <T> Number asNumber(final T value, final String message, final Function1<? super String, ? extends RuntimeException> throwing) {
+  public static <T> Number asNumber(final T value, final String message, final Fun<? super String, ? extends RuntimeException> throwing) {
     final var error = requireNonNullElse(message, "Can't cast to number.");
-    final Function1<? super String, ? extends RuntimeException> thrown = requireNonNullElseGet(throwing, () -> ((Function1<? super String, ? extends RuntimeException>) ClassCastException::new));
+    final Fun<? super String, ? extends RuntimeException> thrown = requireNonNullElseGet(throwing, () -> ((Fun<? super String, ? extends RuntimeException>) ClassCastException::new));
     try {
       return asNumber(value);
     } catch (ClassCastException e) {
@@ -64,7 +62,7 @@ public enum Numeric {
 
   @NotNull
   @Contract(pure = true)
-  public static <V> Function1<? super V, Double> asDouble() {
+  public static <V> Fun<? super V, Double> asDouble() {
     return it -> isNull(it) ? null : switch (Numeric.fromAny(it)) {
       case Float, Double, BigDecimal, Integer, Long, BigInteger -> asNumber(it).doubleValue();
       case NaN -> null;
@@ -73,7 +71,7 @@ public enum Numeric {
 
   @NotNull
   @Contract(pure = true)
-  public static <V> Function1<? super V, Float> asFloat() {
+  public static <V> Fun<? super V, Float> asFloat() {
     return it -> isNull(it) ? null : switch (Numeric.fromAny(it)) {
       case Float, Double, BigDecimal, Integer, Long, BigInteger -> asNumber(it).floatValue();
       case NaN -> null;
@@ -82,7 +80,7 @@ public enum Numeric {
 
   @NotNull
   @Contract(pure = true)
-  public static <V> Function1<? super V, Integer> asInteger() {
+  public static <V> Fun<? super V, Integer> asInteger() {
     return it -> isNull(it) ? null : switch (Numeric.fromAny(it)) {
       case Float, Double, BigDecimal, Integer, Long, BigInteger -> asNumber(it).intValue();
       case NaN -> null;
@@ -91,7 +89,7 @@ public enum Numeric {
 
   @NotNull
   @Contract(pure = true)
-  public static <V> Function1<? super V, Long> asLong() {
+  public static <V> Fun<? super V, Long> asLong() {
     return it -> isNull(it) ? null : switch (Numeric.fromAny(it)) {
       case Float, Double, BigDecimal, Integer, Long, BigInteger -> asNumber(it).longValue();
       case NaN -> null;
@@ -100,7 +98,7 @@ public enum Numeric {
 
   @NotNull
   @Contract(pure = true)
-  public static <V> Function1<? super V, Short> asShort() {
+  public static <V> Fun<? super V, Short> asShort() {
     return it -> isNull(it) ? null : switch (Numeric.fromAny(it)) {
       case Float, Double, BigDecimal, Integer, Long, BigInteger -> asNumber(it).shortValue();
       case NaN -> null;
@@ -109,7 +107,7 @@ public enum Numeric {
 
   @NotNull
   @Contract(pure = true)
-  public static <V> Function1<? super V, Byte> asByte() {
+  public static <V> Fun<? super V, Byte> asByte() {
     return it -> isNull(it) ? null : switch (Numeric.fromAny(it)) {
       case Float, Double, BigDecimal, Integer, Long, BigInteger -> asNumber(it).byteValue();
       case NaN -> null;
@@ -118,7 +116,7 @@ public enum Numeric {
 
   @NotNull
   @Contract(pure = true)
-  public static <V> Function1<? super V, java.math.BigInteger> asBigInteger() {
+  public static <V> Fun<? super V, java.math.BigInteger> asBigInteger() {
     return it -> isNull(it) ? null : switch (Numeric.fromAny(it)) {
       case Float, Double, BigDecimal, Integer, Long, BigInteger -> java.math.BigInteger.valueOf(asNumber(it).longValue());
       case NaN -> null;
@@ -127,7 +125,7 @@ public enum Numeric {
 
   @NotNull
   @Contract(pure = true)
-  public static <V> Function1<? super V, java.math.BigDecimal> asBigDecimal() {
+  public static <V> Fun<? super V, java.math.BigDecimal> asBigDecimal() {
     return it -> isNull(it) ? null : switch (Numeric.fromAny(it)) {
       case Float, Double, BigDecimal, Integer, Long, BigInteger -> java.math.BigDecimal.valueOf(asNumber(it).doubleValue());
       case NaN -> null;

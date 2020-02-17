@@ -1,7 +1,7 @@
 package dev.lug.oak.query.many;
 
-import dev.lug.oak.func.pre.LongPredicate2;
-import dev.lug.oak.func.pre.Predicate1;
+import dev.lug.oak.func.$2.LongPre;
+import dev.lug.oak.func.Pre;
 import dev.lug.oak.query.Many;
 import dev.lug.oak.query.Queryable;
 import dev.lug.oak.type.Nullability;
@@ -15,22 +15,22 @@ public interface Partitionable<T> extends Queryable<T> {
   default Many<T> skip(final int until) {
     return new Skip<>(this, until);
   }
-  default Many<T> skipWhile(final Predicate1<? super T> filter) {
+  default Many<T> skipWhile(final Pre<? super T> filter) {
     final var expression = Nullability.nonNullable(filter, "filter");
     return new SkipWhile<>(this, (index, param) -> expression.test(param));
   }
-  default Many<T> skipWhile(final LongPredicate2<? super T> filter) {
+  default Many<T> skipWhile(final LongPre<? super T> filter) {
     final var expression = Nullability.nonNullable(filter, "filter");
     return new SkipWhile<>(this, expression);
   }
   default Many<T> take(final int until) {
     return new Take<>(this, until);
   }
-  default Many<T> takeWhile(final Predicate1<? super T> filter) {
+  default Many<T> takeWhile(final Pre<? super T> filter) {
     final var expression = Nullability.nonNullable(filter, "filter");
     return new TakeWhile<>(this, (index, param) -> expression.test(param));
   }
-  default Many<T> takeWhile(final LongPredicate2<? super T> filter) {
+  default Many<T> takeWhile(final LongPre<? super T> filter) {
     return new TakeWhile<>(this, Nullability.nonNullable(filter, "filter"));
   }
 }
@@ -57,10 +57,10 @@ final class Skip<S> implements Many<S> {
 
 final class SkipWhile<S> implements Many<S> {
   private final Queryable<S> queryable;
-  private final LongPredicate2<? super S> filter;
+  private final LongPre<? super S> filter;
 
   @Contract(pure = true)
-  SkipWhile(final Queryable<S> queryable, final LongPredicate2<? super S> filter) {
+  SkipWhile(final Queryable<S> queryable, final LongPre<? super S> filter) {
     this.queryable = queryable;
     this.filter = filter;
   }
@@ -104,10 +104,10 @@ final class Take<S> implements Many<S> {
 
 final class TakeWhile<S> implements Many<S> {
   private final Queryable<S> some;
-  private final LongPredicate2<? super S> expression;
+  private final LongPre<? super S> expression;
 
   @Contract(pure = true)
-  TakeWhile(final Queryable<S> some, final LongPredicate2<? super S> expression) {
+  TakeWhile(final Queryable<S> some, final LongPre<? super S> expression) {
     this.some = some;
     this.expression = expression;
   }

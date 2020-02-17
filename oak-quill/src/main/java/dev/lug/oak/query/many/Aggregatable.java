@@ -1,11 +1,10 @@
 package dev.lug.oak.query.many;
 
-import dev.lug.oak.collect.cursor.Cursor;
-import dev.lug.oak.func.fun.Function1;
-import dev.lug.oak.func.fun.Function2;
-import dev.lug.oak.func.pre.Predicate1;
+import dev.lug.oak.cursor.Cursor;
+import dev.lug.oak.func.$2.Fun;
+import dev.lug.oak.func.Pre;
 import dev.lug.oak.query.Queryable;
-import dev.lug.oak.query.One;
+import dev.lug.oak.query.one.One;
 import dev.lug.oak.type.Nullability;
 import dev.lug.oak.type.Numeric;
 import org.jetbrains.annotations.Contract;
@@ -13,8 +12,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
-import static dev.lug.oak.func.fun.Function1.identity;
-import static dev.lug.oak.func.pre.Predicate1.tautology;
+import static dev.lug.oak.func.Fun.identity;
+import static dev.lug.oak.func.Pre.tautology;
 import static dev.lug.oak.type.Nullability.nonNullableState;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -23,7 +22,7 @@ import static java.util.Objects.nonNull;
 public interface Aggregatable<T> extends Queryable<T> {
   @NotNull
   @Contract("_, _, _, _ -> new")
-  private <A, R> One<A> aggregate(final Predicate1<? super T> filter, final Function1<? super T, ? extends R> map, final A seed, final Function2<? super A, ? super R, ? extends A> reduce) {
+  private <A, R> One<A> aggregate(final Pre<? super T> filter, final dev.lug.oak.func.Fun map, final A seed, final Fun<? super A, ? super R, ? extends A> reduce) {
     return new Aggregate<>(
       this,
       Nullability.nonNullable(filter, "filter"),
@@ -33,7 +32,7 @@ public interface Aggregatable<T> extends Queryable<T> {
     );
   }
 
-  default <A, R> One<A> aggregate(final Function1<? super T, ? extends R> map, final A seed, final Function2<? super A, ? super R, ? extends A> reduce) {
+  default <A, R> One<A> aggregate(final dev.lug.oak.func.Fun map, final A seed, final Fun<? super A, ? super R, ? extends A> reduce) {
     return new Aggregate<>(
       this,
       tautology(),
@@ -43,7 +42,7 @@ public interface Aggregatable<T> extends Queryable<T> {
     );
   }
 
-  default <A> One<A> aggregate(final A seed, final Function2<? super A, ? super T, ? extends A> reduce) {
+  default <A> One<A> aggregate(final A seed, final Fun<? super A, ? super T, ? extends A> reduce) {
     return new Aggregate<>(
       this,
       tautology(),
@@ -53,11 +52,11 @@ public interface Aggregatable<T> extends Queryable<T> {
     );
   }
 
-  default One<T> aggregate(final Function2<? super T, ? super T, ? extends T> reduce) {
+  default One<T> aggregate(final Fun<? super T, ? super T, ? extends T> reduce) {
     return new NoSeed<>(this, Nullability.nonNullable(reduce, "reduce"));
   }
 
-  default One<Long> count(final Predicate1<? super T> filter) {
+  default One<Long> count(final Pre<? super T> filter) {
     return new Count<>(this, Nullability.nonNullable(filter, "filter"));
   }
 
@@ -65,7 +64,7 @@ public interface Aggregatable<T> extends Queryable<T> {
     return count(tautology());
   }
 
-  default <R, C extends Comparable<R>, V extends C> One<V> max(final Function1<? super T, ? extends V> selector) {
+  default <R, C extends Comparable<R>, V extends C> One<V> max(final dev.lug.oak.func.Fun selector) {
     return new SelectorMinMax<>(this, Nullability.nonNullable(selector, "selector"), 1);
   }
 
@@ -73,7 +72,7 @@ public interface Aggregatable<T> extends Queryable<T> {
     return new MinMax<>(this, 1);
   }
 
-  default <R, C extends Comparable<R>, V extends C> One<V> min(final Function1<? super T, ? extends V> selector) {
+  default <R, C extends Comparable<R>, V extends C> One<V> min(final dev.lug.oak.func.Fun selector) {
     return new SelectorMinMax<>(this, Nullability.nonNullable(selector, "selector"), -1);
   }
 
@@ -81,7 +80,7 @@ public interface Aggregatable<T> extends Queryable<T> {
     return new MinMax<>(this, -1);
   }
 
-  default <N extends Number> One<N> sum(final Function1<? super T, ? extends N> selector) {
+  default <N extends Number> One<N> sum(final dev.lug.oak.func.Fun selector) {
     return new SelectorSum<>(this, Nullability.nonNullable(selector, "selector"));
   }
 
@@ -89,7 +88,7 @@ public interface Aggregatable<T> extends Queryable<T> {
     return new Sum<>(this);
   }
 
-  default <N extends Number> One<Double> average(final Function1<? super T, ? extends N> selector) {
+  default <N extends Number> One<Double> average(final dev.lug.oak.func.Fun selector) {
     return new Average<>(this, Nullability.nonNullable(selector, "selector"), Numeric.asDouble());
   }
 
@@ -100,18 +99,18 @@ public interface Aggregatable<T> extends Queryable<T> {
 
 final class Aggregate<T, A, R> implements One<A> {
   private final Queryable<T> queryable;
-  private final Predicate1<? super T> filter;
-  private final Function1<? super T, ? extends R> map;
+  private final Pre<? super T> filter;
+  private final dev.lug.oak.func.Fun map;
   private final A seed;
-  private final Function2<? super A, ? super R, ? extends A> reduce;
+  private final Fun<? super A, ? super R, ? extends A> reduce;
 
   @Contract(pure = true)
   Aggregate(
     final Queryable<T> queryable,
-    final Predicate1<? super T> filter,
-    final Function1<? super T, ? extends R> map,
+    final Pre<? super T> filter,
+    final dev.lug.oak.func.Fun map,
     final A seed,
-    final Function2<? super A, ? super R, ? extends A> reduce
+    final Fun<? super A, ? super R, ? extends A> reduce
   ) {
     this.queryable = queryable;
     this.filter = filter;
@@ -135,10 +134,10 @@ final class Aggregate<T, A, R> implements One<A> {
 
 final class NoSeed<T> implements One<T> {
   private final Queryable<T> queryable;
-  private final Function2<? super T, ? super T, ? extends T> reduce;
+  private final Fun<? super T, ? super T, ? extends T> reduce;
 
   @Contract(pure = true)
-  NoSeed(final Queryable<T> queryable, final Function2<? super T, ? super T, ? extends T> reduce) {
+  NoSeed(final Queryable<T> queryable, final Fun<? super T, ? super T, ? extends T> reduce) {
     this.queryable = queryable;
     this.reduce = reduce;
   }
@@ -156,14 +155,14 @@ final class NoSeed<T> implements One<T> {
 
 final class Average<T, V> implements One<Double> {
   private final Queryable<T> queryable;
-  private final Function1<? super T, ? extends V> map;
-  private final Function1<? super V, Double> asDouble;
+  private final dev.lug.oak.func.Fun map;
+  private final dev.lug.oak.func.Fun asDouble;
 
   @Contract(pure = true)
   Average(
     final Queryable<T> queryable,
-    final Function1<? super T, ? extends V> map,
-    final Function1<? super V, Double> asDouble
+    final dev.lug.oak.func.Fun map,
+    final dev.lug.oak.func.Fun asDouble
   ) {
     this.queryable = queryable;
     this.map = map;
@@ -191,13 +190,13 @@ final class Average<T, V> implements One<Double> {
 
 final class SelectorMinMax<T, R, C extends Comparable<R>, V extends C> implements One<V> {
   private final Queryable<T> queryable;
-  private final Function1<? super T, ? extends V> map;
+  private final dev.lug.oak.func.Fun map;
   private final int operation;
 
   @Contract(pure = true)
   SelectorMinMax(
     final Queryable<T> queryable,
-    final Function1<? super T, ? extends V> map,
+    final dev.lug.oak.func.Fun map,
     final int operation
   ) {
     this.queryable = queryable;
@@ -250,10 +249,10 @@ final class MinMax<T> implements One<T> {
 
 final class SelectorSum<T, N extends Number> implements One<N> {
   private final Queryable<T> queryable;
-  private final Function1<? super T, ? extends N> map;
+  private final dev.lug.oak.func.Fun map;
 
   @Contract(pure = true)
-  SelectorSum(final Queryable<T> queryable, final Function1<? super T, ? extends N> map) {
+  SelectorSum(final Queryable<T> queryable, final dev.lug.oak.func.Fun map) {
     this.queryable = queryable;
     this.map = map;
   }
@@ -300,10 +299,10 @@ final class Sum<T> implements One<T> {
 
 final class Count<T> implements One<Long> {
   private final Queryable<T> queryable;
-  private final Predicate1<? super T> filter;
+  private final Pre<? super T> filter;
 
   @Contract(pure = true)
-  Count(final Queryable<T> queryable, final Predicate1<? super T> filter) {
+  Count(final Queryable<T> queryable, final Pre<? super T> filter) {
     this.queryable = queryable;
     this.filter = filter;
   }

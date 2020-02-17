@@ -1,6 +1,6 @@
 package dev.lug.oak.query.many;
 
-import dev.lug.oak.func.fun.Function1;
+import dev.lug.oak.func.Fun;
 import dev.lug.oak.query.Queryable;
 import dev.lug.oak.type.As;
 import org.jetbrains.annotations.Contract;
@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static dev.lug.oak.func.fun.Function1.identity;
+import static dev.lug.oak.func.Fun.identity;
 import static dev.lug.oak.type.Nullability.nonNullable;
 
 public interface Convertable<T> extends Queryable<T> {
-  default @NotNull <K, E> Map<? extends K, ? extends E> asMap(final Function1<? super T, ? extends K> key, final Function1<? super T, ? extends E> element) {
+  default @NotNull <K, E> Map<? extends K, ? extends E> asMap(final Fun<? super T, ? extends K> key, final Fun<? super T, ? extends E> element) {
     return new AsMap<>(this, nonNullable(key, "key"), nonNullable(element, "element")).eval();
   }
 
@@ -40,11 +40,11 @@ public interface Convertable<T> extends Queryable<T> {
 
 final class AsMap<T, K, E> implements As<Map<K, E>> {
   private final Queryable<T> queryable;
-  private final Function1<? super T, ? extends K> key;
-  private final Function1<? super T, ? extends E> element;
+  private final Fun<? super T, ? extends K> key;
+  private final Fun<? super T, ? extends E> element;
 
   @Contract(pure = true)
-  AsMap(final Queryable<T> queryable, final Function1<? super T, ? extends K> key, final Function1<? super T, ? extends E> element) {
+  AsMap(final Queryable<T> queryable, final Fun<? super T, ? extends K> key, final Fun<? super T, ? extends E> element) {
     this.queryable = queryable;
     this.key = key;
     this.element = element;

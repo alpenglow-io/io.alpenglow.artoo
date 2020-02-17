@@ -1,7 +1,7 @@
 package dev.lug.oak.query.many;
 
-import dev.lug.oak.func.pre.IntPredicate2;
-import dev.lug.oak.func.pre.Predicate1;
+import dev.lug.oak.func.$2.IntPre;
+import dev.lug.oak.func.Pre;
 import dev.lug.oak.query.Many;
 import dev.lug.oak.query.Queryable;
 import org.jetbrains.annotations.Contract;
@@ -14,11 +14,11 @@ import static dev.lug.oak.type.Nullability.nonNullable;
 import static java.util.Objects.nonNull;
 
 public interface Filterable<T> extends Queryable<T> {
-  default Many<T> where(final Predicate1<? super T> filter) {
+  default Many<T> where(final Pre<? super T> filter) {
     return new Where<>(this, nonNullable(filter, "filter"));
   }
 
-  default Many<T> where(final IntPredicate2<? super T> filter) {
+  default Many<T> where(final IntPre<? super T> filter) {
     return new WhereIth<>(this, nonNullable(filter, "filter"));
   }
 
@@ -29,10 +29,10 @@ public interface Filterable<T> extends Queryable<T> {
 
 final class Where<T> implements Many<T> {
   private final Queryable<T> queryable;
-  private final Predicate1<? super T> filter;
+  private final Pre<? super T> filter;
 
   @Contract(pure = true)
-  Where(final Queryable<T> queryable, final Predicate1<? super T> filter) {
+  Where(final Queryable<T> queryable, final Pre<? super T> filter) {
     this.queryable = queryable;
     this.filter = filter;
   }
@@ -74,10 +74,10 @@ final class OfType<T, C> implements Many<C> {
 
 final class WhereIth<T> implements Many<T> {
   private final Queryable<T> queryable;
-  private final IntPredicate2<? super T> filter;
+  private final IntPre<? super T> filter;
 
   @Contract(pure = true)
-  WhereIth(final Queryable<T> queryable, final IntPredicate2<? super T> filter) {
+  WhereIth(final Queryable<T> queryable, final IntPre<? super T> filter) {
     this.queryable = queryable;
     this.filter = filter;
   }

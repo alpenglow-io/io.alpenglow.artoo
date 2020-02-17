@@ -1,7 +1,7 @@
 package dev.lug.oak.query;
 
-import dev.lug.oak.collect.cursor.Cursor;
-import dev.lug.oak.func.sup.Supplier1;
+import dev.lug.oak.cursor.Cursor;
+import dev.lug.oak.func.Sup;
 import dev.lug.oak.query.many.Aggregatable;
 import dev.lug.oak.query.many.Concatenatable;
 import dev.lug.oak.query.many.Filterable;
@@ -48,7 +48,7 @@ public interface Many<T> extends
 
   @NotNull
   @Contract("_, _ -> new")
-  static <S> Many<S> repeat(final Supplier1<? extends S> supplier, final int count) {
+  static <S> Many<S> repeat(final Sup<? extends S> supplier, final int count) {
     return new Repeat<>(nonNullable(supplier, "supplier"), count);
   }
 }
@@ -69,11 +69,11 @@ final class Empty<Q> implements Many<Q> {
 }
 
 final class Repeat<T> implements Many<T> {
-  private final Supplier1<? extends T> supplier;
+  private final Sup<? extends T> supplier;
   private final int count;
 
   @Contract(pure = true)
-  Repeat(final Supplier1<? extends T> supplier, final int count) {
+  Repeat(final Sup<? extends T> supplier, final int count) {
     this.supplier = supplier;
     this.count = count;
   }

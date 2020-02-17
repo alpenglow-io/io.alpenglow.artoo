@@ -1,6 +1,6 @@
 package dev.lug.oak.desktop.component.grid;
 
-import dev.lug.oak.func.con.Consumer1;
+import dev.lug.oak.func.Con;
 import javafx.scene.layout.ColumnConstraints;
 
 import static javafx.geometry.HPos.CENTER;
@@ -11,7 +11,7 @@ import static javafx.scene.layout.Priority.NEVER;
 import static javafx.scene.layout.Priority.SOMETIMES;
 
 @FunctionalInterface
-public interface ColumnProperty extends Consumer1<ColumnConstraints> {
+public interface ColumnProperty extends Con<ColumnConstraints> {
   static ColumnProperty width(Percent percent) {
     return it -> it.setPercentWidth(percent.get());
   }

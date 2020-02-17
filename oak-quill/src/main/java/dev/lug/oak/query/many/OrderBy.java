@@ -1,6 +1,6 @@
 package dev.lug.oak.query.many;
 
-import dev.lug.oak.func.fun.Function1;
+import dev.lug.oak.func.Fun;
 import dev.lug.oak.query.Many;
 import dev.lug.oak.query.Queryable;
 import org.jetbrains.annotations.Contract;
@@ -19,10 +19,10 @@ import static java.util.Objects.nonNull;
 final class OrderBy<T, K> implements Many<T> {
   private final class Couple {
     private final T value;
-    private final Function1<? super T, ? extends K> order;
+    private final Fun<? super T, ? extends K> order;
 
     @Contract(pure = true)
-    private Couple(final T value, final Function1<? super T, ? extends K> order) {
+    private Couple(final T value, final Fun<? super T, ? extends K> order) {
       this.value = value;
       this.order = order;
     }
@@ -31,10 +31,10 @@ final class OrderBy<T, K> implements Many<T> {
   private final Comparator<? super Couple> comparison = comparingInt(couple -> couple.order.apply(couple.value).hashCode());
 
   private final Queryable<T> queryable;
-  private final Function1<? super T, ? extends K> order;
+  private final Fun<? super T, ? extends K> order;
 
   @Contract(pure = true)
-  OrderBy(final Queryable<T> queryable, final Function1<? super T, ? extends K> order) {
+  OrderBy(final Queryable<T> queryable, final Fun<? super T, ? extends K> order) {
     this.queryable = queryable;
     this.order = order;
   }

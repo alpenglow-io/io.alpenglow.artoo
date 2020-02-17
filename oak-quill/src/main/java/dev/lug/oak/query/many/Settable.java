@@ -1,6 +1,6 @@
 package dev.lug.oak.query.many;
 
-import dev.lug.oak.func.pre.Predicate1;
+import dev.lug.oak.func.Pre;
 import dev.lug.oak.query.Many;
 import dev.lug.oak.query.Queryable;
 import org.jetbrains.annotations.Contract;
@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import static dev.lug.oak.func.pre.Predicate1.tautology;
+import static dev.lug.oak.func.Pre.tautology;
 import static dev.lug.oak.type.Nullability.nonNullable;
 import static java.util.Objects.nonNull;
 
@@ -18,14 +18,14 @@ public interface Settable<T> extends Queryable<T> {
     return new Distinct<>(this);
   }
 
-  default Many<T> distinct(final Predicate1<? super T> filter) {
+  default Many<T> distinct(final Pre<? super T> filter) {
     return new Distinct<>(this, nonNullable(filter, "filter"));
   }
 }
 
 final class Distinct<T> implements Many<T> {
   private final Queryable<T> queryable;
-  private final Predicate1<? super T> filter;
+  private final Pre<? super T> filter;
 
   @Contract(pure = true)
   Distinct(final Queryable<T> queryable) {
@@ -35,7 +35,7 @@ final class Distinct<T> implements Many<T> {
     );
   }
   @Contract(pure = true)
-  Distinct(final Queryable<T> queryable, final Predicate1<? super T> filter) {
+  Distinct(final Queryable<T> queryable, final Pre<? super T> filter) {
     this.queryable = queryable;
     this.filter = filter;
   }

@@ -1,44 +1,44 @@
 package dev.lug.oak.type;
 
-import dev.lug.oak.func.sup.Supplier1;
+import dev.lug.oak.func.Sup;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import static dev.lug.oak.type.Emptyness.Nothing;
 
 @SuppressWarnings("UnusedReturnValue")
-public interface Lazy<T> extends Supplier1<T> {
+public interface Lazy<T> extends Sup<T> {
   @NotNull
   @Contract(value = "_ -> new", pure = true)
-  static <V> Lazy<V> of(final Supplier1<V> supplier) {
+  static <V> Lazy<V> of(final Sup<V> supplier) {
     return new SyncLazy<>(supplier);
   }
 
   @NotNull
   @Contract(pure = true)
-  static <V> Lazy<V> lazy(final Supplier1<V> supplier) {
+  static <V> Lazy<V> lazy(final Sup<V> supplier) {
     return of(supplier);
   }
 
   Lazy<T> release();
-  Lazy<T> attach(final Supplier1<T> attacher);
+  Lazy<T> attach(final Sup<T> attacher);
 }
 
 enum Emptyness {Nothing}
 
 final class SyncLazy<T> implements Lazy<T> {
-  private volatile Supplier1<T> supplier;
+  private volatile Sup<T> supplier;
   private volatile Object value;
 
   @Contract(pure = true)
-  SyncLazy(final Supplier1<T> supplier) {
+  SyncLazy(final Sup<T> supplier) {
     this(
       supplier,
       Nothing
     );
   }
   @Contract(pure = true)
-  private SyncLazy(final Supplier1<T> supplier, final Object value) {
+  private SyncLazy(final Sup<T> supplier, final Object value) {
     this.supplier = supplier;
     this.value = value;
   }
@@ -79,7 +79,7 @@ final class SyncLazy<T> implements Lazy<T> {
 
   @Override
   @Contract("_ -> this")
-  public Lazy<T> attach(final Supplier1<T> supplier) {
+  public Lazy<T> attach(final Sup<T> supplier) {
     synchronized (this) {
       this.supplier = supplier;
       return this;

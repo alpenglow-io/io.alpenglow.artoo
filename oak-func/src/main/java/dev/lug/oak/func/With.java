@@ -1,6 +1,5 @@
 package dev.lug.oak.func;
 
-import dev.lug.oak.func.fun.Function1;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,7 +14,7 @@ public interface With<T> {
     );
   }
 
-  <R> R then(final Function1<T, R> then);
+  <R> R then(final Fun<T, R> then);
 
   final class WithImpl<T> implements With<T> {
     private final T any;
@@ -26,7 +25,7 @@ public interface With<T> {
     }
 
     @Override
-    public final <R> R then(final Function1<T, R> transform) {
+    public final <R> R then(final Fun<T, R> transform) {
       return requireNonNull(transform, "Transform is null").apply(any);
     }
   }

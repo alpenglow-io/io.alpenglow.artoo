@@ -1,12 +1,12 @@
 package dev.lug.oak.desktop.component.grid;
 
-import dev.lug.oak.func.con.Consumer2;
+import dev.lug.oak.func.$2.Con;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 
 import static javafx.scene.layout.ConstraintsBase.CONSTRAIN_TO_PREF;
 
-public interface RowComponent extends Consumer2<GridPane, Integer> {
+public interface RowComponent extends Con<GridPane, Integer> {
   static RowComponent row(RowProperty... properties) {
     return new RowComponentImpl(new RowConstraints(CONSTRAIN_TO_PREF, CONSTRAIN_TO_PREF, CONSTRAIN_TO_PREF), properties);
   }

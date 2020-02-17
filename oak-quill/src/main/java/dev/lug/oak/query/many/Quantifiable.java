@@ -1,10 +1,10 @@
 package dev.lug.oak.query.many;
 
-import dev.lug.oak.collect.cursor.Cursor;
-import dev.lug.oak.func.pre.Predicate1;
+import dev.lug.oak.cursor.Cursor;
+import dev.lug.oak.func.Pre;
 import dev.lug.oak.query.Many;
 import dev.lug.oak.query.Queryable;
-import dev.lug.oak.query.One;
+import dev.lug.oak.query.one.One;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,13 +18,13 @@ public interface Quantifiable<T> extends Queryable<T> {
     return new AllOf<>(this, type);
   }
 
-  default One<Boolean> all(final Predicate1<T> filter) {
+  default One<Boolean> all(final Pre<T> filter) {
     return new All<>(this, nonNullable(filter, "filter"));
   }
 
   default One<Boolean> any() { return this.any(it -> true); }
 
-  default One<Boolean> any(final Predicate1<? super T> filter) {
+  default One<Boolean> any(final Pre<? super T> filter) {
     return new Any<>(this, nonNullable(filter, "filter"));
   }
 }
@@ -53,10 +53,10 @@ final class AllOf<T, C> implements Many<T> {
 
 final class All<T> implements One<Boolean> {
   private final Queryable<T> queryable;
-  private final Predicate1<? super T> filter;
+  private final Pre<? super T> filter;
 
   @Contract(pure = true)
-  All(final Queryable<T> queryable, final Predicate1<? super T> filter) {
+  All(final Queryable<T> queryable, final Pre<? super T> filter) {
     this.queryable = queryable;
     this.filter = filter;
   }
@@ -75,10 +75,10 @@ final class All<T> implements One<Boolean> {
 
 final class Any<T> implements One<Boolean> {
   private final Queryable<T> queryable;
-  private final Predicate1<? super T> filter;
+  private final Pre<? super T> filter;
 
   @Contract(pure = true)
-  Any(final Queryable<T> queryable, final Predicate1<? super T> filter) {
+  Any(final Queryable<T> queryable, final Pre<? super T> filter) {
     this.queryable = queryable;
     this.filter = filter;
   }

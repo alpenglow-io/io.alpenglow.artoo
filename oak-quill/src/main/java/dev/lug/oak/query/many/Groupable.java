@@ -1,13 +1,11 @@
 package dev.lug.oak.query.many;
 
-import dev.lug.oak.func.fun.Function1;
-import dev.lug.oak.func.pre.Predicate2;
-import dev.lug.oak.func.pre.Predicate3;
+import dev.lug.oak.func.Fun;
+import dev.lug.oak.func.$3.Pre;
 import dev.lug.oak.query.Queryable;
-import dev.lug.oak.query.many2.Many2;
-import dev.lug.oak.query.Queryable3;
+import dev.lug.oak.query.many.$2.Many2;
+import dev.lug.oak.query.$3.Queryable3;
 import dev.lug.oak.query.Tuple;
-import dev.lug.oak.query.Tuple2;
 import dev.lug.oak.query.tuple3.Tuple3;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -21,25 +19,25 @@ import java.util.TreeMap;
 import static java.lang.Integer.compare;
 
 public interface Groupable<T> extends Queryable<T> {
-  default <K> Grouping<K, T> groupBy(final Function1<? super T, ? extends K> key) {
+  default <K> Grouping<K, T> groupBy(final Fun<? super T, ? extends K> key) {
     return new GroupBy<>(this, key);
   }
 
   default <K1, K2> Grouping2<K1, K2, T> groupBy(
-    final Function1<? super T, ? extends K1> key1,
-    final Function1<? super T, ? extends K2> key2
+    final Fun<? super T, ? extends K1> key1,
+    final Fun<? super T, ? extends K2> key2
   ) {
     return new GroupBy2<>(this, key1, key2);
   }
 
   interface Grouping<K, T> extends Many2<K, Collection<T>> {
-    default Many2<K, Collection<T>> having(final Predicate2<? super K, ? super Collection<T>> filter) {
+    default Many2<K, Collection<T>> having(final dev.lug.oak.func.$2.Pre filter) {
       return where(filter);
     }
   }
 
   interface Grouping2<K1, K2, T> extends Queryable3<K1, K2, Collection<T>> {
-    default Queryable3<K1, K2, Collection<T>> having(final Predicate3<? super K1, ? super K2, ? super Collection<T>> filter) {
+    default Queryable3<K1, K2, Collection<T>> having(final Pre<? super K1, ? super K2, ? super Collection<T>> filter) {
       return where(filter);
     }
   }
@@ -49,10 +47,10 @@ final class GroupBy<T, K> implements Groupable.Grouping<K, T> {
   private final Comparator<? super K> comparator = (first, second) -> compare(second.hashCode(), first.hashCode());
 
   private final Queryable<T> queryable;
-  private final Function1<? super T, ? extends K> key;
+  private final Fun<? super T, ? extends K> key;
 
   @Contract(pure = true)
-  GroupBy(final Queryable<T> queryable, final Function1<? super T, ? extends K> key) {
+  GroupBy(final Queryable<T> queryable, final Fun<? super T, ? extends K> key) {
     this.queryable = queryable;
     this.key = key;
   }
@@ -76,11 +74,11 @@ final class GroupBy2<T, K1, K2> implements Groupable.Grouping2<K1, K2, T> {
   private final Comparator<? super Tuple2<? extends K1, ? extends K2>> comparator = (first, second) -> compare(second.hashCode(), first.hashCode());
 
   private final Queryable<T> queryable;
-  private final Function1<? super T, ? extends K1> key1;
-  private final Function1<? super T, ? extends K2> key2;
+  private final Fun<? super T, ? extends K1> key1;
+  private final Fun<? super T, ? extends K2> key2;
 
   @Contract(pure = true)
-  GroupBy2(final Queryable<T> queryable, final Function1<? super T, ? extends K1> key1, final Function1<? super T, ? extends K2> key2) {
+  GroupBy2(final Queryable<T> queryable, final Fun<? super T, ? extends K1> key1, final Fun<? super T, ? extends K2> key2) {
     this.queryable = queryable;
     this.key1 = key1;
     this.key2 = key2;

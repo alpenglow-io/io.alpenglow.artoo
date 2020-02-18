@@ -14,7 +14,13 @@ import java.util.Iterator;
 
 import static dev.lug.oak.func.Fun.identity;
 import static dev.lug.oak.func.Pre.tautology;
+import static dev.lug.oak.type.Nullability.nonNullable;
 import static dev.lug.oak.type.Nullability.nonNullableState;
+import static dev.lug.oak.type.Numeric.asDouble;
+import static dev.lug.oak.type.Numeric.asNumber;
+import static dev.lug.oak.type.Numeric.divide;
+import static dev.lug.oak.type.Numeric.one;
+import static dev.lug.oak.type.Numeric.zero;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -25,10 +31,10 @@ public interface Aggregatable<T> extends Queryable<T> {
   private <A, R> One<A> aggregate(final Pre<? super T> filter, final dev.lug.oak.func.Fun map, final A seed, final Fun<? super A, ? super R, ? extends A> reduce) {
     return new Aggregate<>(
       this,
-      Nullability.nonNullable(filter, "filter"),
-      Nullability.nonNullable(map, "map"),
+      nonNullable(filter, "filter"),
+      nonNullable(map, "map"),
       seed,
-      Nullability.nonNullable(reduce, "reduce")
+      nonNullable(reduce, "reduce")
     );
   }
 
@@ -36,9 +42,9 @@ public interface Aggregatable<T> extends Queryable<T> {
     return new Aggregate<>(
       this,
       tautology(),
-      Nullability.nonNullable(map, "map"),
+      nonNullable(map, "map"),
       seed,
-      Nullability.nonNullable(reduce, "reduce")
+      nonNullable(reduce, "reduce")
     );
   }
 
@@ -48,16 +54,16 @@ public interface Aggregatable<T> extends Queryable<T> {
       tautology(),
       identity(),
       seed,
-      Nullability.nonNullable(reduce, "reduce")
+      nonNullable(reduce, "reduce")
     );
   }
 
   default One<T> aggregate(final Fun<? super T, ? super T, ? extends T> reduce) {
-    return new NoSeed<>(this, Nullability.nonNullable(reduce, "reduce"));
+    return new NoSeed<>(this, nonNullable(reduce, "reduce"));
   }
 
   default One<Long> count(final Pre<? super T> filter) {
-    return new Count<>(this, Nullability.nonNullable(filter, "filter"));
+    return new Count<>(this, nonNullable(filter, "filter"));
   }
 
   default One<Long> count() {
@@ -65,7 +71,7 @@ public interface Aggregatable<T> extends Queryable<T> {
   }
 
   default <R, C extends Comparable<R>, V extends C> One<V> max(final dev.lug.oak.func.Fun selector) {
-    return new SelectorMinMax<>(this, Nullability.nonNullable(selector, "selector"), 1);
+    return new SelectorMinMax<>(this, nonNullable(selector, "selector"), 1);
   }
 
   default One<T> max() {
@@ -73,27 +79,59 @@ public interface Aggregatable<T> extends Queryable<T> {
   }
 
   default <R, C extends Comparable<R>, V extends C> One<V> min(final dev.lug.oak.func.Fun selector) {
-    return new SelectorMinMax<>(this, Nullability.nonNullable(selector, "selector"), -1);
+    return new SelectorMinMax<>(this, nonNullable(selector, "selector"), -1);
   }
 
   default One<T> min() {
     return new MinMax<>(this, -1);
   }
 
-  default <N extends Number> One<N> sum(final dev.lug.oak.func.Fun selector) {
-    return new SelectorSum<>(this, Nullability.nonNullable(selector, "selector"));
+  default <V, N extends Number> One<N> average(final dev.lug.oak.func.Fun<? super T, ? extends V> select, final dev.lug.oak.func.Fun<? super V, ? extends N> asNumber) {
+    return nonNullable(select, sel -> nonNullable(asNumber, asN -> () -> {
+      N total = null;
+      N count = null;
+      for (final var next : this) {
+        if (next != null) {
+          final var value = sel.andThen(asN).apply(next);
+          if (value != null) {
+            total = Numeric.sum(total, value);
+            count = Numeric.sum(count, one(value));
+          }
+        }
+      }
+      return count == null || count.equals(zero(count)) ? Cursor.none() : Cursor.once(divide(total, count));
+    }));
   }
 
-  default One<T> sum() {
-    return new Sum<>(this);
-  }
-
-  default <N extends Number> One<Double> average(final dev.lug.oak.func.Fun selector) {
-    return new Average<>(this, Nullability.nonNullable(selector, "selector"), Numeric.asDouble());
+  default <N extends Number> One<Double> average(final dev.lug.oak.func.Fun<? super T, ? extends N> select) {
+    return average(select, asDouble());
   }
 
   default One<Double> average() {
-    return new Average<>(this, identity(), Numeric.asDouble());
+    return average(identity(), asDouble());
+  }
+
+  default <V, N extends Number> One<N> sum(final dev.lug.oak.func.Fun<? super T, ? extends V> select, final dev.lug.oak.func.Fun<? super V, ? extends N> asNumber) {
+    return nonNullable(select, sel -> nonNullable(asNumber, asN -> () -> {
+      N total = null;
+      for (final var next : this) {
+        if (next != null) {
+          final var value = sel.andThen(asN).apply(next);
+          if (value != null) {
+            total = Numeric.sum(total, value);
+          }
+        }
+      }
+      return Cursor.ofNullable(total);
+    }));
+  }
+
+  default <V, N extends Number> One<N> sum(final dev.lug.oak.func.Fun<? super T, ? extends V> select) {
+    return this.<V, N>sum(select, asNumber());
+  }
+
+  default <N extends Number> One<N> sum() {
+    return this.<T, N>sum(identity(), asNumber());
   }
 }
 
@@ -153,41 +191,6 @@ final class NoSeed<T> implements One<T> {
   }
 }
 
-final class Average<T, V> implements One<Double> {
-  private final Queryable<T> queryable;
-  private final dev.lug.oak.func.Fun map;
-  private final dev.lug.oak.func.Fun asDouble;
-
-  @Contract(pure = true)
-  Average(
-    final Queryable<T> queryable,
-    final dev.lug.oak.func.Fun map,
-    final dev.lug.oak.func.Fun asDouble
-  ) {
-    this.queryable = queryable;
-    this.map = map;
-    this.asDouble = asDouble;
-  }
-
-  @Contract(pure = true)
-  @NotNull
-  @Override
-  public final Iterator<Double> iterator() {
-    var total = 0.0;
-    var count = 0;
-    for (final var next : queryable) {
-      if (nonNull(next)) {
-        final var value = map.andThen(asDouble).apply(next);
-        if (nonNull(value)) {
-          total += value;
-          count++;
-        }
-      }
-    }
-    return count == 0 ? Cursor.none() : Cursor.once(total / count);
-  }
-}
-
 final class SelectorMinMax<T, R, C extends Comparable<R>, V extends C> implements One<V> {
   private final Queryable<T> queryable;
   private final dev.lug.oak.func.Fun map;
@@ -244,56 +247,6 @@ final class MinMax<T> implements One<T> {
       }
     }
     return Cursor.once(nonNullableState(result, operation == 1 ? "Max" : "Min", "%s must have at least one Comparable implementation item."));
-  }
-}
-
-final class SelectorSum<T, N extends Number> implements One<N> {
-  private final Queryable<T> queryable;
-  private final dev.lug.oak.func.Fun map;
-
-  @Contract(pure = true)
-  SelectorSum(final Queryable<T> queryable, final dev.lug.oak.func.Fun map) {
-    this.queryable = queryable;
-    this.map = map;
-  }
-
-  @NotNull
-  @Override
-  public final Iterator<N> iterator() {
-    N result = null;
-    for (final var value : queryable) {
-      final var mapped = map.apply(value);
-      if (isNull(result)) {
-        result = mapped;
-      } else if (nonNull(mapped)) {
-        result = Numeric.sum(result, mapped);
-      }
-    }
-    return Cursor.once(nonNullableState(result, "Sum", "%s must have at least one non-null number."));
-  }
-}
-
-final class Sum<T> implements One<T> {
-  private final Queryable<T> queryable;
-
-  @Contract(pure = true)
-  Sum(final Queryable<T> queryable) {this.queryable = queryable;}
-
-  @SuppressWarnings("unchecked")
-  @Contract(pure = true)
-  @Override
-  public final Iterator<T> iterator() {
-    T result = null;
-    for (final var value : queryable) {
-      if (value instanceof Number) {
-        if (result != null && result.getClass().equals(value.getClass())) {
-          result = (T) Numeric.sum((Number) result, (Number) value);
-        } else if (result == null) {
-          result = value;
-        }
-      }
-    }
-    return Cursor.once(nonNullableState(result, "Sum", "%s must have at least one non-null number."));
   }
 }
 

@@ -194,7 +194,7 @@ class AggregatableTest {
 
     for (final var value : from(packages).sum(pack -> pack.weight)) assertThat(value).isEqualTo(83.7f);
     for (final var value : from(25.2f, 18.7f, 6.0f, 33.8f).sum()) assertThat(value).isEqualTo(83.7f);
-    for (final var value : from(25.2f, "Coho Vineyard", "Lucerne Publishing", BigInteger.valueOf(12)).sum())
+    for (final var value : from(25.2f, "Coho Vineyard", "Lucerne Publishing", BigInteger.valueOf(12)).<BigInteger>sum())
       assertThat(value).isEqualTo(25.2f);
     for (final var value : from(null, "Coho Vineyard", "Lucerne Publishing", BigInteger.valueOf(12)).sum())
       assertThat(value).isEqualTo(BigInteger.valueOf(12));

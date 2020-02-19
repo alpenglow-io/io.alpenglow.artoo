@@ -1,11 +1,11 @@
 package dev.lug.oak.query.many;
 
-import dev.lug.oak.query.Many;
-import dev.lug.oak.query.Queryable;
+import oak.query.Many;
+import oak.query.Queryable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static dev.lug.oak.query.Queryable.P.as;
+import static oak.query.Queryable.P.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class JoinableTest {

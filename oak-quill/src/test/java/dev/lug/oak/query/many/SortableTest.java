@@ -1,9 +1,10 @@
 package dev.lug.oak.query.many;
 
+import oak.query.many.OrderBy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static dev.lug.oak.query.Many.from;
+import static oak.query.Many.from;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class SortableTest {

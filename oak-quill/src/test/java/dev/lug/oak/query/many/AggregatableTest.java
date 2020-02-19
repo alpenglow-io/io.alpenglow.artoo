@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
 
-import static dev.lug.oak.func.Pre.not;
-import static dev.lug.oak.query.Many.*;
+import static oak.func.Pre.not;
+import static oak.query.Many.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;

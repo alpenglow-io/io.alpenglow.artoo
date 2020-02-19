@@ -1,0 +1,20 @@
+package oak.func.fun;
+
+import oak.func.Func;
+
+import java.util.function.IntFunction;
+
+@FunctionalInterface
+public interface IntFunc<R> extends Func<Integer, R>, IntFunction<R> {
+  R applyInt(final int value);
+
+  @Override
+  default R apply(final Integer value) {
+    return applyInt(value);
+  }
+
+  @Override
+  default R apply(final int value) {
+    return applyInt(value);
+  }
+}

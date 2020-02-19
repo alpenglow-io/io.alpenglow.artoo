@@ -1,6 +1,6 @@
 package dev.lug.oak.desktop.component;
 
-import dev.lug.oak.func.Sup;
+import oak.func.Sup;
 import javafx.scene.Parent;
 
 public interface Component extends Sup<Parent> {

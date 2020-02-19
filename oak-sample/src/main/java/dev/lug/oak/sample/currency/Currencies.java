@@ -1,8 +1,8 @@
 package dev.lug.oak.sample.currency;
 
-import dev.lug.oak.cursor.Cursor;
-import dev.lug.oak.func.Pre;
-import dev.lug.oak.query.Many;
+import oak.cursor.Cursor;
+import oak.func.Pre;
+import oak.query.Many;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

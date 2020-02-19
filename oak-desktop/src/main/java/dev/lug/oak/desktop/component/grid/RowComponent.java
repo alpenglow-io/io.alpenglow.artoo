@@ -1,6 +1,6 @@
 package dev.lug.oak.desktop.component.grid;
 
-import dev.lug.oak.func.$2.Con;
+import oak.func.$2.Con;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 

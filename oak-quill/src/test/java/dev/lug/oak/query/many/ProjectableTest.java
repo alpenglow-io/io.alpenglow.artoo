@@ -1,6 +1,6 @@
 package dev.lug.oak.query.many;
 
-import dev.lug.oak.query.Queryable;
+import oak.query.Queryable;
 import org.jetbrains.annotations.Contract;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,10 +8,10 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static dev.lug.oak.query.Queryable.P.ith;
-import static dev.lug.oak.query.Queryable.P.as;
-import static dev.lug.oak.query.Queryable.P.array;
-import static dev.lug.oak.query.Many.from;
+import static oak.query.Queryable.P.ith;
+import static oak.query.Queryable.P.as;
+import static oak.query.Queryable.P.array;
+import static oak.query.Many.from;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ProjectableTest {

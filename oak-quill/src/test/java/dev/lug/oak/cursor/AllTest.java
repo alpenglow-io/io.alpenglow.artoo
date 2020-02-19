@@ -1,5 +1,6 @@
 package dev.lug.oak.cursor;
 
+import oak.cursor.All;
 import org.junit.jupiter.api.Test;
 
 import static java.util.stream.Collectors.toList;

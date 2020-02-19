@@ -1,6 +1,6 @@
 package dev.lug.oak.desktop.component.grid;
 
-import dev.lug.oak.func.Con;
+import oak.func.Con;
 import javafx.scene.layout.RowConstraints;
 
 import static javafx.geometry.VPos.BASELINE;

@@ -1,9 +1,9 @@
 package dev.lug.oak.sample.currency;
 
-import dev.lug.oak.cursor.Cursor;
-import dev.lug.oak.query.one.One;
-import dev.lug.oak.type.AsDouble;
-import dev.lug.oak.type.AsString;
+import oak.cursor.Cursor;
+import oak.query.one.One;
+import oak.type.AsDouble;
+import oak.type.AsString;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,32 +39,5 @@ public interface Currency extends One<Currency.Entry> {
   interface Name extends AsString {}
   interface Amount extends AsDouble {}
 
-  final class Entry {
-    private final Id id;
-    private final Name name;
-    private final Amount amount;
-
-    public Entry(final Id id, final Name name, final Amount amount) {
-      this.id = id;
-      this.name = name;
-      this.amount = amount;
-    }
-
-    public Id id() {
-      return id;
-    }
-
-    public Name name() {
-      return name;
-    }
-
-    public Amount amount() {
-      return amount;
-    }
-
-    @Override
-    public final String toString() {
-      return String.format("Currency.Entry {id=%s, name=%s, amount=%s}", id.eval(), name.eval(), amount.eval());
-    }
-  }
+  record Entry(Id id, Name name, Amount amount) {}
 }

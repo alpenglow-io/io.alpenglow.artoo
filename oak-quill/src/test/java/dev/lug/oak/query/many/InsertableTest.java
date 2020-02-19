@@ -1,7 +1,7 @@
 package dev.lug.oak.query.many;
 
-import dev.lug.oak.query.Many;
-import dev.lug.oak.query.one.One;
+import oak.query.Many;
+import oak.query.one.One;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

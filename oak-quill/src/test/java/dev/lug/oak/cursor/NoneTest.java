@@ -1,5 +1,6 @@
 package dev.lug.oak.cursor;
 
+import oak.cursor.None;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

@@ -17,11 +17,7 @@ class AggregatableTest {
   @Test
   @DisplayName("should reduce to the longest name")
   void shouldReduceLongestName() {
-    final var query = from("apple", "mango", "orange", "passionfruit", "grape").aggregate(
-      String::toUpperCase,
-      "banana",
-      (longest, next) -> longest.length() > next.length() ? longest : next
-    );
+    final var query = from("apple", "mango", "orange", "passionfruit", "grape").<String, String>aggregate(String::toUpperCase, (longest, next) -> longest.length() > next.length() ? longest : next);
 
     Assertions.assertThat(query).containsOnly("PASSIONFRUIT");
   }

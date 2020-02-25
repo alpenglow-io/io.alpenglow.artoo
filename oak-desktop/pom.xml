@@ -14,14 +14,14 @@
 
   <properties>
     <controlsfx.version>11.0.0</controlsfx.version>
-    <javafx.version>13</javafx.version>
+    <javafx.version>13.0.2</javafx.version>
   </properties>
 
   <dependencies>
     <dependency>
-      <groupId>dev.lug.oak</groupId>
-      <artifactId>func</artifactId>
-      <version>${oak.version}</version>
+      <groupId>oak</groupId>
+      <artifactId>oak.func</artifactId>
+      <version>1.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
@@ -32,12 +32,6 @@
       <groupId>org.controlsfx</groupId>
       <artifactId>controlsfx</artifactId>
       <version>${controlsfx.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>dev.lug.oak</groupId>
-      <artifactId>dev.lug.oak.func</artifactId>
-      <version>1.0-SNAPSHOT</version>
-      <scope>compile</scope>
     </dependency>
   </dependencies>
 </project>

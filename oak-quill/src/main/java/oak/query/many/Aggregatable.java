@@ -19,27 +19,34 @@ import static oak.type.Numeric.divide;
 import static oak.type.Numeric.one;
 import static oak.type.Numeric.zero;
 
-public interface Aggregatable<T> extends Count<T>, Sum<T>, Average<T>, Limit<T> {
+public interface Aggregatable<T> extends Count<T>, Sum<T>, Average<T>, Extremum<T> {
 }
 
 interface Aggregate<T> extends Queryable<T> {
   @NotNull
   @Contract("_, _, _, _ -> new")
   default <A, R> One<A> aggregate(final A seed, final Pre<? super T> where, final oak.func.Func<? super T, ? extends R> select, final Func<? super A, ? super R, ? extends A> aggregate) {
-    return nonNullable(where, f -> nonNullable(select, m -> nonNullable(aggregate, a -> () -> {
+    nonNullable(where, "where");
+    nonNullable(select, "select");
+    nonNullable(aggregate, "aggregate");
+    return () -> {
       var returned = seed;
-      for (final var value : this) {
+      for (final var value : Aggregate.this) {
         if (where.test(value)) {
           final var apply = select.apply(value);
           returned = aggregate.apply(returned, apply);
         }
       }
       return Cursor.once(returned);
-    })));
+    };
   }
 
   default <A, R> One<A> aggregate(final A seed, final oak.func.Func<? super T, ? extends R> select, final Func<? super A, ? super R, ? extends A> aggregate) {
     return this.aggregate(seed, tautology(), select, aggregate);
+  }
+
+  default <A, R> One<A> aggregate(final oak.func.Func<? super T, ? extends R> select, final Func<? super A, ? super R, ? extends A> aggregate) {
+    return this.aggregate(null, tautology(), select, aggregate);
   }
 
   default <A> One<A> aggregate(final A seed, final Func<? super A, ? super T, ? extends A> aggregate) {
@@ -51,20 +58,11 @@ interface Aggregate<T> extends Queryable<T> {
   }
 }
 
-interface Sum<T> extends Queryable<T> {
+interface Sum<T> extends Aggregate<T> {
   default <V, N extends Number> One<N> sum(final oak.func.Func<? super T, ? extends V> select, final oak.func.Func<? super V, ? extends N> asNumber) {
-    return nonNullable(select, sel -> nonNullable(asNumber, asN -> () -> {
-      N total = null;
-      for (final var next : this) {
-        if (next != null) {
-          final var value = sel.andThen(asN).apply(next);
-          if (value != null) {
-            total = Numeric.sum(total, value);
-          }
-        }
-      }
-      return Cursor.ofNullable(total);
-    }));
+    nonNullable(select, "select");
+    nonNullable(asNumber, "asNumber");
+    return this.<N, N>aggregate(null, tautology(), value -> select.andThen(asNumber).apply(value), Numeric::sum);
   }
 
   default <V, N extends Number> One<N> sum(final oak.func.Func<? super T, ? extends V> select) {
@@ -78,12 +76,14 @@ interface Sum<T> extends Queryable<T> {
 
 interface Average<T> extends Queryable<T> {
   default <V, N extends Number> One<N> average(final oak.func.Func<? super T, ? extends V> select, final oak.func.Func<? super V, ? extends N> asNumber) {
-    return nonNullable(select, sel -> nonNullable(asNumber, asN -> () -> {
+    nonNullable(select, "select");
+    nonNullable(asNumber, "asNumber");
+    return () -> {
       N total = null;
       N count = null;
       for (final var next : this) {
         if (next != null) {
-          final var value = sel.andThen(asN).apply(next);
+          final var value = select.andThen(asNumber).apply(next);
           if (value != null) {
             total = Numeric.sum(total, value);
             count = Numeric.sum(count, one(value));
@@ -91,7 +91,7 @@ interface Average<T> extends Queryable<T> {
         }
       }
       return count == null || count.equals(zero(count)) ? Cursor.none() : Cursor.once(divide(total, count));
-    }));
+    };
   }
 
   default <V, N extends Number> One<N> average(final oak.func.Func<? super T, ? extends V> select) {
@@ -103,41 +103,42 @@ interface Average<T> extends Queryable<T> {
   }
 }
 
-interface Limit<T> extends Aggregate<T> {
+interface Extremum<T> extends Aggregate<T> {
   @NotNull
   private static <T, R> oak.func.Func<? super T, Comparable<? super R>> comparing() {
     return mapped -> result -> compare(result.hashCode(), mapped.hashCode());
   }
 
   default <R> One<R> max(final oak.func.Func<? super T, ? extends R> select) {
-    return this.<R>limits(select, comparing(), 1);
+    return this.<R>ext(select, comparing(), 1);
   }
 
   default One<T> max() {
-    return this.<T>limits(identity(), comparing(), 1);
+    return this.<T>ext(identity(), comparing(), 1);
   }
 
   default <R> One<R> min(final oak.func.Func<? super T, ? extends R> select) {
-    return this.<R>limits(select, comparing(), -1);
+    return this.<R>ext(select, comparing(), -1);
   }
 
   default One<T> min() {
-    return this.<T>limits(identity(), comparing(), -1);
+    return this.<T>ext(identity(), comparing(), -1);
   }
 
-  private <R> One<R> limits(final oak.func.Func<? super T, ? extends R> select, final oak.func.Func<? super R, Comparable<? super R>> where, final int ends) {
+  private <R> One<R> ext(final oak.func.Func<? super T, ? extends R> select, final oak.func.Func<? super R, Comparable<? super R>> where, final int ends) {
     //this.<R, R>aggregate(null, tautology(), select, (current, next) -> where.apply(next).compareTo(current) == ends ? next : current);
-    return nonNullable(select, s -> () -> {
+    nonNullable(select, "select");
+    return () -> {
       R result = null;
       for (final var value : this) {
         if (value != null) {
-          final var mapped = s.apply(value);
+          final var mapped = select.apply(value);
           if (result == null || mapped != null && where.apply(mapped).compareTo(result) == ends)
             result = mapped;
         }
       }
       return Cursor.ofNullable(result);
-    });
+    };
   }
 }
 

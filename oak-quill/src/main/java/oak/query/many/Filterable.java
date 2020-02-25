@@ -4,27 +4,26 @@ import oak.func.$2.IntPre;
 import oak.func.Pre;
 import oak.query.Many;
 import oak.query.Queryable;
-import oak.type.Nullability;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import static oak.type.Nullability.nonNullable;
 import static java.util.Objects.nonNull;
+import static oak.type.Nullability.nonNullable;
 
 public interface Filterable<T> extends Queryable<T> {
   default Many<T> where(final Pre<? super T> filter) {
-    return new Where<>(this, Nullability.nonNullable(filter, "filter"));
+    return new Where<>(this, nonNullable(filter, "filter"));
   }
 
   default Many<T> where(final IntPre<? super T> filter) {
-    return new WhereIth<>(this, Nullability.nonNullable(filter, "filter"));
+    return new WhereIth<>(this, nonNullable(filter, "filter"));
   }
 
   default <C> Many<C> ofType(final Class<? extends C> type) {
-    return new OfType<>(this, Nullability.nonNullable(type, "type"));
+    return new OfType<>(this, nonNullable(type, "type"));
   }
 }
 

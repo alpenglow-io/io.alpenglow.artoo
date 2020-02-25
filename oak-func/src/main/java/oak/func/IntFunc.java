@@ -1,4 +1,4 @@
-package oak.func.fun;
+package oak.func;
 
 import oak.func.Func;
 

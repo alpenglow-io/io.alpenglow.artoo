@@ -1,7 +1,5 @@
 package oak.func;
 
-import oak.func.Func;
-
 import java.util.function.IntFunction;
 
 @FunctionalInterface

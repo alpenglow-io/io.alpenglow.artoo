@@ -1,14 +1,13 @@
 package oak.query.many.$2;
 
-import oak.union.$2.Union;
 import oak.func.$2.Con;
 import oak.func.$2.Func;
-import oak.query.Many;
-import oak.query.one.One;
 import oak.query.Queryable.Tuple2AsAny;
 import oak.query.Queryable.Tuple2AsMany;
 import oak.query.Queryable.Tuple2AsTuple;
+import oak.query.one.One;
 import oak.type.Nullability;
+import oak.union.$2.Union;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,10 +15,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import static oak.query.Queryable.P.as;
-import static oak.type.Nullability.nonNullable;
 
-public interface Projectable2<V1, V2> extends oak.query.$2.Queryable<V1, V2> {
-  default <R> Many<R> select(final Tuple2AsAny<? super V1, ? super V2, ? extends R> map) {
+public interface Projectable<V1, V2> extends oak.query.$2.Queryable<V1, V2> {
+  default <R> oak.query.Many select(final Tuple2AsAny<? super V1, ? super V2, ? extends R> map) {
     Nullability.nonNullable(map, "map");
     return () -> {
       final var array = new ArrayList<R>();
@@ -29,7 +27,7 @@ public interface Projectable2<V1, V2> extends oak.query.$2.Queryable<V1, V2> {
     };
   }
 
-  default <T1, T2, T extends Projectable2<V1, V2> & Filterable2<V1, V2> & Peekable2<V1, V2>> Many2<T1, T2> select(final Tuple2AsTuple<? super V1, ? super V2, ? extends T> map) {
+  default <T1, T2, T extends Projectable<V1, V2> & Filterable<V1, V2> & Peekable2<V1, V2>> Many<T1, T2> select(final Tuple2AsTuple<? super V1, ? super V2, ? extends T> map) {
     Nullability.nonNullable(map, "map");
     return () -> {
       final var array = new ArrayList<Union<T1, T2>>();
@@ -42,7 +40,7 @@ public interface Projectable2<V1, V2> extends oak.query.$2.Queryable<V1, V2> {
     };
   }
 
-  default <T1, T2, M extends Many2<T1, T2>> M select(final Tuple2AsMany<? super V1, ? super V2, ? extends M> flatMap) {
+  default <T1, T2, M extends Many<T1, T2>> M select(final Tuple2AsMany<? super V1, ? super V2, ? extends M> flatMap) {
     Nullability.nonNullable(flatMap, "flatMap");
     return () -> {
       final var array = new ArrayList<Union<T1, T2>>();
@@ -56,12 +54,12 @@ public interface Projectable2<V1, V2> extends oak.query.$2.Queryable<V1, V2> {
     };
   }
 
-  default Many2<V1, V2> peek2(final Con<? super V1, ? super V2> peek) {
-    return new Peek2<>(this, Nullability.nonNullable(peek, "peek"));
+  default Many<V1, V2> peek2(final Con<? super V1, ? super V2> peek) {
+    return new Peek<>(this, Nullability.nonNullable(peek, "peek"));
   }
 }
 
-final class Select2AsAny<V1, V2, R> implements Many<R> {
+final class Select2AsAny<V1, V2, R> implements oak.query.Many {
   private final oak.query.$2.Queryable<V1, V2> queryable;
   private final Func<? super V1, ? super V2, ? extends R> map;
 
@@ -84,12 +82,12 @@ final class Select2AsAny<V1, V2, R> implements Many<R> {
   }
 }
 
-final class Select2As2<V1, V2, T1, T2, T extends Projectable2<V1, V2> & Filterable2<V1, V2> & Peekable2<V1, V2>> implements Many2<T1, T2> {
+final class SelectAs<V1, V2, T1, T2, T extends Projectable<V1, V2> & Filterable<V1, V2> & Peekable2<V1, V2>> implements Many<T1, T2> {
   private final oak.query.$2.Queryable<V1, V2> queryable;
   private final Func<? super V1, ? super V2, ? extends T> map;
 
   @Contract(pure = true)
-  Select2As2(final oak.query.$2.Queryable<V1, V2> queryable, final Func<? super V1, ? super V2, ? extends T> map) {
+  SelectAs(final oak.query.$2.Queryable<V1, V2> queryable, final Func<? super V1, ? super V2, ? extends T> map) {
     this.queryable = queryable;
     this.map = map;
   }
@@ -109,12 +107,12 @@ final class Select2As2<V1, V2, T1, T2, T extends Projectable2<V1, V2> & Filterab
   }
 }
 
-final class Selection2<V1, V2, T1, T2, T extends Projectable2<V1, V2> & Filterable2<V1, V2> & Peekable2<V1, V2>, S extends oak.query.Queryable> implements Many2<T1, T2> {
+final class Selection<V1, V2, T1, T2, T extends Projectable<V1, V2> & Filterable<V1, V2> & Peekable2<V1, V2>, S extends oak.query.Queryable> implements Many<T1, T2> {
   private final oak.query.Queryable queryable;
   private final Func<? super V1, ? super V2, ? extends S> flatMap;
 
   @Contract(pure = true)
-  Selection2(oak.query.Queryable queryable, Func<? super V1, ? super V2, ? extends S> flatMap) {
+  Selection(oak.query.Queryable queryable, Func<? super V1, ? super V2, ? extends S> flatMap) {
     this.queryable = queryable;
     this.flatMap = flatMap;
   }
@@ -132,12 +130,12 @@ final class Selection2<V1, V2, T1, T2, T extends Projectable2<V1, V2> & Filterab
   }
 }
 
-final class Peek2<V1, V2> implements Many2<V1, V2> {
+final class Peek<V1, V2> implements Many<V1, V2> {
   private final oak.query.Queryable queryable;
   private final Con<? super V1, ? super V2> peek;
 
   @Contract(pure = true)
-  Peek2(oak.query.Queryable queryable, Con<? super V1, ? super V2> peek) {
+  Peek(oak.query.Queryable queryable, Con<? super V1, ? super V2> peek) {
     this.queryable = queryable;
     this.peek = peek;
   }

@@ -9,8 +9,8 @@ import java.util.ArrayList;
 
 import static oak.type.Nullability.nonNullable;
 
-public interface Filterable2<V1, V2> extends Queryable<V1, V2> {
-  default Many2<V1, V2> where(final Pre<? super V1, ? super V2> filter) {
+public interface Filterable<V1, V2> extends Queryable<V1, V2> {
+  default Many<V1, V2> where(final Pre<? super V1, ? super V2> filter) {
     Nullability.nonNullable(filter, "filter");
     return () -> {
       final var array = new ArrayList<Union<V1, V2>>();
@@ -19,7 +19,7 @@ public interface Filterable2<V1, V2> extends Queryable<V1, V2> {
     };
   }
 
-  default <T1, T2> Many2<T1, T2> ofTypes(final Class<T1> type1, final Class<T2> type2) {
+  default <T1, T2> Many<T1, T2> ofTypes(final Class<T1> type1, final Class<T2> type2) {
     Nullability.nonNullable(type1, "type1");
     Nullability.nonNullable(type2, "type2");
     return () -> {

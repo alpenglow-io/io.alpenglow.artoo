@@ -1,12 +1,13 @@
 package oak.query.many;
 
-import oak.func.Func;
-import oak.func.$3.Pre;
-import oak.query.Queryable;
-import oak.query.many.$2.Many2;
-import oak.query.$3.Queryable3;
-import oak.query.Tuple;
 import dev.lug.oak.query.tuple3.Tuple3;
+import oak.func.$3.Pre;
+import oak.func.Func;
+import oak.query.$3.Queryable3;
+import oak.query.Queryable;
+import oak.query.Tuple;
+import oak.query.many.$2.Many;
+import oak.union.$2.Union;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +21,18 @@ import static java.lang.Integer.compare;
 
 public interface Groupable<T> extends Queryable<T> {
   default <K> Grouping<K, T> groupBy(final Func<? super T, ? extends K> key) {
-    return new GroupBy<>(this, key);
+    return () -> {
+      final var map = new TreeMap<K, Collection<T>>((Comparator<? super K>) (first, second) -> compare(second.hashCode(), first.hashCode()));
+      for (final var value : this) {
+        final var k = key.apply(value);
+        map.putIfAbsent(k, new ArrayList<>());
+        map.get(k).add(value);
+      }
+      final var array = new ArrayList<Union<K, Collection<T>>>();
+      for (final var entry : map.entrySet())
+        array.add(Union.of(entry.getKey(), entry.getValue()));
+      return array.iterator();
+    };
   }
 
   default <K1, K2> Grouping2<K1, K2, T> groupBy(
@@ -30,9 +42,18 @@ public interface Groupable<T> extends Queryable<T> {
     return new GroupBy2<>(this, key1, key2);
   }
 
-  interface Grouping<K, T> extends Many2<K, Collection<T>> {
-    default Many2<K, Collection<T>> having(final Pre filter) {
-      return where(filter);
+  @FunctionalInterface
+  interface Grouping<K, T> extends oak.collect.$2.Iterable<K, Collection<T>> {
+    default Many<K, Collection<T>> having(final oak.func.$2.Pre<? super K, ? super Collection<T>> having) {
+      return () -> {
+        final var result = new ArrayList<Union<K, Collection<T>>>();
+        for (final var union : this) {
+          if (union.as(having::test)) {
+            result.add(union);
+          }
+        }
+        return result.iterator();
+      };
     }
   }
 
@@ -40,33 +61,6 @@ public interface Groupable<T> extends Queryable<T> {
     default Queryable3<K1, K2, Collection<T>> having(final Pre<? super K1, ? super K2, ? super Collection<T>> filter) {
       return where(filter);
     }
-  }
-}
-
-final class GroupBy<T, K> implements Groupable.Grouping<K, T> {
-  private final Comparator<? super K> comparator = (first, second) -> compare(second.hashCode(), first.hashCode());
-
-  private final Queryable<T> queryable;
-  private final Func<? super T, ? extends K> key;
-
-  @Contract(pure = true)
-  GroupBy(final Queryable<T> queryable, final Func<? super T, ? extends K> key) {
-    this.queryable = queryable;
-    this.key = key;
-  }
-
-  @NotNull
-  @Override
-  public final Iterator<Tuple2<K, Collection<T>>> iterator() {
-    final var map = new TreeMap<K, Collection<T>>(comparator);
-    for (final var value : queryable) {
-      final var k = key.apply(value);
-      map.putIfAbsent(k, new ArrayList<>());
-      map.get(k).add(value);
-    }
-    final var array = new ArrayList<Tuple2<K, Collection<T>>>();
-    for (final var entry : map.entrySet()) array.add(Tuple.of(entry.getKey(), entry.getValue()));
-    return array.iterator();
   }
 }
 

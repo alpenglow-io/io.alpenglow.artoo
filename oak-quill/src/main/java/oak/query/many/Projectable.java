@@ -3,9 +3,8 @@ package oak.query.many;
 import oak.func.Con;
 import oak.func.Func;
 import oak.func.fun.IntFunction2;
-import oak.query.Many;
 import oak.query.Queryable;
-import oak.query.many.$2.Many2;
+import oak.query.many.$2.Many;
 import oak.query.$3.Queryable3;
 import dev.lug.oak.query.tuple3.Tuple3;
 import oak.type.Nullability;
@@ -16,34 +15,34 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public interface Projectable<T> extends Queryable<T> {
-  default <R> Many<R> select(final AnyAsAny<? super T, ? extends R> map) {
+  default <R> oak.query.Many<R> select(final AnyAsAny<? super T, ? extends R> map) {
     return new Select<>(this, Nullability.nonNullable(map, "map"));
   }
 
-  default <R> Many<R> select(final IntFunction2<? super T, ? extends R> mapIndex) {
+  default <R> oak.query.Many select(final IntFunction2<? super T, ? extends R> mapIndex) {
     return new SelectIth<>(this, Nullability.nonNullable(mapIndex, "mapIndex"));
   }
 
-  default <T1, T2, U extends Projectable2<V1, V2> & Filterable2<V1, V2> & Peekable2<V1, V2>> Many2<T1, T2> select(final AnyAsTuple<? super T, ? extends U> tuple) {
-    return new SelectTuple2<>(this, Nullability.nonNullable(tuple, "tuple"));
+  default <T1, T2, U extends Projectable2<V1, V2> & Filterable2<V1, V2> & Peekable2<V1, V2>> Many<T1, T2> select(final AnyAsTuple<? super T, ? extends U> tuple) {
+    return new SelectTuple<>(this, Nullability.nonNullable(tuple, "tuple"));
   }
 
   default <T1, T2, T3, U extends Tuple3<T1, T2, T3>> Queryable3<T1, T2, T3> select(final JustAsTuple3<? super T, ? extends U> tuple) {
     return new SelectTuple3<>(this, Nullability.nonNullable(tuple, "tuple"));
   }
 
-  default <R, S extends Queryable<R>> Many<R> select(final AnyAsQueryable<? super T, ? super R, ? extends S> flatMap) {
+  default <R, S extends Queryable<R>> oak.query.Many select(final AnyAsQueryable<? super T, ? super R, ? extends S> flatMap) {
     return new Selection<>(new Select<>(this, Nullability.nonNullable(flatMap, "flatMap")));
   }
 
   @Deprecated(forRemoval = true)
-  default Many<T> peek(final Con<? super T> peek) {
+  default oak.query.Many peek(final Con<? super T> peek) {
     return new Peek<>(this, Nullability.nonNullable(peek, "peek"));
   }
 
 }
 
-final class Select<T, S> implements Many<S> {
+final class Select<T, S> implements oak.query.Many {
   private final Queryable<T> queryable;
   private final Func<? super T, ? extends S> map;
 
@@ -62,7 +61,7 @@ final class Select<T, S> implements Many<S> {
   }
 }
 
-final class Selection<R, S extends Queryable<R>> implements Many<R> {
+final class Selection<R, S extends Queryable<R>> implements oak.query.Many {
   private final Queryable<S> structables;
 
   @Contract(pure = true)
@@ -83,7 +82,7 @@ final class Selection<R, S extends Queryable<R>> implements Many<R> {
   }
 }
 
-final class Peek<T> implements Many<T> {
+final class Peek<T> implements oak.query.Many {
   private final Queryable<T> queryable;
   private final Con<? super T> peek;
 
@@ -101,7 +100,7 @@ final class Peek<T> implements Many<T> {
   }
 }
 
-final class SelectIth<S, R> implements Many<R> {
+final class SelectIth<S, R> implements oak.query.Many {
   private final Queryable<S> queryable;
   private final IntFunction2<? super S, ? extends R> mapIndex;
 
@@ -123,12 +122,12 @@ final class SelectIth<S, R> implements Many<R> {
   }
 }
 
-final class SelectTuple2<V, T1, T2, T extends Projectable2<V1, V2> & Filterable2<V1, V2> & Peekable2<V1, V2>> implements Many2<T1, T2> {
+final class SelectTuple<V, T1, T2, T extends Projectable2<V1, V2> & Filterable2<V1, V2> & Peekable2<V1, V2>> implements Many<T1, T2> {
   private final Queryable<V> queryable;
   private final Func<? super V, ? extends T> map;
 
   @Contract(pure = true)
-  SelectTuple2(final Queryable<V> queryable, final Func<? super V, ? extends T> map) {
+  SelectTuple(final Queryable<V> queryable, final Func<? super V, ? extends T> map) {
     this.queryable = queryable;
     this.map = map;
   }

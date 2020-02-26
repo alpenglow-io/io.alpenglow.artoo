@@ -1,7 +1,7 @@
 package oak.func;
 
 @FunctionalInterface
-public interface Exe extends Runnable, Func<Void, Void>, Functional.Exe {
+public interface Exec extends Runnable, Func<Void, Void>, Functional.Exe {
   void execute();
 
   @Override

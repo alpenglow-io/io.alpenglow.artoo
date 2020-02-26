@@ -1,9 +1,9 @@
 package dev.lug.oak.desktop.property;
 
-import oak.func.Con;
+import oak.func.Cons;
 import javafx.scene.control.ToggleGroup;
 
-public interface NamedProperty extends Con<ToggleGroup> {
+public interface NamedProperty extends Cons<ToggleGroup> {
   static NamedProperty named(String name) {
     return t -> t.setUserData(name);
   }

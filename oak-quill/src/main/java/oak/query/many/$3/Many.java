@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
-public interface Many3<V1, V2, V3> extends Projectable3<V1, V2, V3>, Filterable3<V1, V2, V3> {
+public interface Many<V1, V2, V3> extends Projectable3<V1, V2, V3>, Filterable3<V1, V2, V3> {
 
 }
 

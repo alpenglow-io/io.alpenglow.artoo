@@ -5,6 +5,8 @@ import oak.func.Func;
 import oak.query.Queryable;
 import oak.type.Nullability;
 
+import java.util.Iterator;
+
 import static oak.type.Nullability.nonNullable;
 import static java.util.Objects.nonNull;
 
@@ -21,14 +23,16 @@ public interface Projectable<T> extends Queryable<T> {
   }
 
   default <R> One<R> select(final Select<? super T, ? extends R> select) {
-    return Nullability.nonNullable(select, m -> () -> {
+    nonNullable(select, "select");
+    return () -> {
       final var value = this.iterator().next();
-      return nonNull(value) ? Cursor.ofNullable(select.apply(value)) : Cursor.none();
-    });
+      return value != null ? Cursor.ofNullable(select.apply(value)) : Cursor.none();
+    };
   }
 
-  default <R, O extends One<? extends R>> One<R> select(final SelectOne<? super T, ? extends R, O> selectOne) {
-    return Nullability.nonNullable(selectOne, f -> () -> select(selectOne).iterator());
+  default <R, O extends One<R>> One<R> select(final SelectOne<? super T, ? extends R, ? extends O> selectOne) {
+    nonNullable(selectOne, "selectOne");
+    return () -> select(as(selectOne::apply)).iterator().next().iterator();
   }
 }
 

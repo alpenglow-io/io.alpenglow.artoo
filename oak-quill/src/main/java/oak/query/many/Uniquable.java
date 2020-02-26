@@ -1,7 +1,7 @@
 package oak.query.many;
 
 import oak.cursor.Cursor;
-import oak.func.Pre;
+import oak.func.Pred;
 import oak.query.Queryable;
 import oak.query.one.One;
 import oak.type.Nullability;
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import static oak.func.Pre.tautology;
+import static oak.func.Pred.tautology;
 import static oak.type.Nullability.nonNullable;
 
 public interface Uniquable<T> extends Queryable<T> {
@@ -23,7 +23,7 @@ public interface Uniquable<T> extends Queryable<T> {
     return new First<>(this, tautology());
   }
 
-  default One<T> first(final Pre<? super T> filter) {
+  default One<T> first(final Pred<? super T> filter) {
     return new First<>(this, Nullability.nonNullable(filter, "filter"));
   }
 
@@ -31,7 +31,7 @@ public interface Uniquable<T> extends Queryable<T> {
     return new Last<>(this, tautology());
   }
 
-  default One<T> last(final Pre<? super T> filter) {
+  default One<T> last(final Pred<? super T> filter) {
     return new Last<>(this, Nullability.nonNullable(filter, "filter"));
   }
 
@@ -39,7 +39,7 @@ public interface Uniquable<T> extends Queryable<T> {
     return new Single<>(this, tautology());
   }
 
-  default One<T> single(final Pre<? super T> filter) {
+  default One<T> single(final Pred<? super T> filter) {
     return new Single<>(this, Nullability.nonNullable(filter, "filter"));
   }
 }
@@ -70,10 +70,10 @@ final class At<T> implements One<T> {
 
 final class First<T> implements One<T> {
   private final Queryable<T> queryable;
-  private final Pre<? super T> filter;
+  private final Pred<? super T> filter;
 
   @Contract(pure = true)
-  First(final Queryable<T> queryable, final Pre<? super T> filter) {
+  First(final Queryable<T> queryable, final Pred<? super T> filter) {
     this.queryable = queryable;
     this.filter = filter;
   }
@@ -91,10 +91,10 @@ final class First<T> implements One<T> {
 
 final class Last<T> implements One<T> {
   private final Queryable<T> queryable;
-  private final Pre<? super T> filter;
+  private final Pred<? super T> filter;
 
   @Contract(pure = true)
-  Last(final Queryable<T> queryable, final Pre<? super T> filter) {
+  Last(final Queryable<T> queryable, final Pred<? super T> filter) {
     this.queryable = queryable;
     this.filter = filter;
   }
@@ -113,10 +113,10 @@ final class Last<T> implements One<T> {
 
 final class Single<T> implements One<T> {
   private final Queryable<T> queryable;
-  private final Pre<? super T> filter;
+  private final Pred<? super T> filter;
 
   @Contract(pure = true)
-  Single(final Queryable<T> queryable, final Pre<? super T> filter) {
+  Single(final Queryable<T> queryable, final Pred<? super T> filter) {
     this.queryable = queryable;
     this.filter = filter;
   }

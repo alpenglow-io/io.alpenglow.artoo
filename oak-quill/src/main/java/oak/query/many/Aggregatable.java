@@ -2,7 +2,7 @@ package oak.query.many;
 
 import oak.cursor.Cursor;
 import oak.func.$2.Func;
-import oak.func.Pre;
+import oak.func.Pred;
 import oak.query.Queryable;
 import oak.query.one.One;
 import oak.type.Numeric;
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static java.lang.Integer.compare;
 import static oak.func.Func.identity;
-import static oak.func.Pre.tautology;
+import static oak.func.Pred.tautology;
 import static oak.type.Nullability.nonNullable;
 import static oak.type.Numeric.asDouble;
 import static oak.type.Numeric.asNumber;
@@ -25,7 +25,7 @@ public interface Aggregatable<T> extends Count<T>, Sum<T>, Average<T>, Extremum<
 interface Aggregate<T> extends Queryable<T> {
   @NotNull
   @Contract("_, _, _, _ -> new")
-  default <A, R> One<A> aggregate(final A seed, final Pre<? super T> where, final oak.func.Func<? super T, ? extends R> select, final Func<? super A, ? super R, ? extends A> aggregate) {
+  default <A, R> One<A> aggregate(final A seed, final Pred<? super T> where, final oak.func.Func<? super T, ? extends R> select, final Func<? super A, ? super R, ? extends A> aggregate) {
     nonNullable(where, "where");
     nonNullable(select, "select");
     nonNullable(aggregate, "aggregate");
@@ -147,7 +147,7 @@ interface Count<T> extends Aggregate<T> {
     return this.count(tautology());
   }
 
-  default One<Long> count(final Pre<? super T> where) {
+  default One<Long> count(final Pred<? super T> where) {
     return this.aggregate(0L, where, identity(), (count, item) -> count + 1);
   }
 }

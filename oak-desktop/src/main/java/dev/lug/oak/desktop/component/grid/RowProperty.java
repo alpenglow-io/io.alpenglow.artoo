@@ -1,6 +1,6 @@
 package dev.lug.oak.desktop.component.grid;
 
-import oak.func.Con;
+import oak.func.Cons;
 import javafx.scene.layout.RowConstraints;
 
 import static javafx.geometry.VPos.BASELINE;
@@ -12,7 +12,7 @@ import static javafx.scene.layout.Priority.NEVER;
 import static javafx.scene.layout.Priority.SOMETIMES;
 
 @FunctionalInterface
-public interface RowProperty extends Con<RowConstraints> {
+public interface RowProperty extends Cons<RowConstraints> {
   static RowProperty height(Percent value) {
     return it -> it.setPercentHeight(value.get());
   }

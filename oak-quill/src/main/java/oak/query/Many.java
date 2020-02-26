@@ -1,7 +1,7 @@
 package oak.query;
 
 import oak.cursor.Cursor;
-import oak.func.Sup;
+import oak.func.Suppl;
 import oak.query.many.Aggregatable;
 import oak.query.many.Concatenatable;
 import oak.query.many.Filterable;
@@ -48,7 +48,7 @@ public interface Many<T> extends
 
   @NotNull
   @Contract("_, _ -> new")
-  static <S> Many<S> repeat(final Sup<? extends S> supplier, final int count) {
+  static <S> Many<S> repeat(final Suppl<? extends S> supplier, final int count) {
     return new Repeat<>(nonNullable(supplier, "supplier"), count);
   }
 }
@@ -69,11 +69,11 @@ final class Empty<Q> implements Many<Q> {
 }
 
 final class Repeat<T> implements Many<T> {
-  private final Sup<? extends T> supplier;
+  private final Suppl<? extends T> supplier;
   private final int count;
 
   @Contract(pure = true)
-  Repeat(final Sup<? extends T> supplier, final int count) {
+  Repeat(final Suppl<? extends T> supplier, final int count) {
     this.supplier = supplier;
     this.count = count;
   }

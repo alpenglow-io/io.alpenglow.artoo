@@ -1,7 +1,7 @@
 package oak.query.one;
 
 import oak.cursor.Cursor;
-import oak.func.Pre;
+import oak.func.Pred;
 import oak.query.Queryable;
 import oak.type.Nullability;
 
@@ -9,7 +9,7 @@ import static oak.type.Nullability.nonNullable;
 import static java.util.Objects.nonNull;
 
 public interface Filterable<T> extends Queryable<T> {
-  default One<T> where(Pre<? super T> filter) {
+  default One<T> where(Pred<? super T> filter) {
     return Nullability.nonNullable(filter, f -> () -> {
       final var value = this.iterator().next();
       return nonNull(value) && filter.apply(value) ? Cursor.all(value) : Cursor.none();

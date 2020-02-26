@@ -1,7 +1,7 @@
 package dev.lug.oak.sample.currency;
 
 import oak.cursor.Cursor;
-import oak.func.Pre;
+import oak.func.Pred;
 import oak.query.Many;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -20,4 +20,4 @@ public interface Currencies extends Many<Currency.Entry> {
   }
 }
 
-interface IdPredicate extends Pre<Currency.Id> {}
+interface IdPredicate extends Pred<Currency.Id> {}

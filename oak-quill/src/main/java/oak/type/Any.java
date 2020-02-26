@@ -1,10 +1,10 @@
 package oak.type;
 
 import oak.cursor.Cursor;
-import oak.func.Con;
-import oak.func.Exe;
-import oak.func.Pre;
-import oak.func.Sup;
+import oak.func.Cons;
+import oak.func.Exec;
+import oak.func.Pred;
+import oak.func.Suppl;
 import oak.query.one.One;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,17 +12,17 @@ import java.util.Iterator;
 
 import static java.util.Objects.requireNonNull;
 
-public interface Any<T> extends Iterable<T>, Sup<T> {
+public interface Any<T> extends Iterable<T>, Suppl<T> {
 
-  default One<T> filter(final Pre<T> predicate) {
+  default One<T> filter(final Pred<T> predicate) {
     return One.of(get()).where(predicate);
   }
 
-  default void eventually(final Con<T> then) {
+  default void eventually(final Cons<T> then) {
     eventually(then, () -> {});
   }
 
-  default void eventually(final Con<T> then, final Exe eventually) {
+  default void eventually(final Cons<T> then, final Exec eventually) {
     if (this.iterator().hasNext()) {
       for (final var value : this) requireNonNull(then, "Then is null").accept(value);
     } else {

@@ -3,7 +3,7 @@ package dev.lug.oak.query.many;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static oak.func.Pre.not;
+import static oak.func.Pred.not;
 import static oak.query.Many.from;
 import static org.assertj.core.api.Assertions.assertThat;
 

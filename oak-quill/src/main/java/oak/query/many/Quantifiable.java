@@ -1,7 +1,7 @@
 package oak.query.many;
 
 import oak.cursor.Cursor;
-import oak.func.Pre;
+import oak.func.Pred;
 import oak.query.Many;
 import oak.query.Queryable;
 import oak.query.one.One;
@@ -18,13 +18,13 @@ public interface Quantifiable<T> extends Queryable<T> {
     return new AllOf<>(this, type);
   }
 
-  default One<Boolean> all(final Pre<T> filter) {
+  default One<Boolean> all(final Pred<T> filter) {
     return new All<>(this, nonNullable(filter, "filter"));
   }
 
   default One<Boolean> any() { return this.any(it -> true); }
 
-  default One<Boolean> any(final Pre<? super T> filter) {
+  default One<Boolean> any(final Pred<? super T> filter) {
     return new Any<>(this, nonNullable(filter, "filter"));
   }
 }
@@ -53,10 +53,10 @@ final class AllOf<T, C> implements Many<T> {
 
 final class All<T> implements One<Boolean> {
   private final Queryable<T> queryable;
-  private final Pre<? super T> filter;
+  private final Pred<? super T> filter;
 
   @Contract(pure = true)
-  All(final Queryable<T> queryable, final Pre<? super T> filter) {
+  All(final Queryable<T> queryable, final Pred<? super T> filter) {
     this.queryable = queryable;
     this.filter = filter;
   }
@@ -75,10 +75,10 @@ final class All<T> implements One<Boolean> {
 
 final class Any<T> implements One<Boolean> {
   private final Queryable<T> queryable;
-  private final Pre<? super T> filter;
+  private final Pred<? super T> filter;
 
   @Contract(pure = true)
-  Any(final Queryable<T> queryable, final Pre<? super T> filter) {
+  Any(final Queryable<T> queryable, final Pred<? super T> filter) {
     this.queryable = queryable;
     this.filter = filter;
   }

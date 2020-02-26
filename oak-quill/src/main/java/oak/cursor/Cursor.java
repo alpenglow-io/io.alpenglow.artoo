@@ -1,7 +1,7 @@
 package oak.cursor;
 
 import oak.func.Func;
-import oak.func.Sup;
+import oak.func.Suppl;
 import oak.type.Nullability;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -82,10 +82,10 @@ public interface Cursor<E> extends Iterator<E> {
   }
 
   static <T, R> Cursor<R> ofSingle(final Iterable<T> iterable, Func<? super T, ? extends R> then) {
-    return ofSingle(iterable, then, Sup.none());
+    return ofSingle(iterable, then, Suppl.none());
   }
 
-  static <T, R> Cursor<R> ofSingle(final Iterable<T> iterable, Func<? super T, ? extends R> then, Sup<? extends R> otherwise) {
+  static <T, R> Cursor<R> ofSingle(final Iterable<T> iterable, Func<? super T, ? extends R> then, Suppl<? extends R> otherwise) {
     final var iter = Nullability.nonNullable(iterable, "iterable").iterator();
     return Cursor.ofNullable(iter.hasNext() ? Nullability.nonNullable(then, "then").apply(iter.next()) : Nullability.nonNullable(otherwise, "otherwise").get());
   }

@@ -2,7 +2,7 @@ package oak.query.many;
 
 import oak.func.$2.IntFunc;
 import oak.func.$2.IntPre;
-import oak.func.Pre;
+import oak.func.Pred;
 import oak.query.Many;
 import oak.query.Queryable;
 
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import static oak.type.Nullability.nonNullable;
 
 public interface Filterable<T> extends Queryable<T> {
-  default Many<T> where(final Pre<? super T> where) {
+  default Many<T> where(final Pred<? super T> where) {
     nonNullable(where, "where");
     return where((index, param) -> where.apply(param));
   }

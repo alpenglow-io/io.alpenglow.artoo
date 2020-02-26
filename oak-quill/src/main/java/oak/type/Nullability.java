@@ -1,10 +1,9 @@
 package oak.type;
 
 import oak.func.Func;
-import oak.func.Sup;
+import oak.func.Suppl;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import static oak.type.Str.str;
 import static java.util.Objects.isNull;
@@ -32,9 +31,9 @@ public interface Nullability {
     return nonNullable(then, "then").apply(nonNullable(value, argument));
   }
 
-  static <R> R nonNullable(final Object[] values, @NotNull final String[] arguments, final Sup<R> sup) {
+  static <R> R nonNullable(final Object[] values, @NotNull final String[] arguments, final Suppl<R> suppl) {
     for (var index = 0; index < values.length; index++) if (values[index] == null) throw illegalArgument(arguments[index]);
-    return sup.get();
+    return suppl.get();
   }
 
   static boolean areNonNullable(@NotNull final Object... arguments) {
@@ -64,7 +63,7 @@ public interface Nullability {
     return any;
   }
 
-  static <T, R> R nullable(final T any, final Func<T, R> then, final Sup<R> otherwise) {
+  static <T, R> R nullable(final T any, final Func<T, R> then, final Suppl<R> otherwise) {
     return nonNull(any)
       ? nonNullable(then, "then").apply(any)
       : nonNullable(otherwise, "otherwise").get();

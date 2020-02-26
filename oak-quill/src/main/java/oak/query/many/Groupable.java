@@ -1,20 +1,13 @@
 package oak.query.many;
 
-import dev.lug.oak.query.tuple3.Tuple3;
-import oak.func.$3.Pre;
 import oak.func.Func;
-import oak.query.$3.Queryable3;
 import oak.query.Queryable;
-import oak.query.Tuple;
 import oak.query.many.$2.Many;
 import oak.union.$2.Union;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.TreeMap;
 
 import static java.lang.Integer.compare;
@@ -34,6 +27,7 @@ public interface Groupable<T> extends Queryable<T> {
       return array.iterator();
     };
   }
+/*
 
   default <K1, K2> Grouping2<K1, K2, T> groupBy(
     final Func<? super T, ? extends K1> key1,
@@ -41,6 +35,7 @@ public interface Groupable<T> extends Queryable<T> {
   ) {
     return new GroupBy2<>(this, key1, key2);
   }
+*/
 
   @FunctionalInterface
   interface Grouping<K, T> extends oak.collect.$2.Iterable<K, Collection<T>> {
@@ -57,12 +52,13 @@ public interface Groupable<T> extends Queryable<T> {
     }
   }
 
-  interface Grouping2<K1, K2, T> extends Queryable3<K1, K2, Collection<T>> {
+/*  interface Grouping2<K1, K2, T> extends Queryable3<K1, K2, Collection<T>> {
     default Queryable3<K1, K2, Collection<T>> having(final Pre<? super K1, ? super K2, ? super Collection<T>> filter) {
       return where(filter);
     }
-  }
+  }*/
 }
+/*
 
 final class GroupBy2<T, K1, K2> implements Groupable.Grouping2<K1, K2, T> {
   private final Comparator<? super Tuple2<? extends K1, ? extends K2>> comparator = (first, second) -> compare(second.hashCode(), first.hashCode());
@@ -96,3 +92,4 @@ final class GroupBy2<T, K1, K2> implements Groupable.Grouping2<K1, K2, T> {
     return array.iterator();
   }
 }
+*/

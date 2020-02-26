@@ -1,5 +1,6 @@
 package oak.query.many;
 
+import oak.func.$2.IntFunc;
 import oak.func.Con;
 import oak.func.Func;
 import oak.func.fun.IntFunction2;
@@ -7,58 +8,57 @@ import oak.query.Queryable;
 import oak.query.many.$2.Many;
 import oak.query.$3.Queryable3;
 import dev.lug.oak.query.tuple3.Tuple3;
-import oak.type.Nullability;
+import oak.union.$2.Union;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import static oak.type.Nullability.*;
+
 public interface Projectable<T> extends Queryable<T> {
-  default <R> oak.query.Many<R> select(final AnyAsAny<? super T, ? extends R> map) {
-    return new Select<>(this, Nullability.nonNullable(map, "map"));
+  interface Select<T, R> extends Func<T, R> {}
+  interface SelectIth<T, R> extends IntFunc<T, R> {}
+  interface SelectMany<T, R, M extends oak.query.Many<R>> extends Func<T, M> {}
+  interface SelectUnion2<T, R1, R2, U extends Union<R1, R2>> extends oak.func.Func<T, U> {}
+  interface SelectUnion3<T, R1, R2, R3, U extends oak.union.$3.Union<R1, R2, R3>> extends oak.func.Func<T, U> {}
+
+  default <R> oak.query.Many<R> select(final Select<? super T, ? extends R> select) {
+    nonNullable(select, "select");
+    return select((index, value) -> select.apply(value));
   }
 
-  default <R> oak.query.Many select(final IntFunction2<? super T, ? extends R> mapIndex) {
-    return new SelectIth<>(this, Nullability.nonNullable(mapIndex, "mapIndex"));
+  default <R> oak.query.Many<R> select(final SelectIth<? super T, ? extends R> selectIth) {
+    nonNullable(selectIth, "selectIth");
+    return () -> {
+      final var array = new ArrayList<R>();
+      var index = 0;
+      for (var cursor = this.iterator(); cursor.hasNext(); index++) {
+        array.add(selectIth.applyInt(index, cursor.next()));
+      }
+      return array.iterator();
+    };
   }
 
-  default <T1, T2, U extends Projectable2<V1, V2> & Filterable2<V1, V2> & Peekable2<V1, V2>> Many<T1, T2> select(final AnyAsTuple<? super T, ? extends U> tuple) {
-    return new SelectTuple<>(this, Nullability.nonNullable(tuple, "tuple"));
+  default <R1, R2, U extends Union<R1, R2>> Many<R1, R2> select(final SelectUnion2<? super T, ? extends R1, ? extends R2, ? extends U> selectUnion2) {
+    nonNullable(selectUnion2, "selectUnion2");
+    return new SelectTuple<>(this, nonNullable(tuple, "tuple"));
   }
 
   default <T1, T2, T3, U extends Tuple3<T1, T2, T3>> Queryable3<T1, T2, T3> select(final JustAsTuple3<? super T, ? extends U> tuple) {
-    return new SelectTuple3<>(this, Nullability.nonNullable(tuple, "tuple"));
+    return new SelectTuple3<>(this, nonNullable(tuple, "tuple"));
   }
 
   default <R, S extends Queryable<R>> oak.query.Many select(final AnyAsQueryable<? super T, ? super R, ? extends S> flatMap) {
-    return new Selection<>(new Select<>(this, Nullability.nonNullable(flatMap, "flatMap")));
+    return new Selection<>(new Select<>(this, nonNullable(flatMap, "flatMap")));
   }
 
   @Deprecated(forRemoval = true)
   default oak.query.Many peek(final Con<? super T> peek) {
-    return new Peek<>(this, Nullability.nonNullable(peek, "peek"));
+    return new Peek<>(this, nonNullable(peek, "peek"));
   }
 
-}
-
-final class Select<T, S> implements oak.query.Many {
-  private final Queryable<T> queryable;
-  private final Func<? super T, ? extends S> map;
-
-  @Contract(pure = true)
-  Select(final Queryable<T> queryable, Func<? super T, ? extends S> map) {
-    this.queryable = queryable;
-    this.map = map;
-  }
-
-  @NotNull
-  @Override
-  public final Iterator<S> iterator() {
-    final var array = new ArrayList<S>();
-    for (var value : queryable) array.add(map.apply(value));
-    return array.iterator();
-  }
 }
 
 final class Selection<R, S extends Queryable<R>> implements oak.query.Many {
@@ -113,12 +113,7 @@ final class SelectIth<S, R> implements oak.query.Many {
   @NotNull
   @Override
   public final Iterator<R> iterator() {
-    final var array = new ArrayList<R>();
-    var index = 0;
-    for (var iterator = queryable.iterator(); iterator.hasNext(); index++) {
-      array.add(mapIndex.applyInt(index, iterator.next()));
-    }
-    return array.iterator();
+
   }
 }
 

@@ -16,12 +16,12 @@ public interface Many<V1, V2> extends Projectable<V1, V2>, Filterable<V1, V2> {
   @SafeVarargs
   static <T1, T2> Many<T1, T2> of(final Union<T1, T2>... unions) {
     nonNullable(unions, "unions");
-    return of(() -> Cursor.all(unions));
+    return from(() -> Cursor.all(unions));
   }
 
   @NotNull
   @Contract("_ -> new")
-  static <T1, T2> Many<T1, T2> of(final Iterable<Union<T1, T2>> unions) {
+  static <T1, T2> Many<T1, T2> from(final Iterable<Union<T1, T2>> unions) {
     nonNullable(unions, "unions");
     return () -> {
       final var array = new ArrayList<Union<T1, T2>>();

@@ -1,7 +1,7 @@
 package oak.query.many;
 
 import oak.func.$2.IntFunc;
-import oak.func.$2.IntPre;
+import oak.func.$2.IntPred;
 import oak.func.Pred;
 import oak.query.Many;
 import oak.query.Queryable;
@@ -16,7 +16,7 @@ public interface Filterable<T> extends Queryable<T> {
     return where((index, param) -> where.apply(param));
   }
 
-  default Many<T> where(final IntPre<? super T> where) {
+  default Many<T> where(final IntPred<? super T> where) {
     return where(where, IntFunc.identity());
   }
 
@@ -24,7 +24,7 @@ public interface Filterable<T> extends Queryable<T> {
     return where((index, it) -> type.isInstance(it), (index, value) -> type.cast(value));
   }
 
-  default <R> Many<R> where(final IntPre<? super T> where, final IntFunc<? super T, ? extends R> select) {
+  default <R> Many<R> where(final IntPred<? super T> where, final IntFunc<? super T, ? extends R> select) {
     nonNullable(where, "where");
     nonNullable(select, "select");
     return () -> {

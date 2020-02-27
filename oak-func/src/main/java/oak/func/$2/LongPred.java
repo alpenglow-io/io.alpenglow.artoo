@@ -3,7 +3,7 @@ package oak.func.$2;
 import oak.func.Functional;
 
 @FunctionalInterface
-public interface LongPre<T> extends Pre<Long, T>, Func<Long, T, Boolean>, Functional.Pre {
+public interface LongPred<T> extends Pred<Long, T>, Functional.Pre {
   boolean verify(final long index, final T param);
 
   @Override

@@ -1,7 +1,7 @@
 package oak.query.many.$2;
 
 import oak.union.$2.Union;
-import oak.func.$2.Pre;
+import oak.func.$2.Pred;
 import oak.query.$2.Queryable;
 import oak.type.Nullability;
 
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import static oak.type.Nullability.nonNullable;
 
 public interface Filterable<V1, V2> extends Queryable<V1, V2> {
-  default Many<V1, V2> where(final Pre<? super V1, ? super V2> filter) {
+  default Many<V1, V2> where(final Pred<? super V1, ? super V2> filter) {
     Nullability.nonNullable(filter, "filter");
     return () -> {
       final var array = new ArrayList<Union<V1, V2>>();

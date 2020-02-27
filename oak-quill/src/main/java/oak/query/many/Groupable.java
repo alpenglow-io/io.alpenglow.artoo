@@ -1,5 +1,6 @@
 package oak.query.many;
 
+import oak.func.$2.Pred;
 import oak.func.Func;
 import oak.query.Queryable;
 import oak.query.many.$2.Many;
@@ -39,7 +40,7 @@ public interface Groupable<T> extends Queryable<T> {
 
   @FunctionalInterface
   interface Grouping<K, T> extends oak.collect.$2.Iterable<K, Collection<T>> {
-    default Many<K, Collection<T>> having(final oak.func.$2.Pre<? super K, ? super Collection<T>> having) {
+    default Many<K, Collection<T>> having(final Pred<? super K, ? super Collection<T>> having) {
       return () -> {
         final var result = new ArrayList<Union<K, Collection<T>>>();
         for (final var union : this) {

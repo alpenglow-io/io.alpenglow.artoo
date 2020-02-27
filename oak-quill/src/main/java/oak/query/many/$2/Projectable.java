@@ -1,6 +1,6 @@
 package oak.query.many.$2;
 
-import oak.func.$2.Con;
+import oak.func.$2.Cons;
 import oak.func.$2.Func;
 import oak.query.Queryable.Tuple2AsAny;
 import oak.query.Queryable.Tuple2AsMany;
@@ -54,7 +54,7 @@ public interface Projectable<V1, V2> extends oak.query.$2.Queryable<V1, V2> {
     };
   }
 
-  default Many<V1, V2> peek2(final Con<? super V1, ? super V2> peek) {
+  default Many<V1, V2> peek2(final Cons<? super V1, ? super V2> peek) {
     return new Peek<>(this, Nullability.nonNullable(peek, "peek"));
   }
 }
@@ -132,10 +132,10 @@ final class Selection<V1, V2, T1, T2, T extends Projectable<V1, V2> & Filterable
 
 final class Peek<V1, V2> implements Many<V1, V2> {
   private final oak.query.Queryable queryable;
-  private final Con<? super V1, ? super V2> peek;
+  private final Cons<? super V1, ? super V2> peek;
 
   @Contract(pure = true)
-  Peek(oak.query.Queryable queryable, Con<? super V1, ? super V2> peek) {
+  Peek(oak.query.Queryable queryable, Cons<? super V1, ? super V2> peek) {
     this.queryable = queryable;
     this.peek = peek;
   }

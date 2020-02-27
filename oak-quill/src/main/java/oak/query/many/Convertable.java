@@ -3,13 +3,10 @@ package oak.query.many;
 import oak.func.Func;
 import oak.func.LongFunc;
 import oak.query.Queryable;
-import oak.type.As;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -40,6 +37,6 @@ public interface Convertable<T> extends Queryable<T> {
 
   default T[] asArray(final LongFunc<T[]> initializer) {
     nonNullable(initializer, "initializer");
-    return ((Count<T>) this::iterator).count().select(as(initializer::applyLong)).asIs();
+    return ((Countable<T>) this::iterator).count().select(as(initializer::applyLong)).asIs();
   }
 }

@@ -1,12 +1,9 @@
 package oak.query.many;
 
-import oak.func.$2.Pre;
+import oak.func.$2.Pred;
 import oak.query.Queryable;
-import oak.query.many.Joinable.Joining;
 import oak.query.many.$2.Many;
 import oak.union.$2.Union;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -30,6 +27,6 @@ public interface Joinable<O> extends Queryable<O> {
   }
 
   interface Joining<O, I> {
-    Many<O, I> on(final Pre<? super O, ? super I> expression);
+    Many<O, I> on(final Pred<? super O, ? super I> expression);
   }
 }

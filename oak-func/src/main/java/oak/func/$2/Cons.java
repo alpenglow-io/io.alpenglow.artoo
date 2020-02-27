@@ -7,8 +7,8 @@ import java.util.function.BiConsumer;
 import static java.util.Objects.requireNonNull;
 
 @FunctionalInterface
-public interface Con<T1, T2> extends BiConsumer<T1, T2>, Func<T1, T2, Void>, Functional.Con {
-  default Con<T1, T2> then(Con<? super T1, ? super T2> after) {
+public interface Cons<T1, T2> extends BiConsumer<T1, T2>, Func<T1, T2, Void>, Functional.Con {
+  default Cons<T1, T2> then(Cons<? super T1, ? super T2> after) {
     requireNonNull(after);
     return (t1, t2) -> { accept(t1, t2); after.accept(t1, t2); };
   }

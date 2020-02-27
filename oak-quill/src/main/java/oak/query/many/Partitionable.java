@@ -1,6 +1,6 @@
 package oak.query.many;
 
-import oak.func.$2.IntPre;
+import oak.func.$2.IntPred;
 import oak.func.Pred;
 import oak.query.Many;
 import oak.query.Queryable;
@@ -26,7 +26,7 @@ public interface Partitionable<T> extends Queryable<T> {
     return skipWhile((index, param) -> where.test(param));
   }
 
-  default Many<T> skipWhile(final IntPre<? super T> where) {
+  default Many<T> skipWhile(final IntPred<? super T> where) {
     nonNullable(where, "where");
     return () -> {
       final var result = new ArrayList<T>();
@@ -59,7 +59,7 @@ public interface Partitionable<T> extends Queryable<T> {
     return takeWhile((index, param) -> where.test(param));
   }
 
-  default Many<T> takeWhile(final IntPre<? super T> where) {
+  default Many<T> takeWhile(final IntPred<? super T> where) {
     nonNullable(where, "where");
     return () -> {
       final var result = new ArrayList<T>();

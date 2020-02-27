@@ -14,7 +14,7 @@ interface Summable<T> extends Queryable<T> {
   default <V, N extends Number> One<N> sum(final oak.func.Func<? super T, ? extends V> select, final oak.func.Func<? super V, ? extends N> asNumber) {
     nonNullable(select, "select");
     nonNullable(asNumber, "asNumber");
-    return new Aggregate<>(this, nothing(), null, tautology(), value -> select.andThen(asNumber).apply(value), Numeric::sum);
+    return new Aggregatable.Aggregate<>(this, nothing(), null, tautology(), value -> select.andThen(asNumber).apply(value), Numeric::sum);
   }
 
   default <V, N extends Number> One<N> sum(final oak.func.Func<? super T, ? extends V> select) {

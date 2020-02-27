@@ -14,7 +14,7 @@ import java.util.Iterator;
 
 import static oak.func.$2.IntCons.nothing;
 import static oak.func.$2.IntPred.tautology;
-import static oak.func.Func.identity;
+import static oak.func.$2.IntFunc.identity;
 import static oak.type.Nullability.nonNullable;
 import static oak.type.Numeric.asDouble;
 import static oak.type.Numeric.asNumber;
@@ -65,8 +65,8 @@ final class Average<T, V, N extends Number> implements One<N> {
     var index = 0;
     for (var iterator = queryable.iterator(); iterator.hasNext(); index++) {
       var next = iterator.next();
+      peek.acceptInt(index, next);
       if (next != null && where.verify(index, next)) {
-        peek.acceptInt(index, next);
         final var value = select.andThen(asNumber).apply(index, next);
         if (value != null) {
           total = Numeric.sum(total, value);

@@ -1,8 +1,9 @@
 package oak.query.many;
 
 import oak.cursor.Cursor;
+import oak.func.$2.IntCons;
+import oak.func.$2.IntPred;
 import oak.func.Pred;
-import oak.query.Many;
 import oak.query.Queryable;
 import oak.query.one.One;
 import org.jetbrains.annotations.Contract;
@@ -10,88 +11,56 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
+import static oak.func.$2.IntPred.tautology;
 import static oak.type.Nullability.nonNullable;
-import static java.util.Objects.nonNull;
 
+// TODO: replace One<Boolean> with OneBoolean (internal primitive boolean and not boxed-boolean)
 public interface Quantifiable<T> extends Queryable<T> {
-  default <C> Many<T> allOf(final Class<C> type) {
-    return new AllOf<>(this, type);
+  default <C> One<Boolean> allTypeOf(final Class<C> type) {
+    return all((index, value) -> type.isInstance(value));
   }
 
-  default One<Boolean> all(final Pred<T> filter) {
-    return new All<>(this, nonNullable(filter, "filter"));
+  default One<Boolean> all(final Pred<? super T> where) {
+    nonNullable(where, "where");
+    return all((index, value) -> where.test(value));
   }
 
-  default One<Boolean> any() { return this.any(it -> true); }
-
-  default One<Boolean> any(final Pred<? super T> filter) {
-    return new Any<>(this, nonNullable(filter, "filter"));
-  }
-}
-
-final class AllOf<T, C> implements Many<T> {
-  private final Queryable<T> queryable;
-  private final Class<C> type;
-
-  @Contract(pure = true)
-  AllOf(final Queryable<T> queryable, final Class<C> type) {
-    this.queryable = queryable;
-    this.type = type;
+  default One<Boolean> all(final IntPred<? super T> where) {
+    return new Quantify<>(this, IntCons.nothing(), false, nonNullable(where, "where"));
   }
 
-  @NotNull
-  @Override
-  public final Iterator<T> iterator() {
-    var all = true;
-    final var cursor = queryable.iterator();
-    while (cursor.hasNext() && all) {
-      all = type.isInstance(cursor.next());
-    }
-    return all ? queryable.iterator() : Cursor.none();
+  default One<Boolean> any() { return this.any(tautology()); }
+
+  default One<Boolean> any(final IntPred<? super T> where) {
+    return new Quantify<>(this, IntCons.nothing(), true, nonNullable(where, "where"));
   }
 }
 
-final class All<T> implements One<Boolean> {
+final class Quantify<T> implements One<Boolean> {
   private final Queryable<T> queryable;
-  private final Pred<? super T> filter;
+  private final IntCons<? super T> peek;
+  private final boolean once;
+  private final IntPred<? super T> where;
 
   @Contract(pure = true)
-  All(final Queryable<T> queryable, final Pred<? super T> filter) {
+  Quantify(final Queryable<T> queryable, IntCons<? super T> peek, final boolean once, final IntPred<? super T> where) {
     this.queryable = queryable;
-    this.filter = filter;
+    this.peek = peek;
+    this.once = once;
+    this.where = where;
   }
 
   @NotNull
   @Override
   public final Iterator<Boolean> iterator() {
-    var all = true;
-    for (final var iterator = queryable.iterator(); iterator.hasNext() && all;) {
-      final var next = iterator.next();
-      all = nonNull(next) && filter.test(next);
+    var all = !once;
+    var any = once;
+    var index = 0;
+    for (final var iterator = queryable.iterator(); iterator.hasNext() && (all || !any); index++) {
+      final var it = iterator.next();
+      peek.acceptInt(index, it);
+      all = any = it != null && where.test(index, it);
     }
-    return Cursor.once(all);
-  }
-}
-
-final class Any<T> implements One<Boolean> {
-  private final Queryable<T> queryable;
-  private final Pred<? super T> filter;
-
-  @Contract(pure = true)
-  Any(final Queryable<T> queryable, final Pred<? super T> filter) {
-    this.queryable = queryable;
-    this.filter = filter;
-  }
-
-  @NotNull
-  @Contract(pure = true)
-  @Override
-  public final Iterator<Boolean> iterator() {
-    var any = false;
-    for (final var iterator = queryable.iterator(); iterator.hasNext() && !any;) {
-      final var next = iterator.next();
-      any = nonNull(next) && filter.test(next);
-    }
-    return Cursor.once(any);
+    return Cursor.of(once || all);
   }
 }

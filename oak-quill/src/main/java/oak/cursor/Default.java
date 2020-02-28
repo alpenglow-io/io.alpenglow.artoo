@@ -1,11 +1,20 @@
 package oak.cursor;
 
-import dev.lug.oak.cursor.$2.None2;
-import oak.cursor.$3.Cursor;
-import dev.lug.oak.cursor.$3.None3;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
 
-enum Default {
-  ;
-  public static oak.cursor.$2.Cursor None2 = new None2<>();
-  public static Cursor<?, ?, ?> None3 = new None3<>();
+enum Default implements Cursor<Object> {
+  None;
+
+  @Override
+  public boolean hasNext() {
+    return false;
+  }
+
+  @Nullable
+  @Contract(pure = true)
+  @Override
+  public Object next() {
+    return null;
+  }
 }

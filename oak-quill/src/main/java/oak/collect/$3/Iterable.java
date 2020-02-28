@@ -1,7 +1,6 @@
 package oak.collect.$3;
 
 import oak.union.$3.Union;
-import oak.func.$3.Con;
 
 import java.util.Objects;
 

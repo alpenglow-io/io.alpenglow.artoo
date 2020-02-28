@@ -12,13 +12,13 @@ public interface Currency extends One<Currency.Entry> {
   @NotNull
   @Contract("_, _, _ -> new")
   static Currency of(@NotNull final Id id, @NotNull final Name name, @NotNull final Amount amount) {
-    return () -> Cursor.once(new Entry(id, name, amount));
+    return () -> Cursor.of(new Entry(id, name, amount));
   }
 
   @NotNull
   @Contract(pure = true)
   static Currency from(final Currency.Entry entry) {
-    return () -> Cursor.once(entry);
+    return () -> Cursor.of(entry);
   }
 
   default Currency change(Name name) {

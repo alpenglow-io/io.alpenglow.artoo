@@ -17,6 +17,7 @@ public interface Concatenatable<T> extends Queryable<T> {
   }
 }
 
+// TODO: where and select are missing
 final class Concat<T> implements Many<T> {
   private final Queryable<T> queryable;
   private final IntCons<? super T> peek;

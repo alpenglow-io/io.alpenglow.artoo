@@ -3,12 +3,8 @@ package oak.query.one;
 import oak.cursor.Cursor;
 import oak.func.Func;
 import oak.query.Queryable;
-import oak.type.Nullability;
-
-import java.util.Iterator;
 
 import static oak.type.Nullability.nonNullable;
-import static java.util.Objects.nonNull;
 
 public interface Projectable<T> extends Queryable<T> {
   interface Select<T, R> extends Func<T, R> {}
@@ -26,7 +22,7 @@ public interface Projectable<T> extends Queryable<T> {
     nonNullable(select, "select");
     return () -> {
       final var value = this.iterator().next();
-      return value != null ? Cursor.ofNullable(select.apply(value)) : Cursor.none();
+      return value != null ? Cursor.of(select.apply(value)) : Cursor.none();
     };
   }
 

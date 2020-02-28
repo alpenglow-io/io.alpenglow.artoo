@@ -1,6 +1,7 @@
 package oak.query.many;
 
 import oak.cursor.Cursor;
+import oak.func.$2.IntCons;
 import oak.func.Pred;
 import oak.query.Queryable;
 import oak.query.one.One;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import static oak.func.Pred.tautology;
+import static oak.type.Nullability.*;
 import static oak.type.Nullability.nonNullable;
 
 public interface Uniquable<T> extends Queryable<T> {
@@ -20,27 +22,27 @@ public interface Uniquable<T> extends Queryable<T> {
   }
 
   default One<T> first() {
-    return new First<>(this, tautology());
+    return new Unique<>(this, IntCons.nothing(), true, false, tautology());
   }
 
-  default One<T> first(final Pred<? super T> filter) {
-    return new First<>(this, Nullability.nonNullable(filter, "filter"));
+  default One<T> first(final Pred<? super T> where) {
+    return new Unique<>(this, IntCons.nothing(), true, false, nonNullable(where, "where"));
   }
 
   default One<T> last() {
-    return new Last<>(this, tautology());
+    return last(tautology());
   }
 
-  default One<T> last(final Pred<? super T> filter) {
-    return new Last<>(this, Nullability.nonNullable(filter, "filter"));
+  default One<T> last(final Pred<? super T> where) {
+    return new Unique<>(this, IntCons.nothing(), false, false, nonNullable(where, "where"));
   }
 
   default One<T> single() {
-    return new Single<>(this, tautology());
+    return single(tautology());
   }
 
-  default One<T> single(final Pred<? super T> filter) {
-    return new Single<>(this, Nullability.nonNullable(filter, "filter"));
+  default One<T> single(final Pred<? super T> where) {
+    return new Unique<>(this, IntCons.nothing(), false, true, nonNullable(where, "where"));
   }
 }
 
@@ -64,83 +66,40 @@ final class At<T> implements One<T> {
     }
     if (count < index)
       returned = null;
-    return Cursor.ofNullable(returned);
+    return Cursor.of(returned);
   }
 }
 
-final class First<T> implements One<T> {
+final class Unique<T> implements One<T> {
   private final Queryable<T> queryable;
-  private final Pred<? super T> filter;
+  private final IntCons<? super T> peek;
+  private final boolean first;
+  private final boolean single;
+  private final Pred<? super T> where;
 
   @Contract(pure = true)
-  First(final Queryable<T> queryable, final Pred<? super T> filter) {
+  Unique(final Queryable<T> queryable, final IntCons<? super T> peek, final boolean first, final boolean single, final Pred<? super T> where) {
     this.queryable = queryable;
-    this.filter = filter;
+    this.peek = peek;
+    this.first = first;
+    this.single = single;
+    this.where = where;
   }
 
   @NotNull
   @Override
   public final Iterator<T> iterator() {
     T result = null;
-    final var cursor = queryable.iterator();
-    if (cursor.hasNext()) result = cursor.next();
-    if (cursor.hasNext()) result = null;
-    return Cursor.ofNullable(result);
-  }
-}
-
-final class Last<T> implements One<T> {
-  private final Queryable<T> queryable;
-  private final Pred<? super T> filter;
-
-  @Contract(pure = true)
-  Last(final Queryable<T> queryable, final Pred<? super T> filter) {
-    this.queryable = queryable;
-    this.filter = filter;
-  }
-
-  @NotNull
-  @Override
-  public final Iterator<T> iterator() {
-    T last = null;
-    for (final var value : queryable) {
-      if (filter.test(value))
-        last = value;
-    }
-    return Cursor.ofNullable(last);
-  }
-}
-
-final class Single<T> implements One<T> {
-  private final Queryable<T> queryable;
-  private final Pred<? super T> filter;
-
-  @Contract(pure = true)
-  Single(final Queryable<T> queryable, final Pred<? super T> filter) {
-    this.queryable = queryable;
-    this.filter = filter;
-  }
-
-  @NotNull
-  @Override
-  public final Iterator<T> iterator() {
-    if (filter.equals(tautology())) {
-      final var cursor = queryable.iterator();
-      final var returned = cursor.next();
-      if (cursor.hasNext())
-        throw new IllegalStateException("Queryable must contain one element.");
-      return Cursor.once(returned);
-    } else {
-      final var array = new ArrayList<T>();
-      for (final var cursor = queryable.iterator(); cursor.hasNext() && array.size() < 2; ) {
-        final var next = cursor.next();
-        if (filter.test(next)) {
-          array.add(next);
-        }
+    var done = false;
+    var index = 0;
+    for (var cursor = queryable.iterator(); cursor.hasNext() && (!first || result == null) && !done; index++) {
+      var it = cursor.next();
+      peek.acceptInt(index, it);
+      if (it != null && where.test(it)) {
+        done = single && result != null;
+        result = !single || result == null ? it : null;
       }
-      if (array.size() > 1)
-        throw new IllegalStateException("Queryable must satisfy the condition once.");
-      return Cursor.once(array.get(0));
     }
+    return Cursor.of(result);
   }
 }

@@ -1,7 +1,6 @@
 package oak.query.many.$3;
 
-import oak.func.$3.Fun;
-import oak.func.$3.Pre;
+import oak.func.$3.Func;
 import oak.query.Queryable;
 import oak.query.$3.Queryable3;
 import oak.query.Tuple;
@@ -51,7 +50,7 @@ final class Where3<V1, V2, V3> implements Queryable3<V1, V2, V3> {
 
 final class OfType3<V1, V2, V3, T1, T2, T3> implements Queryable3<T1, T2, T3> {
   @SuppressWarnings("unchecked")
-  private final Fun<V1, V2, V3, @NotNull Tuple3<T1, T2, T3>> asTuple = (v1, v2, v3) -> Tuple.of((T1) v1, (T2) v2, (T3) v3);
+  private final Func<V1, V2, V3, @NotNull Tuple3<T1, T2, T3>> asTuple = (v1, v2, v3) -> Tuple.of((T1) v1, (T2) v2, (T3) v3);
 
   private final Queryable<Tuple3<V1, V2, V3>> queryable;
   private final Pre<? super V1, ? super V2, ? super V3> areTypes;

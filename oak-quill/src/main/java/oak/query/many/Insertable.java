@@ -13,13 +13,14 @@ import static java.util.Collections.addAll;
 import static oak.func.$2.IntCons.nothing;
 import static oak.type.Nullability.nonNullable;
 
+@SuppressWarnings("unchecked")
 public interface Insertable<T> extends Queryable<T> {
-  @SuppressWarnings("unchecked")
   default Many<T> insert(final T... values) {
     return new Insert<>(this, nothing(), nonNullable(values, "values"));
   }
 }
 
+// TODO: where and select are missing
 final class Insert<T> implements Many<T> {
   private final Queryable<T> queryable;
   private final IntCons<? super T> peek;

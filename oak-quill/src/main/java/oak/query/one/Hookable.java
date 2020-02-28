@@ -10,7 +10,7 @@ public interface Hookable<T> extends Queryable<T> {
     return () -> {
       final var value = this.iterator().next();
       exec.execute();
-      return Cursor.ofNullable(value);
+      return Cursor.of(value);
     };
   }
 
@@ -18,7 +18,7 @@ public interface Hookable<T> extends Queryable<T> {
     return () -> {
       final var value = this.iterator().next();
       peek.accept(value);
-      return Cursor.ofNullable(value);
+      return Cursor.of(value);
     };
   }
 }

@@ -16,7 +16,7 @@ public interface Many<V1, V2> extends Projectable<V1, V2>, Filterable<V1, V2> {
   @SafeVarargs
   static <T1, T2> Many<T1, T2> of(final Union<T1, T2>... unions) {
     nonNullable(unions, "unions");
-    return from(() -> Cursor.all(unions));
+    return from(() -> Cursor.many(unions));
   }
 
   @NotNull

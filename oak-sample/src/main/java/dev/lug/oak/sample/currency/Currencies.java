@@ -10,7 +10,7 @@ public interface Currencies extends Many<Currency.Entry> {
   @NotNull
   @Contract("_ -> new")
   static Currencies from(final Currency.Entry... entries) {
-    return () -> Cursor.all(entries);
+    return () -> Cursor.many(entries);
   }
 
   default Currency one(final Currency.Id id) {

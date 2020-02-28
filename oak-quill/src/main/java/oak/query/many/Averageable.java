@@ -19,7 +19,6 @@ import static oak.type.Nullability.nonNullable;
 import static oak.type.Numeric.asDouble;
 import static oak.type.Numeric.asNumber;
 import static oak.type.Numeric.divide;
-import static oak.type.Numeric.one;
 import static oak.type.Numeric.zero;
 
 interface Averageable<T> extends Queryable<T> {
@@ -74,6 +73,6 @@ final class Average<T, V, N extends Number> implements One<N> {
         }
       }
     }
-    return count == null || count.equals(zero(count)) ? Cursor.none() : Cursor.once(divide(total, count));
+    return count == null || count.equals(zero(count)) ? Cursor.none() : Cursor.of(divide(total, count));
   }
 }

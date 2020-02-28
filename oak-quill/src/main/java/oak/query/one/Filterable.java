@@ -12,7 +12,7 @@ public interface Filterable<T> extends Queryable<T> {
   default One<T> where(Pred<? super T> filter) {
     return Nullability.nonNullable(filter, f -> () -> {
       final var value = this.iterator().next();
-      return nonNull(value) && filter.apply(value) ? Cursor.all(value) : Cursor.none();
+      return nonNull(value) && filter.apply(value) ? Cursor.many(value) : Cursor.none();
     });
   }
 

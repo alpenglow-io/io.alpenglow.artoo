@@ -1,7 +1,6 @@
 package oak.query.many.$3;
 
-import oak.func.$3.Con;
-import oak.func.$3.Fun;
+import oak.func.$3.Func;
 import oak.query.Queryable;
 import oak.query.$3.Queryable3;
 import dev.lug.oak.query.tuple3.Tuple3;
@@ -16,15 +15,15 @@ import java.util.Iterator;
 import static oak.type.Nullability.nonNullable;
 
 public interface Projectable3<V1, V2, V3> extends Queryable3<V1, V2, V3> {
-  default <R> Many<R> select(final Fun<? super V1, ? super V2, ? super V3, ? extends R> map) {
+  default <R> Many<R> select(final Func<? super V1, ? super V2, ? super V3, ? extends R> map) {
     return new SelectT3<>(this, Nullability.nonNullable(map, "map"));
   }
 
-  default <T1, T2, T3, T extends Tuple3<T1, T2, T3>> Queryable3<T1, T2, T3> select3(final Fun<? super V1, ? super V2, ? super V3, ? extends T> map) {
+  default <T1, T2, T3, T extends Tuple3<T1, T2, T3>> Queryable3<T1, T2, T3> select3(final Func<? super V1, ? super V2, ? super V3, ? extends T> map) {
     return new Select3<>(this, Nullability.nonNullable(map, "map"));
   }
 
-  default <T1, T2, T3, T extends Tuple3<T1, T2, T3>, S extends Queryable<T>> Queryable3<T1, T2, T3> selection3(final Fun<? super V1, ? super V2, ? super V3, ? extends S> flatMap) {
+  default <T1, T2, T3, T extends Tuple3<T1, T2, T3>, S extends Queryable<T>> Queryable3<T1, T2, T3> selection3(final Func<? super V1, ? super V2, ? super V3, ? extends S> flatMap) {
     return new Selection3<>(this, Nullability.nonNullable(flatMap, "flatMap"));
   }
 
@@ -35,10 +34,10 @@ public interface Projectable3<V1, V2, V3> extends Queryable3<V1, V2, V3> {
 
 final class SelectT3<V1, V2, V3, R> implements Many<R> {
   private final Queryable<Tuple3<V1, V2, V3>> queryable;
-  private final Fun<? super V1, ? super V2, ? super V3, ? extends R> map;
+  private final Func<? super V1, ? super V2, ? super V3, ? extends R> map;
 
   @Contract(pure = true)
-  SelectT3(final Queryable<Tuple3<V1, V2, V3>> queryable, final Fun<? super V1, ? super V2, ? super V3, ? extends R> map) {
+  SelectT3(final Queryable<Tuple3<V1, V2, V3>> queryable, final Func<? super V1, ? super V2, ? super V3, ? extends R> map) {
     this.queryable = queryable;
     this.map = map;
   }
@@ -58,10 +57,10 @@ final class SelectT3<V1, V2, V3, R> implements Many<R> {
 
 final class Select3<V1, V2, V3, T1, T2, T3, T extends Tuple3<T1, T2, T3>> implements Queryable3<T1, T2, T3> {
   private final Queryable<Tuple3<V1, V2, V3>> queryable;
-  private final Fun<? super V1, ? super V2, ? super V3, ? extends T> map;
+  private final Func<? super V1, ? super V2, ? super V3, ? extends T> map;
 
   @Contract(pure = true)
-  Select3(final Queryable<Tuple3<V1, V2, V3>> queryable, final Fun<? super V1, ? super V2, ? super V3, ? extends T> map) {
+  Select3(final Queryable<Tuple3<V1, V2, V3>> queryable, final Func<? super V1, ? super V2, ? super V3, ? extends T> map) {
     this.queryable = queryable;
     this.map = map;
   }
@@ -82,10 +81,10 @@ final class Select3<V1, V2, V3, T1, T2, T3, T extends Tuple3<T1, T2, T3>> implem
 
 final class Selection3<V1, V2, V3, T1, T2, T3, T extends Tuple3<T1, T2, T3>, S extends Queryable<T>> implements Queryable3<T1, T2, T3> {
   private final Queryable<Tuple3<V1, V2, V3>> queryable;
-  private final Fun<? super V1, ? super V2, ? super V3, ? extends S> flatMap;
+  private final Func<? super V1, ? super V2, ? super V3, ? extends S> flatMap;
 
   @Contract(pure = true)
-  Selection3(Queryable<Tuple3<V1, V2, V3>> queryable, Fun<? super V1, ? super V2, ? super V3, ? extends S> flatMap) {
+  Selection3(Queryable<Tuple3<V1, V2, V3>> queryable, Func<? super V1, ? super V2, ? super V3, ? extends S> flatMap) {
     this.queryable = queryable;
     this.flatMap = flatMap;
   }

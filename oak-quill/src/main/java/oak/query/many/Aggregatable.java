@@ -75,7 +75,7 @@ final class Aggregate<T, A, R> implements One<A> {
         aggregated = aggregate.apply(aggregated, apply);
       }
     }
-    return Cursor.once(aggregated);
+    return Cursor.of(aggregated);
   }
 }
 

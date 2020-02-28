@@ -69,6 +69,18 @@ public interface Nullability {
       : nonNullable(otherwise, "otherwise").get();
   }
 
+  static <T1, T2, R> R nullable(final T1 value1, final T2 value2, final oak.func.$2.Func<T1, T2, R> then, final Suppl<R> otherwise) {
+    return value1 == null && value2 == null
+      ? nonNullable(otherwise, "otherwise").get()
+      : nonNullable(then, "then").apply(value1, value2);
+  }
+
+  static <T1, T2, T3, R> R nullable(final T1 value1, final T2 value2, final T3 value3, final oak.func.$3.Func<T1, T2, T3, R> then, final Suppl<R> otherwise) {
+    return value1 == null && value2 == null
+      ? nonNullable(otherwise, "otherwise").get()
+      : nonNullable(then, "then").apply(value1, value2);
+  }
+
   static <T, R> R nonNullable(final T any, final Func<T, R> then, final String message) {
     if (isNull(any)) throw new IllegalStateException(requireNonNullElse(message, "Any is null"));
     return then.apply(any);

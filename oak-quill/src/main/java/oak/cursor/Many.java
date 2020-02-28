@@ -6,15 +6,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.util.Objects.nonNull;
 
-final class All<E> implements Cursor<E> {
+final class Many<E> implements Cursor<E> {
   private final E[] es;
   private final AtomicInteger index;
 
-  All(E[] es) {
+  Many(E[] es) {
     this(es, new AtomicInteger(0));
   }
   @Contract(pure = true)
-  private All(E[] es, AtomicInteger index) {
+  private Many(E[] es, AtomicInteger index) {
     this.es = es;
     this.index = index;
   }

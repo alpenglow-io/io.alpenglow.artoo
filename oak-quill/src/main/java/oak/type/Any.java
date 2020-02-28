@@ -33,6 +33,6 @@ public interface Any<T> extends Iterable<T>, Suppl<T> {
   @NotNull
   @Override
   default Iterator<T> iterator() {
-    return Cursor.ofNullable(this.get());
+    return Cursor.of(this.get());
   }
 }

@@ -7,7 +7,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class AllTest {
+class QuantifyTest {
   @Test
   void shouldHaveNext() {
     assertThat(new All<>(new Integer[]{1, 2, 3}).hasNext()).isTrue();

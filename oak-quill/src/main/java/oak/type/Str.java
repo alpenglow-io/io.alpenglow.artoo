@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 public interface Str {
   @NotNull
   @Contract(value = "_ -> new", pure = true)
-  static Str str(final String value) {
+  static Str $(final String value) {
     return new StrImpl(value);
   }
 

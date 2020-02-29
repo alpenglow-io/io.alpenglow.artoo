@@ -5,7 +5,7 @@ import oak.func.Suppl;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import static oak.type.Str.str;
+import static oak.type.Str.$;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNullElse;
@@ -22,7 +22,7 @@ public interface Nullability {
     return new IllegalArgumentException(
       requireNonNullElse(
         argument,
-        str("%s can't be null.").format(argument) + ""
+        $("%s can't be null.").format(argument) + ""
       )
     );
   }
@@ -57,7 +57,7 @@ public interface Nullability {
   static <T> T nonNullableState(final T any, final String argument, final String formatted) {
     if (isNull(any)) {
       throw new IllegalStateException(
-        str(nonNullable(formatted, "formatted")).format(nonNullable(argument, "argument")) + ""
+        $(nonNullable(formatted, "formatted")).format(nonNullable(argument, "argument")) + ""
       );
     }
     return any;

@@ -42,7 +42,7 @@ public interface Many<T> extends
   @NotNull
   @Contract(value = " -> new", pure = true)
   @SuppressWarnings("unchecked")
-  static <T> Many<T> empty() {
+  static <T> Many<T> none() {
     return (Many<T>) DefaultMany.Empty;
   }
 

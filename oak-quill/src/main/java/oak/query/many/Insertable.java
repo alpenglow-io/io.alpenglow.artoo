@@ -13,8 +13,8 @@ import static java.util.Collections.addAll;
 import static oak.func.$2.IntCons.nothing;
 import static oak.type.Nullability.nonNullable;
 
-@SuppressWarnings("unchecked")
 public interface Insertable<T> extends Queryable<T> {
+  @SuppressWarnings("unchecked")
   default Many<T> insert(final T... values) {
     return new Insert<>(this, nothing(), nonNullable(values, "values"));
   }

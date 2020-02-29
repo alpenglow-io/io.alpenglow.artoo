@@ -14,6 +14,6 @@ interface Countable<T> extends Queryable<T> {
   }
 
   default One<Long> count(final Pred<? super T> where) {
-    return new Aggregatable.Aggregate<>(this, nothing(), 0L, where, identity(), (count, item) -> count + 1);
+    return new Aggregate<>(this, nothing(), 0L, where, identity(), (count, item) -> count + 1);
   }
 }

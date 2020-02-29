@@ -42,9 +42,14 @@ public interface Cursor<E> extends Iterator<E> {
   }
 
   @NotNull
+  static <T> Cursor<T> none() {
+    return Cursor.of(null);
+  }
+
+  @NotNull
   @Contract(pure = true)
   static <V1, V2> oak.cursor.$2.Cursor<V1, V2> of(final V1 value1, final V2 value2) {
-    return nullable(value1, value2, (v1, v2) -> oak.cursor.$2.Cursor.two(v1, v2), () -> ) ;
+    return nullable(value1, value2, oak.cursor.$2.Cursor::two, () -> ) ;
   }
 }
 

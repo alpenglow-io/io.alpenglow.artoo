@@ -9,18 +9,24 @@ public interface IntPred<T> extends Pred<Integer, T>, Func<Integer, T, Boolean>,
   @NotNull
   @Contract(pure = true)
   static <T> IntPred<T> tautology() {
-    return (index, value) -> true;
+    return (index, it) -> true;
   }
 
-  boolean verify(final int index, final T param);
+  @NotNull
+  @Contract(pure = true)
+  static <T> IntPred<T> not(final IntPred<T> pred) {
+    return (index, it) -> !pred.apply(index, it);
+  }
+
+  boolean verify(final int index, final T it);
 
   @Override
-  default Boolean apply(Integer index, T param) {
-    return verify(index, param);
+  default Boolean apply(Integer index, T it) {
+    return verify(index, it);
   }
 
   @Override
-  default boolean test(Integer index, T param) {
-    return verify(index, param);
+  default boolean test(Integer index, T it) {
+    return verify(index, it);
   }
 }

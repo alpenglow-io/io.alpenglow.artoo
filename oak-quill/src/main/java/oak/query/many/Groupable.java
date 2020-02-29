@@ -2,10 +2,8 @@ package oak.query.many;
 
 import oak.NotImplementedYetException;
 import oak.func.$2.IntCons;
-import oak.func.$2.Pred;
 import oak.func.Func;
 import oak.query.Queryable;
-import oak.query.many.$2.Many;
 import oak.union.$2.Union;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -32,23 +30,9 @@ public interface Groupable<T> extends Queryable<T> {
   }
 
 
-  @FunctionalInterface
-  interface Grouping<K, T> extends oak.collect.$2.Iterable<K, oak.query.Many<T>> {
-    default Many<K, oak.query.Many<T>> having(final Pred<? super K, ? super oak.query.Many<T>> having) {
-      return () -> {
-        final var result = new ArrayList<Union<K, oak.query.Many<T>>>();
-        for (final var union : this) {
-          if (union.as(having::test)) {
-            result.add(union);
-          }
-        }
-        return result.iterator();
-      };
-    }
-  }
 }
 
-final class GroupBy<K, T> implements Groupable.Grouping<K, T> {
+final class GroupBy<K, T> implements Grouping<K, T> {
   private final Comparator<? super K> comparator = (first, second) -> compare(second.hashCode(), first.hashCode());
 
   private final Queryable<T> queryable;

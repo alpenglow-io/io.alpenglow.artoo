@@ -1,57 +1,35 @@
 package oak.query.many;
 
+import oak.func.$2.IntCons;
 import oak.func.$2.IntPred;
 import oak.func.Pred;
 import oak.query.Many;
 import oak.query.Queryable;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
 
+import static oak.func.$2.IntPred.not;
 import static oak.type.Nullability.nonNullable;
 
 public interface Partitionable<T> extends Queryable<T> {
   default Many<T> skip(final int until) {
-    return () -> {
-      var skip = 0;
-      var array = new ArrayList<T>();
-      for (final var it : this)
-        if (skip++ >= until)
-          array.add(it);
-      return array.iterator();
-    };
+    return skipWhile((index, it) -> index < until);
   }
 
   default Many<T> skipWhile(final Pred<? super T> where) {
-    nonNullable(where, "filter");
-    return skipWhile((index, param) -> where.test(param));
+    return skipWhile((index, it) -> !where.apply(it));
   }
 
   default Many<T> skipWhile(final IntPred<? super T> where) {
-    nonNullable(where, "where");
-    return () -> {
-      final var result = new ArrayList<T>();
-      var keepSkipping = true;
-      var index = 0;
-      for (final var cursor = this.iterator(); cursor.hasNext(); index++) {
-        var value = cursor.next();
-        if (!where.verify(index, value) || !keepSkipping) {
-          result.add(value);
-          keepSkipping = false;
-        }
-      }
-      return result.iterator();
-    };
+    return new Partition<>(this, IntCons.nothing(), not(nonNullable(where, "where")));
   }
 
   default Many<T> take(final int until) {
-    return () -> {
-      var take = 0;
-      var seq = new ArrayList<T>();
-      for (final var it : this)
-        if (take++ < until)
-          seq.add(it);
-      return seq.iterator();
-    };
+    return new Partition<>(this, IntCons.nothing(), (index, it) -> index < until);
   }
 
   default Many<T> takeWhile(final Pred<? super T> where) {
@@ -60,20 +38,41 @@ public interface Partitionable<T> extends Queryable<T> {
   }
 
   default Many<T> takeWhile(final IntPred<? super T> where) {
-    nonNullable(where, "where");
-    return () -> {
-      final var result = new ArrayList<T>();
-      var keepTaking = true;
-      var index = 0;
-      for (var cursor = this.iterator(); cursor.hasNext() && keepTaking; index++) {
+    return new Partition<>(this, IntCons.nothing(), nonNullable(where, "where"));
+  }
+}
+
+final class Partition<T> implements Many<T> {
+  private final Queryable<T> queryable;
+  private final IntCons<? super T> peek;
+  private final IntPred<? super T> where;
+
+  @Contract(pure = true)
+  Partition(final Queryable<T> queryable, final IntCons<? super T> peek, final IntPred<? super T> where) {
+    this.queryable = queryable;
+    this.peek = peek;
+    this.where = where;
+  }
+
+  @NotNull
+  @Override
+  public final Iterator<T> iterator() {
+    final var result = new ArrayList<T>();
+    var index = 0;
+    var cursor = queryable.iterator();
+    var verified = false;
+    if (cursor.hasNext()) {
+      do
+      {
         final var it = cursor.next();
-        if (where.verify(index, it)) {
+        peek.applyInt(index, it);
+        verified = where.verify(index, it);
+        if (it != null && verified) {
           result.add(it);
-        } else {
-          keepTaking = false;
         }
-      }
-      return result.iterator();
-    };
+        index++;
+      } while (cursor.hasNext() && verified);
+    }
+    return result.iterator();
   }
 }

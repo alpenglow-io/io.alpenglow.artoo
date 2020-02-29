@@ -6,12 +6,12 @@ import org.jetbrains.annotations.NotNull;
 
 import static oak.type.Nullability.nonNullable;
 
-final class Once<V1, V2> implements Cursor<V1, V2> {
+final class One<V1, V2> implements Cursor<V1, V2> {
   private final V1 value1;
   private final V2 value2;
   private boolean notRead;
 
-  Once(final V1 value1, final V2 value2) {
+  One(final V1 value1, final V2 value2) {
     this.value1 = value1;
     this.value2 = value2;
     this.notRead = true;

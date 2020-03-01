@@ -1,22 +1,7 @@
 package oak.query.many.$2;
 
-import oak.func.$2.Cons;
-import oak.func.$2.Func;
-import oak.query.Queryable.Tuple2AsAny;
-import oak.query.Queryable.Tuple2AsMany;
-import oak.query.Queryable.Tuple2AsTuple;
-import oak.query.one.One;
-import oak.type.Nullability;
-import oak.union.$2.Union;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-
-import static oak.query.Queryable.P.as;
-
 public interface Projectable<V1, V2> extends oak.query.$2.Queryable<V1, V2> {
+  /*
   default <R> oak.query.Many select(final Tuple2AsAny<? super V1, ? super V2, ? extends R> map) {
     Nullability.nonNullable(map, "map");
     return () -> {
@@ -146,5 +131,5 @@ final class Peek<V1, V2> implements Many<V1, V2> {
     for (final var value : queryable)
       value.peek(peek);
     return queryable.iterator();
-  }
+  }*/
 }

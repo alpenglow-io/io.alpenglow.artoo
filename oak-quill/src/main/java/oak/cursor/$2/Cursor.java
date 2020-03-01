@@ -5,6 +5,7 @@ import oak.func.$2.Func;
 import oak.union.$2.Union;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
@@ -30,6 +31,13 @@ public interface Cursor<V1, V2> extends Iterator<V1, V2>, Union<V1, V2> {
     return new Wrapped<>(nonNullable(iterator, "iterator"));
   }
 
+  @SuppressWarnings("unchecked")
+  static <V1, V2> Cursor<V1, V2> none() {
+    return (Cursor<V1, V2>) Default.None;
+  }
+
   @Override
-  default Union<V1, V2> next() { return this; }
+  default Union<V1, V2> next() {
+    return this;
+  }
 }

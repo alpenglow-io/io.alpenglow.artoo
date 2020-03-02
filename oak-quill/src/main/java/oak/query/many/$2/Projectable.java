@@ -2,7 +2,7 @@ package oak.query.many.$2;
 
 public interface Projectable<V1, V2> extends oak.query.$2.Queryable<V1, V2> {
   /*
-  default <R> oak.query.Many select(final Tuple2AsAny<? super V1, ? super V2, ? extends R> map) {
+  default <R> oak.query.many.Many select(final Tuple2AsAny<? super V1, ? super V2, ? extends R> map) {
     Nullability.nonNullable(map, "map");
     return () -> {
       final var array = new ArrayList<R>();
@@ -44,7 +44,7 @@ public interface Projectable<V1, V2> extends oak.query.$2.Queryable<V1, V2> {
   }
 }
 
-final class Select2AsAny<V1, V2, R> implements oak.query.Many {
+final class Select2AsAny<V1, V2, R> implements oak.query.many.Many {
   private final oak.query.$2.Queryable<V1, V2> queryable;
   private final Func<? super V1, ? super V2, ? extends R> map;
 

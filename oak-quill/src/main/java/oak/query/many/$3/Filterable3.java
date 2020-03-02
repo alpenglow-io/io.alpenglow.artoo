@@ -3,7 +3,6 @@ package oak.query.many.$3;
 import oak.func.$3.Func;
 import oak.query.Queryable;
 import oak.query.$3.Queryable3;
-import oak.query.Tuple;
 import dev.lug.oak.query.tuple3.Tuple3;
 import oak.query.many.Filterable;
 import oak.type.Nullability;

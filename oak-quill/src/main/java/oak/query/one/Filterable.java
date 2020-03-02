@@ -1,25 +1,21 @@
 package oak.query.one;
 
-import oak.cursor.Cursor;
+import oak.func.$2.IntCons;
+import oak.func.$2.IntFunc;
 import oak.func.Pred;
 import oak.query.Queryable;
-import oak.type.Nullability;
+import oak.query.internal.Where;
 
 import static oak.type.Nullability.nonNullable;
-import static java.util.Objects.nonNull;
 
 public interface Filterable<T> extends Queryable<T> {
-  default One<T> where(Pred<? super T> filter) {
-    return Nullability.nonNullable(filter, f -> () -> {
-      final var value = this.iterator().next();
-      return nonNull(value) && filter.apply(value) ? Cursor.many(value) : Cursor.none();
-    });
+  default One<T> where(Pred<? super T> where) {
+    nonNullable(where, "where");
+    return () -> new Where<>(this, IntCons.nothing(), (index, it) -> where.test(it), IntFunc.identity()).iterator();
   }
 
   default <R> One<R> ofType(Class<? extends R> type) {
-    return Nullability.nonNullable(type, t -> () -> {
-      final var value = this.iterator().next();
-      return nonNull(value) && t.isInstance(value) ? Cursor.all(t.cast(value)) : Cursor.none();
-    });
+    nonNullable(type, "type");
+    return () -> new Where<T, R>(this, IntCons.nothing(), ((index, it) -> type.isInstance(it)), (index, it) -> type.cast(it)).iterator();
   }
 }

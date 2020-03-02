@@ -1,7 +1,6 @@
 package oak.query.many;
 
 import oak.func.$2.IntCons;
-import oak.query.Many;
 import oak.query.Queryable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

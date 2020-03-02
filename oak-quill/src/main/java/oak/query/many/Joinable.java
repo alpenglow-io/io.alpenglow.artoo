@@ -11,7 +11,7 @@ public interface Joinable<T1> extends Queryable<T1> {
 
   @SuppressWarnings("unchecked")
   default <T2> Joining<T1, T2> join(final T2... values) {
-    return join(oak.query.Many.from(values));
+    return join(Many.from(values));
   }
 }
 

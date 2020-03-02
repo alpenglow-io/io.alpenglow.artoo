@@ -11,7 +11,7 @@ import java.util.Collections;
 import static oak.query.Queryable.P.ith;
 import static oak.query.Queryable.P.as;
 import static oak.query.Queryable.P.array;
-import static oak.query.Many.from;
+import static oak.query.many.Many.from;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ProjectableTest {

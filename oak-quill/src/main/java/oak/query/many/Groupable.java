@@ -48,20 +48,20 @@ final class GroupBy<K, T> implements Grouping<K, T> {
 
   @NotNull
   @Override
-  public final Iterator<Union<K, oak.query.Many<T>>> iterator() {
-    final var map = new TreeMap<K, oak.query.Many<T>>(comparator);
+  public final Iterator<Union<K, Many<T>>> iterator() {
+    final var map = new TreeMap<K, Many<T>>(comparator);
     var index = 0;
     for (var cursor = queryable.iterator(); cursor.hasNext(); index++) {
       var it = cursor.next();
       peek.acceptInt(index, it);
       if (it != null) {
         final var k = key.apply(it);
-        map.putIfAbsent(k, oak.query.Many.none());
+        map.putIfAbsent(k, Many.none());
         //noinspection unchecked
         map.put(k, map.get(k).insert(it));
       }
     }
-    final var array = new ArrayList<Union<K, oak.query.Many<T>>>();
+    final var array = new ArrayList<Union<K, Many<T>>>();
     for (final var entry : map.entrySet())
       array.add(Union.of(entry.getKey(), entry.getValue()));
     return array.iterator();

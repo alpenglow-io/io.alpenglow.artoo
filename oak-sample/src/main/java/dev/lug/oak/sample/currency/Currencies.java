@@ -2,7 +2,7 @@ package dev.lug.oak.sample.currency;
 
 import oak.cursor.Cursor;
 import oak.func.Pred;
-import oak.query.Many;
+import oak.query.many.Many;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

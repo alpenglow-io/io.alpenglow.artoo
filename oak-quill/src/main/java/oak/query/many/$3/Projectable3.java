@@ -4,7 +4,7 @@ import oak.func.$3.Func;
 import oak.query.Queryable;
 import oak.query.$3.Queryable3;
 import dev.lug.oak.query.tuple3.Tuple3;
-import oak.query.Many;
+import oak.query.many.Many;
 import oak.type.Nullability;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

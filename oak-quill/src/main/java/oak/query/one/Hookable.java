@@ -1,24 +1,29 @@
 package oak.query.one;
 
-import oak.cursor.Cursor;
-import oak.func.Cons;
-import oak.func.Exec;
+import oak.func.$2.IntCons;
 import oak.query.Queryable;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Iterator;
 
 public interface Hookable<T> extends Queryable<T> {
-  default One<T> sleek(final Exec exec) {
-    return () -> {
-      final var value = this.iterator().next();
-      exec.execute();
-      return Cursor.of(value);
-    };
+  default One<T> peek(final IntCons<? super T> peek) {
+    return () -> Peek<>(this, peek);
+  }
+}
+
+final class Peek<T> implements Queryable<T> {
+  private final Queryable<T> queryable;
+  private final IntCons<? super T> peek;
+
+  Peek(Queryable<T> queryable, IntCons<? super T> peek) {
+    this.queryable = queryable;
+    this.peek = peek;
   }
 
-  default One<T> peek(final Cons<? super T> peek) {
-    return () -> {
-      final var value = this.iterator().next();
-      peek.accept(value);
-      return Cursor.of(value);
-    };
+  @NotNull
+  @Override
+  public final Iterator<T> iterator() {
+    return null;
   }
 }

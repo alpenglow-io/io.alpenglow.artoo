@@ -4,12 +4,13 @@ import oak.func.$2.IntFunc;
 import oak.func.Func;
 import oak.query.Queryable;
 import oak.query.internal.Selection;
+import oak.query.one.Sneakable;
 import oak.union.$2.Union;
 
 import static oak.func.$2.IntCons.nothing;
 import static oak.type.Nullability.nonNullable;
 
-public interface Projectable<T> extends Queryable<T> {
+public interface Projectable<T> extends Sneakable<T> {
   interface Select<T, R> extends Func<T, R> {}
   interface SelectIth<T, R> extends IntFunc<T, R> {}
   interface SelectMany<T, R, M extends Many<R>> extends Func<T, M> {}
@@ -40,10 +41,9 @@ public interface Projectable<T> extends Queryable<T> {
     return () -> new Selection<>(this, nothing(), select).iterator();
   }
 
-  default <R, M extends Many<R>> Many<R> select(SelectMany<? super T, ? extends R, M> select) {
+  default <R, M extends Many<R>> Many<R> select(SelectMany<? super T, ? extends R, ? extends M> select) {
     nonNullable(select, "select");
-    return () -> new Selection<>(this, nothing(), (index, value) -> select.apply(value)).iterator();
+    return () -> new Selection<>(this, this.sneak(), (index, it) -> select.apply(it)).iterator();
   }
-
 }
 

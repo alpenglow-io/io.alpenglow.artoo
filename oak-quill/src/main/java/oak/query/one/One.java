@@ -6,7 +6,7 @@ import oak.query.Queryable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-public interface One<T> extends Projectable<T>, Filterable<T>, Either<T>, Unwrappable<T> {
+public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Either<T>, Unwrappable<T> {
   static <L> One<L> of(final L value) {
     return value != null ? One.just(value) : One.none();
   }

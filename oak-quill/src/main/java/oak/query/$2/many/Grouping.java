@@ -1,8 +1,8 @@
-package oak.query.many.$2;
+package oak.query.$2.many;
 
 import oak.func.$3.Pred;
 import oak.query.$3.Queryable;
-import oak.query.many.Many;
+import oak.query.Many;
 
 public interface Grouping<T1, T2, R> extends oak.query.$3.Queryable<T1, T2, Many<R>> {
   default Queryable<T1, T2, Many<R>> having(final Pred<? super T1, ? super T2, ? super Many<R>> where) {

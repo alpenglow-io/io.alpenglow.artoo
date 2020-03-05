@@ -5,7 +5,7 @@ import oak.func.Cons;
 import oak.func.Exec;
 import oak.func.Pred;
 import oak.func.Suppl;
-import oak.query.one.One;
+import oak.query.One;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;

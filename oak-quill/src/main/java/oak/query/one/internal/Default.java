@@ -1,11 +1,12 @@
-package oak.query.one;
+package oak.query.one.internal;
 
 import oak.cursor.Cursor;
+import oak.query.One;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
-enum Default implements One<Object> {
+public enum Default implements One<Object> {
   None;
 
   @NotNull

@@ -1,31 +1,56 @@
 package oak.query;
 
 import oak.func.Suppl;
-import oak.query.many.Many;
+import oak.query.many.Aggregatable;
+import oak.query.many.Concatenatable;
+import oak.query.many.Default;
+import oak.query.many.Filterable;
+import oak.query.many.Groupable;
+import oak.query.many.Insertable;
+import oak.query.many.Joinable;
+import oak.query.many.Partitionable;
+import oak.query.many.Projectable;
+import oak.query.many.Quantifiable;
+import oak.query.many.Settable;
+import oak.query.many.Uniquable;
+import oak.query.many.internal.Array;
+import oak.query.many.internal.Iteration;
+import oak.query.many.internal.Repeat;
+import oak.query.one.Either;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Arrays;
 
-final class Repeat<T> implements Many<T> {
-  private final Suppl<? extends T> supplier;
-  private final int count;
+import static oak.type.Nullability.nonNullable;
 
-  @Contract(pure = true)
-  Repeat(final Suppl<? extends T> supplier, final int count) {
-    this.supplier = supplier;
-    this.count = count;
+public interface Many<T> extends
+  Projectable<T>, Filterable<T>, Partitionable<T>, Uniquable<T>, Aggregatable<T>, Concatenatable<T>, Groupable<T>,
+  Joinable<T>, Quantifiable<T>, Settable<T>, Insertable<T>, Either<T> {
+
+  @NotNull
+  @Contract("_ -> new")
+  @SafeVarargs
+  static <T> Many<T> from(final T... items) {
+    return new Array<>(Arrays.copyOf(items, items.length));
   }
 
   @NotNull
-  @Override
-  public final Iterator<T> iterator() {
-    final var array = new ArrayList<T>();
-    for (var index = 0; index < count; index++) {
-      array.add(supplier.get());
-    }
-    return array.iterator();
+  @Contract("_ -> new")
+  static <T> Many<T> from(final Iterable<T> iterable) {
+    return new Iteration<>(nonNullable(iterable, "iterable"));
+  }
+
+  @NotNull
+  @Contract(value = " -> new", pure = true)
+  @SuppressWarnings("unchecked")
+  static <T> Many<T> none() {
+    return (Many<T>) Default.None;
+  }
+
+  @NotNull
+  @Contract("_, _ -> new")
+  static <S> Many<S> repeat(final Suppl<? extends S> supplier, final int count) {
+    return new Repeat<>(nonNullable(supplier, "supplier"), count);
   }
 }
-

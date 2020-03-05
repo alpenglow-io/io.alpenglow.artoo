@@ -16,6 +16,9 @@ public final class Where<T, R> implements Queryable<R> {
   private final IntPred<? super T> where;
   private final IntFunc<? super T, ? extends R> select;
 
+  public Where(final Queryable<T> queryable, final IntPred<? super T> where, final IntFunc<? super T, ? extends R> select) {
+    this(queryable, null, where, select);
+  }
   @Contract(pure = true)
   public Where(final Queryable<T> queryable, final IntCons<? super T> peek, final IntPred<? super T> where, final IntFunc<? super T, ? extends R> select) {
     this.queryable = queryable;

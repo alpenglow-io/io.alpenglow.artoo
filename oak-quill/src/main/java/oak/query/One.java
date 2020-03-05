@@ -1,8 +1,12 @@
-package oak.query.one;
+package oak.query;
 
-import oak.cursor.Cursor;
-import oak.func.$2.IntCons;
-import oak.query.Queryable;
+import oak.query.one.Either;
+import oak.query.one.Filterable;
+import oak.query.one.Peekable;
+import oak.query.one.Projectable;
+import oak.query.one.Unwrappable;
+import oak.query.one.internal.Default;
+import oak.query.one.internal.Just;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +18,7 @@ public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Eith
   @NotNull
   @Contract("_ -> new")
   static <L> One<L> just(final L value) {
-    return () -> Cursor.of(value);
+    return new Just<>(value);
   }
 
   @NotNull

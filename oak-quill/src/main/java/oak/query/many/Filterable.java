@@ -1,9 +1,9 @@
 package oak.query.many;
 
-import oak.func.$2.IntCons;
 import oak.func.$2.IntFunc;
 import oak.func.$2.IntPred;
 import oak.func.Pred;
+import oak.query.Many;
 import oak.query.Queryable;
 import oak.query.internal.Where;
 
@@ -28,7 +28,7 @@ public interface Filterable<T> extends Queryable<T> {
   default <R> Many<R> where(final IntPred<? super T> where, final IntFunc<? super T, ? extends R> select) {
     nonNullable(where, "where");
     nonNullable(select, "select");
-    return () -> new Where<T, R>(this, IntCons.nothing(), where, select).iterator();
+    return new Where<T, R>(this, where, select)::iterator;
   }
 }
 

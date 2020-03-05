@@ -1,4 +1,4 @@
-package oak.query.many.$2;
+package oak.query.$2.many;
 
 import oak.cursor.Cursor;
 import oak.union.$2.Union;

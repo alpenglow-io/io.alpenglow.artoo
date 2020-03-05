@@ -1,4 +1,4 @@
-package oak.query.one;
+package oak.query;
 
 public interface OneInt {
 }

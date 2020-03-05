@@ -1,6 +1,8 @@
 package oak.query.many;
 
+import oak.query.Many;
 import oak.query.Queryable;
+import oak.query.many.internal.Join;
 
 import static oak.type.Nullability.nonNullable;
 

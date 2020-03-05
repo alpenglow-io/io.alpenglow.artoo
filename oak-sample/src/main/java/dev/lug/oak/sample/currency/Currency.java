@@ -1,7 +1,7 @@
 package dev.lug.oak.sample.currency;
 
 import oak.cursor.Cursor;
-import oak.query.one.One;
+import oak.query.One;
 import oak.type.AsDouble;
 import oak.type.AsString;
 import org.jetbrains.annotations.Contract;

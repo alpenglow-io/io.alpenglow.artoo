@@ -1,4 +1,4 @@
-package oak.query.many.$3;
+package oak.query.$3.many;
 
 import oak.func.$3.Func;
 import oak.query.Queryable;

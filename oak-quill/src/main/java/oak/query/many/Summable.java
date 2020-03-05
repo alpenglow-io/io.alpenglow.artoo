@@ -1,7 +1,8 @@
 package oak.query.many;
 
 import oak.query.Queryable;
-import oak.query.one.One;
+import oak.query.One;
+import oak.query.many.internal.Aggregate;
 import oak.type.Numeric;
 
 import static oak.func.Cons.nothing;
@@ -14,7 +15,7 @@ interface Summable<T> extends Queryable<T> {
   default <V, N extends Number> One<N> sum(final oak.func.Func<? super T, ? extends V> select, final oak.func.Func<? super V, ? extends N> asNumber) {
     nonNullable(select, "select");
     nonNullable(asNumber, "asNumber");
-    return new Aggregate<>(this, nothing(), null, tautology(), value -> select.andThen(asNumber).apply(value), Numeric::sum);
+    return new Aggregate<T, N, N>(this, nothing(), null, tautology(), value -> select.andThen(asNumber).apply(value), Numeric::sum)::iterator;
   }
 
   default <V, N extends Number> One<N> sum(final oak.func.Func<? super T, ? extends V> select) {

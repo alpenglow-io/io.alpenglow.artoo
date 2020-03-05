@@ -1,12 +1,13 @@
 package oak.query.many;
 
 import oak.cursor.Cursor;
+import oak.query.Many;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
-enum Default implements Many<Object> {
-  Empty;
+public enum Default implements Many<Object> {
+  None;
 
   @NotNull
   @Override

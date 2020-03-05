@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import static oak.query.Queryable.F.ith;
-import static oak.query.many.Many.from;
+import static oak.query.Many.from;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class FilterableTest {

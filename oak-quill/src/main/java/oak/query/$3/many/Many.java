@@ -1,4 +1,4 @@
-package oak.query.many.$3;
+package oak.query.$3.many;
 
 import oak.query.$3.Queryable3;
 import dev.lug.oak.query.tuple3.Tuple3;

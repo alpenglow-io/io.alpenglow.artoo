@@ -1,6 +1,7 @@
 package oak.query.many;
 
 import oak.func.Func;
+import oak.func.IntFunc;
 import oak.func.LongFunc;
 import oak.query.Queryable;
 import org.jetbrains.annotations.NotNull;
@@ -35,8 +36,8 @@ public interface Convertable<T> extends Queryable<T> {
     return list;
   }
 
-  default T[] asArray(final LongFunc<T[]> initializer) {
+  default T[] asArray(final IntFunc<T[]> initializer) {
     nonNullable(initializer, "initializer");
-    return ((Countable<T>) this::iterator).count().select(as(initializer::applyLong)).asIs();
+    return ((Countable<T>) this::iterator).count().select(as(initializer::applyInt)).asIs();
   }
 }

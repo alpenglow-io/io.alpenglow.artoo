@@ -3,17 +3,23 @@ package oak.query.internal;
 import oak.func.$2.IntCons;
 import oak.func.$2.IntFunc;
 import oak.query.Queryable;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public final class Selection<T, R, Q extends Queryable<R>> implements Queryable<R> {
+public final class Projection<T, R, Q extends Queryable<R>> implements Queryable<R> {
   private final Queryable<T> queryable;
   private final IntCons<? super T> peek;
   private final IntFunc<? super T, ? extends Q> select;
 
-  public Selection(final Queryable<T> queryable, final IntCons<? super T> peek, final IntFunc<? super T, ? extends Q> select) {
+  @Contract(pure = true)
+  public Projection(final Queryable<T> queryable, final IntFunc<? super T, ? extends Q> select) {
+    this(queryable, null, select);
+  }
+  @Contract(pure = true)
+  public Projection(final Queryable<T> queryable, final IntCons<? super T> peek, final IntFunc<? super T, ? extends Q> select) {
     this.queryable = queryable;
     this.peek = peek;
     this.select = select;

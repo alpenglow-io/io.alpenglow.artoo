@@ -4,7 +4,7 @@ import oak.type.Any;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import static oak.query.one.One.of;
+import static oak.query.One.of;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class AnyTest {

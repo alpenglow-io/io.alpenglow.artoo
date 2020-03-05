@@ -1,4 +1,4 @@
-package oak.query.many.$2;
+package oak.query.$2.many;
 
 import oak.union.$2.Union;
 import oak.func.$2.Pred;

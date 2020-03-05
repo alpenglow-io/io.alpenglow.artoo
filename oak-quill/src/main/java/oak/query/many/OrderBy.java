@@ -1,6 +1,8 @@
 package oak.query.many;
 
+import oak.cursor.Cursor;
 import oak.func.Func;
+import oak.query.Many;
 import oak.query.Queryable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -10,8 +12,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentSkipListMap;
 
-import static oak.query.Queryable.P.as;
-import static oak.query.many.Many.from;
 import static java.util.Comparator.comparingInt;
 import static java.util.Objects.nonNull;
 
@@ -49,6 +49,6 @@ final class OrderBy<T, K> implements Many<T> {
         result.sort(comparison);
       }
     }
-    return from(result).select(P.as(it -> it.value)).iterator();
+    return Cursor.none();
   }
 }

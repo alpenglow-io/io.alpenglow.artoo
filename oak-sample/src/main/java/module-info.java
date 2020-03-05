@@ -1,4 +1,4 @@
-module dev.lug.oak.sample {
+module oak.sample {
   requires dev.lug.oak.quill;
   requires org.jetbrains.annotations;
   requires dev.lug.oak.func;

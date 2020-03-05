@@ -38,7 +38,7 @@ public interface Many<T> extends
   @NotNull
   @Contract("_ -> new")
   static <T> Many<T> from(final Iterable<T> iterable) {
-    return new Iteration<>(nonNullable(iterable, "iterable"));
+    return new Iteration<>(Nullability.nonNullable(iterable, "iterable"));
   }
 
   @NotNull
@@ -51,6 +51,6 @@ public interface Many<T> extends
   @NotNull
   @Contract("_, _ -> new")
   static <S> Many<S> repeat(final Suppl<? extends S> supplier, final int count) {
-    return new Repeat<>(nonNullable(supplier, "supplier"), count);
+    return new Repeat<>(Nullability.nonNullable(supplier, "supplier"), count);
   }
 }

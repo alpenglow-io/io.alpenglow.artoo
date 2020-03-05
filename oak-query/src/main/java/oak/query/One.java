@@ -15,6 +15,10 @@ public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Eith
     return value != null ? One.just(value) : One.none();
   }
 
+  static OneInt of(final int value) {
+    return null;
+  }
+
   @NotNull
   @Contract("_ -> new")
   static <L> One<L> just(final L value) {

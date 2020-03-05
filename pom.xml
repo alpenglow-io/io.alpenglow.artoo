@@ -12,6 +12,7 @@
     <module>oak-desktop</module>
     <module>oak-func</module>
     <module>oak-sample</module>
+    <module>oak-query</module>
   </modules>
 
   <name>OAK</name>

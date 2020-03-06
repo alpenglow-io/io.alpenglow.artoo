@@ -13,6 +13,8 @@
     <module>oak-func</module>
     <module>oak-sample</module>
     <module>oak-query</module>
+    <module>oak-query-pint</module>
+    <module>oak-query-plong</module>
   </modules>
 
   <name>OAK</name>

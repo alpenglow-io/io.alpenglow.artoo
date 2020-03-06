@@ -1,5 +1,5 @@
 module oak.sample {
-  requires dev.lug.oak.quill;
+  requires oak.func;
+  requires oak.quill;
   requires org.jetbrains.annotations;
-  requires dev.lug.oak.func;
 }

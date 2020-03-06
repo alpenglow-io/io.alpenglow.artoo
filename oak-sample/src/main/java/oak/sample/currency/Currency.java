@@ -1,4 +1,4 @@
-package dev.lug.oak.sample.currency;
+package oak.sample.currency;
 
 import oak.cursor.Cursor;
 import oak.query.One;
@@ -6,6 +6,8 @@ import oak.type.AsDouble;
 import oak.type.AsString;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 @SuppressWarnings("UnusedReturnValue")
 public interface Currency extends One<Currency.Entry> {
@@ -39,5 +41,44 @@ public interface Currency extends One<Currency.Entry> {
   interface Name extends AsString {}
   interface Amount extends AsDouble {}
 
-  record Entry(Id id, Name name, Amount amount) {}
+  final class Entry {
+    public final Id id;
+    public final Name name;
+    public final Amount amount;
+
+    public Entry(Id id, Name name, Amount amount) {
+      this.id = id;
+      this.name = name;
+      this.amount = amount;
+    }
+
+    @Override
+    public final String toString() {
+      return String.format("Currency.Entry{ id=%s, name=%s, amount=%s }", id, name, amount);
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+      if (this == o)
+        return true;
+      if (o == null || getClass() != o.getClass())
+        return false;
+
+      var entry = (Entry) o;
+
+      if (!Objects.equals(id, entry.id))
+        return false;
+      if (!Objects.equals(name, entry.name))
+        return false;
+      return Objects.equals(amount, entry.amount);
+    }
+
+    @Override
+    public final int hashCode() {
+      int result = id != null ? id.hashCode() : 0;
+      result = 31 * result + (name != null ? name.hashCode() : 0);
+      result = 31 * result + (amount != null ? amount.hashCode() : 0);
+      return result;
+    }
+  }
 }

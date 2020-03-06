@@ -1,4 +1,4 @@
-package dev.lug.oak.sample.currency;
+package oak.sample.currency;
 
 import oak.cursor.Cursor;
 import oak.func.Pred;

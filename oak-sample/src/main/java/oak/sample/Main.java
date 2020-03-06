@@ -1,11 +1,11 @@
-package dev.lug.oak.sample;
+package oak.sample;
 
-import dev.lug.oak.sample.currency.Currencies;
-import dev.lug.oak.sample.currency.Currency;
+import oak.sample.currency.Currencies;
+import oak.sample.currency.Currency;
 
-import static dev.lug.oak.sample.Main.DefaultCurrency.Dollar;
-import static dev.lug.oak.sample.Main.DefaultCurrency.Lira;
-import static dev.lug.oak.sample.Main.DefaultCurrency.Pound;
+import static oak.sample.Main.DefaultCurrency.Dollar;
+import static oak.sample.Main.DefaultCurrency.Lira;
+import static oak.sample.Main.DefaultCurrency.Pound;
 import static java.lang.System.out;
 
 public enum Main {;

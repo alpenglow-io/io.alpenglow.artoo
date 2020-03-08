@@ -1,8 +1,7 @@
 package oak.query.many.internal;
 
-import oak.func.$2.IntCons;
+import oak.func.$2.ConsInt;
 import oak.query.Queryable;
-import oak.query.Many;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -14,11 +13,11 @@ import static java.util.Collections.addAll;
 // TODO: where and select are missing
 public final class Insert<T> implements Queryable<T> {
   private final Queryable<T> queryable;
-  private final IntCons<? super T> peek;
+  private final ConsInt<? super T> peek;
   private final T[] values;
 
   @SafeVarargs
-  public Insert(final Queryable<T> queryable, final IntCons<? super T> peek, final T... values) {
+  public Insert(final Queryable<T> queryable, final ConsInt<? super T> peek, final T... values) {
     this.queryable = queryable;
     this.peek = peek;
     this.values = values;

@@ -1,9 +1,8 @@
 package oak.query.many.internal;
 
 import oak.cursor.Cursor;
-import oak.func.$2.IntCons;
-import oak.func.$2.IntPred;
-import oak.query.One;
+import oak.func.$2.ConsInt;
+import oak.func.$2.PredInt;
 import oak.query.Queryable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -12,12 +11,12 @@ import java.util.Iterator;
 
 public final class Quantify<T> implements Queryable<Boolean> {
   private final Queryable<T> queryable;
-  private final IntCons<? super T> peek;
+  private final ConsInt<? super T> peek;
   private final boolean once;
-  private final IntPred<? super T> where;
+  private final PredInt<? super T> where;
 
   @Contract(pure = true)
-  public Quantify(final Queryable<T> queryable, IntCons<? super T> peek, final boolean once, final IntPred<? super T> where) {
+  public Quantify(final Queryable<T> queryable, ConsInt<? super T> peek, final boolean once, final PredInt<? super T> where) {
     this.queryable = queryable;
     this.peek = peek;
     this.once = once;

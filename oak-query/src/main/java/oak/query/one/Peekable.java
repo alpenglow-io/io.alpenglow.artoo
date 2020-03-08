@@ -1,6 +1,6 @@
 package oak.query.one;
 
-import oak.func.$2.IntCons;
+import oak.func.$2.ConsInt;
 import oak.func.Cons;
 import oak.func.Exec;
 import oak.query.Queryable;
@@ -10,7 +10,7 @@ import oak.query.one.internal.Sneakable;
 import static oak.type.Nullability.nonNullable;
 
 public interface Peekable<T> extends Queryable<T> {
-  default One<T> peek(final IntCons<? super T> peek) {
+  default One<T> peek(final ConsInt<? super T> peek) {
     return new Sneakable.Sneak<>(this, peek);
   }
 

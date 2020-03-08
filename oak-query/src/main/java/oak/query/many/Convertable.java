@@ -1,8 +1,7 @@
 package oak.query.many;
 
 import oak.func.Func;
-import oak.func.IntFunc;
-import oak.func.LongFunc;
+import oak.func.FuncInt;
 import oak.query.Queryable;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,8 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static oak.func.Func.identity;
-import static oak.query.one.Projectable.as;
 import static oak.type.Nullability.nonNullable;
 
 public interface Convertable<T> extends Queryable<T> {
@@ -36,8 +33,11 @@ public interface Convertable<T> extends Queryable<T> {
     return list;
   }
 
-  default T[] asArray(final IntFunc<T[]> initializer) {
+  default T[] asArray(final FuncInt<T[]> initializer) {
     nonNullable(initializer, "initializer");
-    return ((Countable<T>) this::iterator).count().select(as(initializer::applyInt)).asIs();
+    return ((Countable<T>) this::iterator)
+      .count()
+      .select(initializer::applyInt)
+      .asIs();
   }
 }

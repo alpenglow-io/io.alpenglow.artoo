@@ -1,6 +1,6 @@
 package oak.query.many.internal;
 
-import oak.func.$2.IntCons;
+import oak.func.$2.ConsInt;
 import oak.func.Func;
 import oak.query.Queryable;
 import oak.query.many.Grouping;
@@ -20,11 +20,11 @@ public final class GroupBy<K, T> implements Grouping<K, T> {
   private final Comparator<? super K> comparator = (first, second) -> compare(second.hashCode(), first.hashCode());
 
   private final Queryable<T> queryable;
-  private final IntCons<? super T> peek;
+  private final ConsInt<? super T> peek;
   private final Func<? super T, ? extends K> key;
 
   @Contract(pure = true)
-  public GroupBy(final Queryable<T> queryable, final IntCons<? super T> peek, final Func<? super T, ? extends K> key) {
+  public GroupBy(final Queryable<T> queryable, final ConsInt<? super T> peek, final Func<? super T, ? extends K> key) {
     this.queryable = queryable;
     this.peek = peek;
     this.key = key;

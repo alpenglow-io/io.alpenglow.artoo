@@ -1,14 +1,13 @@
 package oak.query.many;
 
 import oak.func.$2.Func;
-import oak.func.Cons;
 import oak.func.Pred;
 import oak.query.One;
 import oak.query.many.internal.Aggregate;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import static oak.func.Cons.*;
+import static oak.func.Cons.nothing;
 import static oak.func.Func.identity;
 import static oak.func.Pred.tautology;
 import static oak.type.Nullability.nonNullable;

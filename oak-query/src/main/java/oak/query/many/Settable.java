@@ -5,7 +5,7 @@ import oak.query.Many;
 import oak.query.Queryable;
 import oak.query.many.internal.Distinct;
 
-import static oak.func.$2.IntCons.nothing;
+import static oak.func.$2.ConsInt.nothing;
 import static oak.func.Pred.tautology;
 import static oak.type.Nullability.nonNullable;
 

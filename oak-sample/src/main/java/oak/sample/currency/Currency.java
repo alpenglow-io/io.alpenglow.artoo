@@ -4,10 +4,13 @@ import oak.cursor.Cursor;
 import oak.query.One;
 import oak.type.AsDouble;
 import oak.type.AsString;
+import oak.type.Str;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
+
+import static oak.query.one.Projectable.*;
 
 @SuppressWarnings("UnusedReturnValue")
 public interface Currency extends One<Currency.Entry> {
@@ -24,22 +27,47 @@ public interface Currency extends One<Currency.Entry> {
   }
 
   default Currency change(Name name) {
-    return () -> this.select(currency -> new Currency.Entry(currency.id, name, currency.amount)).iterator();
+    return () -> this
+      .select(as(currency -> new Currency.Entry(
+          currency.id,
+          name,
+          currency.amount
+        )
+      )).iterator();
   }
 
   default Currency increase(Amount amount) {
     return () -> this
-      .select(currency -> new Currency.Entry(
-        currency.id,
-        currency.name,
-        () -> amount.eval() + currency.amount.eval())
-      )
-      .iterator();
+      .select(as(currency -> new Currency.Entry(
+          currency.id,
+          currency.name,
+          () -> amount.eval() + currency.amount.eval()
+        )
+      )).iterator();
   }
 
-  interface Id extends AsString {}
-  interface Name extends AsString {}
-  interface Amount extends AsDouble {}
+  final class Id implements AsString {
+    private final String value;
+
+    private Id(String value) {this.value = value;}
+
+    @Override
+    public final String eval() {
+      return value;
+    }
+
+    public static One<Id> from(final String value) {
+      return One.of(value)
+        .where(it -> it.length() > 3)
+        .select(as(Id::new));
+    }
+  }
+
+  interface Name extends AsString {
+  }
+
+  interface Amount extends AsDouble {
+  }
 
   final class Entry {
     public final Id id;

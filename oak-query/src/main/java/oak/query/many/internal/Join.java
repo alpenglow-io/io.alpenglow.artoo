@@ -2,7 +2,7 @@ package oak.query.many.internal;
 
 import oak.cursor.$2.Cursor;
 import oak.func.$2.Pred;
-import oak.query.$2.many.Many;
+import oak.query.$2.Many;
 import oak.query.Queryable;
 import oak.query.many.Joining;
 import oak.union.$2.Union;

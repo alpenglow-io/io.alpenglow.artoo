@@ -8,13 +8,11 @@
   <packaging>pom</packaging>
   <version>1.0-SNAPSHOT</version>
   <modules>
-    <module>oak-quill</module>
+    <module>oak-base</module>
     <module>oak-desktop</module>
-    <module>oak-func</module>
-    <module>oak-sample</module>
     <module>oak-query</module>
-    <module>oak-query-pint</module>
-    <module>oak-query-plong</module>
+
+    <module>oak-sample</module>
   </modules>
 
   <name>OAK</name>

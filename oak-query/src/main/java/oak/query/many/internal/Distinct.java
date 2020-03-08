@@ -1,8 +1,7 @@
 package oak.query.many.internal;
 
-import oak.func.$2.IntCons;
+import oak.func.$2.ConsInt;
 import oak.func.Pred;
-import oak.query.Many;
 import oak.query.Queryable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -14,11 +13,11 @@ import static java.util.Objects.nonNull;
 
 public final class Distinct<T> implements Queryable<T> {
   private final Queryable<T> queryable;
-  private final IntCons<? super T> peek;
+  private final ConsInt<? super T> peek;
   private final Pred<? super T> where;
 
   @Contract(pure = true)
-  public Distinct(final Queryable<T> queryable, final IntCons<? super T> peek, final Pred<? super T> where) {
+  public Distinct(final Queryable<T> queryable, final ConsInt<? super T> peek, final Pred<? super T> where) {
     this.queryable = queryable;
     this.peek = peek;
     this.where = where;

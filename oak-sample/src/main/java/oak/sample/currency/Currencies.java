@@ -3,8 +3,11 @@ package oak.sample.currency;
 import oak.cursor.Cursor;
 import oak.func.Pred;
 import oak.query.Many;
+import oak.query.One;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+
+import static oak.query.one.Projectable.as;
 
 public interface Currencies extends Many<Currency.Entry> {
   @NotNull
@@ -13,10 +16,10 @@ public interface Currencies extends Many<Currency.Entry> {
     return () -> Cursor.many(entries);
   }
 
-  default Currency one(final Currency.Id id) {
+  default One<Currency> one(final Currency.Id id) {
     return this
-      .single(entry -> entry.id().is(id))
-      .as(Currency::from);
+      .single(entry -> entry.id.is(id))
+      .select(as(Currency::from));
   }
 }
 

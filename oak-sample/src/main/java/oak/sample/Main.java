@@ -7,10 +7,12 @@ import static oak.sample.Main.DefaultCurrency.Dollar;
 import static oak.sample.Main.DefaultCurrency.Lira;
 import static oak.sample.Main.DefaultCurrency.Pound;
 import static java.lang.System.out;
+import static oak.sample.currency.Currency.*;
+import static oak.sample.currency.Currency.Id.*;
 
 public enum Main {;
 
-  enum DefaultCurrency implements Currency.Name {
+  enum DefaultCurrency implements Name {
     Lira("Lira"), Dollar("Dollar"), Pound("Pound");
 
     private final String name;
@@ -26,22 +28,22 @@ public enum Main {;
   }
 
   public static void main(String... args) {
-    final var lira = new Currency.Entry(
-      () -> "lira",
+    final var lira = new Entry(
+      Id.from("lira")
+        .or("lira can't be an Id.", RuntimeException::new)
+        .asIs(),
       Lira,
       () -> 1000.0
     );
-    final var dollaro = new Currency.Entry(
-      () -> "dollaro",
+    final var dollaro = new Entry(
+      Id.from("dollaro").asIs(),
       Dollar,
       () -> 10.0
     );
 
-    final Currency.Id dollar = () -> "dollaro";
+    final Id dollar = Id.from("dollaro").asIs();
     Currencies.from(lira, dollaro)
       .one(dollar)
-      .change(Pound)
-      .increase(() -> 32.3)
       .eventually(out::println);
   }
 }

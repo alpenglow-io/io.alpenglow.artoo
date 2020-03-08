@@ -1,9 +1,8 @@
 package oak.query.many.internal;
 
 import oak.cursor.Cursor;
-import oak.func.$2.IntCons;
+import oak.func.$2.ConsInt;
 import oak.func.Pred;
-import oak.query.One;
 import oak.query.Queryable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -12,13 +11,13 @@ import java.util.Iterator;
 
 public final class Unique<T> implements Queryable<T> {
   private final Queryable<T> queryable;
-  private final IntCons<? super T> peek;
+  private final ConsInt<? super T> peek;
   private final boolean first;
   private final boolean single;
   private final Pred<? super T> where;
 
   @Contract(pure = true)
-  public Unique(final Queryable<T> queryable, final IntCons<? super T> peek, final boolean first, final boolean single, final Pred<? super T> where) {
+  public Unique(final Queryable<T> queryable, final ConsInt<? super T> peek, final boolean first, final boolean single, final Pred<? super T> where) {
     this.queryable = queryable;
     this.peek = peek;
     this.first = first;

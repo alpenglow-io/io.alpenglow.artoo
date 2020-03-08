@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public final class Having<K, T> implements oak.query.$2.many.Many<K, Many<T>> {
+public final class Having<K, T> implements oak.query.$2.Many<K, Many<T>> {
   private final oak.collect.$2.Iterable<K, Many<T>> iterable;
   private final Pred<? super K, ? super Many<T>> having;
 

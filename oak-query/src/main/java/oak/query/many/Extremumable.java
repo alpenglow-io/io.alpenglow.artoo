@@ -1,6 +1,6 @@
 package oak.query.many;
 
-import oak.func.$2.IntCons;
+import oak.func.$2.ConsInt;
 import oak.func.Func;
 import oak.query.One;
 import oak.query.Queryable;
@@ -38,6 +38,6 @@ interface Extremumable<T> extends Queryable<T> {
   @Contract("_, _, _ -> new")
   private <R> One<R> extremum(final int extremum, final Func<? super R, Comparable<? super R>> where, final Func<? super T, ? extends R> select) {
     //this.<R, R>aggregate(null, tautology(), select, (current, next) -> where.apply(next).compareTo(current) == extremum ? next : current);
-    return new Extremum<>(this, IntCons.nothing(), extremum, nonNullable(where, "where"), nonNullable(select, "select"))::iterator;
+    return new Extremum<>(this, ConsInt.nothing(), extremum, nonNullable(where, "where"), nonNullable(select, "select"))::iterator;
   }
 }

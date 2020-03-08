@@ -1,6 +1,6 @@
 package oak.query.internal;
 
-import oak.func.$2.IntCons;
+import oak.func.$2.ConsInt;
 import oak.func.Func;
 import oak.func.Suppl;
 import oak.query.Queryable;
@@ -11,7 +11,7 @@ import java.util.Iterator;
 public final class Or<T> implements Queryable<T> {
   private final Queryable<T> queryable;
   private final Queryable<T> otherwise;
-  private final IntCons<? super T> peek;
+  private final ConsInt<? super T> peek;
   private final String message;
   private final Func<? super String, ? extends RuntimeException> exception;
 
@@ -25,16 +25,16 @@ public final class Or<T> implements Queryable<T> {
     this(queryable, null, null, message, exception);
   }
 
-  public Or(final Queryable<T> queryable, IntCons<? super T> peek, final Queryable<T> otherwise) {
+  public Or(final Queryable<T> queryable, ConsInt<? super T> peek, final Queryable<T> otherwise) {
     this(queryable, peek, otherwise, null, null);
   }
-  public Or(final Queryable<T> queryable, IntCons<? super T> peek, final Suppl<? extends RuntimeException> exception) {
+  public Or(final Queryable<T> queryable, ConsInt<? super T> peek, final Suppl<? extends RuntimeException> exception) {
     this(queryable, peek, null, message -> exception.get());
   }
-  public Or(final Queryable<T> queryable, IntCons<? super T> peek, final String message, final Func<? super String, ? extends RuntimeException> exception) {
+  public Or(final Queryable<T> queryable, ConsInt<? super T> peek, final String message, final Func<? super String, ? extends RuntimeException> exception) {
     this(queryable, peek, null, message, exception);
   }
-  private Or(final Queryable<T> queryable, IntCons<? super T> peek, final Queryable<T> otherwise, final String message, final Func<? super String, ? extends RuntimeException> exception) {
+  private Or(final Queryable<T> queryable, ConsInt<? super T> peek, final Queryable<T> otherwise, final String message, final Func<? super String, ? extends RuntimeException> exception) {
     this.queryable = queryable;
     this.peek = peek;
     this.otherwise = otherwise;

@@ -1,8 +1,7 @@
 package oak.query.many.internal;
 
-import oak.func.$2.IntCons;
+import oak.func.$2.ConsInt;
 import oak.query.Queryable;
-import oak.query.Many;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,11 +11,11 @@ import java.util.Iterator;
 // TODO: where and select are missing
 public final class Concat<T> implements Queryable<T> {
   private final Queryable<T> queryable;
-  private final IntCons<? super T> peek;
+  private final ConsInt<? super T> peek;
   private final Queryable<T> others;
 
   @Contract(pure = true)
-  public Concat(final Queryable<T> queryable, final IntCons<? super T> peek, final Queryable<T> others) {
+  public Concat(final Queryable<T> queryable, final ConsInt<? super T> peek, final Queryable<T> others) {
     this.queryable = queryable;
     this.peek = peek;
     this.others = others;

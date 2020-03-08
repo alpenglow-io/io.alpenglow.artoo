@@ -17,12 +17,11 @@ import oak.query.many.internal.Array;
 import oak.query.many.internal.Iteration;
 import oak.query.many.internal.Repeat;
 import oak.query.one.Either;
+import oak.type.Nullability;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
-
-import static oak.type.Nullability.nonNullable;
 
 public interface Many<T> extends
   Projectable<T>, Filterable<T>, Partitionable<T>, Uniquable<T>, Aggregatable<T>, Concatenatable<T>, Groupable<T>,

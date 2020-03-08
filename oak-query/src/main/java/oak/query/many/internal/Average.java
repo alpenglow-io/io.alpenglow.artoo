@@ -1,11 +1,10 @@
 package oak.query.many.internal;
 
 import oak.cursor.Cursor;
-import oak.func.$2.IntCons;
-import oak.func.$2.IntFunc;
-import oak.func.$2.IntPred;
+import oak.func.$2.ConsInt;
+import oak.func.$2.FuncInt;
+import oak.func.$2.PredInt;
 import oak.func.Func;
-import oak.query.One;
 import oak.query.Queryable;
 import oak.type.Numeric;
 import org.jetbrains.annotations.Contract;
@@ -18,17 +17,17 @@ import static oak.type.Numeric.zero;
 
 public final class Average<T, V, N extends Number> implements Queryable<N> {
   private final Queryable<T> queryable;
-  private final IntCons<? super T> peek;
-  private final IntPred<? super T> where;
-  private final IntFunc<? super T, ? extends V> select;
+  private final ConsInt<? super T> peek;
+  private final PredInt<? super T> where;
+  private final FuncInt<? super T, ? extends V> select;
   private final Func<? super V, ? extends N> asNumber;
 
   @Contract(pure = true)
   public Average(
     final Queryable<T> queryable,
-    final IntCons<? super T> peek,
-    final IntPred<? super T> where,
-    final IntFunc<? super T, ? extends V> select,
+    final ConsInt<? super T> peek,
+    final PredInt<? super T> where,
+    final FuncInt<? super T, ? extends V> select,
     final Func<? super V, ? extends N> asNumber
   ) {
     this.queryable = queryable;

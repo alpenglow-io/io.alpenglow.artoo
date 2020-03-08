@@ -1,5 +1,6 @@
 package oak.query.$2.many;
 
+import oak.query.$2.Many;
 import oak.union.$2.Union;
 import oak.func.$2.Pred;
 import oak.query.$2.Queryable;

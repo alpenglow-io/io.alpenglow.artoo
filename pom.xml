@@ -21,7 +21,7 @@
     <oak.version>1.0-SNAPSHOT</oak.version>
 
     <encoding>UTF-8</encoding>
-    <java.version>13</java.version>
+    <java.version>14</java.version>
     <maven.max.version>3.6.2</maven.max.version>
     <maven.min.version>3.3.9</maven.min.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
@@ -36,7 +36,7 @@
     <mockito.version>3.1.0</mockito.version>
     <slf4j.version>2.0.0-alpha1</slf4j.version>
 
-    <asm.version>7.2</asm.version>
+    <asm.version>8.0.1</asm.version>
 
     <plugin-clean.version>3.1.0</plugin-clean.version>
     <plugin-compiler.version>3.8.1</plugin-compiler.version>

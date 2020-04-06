@@ -5,9 +5,6 @@ import oak.query.Queryable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static oak.query.Queryable.P.as;
-import static org.assertj.core.api.Assertions.assertThat;
-
 class JoinableTest {
   @Test
   @DisplayName("should join each pet with its owner")

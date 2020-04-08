@@ -8,3 +8,7 @@ The first project name was **trydent**; I wanted to make a tribute to the very f
  . it was a company looking for *OOParts*, out-of-place artifacts, in one of my favourite manga comics, Spriggan.
 
 In order to build with tests, `MAVEN_OPTS` set to `--enable-preview` is needed.
+
+## Destructable
+
+An attempt to implement tuples with just generics, pretty long and exhausting.

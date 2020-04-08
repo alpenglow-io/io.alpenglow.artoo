@@ -3,22 +3,22 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>oak</groupId>
-  <artifactId>oak</artifactId>
+  <groupId>trydent</groupId>
+  <artifactId>trydent</artifactId>
   <packaging>pom</packaging>
   <version>1.0-SNAPSHOT</version>
   <modules>
-    <module>oak-base</module>
-    <module>oak-desktop</module>
-    <module>oak-query</module>
+    <module>trydent.base</module>
+    <module>trydent.desktop</module>
+    <module>trydent.query</module>
 
-    <module>oak-sample</module>
+    <module>trydent.sample</module>
   </modules>
 
-  <name>OAK</name>
+  <name>Trydent</name>
 
   <properties>
-    <oak.version>1.0-SNAPSHOT</oak.version>
+    <trydent.version>1.0-SNAPSHOT</trydent.version>
 
     <encoding>UTF-8</encoding>
     <java.version>14</java.version>
@@ -106,9 +106,9 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>oak</groupId>
-        <artifactId>oak-func</artifactId>
-        <version>${oak.version}</version>
+        <groupId>trydent</groupId>
+        <artifactId>trydent-func</artifactId>
+        <version>${trydent.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

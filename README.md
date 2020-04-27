@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/trydent-io/artoo/master/artoo_stone.svg" width="96px" alt="Artoo logo">
+<img src="https://raw.githubusercontent.com/trydent-io/artoo/master/artoo_stone.svg" width="256px" alt="Artoo logo">
 
 # Art of Object-Oriented programming
 

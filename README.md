@@ -1,4 +1,4 @@
-![Image description](https://raw.githubusercontent.com/trydent-io/artoo/master/artoo_stone.svg)
+![Image description](https://raw.githubusercontent.com/trydent-io/artoo/master/artoo_stone.svg=72px)
 
 # Art of Object-Oriented programming
 

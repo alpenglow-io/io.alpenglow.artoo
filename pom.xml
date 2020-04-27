@@ -3,19 +3,19 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>trydent</groupId>
-  <artifactId>trydent</artifactId>
+  <groupId>io.artoo</groupId>
+  <artifactId>io.artoo</artifactId>
   <packaging>pom</packaging>
   <version>1.0-SNAPSHOT</version>
   <modules>
-    <module>trydent.base</module>
-    <module>trydent.desktop</module>
-    <module>trydent.query</module>
+    <module>artoo.base</module>
+    <module>artoo.desktop</module>
+    <module>artoo.query</module>
 
-    <module>trydent.sample</module>
+    <module>artoo.sample</module>
   </modules>
 
-  <name>Trydent</name>
+  <name>Artoo</name>
 
   <properties>
     <trydent.version>1.0-SNAPSHOT</trydent.version>

@@ -1,4 +1,4 @@
-![Artoo Logo](https://raw.githubusercontent.com/trydent-io/artoo/master/artoo_stone.svg =96x)
+<img src="https://raw.githubusercontent.com/trydent-io/artoo/master/artoo_stone.svg" width="96px" alt="Artoo logo">
 
 # Art of Object-Oriented programming
 

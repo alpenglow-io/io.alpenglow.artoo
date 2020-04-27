@@ -4,6 +4,8 @@
 
 ## WIP
 
+More to be explained.
+
 In order to build with tests, `MAVEN_OPTS` set to `--enable-preview` is needed.
 
 Image provided by:

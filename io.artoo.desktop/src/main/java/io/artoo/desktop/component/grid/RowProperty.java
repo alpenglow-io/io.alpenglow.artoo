@@ -1,7 +1,7 @@
 package io.artoo.desktop.component.grid;
 
+
 import javafx.scene.layout.RowConstraints;
-import io.artoo.func.Cons;
 
 import static javafx.geometry.VPos.BASELINE;
 import static javafx.geometry.VPos.BOTTOM;
@@ -12,7 +12,7 @@ import static javafx.scene.layout.Priority.NEVER;
 import static javafx.scene.layout.Priority.SOMETIMES;
 
 @FunctionalInterface
-public interface RowProperty extends Cons<RowConstraints> {
+public interface RowProperty extends Consumer<RowConstraints> {
   static RowProperty height(Percent value) {
     return it -> it.setPercentHeight(value.get());
   }

@@ -1,16 +1,16 @@
 package io.artoo.query.many;
 
+import io.artoo.type.Str;
 import org.jetbrains.annotations.Contract;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import io.artoo.type.Str;
 
+
+import static io.artoo.query.Many.from;
+import static io.artoo.query.many.TestData.PACKAGES;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
-import static io.artoo.func.Pred.not;
-import static io.artoo.query.Many.from;
-import static io.artoo.query.many.TestData.PACKAGES;
 
 class AggregatableTest {
   @Test

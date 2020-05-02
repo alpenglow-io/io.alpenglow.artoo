@@ -1,19 +1,20 @@
 package io.artoo.query.many.impl;
 
+
+import io.artoo.query.Many;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import io.artoo.func.Suppl;
-import io.artoo.query.Many;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.function.Supplier;
 
 public final class Repeat<T> implements Many<T> {
-  private final Suppl<? extends T> supplier;
+  private final Supplier<? extends T> supplier;
   private final int count;
 
   @Contract(pure = true)
-  public Repeat(final Suppl<? extends T> supplier, final int count) {
+  public Repeat(final Supplier<? extends T> supplier, final int count) {
     this.supplier = supplier;
     this.count = count;
   }

@@ -1,21 +1,22 @@
 package io.artoo.query.many.impl;
 
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import io.artoo.func.$2.Pred;
+
 import io.artoo.query.Many;
 import io.artoo.query.Queryable;
 import io.artoo.query.many.Grouping;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.function.BiPredicate;
 
 public final class Having<K, T> implements Many<Grouping.Bag<K, T>> {
   private final Queryable<Grouping.Bag<K, T>> queryable;
-  private final Pred<? super K, ? super Many<T>> having;
+  private final BiPredicate<? super K, ? super Many<T>> having;
 
   @Contract(pure = true)
-  public Having(final Queryable<Grouping.Bag<K, T>> queryable, final Pred<? super K, ? super Many<T>> having) {
+  public Having(final Queryable<Grouping.Bag<K, T>> queryable, final BiPredicate<? super K, ? super Many<T>> having) {
     this.queryable = queryable;
     this.having = having;
   }

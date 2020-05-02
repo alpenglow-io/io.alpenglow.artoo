@@ -1,8 +1,8 @@
 package io.artoo.desktop.component;
 
-import javafx.scene.Parent;
 import io.artoo.desktop.property.IdProperty;
 import io.artoo.desktop.property.ParentProperty;
+import javafx.scene.Parent;
 
 import java.util.function.Supplier;
 

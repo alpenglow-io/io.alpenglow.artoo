@@ -1,21 +1,21 @@
 package io.artoo.query.many.impl;
 
+import io.artoo.query.Queryable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import io.artoo.func.$2.ConsInt;
-import io.artoo.func.$2.PredInt;
-import io.artoo.query.Queryable;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.function.BiConsumer;
+import java.util.function.BiPredicate;
 
 public final class Partition<T> implements Queryable<T> {
   private final Queryable<T> queryable;
-  private final ConsInt<? super T> peek;
-  private final PredInt<? super T> where;
+  private final BiConsumer<? super Integer, ? super T> peek;
+  private final BiPredicate<? super Integer, ? super T> where;
 
   @Contract(pure = true)
-  public Partition(final Queryable<T> queryable, final ConsInt<? super T> peek, final PredInt<? super T> where) {
+  public Partition(final Queryable<T> queryable, final BiConsumer<? super Integer, ? super T> peek, final BiPredicate<? super Integer, ? super T> where) {
     this.queryable = queryable;
     this.peek = peek;
     this.where = where;
@@ -32,11 +32,9 @@ public final class Partition<T> implements Queryable<T> {
       do
       {
         final var it = cursor.next();
-        peek.applyInt(index, it);
-        verified = where.verify(index, it);
-        if (it != null && verified) {
-          result.add(it);
-        }
+        peek.accept(index, it);
+        verified = it != null && where.test(index, it);
+        if (verified) result.add(it);
         index++;
       } while (cursor.hasNext() && verified);
     }

@@ -1,9 +1,9 @@
 package io.artoo.desktop.component;
 
-import javafx.scene.Parent;
-import javafx.scene.layout.Pane;
 import io.artoo.desktop.property.IdProperty;
 import io.artoo.desktop.property.ParentProperty;
+import javafx.scene.Parent;
+import javafx.scene.layout.Pane;
 
 final class PaneComponentImpl implements PaneComponent {
   private final IdProperty id;

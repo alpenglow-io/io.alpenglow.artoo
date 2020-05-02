@@ -1,7 +1,7 @@
 package io.artoo.desktop.component.grid;
 
+
 import javafx.scene.layout.ColumnConstraints;
-import io.artoo.func.Cons;
 
 import static javafx.geometry.HPos.CENTER;
 import static javafx.geometry.HPos.LEFT;
@@ -11,7 +11,7 @@ import static javafx.scene.layout.Priority.NEVER;
 import static javafx.scene.layout.Priority.SOMETIMES;
 
 @FunctionalInterface
-public interface ColumnProperty extends Cons<ColumnConstraints> {
+public interface ColumnProperty extends Consumer<ColumnConstraints> {
   static ColumnProperty width(Percent percent) {
     return it -> it.setPercentWidth(percent.get());
   }

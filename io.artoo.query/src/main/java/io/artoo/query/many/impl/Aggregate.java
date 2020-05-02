@@ -1,31 +1,36 @@
 package io.artoo.query.many.impl;
 
+import io.artoo.cursor.Cursor;
+
+
+
+import io.artoo.query.Queryable;
+import io.artoo.query.many.Aggregatable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import io.artoo.cursor.Cursor;
-import io.artoo.func.$2.Func;
-import io.artoo.func.Cons;
-import io.artoo.func.Pred;
-import io.artoo.query.Queryable;
 
 import java.util.Iterator;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
-public final class Aggregate<T, A, R> implements Queryable<A> {
+public final class Aggregate<T extends Record, A extends Record, R> implements Aggregatable<A> {
   private final Queryable<T> queryable;
-  private final Cons<? super T> peek;
+  private final Consumer<? super T> peek;
   private final A seed;
-  private final Pred<? super T> where;
-  private final io.artoo.func.Func<? super T, ? extends R> select;
-  private final Func<? super A, ? super R, ? extends A> aggregate;
+  private final Predicate<? super T> where;
+  private final Function<? super T, ? extends R> select;
+  private final BiFunction<? super A, ? super R, ? extends A> aggregate;
 
   @Contract(pure = true)
   public Aggregate(
     final Queryable<T> queryable,
-    final Cons<? super T> peek,
+    final Consumer<? super T> peek,
     final A seed,
-    final Pred<? super T> where,
-    final io.artoo.func.Func<? super T, ? extends R> select,
-    final Func<? super A, ? super R, ? extends A> aggregate
+    final Predicate<? super T> where,
+    final Function<? super T, ? extends R> select,
+    final BiFunction<? super A, ? super R, ? extends A> aggregate
   ) {
     this.queryable = queryable;
     this.peek = peek;

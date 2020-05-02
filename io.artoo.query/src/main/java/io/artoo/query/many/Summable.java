@@ -1,25 +1,27 @@
 package io.artoo.query.many;
 
-import io.artoo.func.Func;
+
 import io.artoo.query.One;
 import io.artoo.query.Queryable;
 import io.artoo.query.many.impl.Aggregate;
+import io.artoo.type.AsFloat;
 import io.artoo.type.Numeric;
 
-import static io.artoo.func.Cons.nothing;
-import static io.artoo.func.Func.identity;
-import static io.artoo.func.Pred.tautology;
+
+import java.util.function.Function;
+
 import static io.artoo.type.Nullability.nonNullable;
 import static io.artoo.type.Numeric.asNumber;
+import static java.util.function.Function.identity;
 
-interface Summable<T> extends Queryable<T> {
-  default <V, N extends Number> One<N> sum(final Func<? super T, ? extends V> select, final Func<? super V, ? extends N> asNumber) {
+interface Summable<T extends Record> extends Queryable<T> {
+  default <V, N extends Number> One<N> sum(final Function<? super T, ? extends V> select, final Function<? super V, ? extends N> asNumber) {
     nonNullable(select, "select");
     nonNullable(asNumber, "asNumber");
-    return new Aggregate<T, N, N>(this, nothing(), null, tautology(), value -> select.after(asNumber).apply(value), Numeric::sum)::iterator;
+    return new Aggregate<T, N, N>(this, it -> {}, null, it -> true, value -> select.andThen(asNumber).apply(value), Numeric::sum)::iterator;
   }
 
-  default <V, N extends Number> One<N> sum(final Func<? super T, ? extends V> select) {
+  default <V, N extends Number> One<N> sum(final Function<? super T, ? extends V> select) {
     return this.<V, N>sum(select, asNumber());
   }
 

@@ -1,20 +1,21 @@
 package io.artoo.query.many;
 
-import org.jetbrains.annotations.NotNull;
-import io.artoo.func.Func;
-import io.artoo.func.FuncInt;
+
+
 import io.artoo.query.Queryable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 import static io.artoo.type.Nullability.nonNullable;
 
 public interface Convertable<T> extends Queryable<T> {
-  default @NotNull <K, E> Map<? extends K, ? extends E> asMap(final Func<? super T, ? extends K> key, final Func<? super T, ? extends E> element) {
+  default @NotNull <K, E> Map<? extends K, ? extends E> asMap(final Function<? super T, ? extends K> key, final Function<? super T, ? extends E> element) {
     nonNullable(key, "key");
     nonNullable(element, "element");
     final var map = new ConcurrentHashMap<K, E>();
@@ -34,11 +35,11 @@ public interface Convertable<T> extends Queryable<T> {
     return list;
   }
 
-  default T[] asArray(final FuncInt<T[]> initializer) {
+  default T[] asArray(final Function<? super Integer, T[]> initializer) {
     nonNullable(initializer, "initializer");
     final var ts = ((Countable<T>) this::iterator)
       .count()
-      .select(initializer::applyInt)
+      .select(initializer::apply)
       .asIs();
 
     var i = 0;

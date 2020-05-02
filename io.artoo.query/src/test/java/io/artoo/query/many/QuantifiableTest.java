@@ -1,8 +1,8 @@
 package io.artoo.query.many;
 
+import io.artoo.query.Many;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import io.artoo.query.Many;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

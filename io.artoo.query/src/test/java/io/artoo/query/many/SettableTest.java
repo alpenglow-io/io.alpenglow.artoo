@@ -3,8 +3,8 @@ package io.artoo.query.many;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static io.artoo.query.Many.from;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class SettableTest {
   @Test

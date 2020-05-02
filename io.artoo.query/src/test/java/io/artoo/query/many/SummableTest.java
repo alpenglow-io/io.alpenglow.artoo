@@ -1,15 +1,14 @@
 package io.artoo.query.many;
 
+import io.artoo.query.Many;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import io.artoo.query.Many;
 
 import java.math.BigInteger;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static io.artoo.query.Many.from;
 import static io.artoo.query.many.TestData.PACKAGES;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class SummableTest {
   @Test

@@ -1,37 +1,37 @@
 package io.artoo.query.many;
 
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import io.artoo.func.$2.Func;
-import io.artoo.func.Pred;
 import io.artoo.query.One;
 import io.artoo.query.many.impl.Aggregate;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
-import static io.artoo.func.Cons.nothing;
-import static io.artoo.func.Func.identity;
-import static io.artoo.func.Pred.tautology;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
 import static io.artoo.type.Nullability.nonNullable;
+import static java.util.function.Function.identity;
 
-public interface Aggregatable<T> extends Countable<T>, Summable<T>, Averageable<T>, Extremumable<T> {
+public interface Aggregatable<T extends Record> extends Countable<T>, Summable<T>, Averageable<T>, Extremumable<T> {
   @NotNull
   @Contract("_, _, _, _ -> new")
-  default <A, R> One<A> aggregate(final A seed, final Pred<? super T> where, final io.artoo.func.Func<? super T, ? extends R> select, final Func<? super A, ? super R, ? extends A> aggregate) {
-    return new Aggregate<T, A, R>(this, nothing(), seed, nonNullable(where, "where"), nonNullable(select, "select"), nonNullable(aggregate, "aggregate"))::iterator;
+  default <A extends Record, R> One<A> aggregate(final A seed, final Predicate<? super T> where, final Function<? super T, ? extends R> select, final BiFunction<? super A, ? super R, ? extends A> aggregate) {
+    return new Aggregate<T, A, R>(this, it -> {}, seed, nonNullable(where, "where"), nonNullable(select, "select"), nonNullable(aggregate, "aggregate"))::iterator;
   }
 
-  default <A, R> One<A> aggregate(final A seed, final io.artoo.func.Func<? super T, ? extends R> select, final Func<? super A, ? super R, ? extends A> aggregate) {
-    return this.aggregate(seed, tautology(), select, aggregate);
+  default <A extends Record, R> One<A> aggregate(final A seed, final Function<? super T, ? extends R> select, final BiFunction<? super A, ? super R, ? extends A> aggregate) {
+    return this.aggregate(seed, it -> true, select, aggregate);
   }
 
-  default <A, R> One<A> aggregate(final io.artoo.func.Func<? super T, ? extends R> select, final Func<? super A, ? super R, ? extends A> aggregate) {
-    return this.aggregate(null, tautology(), select, aggregate);
+  default <A extends Record, R> One<A> aggregate(final Function<? super T, ? extends R> select, final BiFunction<? super A, ? super R, ? extends A> aggregate) {
+    return this.aggregate(null, it -> true, select, aggregate);
   }
 
-  default <A> One<A> aggregate(final A seed, final Func<? super A, ? super T, ? extends A> aggregate) {
-    return this.aggregate(seed, tautology(), identity(), aggregate);
+  default <A extends Record> One<A> aggregate(final A seed, final BiFunction<? super A, ? super T, ? extends A> aggregate) {
+    return this.aggregate(seed, it -> true, identity(), aggregate);
   }
 
-  default One<T> aggregate(final Func<? super T, ? super T, ? extends T> aggregate) {
-    return this.aggregate(null, tautology(), identity(), aggregate);
+  default One<T> aggregate(final BiFunction<? super T, ? super T, ? extends T> aggregate) {
+    return this.aggregate(null, it -> true, identity(), aggregate);
   }
 }

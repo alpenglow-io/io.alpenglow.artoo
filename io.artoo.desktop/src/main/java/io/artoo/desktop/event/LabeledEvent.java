@@ -1,18 +1,18 @@
 package io.artoo.desktop.event;
 
+import io.artoo.desktop.property.LabeledProperty;
+
+
 import javafx.scene.control.Labeled;
 import javafx.scene.input.MouseEvent;
-import io.artoo.desktop.property.LabeledProperty;
-import io.artoo.func.$2.Cons;
-import io.artoo.func.Func;
 
 @FunctionalInterface
 public interface LabeledEvent {
-  static LabeledEvent mouseClicked(Func<MouseEvent, LabeledProperty> callback) {
+  static LabeledEvent mouseClicked(Function<MouseEvent, LabeledProperty> callback) {
     return it -> it.setOnMouseClicked(e -> callback.apply(e).onLabeled(it));
   }
 
-  static LabeledEvent mouseClicked(Cons<MouseEvent, Labeled> callback) {
+  static LabeledEvent mouseClicked(Consumer<MouseEvent, Labeled> callback) {
     return it -> it.setOnMouseClicked(e -> callback.accept(e, it));
   }
 

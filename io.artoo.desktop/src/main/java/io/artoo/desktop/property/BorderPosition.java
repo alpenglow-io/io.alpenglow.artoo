@@ -1,7 +1,7 @@
 package io.artoo.desktop.property;
 
-import javafx.scene.layout.BorderPane;
 import io.artoo.desktop.component.Component;
+import javafx.scene.layout.BorderPane;
 
 public interface BorderPosition {
   static BorderPosition top(Component component) {

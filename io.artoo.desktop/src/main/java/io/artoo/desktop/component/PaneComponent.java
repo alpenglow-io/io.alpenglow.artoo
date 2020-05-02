@@ -1,10 +1,10 @@
 package io.artoo.desktop.component;
 
+import io.artoo.desktop.property.IdProperty;
+import io.artoo.desktop.property.ParentProperty;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import io.artoo.desktop.property.IdProperty;
-import io.artoo.desktop.property.ParentProperty;
 
 public interface PaneComponent extends Component {
   static PaneComponent vertical(IdProperty id, ParentProperty... properties) {

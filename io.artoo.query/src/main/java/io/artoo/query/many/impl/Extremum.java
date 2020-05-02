@@ -1,28 +1,30 @@
 package io.artoo.query.many.impl;
 
+import io.artoo.cursor.Cursor;
+
+
+import io.artoo.query.Queryable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import io.artoo.cursor.Cursor;
-import io.artoo.func.$2.ConsInt;
-import io.artoo.func.Func;
-import io.artoo.query.Queryable;
 
 import java.util.Iterator;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 public final class Extremum<T, R> implements Queryable<R> {
   private final Queryable<T> queryable;
-  private final ConsInt<? super T> peek;
+  private final BiConsumer<? super Integer, ? super T> peek;
   private final int extreme;
-  private final Func<? super R, Comparable<? super R>> comparing;
-  private final Func<? super T, ? extends R> select;
+  private final Function<? super R, Comparable<? super R>> comparing;
+  private final Function<? super T, ? extends R> select;
 
   @Contract(pure = true)
   public Extremum(
     final Queryable<T> queryable,
-    final ConsInt<? super T> peek,
+    final BiConsumer<? super Integer, ? super T> peek,
     final int extreme,
-    final Func<? super R, Comparable<? super R>> comparing,
-    final Func<? super T, ? extends R> select
+    final Function<? super R, Comparable<? super R>> comparing,
+    final Function<? super T, ? extends R> select
   ) {
     this.queryable = queryable;
     this.peek = peek;
@@ -38,7 +40,7 @@ public final class Extremum<T, R> implements Queryable<R> {
     var index = 0;
     for (var iterator = queryable.iterator(); iterator.hasNext(); index++) {
       var it = iterator.next();
-      peek.acceptInt(index, it);
+      peek.accept(index, it);
       if (it != null) {
         final var mapped = select.apply(it);
         if (result == null || mapped != null && comparing.apply(mapped).compareTo(result) == extreme)

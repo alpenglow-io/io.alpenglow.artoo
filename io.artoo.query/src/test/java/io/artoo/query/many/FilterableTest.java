@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static io.artoo.query.Many.from;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class FilterableTest {
   @Test

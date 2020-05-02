@@ -107,7 +107,7 @@
     <dependencies>
       <dependency>
         <groupId>trydent</groupId>
-        <artifactId>trydent-func</artifactId>
+        <artifactId>trydent-Function</artifactId>
         <version>${trydent.version}</version>
       </dependency>
     </dependencies>

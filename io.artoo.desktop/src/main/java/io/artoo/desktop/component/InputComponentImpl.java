@@ -1,8 +1,8 @@
 package io.artoo.desktop.component;
 
+import io.artoo.desktop.property.InputProperty;
 import javafx.scene.Parent;
 import javafx.scene.control.TextInputControl;
-import io.artoo.desktop.property.InputProperty;
 
 import static java.util.Objects.nonNull;
 

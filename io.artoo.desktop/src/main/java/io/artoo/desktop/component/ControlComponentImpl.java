@@ -1,8 +1,8 @@
 package io.artoo.desktop.component;
 
-import javafx.scene.control.Control;
 import io.artoo.desktop.event.ControlEvent;
 import io.artoo.desktop.property.ControlProperty;
+import javafx.scene.control.Control;
 
 import static java.util.Objects.nonNull;
 

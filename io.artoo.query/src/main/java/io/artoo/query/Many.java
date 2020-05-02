@@ -1,8 +1,5 @@
 package io.artoo.query;
 
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import io.artoo.func.Suppl;
 import io.artoo.query.many.Aggregatable;
 import io.artoo.query.many.Concatenatable;
 import io.artoo.query.many.Default;
@@ -19,37 +16,41 @@ import io.artoo.query.many.Uniquable;
 import io.artoo.query.many.impl.Array;
 import io.artoo.query.many.impl.Iteration;
 import io.artoo.query.many.impl.Repeat;
-import io.artoo.type.Nullability;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.function.Supplier;
 
-public interface Many<T> extends
-  Projectable<T>, Filterable<T>, Partitionable<T>, Uniquable<T>, Aggregatable<T>, Concatenatable<T>, Groupable<T>,
-  Joinable<T>, Quantifiable<T>, Settable<T>, Insertable<T>, Either<T> {
+import static io.artoo.type.Nullability.nonNullable;
+
+public interface Many<R extends Record> extends
+  Projectable<R>, Filterable<R>, Partitionable<R>, Uniquable<R>, Aggregatable<R>, Concatenatable<R>, Groupable<R>,
+  Joinable<R>, Quantifiable<R>, Settable<R>, Insertable<R>, Either<R> {
 
   @NotNull
   @Contract("_ -> new")
   @SafeVarargs
-  static <T> Many<T> from(final T... items) {
+  static <R extends Record> Many<R> from(final R... items) {
     return new Array<>(Arrays.copyOf(items, items.length));
   }
 
   @NotNull
   @Contract("_ -> new")
-  static <T> Many<T> from(final Iterable<T> iterable) {
-    return new Iteration<>(Nullability.nonNullable(iterable, "iterable"));
+  static <R extends Record> Many<R> from(final Iterable<R> iterable) {
+    return new Iteration<>(nonNullable(iterable, "iterable"));
   }
 
   @NotNull
   @Contract(value = " -> new", pure = true)
   @SuppressWarnings("unchecked")
-  static <T> Many<T> none() {
-    return (Many<T>) Default.None;
+  static <R extends Record> Many<R> none() {
+    return (Many<R>) Default.None;
   }
 
   @NotNull
   @Contract("_, _ -> new")
-  static <S> Many<S> repeat(final Suppl<? extends S> supplier, final int count) {
-    return new Repeat<>(Nullability.nonNullable(supplier, "supplier"), count);
+  static <R extends Record> Many<R> repeat(final Supplier<? extends R> supplier, final int count) {
+    return new Repeat<>(nonNullable(supplier, "supplier"), count);
   }
 }

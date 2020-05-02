@@ -1,34 +1,36 @@
 package io.artoo.query.many;
 
-import io.artoo.func.$2.FuncInt;
-import io.artoo.func.$2.PredInt;
-import io.artoo.func.Pred;
 import io.artoo.query.Many;
 import io.artoo.query.Queryable;
 import io.artoo.query.impl.Where;
 
-import static io.artoo.func.$2.FuncInt.identity;
+
+import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
+
 import static io.artoo.type.Nullability.nonNullable;
+import static java.util.function.Function.identity;
 
-public interface Filterable<T> extends Queryable<T> {
-  default Many<T> where(final Pred<? super T> where) {
+public interface Filterable<T extends Record> extends Queryable<T> {
+  default Many<T> where(final Predicate<? super T> where) {
     nonNullable(where, "where");
-    return where((index, param) -> where.apply(param));
+    return where((index, param) -> where.test(param));
   }
 
-  default Many<T> where(final PredInt<? super T> where) {
-    return where(where, identity());
+  default Many<T> where(final BiPredicate<? super Integer, ? super T> where) {
+    return where(where, (i, it) -> it);
   }
 
-  default <C> Many<C> ofType(final Class<? extends C> type) {
+  default <C extends Record> Many<C> ofType(final Class<? extends C> type) {
     nonNullable(type, "type");
     return where((index, it) -> type.isInstance(it), (index, it) -> type.cast(it));
   }
 
-  default <R> Many<R> where(final PredInt<? super T> where, final FuncInt<? super T, ? extends R> select) {
+  default <R extends Record> Many<R> where(final BiPredicate<? super Integer, ? super T> where, final BiFunction<? super Integer, ? super T, ? extends R> select) {
     nonNullable(where, "where");
     nonNullable(select, "select");
-    return new Where<T, R>(this, where, select)::iterator;
+    return new Where<T, R>(this, (i, it) -> {}, where, select)::iterator;
   }
 }
 

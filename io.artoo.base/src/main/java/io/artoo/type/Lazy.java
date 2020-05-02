@@ -2,37 +2,38 @@ package io.artoo.type;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import io.artoo.func.Suppl;
+
+import java.util.function.Supplier;
 
 import static io.artoo.type.Emptyness.Nothing;
 
 enum Emptyness {Nothing}
 
 @SuppressWarnings("UnusedReturnValue")
-public interface Lazy<T> extends Suppl<T> {
+public interface Lazy<T> extends Supplier<T> {
   @NotNull
   @Contract(value = "_ -> new", pure = true)
-  static <V> Lazy<V> of(final Suppl<V> supplier) {
+  static <V> Lazy<V> of(final Supplier<V> supplier) {
     return new SyncLazy<>(supplier);
   }
 
   @NotNull
   @Contract(pure = true)
-  static <V> Lazy<V> lazy(final Suppl<V> supplier) {
+  static <V> Lazy<V> lazy(final Supplier<V> supplier) {
     return of(supplier);
   }
 
   Lazy<T> release();
 
-  Lazy<T> attach(final Suppl<T> attacher);
+  Lazy<T> attach(final Supplier<T> attacher);
 }
 
 final class SyncLazy<T> implements Lazy<T> {
-  private volatile Suppl<T> supplier;
+  private volatile Supplier<T> supplier;
   private volatile Object value;
 
   @Contract(pure = true)
-  SyncLazy(final Suppl<T> supplier) {
+  SyncLazy(final Supplier<T> supplier) {
     this(
       supplier,
       Nothing
@@ -40,7 +41,7 @@ final class SyncLazy<T> implements Lazy<T> {
   }
 
   @Contract(pure = true)
-  private SyncLazy(final Suppl<T> supplier, final Object value) {
+  private SyncLazy(final Supplier<T> supplier, final Object value) {
     this.supplier = supplier;
     this.value = value;
   }
@@ -83,7 +84,7 @@ final class SyncLazy<T> implements Lazy<T> {
 
   @Override
   @Contract("_ -> this")
-  public Lazy<T> attach(final Suppl<T> supplier) {
+  public Lazy<T> attach(final Supplier<T> supplier) {
     synchronized (this) {
       this.supplier = supplier;
       return this;

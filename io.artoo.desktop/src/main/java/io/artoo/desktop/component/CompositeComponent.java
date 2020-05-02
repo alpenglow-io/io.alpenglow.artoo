@@ -1,8 +1,8 @@
 package io.artoo.desktop.component;
 
-import javafx.scene.control.ListView;
 import io.artoo.desktop.property.ControlProperty;
 import io.artoo.desktop.property.IdProperty;
+import javafx.scene.control.ListView;
 
 public interface CompositeComponent extends ControlComponent {
   static CompositeComponent list(IdProperty id, ControlProperty... properties) {

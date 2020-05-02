@@ -1,41 +1,41 @@
 package io.artoo.query.many;
 
-import io.artoo.func.Pred;
 import io.artoo.query.One;
 import io.artoo.query.Queryable;
 import io.artoo.query.many.impl.At;
 import io.artoo.query.many.impl.Unique;
 
-import static io.artoo.func.$2.ConsInt.nothing;
-import static io.artoo.func.Pred.tautology;
+
+import java.util.function.Predicate;
+
 import static io.artoo.type.Nullability.nonNullable;
 
-public interface Uniquable<T> extends Queryable<T> {
+public interface Uniquable<T extends Record> extends Queryable<T> {
   default One<T> at(final int index) {
     return new At<>(this, index)::iterator;
   }
 
   default One<T> first() {
-    return new Unique<>(this, nothing(), true, false, tautology())::iterator;
+    return new Unique<>(this, (i, it) -> {}, true, false, it -> true)::iterator;
   }
 
-  default One<T> first(final Pred<? super T> where) {
-    return new Unique<>(this, nothing(), true, false, nonNullable(where, "where"))::iterator;
+  default One<T> first(final Predicate<? super T> where) {
+    return new Unique<>(this, (i, it) -> {}, true, false, nonNullable(where, "where"))::iterator;
   }
 
   default One<T> last() {
-    return last(tautology());
+    return last(it -> true);
   }
 
-  default One<T> last(final Pred<? super T> where) {
-    return new Unique<>(this, nothing(), false, false, nonNullable(where, "where"))::iterator;
+  default One<T> last(final Predicate<? super T> where) {
+    return new Unique<>(this, (i, it) -> {}, false, false, nonNullable(where, "where"))::iterator;
   }
 
   default One<T> single() {
-    return single(tautology());
+    return single(it -> true);
   }
 
-  default One<T> single(final Pred<? super T> where) {
-    return new Unique<>(this, nothing(), false, true, nonNullable(where, "where"))::iterator;
+  default One<T> single(final Predicate<? super T> where) {
+    return new Unique<>(this, (i, it) -> {}, false, true, nonNullable(where, "where"))::iterator;
   }
 }

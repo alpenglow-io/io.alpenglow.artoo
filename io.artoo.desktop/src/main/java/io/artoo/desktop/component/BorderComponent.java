@@ -1,9 +1,9 @@
 package io.artoo.desktop.component;
 
-import javafx.scene.layout.BorderPane;
 import io.artoo.desktop.property.BorderPosition;
 import io.artoo.desktop.property.IdProperty;
 import io.artoo.desktop.property.ParentProperty;
+import javafx.scene.layout.BorderPane;
 
 public interface BorderComponent extends Source<BorderPane> {
   static BorderComponent border(IdProperty id, ParentProperty... properties) {

@@ -1,7 +1,7 @@
 package io.artoo.query.many.impl;
 
-import org.jetbrains.annotations.NotNull;
 import io.artoo.query.Many;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 

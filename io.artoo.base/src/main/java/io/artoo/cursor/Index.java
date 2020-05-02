@@ -1,8 +1,8 @@
 package io.artoo.cursor;
 
+import io.artoo.type.AsInt;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import io.artoo.type.AsInt;
 
 import java.util.concurrent.locks.StampedLock;
 

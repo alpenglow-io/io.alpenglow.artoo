@@ -2,12 +2,12 @@ package io.artoo.sample;
 
 import io.artoo.sample.currency.Currencies;
 
-import static java.lang.System.out;
 import static io.artoo.sample.Main.DefaultCurrency.Dollar;
 import static io.artoo.sample.Main.DefaultCurrency.Lira;
 import static io.artoo.sample.currency.Currency.Entry;
 import static io.artoo.sample.currency.Currency.Id;
 import static io.artoo.sample.currency.Currency.Name;
+import static java.lang.System.out;
 
 public enum Main {
   ;

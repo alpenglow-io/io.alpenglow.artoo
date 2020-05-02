@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.Iterator;
 
-import static java.util.Arrays.copyOf;
 import static io.artoo.type.Nullability.nonNullable;
 import static io.artoo.type.Nullability.nullable;
 
@@ -42,12 +41,6 @@ public interface Cursor<E> extends Iterator<E> {
   @NotNull
   static <T> Cursor<T> none() {
     return (Cursor<T>) Default.None;
-  }
-
-  @NotNull
-  @Contract(pure = true)
-  static <V1, V2> io.artoo.cursor.$2.Cursor<V1, V2> of(final V1 value1, final V2 value2) {
-    return nullable(value1, value2, io.artoo.cursor.$2.Cursor::one, io.artoo.cursor.$2.Cursor::none);
   }
 
   void resume();

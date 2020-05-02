@@ -1,8 +1,8 @@
 package io.artoo.desktop.component;
 
-import javafx.scene.control.Labeled;
 import io.artoo.desktop.event.LabeledEvent;
 import io.artoo.desktop.property.LabeledProperty;
+import javafx.scene.control.Labeled;
 
 import static java.util.Objects.nonNull;
 

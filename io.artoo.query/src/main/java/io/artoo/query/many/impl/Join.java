@@ -1,14 +1,14 @@
 package io.artoo.query.many.impl;
 
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import io.artoo.func.$2.Func;
-import io.artoo.func.$2.Pred;
 import io.artoo.query.Many;
 import io.artoo.query.Queryable;
 import io.artoo.query.many.Joining;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
 import static io.artoo.type.Nullability.nonNullable;
 
@@ -25,7 +25,7 @@ public final class Join<O, I> implements Joining<O, I> {
   @NotNull
   @Contract(pure = true)
   @Override
-  public final Many<Bag<O, I>> on(final Pred<? super O, ? super I> on) {
+  public final Many<Bag<O, I>> on(final BiPredicate<? super O, ? super I> on) {
     return () -> {
       final var array = new ArrayList<Bag<O, I>>();
       for (final var o : first) {
@@ -45,11 +45,6 @@ public final class Join<O, I> implements Joining<O, I> {
     private JoiningBag(final O left, final I right) {
       this.left = left;
       this.right = right;
-    }
-
-    @Override
-    public <T> T as(Func<O, I, T> as) {
-      return nonNullable(as, "as").apply(left, right);
     }
   }
 }

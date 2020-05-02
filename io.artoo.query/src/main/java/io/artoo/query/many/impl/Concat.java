@@ -1,21 +1,22 @@
 package io.artoo.query.many.impl;
 
+import io.artoo.query.Queryable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import io.artoo.func.$2.ConsInt;
-import io.artoo.query.Queryable;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 // TODO: where and select are missing
 public final class Concat<T> implements Queryable<T> {
   private final Queryable<T> queryable;
-  private final ConsInt<? super T> peek;
+  private final BiConsumer<? super Integer, ? super T> peek;
   private final Queryable<T> others;
 
   @Contract(pure = true)
-  public Concat(final Queryable<T> queryable, final ConsInt<? super T> peek, final Queryable<T> others) {
+  public Concat(final Queryable<T> queryable, final BiConsumer<? super Integer, ? super T> peek, final Queryable<T> others) {
     this.queryable = queryable;
     this.peek = peek;
     this.others = others;
@@ -30,7 +31,7 @@ public final class Concat<T> implements Queryable<T> {
     var hasNext = cursor.hasNext();
     while (hasNext) {
       var value = cursor.next();
-      peek.acceptInt(index, value);
+      peek.accept(index, value);
       if (value != null)
         array.add(value);
       index++;

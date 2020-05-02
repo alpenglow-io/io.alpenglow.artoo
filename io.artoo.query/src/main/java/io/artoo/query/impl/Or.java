@@ -1,19 +1,19 @@
 package io.artoo.query.impl;
 
-import org.jetbrains.annotations.NotNull;
-import io.artoo.func.Func;
 import io.artoo.query.Queryable;
 import io.artoo.query.many.Either;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
+import java.util.function.Function;
 
-public final class Or<T> implements Either<T> {
-  private final Queryable<T> queryable;
-  private final Queryable<T> otherwise;
+public final class Or<R extends Record> implements Either<R> {
+  private final Queryable<R> queryable;
+  private final Queryable<R> otherwise;
   private final String message;
-  private final Func<? super String, ? extends RuntimeException> exception;
+  private final Function<? super String, ? extends RuntimeException> exception;
 
-  public Or(final Queryable<T> queryable, final Queryable<T> otherwise, final String message, final Func<? super String, ? extends RuntimeException> exception) {
+  public Or(final Queryable<R> queryable, final Queryable<R> otherwise, final String message, final Function<? super String, ? extends RuntimeException> exception) {
     this.queryable = queryable;
     this.otherwise = otherwise;
     this.message = message;
@@ -22,7 +22,7 @@ public final class Or<T> implements Either<T> {
 
   @NotNull
   @Override
-  public final Iterator<T> iterator() {
+  public final Iterator<R> iterator() {
     final var cursor = queryable.iterator();
     if (cursor.hasNext()) return cursor;
 

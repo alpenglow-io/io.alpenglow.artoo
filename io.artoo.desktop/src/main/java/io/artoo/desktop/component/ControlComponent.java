@@ -1,10 +1,10 @@
 package io.artoo.desktop.component;
 
-import javafx.scene.control.Control;
-import javafx.scene.control.ProgressIndicator;
 import io.artoo.desktop.event.ControlEvent;
 import io.artoo.desktop.property.ControlProperty;
 import io.artoo.desktop.property.IdProperty;
+import javafx.scene.control.Control;
+import javafx.scene.control.ProgressIndicator;
 
 import static javafx.scene.control.ProgressIndicator.INDETERMINATE_PROGRESS;
 

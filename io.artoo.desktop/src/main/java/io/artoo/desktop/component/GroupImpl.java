@@ -1,7 +1,7 @@
 package io.artoo.desktop.component;
 
-import javafx.scene.control.ToggleGroup;
 import io.artoo.desktop.property.NamedProperty;
+import javafx.scene.control.ToggleGroup;
 
 import static java.util.Objects.nonNull;
 

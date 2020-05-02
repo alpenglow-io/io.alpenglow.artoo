@@ -1,34 +1,39 @@
 package io.artoo.query.many.impl;
 
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import io.artoo.cursor.Cursor;
-import io.artoo.func.$2.ConsInt;
-import io.artoo.func.$2.FuncInt;
-import io.artoo.func.$2.PredInt;
-import io.artoo.func.Func;
+
+
+
+
 import io.artoo.query.Queryable;
 import io.artoo.type.Numeric;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static io.artoo.type.Numeric.divide;
 import static io.artoo.type.Numeric.zero;
 
 public final class Average<T, V, N extends Number> implements Queryable<N> {
   private final Queryable<T> queryable;
-  private final ConsInt<? super T> peek;
-  private final PredInt<? super T> where;
-  private final FuncInt<? super T, ? extends V> select;
-  private final Func<? super V, ? extends N> asNumber;
+  private final BiConsumer<? super Integer, ? super T> peek;
+  private final BiPredicate<? super Integer, ? super T> where;
+  private final BiFunction<? super Integer, ? super T, ? extends V> select;
+  private final Function<? super V, ? extends N> asNumber;
 
   @Contract(pure = true)
   public Average(
     final Queryable<T> queryable,
-    final ConsInt<? super T> peek,
-    final PredInt<? super T> where,
-    final FuncInt<? super T, ? extends V> select,
-    final Func<? super V, ? extends N> asNumber
+    final BiConsumer<? super Integer, ? super T> peek,
+    final BiPredicate<? super Integer, ? super T> where,
+    final BiFunction<? super Integer, ? super T, ? extends V> select,
+    final Function<? super V, ? extends N> asNumber
   ) {
     this.queryable = queryable;
     this.peek = peek;
@@ -45,8 +50,8 @@ public final class Average<T, V, N extends Number> implements Queryable<N> {
     var index = 0;
     for (var iterator = queryable.iterator(); iterator.hasNext(); index++) {
       var next = iterator.next();
-      peek.acceptInt(index, next);
-      if (next != null && where.verify(index, next)) {
+      peek.accept(index, next);
+      if (next != null && where.test(index, next)) {
         final var value = select.andThen(asNumber).apply(index, next);
         if (value != null) {
           total = Numeric.sum(total, value);

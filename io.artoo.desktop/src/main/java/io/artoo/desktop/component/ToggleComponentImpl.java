@@ -1,7 +1,7 @@
 package io.artoo.desktop.component;
 
-import javafx.scene.control.ToggleButton;
 import io.artoo.desktop.property.ToggleProperty;
+import javafx.scene.control.ToggleButton;
 
 import static java.util.Objects.nonNull;
 

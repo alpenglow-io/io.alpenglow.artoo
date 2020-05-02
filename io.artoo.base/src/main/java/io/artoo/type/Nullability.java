@@ -2,13 +2,15 @@ package io.artoo.type;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import io.artoo.func.Func;
-import io.artoo.func.Suppl;
 
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+import static io.artoo.type.Str.$;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNullElse;
-import static io.artoo.type.Str.$;
 
 public interface Nullability {
   @Contract("_, _ -> param1")
@@ -28,11 +30,11 @@ public interface Nullability {
     );
   }
 
-  static <T, R> R nonNullable(final T value, @NotNull final String argument, @NotNull final Func<T, R> then) {
+  static <T, R> R nonNullable(final T value, @NotNull final String argument, @NotNull final Function<T, R> then) {
     return nonNullable(then, "then").apply(nonNullable(value, argument));
   }
 
-  static <R> R nonNullable(final Object[] values, @NotNull final String[] arguments, final Suppl<R> suppl) {
+  static <R> R nonNullable(final Object[] values, @NotNull final String[] arguments, final Supplier<R> suppl) {
     for (var index = 0; index < values.length; index++)
       if (values[index] == null)
         throw illegalArgument(arguments[index]);
@@ -66,25 +68,19 @@ public interface Nullability {
     return any;
   }
 
-  static <T, R> R nullable(final T any, final Func<T, R> then, final Suppl<R> otherwise) {
+  static <T, R> R nullable(final T any, final Function<T, R> then, final Supplier<R> otherwise) {
     return nonNull(any)
       ? nonNullable(then, "then").apply(any)
       : nonNullable(otherwise, "otherwise").get();
   }
 
-  static <T1, T2, R> R nullable(final T1 value1, final T2 value2, final io.artoo.func.$2.Func<T1, T2, R> then, final Suppl<R> otherwise) {
+  static <T1, T2, R> R nullable(final T1 value1, final T2 value2, final BiFunction<T1, T2, R> then, final Supplier<R> otherwise) {
     return value1 == null && value2 == null
       ? nonNullable(otherwise, "otherwise").get()
       : nonNullable(then, "then").apply(value1, value2);
   }
 
-  static <T1, T2, T3, R> R nullable(final T1 value1, final T2 value2, final T3 value3, final io.artoo.func.$3.Func<T1, T2, T3, R> then, final Suppl<R> otherwise) {
-    return value1 == null && value2 == null && value3 == null
-      ? nonNullable(otherwise, "otherwise").get()
-      : nonNullable(then, "then").apply(value1, value2, value3);
-  }
-
-  static <T, R> R nonNullable(final T any, final Func<T, R> then, final String message) {
+  static <T, R> R nonNullable(final T any, final Function<T, R> then, final String message) {
     if (isNull(any))
       throw new IllegalStateException(requireNonNullElse(message, "Any is null"));
     return then.apply(any);

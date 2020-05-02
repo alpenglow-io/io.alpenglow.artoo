@@ -1,16 +1,16 @@
 package io.artoo.query;
 
 import io.artoo.cursor.Cursor;
-import io.artoo.func.Cons;
+
+import java.util.function.Consumer;
 
 @FunctionalInterface
-public interface Queryable<T> extends Iterable<T> {
-  default void eventually(final Cons<T> eventually) {
-    for (final var value : this)
-      eventually.accept(value);
+public interface Queryable<R extends Record> extends Iterable<R> {
+  default void eventually(final Consumer<R> eventually) {
+    for (final var value : this) if (value != null) eventually.accept(value);
   }
 
-  default Cursor<T> cursor() {
-    return (Cursor<T>) this.iterator();
+  default Cursor<R> cursor() {
+    return (Cursor<R>) this.iterator();
   }
 }

@@ -1,8 +1,8 @@
 package io.artoo.desktop.component.grid;
 
+import io.artoo.desktop.component.Component;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import io.artoo.desktop.component.Component;
 
 import static java.util.Objects.nonNull;
 

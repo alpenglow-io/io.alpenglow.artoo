@@ -1,10 +1,10 @@
 package io.artoo.sample.currency;
 
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import io.artoo.cursor.Cursor;
 import io.artoo.query.Many;
 import io.artoo.query.One;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 public interface Currencies extends Many<Currency.Entry> {
   @NotNull

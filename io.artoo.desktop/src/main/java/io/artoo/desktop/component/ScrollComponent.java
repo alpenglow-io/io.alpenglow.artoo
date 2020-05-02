@@ -1,10 +1,10 @@
 package io.artoo.desktop.component;
 
-import javafx.scene.control.Control;
-import javafx.scene.control.ScrollPane;
 import io.artoo.desktop.event.ControlEvent;
 import io.artoo.desktop.property.ControlProperty;
 import io.artoo.desktop.property.IdProperty;
+import javafx.scene.control.Control;
+import javafx.scene.control.ScrollPane;
 
 import static java.util.Objects.nonNull;
 

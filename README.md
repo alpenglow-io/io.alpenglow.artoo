@@ -1,6 +1,6 @@
 <img src="https://raw.githubusercontent.com/trydent-io/io.artoo/master/artoo_stone.svg" width="256px" alt="Artoo logo">
 
-# Artoo: Art of Object-Oriented programming
+# Artoo: Art of Objects
 
 ## WIP
 

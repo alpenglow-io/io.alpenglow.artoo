@@ -14,11 +14,9 @@ import java.util.Iterator;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static io.artoo.type.Numeric.divide;
-import static io.artoo.type.Numeric.zero;
 
 public final class Average<T, V, N extends Number> implements Queryable<N> {
   private final Queryable<T> queryable;

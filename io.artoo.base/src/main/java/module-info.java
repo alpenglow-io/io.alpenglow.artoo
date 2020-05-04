@@ -8,4 +8,5 @@ module io.artoo.base {
 
 
   exports io.artoo.type;
+  exports io.artoo.value;
 }

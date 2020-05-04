@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.function.Function;
@@ -39,10 +40,11 @@ public enum Numeric {
     }
   }
 
-  public static <N extends Number> N sum(@Nullable final N result, @NotNull final N value) {
+  @Contract(pure = true)
+  public static <N extends Number> @Nullable N sum(@Nullable final N result, @NotNull final N value) {
     var sum = result == null ? zero(value) : result;
 
-    if (value instanceof Integer v) {
+     if (value instanceof Integer v) {
       return (N) java.lang.Integer.valueOf(sum.intValue() + v);
 
     } else if (value instanceof Long v) {
@@ -193,18 +195,6 @@ public enum Numeric {
     };
   }
 
-  public static <N extends Number> N zero(final N number) {
-    return (N) switch (Numeric.from(number)) {
-      case NaN -> throw new IllegalStateException("Unexpected value: " + Numeric.from(number));
-      case Integer -> 0;
-      case Long -> 0L;
-      case Float -> 0.0F;
-      case Double -> 0.0D;
-      case BigInteger -> java.math.BigInteger.ZERO;
-      case BigDecimal -> java.math.BigDecimal.ZERO;
-    };
-  }
-
   public static <N extends Number> N one(final N number) {
     return (N) switch (Numeric.from(number)) {
       case NaN -> throw new IllegalStateException("Unexpected value: " + Numeric.from(number));
@@ -214,6 +204,18 @@ public enum Numeric {
       case Double -> 1.0D;
       case BigInteger -> java.math.BigInteger.ONE;
       case BigDecimal -> java.math.BigDecimal.ONE;
+    };
+  }
+
+  public static <N extends Number> N zero(final N number) {
+    return (N) switch (Numeric.from(number)) {
+      case NaN -> throw new IllegalStateException("Unexpected value: " + Numeric.from(number));
+      case Integer -> 0;
+      case Long -> 0L;
+      case Float -> 0.0;
+      case Double -> 0.0D;
+      case BigInteger -> java.math.BigInteger.ZERO;
+      case BigDecimal -> java.math.BigDecimal.ZERO;
     };
   }
 }

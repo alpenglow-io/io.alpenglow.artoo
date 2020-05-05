@@ -17,5 +17,11 @@ public record Int32(int eval) implements Numeral<Integer, Int32> {
   public final @NotNull Int32 add(@NotNull Int32 value) {
     return new Int32(eval + value.eval);
   }
+
+  @Override
+  @Contract(" -> new")
+  public final @NotNull Int32 inc() {
+    return new Int32(eval + 1);
+  }
 }
 

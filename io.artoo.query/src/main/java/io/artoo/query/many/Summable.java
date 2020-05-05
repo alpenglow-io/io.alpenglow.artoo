@@ -3,7 +3,6 @@ package io.artoo.query.many;
 import io.artoo.query.One;
 import io.artoo.query.Queryable;
 import io.artoo.query.many.impl.Aggregate;
-import io.artoo.type.Numeric;
 import io.artoo.value.Numeral;
 
 import java.util.function.Function;
@@ -31,10 +30,10 @@ interface Summable<T extends Record> extends Queryable<T> {
   default <V, N extends Number, R extends Record & Numeral<N, R>> One<R> sum(
     final Function<? super T, ? extends V> select
   ) {
-    return this.sum(select, Numeral.<V, N, R>asNumber());
+    return this.sum(select, Numeral.<V, N, R>asNumeral());
   }
 
   default <N extends Number, R extends Record & Numeral<N, R>> One<R> sum() {
-    return this.sum(identity(), Numeral.<T, N, R>asNumber());
+    return this.sum(identity(), Numeral.<T, N, R>asNumeral());
   }
 }

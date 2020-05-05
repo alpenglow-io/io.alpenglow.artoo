@@ -17,6 +17,12 @@ public record Int8(byte eval) implements Numeral<Byte, Int8> {
   public final @NotNull Int8 add(@NotNull Int8 value) {
     return new Int8((byte) (eval + value.eval));
   }
+
+  @Override
+  @Contract(" -> new")
+  public final @NotNull Int8 inc() {
+    return new Int8((byte) (eval + 1));
+  }
 }
 
 

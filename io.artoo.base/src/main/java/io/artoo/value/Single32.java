@@ -17,5 +17,11 @@ public record Single32(float eval) implements Numeral<Float, Single32> {
   public final @NotNull Single32 add(@NotNull Single32 value) {
     return new Single32(eval + value.eval);
   }
+
+  @Override
+  @Contract(" -> new")
+  public final @NotNull Single32 inc() {
+    return new Single32(eval + 1);
+  }
 }
 

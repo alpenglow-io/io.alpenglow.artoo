@@ -17,5 +17,11 @@ public record Int64(long eval) implements Numeral<Long, Int64> {
   public final @NotNull Int64 add(@NotNull Int64 value) {
     return new Int64(eval + value.eval);
   }
+
+  @Override
+  @Contract(" -> new")
+  public final @NotNull Int64 inc() {
+    return new Int64(eval + 1);
+  }
 }
 

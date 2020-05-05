@@ -23,5 +23,11 @@ public record Single64(double eval) implements Numeral<Double, Single64> {
   public final @NotNull Single64 add(@NotNull Single64 value) {
     return new Single64(eval + value.eval);
   }
+
+  @Override
+  @Contract(" -> new")
+  public final @NotNull Single64 inc() {
+    return new Single64(eval + 1);
+  }
 }
 

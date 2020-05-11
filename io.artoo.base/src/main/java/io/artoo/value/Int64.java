@@ -12,10 +12,16 @@ public record Int64(long eval) implements Numeral<Long, Int64> {
     return eval;
   }
 
-  @Override
   @Contract("_ -> new")
-  public final @NotNull Int64 add(@NotNull Int64 value) {
-    return new Int64(eval + value.eval);
+  @Override
+  public <L extends Number, V extends Record & Numeral<L, V>> @NotNull Int64 add(@NotNull V value) {
+    return new Int64(eval + value.box().longValue());
+  }
+
+  @Contract("_ -> new")
+  @Override
+  public <L extends Number, V extends Record & Numeral<L, V>> @NotNull Int64 div(@NotNull V value) {
+    return new Int64(eval / value.box().longValue());
   }
 
   @Override

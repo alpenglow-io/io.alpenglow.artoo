@@ -1,8 +1,9 @@
-package io.artoo.query.impl;
+package io.artoo.query.many.impl;
 
 
 
 import io.artoo.query.Queryable;
+import io.artoo.query.many.Projectable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,7 +12,7 @@ import java.util.Iterator;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
-public final class SelectMany<T, R, Q extends Queryable<R>> implements Queryable<R> {
+public final class SelectMany<T extends Record, R extends Record, Q extends Queryable<R>> implements Projectable<R> {
   private final Queryable<T> queryable;
   private final BiConsumer<? super Integer, ? super T> peek;
   private final BiFunction<? super Integer, ? super T, ? extends Q> select;

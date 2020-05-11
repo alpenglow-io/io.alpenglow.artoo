@@ -11,7 +11,7 @@ import java.util.function.Predicate;
 
 import static java.util.Objects.nonNull;
 
-public final class Distinct<T> implements Queryable<T> {
+public final class Distinct<T extends Record> implements Queryable<T> {
   private final Queryable<T> queryable;
   private final BiConsumer<? super Integer, ? super T> peek;
   private final Predicate<? super T> where;

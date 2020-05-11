@@ -12,10 +12,16 @@ public record Single32(float eval) implements Numeral<Float, Single32> {
     return eval;
   }
 
-  @Override
   @Contract("_ -> new")
-  public final @NotNull Single32 add(@NotNull Single32 value) {
-    return new Single32(eval + value.eval);
+  @Override
+  public <L extends Number, V extends Record & Numeral<L, V>> @NotNull Single32 add(@NotNull V value) {
+    return new Single32(eval + value.box().floatValue());
+  }
+
+  @Contract("_ -> new")
+  @Override
+  public <L extends Number, V extends Record & Numeral<L, V>> @NotNull Single32 div(@NotNull V value) {
+    return new Single32(eval / value.box().floatValue());
   }
 
   @Override

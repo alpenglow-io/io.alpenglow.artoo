@@ -3,7 +3,7 @@ package io.artoo.query.one;
 
 import io.artoo.query.One;
 import io.artoo.query.Queryable;
-import io.artoo.query.impl.Select;
+import io.artoo.query.many.impl.Select;
 import io.artoo.query.one.impl.SelectOne;
 
 import java.util.function.Function;

@@ -1,13 +1,13 @@
-package io.artoo.query.impl;
+package io.artoo.query.many.impl;
 
 import io.artoo.query.Queryable;
-import io.artoo.query.many.Either;
+import io.artoo.query.many.Otherwise;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 import java.util.function.Function;
 
-public final class Or<R extends Record> implements Either<R> {
+public final class Or<R extends Record> implements Otherwise<R> {
   private final Queryable<R> queryable;
   private final Queryable<R> otherwise;
   private final String message;

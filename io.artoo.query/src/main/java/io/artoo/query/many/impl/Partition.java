@@ -1,6 +1,7 @@
 package io.artoo.query.many.impl;
 
 import io.artoo.query.Queryable;
+import io.artoo.query.many.Partitionable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,7 +10,7 @@ import java.util.Iterator;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 
-public final class Partition<T> implements Queryable<T> {
+public final class Partition<T extends Record> implements Partitionable<T> {
   private final Queryable<T> queryable;
   private final BiConsumer<? super Integer, ? super T> peek;
   private final BiPredicate<? super Integer, ? super T> where;

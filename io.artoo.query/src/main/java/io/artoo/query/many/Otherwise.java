@@ -2,14 +2,14 @@ package io.artoo.query.many;
 
 import io.artoo.query.Many;
 import io.artoo.query.Queryable;
-import io.artoo.query.impl.Or;
+import io.artoo.query.many.impl.Or;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static io.artoo.type.Nullability.nonNullable;
 
-public interface Either<T> extends Queryable<T> {
+public interface Otherwise<T extends Record> extends Queryable<T> {
   @SuppressWarnings("unchecked")
   default Many<T> or(final T... values) {
     nonNullable(values, "values");

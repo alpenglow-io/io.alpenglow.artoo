@@ -2,12 +2,13 @@ package io.artoo.query.many.impl;
 
 import io.artoo.cursor.Cursor;
 import io.artoo.query.Queryable;
+import io.artoo.query.many.Uniquable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
-public final class At<T> implements Queryable<T> {
+public final class At<T extends Record> implements Uniquable<T> {
   private final Queryable<T> queryable;
   private final int index;
 

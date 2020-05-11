@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.function.Supplier;
 
-public final class Repeat<T> implements Many<T> {
+public final class Repeat<T extends Record> implements Many<T> {
   private final Supplier<? extends T> supplier;
   private final int count;
 

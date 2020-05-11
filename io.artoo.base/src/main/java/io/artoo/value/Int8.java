@@ -12,10 +12,16 @@ public record Int8(byte eval) implements Numeral<Byte, Int8> {
     return eval;
   }
 
-  @Override
   @Contract("_ -> new")
-  public final @NotNull Int8 add(@NotNull Int8 value) {
-    return new Int8((byte) (eval + value.eval));
+  @Override
+  public <L extends Number, V extends Record & Numeral<L, V>> @NotNull Int8 add(@NotNull V value) {
+    return new Int8((byte) (eval + value.box().byteValue()));
+  }
+
+  @Contract("_ -> new")
+  @Override
+  public <L extends Number, V extends Record & Numeral<L, V>> @NotNull Int8 div(@NotNull V value) {
+    return new Int8((byte) (eval / value.box().byteValue()));
   }
 
   @Override

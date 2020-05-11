@@ -2,7 +2,7 @@ package io.artoo.query.many;
 
 import io.artoo.query.Many;
 import io.artoo.query.Queryable;
-import io.artoo.query.impl.Where;
+import io.artoo.query.many.impl.Where;
 
 
 import java.util.function.BiFunction;
@@ -10,7 +10,6 @@ import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 import static io.artoo.type.Nullability.nonNullable;
-import static java.util.function.Function.identity;
 
 public interface Filterable<T extends Record> extends Queryable<T> {
   default Many<T> where(final Predicate<? super T> where) {

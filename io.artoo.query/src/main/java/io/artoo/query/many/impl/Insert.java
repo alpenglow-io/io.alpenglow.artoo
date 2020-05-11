@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.function.BiConsumer;
 
 // TODO: where and select are missing
-public final class Insert<T, Q extends Queryable<T>> implements Queryable<T> {
+public final class Insert<T extends Record, Q extends Queryable<T>> implements Queryable<T> {
   private final Queryable<T> queryable;
   private final BiConsumer<? super Integer, ? super T> peek;
   private final Q values;

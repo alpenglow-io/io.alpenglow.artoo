@@ -7,8 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
-@SuppressWarnings("ALL")
-public final class Array<T> implements Many<T> {
+public final class Array<T extends Record> implements Many<T> {
   private final T[] values;
 
   @SafeVarargs
@@ -21,11 +20,5 @@ public final class Array<T> implements Many<T> {
   @Override
   public final Iterator<T> iterator() {
     return Cursor.many(values);
-  }
-
-  private record Entry(
-    Entry prev,
-    Entry next,
-    Object value) {
   }
 }

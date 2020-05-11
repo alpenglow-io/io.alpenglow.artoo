@@ -12,7 +12,7 @@ import java.util.function.Predicate;
 
 import static io.artoo.type.Nullability.nonNullable;
 
-public final class Join<O, I> implements Joining<O, I> {
+public final class Join<O extends Record, I extends Record> implements Joining<O, I> {
   private final Queryable<O> first;
   private final Queryable<I> second;
 

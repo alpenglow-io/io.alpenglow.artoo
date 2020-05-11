@@ -2,8 +2,8 @@ package io.artoo.query.many;
 
 import io.artoo.query.Many;
 import io.artoo.query.Queryable;
-import io.artoo.query.impl.Select;
-import io.artoo.query.impl.SelectMany;
+import io.artoo.query.many.impl.Select;
+import io.artoo.query.many.impl.SelectMany;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;

@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
-public final class Iteration<T> implements Many<T> {
+public final class Iteration<T extends Record> implements Many<T> {
   private final Iterable<T> iterable;
 
   public Iteration(Iterable<T> iterable) {this.iterable = iterable;}

@@ -7,7 +7,7 @@ import io.artoo.query.many.impl.Insert;
 
 import static io.artoo.type.Nullability.nonNullable;
 
-public interface Insertable<T> extends Queryable<T> {
+public interface Insertable<T extends Record> extends Queryable<T> {
   @SuppressWarnings("unchecked")
   default Many<T> insert(final T... values) {
     return new Insert<>(this, (i, it) -> {}, Many.from(nonNullable(values, "values")))::iterator;

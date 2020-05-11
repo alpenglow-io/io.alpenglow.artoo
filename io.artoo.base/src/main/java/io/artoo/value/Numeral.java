@@ -8,15 +8,20 @@ import java.util.function.Function;
 public interface Numeral<N extends Number, R extends Record & Numeral<N, R>> {
   N box();
 
-  R add(R value);
+  <L extends Number, V extends Record & Numeral<L, V>> R add(V value);
+  <L extends Number, V extends Record & Numeral<L, V>> R div(V value);
   R inc();
 
-  static <R extends Record & Numeral<N, R>> R inc(R count) {
-    return first == null ? second : first.add(second);
+  static <N extends Number, R extends Record & Numeral<N, R>> R inc(R count) {
+    return count == null ? null : count.inc();
   }
 
   static <N extends Number, R extends Record & Numeral<N, R>> R add(R first, R second) {
     return first == null ? second : first.add(second);
+  }
+
+  static <N extends Number, R extends Record & Numeral<N, R>> R div(R first, R second) {
+    return second == null || first == null ? null : first.div(second);
   }
 
   @NotNull

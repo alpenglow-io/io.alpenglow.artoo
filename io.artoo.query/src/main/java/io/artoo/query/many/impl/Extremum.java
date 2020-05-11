@@ -4,6 +4,7 @@ import io.artoo.cursor.Cursor;
 
 
 import io.artoo.query.Queryable;
+import io.artoo.query.many.Extremumable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,7 +12,7 @@ import java.util.Iterator;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-public final class Extremum<T, R> implements Queryable<R> {
+public final class Extremum<T extends Record, R extends Record> implements Extremumable<R> {
   private final Queryable<T> queryable;
   private final BiConsumer<? super Integer, ? super T> peek;
   private final int extreme;

@@ -2,7 +2,7 @@ package io.artoo.query.one;
 
 import io.artoo.query.One;
 import io.artoo.query.Queryable;
-import io.artoo.query.impl.Or;
+import io.artoo.query.many.impl.Or;
 
 import java.util.function.Function;
 import java.util.function.Supplier;

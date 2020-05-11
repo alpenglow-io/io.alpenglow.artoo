@@ -12,10 +12,16 @@ public record Int16(short eval) implements Numeral<Short, Int16> {
     return eval;
   }
 
-  @Override
   @Contract("_ -> new")
-  public final @NotNull Int16 add(@NotNull Int16 value) {
-    return new Int16((short) (eval + value.eval));
+  @Override
+  public <L extends Number, V extends Record & Numeral<L, V>> @NotNull Int16 add(@NotNull V value) {
+    return new Int16((short) (eval + value.box().shortValue()));
+  }
+
+  @Contract("_ -> new")
+  @Override
+  public <L extends Number, V extends Record & Numeral<L, V>> @NotNull Int16 div(@NotNull V value) {
+    return new Int16((short) (eval / value.box().shortValue()));
   }
 
   @Override

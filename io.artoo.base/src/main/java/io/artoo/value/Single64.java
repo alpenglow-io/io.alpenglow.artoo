@@ -18,10 +18,16 @@ public record Single64(double eval) implements Numeral<Double, Single64> {
     return eval;
   }
 
+  @Contract("_ -> new")
   @Override
-  @Contract(pure = true)
-  public final @NotNull Single64 add(@NotNull Single64 value) {
-    return new Single64(eval + value.eval);
+  public <L extends Number, V extends Record & Numeral<L, V>> @NotNull Single64 add(@NotNull V value) {
+    return new Single64(eval + value.box().doubleValue());
+  }
+
+  @Contract("_ -> new")
+  @Override
+  public <L extends Number, V extends Record & Numeral<L, V>> @NotNull Single64 div(@NotNull V value) {
+    return new Single64(eval / value.box().doubleValue());
   }
 
   @Override

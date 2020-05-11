@@ -1,24 +1,28 @@
 package io.artoo.query.many.impl;
 
 import io.artoo.cursor.Cursor;
-
-
 import io.artoo.query.Queryable;
+import io.artoo.query.many.Quantifiable;
+import io.artoo.value.Bool;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
+import java.util.TreeMap;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 
-public final class Quantify<T> implements Queryable<Boolean> {
+import static io.artoo.value.Bool.False;
+import static io.artoo.value.Bool.True;
+
+public final class Quantify<T extends Record> implements Quantifiable<Bool> {
   private final Queryable<T> queryable;
   private final BiConsumer<? super Integer, ? super T> peek;
-  private final boolean once;
+  private final Bool once;
   private final BiPredicate<? super Integer, ? super T> where;
 
   @Contract(pure = true)
-  public Quantify(final Queryable<T> queryable, BiConsumer<? super Integer, ? super T> peek, final boolean once, final BiPredicate<? super Integer, ? super T> where) {
+  public Quantify(final Queryable<T> queryable, BiConsumer<? super Integer, ? super T> peek, final Bool once, final BiPredicate<? super Integer, ? super T> where) {
     this.queryable = queryable;
     this.peek = peek;
     this.once = once;
@@ -27,15 +31,15 @@ public final class Quantify<T> implements Queryable<Boolean> {
 
   @NotNull
   @Override
-  public final Iterator<Boolean> iterator() {
-    var all = !once;
+  public final Iterator<Bool> iterator() {
+    var all = once.not();
     var any = once;
     var index = 0;
-    for (final var iterator = queryable.iterator(); iterator.hasNext() && (all || !any); index++) {
+    for (final var iterator = queryable.iterator(); iterator.hasNext() && (all.equals(True) || any.equals(False)); index++) {
       final var it = iterator.next();
       peek.accept(index, it);
-      all = any = it != null && where.test(index, it);
+      all = any = new Bool(it != null && where.test(index, it));
     }
-    return Cursor.of(once || all);
+    return Cursor.of(new Bool(once.equals(True) || all.equals(True)));
   }
 }

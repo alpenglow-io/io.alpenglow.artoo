@@ -3,8 +3,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>io.io.artoo</groupId>
-  <artifactId>io.io.artoo</artifactId>
+  <groupId>io.artoo</groupId>
+  <artifactId>io.artoo</artifactId>
   <packaging>pom</packaging>
   <version>1.0-SNAPSHOT</version>
   <modules>
@@ -18,7 +18,7 @@
   <name>Artoo</name>
 
   <properties>
-    <trydent.version>1.0-SNAPSHOT</trydent.version>
+    <io.artoo.version>1.0-SNAPSHOT</io.artoo.version>
 
     <encoding>UTF-8</encoding>
     <java.version>14</java.version>
@@ -106,9 +106,9 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>trydent</groupId>
-        <artifactId>trydent-Function</artifactId>
-        <version>${trydent.version}</version>
+        <groupId>io.artoo</groupId>
+        <artifactId>io.artoo-Function</artifactId>
+        <version>${io.artoo.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

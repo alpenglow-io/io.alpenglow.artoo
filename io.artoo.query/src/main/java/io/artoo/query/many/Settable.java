@@ -9,7 +9,7 @@ import java.util.function.Predicate;
 
 import static io.artoo.type.Nullability.nonNullable;
 
-public interface Settable<T> extends Queryable<T> {
+public interface Settable<T extends Record> extends Queryable<T> {
   default Many<T> distinct() {
     return distinct(it -> true);
   }

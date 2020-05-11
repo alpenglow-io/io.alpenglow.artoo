@@ -8,6 +8,7 @@ import io.artoo.cursor.Cursor;
 import io.artoo.query.Queryable;
 import io.artoo.query.many.Averageable;
 import io.artoo.type.Numeric;
+import io.artoo.value.Int32;
 import io.artoo.value.Numeral;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -46,7 +47,7 @@ public final class Average<T extends Record, V extends Record, N extends Number,
   @Override
   public final Iterator<R> iterator() {
     R total = null;
-    R count = null;
+    var count = 0;
     var index = 0;
     for (var iterator = queryable.iterator(); iterator.hasNext(); index++) {
       var next = iterator.next();
@@ -55,10 +56,10 @@ public final class Average<T extends Record, V extends Record, N extends Number,
         final var value = select.andThen(asNumber).apply(index, next);
         if (value != null) {
           total = Numeral.add(total, value);
-          count = Numeral.inc(count);
+          count++;
         }
       }
     }
-    return count == null || count.equals(zero(count)) ? Cursor.none() : Cursor.of(divide(total, count));
+    return count == 0 ? Cursor.none() : Cursor.of(total.div(new Int32(count)));
   }
 }

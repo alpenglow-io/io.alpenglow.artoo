@@ -19,14 +19,16 @@ import static io.artoo.value.Numeral.asSingle64;
 import static java.util.function.Function.identity;
 
 public interface Averageable<T extends Record> extends Queryable<T> {
-  default <V, N extends Number, R extends Record & Numeral<N, R>> One<R> average(final BiFunction<? super Integer, ? super T, ? extends V> select, final Function<? super V, ? extends R> asNumber) {
-    return new Average<T, V, N, R>(this, (i, it) -> {}, (i, it) -> true, nonNullable(select, "select"), nonNullable(asNumber, "asNumber"))::iterator;
+  default <V extends Record, N extends Number, R extends Record & Numeral<N, R>> One<R> average(final BiFunction<? super Integer, ? super T, ? extends V> select, final Function<? super V, ? extends R> asNumber) {
+    final var s = nonNullable(select, "select");
+    final var n = nonNullable(asNumber, "asNumber");
+    return new Average<T, V, N, R>(this, (i, it) -> {}, (i, it) -> true, s, n)::iterator;
   }
 
-  default <V, N extends Number, R extends Record & Numeral<N, R>> One<R> average(final Function<? super T, ? extends V> select, final Function<? super V, ? extends R> asNumeral) {
-    nonNullable(select, "select");
-    nonNullable(asNumeral, "asNumeral");
-    return average((index, it) -> select.apply(it), asNumeral);
+  default <V extends Record, N extends Number, R extends Record & Numeral<N, R>> One<R> average(final Function<? super T, ? extends V> select, final Function<? super V, ? extends R> asNumeral) {
+    final var s = nonNullable(select, "select");
+    final var n = nonNullable(asNumeral, "asNumeral");
+    return this.<V, N, R>average((index, it) -> s.apply(it), n);
   }
 
   default <N extends Number, R extends Record & Numeral<N, R>> One<R> average(final BiFunction<? super Integer, ? super T, ? extends R> select) {

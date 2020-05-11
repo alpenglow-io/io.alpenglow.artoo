@@ -1,6 +1,7 @@
-package io.artoo.query.impl;
+package io.artoo.query.many.impl;
 
 import io.artoo.query.Queryable;
+import io.artoo.query.many.Filterable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,7 +11,7 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 
-public final class Where<T, R> implements Queryable<R> {
+public final class Where<T extends Record, R extends Record> implements Filterable<R> {
   private final Queryable<T> queryable;
   private final BiConsumer<? super Integer, ? super T> peek;
   private final BiPredicate<? super Integer, ? super T> where;

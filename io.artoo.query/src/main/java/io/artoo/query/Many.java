@@ -3,7 +3,7 @@ package io.artoo.query;
 import io.artoo.query.many.Aggregatable;
 import io.artoo.query.many.Concatenatable;
 import io.artoo.query.many.Default;
-import io.artoo.query.many.Either;
+import io.artoo.query.many.Otherwise;
 import io.artoo.query.many.Filterable;
 import io.artoo.query.many.Groupable;
 import io.artoo.query.many.Insertable;
@@ -26,7 +26,7 @@ import static io.artoo.type.Nullability.nonNullable;
 
 public interface Many<R extends Record> extends
   Projectable<R>, Filterable<R>, Partitionable<R>, Uniquable<R>, Aggregatable<R>, Concatenatable<R>, Groupable<R>,
-  Joinable<R>, Quantifiable<R>, Settable<R>, Insertable<R>, Either<R> {
+  Joinable<R>, Quantifiable<R>, Settable<R>, Insertable<R>, Otherwise<R> {
 
   @NotNull
   @Contract("_ -> new")

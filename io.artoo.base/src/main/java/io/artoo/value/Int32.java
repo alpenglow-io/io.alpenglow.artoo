@@ -12,10 +12,16 @@ public record Int32(int eval) implements Numeral<Integer, Int32> {
     return eval;
   }
 
-  @Override
   @Contract("_ -> new")
-  public final @NotNull Int32 add(@NotNull Int32 value) {
-    return new Int32(eval + value.eval);
+  @Override
+  public <L extends Number, V extends Record & Numeral<L, V>> @NotNull Int32 add(@NotNull V value) {
+    return new Int32(eval + value.box().intValue());
+  }
+
+  @Contract("_ -> new")
+  @Override
+  public <L extends Number, V extends Record & Numeral<L, V>> @NotNull Int32 div(@NotNull V value) {
+    return new Int32(eval / value.box().intValue());
   }
 
   @Override

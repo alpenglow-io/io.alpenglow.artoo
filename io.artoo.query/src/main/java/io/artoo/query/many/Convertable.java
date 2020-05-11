@@ -1,7 +1,5 @@
 package io.artoo.query.many;
 
-
-
 import io.artoo.query.Queryable;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +12,7 @@ import java.util.function.Function;
 
 import static io.artoo.type.Nullability.nonNullable;
 
-public interface Convertable<T> extends Queryable<T> {
+public interface Convertable<T extends Record> extends Queryable<T> {
   default @NotNull <K, E> Map<? extends K, ? extends E> asMap(final Function<? super T, ? extends K> key, final Function<? super T, ? extends E> element) {
     nonNullable(key, "key");
     nonNullable(element, "element");

@@ -1,6 +1,6 @@
-<img src="https://raw.githubusercontent.com/trydent-io/artoo/master/artoo_stone.svg" width="256px" alt="Artoo logo">
+<img src="https://raw.githubusercontent.com/trydent-io/artoo/master/artoo_stone.svg" width="256px" alt="Artoor logo">
 
-# Artoo: Art of Objects
+# Artoor: Artefacts Of Objects and Records
 
 ## WIP
 

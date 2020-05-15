@@ -3,7 +3,7 @@ package io.artoo.cursor;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
-public enum Default implements Cursor<Object> {
+public enum Default implements Cursor<Record> {
   None;
 
   @Override
@@ -14,12 +14,12 @@ public enum Default implements Cursor<Object> {
   @Nullable
   @Contract(pure = true)
   @Override
-  public final Object next() {
+  public final Record next() {
     return null;
   }
 
   @Override
-  public final void resume() {
-    // nothing to do
+  public final Cursor<Record> resume() {
+    return this;
   }
 }

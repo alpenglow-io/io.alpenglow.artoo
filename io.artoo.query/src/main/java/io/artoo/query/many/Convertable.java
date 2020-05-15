@@ -1,6 +1,8 @@
 package io.artoo.query.many;
 
 import io.artoo.query.Queryable;
+import io.artoo.value.Int32;
+import io.artoo.value.UInt32;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 import static io.artoo.type.Nullability.nonNullable;
+import static io.artoo.value.UInt32.*;
 
 public interface Convertable<T extends Record> extends Queryable<T> {
   default @NotNull <K, E> Map<? extends K, ? extends E> asMap(final Function<? super T, ? extends K> key, final Function<? super T, ? extends E> element) {
@@ -34,15 +37,10 @@ public interface Convertable<T extends Record> extends Queryable<T> {
   }
 
   default T[] asArray(final Function<? super Integer, T[]> initializer) {
-    nonNullable(initializer, "initializer");
-    final var ts = ((Countable<T>) this::iterator)
-      .count()
-      .select(initializer::apply)
-      .asIs();
+    for (final var count : ((Countable<T>) this::iterator).count().or(ZERO)) {
+      return nonNullable(initializer, "initializer").apply(count.box());
+    }
 
-    var i = 0;
-    for (final var value : this) ts[i++] = value;
-
-    return ts;
+    throw new IllegalStateException("Can't initialize array");
   }
 }

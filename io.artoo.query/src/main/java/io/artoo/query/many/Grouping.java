@@ -2,11 +2,8 @@ package io.artoo.query.many;
 
 
 import io.artoo.query.Many;
-import io.artoo.query.many.impl.Having;
 
-import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
-import java.util.function.Predicate;
 
 import static io.artoo.type.Nullability.nonNullable;
 

@@ -10,11 +10,11 @@ import static io.artoo.type.Nullability.nonNullable;
 import static io.artoo.type.Nullability.nullable;
 
 @SuppressWarnings("unchecked")
-public interface Cursor<E> extends Iterator<E> {
+public interface Cursor<R extends Record> extends Iterator<R> {
   @SafeVarargs
   @NotNull
   @Contract("_ -> new")
-  static <T> Cursor<T> many(final T... values) {
+  static <R extends Record> Cursor<R> many(final R... values) {
     return new Linear<>(Arrays.copyOf(nonNullable(values, "values"), values.length));
   }
 
@@ -30,20 +30,20 @@ public interface Cursor<E> extends Iterator<E> {
     return new Index(start);
   }
 
-  static <T> Cursor<T> of(final T value) {
+  static <R extends Record> Cursor<R> of(final R value) {
     return nullable(value, Just::new, Cursor::none);
   }
 
-  static <T> Cursor<T> just(final T value) {
+  static <R extends Record> Cursor<R> just(final R value) {
     return new Just<>(nonNullable(value, "value"));
   }
 
   @NotNull
-  static <T> Cursor<T> none() {
-    return (Cursor<T>) Default.None;
+  static <R extends Record> Cursor<R> none() {
+    return (Cursor<R>) Default.None;
   }
 
-  void resume();
+  Cursor<R> resume();
 }
 
 

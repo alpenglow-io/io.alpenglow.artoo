@@ -2,8 +2,9 @@ package io.artoo.query.many;
 
 import io.artoo.query.Many;
 import io.artoo.query.Queryable;
-import io.artoo.query.many.impl.Or;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Iterator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -30,5 +31,32 @@ public interface Otherwise<T extends Record> extends Queryable<T> {
   default <E extends RuntimeException> Many<T> or(final Supplier<? extends E> exception) {
     nonNullable(exception, "exception");
     return or("nothing", it -> exception.get());
+  }
+}
+
+final class Or<R extends Record> implements Otherwise<R> {
+  private final Queryable<R> queryable;
+  private final Queryable<R> otherwise;
+  private final String message;
+  private final Function<? super String, ? extends RuntimeException> exception;
+
+  Or(final Queryable<R> queryable, final Queryable<R> otherwise, final String message, final Function<? super String, ? extends RuntimeException> exception) {
+    this.queryable = queryable;
+    this.otherwise = otherwise;
+    this.message = message;
+    this.exception = exception;
+  }
+
+  @NotNull
+  @Override
+  public final Iterator<R> iterator() {
+    final var cursor = queryable.iterator();
+    if (cursor.hasNext()) return cursor;
+
+    final var except = exception.apply(message);
+    if (except == null)
+      return otherwise.iterator();
+
+    throw except;
   }
 }

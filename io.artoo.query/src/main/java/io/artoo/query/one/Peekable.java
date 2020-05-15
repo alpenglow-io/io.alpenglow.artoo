@@ -2,10 +2,12 @@ package io.artoo.query.one;
 
 
 
+import io.artoo.cursor.Cursor;
 import io.artoo.query.One;
 import io.artoo.query.Queryable;
-import io.artoo.query.one.impl.Peek;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Iterator;
 import java.util.function.Consumer;
 
 import static io.artoo.type.Nullability.nonNullable;
@@ -20,3 +22,23 @@ public interface Peekable<T extends Record> extends Queryable<T> {
     return peek(it -> runnable.run());
   }
 }
+
+final class Peek<T extends Record> implements Peekable<T> {
+  private final Queryable<T> queryable;
+  private final Consumer<? super T> cons;
+
+  public Peek(final Queryable<T> queryable, final Consumer<? super T> cons) {
+    this.queryable = queryable;
+    this.cons = cons;
+  }
+
+  @NotNull
+  @Override
+  public final Iterator<T> iterator() {
+    final var cursor = queryable.cursor();
+    if (cursor.hasNext()) cons.accept(cursor.next());
+    cursor.resume();
+    return cursor;
+  }
+}
+

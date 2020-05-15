@@ -1,8 +1,8 @@
 package io.artoo.query;
 
+import io.artoo.cursor.Cursor;
 import io.artoo.query.many.Aggregatable;
 import io.artoo.query.many.Concatenatable;
-import io.artoo.query.many.Default;
 import io.artoo.query.many.Otherwise;
 import io.artoo.query.many.Filterable;
 import io.artoo.query.many.Groupable;
@@ -13,13 +13,12 @@ import io.artoo.query.many.Projectable;
 import io.artoo.query.many.Quantifiable;
 import io.artoo.query.many.Settable;
 import io.artoo.query.many.Uniquable;
-import io.artoo.query.many.impl.Array;
-import io.artoo.query.many.impl.Iteration;
-import io.artoo.query.many.impl.Repeat;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.function.Supplier;
 
 import static io.artoo.type.Nullability.nonNullable;
@@ -32,7 +31,7 @@ public interface Many<R extends Record> extends
   @Contract("_ -> new")
   @SafeVarargs
   static <R extends Record> Many<R> from(final R... items) {
-    return new Array<>(Arrays.copyOf(items, items.length));
+    return new Records<>(Arrays.copyOf(items, items.length));
   }
 
   @NotNull
@@ -45,7 +44,7 @@ public interface Many<R extends Record> extends
   @Contract(value = " -> new", pure = true)
   @SuppressWarnings("unchecked")
   static <R extends Record> Many<R> none() {
-    return (Many<R>) Default.None;
+    return (Many<R>) ManyRecord.None;
   }
 
   @NotNull
@@ -54,3 +53,64 @@ public interface Many<R extends Record> extends
     return new Repeat<>(nonNullable(supplier, "supplier"), count);
   }
 }
+
+final class Iteration<T extends Record> implements Many<T> {
+  private final Iterable<T> iterable;
+
+  @Contract(pure = true)
+  Iteration(final Iterable<T> iterable) {this.iterable = iterable;}
+
+  @NotNull
+  @Override
+  public final Iterator<T> iterator() {
+    return iterable.iterator();
+  }
+}
+
+final class Records<T extends Record> implements Many<T> {
+  private final T[] records;
+
+  @SafeVarargs
+  @Contract(pure = true)
+  Records(final T... records) {
+    this.records = records;
+  }
+
+  @NotNull
+  @Override
+  public final Iterator<T> iterator() {
+    return Cursor.many(records);
+  }
+}
+
+final class Repeat<T extends Record> implements Many<T> {
+  private final Supplier<? extends T> supplier;
+  private final int count;
+
+  @Contract(pure = true)
+  public Repeat(final Supplier<? extends T> supplier, final int count) {
+    this.supplier = supplier;
+    this.count = count;
+  }
+
+  @NotNull
+  @Override
+  public final Iterator<T> iterator() {
+    final var array = new ArrayList<T>();
+    for (var index = 0; index < count; index++) {
+      array.add(supplier.get());
+    }
+    return array.iterator();
+  }
+}
+
+enum ManyRecord implements Many<Record> {
+  None;
+
+  @NotNull
+  @Override
+  public final Iterator<Record> iterator() {
+    return Cursor.none();
+  }
+}
+

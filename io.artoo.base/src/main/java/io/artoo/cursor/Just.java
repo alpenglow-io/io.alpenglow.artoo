@@ -2,7 +2,7 @@ package io.artoo.cursor;
 
 import org.jetbrains.annotations.Contract;
 
-final class Just<T> implements Cursor<T> {
+final class Just<T extends Record> implements Cursor<T> {
   private final T value;
   private final ThreadLocal<Boolean> notRead;
 
@@ -28,7 +28,8 @@ final class Just<T> implements Cursor<T> {
   }
 
   @Override
-  public final void resume() {
+  public final Cursor<T> resume() {
     if (!notRead.get()) notRead.set(true);
+    return this;
   }
 }

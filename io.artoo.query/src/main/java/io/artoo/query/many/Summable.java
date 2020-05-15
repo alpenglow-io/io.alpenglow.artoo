@@ -2,7 +2,6 @@ package io.artoo.query.many;
 
 import io.artoo.query.One;
 import io.artoo.query.Queryable;
-import io.artoo.query.many.impl.Aggregate;
 import io.artoo.value.Numeral;
 
 import java.util.function.Function;

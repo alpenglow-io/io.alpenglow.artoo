@@ -1,6 +1,6 @@
 package io.artoor.cursor;
 
-final class None<T> implements Cursor<T> {
+final class None<T extends Record> implements Cursor<T> {
   @Override
   public final boolean hasNext() {
     return false;
@@ -12,5 +12,5 @@ final class None<T> implements Cursor<T> {
   }
 
   @Override
-  public final void resume() {}
+  public final Cursor<T> resume() { return this; }
 }

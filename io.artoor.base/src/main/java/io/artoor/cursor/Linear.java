@@ -4,32 +4,33 @@ import org.jetbrains.annotations.Contract;
 
 import static java.util.Objects.nonNull;
 
-final class Linear<E> implements Cursor<E> {
-  private final E[] es;
+final class Linear<R extends Record> implements Cursor<R> {
+  private final R[] rs;
   private final Index index;
 
-  Linear(E[] es) {
-    this(es, Index.zero());
+  Linear(R[] rs) {
+    this(rs, Index.zero());
   }
 
   @Contract(pure = true)
-  private Linear(E[] es, Index index) {
-    this.es = es;
+  private Linear(R[] rs, Index index) {
+    this.rs = rs;
     this.index = index;
   }
 
   @Override
   public final boolean hasNext() {
-    return nonNull(es) && es.length > 0 && index.eval() < es.length;
+    return nonNull(rs) && rs.length > 0 && index.eval() < rs.length;
   }
 
   @Override
-  public final E next() {
-    return es.length > 0 ? es[index.evalAndInc()] : null;
+  public final R next() {
+    return rs.length > 0 ? rs[index.evalAndInc()] : null;
   }
 
   @Override
-  public final void resume() {
+  public final Cursor<R> resume() {
     this.index.reset();
+    return this;
   }
 }

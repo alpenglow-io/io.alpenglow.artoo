@@ -3,22 +3,22 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>io.artoor</groupId>
-  <artifactId>io.artoor</artifactId>
+  <groupId>io.artoo</groupId>
+  <artifactId>io.artoo</artifactId>
   <packaging>pom</packaging>
   <version>1.0-SNAPSHOT</version>
   <modules>
-    <module>io.artoor.base</module>
-    <module>io.artoor.desktop</module>
-    <module>io.artoor.query</module>
+    <module>io.artoo.base</module>
+    <module>io.artoo.desktop</module>
+    <module>io.artoo.query</module>
 
-    <module>io.artoor.sample</module>
+    <module>io.artoo.sample</module>
   </modules>
 
-  <name>Artoor</name>
+  <name>Artoo</name>
 
   <properties>
-    <io.artoor.version>1.0-SNAPSHOT</io.artoor.version>
+    <io.artoo.version>1.0-SNAPSHOT</io.artoo.version>
 
     <encoding>UTF-8</encoding>
     <java.version>14</java.version>
@@ -106,9 +106,9 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>io.artoor</groupId>
+        <groupId>io.artoo</groupId>
         <artifactId>io.artoo-Function</artifactId>
-        <version>${io.artoor.version}</version>
+        <version>${io.artoo.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -266,6 +266,10 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>14</source>
+          <target>14</target>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

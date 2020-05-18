@@ -7,6 +7,8 @@ import io.artoo.type.AsString;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
+
 @SuppressWarnings("UnusedReturnValue")
 public interface Currency extends One<Currency.Entry> {
   @NotNull
@@ -41,15 +43,30 @@ public interface Currency extends One<Currency.Entry> {
       ).iterator();
   }
 
-  interface Name extends AsString {
-    static One<Id> from(final String value) {
-      return One.of(value)
-        .where(it -> it.length() > 3)
-        .select(Id::new);
+  record Name(String eval) implements AsString {
+    public Name {
+      if (eval == null || eval.length() <= 3) throw new IllegalStateException("Name can't be null or less than 3.");
+    }
+
+    public static One<Name> of(final String value) {
+      return Optional.ofNullable(value)
+        .filter(it -> it.length() > 3)
+        .map(it -> One.just(new Name(it)))
+        .orElse(One.none());
     }
   }
 
-  interface Amount extends AsDouble {
+  record Amount(double eval) implements AsDouble {
+    public Amount {
+      if (eval < 0) throw new IllegalStateException("Amount can't be less than 0.");
+    }
+
+    public static One<Amount> of(final double value) {
+      return Optional.of(value)
+        .filter(it -> it >= 0)
+        .map(it -> One.just(new Amount(it)))
+        .orElse(One.none());
+    }
   }
 
   record Id(String eval) implements AsString {

@@ -5,10 +5,16 @@ import io.artoo.query.one.Otherwise;
 import io.artoo.query.one.Filterable;
 import io.artoo.query.one.Peekable;
 import io.artoo.query.one.Projectable;
+import io.artoo.type.AsByte;
+import io.artoo.type.AsDouble;
+import io.artoo.type.AsInt;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 public interface One<R extends Record> extends Projectable<R>, Peekable<R>, Filterable<R>, Otherwise<R> {
   static <L extends  Record> One<L> of(final L record) {

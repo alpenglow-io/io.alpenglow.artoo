@@ -46,7 +46,7 @@ final class GroupBy<K, T> implements Grouping<K, T> {
       peek.accept(index, it);
       if (it != null) {
         final var k = key.apply(it);
-        map.putIfAbsent(k, Many.none());
+        map.putIfAbsent(k, none());
         //noinspection unchecked
         map.put(k, map.get(k).insert(it));
       }

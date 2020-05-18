@@ -2,16 +2,18 @@ package io.artoo.query.many;
 
 import io.artoo.query.Many;
 import io.artoo.query.Queryable;
+import io.artoo.query.many.Joinable.BiProjectable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 
 import static io.artoo.type.Nullability.nonNullable;
 
 public interface Joinable<T1 extends Record> extends Queryable<T1> {
-  default <T2 extends Record> Joining<T1, T2> join(final Queryable<T2> second) {
+  default <T2 extends Record, Q extends Queryable<T2>> Joining<T1, T2> join(final Q second) {
     return new Join<>(this, nonNullable(second, "second"));
   }
 
@@ -19,9 +21,18 @@ public interface Joinable<T1 extends Record> extends Queryable<T1> {
   default <T2 extends Record> Joining<T1, T2> join(final T2... values) {
     return join(Many.from(values));
   }
+
+  interface Joining<T1 extends Record, T2 extends Record> {
+    <R extends Record> BiProjectable<T1, T2, R> on(final BiPredicate<? super T1, ? super T2> on);
+  }
+
+  interface BiProjectable<T1 extends Record, T2 extends Record, R extends Record> {
+    Many<R> select(BiFunction<? super T1, ? super T2, ? extends R> select);
+  }
 }
 
-final class Join<O extends Record, I extends Record> implements Joining<O, I> {
+
+final class Join<O extends Record, I extends Record> implements Joinable.Joining<O, I> {
   private final Queryable<O> first;
   private final Queryable<I> second;
 
@@ -31,30 +42,19 @@ final class Join<O extends Record, I extends Record> implements Joining<O, I> {
     this.second = second;
   }
 
-  @NotNull
   @Contract(pure = true)
   @Override
-  public final Many<Bag<O, I>> on(final BiPredicate<? super O, ? super I> on) {
-    return () -> {
-      final var array = new ArrayList<Bag<O, I>>();
+  public final <R extends Record> @NotNull BiProjectable<O, I, R> on(BiPredicate<? super O, ? super I> on) {
+    return select -> {
+      final var array = new ArrayList<R>();
       for (final var o : first) {
         for (final var i : second) {
           if (on.test(o, i))
-            array.add(new JoiningBag(o, i));
+            array.add(select.apply(o, i));
         }
       }
-      return array.iterator();
+      return Many.from(array);
     };
-  }
-
-  private final class JoiningBag implements Bag<O, I> {
-    private final O left;
-    private final I right;
-
-    private JoiningBag(final O left, final I right) {
-      this.left = left;
-      this.right = right;
-    }
   }
 }
 

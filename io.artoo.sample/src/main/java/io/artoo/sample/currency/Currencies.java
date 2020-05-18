@@ -13,7 +13,7 @@ public interface Currencies extends Many<Currency.Entry> {
     return () -> Cursor.many(entries);
   }
 
-  default One<Currency> one(final Currency.Id id) {
+  default One<Currency.Entry> one(final Currency.Id id) {
     return this
       .single(entry -> entry.id().is(id))
       .select(Currency::from);

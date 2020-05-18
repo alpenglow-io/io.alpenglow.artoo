@@ -4,7 +4,7 @@
 
 ## WIP
 
-More to be explained.
+More to be explained and why all of this has been created.
 
 In order to build with tests, `MAVEN_OPTS` set to `--enable-preview` is needed.
 

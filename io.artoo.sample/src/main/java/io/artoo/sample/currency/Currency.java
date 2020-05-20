@@ -2,8 +2,6 @@ package io.artoo.sample.currency;
 
 import io.artoo.cursor.Cursor;
 import io.artoo.query.One;
-import io.artoo.type.AsDouble;
-import io.artoo.type.AsString;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,7 +28,7 @@ public interface Currency extends One<Currency.Entry> {
           name,
           currency.amount()
         )
-      ).iterator();
+      ).cursor();
   }
 
   default Currency increase(Amount amount) {
@@ -38,47 +36,46 @@ public interface Currency extends One<Currency.Entry> {
       .select(currency -> new Currency.Entry(
           currency.id(),
           currency.name(),
-          () -> amount.eval() + currency.amount.eval()
+          new Amount(amount.value() + currency.amount.value())
         )
-      ).iterator();
+      ).cursor();
   }
 
-  record Name(String eval) implements AsString {
-    public Name {
-      if (eval == null || eval.length() <= 3) throw new IllegalStateException("Name can't be null or less than 3.");
-    }
+  record Name(String value) {
+    public Name { assert value != null && value.length() >= 3; }
 
-    public static One<Name> of(final String value) {
-      return Optional.ofNullable(value)
-        .filter(it -> it.length() > 3)
-        .map(it -> One.just(new Name(it)))
-        .orElse(One.none());
-    }
-  }
-
-  record Amount(double eval) implements AsDouble {
-    public Amount {
-      if (eval < 0) throw new IllegalStateException("Amount can't be less than 0.");
-    }
-
-    public static One<Amount> of(final double value) {
-      return Optional.of(value)
-        .filter(it -> it >= 0)
-        .map(it -> One.just(new Amount(it)))
-        .orElse(One.none());
+    public static @NotNull One<Name> of(final String value) {
+      try {
+        return One.just(new Name(value));
+      } catch (AssertionError error) {
+        return One.none();
+      }
     }
   }
 
-  record Id(String eval) implements AsString {
-    public static One<Id> from(final String value) {
-      return One.of(value)
-        .where(it -> it.length() > 3)
-        .select(Id::new);
+  record Amount(double value) {
+    public Amount { assert value >= 0; }
+
+    public static @NotNull One<Amount> of(final double value) {
+      try {
+        return One.just(new Amount(value));
+      } catch (AssertionError error) {
+        return One.none();
+      }
+    }
+  }
+
+  record Id(String value) {
+    public Id { assert value != null; }
+
+    public static @NotNull One<Id> of(final String value) {
+      try {
+        return One.just(new Id(value));
+      } catch (AssertionError error) {
+        return One.none();
+      }
     }
   }
 
   record Entry(Id id, Name name, Amount amount) {}
 }
-
-record AmountProperty(double eval) implements Currency.Amount {}
-record NameProperty(String eval) implements Currency.Name {}

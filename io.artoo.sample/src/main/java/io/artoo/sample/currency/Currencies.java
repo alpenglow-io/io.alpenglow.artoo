@@ -15,7 +15,7 @@ public interface Currencies extends Many<Currency.Entry> {
 
   default One<Currency.Entry> one(final Currency.Id id) {
     return this
-      .single(entry -> entry.id().is(id))
-      .select(Currency::from);
+      .single(entry -> entry.id().equals(id))
+      .selectOne(Currency::from);
   }
 }

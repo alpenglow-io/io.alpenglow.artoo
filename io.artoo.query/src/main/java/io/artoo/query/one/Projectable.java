@@ -17,8 +17,9 @@ public interface Projectable<T extends Record> extends Queryable<T> {
     return new Select<T, R>(this, select)::iterator;
   }
 
-  default <R extends Record, O extends One<R>> One<R> selectOne(final Function<? super T, ? extends O> selectOne) {
-    return new SelectOne<>(this, nonNullable(selectOne, "selectOne"))::iterator;
+  default <R extends Record, O extends One<R>> O selectOne(final Function<? super T, ? extends O> selectOne) {
+    final var so = nonNullable(selectOne, "selectOne");
+    return this.cursor().hasNext() ? so.apply(this.cursor().next()) : Cursor.none();
   }
 }
 

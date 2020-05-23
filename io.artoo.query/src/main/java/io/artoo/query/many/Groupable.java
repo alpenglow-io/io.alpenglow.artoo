@@ -13,16 +13,17 @@ import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 
+import static io.artoo.query.Many.none;
 import static io.artoo.type.Nullability.nonNullable;
 import static java.lang.Integer.compare;
 
 public interface Groupable<T extends Record> extends Queryable<T> {
-  default <K> Grouping<K, T> groupBy(final Function<? super T, ? extends K> key) {
+  default <K> Grouping<T, K> groupBy(final Function<? super T, ? extends K> key) {
     return new GroupBy<>(this, (i, it) -> {}, nonNullable(key, "key"));
   }
 }
 
-final class GroupBy<K, T> implements Grouping<K, T> {
+final class GroupBy<T extends Record, K> implements Grouping<T, K> {
   private final Comparator<? super K> comparator = (first, second) -> compare(second.hashCode(), first.hashCode());
 
   private final Queryable<T> queryable;
@@ -38,7 +39,7 @@ final class GroupBy<K, T> implements Grouping<K, T> {
 
   @NotNull
   @Override
-  public final Iterator<Bag<K, T>> iterator() {
+  public final Iterator<T> iterator() {
     final var map = new TreeMap<K, Many<T>>(comparator);
     var index = 0;
     for (var cursor = queryable.iterator(); cursor.hasNext(); index++) {
@@ -51,20 +52,7 @@ final class GroupBy<K, T> implements Grouping<K, T> {
         map.put(k, map.get(k).insert(it));
       }
     }
-    final var array = new ArrayList<Bag<K, T>>();
-    for (final var entry : map.entrySet())
-      array.add(new GroupingBag(entry.getKey(), entry.getValue()));
-    return array.iterator();
-  }
-
-  final class GroupingBag implements Bag<K, T> {
-    private final K value;
-    private final Many<T> many;
-
-    GroupingBag(final K value, final Many<T> many) {
-      this.value = value;
-      this.many = many;
-    }
+    return map.entrySet().iterator();
   }
 }
 

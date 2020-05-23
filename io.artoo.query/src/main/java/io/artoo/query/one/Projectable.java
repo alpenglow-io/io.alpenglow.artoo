@@ -17,9 +17,10 @@ public interface Projectable<T extends Record> extends Queryable<T> {
     return new Select<T, R>(this, select)::iterator;
   }
 
+  @SuppressWarnings("unchecked")
   default <R extends Record, O extends One<R>> O selectOne(final Function<? super T, ? extends O> selectOne) {
     final var so = nonNullable(selectOne, "selectOne");
-    return this.cursor().hasNext() ? so.apply(this.cursor().next()) : Cursor.none();
+    return this.cursor().hasNext() ? so.apply(this.cursor().next()) : (O) One.none();
   }
 }
 

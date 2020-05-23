@@ -6,7 +6,7 @@
 
 More to be explained and why all of this has been created.
 
-In order to build with tests, `MAVEN_OPTS` set to `--enable-preview` is needed.
+In order to build with tests, `MAVEN_OPTS` set to `--enable-preview -ea` is needed.
 
 Image provided by:
 <a href="https://www.freepik.com/free-photos-vectors/people">People vector created by macrovector - www.freepik.com</a>

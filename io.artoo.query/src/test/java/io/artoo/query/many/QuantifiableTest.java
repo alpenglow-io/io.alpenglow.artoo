@@ -104,7 +104,7 @@ class QuantifiableTest {
   }
 
   @Test
-  @DisplayName("should have vaccinated pets only")
+  @DisplayName("should have vaxed pets only")
   void shouldHaveVaccinatedOnly() {
     final Pet[] pets = {
       new Pet("Barley", 8, true),
@@ -112,7 +112,7 @@ class QuantifiableTest {
       new Pet("Whiskers", 1, false)
     };
 
-    final var query = Many.from(pets).any((index, pet) -> pet.age() > 1 && !pet.vaccinated());
+    final var query = Many.from(pets).any((index, pet) -> pet.age() > 1 && !pet.vaxed());
 
     assertThat(query).containsOnly(true);
   }

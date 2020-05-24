@@ -7,6 +7,15 @@ public record Int32(int eval) implements Numeral<Integer, Int32> {
   public static final Int32 ZERO = new Int32(0);
   public static final Int32 ONE = new Int32(1);
 
+  @Contract("_ -> new")
+  public static @NotNull Int32 let(final int value) {
+    return new Int32(value);
+  }
+
+  public Single64 asSingle64() {
+    return new Single64(eval);
+  }
+
   @Override
   public final @NotNull Integer box() {
     return eval;

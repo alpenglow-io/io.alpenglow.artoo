@@ -349,7 +349,7 @@ record Pet(
   String name,
   Person owner,
   double age,
-  boolean vaccinated
+  boolean vaxed
 ) {
   public Pet(String name, double age) {
     this(name, new Person("anyone"), age, false);
@@ -359,8 +359,12 @@ record Pet(
     this(name, person, -1, false);
   }
 
-  public Pet(String name, double age, boolean vaccinated) {
-    this(name, new Person("any"), -1, vaccinated);
+  public Pet(String name, double age, boolean vaxed) {
+    this(name, new Person("any"), -1, vaxed);
+  }
+
+  public Pet(String name, boolean vaxed) {
+    this(name, new Person("anyone"), -1, vaxed);
   }
 }
 

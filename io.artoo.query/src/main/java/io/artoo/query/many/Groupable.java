@@ -21,9 +21,23 @@ public interface Groupable<T extends Record> extends Queryable<T> {
   default <K> Grouping<T, K> groupBy(final Function<? super T, ? extends K> key) {
     return new GroupBy<>(this, (i, it) -> {}, nonNullable(key, "key"));
   }
+
+  @FunctionalInterface
+  interface Grouping<T extends Record, K> extends Queryable<T> {
+  /*  default Many<T> having(final BiPredicate<? super T, ? super Many<T>> having) {
+      return new Having<>(this, nonNullable(having, "having"));
+    }*/
+  /*
+
+    default <R> Many<R> select(final BiFunction<? super K, ? super Many<T>, ? extends R> select) {
+      return this.select(bag -> bag.as(select::apply));
+    }
+  */
+
+  }
 }
 
-final class GroupBy<T extends Record, K> implements Grouping<T, K> {
+final class GroupBy<T extends Record, K> implements Groupable.Grouping<T, K> {
   private final Comparator<? super K> comparator = (first, second) -> compare(second.hashCode(), first.hashCode());
 
   private final Queryable<T> queryable;
@@ -56,7 +70,7 @@ final class GroupBy<T extends Record, K> implements Grouping<T, K> {
   }
 }
 
-final class Having<K, T> implements Many<Grouping.Bag<K, T>> {
+final class Having<K, T> implements Many<Groupable.Grouping.Bag<K, T>> {
   private final Queryable<Grouping.Bag<K, T>> queryable;
   private final BiPredicate<? super K, ? super Many<T>> having;
 

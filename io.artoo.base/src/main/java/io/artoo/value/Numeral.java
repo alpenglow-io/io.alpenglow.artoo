@@ -6,6 +6,23 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Function;
 
 public interface Numeral<N extends Number, R extends Record & Numeral<N, R>> {
+  @SuppressWarnings("unchecked")
+  static <R extends Record & Numeral<N, R>, N extends Number> R from(N number) {
+    if (number instanceof Byte b) return (R) new Int8(b);
+
+    if (number instanceof Short s) return (R) new Int16(s);
+
+    if (number instanceof Integer i) return (R) new Int32(i);
+
+    if (number instanceof Long l) return (R) new Int64(l);
+
+    if (number instanceof Float f) return (R) new Single32(f);
+
+    if (number instanceof Double d) return (R) new Single64(d);
+
+    throw new IllegalArgumentException(String.format("can't cast %s to number", number));
+  }
+
   N box();
 
   <L extends Number, V extends Record & Numeral<L, V>> R add(V value);

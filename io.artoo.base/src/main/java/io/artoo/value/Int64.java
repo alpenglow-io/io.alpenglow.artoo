@@ -7,6 +7,10 @@ public record Int64(long eval) implements Numeral<Long, Int64> {
   public static final Int64 ZERO = new Int64(0L);
   public static final Int64 ONE = new Int64(1L);
 
+  public static Int64 let(final long value) {
+    return new Int64(value);
+  }
+
   @Override
   public final @NotNull Long box() {
     return eval;

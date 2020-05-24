@@ -34,12 +34,14 @@ public interface Currency extends One<Currency.Entry> {
   default Currency increase(Amount amount) {
     return () -> this
       .select(currency -> new Currency.Entry(
-          currency.id(),
-          currency.name(),
-          new Amount(amount.value() + currency.amount.value())
+          currency.id,
+          currency.name,
+          new Amount(amount.value + currency.amount.value)
         )
       ).cursor();
   }
+
+  record Entry(Id id, Name name, Amount amount) {}
 
   record Name(String value) {
     public Name { assert value != null && value.length() >= 3; }
@@ -76,6 +78,4 @@ public interface Currency extends One<Currency.Entry> {
       }
     }
   }
-
-  record Entry(Id id, Name name, Amount amount) {}
 }

@@ -9,6 +9,15 @@ public record Single64(double eval) implements Numeral<Double, Single64> {
   public static final Single64 ZERO = new Single64(0.0d);
   public static final Single64 ONE = new Single64(1.0d);
 
+  @Contract("_ -> new")
+  public static @NotNull Single64 let(final double value) {
+    return new Single64(value);
+  }
+
+  public static Single64 let(final Number number) {
+    return new Single64(number.doubleValue());
+  }
+
   public final @NotNull BigDecimal asBigDecimal() {
     return BigDecimal.valueOf(eval);
   }

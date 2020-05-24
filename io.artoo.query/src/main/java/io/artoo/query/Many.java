@@ -19,9 +19,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Objects;
+import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static io.artoo.type.Nullability.nonNullable;
+import static java.util.stream.Collectors.toList;
 
 public interface Many<R extends Record> extends
   Projectable<R>, Filterable<R>, Partitionable<R>, Uniquable<R>, Aggregatable<R>, Concatenatable<R>, Groupable<R>,
@@ -32,6 +37,12 @@ public interface Many<R extends Record> extends
   @SafeVarargs
   static <R extends Record> Many<R> from(final R... items) {
     return new Records<>(Arrays.copyOf(items, items.length));
+  }
+
+  @SafeVarargs
+  @Contract("_, _ -> new")
+  static <T, R extends Record> @NotNull Many<R> from(final Function<T, R> asRecord, T... values) {
+    return new Iteration<>(Stream.of(values).filter(Objects::nonNull).map(asRecord).collect(toList()));
   }
 
   @NotNull

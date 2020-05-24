@@ -3,6 +3,7 @@ package io.artoo.query.many;
 import io.artoo.cursor.Cursor;
 import io.artoo.query.One;
 import io.artoo.query.Queryable;
+import io.artoo.value.Numeral;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,16 +21,16 @@ public interface Extremumable<T extends Record> extends Queryable<T> {
     return mapped -> result -> compare(result.hashCode(), mapped.hashCode());
   }
 
-  default <R extends Record> One<R> max(final Function<? super T, ? extends R> select) {
-    return this.<R>extremum(1, comparing(), select);
+  default <N extends Number, R extends Record & Numeral<N, R>> One<R> max(final Function<? super T, ? extends N> select) {
+    return this.<R>extremum(1, comparing(), it -> Numeral.from(select.apply(it)));
   }
 
   default One<T> max() {
     return this.<T>extremum(1, comparing(), identity());
   }
 
-  default <R extends Record> One<R> min(final Function<? super T, ? extends R> select) {
-    return this.<R>extremum(-1, comparing(), select);
+  default <N extends Number, R extends Record & Numeral<N, R>> One<R> min(final Function<? super T, ? extends N> select) {
+    return this.<R>extremum(-1, comparing(), it -> Numeral.from(select.apply(it)));
   }
 
   default One<T> min() {

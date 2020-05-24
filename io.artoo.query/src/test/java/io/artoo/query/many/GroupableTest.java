@@ -13,11 +13,11 @@ class GroupableTest {
   @Test
   @DisplayName("should group by floor age")
   void shouldGroupByFlooredAge() {
-    final var pets = new Pet[]{
-      new Pet("Barley", 8.3),
-      new Pet("Boots", 4.9),
-      new Pet("Whiskey", 1.5),
-      new Pet("Daisy", 4.3)
+    final var pets = new io.artoo.query.many.Pet[]{
+      new io.artoo.query.many.Pet("Barley", 8.3),
+      new io.artoo.query.many.Pet("Boots", 4.9),
+      new io.artoo.query.many.Pet("Whiskey", 1.5),
+      new io.artoo.query.many.Pet("Daisy", 4.3)
     };
 
     final var query = from(pets)

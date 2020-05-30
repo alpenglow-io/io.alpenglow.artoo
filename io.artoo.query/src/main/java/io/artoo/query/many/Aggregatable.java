@@ -18,15 +18,18 @@ import static java.util.function.Function.identity;
 public interface Aggregatable<T extends Record> extends Countable<T>, Summable<T>, Averageable<T>, Extremumable<T> {
   @NotNull
   @Contract("_, _, _, _ -> new")
-  default <A extends Record, R> One<A> aggregate(final A seed, final Predicate<? super T> where, final Function<? super T, ? extends R> select, final BiFunction<? super A, ? super R, ? extends A> aggregate) {
-    return new Aggregate<T, A, R>(this, it -> {}, seed, nonNullable(where, "where"), nonNullable(select, "select"), nonNullable(aggregate, "aggregate"))::iterator;
+  default <A extends Record, R extends Record> One<A> aggregate(final A seed, final Predicate<? super T> where, final Function<? super T, ? extends R> select, final BiFunction<? super A, ? super R, ? extends A> aggregate) {
+    final var whr = nonNullable(where, "where");
+    final var sel = nonNullable(select, "select");
+    final var agr = nonNullable(aggregate, "aggregate");
+    return new Aggregate<T, A, R>(this, it -> {}, seed, whr, sel, agr)::iterator;
   }
 
-  default <A extends Record, R> One<A> aggregate(final A seed, final Function<? super T, ? extends R> select, final BiFunction<? super A, ? super R, ? extends A> aggregate) {
+  default <A extends Record, R extends Record> One<A> aggregate(final A seed, final Function<? super T, ? extends R> select, final BiFunction<? super A, ? super R, ? extends A> aggregate) {
     return this.aggregate(seed, it -> true, select, aggregate);
   }
 
-  default <A extends Record, R> One<A> aggregate(final Function<? super T, ? extends R> select, final BiFunction<? super A, ? super R, ? extends A> aggregate) {
+  default <A extends Record, R extends Record> One<A> aggregate(final Function<? super T, ? extends R> select, final BiFunction<? super A, ? super R, ? extends A> aggregate) {
     return this.aggregate(null, it -> true, select, aggregate);
   }
 

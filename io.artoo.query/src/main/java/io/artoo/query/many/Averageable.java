@@ -39,7 +39,7 @@ public interface Averageable<T extends Record> extends Queryable<T> {
 
   @SuppressWarnings("rawtypes")
   default One<Single64> average() {
-    return new Average<>(this, (i, it) -> {}, (i, it) -> it instanceof Numeral, (i, it) -> ((Numeral) it).box().doubleValue(), Single64::let)::iterator;
+    return new Average<>(this, (i, it) -> {}, (i, it) -> it instanceof Numeral, (i, it) -> ((Numeral) it).raw().doubleValue(), Single64::let)::iterator;
   }
 }
 

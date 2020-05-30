@@ -2,12 +2,14 @@ package io.artoo.query.many;
 
 import io.artoo.query.Many;
 import io.artoo.query.Queryable;
+import io.artoo.query.many.Groupable.Grouping;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
@@ -23,7 +25,7 @@ public interface Groupable<T extends Record> extends Queryable<T> {
   }
 
   @FunctionalInterface
-  interface Grouping<T extends Record, K> extends Queryable<T> {
+  interface Grouping<T extends Record, K> extends Iterable<Entry<K, Many<T>>> {
   /*  default Many<T> having(final BiPredicate<? super T, ? super Many<T>> having) {
       return new Having<>(this, nonNullable(having, "having"));
     }*/
@@ -37,7 +39,7 @@ public interface Groupable<T extends Record> extends Queryable<T> {
   }
 }
 
-final class GroupBy<T extends Record, K> implements Groupable.Grouping<T, K> {
+final class GroupBy<T extends Record, K> implements Grouping<T, K> {
   private final Comparator<? super K> comparator = (first, second) -> compare(second.hashCode(), first.hashCode());
 
   private final Queryable<T> queryable;
@@ -53,7 +55,7 @@ final class GroupBy<T extends Record, K> implements Groupable.Grouping<T, K> {
 
   @NotNull
   @Override
-  public final Iterator<T> iterator() {
+  public final Iterator<Entry<K, Many<T>>> iterator() {
     final var map = new TreeMap<K, Many<T>>(comparator);
     var index = 0;
     for (var cursor = queryable.iterator(); cursor.hasNext(); index++) {
@@ -70,25 +72,3 @@ final class GroupBy<T extends Record, K> implements Groupable.Grouping<T, K> {
   }
 }
 
-final class Having<K, T> implements Many<Groupable.Grouping.Bag<K, T>> {
-  private final Queryable<Grouping.Bag<K, T>> queryable;
-  private final BiPredicate<? super K, ? super Many<T>> having;
-
-  @Contract(pure = true)
-  public Having(final Queryable<Grouping.Bag<K, T>> queryable, final BiPredicate<? super K, ? super Many<T>> having) {
-    this.queryable = queryable;
-    this.having = having;
-  }
-
-  @NotNull
-  @Override
-  public Iterator<Grouping.Bag<K, T>> iterator() {
-    final var result = new ArrayList<Grouping.Bag<K, T>>();
-    for (final var bag : queryable) {
-      if (bag.as(having::test)) {
-        result.add(bag);
-      }
-    }
-    return result.iterator();
-  }
-}

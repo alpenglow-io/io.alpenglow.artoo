@@ -7,32 +7,16 @@ import io.artoo.value.Numeral;
 import java.util.function.Function;
 
 import static io.artoo.type.Nullability.nonNullable;
-import static java.util.function.Function.identity;
 
+@SuppressWarnings("unchecked")
 interface Summable<T extends Record> extends Queryable<T> {
 
-  default <V, N extends Number, R extends Record & Numeral<N, R>> One<R> sum(
-    final Function<? super T, ? extends V> select,
-    final Function<? super V, ? extends R> asNumber
-  ) {
-    nonNullable(select, "select");
-    nonNullable(asNumber, "asNumber");
-    return new Aggregate<T, R, R>(
-      this,
-      it -> {},
-      null,
-      it -> true,
-      value -> select.andThen(asNumber).apply(value),
-      (result, value) -> Numeral.add(result, value))::iterator;
+  default <R extends Record & Numeral<R>> One<R> sum(final Function<? super T, ? extends Number> select) {
+    final var sel = nonNullable(select, "select");
+    return new Aggregate<T, R, R>(this, it -> {}, null, Numeral::isNumber, it -> Numeral.from(sel.apply(it)), (result, value) -> Numeral.add(result, value))::iterator;
   }
 
-  default <V, N extends Number, R extends Record & Numeral<N, R>> One<R> sum(
-    final Function<? super T, ? extends V> select
-  ) {
-    return this.sum(select, Numeral.<V, N, R>asNumeral());
-  }
-
-  default <N extends Number, R extends Record & Numeral<N, R>> One<R> sum() {
-    return this.sum(identity(), Numeral.<T, N, R>asNumeral());
+  default <R extends Record & Numeral<R>> One<R> sum() {
+    return new Aggregate<T, R, R>(this, it -> {}, null, Numeral::isNumber, Numeral::from$, (result, value) -> Numeral.add(result, value))::iterator;
   }
 }

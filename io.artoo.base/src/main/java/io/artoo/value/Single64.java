@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 
-public record Single64(double eval) implements Numeral<Double, Single64> {
+public record Single64(double eval) implements Numeral<Single64> {
   public static final Single64 ZERO = new Single64(0.0d);
   public static final Single64 ONE = new Single64(1.0d);
 
@@ -23,20 +23,20 @@ public record Single64(double eval) implements Numeral<Double, Single64> {
   }
 
   @Override
-  public final Double box() {
+  public final Number raw() {
     return eval;
   }
 
   @Contract("_ -> new")
   @Override
-  public <L extends Number, V extends Record & Numeral<L, V>> @NotNull Single64 add(@NotNull V value) {
-    return new Single64(eval + value.box().doubleValue());
+  public <V extends Record & Numeral<V>> @NotNull Single64 add(@NotNull V value) {
+    return new Single64(eval + value.raw().doubleValue());
   }
 
   @Contract("_ -> new")
   @Override
-  public <L extends Number, V extends Record & Numeral<L, V>> @NotNull Single64 div(@NotNull V value) {
-    return new Single64(eval / value.box().doubleValue());
+  public <V extends Record & Numeral<V>> @NotNull Single64 div(@NotNull V value) {
+    return new Single64(eval / value.raw().doubleValue());
   }
 
   @Override

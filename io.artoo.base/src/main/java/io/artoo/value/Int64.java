@@ -3,7 +3,7 @@ package io.artoo.value;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-public record Int64(long eval) implements Numeral<Long, Int64> {
+public record Int64(long eval) implements Numeral<Int64> {
   public static final Int64 ZERO = new Int64(0L);
   public static final Int64 ONE = new Int64(1L);
 
@@ -12,20 +12,20 @@ public record Int64(long eval) implements Numeral<Long, Int64> {
   }
 
   @Override
-  public final @NotNull Long box() {
+  public final @NotNull Long raw() {
     return eval;
   }
 
   @Contract("_ -> new")
   @Override
-  public <L extends Number, V extends Record & Numeral<L, V>> @NotNull Int64 add(@NotNull V value) {
-    return new Int64(eval + value.box().longValue());
+  public <V extends Record & Numeral<V>> @NotNull Int64 add(@NotNull V value) {
+    return new Int64(eval + value.raw().longValue());
   }
 
   @Contract("_ -> new")
   @Override
-  public <L extends Number, V extends Record & Numeral<L, V>> @NotNull Int64 div(@NotNull V value) {
-    return new Int64(eval / value.box().longValue());
+  public <V extends Record & Numeral<V>> @NotNull Int64 div(@NotNull V value) {
+    return new Int64(eval / value.raw().longValue());
   }
 
   @Override

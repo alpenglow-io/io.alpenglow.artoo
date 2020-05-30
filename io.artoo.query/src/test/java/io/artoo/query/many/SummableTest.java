@@ -1,6 +1,8 @@
 package io.artoo.query.many;
 
 import io.artoo.query.Many;
+import io.artoo.value.Single32;
+import io.artoo.value.Single64;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -14,48 +16,51 @@ class SummableTest {
   @Test
   @DisplayName("should sum all float sequence")
   void shouldSumFloatSequence() {
-    final var sum = Many.from(43.68F, 1.25F, 583.7F, 6.5F).sum();
+    final var sum = Many.from(Single32::let, 43.68F, 1.25F, 583.7F, 6.5F).<Single32>sum();
 
-    assertThat(sum.asFloat()).isEqualTo(635.13F);
+    for (final var value : sum) assertThat(value.eval()).isEqualTo(635.13F);
   }
 
   @Test
   @DisplayName("should sum all nullable float sequence ignoring null-ones")
   void shouldSumNullableFloatSequence() {
-    final var sum = Many.from(null, 0, 92.83F, null, 100.0F, 37.46F, 81.1F).sum();
+    final var sum = Many.from(null, 0, 92.83F, null, 100.0F, 37.46F, 81.1F).<Single32>sum();
 
-    assertThat(sum.asFloat()).isEqualTo(311.39F);
+    for (final var value : sum) assertThat(value.eval()).isEqualTo(311.39F);
   }
 
   @Test
   @DisplayName("should sum all double sequence")
   void shouldSumDoubleSequence() {
-    final var sum = Many.from(43.68D, 1.25D, 583.7D, 6.5D).sum();
+    final var sum = Many.from(Single64::let, 43.68D, 1.25D, 583.7D, 6.5D).<Single64>sum();
 
-    assertThat(sum.asDouble()).isEqualTo(635.13D);
+    for (final var value : sum) assertThat(value.eval()).isEqualTo(635.13D);
   }
 
   @Test
   @DisplayName("should sum all nullable double sequence ignoring null-ones")
   void shouldSumNullableDoubleSequence() {
-    final var sum = Many.from(null, 0, 92.83D, null, 100.0D, 37.46D, 81.1D).sum();
+    final var sum = Many.from(null, 0, 92.83D, null, 100.0D, 37.46D, 81.1D).<Single64>sum();
 
-    assertThat(sum.asDouble()).isEqualTo(311.39D);
+    for (final var value : sum) assertThat(value.eval()).isEqualTo(311.39D);
   }
 
   @Test
   @DisplayName("should sum all nullable double sequence ignoring null-ones")
   void shouldSumBySelecting() {
-    final var sum = Many.from(PACKAGES).sum(Package::weight);
+    final var sum = Many.from(PACKAGES).<Single32>sum(Package::weight);
 
-    assertThat(sum.asIs()).isEqualTo(83.7F);
+    for (final var value : sum) assertThat(value.eval()).isEqualTo(83.7F);
   }
 
   @Test
   @DisplayName("should sum by declaring the generic type")
   void shouldSumWithGenericSpecified() {
-    final var sum = Many.from(25.2f, "Coho Vineyard", "Lucerne Publishing", BigInteger.valueOf(12)).<Double>sum();
+    final var sum = Many.from(25.2f, "Coho Vineyard", "Lucerne Publishing", BigInteger.valueOf(12)).<Single64>sum();
 
+    sum
+      .rejected()
+      .resolved()
     assertThat(sum).contains(37D);
   }
 

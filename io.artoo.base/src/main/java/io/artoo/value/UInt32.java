@@ -3,27 +3,27 @@ package io.artoo.value;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-public record UInt32(int eval) implements Numeral<Integer, UInt32> {
-  public UInt32 { if (eval < 0) throw new IllegalStateException("UInt32 can't be negative."); }
+public record UInt32(int eval) implements Numeral<UInt32> {
+  public UInt32 { assert eval >= 0; }
 
   public static final UInt32 ZERO = new UInt32(0);
   public static final UInt32 ONE = new UInt32(1);
 
   @Override
-  public final @NotNull Integer box() {
+  public final @NotNull Integer raw() {
     return eval;
   }
 
   @Contract("_ -> new")
   @Override
-  public <L extends Number, V extends Record & Numeral<L, V>> @NotNull UInt32 add(@NotNull V value) {
-    return new UInt32(eval + value.box().intValue());
+  public <V extends Record & Numeral<V>> @NotNull UInt32 add(@NotNull V value) {
+    return new UInt32(eval + value.raw().intValue());
   }
 
   @Contract("_ -> new")
   @Override
-  public <L extends Number, V extends Record & Numeral<L, V>> @NotNull UInt32 div(@NotNull V value) {
-    return new UInt32(eval / value.box().intValue());
+  public <V extends Record & Numeral<V>> @NotNull UInt32 div(@NotNull V value) {
+    return new UInt32(eval / value.raw().intValue());
   }
 
   @Override

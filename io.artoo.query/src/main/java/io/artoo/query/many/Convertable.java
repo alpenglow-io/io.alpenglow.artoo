@@ -36,7 +36,7 @@ public interface Convertable<T extends Record> extends Queryable<T> {
 
   default T[] asArray(final Function<? super Integer, T[]> initializer) {
     for (final var count : ((Countable<T>) this::iterator).count().or(ZERO)) {
-      return nonNullable(initializer, "initializer").apply(count.box());
+      return nonNullable(initializer, "initializer").apply(count.raw());
     }
 
     throw new IllegalStateException("Can't initialize array");

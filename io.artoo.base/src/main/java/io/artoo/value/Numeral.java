@@ -5,9 +5,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
-public interface Numeral<N extends Number, R extends Record & Numeral<N, R>> {
+public interface Numeral<R extends Record & Numeral<R>> {
   @SuppressWarnings("unchecked")
-  static <R extends Record & Numeral<N, R>, N extends Number> R from(N number) {
+  static <R extends Record & Numeral<R>> R from(Number number) {
     if (number instanceof Byte b) return (R) new Int8(b);
 
     if (number instanceof Short s) return (R) new Int16(s);
@@ -23,27 +23,48 @@ public interface Numeral<N extends Number, R extends Record & Numeral<N, R>> {
     throw new IllegalArgumentException(String.format("can't cast %s to number", number));
   }
 
-  N box();
+  @SuppressWarnings("unchecked")
+  static <T extends Record, R extends Record & Numeral<R>> R from$(T record) {
+    if (record instanceof Int8 b) return (R) b;
 
-  <L extends Number, V extends Record & Numeral<L, V>> R add(V value);
-  <L extends Number, V extends Record & Numeral<L, V>> R div(V value);
+    if (record instanceof Int16 s) return (R) s;
+
+    if (record instanceof Int32 i) return (R) i;
+
+    if (record instanceof Int64 l) return (R) l;
+
+    if (record instanceof Single32 f) return (R) f;
+
+    if (record instanceof Single64 d) return (R) d;
+
+    throw new IllegalArgumentException(String.format("can't cast %s to number", record));
+  }
+
+  static <T extends Record> boolean isNumber(T record) {
+    return record instanceof Numeral;
+  }
+
+  Number raw();
+
+  <V extends Record & Numeral<V>> R add(V value);
+  <V extends Record & Numeral<V>> R div(V value);
   R inc();
 
-  static <N extends Number, R extends Record & Numeral<N, R>> R inc(R count) {
+  static <R extends Record & Numeral<R>> R inc(R count) {
     return count == null ? null : count.inc();
   }
 
-  static <N extends Number, R extends Record & Numeral<N, R>> R add(R first, R second) {
+  static <R extends Record & Numeral<R>> R add(R first, R second) {
     return first == null ? second : first.add(second);
   }
 
-  static <N extends Number, R extends Record & Numeral<N, R>> R div(R first, R second) {
+  static <R extends Record & Numeral<R>> R div(R first, R second) {
     return second == null || first == null ? null : first.div(second);
   }
 
   @NotNull
   @Contract(pure = true)
-  static <V, N extends Number, R extends Record & Numeral<N, R>> Function<? super V, ? extends R> asNumeral() {
+  static <V, R extends Record & Numeral<R>> Function<? super V, ? extends R> asNumeral() {
     return it -> it == null ? null : (R) switch (it.getClass().getSimpleName()) {
       case "Byte" -> new Int8((Byte) it);
       case "Short" -> new Int16((Short) it);
@@ -62,7 +83,6 @@ public interface Numeral<N extends Number, R extends Record & Numeral<N, R>> {
       default -> null;
     };
   }
-
 }
 
 

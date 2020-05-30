@@ -12,8 +12,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 
-import java.lang.ref.PhantomReference;
-
 import static io.artoo.query.Many.from;
 import static io.artoo.query.many.TestData.PACKAGES;
 import static java.util.function.Predicate.not;
@@ -135,8 +133,8 @@ class AggregatableTest {
       new Pet("Whiskers", 1)
     ).min(pet -> pet.name().length());
 
-    for (final var result : max) assertThat(result.box()).isEqualTo(14);
-    for (final var result : min) assertThat(result.box()).isEqualTo(5);
+    for (final var result : max) assertThat(result.raw()).isEqualTo(14);
+    for (final var result : min) assertThat(result.raw()).isEqualTo(5);
   }
 
   @Test

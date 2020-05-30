@@ -13,6 +13,7 @@ import io.artoo.query.many.Projectable;
 import io.artoo.query.many.Quantifiable;
 import io.artoo.query.many.Settable;
 import io.artoo.query.many.Uniquable;
+import io.artoo.value.Any;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,6 +38,11 @@ public interface Many<R extends Record> extends
   @SafeVarargs
   static <R extends Record> Many<R> from(final R... items) {
     return new Records<>(Arrays.copyOf(items, items.length));
+  }
+
+  @Contract("_ -> new")
+  static @NotNull Many<Any> from(Object... objects) {
+    return new Iteration<>(Stream.of(objects).filter(Objects::nonNull).map(Any::new).collect(toList()));
   }
 
   @SafeVarargs

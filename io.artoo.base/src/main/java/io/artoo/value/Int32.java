@@ -3,7 +3,7 @@ package io.artoo.value;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-public record Int32(int eval) implements Numeral<Integer, Int32> {
+public record Int32(int eval) implements Numeral<Int32> {
   public static final Int32 ZERO = new Int32(0);
   public static final Int32 ONE = new Int32(1);
 
@@ -17,20 +17,20 @@ public record Int32(int eval) implements Numeral<Integer, Int32> {
   }
 
   @Override
-  public final @NotNull Integer box() {
+  public final @NotNull Integer raw() {
     return eval;
   }
 
   @Contract("_ -> new")
   @Override
-  public <L extends Number, V extends Record & Numeral<L, V>> @NotNull Int32 add(@NotNull V value) {
-    return new Int32(eval + value.box().intValue());
+  public <V extends Record & Numeral<V>> @NotNull Int32 add(@NotNull V value) {
+    return new Int32(eval + value.raw().intValue());
   }
 
   @Contract("_ -> new")
   @Override
-  public <L extends Number, V extends Record & Numeral<L, V>> @NotNull Int32 div(@NotNull V value) {
-    return new Int32(eval / value.box().intValue());
+  public <V extends Record & Numeral<V>> @NotNull Int32 div(@NotNull V value) {
+    return new Int32(eval / value.raw().intValue());
   }
 
   @Override

@@ -10,7 +10,7 @@
   <modules>
     <module>io.artoo.base</module>
     <module>io.artoo.desktop</module>
-    <module>io.artoo.query</module>
+    <module>io.artoo.lance</module>
 
     <module>io.artoo.sample</module>
   </modules>

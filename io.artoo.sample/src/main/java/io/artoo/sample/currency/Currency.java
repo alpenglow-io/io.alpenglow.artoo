@@ -1,11 +1,9 @@
 package io.artoo.sample.currency;
 
-import io.artoo.cursor.Cursor;
-import io.artoo.query.One;
+import io.artoo.lance.cursor.Cursor;
+import io.artoo.lance.query.One;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Optional;
 
 @SuppressWarnings("UnusedReturnValue")
 public interface Currency extends One<Currency.Entry> {

@@ -1,8 +1,7 @@
 package io.artoo.sample.currency;
 
-import io.artoo.cursor.Cursor;
-import io.artoo.query.Many;
-import io.artoo.query.One;
+import io.artoo.lance.cursor.Cursor;
+import io.artoo.lance.query.Many;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

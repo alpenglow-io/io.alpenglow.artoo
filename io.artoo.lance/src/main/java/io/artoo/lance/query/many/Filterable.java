@@ -2,6 +2,7 @@ package io.artoo.lance.query.many;
 
 import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
+import io.artoo.lance.value.Any;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,19 +26,19 @@ public interface Filterable<T extends Record> extends Queryable<T> {
     return where(where, (i, it) -> it);
   }
 
-  default <C extends Record> Many<C> ofType(final Class<? extends C> type) {
-    nonNullable(type, "type");
-    return where((index, it) -> type.isInstance(it), (index, it) -> type.cast(it));
+  default <R extends Record> Many<R> ofType(final Class<? extends R> type) {
+    final var t = nonNullable(type, "type");
+    return new OfType<>(this, (i, it) -> {}, t);
   }
 
   default <R extends Record> Many<R> where(final BiPredicate<? super Integer, ? super T> where, final BiFunction<? super Integer, ? super T, ? extends R> select) {
     nonNullable(where, "where");
     nonNullable(select, "select");
-    return new Where<T, R>(this, (i, it) -> {}, where, select)::iterator;
+    return new Where<T, R>(this, (i, it) -> {}, where, select);
   }
 }
 
-final class Where<T extends Record, R extends Record> implements Filterable<R> {
+final class Where<T extends Record, R extends Record> implements Many<R> {
   private final Queryable<T> queryable;
   private final BiConsumer<? super Integer, ? super T> peek;
   private final BiPredicate<? super Integer, ? super T> where;
@@ -61,6 +62,30 @@ final class Where<T extends Record, R extends Record> implements Filterable<R> {
       peek.accept(index, it);
       if (it != null && where.test(index, it)) {
         result.add(select.apply(index, it));
+      }
+    }
+    return result.iterator();
+  }
+}
+
+final class OfType<T extends Record, R extends Record> implements Many<R> {
+  private final Queryable<T> queryable;
+  private final BiConsumer<? super Integer, ? super T> peek;
+  private final Class<? extends R> type;
+
+  OfType(final Queryable<T> queryable, final BiConsumer<? super Integer, ? super T> peek, final Class<? extends R> type) {
+    this.queryable = queryable;
+    this.peek = peek;
+    this.type = type;
+  }
+
+  @NotNull
+  @Override
+  public final Iterator<R> iterator() {
+    final var result = new ArrayList<R>();
+    for (final var value : queryable) {
+      if (value instanceof Any any) {
+        any.as(type).eventually(result::add);
       }
     }
     return result.iterator();

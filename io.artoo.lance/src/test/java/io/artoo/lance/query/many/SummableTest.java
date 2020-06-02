@@ -17,7 +17,7 @@ class SummableTest {
   @Test
   @DisplayName("should sum all float sequence")
   void shouldSumFloatSequence() {
-    final var sum = from(Decimal32::let, 43.68F, 1.25F, 583.7F, 6.5F).<Decimal32>sum();
+    final var sum = from(43.68F, 1.25F, 583.7F, 6.5F).<Decimal32>sum();
 
     for (final var value : sum) assertThat(value.eval()).isEqualTo(635.13F);
   }
@@ -33,7 +33,7 @@ class SummableTest {
   @Test
   @DisplayName("should sum all double sequence")
   void shouldSumDoubleSequence() {
-    final var sum = from(Decimal64::let, 43.68D, 1.25D, 583.7D, 6.5D).<Decimal64>sum();
+    final var sum = from(43.68D, 1.25D, 583.7D, 6.5D).<Decimal64>sum();
 
     for (final var value : sum) assertThat(value.eval()).isEqualTo(635.13D);
   }

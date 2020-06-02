@@ -1,9 +1,13 @@
 package io.artoo.lance.value;
 
+import io.artoo.lance.cursor.Cursor;
+import io.artoo.lance.query.One;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-public record UInt32(int eval) implements Numeral<UInt32> {
+import java.util.Iterator;
+
+public record UInt32(int eval) implements Numeral<UInt32>, One<UInt32> {
   public UInt32 { assert eval >= 0; }
 
   public static final UInt32 ZERO = new UInt32(0);
@@ -30,6 +34,12 @@ public record UInt32(int eval) implements Numeral<UInt32> {
   @Contract(" -> new")
   public final @NotNull UInt32 inc() {
     return new UInt32(eval + 1);
+  }
+
+  @NotNull
+  @Override
+  public Iterator<UInt32> iterator() {
+    return Cursor.just(this);
   }
 }
 

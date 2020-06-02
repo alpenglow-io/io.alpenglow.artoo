@@ -36,6 +36,11 @@ public interface Quantifiable<T extends Record> extends Queryable<T> {
   default One<Bool> any(final BiPredicate<? super Integer, ? super T> where) {
     return new Quantify<>(this, (i, it) -> {}, Bool.True, nonNullable(where, "where"))::iterator;
   }
+
+  default One<Bool> any(final Predicate<? super T> where) {
+    final var w = nonNullable(where, "where");
+    return any((index, item) -> w.test(item));
+  }
 }
 
 final class Quantify<T extends Record> implements Quantifiable<Bool> {

@@ -6,10 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Iterator;
 
 public record Char(char eval) {
-  public static Char let(final char value) {
-    return new Char(value);
-  }
-
   public final class Chars implements Iterable<Char> {
     private final Char[] chars;
 

@@ -5,6 +5,14 @@ import io.artoo.lance.query.one.Otherwise;
 import io.artoo.lance.query.one.Filterable;
 import io.artoo.lance.query.one.Peekable;
 import io.artoo.lance.query.one.Projectable;
+import io.artoo.lance.value.Char;
+import io.artoo.lance.value.Decimal32;
+import io.artoo.lance.value.Decimal64;
+import io.artoo.lance.value.Int16;
+import io.artoo.lance.value.Int32;
+import io.artoo.lance.value.Int64;
+import io.artoo.lance.value.Int8;
+import io.artoo.lance.value.Text;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,6 +27,42 @@ public interface One<R extends Record> extends Projectable<R>, Peekable<R>, Filt
   @Contract("_ -> new")
   static <L extends Record> One<L> just(final L record) {
     return new Just<>(record);
+  }
+
+  static One<Text> from(final String value) {
+    try {
+      return One.just(Text.let(value));
+    } catch (AssertionError error) {
+      return One.none();
+    }
+  }
+
+  static @NotNull One<Char> from(final char value) {
+    return One.just(new Char(value));
+  }
+
+  static @NotNull One<Int8> from(final byte value) {
+    return One.just(new Int8(value));
+  }
+
+  static @NotNull One<Int16> from(final short value) {
+    return One.just(new Int16(value));
+  }
+
+  static @NotNull One<Int32> from(final int value) {
+    return One.just(new Int32(value));
+  }
+
+  static @NotNull One<Int64> from(final long value) {
+    return One.just(new Int64(value));
+  }
+
+  static @NotNull One<Decimal32> from(final float value) {
+    return One.just(new Decimal32(value));
+  }
+
+  static @NotNull One<Decimal64> from(final double value) {
+    return One.just(new Decimal64(value));
   }
 
   @NotNull

@@ -14,6 +14,6 @@ interface Countable<T extends Record> extends Queryable<T> {
   }
 
   default One<UInt32> count(final Predicate<? super T> where) {
-    return new Aggregate<>(this, it -> {}, UInt32.ZERO, where, identity(), (counted, item) -> counted.inc())::iterator;
+    return new Aggregate<>(this, it -> {}, UInt32.ZERO, where, identity(), (counted, item) -> counted.inc());
   }
 }

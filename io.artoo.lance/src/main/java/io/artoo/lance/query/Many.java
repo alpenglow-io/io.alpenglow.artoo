@@ -2,11 +2,8 @@ package io.artoo.lance.query;
 
 import io.artoo.lance.cursor.Cursor;
 import io.artoo.lance.query.many.Aggregatable;
-import io.artoo.lance.query.many.Concatenatable;
 import io.artoo.lance.query.many.Filterable;
-import io.artoo.lance.query.many.Groupable;
 import io.artoo.lance.query.many.Insertable;
-import io.artoo.lance.query.many.Joinable;
 import io.artoo.lance.query.many.Otherwise;
 import io.artoo.lance.query.many.Partitionable;
 import io.artoo.lance.query.many.Projectable;
@@ -14,12 +11,12 @@ import io.artoo.lance.query.many.Quantifiable;
 import io.artoo.lance.query.many.Settable;
 import io.artoo.lance.query.many.Uniquable;
 import io.artoo.lance.value.Any;
+import io.artoo.lance.value.Decimal32;
+import io.artoo.lance.value.Decimal64;
 import io.artoo.lance.value.Int16;
 import io.artoo.lance.value.Int32;
 import io.artoo.lance.value.Int64;
 import io.artoo.lance.value.Int8;
-import io.artoo.lance.value.Decimal32;
-import io.artoo.lance.value.Decimal64;
 import io.artoo.lance.value.Text;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +26,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -37,8 +33,8 @@ import static io.artoo.lance.type.Nullability.nonNullable;
 import static java.util.stream.Collectors.toList;
 
 public interface Many<R extends Record> extends
-  Projectable<R>, Filterable<R>, Partitionable<R>, Uniquable<R>, Aggregatable<R>, Concatenatable<R>, Groupable<R>,
-  Joinable<R>, Quantifiable<R>, Settable<R>, Insertable<R>, Otherwise<R> {
+  Projectable<R>, Filterable<R>, Partitionable<R>, Uniquable<R>, Aggregatable<R>,
+  Quantifiable<R>, Settable<R>, Insertable<R>, Otherwise<R> {
 
   @NotNull
   @Contract("_ -> new")
@@ -131,6 +127,11 @@ final class Iteration<T extends Record> implements Many<T> {
   @Override
   public final Iterator<T> iterator() {
     return iterable.iterator();
+  }
+
+  @Override
+  public String toString() {
+    return String.format("[%s]", iterable);
   }
 }
 

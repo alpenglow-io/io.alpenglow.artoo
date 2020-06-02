@@ -1,5 +1,6 @@
 package io.artoo.lance.value;
 
+import io.artoo.lance.query.One;
 import io.artoo.lance.value.Char.Chars;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -25,4 +26,8 @@ public record Text(String eval) {
   public @NotNull Text lowerCased() { return new Text(eval.toLowerCase()); }
 
   public int length() { return eval.length(); }
+
+  public boolean is(final String value) {
+    return eval.equals(value);
+  }
 }

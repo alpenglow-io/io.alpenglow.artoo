@@ -1,9 +1,13 @@
 package io.artoo.lance.query.many;
 
 import io.artoo.lance.query.Many;
+import io.artoo.lance.value.Bool;
+import io.artoo.lance.value.Text;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static io.artoo.lance.value.Bool.False;
+import static io.artoo.lance.value.Text.let;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class QuantifiableTest {
@@ -16,13 +20,13 @@ class QuantifiableTest {
       new Pet("Whiskers", 6)
     };
 
-    final var query = Many.from(pets).all(pet -> pet.name().startsWith("B"));
+    final var all = Many.from(pets).all(pet -> pet.name().startsWith("B"));
 
-    query.eventually(result -> assertThat(result).isFalse());
+    all.eventually(result -> assertThat(result.eval()).isFalse());
   }
 
   @Test
-  @DisplayName("should fine people with pets older than 5")
+  @DisplayName("should find people with pets older than 5")
   void shouldFindPeopleWithPetsOlderThan5() {
     final PetOwner[] owners = {
       new PetOwner(
@@ -44,34 +48,38 @@ class QuantifiableTest {
       )
     };
 
-    final var query = Many.from(owners)
-      .where(person -> Many.from(person.pets()).all(pet -> pet.age() > 5) != null)
-      .select(PetOwner::name);
+    record OldPetOwner(String owner, String pet, double age) { }
 
-    assertThat(query).containsOnly("Haas", "Antebi");
+    final var selected = Many.from(owners)
+      .selectMany(owner ->
+        Many.from(owner.pets())
+          .select(pet ->
+            new OldPetOwner(
+              owner.name(),
+              pet.name(),
+              pet.age()
+            )
+          )
+      )
+      .where(owner -> owner.age > 5)
+      .select(owner -> let(owner.owner));
+
+    assertThat(selected).isEqualTo(Many.from("Haas", "Antebi"));
   }
 
   @Test
   @DisplayName("should contains an element")
   void shouldHaveAnyElement() {
-    final Integer[] numbers = {1, 2};
-    final Integer[] empty = {};
-
-    final var query1 = Many.fromAny(numbers).any();
-    final var query2 = Many.fromAny(empty).any();
-
-    assertThat(query1).containsOnly(true);
-    assertThat(query2).containsOnly(false);
+    Many.from(1, 2).any().eventually(result -> assertThat(result.eval()).isTrue());
+    Many.fromAny().any().eventually(result -> assertThat(result.eval()).isFalse());
   }
 
   @Test
   @DisplayName("should have an even number")
   void shouldHaveEvenNumber() {
-    final Integer[] numbers = {1, 2};
+    final var any = Many.from(1, 2).any(number -> number.eval() % 2 == 0);
 
-    final var query = Many.fromAny(numbers).any((index, number) -> number % 2 == 0);
-
-    assertThat(query).containsOnly(true);
+    any.eventually(result -> assertThat(result.eval()).isTrue());
   }
 
   @Test
@@ -92,15 +100,15 @@ class QuantifiableTest {
       )
     };
 
-    final var query = Many.from(people)
-      .where(person -> Many.from(person.pets()).any() != null)
-      .select(PetOwner::name);
+    final var selected = Many.from(people)
+      .where(person -> Many.from(person.pets()).any().iterator().next().eval())
+      .select(person -> let(person.name()));
 
-    assertThat(query).containsOnly(
+    assertThat(selected).isEqualTo(Many.from(
       "Haas",
       "Fakhouri",
       "Philips"
-    );
+    ));
   }
 
   @Test
@@ -112,8 +120,8 @@ class QuantifiableTest {
       new Pet("Whiskers", 1, false)
     };
 
-    final var query = Many.from(pets).any((index, pet) -> pet.age() > 1 && !pet.vaxed());
-
-    assertThat(query).containsOnly(true);
+    Many.from(pets)
+      .any(pet -> pet.age() > 1 && !pet.vaxed())
+      .eventually(result -> assertThat(result).isEqualTo(False));
   }
 }

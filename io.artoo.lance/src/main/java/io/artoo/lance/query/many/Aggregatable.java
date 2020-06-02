@@ -42,7 +42,7 @@ public interface Aggregatable<T extends Record> extends Countable<T>, Summable<T
   }
 }
 
-final class Aggregate<T extends Record, A extends Record, R extends Record> implements Aggregatable<A> {
+final class Aggregate<T extends Record, A extends Record, R extends Record> implements One<A> {
   private final Queryable<T> queryable;
   private final Consumer<? super T> peek;
   private final A seed;

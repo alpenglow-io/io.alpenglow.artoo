@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.concurrent.Flow;
+import java.util.stream.Stream;
 
 import static io.artoo.lance.query.Many.from;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -59,33 +61,5 @@ class ProjectableTest {
       "brown",
       "fox"
     ));
-  }
-
-  @Test
-  void selectAndDoSelectionShouldBeEqual() {
-    record Bouquet(String...flowers) {}
-
-    final var bouquets = new Bouquet[]{
-      new Bouquet("sunflower", "daisy", "daffodil", "larkspur"),
-      new Bouquet("tulip", "rose", "orchid"),
-      new Bouquet("gladiolis", "lily", "snapdragon", "aster", "protea"),
-      new Bouquet("larkspur", "lilac", "iris", "dahlia")
-    };
-
-    final var selectQuery = from(bouquets).select(Bouquet::flowers);
-    final var selectionQuery = from(bouquets).selectMany(bouquet -> Many.from(bouquet.flowers()));
-
-    final var flowers1 = new ArrayList<String>();
-    final var flowers2 = new ArrayList<String>();
-
-    for (final var flowers : selectQuery) {
-      Collections.addAll(flowers1, flowers);
-    }
-
-    for (final var flower : selectionQuery) {
-      flowers2.add(flower);
-    }
-
-    assertThat(flowers1).isEqualTo(flowers2);
   }
 }

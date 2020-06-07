@@ -11,8 +11,8 @@ import io.artoo.lance.query.many.Quantifiable;
 import io.artoo.lance.query.many.Settable;
 import io.artoo.lance.query.many.Uniquable;
 import io.artoo.lance.value.Any;
-import io.artoo.lance.value.Decimal32;
-import io.artoo.lance.value.Decimal64;
+import io.artoo.lance.value.Single32;
+import io.artoo.lance.value.Single64;
 import io.artoo.lance.value.Int16;
 import io.artoo.lance.value.Int32;
 import io.artoo.lance.value.Int64;
@@ -84,16 +84,16 @@ public interface Many<R extends Record> extends
   }
 
   @Contract("_ -> new")
-  static @NotNull Many<Decimal32> from(float @NotNull ... floats) {
-    final var list = new ArrayList<Decimal32>();
-    for (final var value : floats) list.add(new Decimal32(value));
+  static @NotNull Many<Single32> from(float @NotNull ... floats) {
+    final var list = new ArrayList<Single32>();
+    for (final var value : floats) list.add(new Single32(value));
     return new Iteration<>(list);
   }
 
   @Contract("_ -> new")
-  static @NotNull Many<Decimal64> from(double @NotNull ... doubles) {
-    final var list = new ArrayList<Decimal64>();
-    for (final var value : doubles) list.add(new Decimal64(value));
+  static @NotNull Many<Single64> from(double @NotNull ... doubles) {
+    final var list = new ArrayList<Single64>();
+    for (final var value : doubles) list.add(new Single64(value));
     return new Iteration<>(list);
   }
 

@@ -5,11 +5,6 @@ import io.artoo.lance.value.Text;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.concurrent.Flow;
-import java.util.stream.Stream;
-
 import static io.artoo.lance.query.Many.from;
 import static org.assertj.core.api.Assertions.assertThat;
 

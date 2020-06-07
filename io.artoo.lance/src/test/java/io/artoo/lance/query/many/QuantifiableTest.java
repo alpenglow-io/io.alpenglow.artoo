@@ -1,8 +1,6 @@
 package io.artoo.lance.query.many;
 
 import io.artoo.lance.query.Many;
-import io.artoo.lance.value.Bool;
-import io.artoo.lance.value.Text;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -14,8 +14,8 @@ public record Any(Object eval) {
     if (type.equals(Int16.class)) return (One<R>) asInt16();
     if (type.equals(Int32.class)) return (One<R>) asInt32();
     if (type.equals(Int64.class)) return (One<R>) asInt64();
-    if (type.equals(Decimal32.class)) return (One<R>) asDecimal32();
-    if (type.equals(Decimal64.class)) return (One<R>) asDecimal64();
+    if (type.equals(Single32.class)) return (One<R>) asDecimal32();
+    if (type.equals(Single64.class)) return (One<R>) asDecimal64();
 
     return type.isInstance(eval) ? One.just(type.cast(eval)) : One.none();
   }
@@ -44,11 +44,11 @@ public record Any(Object eval) {
     return eval instanceof Long l ? One.from(l) : One.none();
   }
 
-  public One<Decimal32> asDecimal32() {
+  public One<Single32> asDecimal32() {
     return eval instanceof Float f ? One.from(f) : One.none();
   }
 
-  public One<Decimal64> asDecimal64() {
+  public One<Single64> asDecimal64() {
     return eval instanceof Double d ? One.from(d) : One.none();
   }
 }

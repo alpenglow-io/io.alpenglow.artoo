@@ -3,7 +3,7 @@ package io.artoo.lance.query.many;
 import io.artoo.lance.cursor.Cursor;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.value.Numeral;
+import io.artoo.lance.value.Numeric;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,16 +21,16 @@ public interface Extremumable<T extends Record> extends Queryable<T> {
     return mapped -> result -> compare(result.hashCode(), mapped.hashCode());
   }
 
-  default <N extends Number, R extends Record & Numeral<R>> One<R> max(final Function<? super T, ? extends N> select) {
-    return this.<R>extremum(1, comparing(), it -> Numeral.from(select.apply(it)));
+  default <N extends Number, R extends Record & Numeric<R>> One<R> max(final Function<? super T, ? extends N> select) {
+    return this.<R>extremum(1, comparing(), it -> Numeric.from(select.apply(it)));
   }
 
   default One<T> max() {
     return this.<T>extremum(1, comparing(), identity());
   }
 
-  default <N extends Number, R extends Record & Numeral<R>> One<R> min(final Function<? super T, ? extends N> select) {
-    return this.<R>extremum(-1, comparing(), it -> Numeral.from(select.apply(it)));
+  default <N extends Number, R extends Record & Numeric<R>> One<R> min(final Function<? super T, ? extends N> select) {
+    return this.<R>extremum(-1, comparing(), it -> Numeric.from(select.apply(it)));
   }
 
   default One<T> min() {

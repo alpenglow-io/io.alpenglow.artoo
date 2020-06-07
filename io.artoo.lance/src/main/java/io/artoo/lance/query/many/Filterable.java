@@ -6,7 +6,6 @@ import io.artoo.lance.value.Any;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.function.BiConsumer;

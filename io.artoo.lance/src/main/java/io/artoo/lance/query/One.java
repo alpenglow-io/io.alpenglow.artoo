@@ -1,13 +1,13 @@
 package io.artoo.lance.query;
 
 import io.artoo.lance.cursor.Cursor;
-import io.artoo.lance.query.one.Otherwise;
 import io.artoo.lance.query.one.Filterable;
+import io.artoo.lance.query.one.Otherwise;
 import io.artoo.lance.query.one.Peekable;
 import io.artoo.lance.query.one.Projectable;
 import io.artoo.lance.value.Char;
-import io.artoo.lance.value.Decimal32;
-import io.artoo.lance.value.Decimal64;
+import io.artoo.lance.value.Single32;
+import io.artoo.lance.value.Single64;
 import io.artoo.lance.value.Int16;
 import io.artoo.lance.value.Int32;
 import io.artoo.lance.value.Int64;
@@ -57,12 +57,12 @@ public interface One<R extends Record> extends Projectable<R>, Peekable<R>, Filt
     return One.just(new Int64(value));
   }
 
-  static @NotNull One<Decimal32> from(final float value) {
-    return One.just(new Decimal32(value));
+  static @NotNull One<Single32> from(final float value) {
+    return One.just(new Single32(value));
   }
 
-  static @NotNull One<Decimal64> from(final double value) {
-    return One.just(new Decimal64(value));
+  static @NotNull One<Single64> from(final double value) {
+    return One.just(new Single64(value));
   }
 
   @NotNull

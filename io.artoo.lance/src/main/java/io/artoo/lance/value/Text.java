@@ -1,7 +1,5 @@
 package io.artoo.lance.value;
 
-import io.artoo.lance.query.One;
-import io.artoo.lance.value.Char.Chars;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

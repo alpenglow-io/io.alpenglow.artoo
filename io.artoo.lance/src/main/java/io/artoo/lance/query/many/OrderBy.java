@@ -1,7 +1,6 @@
 package io.artoo.lance.query.many;
 
 import io.artoo.lance.cursor.Cursor;
-
 import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
 import org.jetbrains.annotations.Contract;

@@ -2,9 +2,7 @@ package io.artoo.lance.query.many;
 
 import io.artoo.lance.query.Many;
 import io.artoo.lance.type.Str;
-import io.artoo.lance.value.Decimal32;
-import io.artoo.lance.value.Decimal64;
-import io.artoo.lance.value.Int16;
+import io.artoo.lance.value.Single32;
 import io.artoo.lance.value.Int32;
 import io.artoo.lance.value.Text;
 import org.jetbrains.annotations.Contract;
@@ -14,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import static io.artoo.lance.query.Many.from;
 import static io.artoo.lance.query.many.TestData.PACKAGES;
-import static io.artoo.lance.value.Decimal32.let;
+import static io.artoo.lance.value.Single32.let;
 import static java.util.function.Predicate.not;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -158,7 +156,7 @@ class AggregatableTest {
   @Test
   @DisplayName("should sum by selecting package weight")
   void shouldSumBySelectingWeight() {
-    final var sum = from(PACKAGES).<Decimal32>sum(Package::weight);
+    final var sum = from(PACKAGES).<Single32>sum(Package::weight);
 
     for (final var value : sum) assertThat(value.eval()).isEqualTo(83.7f);
   }

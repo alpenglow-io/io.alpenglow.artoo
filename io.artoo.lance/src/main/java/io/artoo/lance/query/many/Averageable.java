@@ -3,9 +3,9 @@ package io.artoo.lance.query.many;
 import io.artoo.lance.cursor.Cursor;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
+import io.artoo.lance.value.Single64;
 import io.artoo.lance.value.Int32;
-import io.artoo.lance.value.Numeral;
-import io.artoo.lance.value.Decimal64;
+import io.artoo.lance.value.Numeric;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,30 +18,30 @@ import java.util.function.Function;
 import static io.artoo.lance.type.Nullability.nonNullable;
 
 public interface Averageable<T extends Record> extends Queryable<T> {
-  default <V extends Number, R extends Record & Numeral<R>> One<R> average(final BiFunction<? super Integer, ? super T, ? extends V> select, final Function<? super V, ? extends R> asNumber) {
+  default <V extends Number, R extends Record & Numeric<R>> One<R> average(final BiFunction<? super Integer, ? super T, ? extends V> select, final Function<? super V, ? extends R> asNumber) {
     final var s = nonNullable(select, "select");
     final var n = nonNullable(asNumber, "asNumber");
     return new Average<T, V, R>(this, (i, it) -> {}, (i, it) -> true, s, n)::iterator;
   }
 
-  default <V extends Number, R extends Record & Numeral<R>> One<R> average(final Function<? super T, ? extends V> select, final Function<? super V, ? extends R> asNumeral) {
+  default <V extends Number, R extends Record & Numeric<R>> One<R> average(final Function<? super T, ? extends V> select, final Function<? super V, ? extends R> asNumeral) {
     final var s = nonNullable(select, "select");
     final var n = nonNullable(asNumeral, "asNumeral");
     return this.<V, R>average((index, it) -> s.apply(it), n);
   }
 
-  default <N extends Number> One<Decimal64> average(final Function<? super T, ? extends N> select) {
+  default <N extends Number> One<Single64> average(final Function<? super T, ? extends N> select) {
     final var s = nonNullable(select, "select");
-    return new Average<>(this, (i, it) -> {}, (i, it) -> true, (i, it) -> s.apply(it), Decimal64::let)::iterator;
+    return new Average<>(this, (i, it) -> {}, (i, it) -> true, (i, it) -> s.apply(it), Single64::let)::iterator;
   }
 
   @SuppressWarnings("rawtypes")
-  default One<Decimal64> average() {
-    return new Average<>(this, (i, it) -> {}, (i, it) -> it instanceof Numeral, (i, it) -> ((Numeral) it).raw().doubleValue(), Decimal64::let)::iterator;
+  default One<Single64> average() {
+    return new Average<>(this, (i, it) -> {}, (i, it) -> it instanceof Numeric, (i, it) -> ((Numeric) it).raw().doubleValue(), Single64::let)::iterator;
   }
 }
 
-final class Average<T extends Record, V extends Number, R extends Record & Numeral<R>> implements Averageable<R> {
+final class Average<T extends Record, V extends Number, R extends Record & Numeric<R>> implements Averageable<R> {
   private final Queryable<T> queryable;
   private final BiConsumer<? super Integer, ? super T> peek;
   private final BiPredicate<? super Integer, ? super T> where;
@@ -75,7 +75,7 @@ final class Average<T extends Record, V extends Number, R extends Record & Numer
       if (next != null && where.test(index, next)) {
         final var value = select.andThen(asNumber).apply(index, next);
         if (value != null) {
-          total = Numeral.add(total, value);
+          total = Numeric.add(total, value);
           count++;
         }
       }

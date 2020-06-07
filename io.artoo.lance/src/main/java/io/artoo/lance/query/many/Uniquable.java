@@ -6,7 +6,6 @@ import io.artoo.lance.query.Queryable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-
 import java.util.Iterator;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;

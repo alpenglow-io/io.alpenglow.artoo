@@ -1,9 +1,9 @@
 package io.artoo.lance.query.many;
 
 import io.artoo.lance.query.Many;
+import io.artoo.lance.value.Single32;
+import io.artoo.lance.value.Single64;
 import io.artoo.lance.value.Int64;
-import io.artoo.lance.value.Decimal32;
-import io.artoo.lance.value.Decimal64;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +17,7 @@ class SummableTest {
   @Test
   @DisplayName("should sum all float sequence")
   void shouldSumFloatSequence() {
-    final var sum = from(43.68F, 1.25F, 583.7F, 6.5F).<Decimal32>sum();
+    final var sum = from(43.68F, 1.25F, 583.7F, 6.5F).<Single32>sum();
 
     for (final var value : sum) assertThat(value.eval()).isEqualTo(635.13F);
   }
@@ -25,7 +25,7 @@ class SummableTest {
   @Test
   @DisplayName("should sum all nullable float sequence ignoring null-ones")
   void shouldSumNullableFloatSequence() {
-    final var sum = Many.fromAny(null, 0, 92.83F, null, 100.0F, 37.46F, 81.1F).<Decimal32>sum();
+    final var sum = Many.fromAny(null, 0, 92.83F, null, 100.0F, 37.46F, 81.1F).<Single32>sum();
 
     for (final var value : sum) assertThat(value.eval()).isEqualTo(311.39F);
   }
@@ -33,7 +33,7 @@ class SummableTest {
   @Test
   @DisplayName("should sum all double sequence")
   void shouldSumDoubleSequence() {
-    final var sum = from(43.68D, 1.25D, 583.7D, 6.5D).<Decimal64>sum();
+    final var sum = from(43.68D, 1.25D, 583.7D, 6.5D).<Single64>sum();
 
     for (final var value : sum) assertThat(value.eval()).isEqualTo(635.13D);
   }
@@ -41,7 +41,7 @@ class SummableTest {
   @Test
   @DisplayName("should sum all nullable double sequence ignoring null-ones")
   void shouldSumNullableDoubleSequence() {
-    final var sum = Many.fromAny(null, 0, 92.83D, null, 100.0D, 37.46D, 81.1D).<Decimal64>sum();
+    final var sum = Many.fromAny(null, 0, 92.83D, null, 100.0D, 37.46D, 81.1D).<Single64>sum();
 
     for (final var value : sum) assertThat(value.eval()).isEqualTo(311.39D);
   }
@@ -49,7 +49,7 @@ class SummableTest {
   @Test
   @DisplayName("should sum all nullable double sequence ignoring null-ones")
   void shouldSumBySelecting() {
-    final var sum = from(PACKAGES).<Decimal32>sum(Package::weight);
+    final var sum = from(PACKAGES).<Single32>sum(Package::weight);
 
     for (final var value : sum) assertThat(value.eval()).isEqualTo(83.7F);
   }
@@ -57,7 +57,7 @@ class SummableTest {
   @Test
   @DisplayName("should sum by declaring the generic type")
   void shouldSumWithGenericSpecified() {
-    final var sum = Many.fromAny(25.2f, "Coho Vineyard", "Lucerne Publishing", BigInteger.valueOf(12)).<Decimal64>sum();
+    final var sum = Many.fromAny(25.2f, "Coho Vineyard", "Lucerne Publishing", BigInteger.valueOf(12)).<Single64>sum();
 
     for (final var value : sum) assertThat(value.eval()).isEqualTo(37D);
   }

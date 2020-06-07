@@ -1,11 +1,9 @@
 package io.artoo.lance.query.many;
 
 import io.artoo.lance.query.Many;
-import io.artoo.lance.value.Int32;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.artoo.lance.query.Many.from;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class SettableTest {

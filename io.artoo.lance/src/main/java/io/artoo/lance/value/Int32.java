@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
-public record Int32(int eval) implements Numeral<Int32>, One<Int32> {
+public record Int32(int eval) implements One<Int32>, Numeric<Int32> {
   public static final Int32 ZERO = new Int32(0);
   public static final Int32 ONE = new Int32(1);
 
@@ -16,8 +16,8 @@ public record Int32(int eval) implements Numeral<Int32>, One<Int32> {
     return new Int32(value);
   }
 
-  public Decimal64 asSingle64() {
-    return new Decimal64(eval);
+  public Single64 asSingle64() {
+    return new Single64(eval);
   }
 
   @Override
@@ -27,13 +27,13 @@ public record Int32(int eval) implements Numeral<Int32>, One<Int32> {
 
   @Contract("_ -> new")
   @Override
-  public <V extends Record & Numeral<V>> @NotNull Int32 add(@NotNull V value) {
+  public <V extends Record & Numeric<V>> @NotNull Int32 add(@NotNull V value) {
     return new Int32(eval + value.raw().intValue());
   }
 
   @Contract("_ -> new")
   @Override
-  public <V extends Record & Numeral<V>> @NotNull Int32 div(@NotNull V value) {
+  public <V extends Record & Numeric<V>> @NotNull Int32 div(@NotNull V value) {
     return new Int32(eval / value.raw().intValue());
   }
 

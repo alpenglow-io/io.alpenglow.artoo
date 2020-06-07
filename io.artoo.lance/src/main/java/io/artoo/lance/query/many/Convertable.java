@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 import static io.artoo.lance.type.Nullability.nonNullable;
-import static io.artoo.lance.value.UInt32.*;
+import static io.artoo.lance.value.UInt32.ZERO;
 
 public interface Convertable<T extends Record> extends Queryable<T> {
   default @NotNull <K, E> Map<? extends K, ? extends E> asMap(final Function<? super T, ? extends K> key, final Function<? super T, ? extends E> element) {

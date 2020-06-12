@@ -2,7 +2,7 @@ package io.artoo.lance.cursor;
 
 import org.jetbrains.annotations.Contract;
 
-final class Just<T> implements Cursor<T> {
+final class Just<T extends Record> implements Cursor<T> {
   private final T value;
   private final ThreadLocal<Boolean> notRead;
 

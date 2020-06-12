@@ -8,13 +8,8 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
-
-import static java.util.function.Function.identity;
 
 interface Countable<T extends Record> extends Queryable<T> {
   default UInt32 count() {
@@ -22,15 +17,11 @@ interface Countable<T extends Record> extends Queryable<T> {
   }
 
   default UInt32 count(final Predicate<? super T> where) {
-    return new Count<>(this, it -> {}, where);
+    return new UInt32(new Count<>(this, it -> {}, where));
   }
 }
 
-interface Postponable<R extends Record> {
-  Supplier<R> lately();
-}
-
-final class Count<T extends Record> implements One<UInt32>, Postponable<UInt32> {
+final class Count<T extends Record> implements One<UInt32> {
   private final Queryable<T> queryable;
   private final Consumer<? super T> peek;
   private final Predicate<? super T> where;
@@ -57,10 +48,5 @@ final class Count<T extends Record> implements One<UInt32>, Postponable<UInt32> 
       }
     }
     return Cursor.of(aggregated);
-  }
-
-  @Override
-  public Supplier<UInt32> lately() {
-    return () -> iterator().next();
   }
 }

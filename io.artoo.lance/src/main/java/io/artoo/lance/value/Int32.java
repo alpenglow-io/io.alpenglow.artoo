@@ -43,6 +43,11 @@ public record Int32(int eval) implements One<Int32>, Numeric<Int32> {
     return new Int32(eval + 1);
   }
 
+  @Override
+  public boolean isEven() {
+    return eval() % 2 == 0;
+  }
+
   @NotNull
   @Override
   public final Iterator<Int32> iterator() {

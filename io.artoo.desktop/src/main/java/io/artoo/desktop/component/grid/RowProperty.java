@@ -1,7 +1,8 @@
 package io.artoo.desktop.component.grid;
 
-
 import javafx.scene.layout.RowConstraints;
+
+import java.util.function.Consumer;
 
 import static javafx.geometry.VPos.BASELINE;
 import static javafx.geometry.VPos.BOTTOM;

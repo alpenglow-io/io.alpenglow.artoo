@@ -50,6 +50,9 @@ public interface Numeric<R extends Record & Numeric<R>> {
   <V extends Record & Numeric<V>> R div(V value);
   R inc();
 
+  default boolean isEven() { return raw().doubleValue() % 2 == 0.0; }
+  default boolean isOdd() { return !isEven(); }
+
   static <R extends Record & Numeric<R>> R inc(R count) {
     return count == null ? null : count.inc();
   }

@@ -24,7 +24,7 @@ public record Single64(double eval) implements Numeric<Single64> {
 
   @Override
   public final Number raw() {
-    return eval;
+    return eval();
   }
 
   @Contract("_ -> new")

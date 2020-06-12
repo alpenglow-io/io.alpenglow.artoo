@@ -1,10 +1,11 @@
 package io.artoo.desktop.event;
 
 import io.artoo.desktop.property.LabeledProperty;
-
-
 import javafx.scene.control.Labeled;
 import javafx.scene.input.MouseEvent;
+
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 @FunctionalInterface
 public interface LabeledEvent {
@@ -12,7 +13,7 @@ public interface LabeledEvent {
     return it -> it.setOnMouseClicked(e -> callback.apply(e).onLabeled(it));
   }
 
-  static LabeledEvent mouseClicked(Consumer<MouseEvent, Labeled> callback) {
+  static LabeledEvent mouseClicked(BiConsumer<MouseEvent, Labeled> callback) {
     return it -> it.setOnMouseClicked(e -> callback.accept(e, it));
   }
 

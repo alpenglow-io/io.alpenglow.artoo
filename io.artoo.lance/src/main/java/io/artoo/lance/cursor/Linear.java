@@ -4,7 +4,7 @@ import org.jetbrains.annotations.Contract;
 
 import static java.util.Objects.nonNull;
 
-final class Linear<R extends Record> implements Cursor<R> {
+final class Linear<R> implements Cursor<R> {
   private final R[] rs;
   private final Index index;
 
@@ -26,11 +26,5 @@ final class Linear<R extends Record> implements Cursor<R> {
   @Override
   public final R next() {
     return rs.length > 0 ? rs[index.evalAndInc()] : null;
-  }
-
-  @Override
-  public final Cursor<R> resume() {
-    this.index.reset();
-    return this;
   }
 }

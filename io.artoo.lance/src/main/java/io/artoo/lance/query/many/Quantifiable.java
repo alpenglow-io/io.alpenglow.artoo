@@ -1,73 +1,84 @@
 package io.artoo.lance.query.many;
 
 import io.artoo.lance.cursor.Cursor;
+import io.artoo.lance.func.Cons;
+import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.value.Bool;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
-import java.util.function.BiConsumer;
-import java.util.function.BiPredicate;
-import java.util.function.Predicate;
 
 import static io.artoo.lance.type.Nullability.nonNullable;
-import static io.artoo.lance.value.Bool.False;
-import static io.artoo.lance.value.Bool.True;
 
-public interface Quantifiable<T extends Record> extends Queryable<T> {
-  default <C> One<Bool> allTypeOf(final Class<C> type) {
-    return all((index, value) -> type.isInstance(value));
+public interface Quantifiable<T> extends Queryable<T> {
+  default <R> One<Boolean> all(final Class<R> type) {
+    return all(type::isInstance);
   }
 
-  default One<Bool> all(final Predicate<? super T> where) {
-    nonNullable(where, "where");
-    return all((index, value) -> where.test(value));
+  default One<Boolean> all(final Pred.Uni<? super T> where) {
+    return new All<>(this, it -> {}, nonNullable(where, "where"));
   }
 
-  default One<Bool> all(final BiPredicate<? super Integer, ? super T> where) {
-    return new Quantify<>(this, (i, it) -> {}, Bool.False, nonNullable(where, "where"))::iterator;
-  }
+  default One<Boolean> any() { return this.any(t -> true); }
 
-  default One<Bool> any() { return this.any((i, t) -> true); }
-
-  default One<Bool> any(final BiPredicate<? super Integer, ? super T> where) {
-    return new Quantify<>(this, (i, it) -> {}, Bool.True, nonNullable(where, "where"))::iterator;
-  }
-
-  default One<Bool> any(final Predicate<? super T> where) {
-    final var w = nonNullable(where, "where");
-    return any((index, item) -> w.test(item));
+  default One<Boolean> any(final Pred.Uni<? super T> where) {
+    return new Any<>(this, it -> {}, nonNullable(where, "where"));
   }
 }
 
-final class Quantify<T extends Record> implements Quantifiable<Bool> {
+final class Any<T> implements One<Boolean> {
   private final Queryable<T> queryable;
-  private final BiConsumer<? super Integer, ? super T> peek;
-  private final Bool once;
-  private final BiPredicate<? super Integer, ? super T> where;
+  private final Cons.Uni<? super T> peek;
+  private final Pred.Uni<? super T> where;
 
-  @Contract(pure = true)
-  Quantify(final Queryable<T> queryable, BiConsumer<? super Integer, ? super T> peek, final Bool once, final BiPredicate<? super Integer, ? super T> where) {
+  Any(final Queryable<T> queryable, final Cons.Uni<? super T> peek, final Pred.Uni<? super T> where) {
+    assert queryable != null && peek != null && where != null;
     this.queryable = queryable;
     this.peek = peek;
-    this.once = once;
     this.where = where;
   }
 
   @NotNull
   @Override
-  public final Iterator<Bool> iterator() {
-    var all = once.not();
-    var any = once;
-    var index = 0;
-    for (final var iterator = queryable.iterator(); iterator.hasNext() && (all.equals(True) || any.equals(False)); index++) {
+  public final Iterator<Boolean> iterator() {
+    var found = false;
+    for (var iterator = queryable.iterator(); iterator.hasNext() && !found;) {
       final var it = iterator.next();
-      peek.accept(index, it);
-      all = any = new Bool(it != null && where.test(index, it));
+      if (it != null) {
+        peek.accept(it);
+
+        found = where.test(it);
+      }
     }
-    return Cursor.of(new Bool(once.equals(True) || all.equals(True)));
+    return Cursor.lone(found);
   }
 }
 
+final class All<T> implements One<Boolean> {
+  private final Queryable<T> queryable;
+  private final Cons.Uni<? super T> peek;
+  private final Pred.Uni<? super T> where;
+
+  All(final Queryable<T> queryable, final Cons.Uni<? super T> peek, final Pred.Uni<? super T> where) {
+    assert queryable != null && peek != null && where != null;
+    this.queryable = queryable;
+    this.peek = peek;
+    this.where = where;
+  }
+
+  @NotNull
+  @Override
+  public final Iterator<Boolean> iterator() {
+    var found = true;
+    for (var iterator = queryable.iterator(); iterator.hasNext() && found;) {
+      final var it = iterator.next();
+      if (it != null) {
+        peek.accept(it);
+
+        found = where.test(it);
+      }
+    }
+    return Cursor.lone(found);
+  }
+}

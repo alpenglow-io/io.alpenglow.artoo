@@ -12,7 +12,7 @@ import java.util.function.Predicate;
 
 import static io.artoo.lance.type.Nullability.nonNullable;
 
-public interface Uniquable<T extends Record> extends Queryable<T> {
+public interface Uniquable<T> extends Queryable<T> {
   default One<T> at(final int index) {
     return new At<>(this, index)::iterator;
   }
@@ -42,7 +42,7 @@ public interface Uniquable<T extends Record> extends Queryable<T> {
   }
 }
 
-final class At<T extends Record> implements Uniquable<T> {
+final class At<T> implements Uniquable<T> {
   private final Queryable<T> queryable;
   private final int index;
 
@@ -66,7 +66,7 @@ final class At<T extends Record> implements Uniquable<T> {
   }
 }
 
-final class Unique<T extends Record> implements Uniquable<T> {
+final class Unique<T> implements Uniquable<T> {
   private final Queryable<T> queryable;
   private final BiConsumer<? super Integer, ? super T> peek;
   private final boolean first;

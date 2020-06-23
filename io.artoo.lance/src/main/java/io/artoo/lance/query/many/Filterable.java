@@ -2,7 +2,6 @@ package io.artoo.lance.query.many;
 
 import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.value.Any;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,7 +14,7 @@ import java.util.function.Predicate;
 
 import static io.artoo.lance.type.Nullability.nonNullable;
 
-public interface Filterable<T extends Record> extends Queryable<T> {
+public interface Filterable<T> extends Queryable<T> {
   default Many<T> where(final Predicate<? super T> where) {
     nonNullable(where, "where");
     return where((index, param) -> where.test(param));
@@ -25,19 +24,19 @@ public interface Filterable<T extends Record> extends Queryable<T> {
     return where(where, (i, it) -> it);
   }
 
-  default <R extends Record> Many<R> ofType(final Class<? extends R> type) {
+  default <R> Many<R> ofType(final Class<? extends R> type) {
     final var t = nonNullable(type, "type");
     return new OfType<>(this, (i, it) -> {}, t);
   }
 
-  default <R extends Record> Many<R> where(final BiPredicate<? super Integer, ? super T> where, final BiFunction<? super Integer, ? super T, ? extends R> select) {
+  default <R> Many<R> where(final BiPredicate<? super Integer, ? super T> where, final BiFunction<? super Integer, ? super T, ? extends R> select) {
     nonNullable(where, "where");
     nonNullable(select, "select");
     return new Where<T, R>(this, (i, it) -> {}, where, select);
   }
 }
 
-final class Where<T extends Record, R extends Record> implements Many<R> {
+final class Where<T, R> implements Many<R> {
   private final Queryable<T> queryable;
   private final BiConsumer<? super Integer, ? super T> peek;
   private final BiPredicate<? super Integer, ? super T> where;
@@ -67,7 +66,7 @@ final class Where<T extends Record, R extends Record> implements Many<R> {
   }
 }
 
-final class OfType<T extends Record, R extends Record> implements Many<R> {
+final class OfType<T, R> implements Many<R> {
   private final Queryable<T> queryable;
   private final BiConsumer<? super Integer, ? super T> peek;
   private final Class<? extends R> type;
@@ -81,13 +80,13 @@ final class OfType<T extends Record, R extends Record> implements Many<R> {
   @NotNull
   @Override
   public final Iterator<R> iterator() {
-    final var result = new ArrayList<R>();
-    for (final var value : queryable) {
-      if (value instanceof Any any) {
-        any.as(type).eventually(result::add);
+    final var records = new ArrayList<R>();
+    for (final var record : queryable) {
+      if (type.isInstance(record)) {
+        records.add(type.cast(record));
       }
     }
-    return result.iterator();
+    return records.iterator();
   }
 }
 

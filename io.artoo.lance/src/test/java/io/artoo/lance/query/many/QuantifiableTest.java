@@ -1,89 +1,54 @@
 package io.artoo.lance.query.many;
 
 import io.artoo.lance.query.Many;
+import io.artoo.lance.query.TestData.Pet;
+import io.artoo.lance.query.TestData.PetOwner;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.artoo.lance.value.Bool.False;
-import static io.artoo.lance.value.Text.let;
+import static io.artoo.lance.query.Many.from;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class QuantifiableTest {
   @Test
   @DisplayName("not all pets should start with letter B")
   void shouldNotStartAllWithB() {
-    final Pet[] pets = {
-      new Pet("Barley", 10),
-      new Pet("Boots", 4),
-      new Pet("Whiskers", 6)
-    };
 
-    final var all = Many.from(pets).all(pet -> pet.name().startsWith("B"));
+    final var all = from(new Pet("Barley", 10), new Pet("Boots", 4), new Pet("Whiskers", 6))
+      .all(pet -> pet.name().startsWith("B"))
+      .yield();
 
-    all.eventually(result -> assertThat(result.eval()).isFalse());
-  }
-
-  @Test
-  @DisplayName("should find people with pets older than 5")
-  void shouldFindPeopleWithPetsOlderThan5() {
-    final PetOwner[] owners = {
-      new PetOwner(
-        "Haas",
-        new Pet("Barley", 10),
-        new Pet("Boots", 14),
-        new Pet("Whiskers", 6)),
-      new PetOwner(
-        "Fakhouri",
-        new Pet("Snowball", 1)),
-      new PetOwner(
-        "Antebi",
-        new Pet("Belle", 8)
-      ),
-      new PetOwner(
-        "Philips",
-        new Pet("Sweetie", 2),
-        new Pet("Rover", 13)
-      )
-    };
-
-    record OldPetOwner(String owner, String pet, double age) { }
-
-    final var selected = Many.from(owners)
-      .selectMany(owner ->
-        Many.from(owner.pets())
-          .select(pet ->
-            new OldPetOwner(
-              owner.name(),
-              pet.name(),
-              pet.age()
-            )
-          )
-      )
-      .where(owner -> owner.age > 5)
-      .select(owner -> let(owner.owner));
-
-    assertThat(selected).isEqualTo(Many.from("Haas", "Antebi"));
+    assertThat(all).isFalse();
   }
 
   @Test
   @DisplayName("should contains an element")
   void shouldHaveAnyElement() {
-    Many.from(1, 2).any().eventually(result -> assertThat(result.eval()).isTrue());
-    Many.fromAny().any().eventually(result -> assertThat(result.eval()).isFalse());
+    final var any = from(1, 2).any().yield();
+
+    assertThat(any).isTrue();
+  }
+
+  @Test
+  @DisplayName("should not contains elements")
+  void shouldNotHaveAnyElement() {
+    final var any = from().any().yield();
+
+    assertThat(any).isFalse();
   }
 
   @Test
   @DisplayName("should have an even number")
   void shouldHaveEvenNumber() {
-    final var any = Many.from(1, 2).any(number -> number.eval() % 2 == 0);
+    final var any = from(1, 2).any(number -> number % 2 == 0).yield();
 
-    any.eventually(result -> assertThat(result.eval()).isTrue());
+    assertThat(any).isTrue();
   }
 
   @Test
-  @DisplayName("should have three people")
+  @DisplayName("should find 3 people with pets")
   void shouldHaveThreePeople() {
-    final PetOwner[] people = {
+    final PetOwner[] owners = {
       new PetOwner(
         "Haas",
         new Pet("Barley", 10),
@@ -98,28 +63,14 @@ class QuantifiableTest {
       )
     };
 
-    final var selected = Many.from(people)
-      .where(person -> Many.from(person.pets()).any().iterator().next().eval())
-      .select(person -> let(person.name()));
+    final var selected = from(owners)
+      .where(person -> from(person.pets()).any().yield())
+      .select(PetOwner::name);
 
-    assertThat(selected).isEqualTo(Many.from(
+    assertThat(selected).containsExactly(
       "Haas",
       "Fakhouri",
       "Philips"
-    ));
-  }
-
-  @Test
-  @DisplayName("should have vaxed pets only")
-  void shouldHaveVaccinatedOnly() {
-    final Pet[] pets = {
-      new Pet("Barley", 8, true),
-      new Pet("Boots", 4, false),
-      new Pet("Whiskers", 1, false)
-    };
-
-    Many.from(pets)
-      .any(pet -> pet.age() > 1 && !pet.vaxed())
-      .eventually(result -> assertThat(result).isEqualTo(False));
+    );
   }
 }

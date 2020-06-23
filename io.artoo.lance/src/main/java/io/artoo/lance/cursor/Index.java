@@ -1,77 +1,36 @@
 package io.artoo.lance.cursor;
 
-import io.artoo.lance.type.AsInt;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.concurrent.locks.StampedLock;
+import java.util.concurrent.atomic.AtomicInteger;
 
-@SuppressWarnings("UnusedReturnValue")
-public final class Index implements AsInt {
-  private final StampedLock stamp;
-  private int value;
+public record Index(AtomicInteger value) {
+  public Index { assert value != null; }
 
   @Contract(" -> new")
-  static @NotNull Index zero() { return new Index(0); }
-
-  Index(final int start) { this(start, new StampedLock()); }
-
-  private Index(final int value, StampedLock stamp) {
-    this.value = value;
-    this.stamp = stamp;
-  }
+  static @NotNull Index zero() { return new Index(new AtomicInteger(0)); }
 
   @Contract(" -> this")
   public final Index inc() {
-    final var write = this.stamp.asWriteLock();
-    try {
-      write.lock();
-      value++;
-    } finally {
-      write.unlock();
-    }
+    this.value.incrementAndGet();
     return this;
   }
 
   public final Index dec() {
-    final var write = this.stamp.asWriteLock();
-    try {
-      write.lock();
-      value++;
-    } finally {
-      write.unlock();
-    }
+    this.value.decrementAndGet();
     return this;
   }
 
   public final int evalAndInc() {
-    final var write = this.stamp.asWriteLock();
-    try {
-      write.lock();
-      return value++;
-    } finally {
-      write.unlock();
-    }
+    return this.value.getAndIncrement();
   }
 
-  @Override
   public final int eval() {
-    final var read = this.stamp.asReadLock();
-    try {
-      read.lock();
-      return this.value;
-    } finally {
-      read.unlock();
-    }
+    return this.value.get();
   }
 
   public final void reset() {
-    final var write = this.stamp.asWriteLock();
-    try {
-      write.lock();
-      value = 0;
-    } finally {
-      write.unlock();
-    }
+    this.value.set(0);
   }
 }

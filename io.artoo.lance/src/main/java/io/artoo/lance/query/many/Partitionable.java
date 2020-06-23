@@ -13,7 +13,7 @@ import java.util.function.Predicate;
 
 import static io.artoo.lance.type.Nullability.nonNullable;
 
-public interface Partitionable<T extends Record> extends Queryable<T> {
+public interface Partitionable<T> extends Queryable<T> {
   default Many<T> skip(final int until) {
     return skipWhile((index, it) -> index < until);
   }
@@ -41,7 +41,7 @@ public interface Partitionable<T extends Record> extends Queryable<T> {
   }
 }
 
-final class Partition<T extends Record> implements Partitionable<T> {
+final class Partition<T> implements Partitionable<T> {
   private final Queryable<T> queryable;
   private final BiConsumer<? super Integer, ? super T> peek;
   private final BiPredicate<? super Integer, ? super T> where;

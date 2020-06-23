@@ -1,37 +1,31 @@
 package io.artoo.lance.query.many;
 
 import io.artoo.lance.cursor.Cursor;
+import io.artoo.lance.func.Cons;
+import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.value.UInt32;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
 
-interface Countable<T extends Record> extends Queryable<T> {
-  default UInt32 count() {
+interface Countable<T> extends Queryable<T> {
+  default One<Integer> count() {
     return this.count(it -> true);
   }
 
-  default UInt32 count(final Predicate<? super T> where) {
-    return new UInt32(new Count<>(this, it -> {}, where));
+  default One<Integer> count(final Pred.Uni<? super T> where) {
+    return new Count<>(this, it -> {}, where);
   }
 }
 
-final class Count<T extends Record> implements One<UInt32> {
+final class Count<T> implements One<Integer> {
   private final Queryable<T> queryable;
-  private final Consumer<? super T> peek;
-  private final Predicate<? super T> where;
+  private final Cons.Uni<? super T> peek;
+  private final Pred.Uni<? super T> where;
 
-  @Contract(pure = true)
-  Count(
-    final Queryable<T> queryable,
-    final Consumer<? super T> peek,
-    final Predicate<? super T> where
-  ) {
+  Count(final Queryable<T> queryable, final Cons.Uni<? super T> peek, final Pred.Uni<? super T> where) {
+    assert queryable != null && peek != null && where != null;
     this.queryable = queryable;
     this.peek = peek;
     this.where = where;
@@ -39,14 +33,16 @@ final class Count<T extends Record> implements One<UInt32> {
 
   @NotNull
   @Override
-  public final Iterator<UInt32> iterator() {
-    var aggregated = UInt32.ZERO;
+  public final Iterator<Integer> iterator() {
+    var counted = 0;
     for (final var it : queryable) {
-      if (peek != null) peek.accept(it);
-      if (where.test(it)) {
-        aggregated = aggregated.inc();
+      if (it != null) {
+        peek.accept(it);
+        if (where.test(it)) {
+          counted += 1;
+        }
       }
     }
-    return Cursor.of(aggregated);
+    return Cursor.lone(counted);
   }
 }

@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 
 import static io.artoo.lance.type.Nullability.nonNullable;
 
-public interface Otherwise<T extends Record> extends Queryable<T> {
+public interface Otherwise<T> extends Queryable<T> {
   @SuppressWarnings("unchecked")
   default Many<T> or(final T... values) {
     nonNullable(values, "values");
@@ -34,7 +34,7 @@ public interface Otherwise<T extends Record> extends Queryable<T> {
   }
 }
 
-final class Or<R extends Record> implements Otherwise<R> {
+final class Or<R> implements Otherwise<R> {
   private final Queryable<R> queryable;
   private final Queryable<R> otherwise;
   private final String message;

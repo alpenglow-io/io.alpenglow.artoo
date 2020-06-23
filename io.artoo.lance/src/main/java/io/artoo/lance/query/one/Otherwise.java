@@ -10,9 +10,9 @@ import java.util.function.Supplier;
 
 import static io.artoo.lance.type.Nullability.nonNullable;
 
-public interface Otherwise<T extends Record> extends Queryable<T> {
+public interface Otherwise<T> extends Queryable<T> {
   default One<T> or(final T value) {
-    return or(One.just(nonNullable(value, "value")));
+    return or(One.lone(nonNullable(value, "element")));
   }
 
   default <O extends One<T>> One<T> or(final O otherwise) {
@@ -32,7 +32,7 @@ public interface Otherwise<T extends Record> extends Queryable<T> {
   }
 }
 
-final class Exceptionally<T extends Record, R extends RuntimeException> implements Otherwise<T> {
+final class Exceptionally<T, R extends RuntimeException> implements Otherwise<T> {
   private final Queryable<T> queryable;
   private final String message;
   private final Function<? super String, ? extends R> exception;
@@ -46,14 +46,14 @@ final class Exceptionally<T extends Record, R extends RuntimeException> implemen
   @NotNull
   @Override
   public final Iterator<T> iterator() {
-    final var cursor = queryable.cursor();
+    final var cursor = queryable.iterator();
     if (cursor.hasNext()) return cursor;
 
     throw exception.apply(message);
   }
 }
 
-final class Or<T extends Record, O extends One<T>> implements Otherwise<T> {
+final class Or<T, O extends One<T>> implements Otherwise<T> {
   private final Queryable<T> queryable;
   private final O otherwise;
 
@@ -65,8 +65,8 @@ final class Or<T extends Record, O extends One<T>> implements Otherwise<T> {
   @NotNull
   @Override
   public final Iterator<T> iterator() {
-    final var cursor = queryable.cursor();
-    return cursor.hasNext() ? cursor : otherwise.cursor();
+    final var cursor = queryable.iterator();
+    return cursor.hasNext() ? cursor : otherwise.iterator();
   }
 }
 

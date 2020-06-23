@@ -14,15 +14,15 @@ class PartitionableTest {
   void shouldTake3Rows() {
     final var taken = from(59, 82, 70, 56, 92, 98, 85).take(3);
 
-    assertThat(taken).isEqualTo(Many.from(59, 82, 70));
+    assertThat(taken).containsExactly(59, 82, 70);
   }
 
   @Test
   @DisplayName("should take all fruits until orange is met")
   void shouldTakeAllUntilOrange() {
-    final var taken = from("apple", "banana", "mango", "orange", "passionfruit", "grape").takeWhile(not(text -> text.is("orange")));
+    final var taken = from("apple", "banana", "mango", "orange", "passionfruit", "grape").takeWhile(not(text -> text.equals("orange")));
 
-    assertThat(taken).isEqualTo(Many.from("apple", "banana", "mango"));
+    assertThat(taken).containsExactly("apple", "banana", "mango");
   }
 
   @Test
@@ -30,7 +30,7 @@ class PartitionableTest {
   void shouldTakeWithIndex() {
     final var query = from("apple", "passionfruit", "banana", "mango", "orange", "blueberry", "grape", "strawberry").takeWhile((index, fruit) -> fruit.length() >= index);
 
-    assertThat(query).isEqualTo(Many.from("apple", "passionfruit", "banana", "mango", "orange", "blueberry"));
+    assertThat(query).containsExactly("apple", "passionfruit", "banana", "mango", "orange", "blueberry");
   }
 
   @Test
@@ -38,22 +38,22 @@ class PartitionableTest {
   void shouldSkipFirst3() {
     final var skipped = Many.from(59, 82, 70, 56, 92, 98, 85).skip(3);
 
-    assertThat(skipped).isEqualTo(Many.from(56, 92, 98, 85));
+    assertThat(skipped).containsExactly(56, 92, 98, 85);
   }
 
   @Test
   @DisplayName("should skip while number is lesser or equal than 90")
   void shouldSkipWhileNumbersLesserOrEqualThan90() {
-    final var query = Many.from(59, 82, 70, 56, 92, 98, 85).skipWhile(number -> number.eval() <= 90);
+    final var query = Many.from(59, 82, 70, 56, 92, 98, 85).skipWhile(number -> number <= 90);
 
-    assertThat(query).isEqualTo(Many.from(92, 98, 85));
+    assertThat(query).containsExactly(92, 98, 85);
   }
 
   @Test
   @DisplayName("should skip while amount is greater than the index by 1000")
   void shouldSkipWhileAmountGreaterThanIndexBy1000() {
-    final var query = Many.from(5000, 2500, 9000, 8000, 6500, 4000, 1500, 5500).skipWhile((index, amount) -> amount.eval() > index * 1000);
+    final var query = Many.from(5000, 2500, 9000, 8000, 6500, 4000, 1500, 5500).skipWhile((index, amount) -> amount > index * 1000);
 
-    assertThat(query).isEqualTo(Many.from(4000, 1500, 5500));
+    assertThat(query).containsExactly(4000, 1500, 5500);
   }
 }

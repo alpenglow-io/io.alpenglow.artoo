@@ -25,10 +25,4 @@ final class One<T extends Record> implements Cursor<T> {
     notRead.set(false);
     return value;
   }
-
-  @Override
-  public final Cursor<T> resume() {
-    notRead.set(true);;
-    return this;
-  }
 }

@@ -10,7 +10,7 @@ import java.util.function.BiConsumer;
 
 import static io.artoo.lance.type.Nullability.nonNullable;
 
-public interface Insertable<T extends Record> extends Queryable<T> {
+public interface Insertable<T> extends Queryable<T> {
   @SuppressWarnings("unchecked")
   default Many<T> insert(final T... values) {
     return new Insert<>(this, (i, it) -> {}, Many.from(nonNullable(values, "values")))::iterator;
@@ -22,7 +22,7 @@ public interface Insertable<T extends Record> extends Queryable<T> {
 }
 
 // TODO: where and select are missing
-final class Insert<T extends Record, Q extends Queryable<T>> implements Queryable<T> {
+final class Insert<T, Q extends Queryable<T>> implements Queryable<T> {
   private final Queryable<T> queryable;
   private final BiConsumer<? super Integer, ? super T> peek;
   private final Q values;

@@ -13,7 +13,7 @@ import java.util.function.Predicate;
 import static io.artoo.lance.type.Nullability.nonNullable;
 import static java.util.Objects.nonNull;
 
-public interface Settable<T extends Record> extends Queryable<T> {
+public interface Settable<T> extends Queryable<T> {
   default Many<T> distinct() {
     return distinct(it -> true);
   }
@@ -23,7 +23,7 @@ public interface Settable<T extends Record> extends Queryable<T> {
   }
 }
 
-final class Distinct<T extends Record> implements Settable<T> {
+final class Distinct<T> implements Settable<T> {
   private final Queryable<T> queryable;
   private final BiConsumer<? super Integer, ? super T> peek;
   private final Predicate<? super T> where;

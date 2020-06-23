@@ -13,29 +13,29 @@ import java.util.function.Function;
 
 import static io.artoo.lance.type.Nullability.nonNullable;
 
-public interface Projectable<T extends Record> extends Queryable<T> {
-  default <R extends Record> Many<R> select(BiFunction<? super Integer, ? super T, ? extends R> select) {
+public interface Projectable<T> extends Queryable<T> {
+  default <R> Many<R> select(BiFunction<? super Integer, ? super T, ? extends R> select) {
     nonNullable(select, "select");
     return new Select<T, R>(this, (i, it) -> {}, select)::iterator;
   }
 
-  default <R extends Record> Many<R> select(Function<? super T, ? extends R> select) {
+  default <R> Many<R> select(Function<? super T, ? extends R> select) {
     nonNullable(select, "select");
     return select((index, value) -> select.apply(value));
   }
 
-  default <R extends Record, M extends Many<R>> Many<R> selectMany(BiFunction<? super Integer, ? super T, ? extends M> select) {
+  default <R, M extends Many<R>> Many<R> selectMany(BiFunction<? super Integer, ? super T, ? extends M> select) {
     nonNullable(select, "select");
     return new SelectMany<>(this, (i, it) -> {}, select)::iterator;
   }
 
-  default <R extends Record, M extends Many<R>> Many<R> selectMany(Function<? super T, ? extends M> select) {
+  default <R, M extends Many<R>> Many<R> selectMany(Function<? super T, ? extends M> select) {
     nonNullable(select, "select");
     return new SelectMany<>(this, (i, it) -> {}, (index, it) -> select.apply(it))::iterator;
   }
 }
 
-final class Select<T extends Record, R extends Record> implements Projectable<R> {
+final class Select<T, R> implements Projectable<R> {
   private final Queryable<T> queryable;
   private final BiConsumer<? super Integer, ? super T> peek;
   private final BiFunction<? super Integer, ? super T, ? extends R> select;
@@ -61,7 +61,7 @@ final class Select<T extends Record, R extends Record> implements Projectable<R>
   }
 }
 
-final class SelectMany<T extends Record, R extends Record, Q extends Queryable<R>> implements Projectable<R> {
+final class SelectMany<T, R, Q extends Queryable<R>> implements Projectable<R> {
   private final Queryable<T> queryable;
   private final BiConsumer<? super Integer, ? super T> peek;
   private final BiFunction<? super Integer, ? super T, ? extends Q> select;

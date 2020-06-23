@@ -11,9 +11,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 import static io.artoo.lance.type.Nullability.nonNullable;
-import static io.artoo.lance.value.UInt32.ZERO;
 
-public interface Convertable<T extends Record> extends Queryable<T> {
+public interface Convertable<T> extends Queryable<T> {
   default @NotNull <K, E> Map<? extends K, ? extends E> asMap(final Function<? super T, ? extends K> key, final Function<? super T, ? extends E> element) {
     nonNullable(key, "key");
     nonNullable(element, "element");
@@ -23,10 +22,6 @@ public interface Convertable<T extends Record> extends Queryable<T> {
     return map;
   }
 
-  default Collection<T> asCollection() {
-    return asList();
-  }
-
   default List<T> asList() {
     final List<T> list = new ArrayList<>();
     for (final var value : this)
@@ -34,11 +29,11 @@ public interface Convertable<T extends Record> extends Queryable<T> {
     return list;
   }
 
-  default T[] asArray(final Function<? super Integer, T[]> initializer) {
-    for (final var count : ((Countable<T>) this::iterator).count().or(ZERO)) {
-      return nonNullable(initializer, "initializer").apply(count.raw());
-    }
+  default Collection<T> asCollection() {
+    return asList();
+  }
 
-    throw new IllegalStateException("Can't initialize array");
+  default Iterable<T> asIterable() {
+    return asCollection();
   }
 }

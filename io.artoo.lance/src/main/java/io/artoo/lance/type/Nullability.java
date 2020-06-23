@@ -7,7 +7,6 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static io.artoo.lance.type.Str.$;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNullElse;
@@ -23,9 +22,10 @@ public interface Nullability {
   @NotNull
   private static IllegalArgumentException illegalArgument(String argument) {
     return new IllegalArgumentException(
-      requireNonNullElse(
-        argument,
-        $("%s can't be null.").format(argument) + ""
+      requireNonNullElse(argument, """
+        %s can't be null.
+        """
+        .formatted(argument)
       )
     );
   }
@@ -43,7 +43,7 @@ public interface Nullability {
 
   static boolean areNonNullable(@NotNull final Object... arguments) {
     var areNonNullable = true;
-    for (int i = 0; i < arguments.length && areNonNullable; i++) {
+    for (var i = 0; i < arguments.length && areNonNullable; i++) {
       try {
         nonNullable(arguments[i], "Arguments");
       } catch (IllegalArgumentException iae) {
@@ -62,7 +62,10 @@ public interface Nullability {
   static <T> T nonNullableState(final T any, final String argument, final String formatted) {
     if (isNull(any)) {
       throw new IllegalStateException(
-        $(nonNullable(formatted, "formatted")).format(nonNullable(argument, "argument")) + ""
+        String.format(
+          nonNullable(formatted, "formatted"),
+          nonNullable(argument, "argument")
+        )
       );
     }
     return any;

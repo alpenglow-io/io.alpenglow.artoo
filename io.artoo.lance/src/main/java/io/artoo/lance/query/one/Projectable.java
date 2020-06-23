@@ -11,20 +11,20 @@ import java.util.function.Function;
 
 import static io.artoo.lance.type.Nullability.nonNullable;
 
-public interface Projectable<T extends Record> extends Queryable<T> {
-  default <R extends Record> One<R> select(final Function<? super T, ? extends R> select) {
+public interface Projectable<T> extends Queryable<T> {
+  default <R> One<R> select(final Function<? super T, ? extends R> select) {
     nonNullable(select, "select");
     return new Select<T, R>(this, select)::iterator;
   }
 
   @SuppressWarnings("unchecked")
-  default <R extends Record, O extends One<R>> O selectOne(final Function<? super T, ? extends O> selectOne) {
+  default <R, O extends One<R>> O selectOne(final Function<? super T, ? extends O> selectOne) {
     final var so = nonNullable(selectOne, "selectOne");
-    return this.cursor().hasNext() ? so.apply(this.cursor().next()) : (O) One.none();
+    return this.iterator().hasNext() ? so.apply(this.iterator().next()) : (O) One.none();
   }
 }
 
-final class Select<T extends Record, R extends Record> implements Projectable<R> {
+final class Select<T, R> implements Projectable<R> {
   private final Queryable<T> queryable;
   private final Function<? super T, ? extends R> select;
 
@@ -43,7 +43,7 @@ final class Select<T extends Record, R extends Record> implements Projectable<R>
   }
 }
 
-final class SelectOne<T extends Record, R extends Record, O extends One<R>> implements Projectable<R> {
+final class SelectOne<T, R, O extends One<R>> implements Projectable<R> {
   private final Queryable<T> queryable;
   private final Function<? super T, ? extends O> select;
 

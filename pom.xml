@@ -8,7 +8,7 @@
   <packaging>pom</packaging>
   <version>1.0-SNAPSHOT</version>
   <modules>
-    <module>io.artoo.desktop</module>
+    <module>io.artoo.fxcalibur</module>
     <module>io.artoo.lance</module>
   </modules>
 
@@ -99,16 +99,6 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>io.artoo</groupId>
-        <artifactId>io.artoo-Function</artifactId>
-        <version>${io.artoo.version}</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
 
   <build>
     <pluginManagement>

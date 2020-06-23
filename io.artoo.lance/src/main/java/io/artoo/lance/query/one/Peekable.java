@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 
 import static io.artoo.lance.type.Nullability.nonNullable;
 
-public interface Peekable<T extends Record> extends Queryable<T> {
+public interface Peekable<T> extends Queryable<T> {
   default One<T> peek(final Consumer<? super T> peek) {
     return new Peek<>(this, nonNullable(peek, "peek"))::iterator;
   }
@@ -22,7 +22,7 @@ public interface Peekable<T extends Record> extends Queryable<T> {
   }
 }
 
-final class Peek<T extends Record> implements Peekable<T> {
+final class Peek<T> implements Peekable<T> {
   private final Queryable<T> queryable;
   private final Consumer<? super T> cons;
 
@@ -34,10 +34,9 @@ final class Peek<T extends Record> implements Peekable<T> {
   @NotNull
   @Override
   public final Iterator<T> iterator() {
-    final var cursor = queryable.cursor();
+    final var cursor = queryable.iterator();
     if (cursor.hasNext()) cons.accept(cursor.next());
-    cursor.resume();
-    return cursor;
+    return queryable.iterator();
   }
 }
 

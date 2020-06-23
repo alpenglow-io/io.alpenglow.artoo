@@ -15,7 +15,7 @@ import java.util.function.Function;
 import static java.util.Comparator.comparingInt;
 import static java.util.Objects.nonNull;
 
-final class OrderBy<T extends Record, K> implements Many<T> {
+final class OrderBy<T, K> implements Many<T> {
   private final Comparator<? super Couple> comparison = comparingInt(couple -> couple.order.apply(couple.value).hashCode());
   private final Queryable<T> queryable;
   private final Function<? super T, ? extends K> order;

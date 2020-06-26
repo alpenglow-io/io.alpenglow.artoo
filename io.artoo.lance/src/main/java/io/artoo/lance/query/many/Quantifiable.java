@@ -1,13 +1,11 @@
 package io.artoo.lance.query.many;
 
-import io.artoo.lance.cursor.Cursor;
+import io.artoo.lance.query.cursor.Cursor;
 import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Iterator;
 
 import static io.artoo.lance.type.Nullability.nonNullable;
 
@@ -41,7 +39,7 @@ final class Any<T> implements One<Boolean> {
 
   @NotNull
   @Override
-  public final Iterator<Boolean> iterator() {
+  public final Cursor<Boolean> cursor() {
     var found = false;
     for (var iterator = queryable.iterator(); iterator.hasNext() && !found;) {
       final var it = iterator.next();
@@ -51,7 +49,7 @@ final class Any<T> implements One<Boolean> {
         found = where.test(it);
       }
     }
-    return Cursor.lone(found);
+    return Cursor.of(found);
   }
 }
 
@@ -69,7 +67,7 @@ final class All<T> implements One<Boolean> {
 
   @NotNull
   @Override
-  public final Iterator<Boolean> iterator() {
+  public final Cursor<Boolean> cursor() {
     var found = true;
     for (var iterator = queryable.iterator(); iterator.hasNext() && found;) {
       final var it = iterator.next();
@@ -79,6 +77,6 @@ final class All<T> implements One<Boolean> {
         found = where.test(it);
       }
     }
-    return Cursor.lone(found);
+    return Cursor.of(found);
   }
 }

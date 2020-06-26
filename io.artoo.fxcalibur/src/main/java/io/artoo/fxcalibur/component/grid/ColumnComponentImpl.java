@@ -34,7 +34,7 @@ final class ColumnComponentImpl implements ColumnComponent {
   }
 
   @Override
-  public void consume(GridPane grid, Integer row, Integer col) {
+  public void tryAccept(GridPane grid, Integer row, Integer col) {
     for (final var property : properties)
       property.accept(constraints);
     grid.getColumnConstraints().add(constraints);

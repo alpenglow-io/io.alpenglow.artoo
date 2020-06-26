@@ -1,88 +1,92 @@
 package io.artoo.lance.func;
 
+import io.artoo.lance.func.Func.Nothing;
+
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import static io.artoo.lance.func.Func.Nothing.Nil;
+
 public interface Cons {
-  interface Uni<A> extends Consumer<A>, Func.Uni<A, Void> {
-    void consume(A a) throws Throwable;
+  interface Uni<A> extends Consumer<A>, Func.Uni<A, Nothing> {
+    void tryAccept(A a) throws Throwable;
 
     @Override
-    default Void invoke(A a) throws Throwable {
-      consume(a);
-      return null;
+    default Nothing tryApply(A a) throws Throwable {
+      tryAccept(a);
+      return Nil;
     }
 
     @Override
     default void accept(A a) {
-      try { consume(a); } catch (Throwable ignored) {}
+      try { tryAccept(a); } catch (Throwable ignored) {}
     }
 
     @Override
-    default Void apply(A a) {
+    default Nothing apply(A a) {
       accept(a);
-      return null;
+      return Nil;
     }
   }
 
-  interface Bi<A, B> extends BiConsumer<A, B>, Func.Bi<A, B, Void> {
-    void consume(A a, B b) throws Throwable;
+  interface Bi<A, B> extends BiConsumer<A, B>, Func.Bi<A, B, Nothing> {
+    void tryAccept(A a, B b) throws Throwable;
 
     @Override
-    default Void invoke(A a, B b) throws Throwable {
-      consume(a, b);
-      return null;
+    default Nothing tryApply(A a, B b) throws Throwable {
+      tryAccept(a, b);
+      return Nil;
     }
 
     @Override
     default void accept(A a, B b) {
-      try { consume(a, b); } catch (Throwable ignored) {}
+      try { tryAccept(a, b); } catch (Throwable ignored) {}
     }
 
     @Override
-    default Void apply(A a, B b) {
+    default Nothing apply(A a, B b) {
       accept(a, b);
-      return null;
+      return Nil;
     }
   }
 
-  interface Tri<A, B, C> extends Func.Tri<A, B, C, Void> {
-    void consume(A a, B b, C c) throws Throwable;
+  interface Tri<A, B, C> extends Func.Tri<A, B, C, Nothing> {
+    void tryAccept(A a, B b, C c) throws Throwable;
 
     @Override
-    default Void invoke(A a, B b, C c) throws Throwable {
-      consume(a, b, c);
-      return null;
+    default Nothing tryApply(A a, B b, C c) throws Throwable {
+      tryAccept(a, b, c);
+      return Nil;
     }
 
     default void accept(A a, B b, C c) {
-      try { consume(a, b, c); } catch (Throwable ignored) {}
+      try { tryAccept(a, b, c); } catch (Throwable ignored) {}
     }
 
     @Override
-    default Void apply(A a, B b, C c) {
+    default Nothing apply(A a, B b, C c) {
       accept(a, b, c);
-      return null;
+      return Nil;
     }
   }
 
-  interface Quad<A, B, C, D> extends Func.Quad<A, B, C, D, Void> {
-    void consume(A a, B b, C c, D d) throws Throwable;
+  interface Quad<A, B, C, D> extends Func.Quad<A, B, C, D, Nothing> {
+    void tryAccept(A a, B b, C c, D d) throws Throwable;
 
     @Override
-    default Void invoke(A a, B b, C c, D d) throws Throwable {
-      consume(a, b, c, d);
-      return null;
+    default Nothing tryApply(A a, B b, C c, D d) throws Throwable {
+      tryAccept(a, b, c, d);
+      return Nil;
     }
 
     default void accept(A a, B b, C c, D d) {
-      try { consume(a, b, c, d); } catch (Throwable ignored) {}
+      try { tryAccept(a, b, c, d); } catch (Throwable ignored) {}
     }
 
     @Override
-    default Void apply(A a, B b, C c, D d) {
+    default Nothing apply(A a, B b, C c, D d) {
       accept(a, b, c, d);
-      return null;
+      return Nil;
     }
   }
 }

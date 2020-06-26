@@ -5,9 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
-import static io.artoo.lance.type.Emptyness.Nothing;
-
-enum Emptyness {Nothing}
+import static io.artoo.lance.func.Func.Nothing.Nil;
 
 @SuppressWarnings("UnusedReturnValue")
 public interface Lazy<T> extends Supplier<T> {
@@ -36,7 +34,7 @@ final class SyncLazy<T> implements Lazy<T> {
   SyncLazy(final Supplier<T> supplier) {
     this(
       supplier,
-      Nothing
+      Nil
     );
   }
 
@@ -50,12 +48,12 @@ final class SyncLazy<T> implements Lazy<T> {
   @SuppressWarnings("unchecked")
   public final T get() {
     final var v1 = value;
-    if (!v1.equals(Nothing))
+    if (!v1.equals(Nil))
       return (T) v1;
     else
       synchronized (this) {
         final var v2 = value;
-        return !v2.equals(Nothing) ? (T) v1 : set();
+        return !v2.equals(Nil) ? (T) v1 : set();
       }
   }
 
@@ -67,18 +65,18 @@ final class SyncLazy<T> implements Lazy<T> {
 
   @Contract(" -> this")
   private Lazy<T> unset() {
-    this.value = Nothing;
+    this.value = Nil;
     return this;
   }
 
   @Override
   public Lazy<T> release() {
     final var v1 = value;
-    if (v1.equals(Nothing))
+    if (v1.equals(Nil))
       return this;
     else
       synchronized (this) {
-        return value.equals(Nothing) ? this : unset();
+        return value.equals(Nil) ? this : unset();
       }
   }
 

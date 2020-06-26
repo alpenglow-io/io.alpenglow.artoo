@@ -1,13 +1,11 @@
 package io.artoo.lance.query.many;
 
-import io.artoo.lance.cursor.Cursor;
+import io.artoo.lance.query.cursor.Cursor;
 import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Iterator;
 
 interface Countable<T> extends Queryable<T> {
   default One<Integer> count() {
@@ -33,7 +31,7 @@ final class Count<T> implements One<Integer> {
 
   @NotNull
   @Override
-  public final Iterator<Integer> iterator() {
+  public final Cursor<Integer> cursor() {
     var counted = 0;
     for (final var it : queryable) {
       if (it != null) {
@@ -43,6 +41,6 @@ final class Count<T> implements One<Integer> {
         }
       }
     }
-    return Cursor.lone(counted);
+    return Cursor.of(counted);
   }
 }

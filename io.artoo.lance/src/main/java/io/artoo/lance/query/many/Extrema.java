@@ -1,6 +1,6 @@
 package io.artoo.lance.query.many;
 
-import io.artoo.lance.cursor.Cursor;
+import io.artoo.lance.query.cursor.Cursor;
 import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.query.One;
@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Iterator;
 
 import static io.artoo.lance.type.Nullability.nonNullable;
 
@@ -57,7 +56,7 @@ final class Extremum<T, N extends Number, V> implements One<V> {
 
   @NotNull
   @Override
-  public final Iterator<V> iterator() {
+  public final Cursor<V> cursor() {
     N compared = null;
     for (final var it : queryable) {
       if (it != null) {

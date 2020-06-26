@@ -1,68 +1,81 @@
 package io.artoo.lance.query.one;
 
-import io.artoo.lance.cursor.Cursor;
+import io.artoo.lance.query.cursor.Cursor;
+import io.artoo.lance.func.Func;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Iterator;
-import java.util.function.Function;
-
 import static io.artoo.lance.type.Nullability.nonNullable;
 
 public interface Projectable<T> extends Queryable<T> {
-  default <R> One<R> select(final Function<? super T, ? extends R> select) {
+  default <R> One<R> select(final Func.Uni<? super T, ? extends R> select) {
     nonNullable(select, "select");
-    return new Select<T, R>(this, select)::iterator;
+    return new Select<T, R>(this, select);
   }
 
-  @SuppressWarnings("unchecked")
-  default <R, O extends One<R>> O selectOne(final Function<? super T, ? extends O> selectOne) {
-    final var so = nonNullable(selectOne, "selectOne");
-    return this.iterator().hasNext() ? so.apply(this.iterator().next()) : (O) One.none();
+  default <R, O extends One<R>> One<R> selectOne(final Func.Uni<? super T, ? extends O> selectOne) {
+    return new SelectOne<>(this, nonNullable(selectOne, "selectOne"));
   }
 }
 
-final class Select<T, R> implements Projectable<R> {
+final class Select<T, R> implements One<R> {
   private final Queryable<T> queryable;
-  private final Function<? super T, ? extends R> select;
+  private final Func.Uni<? super T, ? extends R> select;
 
   @Contract(pure = true)
-  Select(final Queryable<T> queryable, final Function<? super T, ? extends R> select) {
+  Select(final Queryable<T> queryable, final Func.Uni<? super T, ? extends R> select) {
+    assert queryable != null && select != null;
     this.queryable = queryable;
     this.select = select;
   }
 
   @NotNull
   @Override
-  public final Iterator<R> iterator() {
+  public final Cursor<R> cursor() {
     R result = null;
     for (final var value : queryable) if (value != null) result = select.apply(value);
     return Cursor.of(result);
   }
 }
 
-final class SelectOne<T, R, O extends One<R>> implements Projectable<R> {
+final class SelectOne<T, R, O extends One<R>> implements One<R> {
   private final Queryable<T> queryable;
-  private final Function<? super T, ? extends O> select;
+  private final Func.Uni<? super T, ? extends O> select;
 
   @Contract(pure = true)
-  SelectOne(final Queryable<T> queryable, final Function<? super T, ? extends O> select) {
+  SelectOne(final Queryable<T> queryable, final Func.Uni<? super T, ? extends O> select) {
     this.queryable = queryable;
     this.select = select;
   }
 
   @NotNull
   @Override
-  public final Iterator<R> iterator() {
-    O result = null;
+  public final Cursor<R> cursor() {
+    O selected = null;
     for (final var value : queryable) {
       if (value != null) {
-        result = select.apply(value);
+        selected = select.apply(value);
       }
     }
-    return result != null ? result.iterator() : Cursor.none();
+    final var iterator = selected.iterator();
+    return selected != null ? new Cursor<R>() {
+      @Override
+      public Cursor<R> append(final R element) {
+        return null;
+      }
+
+      @Override
+      public boolean hasNext() {
+        return iterator.hasNext();
+      }
+
+      @Override
+      public R next() {
+        return iterator.next();
+      }
+    } : Cursor.empty();
   }
 }
 

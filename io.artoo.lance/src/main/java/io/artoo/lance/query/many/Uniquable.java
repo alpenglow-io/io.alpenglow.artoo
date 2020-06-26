@@ -1,48 +1,46 @@
 package io.artoo.lance.query.many;
 
-import io.artoo.lance.cursor.Cursor;
+import io.artoo.lance.query.cursor.Cursor;
+import io.artoo.lance.func.Cons;
+import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Iterator;
-import java.util.function.BiConsumer;
-import java.util.function.Predicate;
-
 import static io.artoo.lance.type.Nullability.nonNullable;
 
 public interface Uniquable<T> extends Queryable<T> {
   default One<T> at(final int index) {
-    return new At<>(this, index)::iterator;
+    return new At<>(this, index);
   }
 
   default One<T> first() {
-    return new Unique<>(this, (i, it) -> {}, true, false, it -> true)::iterator;
+    return new Unique<>(this, (i, it) -> {}, true, false, it -> true);
   }
 
-  default One<T> first(final Predicate<? super T> where) {
-    return new Unique<>(this, (i, it) -> {}, true, false, nonNullable(where, "where"))::iterator;
+  default One<T> first(final Pred.Uni<? super T> where) {
+    return new Unique<>(this, (i, it) -> {}, true, false, nonNullable(where, "where"));
   }
 
   default One<T> last() {
     return last(it -> true);
   }
 
-  default One<T> last(final Predicate<? super T> where) {
-    return new Unique<>(this, (i, it) -> {}, false, false, nonNullable(where, "where"))::iterator;
+  default One<T> last(final Pred.Uni<? super T> where) {
+    return new Unique<>(this, (i, it) -> {}, false, false, nonNullable(where, "where"));
   }
 
   default One<T> single() {
     return single(it -> true);
   }
 
-  default One<T> single(final Predicate<? super T> where) {
-    return new Unique<>(this, (i, it) -> {}, false, true, nonNullable(where, "where"))::iterator;
+  default One<T> single(final Pred.Uni<? super T> where) {
+    return new Unique<>(this, (i, it) -> {}, false, true, nonNullable(where, "where"));
   }
 }
 
-final class At<T> implements Uniquable<T> {
+final class At<T> implements One<T> {
   private final Queryable<T> queryable;
   private final int index;
 
@@ -54,7 +52,7 @@ final class At<T> implements Uniquable<T> {
 
   @NotNull
   @Override
-  public final Iterator<T> iterator() {
+  public final Cursor<T> cursor() {
     var count = 0;
     T returned = null;
     for (final var iterator = queryable.iterator(); iterator.hasNext() && count <= index; count++) {
@@ -66,15 +64,15 @@ final class At<T> implements Uniquable<T> {
   }
 }
 
-final class Unique<T> implements Uniquable<T> {
+final class Unique<T> implements One<T> {
   private final Queryable<T> queryable;
-  private final BiConsumer<? super Integer, ? super T> peek;
+  private final Cons.Bi<? super Integer, ? super T> peek;
   private final boolean first;
   private final boolean single;
-  private final Predicate<? super T> where;
+  private final Pred.Uni<? super T> where;
 
   @Contract(pure = true)
-  public Unique(final Queryable<T> queryable, final BiConsumer<? super Integer, ? super T> peek, final boolean first, final boolean single, final Predicate<? super T> where) {
+  public Unique(final Queryable<T> queryable, final Cons.Bi<? super Integer, ? super T> peek, final boolean first, final boolean single, final Pred.Uni<? super T> where) {
     this.queryable = queryable;
     this.peek = peek;
     this.first = first;
@@ -84,7 +82,7 @@ final class Unique<T> implements Uniquable<T> {
 
   @NotNull
   @Override
-  public final Iterator<T> iterator() {
+  public final Cursor<T> cursor() {
     T result = null;
     var done = false;
     var index = 0;

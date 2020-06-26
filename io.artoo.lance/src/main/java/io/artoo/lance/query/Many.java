@@ -1,6 +1,7 @@
 package io.artoo.lance.query;
 
-import io.artoo.lance.cursor.Cursor;
+import io.artoo.lance.query.cursor.Cursor;
+
 import io.artoo.lance.query.many.Aggregatable;
 import io.artoo.lance.query.many.Filterable;
 import io.artoo.lance.query.many.Insertable;
@@ -15,31 +16,32 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.function.Supplier;
 
 import static io.artoo.lance.type.Nullability.nonNullable;
 
-public interface Many<T> extends
-  Projectable<T>, Filterable<T>, Partitionable<T>, Uniquable<T>, Aggregatable<T>,
-  Quantifiable<T>, Settable<T>, Insertable<T>, Otherwise<T> {
+public interface  Many<T> extends
+  Projectable<T>,
+  Filterable<T>,
+  Partitionable<T>,
+  Uniquable<T>,
+  Aggregatable<T>,
+  Quantifiable<T>,
+  Settable<T>,
+  Insertable<T>,
+  Otherwise<T>
+{
 
   @NotNull
   @Contract("_ -> new")
   @SafeVarargs
   static <R> Many<R> from(final R... items) {
-    return new Array<>(Arrays.copyOf(items, items.length));
+    return new Array<>(items);
   }
 
   @Contract("_ -> new")
   static @NotNull Many<Object> fromAny(Object... objects) {
     return new Array<>(Arrays.copyOf(objects, objects.length));
-  }
-
-  @NotNull
-  @Contract("_ -> new")
-  static <R> Many<R> from(final Iterable<R> iterable) {
-    return new Iteration<>(nonNullable(iterable, "iterable"));
   }
 
   @NotNull
@@ -56,24 +58,6 @@ public interface Many<T> extends
   }
 }
 
-final class Iteration<T> implements Many<T> {
-  private final Iterable<T> iterable;
-
-  @Contract(pure = true)
-  Iteration(final Iterable<T> iterable) {this.iterable = iterable;}
-
-  @NotNull
-  @Override
-  public final Iterator<T> iterator() {
-    return iterable.iterator();
-  }
-
-  @Override
-  public String toString() {
-    return String.format("[%s]", iterable);
-  }
-}
-
 final class Array<T> implements Many<T> {
   private final T[] elements;
 
@@ -85,13 +69,8 @@ final class Array<T> implements Many<T> {
 
   @NotNull
   @Override
-  public final Iterator<T> iterator() {
-    final var list = new ArrayList<T>();
-    for (final var element : elements) {
-      if (element != null) list.add(element);
-    }
-
-    return list.iterator();
+  public final Cursor<T> cursor() {
+    return Cursor.pipe(Arrays.copyOf(elements, elements.length));
   }
 }
 
@@ -107,12 +86,12 @@ final class Repeat<T> implements Many<T> {
 
   @NotNull
   @Override
-  public final Iterator<T> iterator() {
-    final var array = new ArrayList<T>();
+  public final Cursor<T> cursor() {
+    var cursor = Cursor.<T>empty();
     for (var index = 0; index < count; index++) {
-      array.add(supplier.get());
+      cursor = cursor.append(supplier.get());
     }
-    return array.iterator();
+    return cursor;
   }
 }
 
@@ -121,8 +100,8 @@ enum ManyRecord implements Many<Record> {
 
   @NotNull
   @Override
-  public final Iterator<Record> iterator() {
-    return Cursor.none();
+  public final Cursor<Record> cursor() {
+    return Cursor.empty();
   }
 }
 

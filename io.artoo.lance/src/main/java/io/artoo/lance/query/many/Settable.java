@@ -1,14 +1,14 @@
 package io.artoo.lance.query.many;
 
+import io.artoo.lance.query.cursor.Cursor;
+import io.artoo.lance.func.Cons;
+import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.function.BiConsumer;
-import java.util.function.Predicate;
 
 import static io.artoo.lance.type.Nullability.nonNullable;
 import static java.util.Objects.nonNull;
@@ -18,18 +18,18 @@ public interface Settable<T> extends Queryable<T> {
     return distinct(it -> true);
   }
 
-  default Many<T> distinct(final Predicate<? super T> where) {
-    return new Distinct<>(this, (i, it) -> {}, nonNullable(where, "where"))::iterator;
+  default Many<T> distinct(final Pred.Uni<? super T> where) {
+    return new Distinct<>(this, (i, it) -> {}, nonNullable(where, "where"));
   }
 }
 
-final class Distinct<T> implements Settable<T> {
+final class Distinct<T> implements Many<T> {
   private final Queryable<T> queryable;
-  private final BiConsumer<? super Integer, ? super T> peek;
-  private final Predicate<? super T> where;
+  private final Cons.Bi<? super Integer, ? super T> peek;
+  private final Pred.Uni<? super T> where;
 
   @Contract(pure = true)
-  Distinct(final Queryable<T> queryable, final BiConsumer<? super Integer, ? super T> peek, final Predicate<? super T> where) {
+  Distinct(final Queryable<T> queryable, final Cons.Bi<? super Integer, ? super T> peek, final Pred.Uni<? super T> where) {
     this.queryable = queryable;
     this.peek = peek;
     this.where = where;
@@ -37,7 +37,7 @@ final class Distinct<T> implements Settable<T> {
 
   @NotNull
   @Override
-  public final Iterator<T> iterator() {
+  public final Cursor<T> cursor() {
     final var result = new ArrayList<T>();
     var index = 0;
     for (var iterator = queryable.iterator(); iterator.hasNext(); index++) {
@@ -48,6 +48,23 @@ final class Distinct<T> implements Settable<T> {
         result.add(it);
       }
     }
-    return result.iterator();
+
+    final var iterator = result.iterator();
+    return new Cursor<T>() {
+      @Override
+      public Cursor<T> append(final T element) {
+        return null;
+      }
+
+      @Override
+      public boolean hasNext() {
+        return iterator.hasNext();
+      }
+
+      @Override
+      public T next() {
+        return iterator.next();
+      }
+    };
   }
 }

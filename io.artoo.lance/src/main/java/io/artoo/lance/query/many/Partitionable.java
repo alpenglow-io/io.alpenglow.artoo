@@ -1,16 +1,16 @@
 package io.artoo.lance.query.many;
 
+import io.artoo.lance.query.cursor.Cursor;
+import io.artoo.lance.func.Cons;
+import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.function.BiConsumer;
-import java.util.function.BiPredicate;
-import java.util.function.Predicate;
 
+import static io.artoo.lance.func.Pred.not;
 import static io.artoo.lance.type.Nullability.nonNullable;
 
 public interface Partitionable<T> extends Queryable<T> {
@@ -18,36 +18,44 @@ public interface Partitionable<T> extends Queryable<T> {
     return skipWhile((index, it) -> index < until);
   }
 
-  default Many<T> skipWhile(final Predicate<? super T> where) {
+  default Many<T> skipWhile(final Pred.Uni<? super T> where) {
     return skipWhile((index, it) -> !where.test(it));
   }
 
-  default Many<T> skipWhile(final BiPredicate<? super Integer, ? super T> where) {
-    nonNullable(where, "where");
-    return new Partition<>(this, (i, it) -> {}, where.negate())::iterator;
+  default Many<T> skipWhile(final Pred.Bi<? super Integer, ? super T> where) {
+    return new Partition<>(this, it -> {}, not(nonNullable(where, "where")));
   }
 
   default Many<T> take(final int until) {
-    return new Partition<>(this, (i, it) -> {}, (index, it) -> index < until)::iterator;
+    return new Partition<>(this, it -> {}, (index, it) -> index < until);
   }
 
-  default Many<T> takeWhile(final Predicate<? super T> where) {
+  default Many<T> takeWhile(final Pred.Uni<? super T> where) {
     nonNullable(where, "where");
     return takeWhile((index, param) -> where.test(param));
   }
 
-  default Many<T> takeWhile(final BiPredicate<? super Integer, ? super T> where) {
-    return new Partition<>(this, (i, it) -> {}, nonNullable(where, "where"))::iterator;
+  default Many<T> takeWhile(final Pred.Bi<? super Integer, ? super T> where) {
+    return new Partition<>(this, it -> {}, nonNullable(where, "where"));
   }
 }
 
-final class Partition<T> implements Partitionable<T> {
+final class Skip<T> implements Many<T> {
+
+  @Override
+  public Cursor<T> cursor() {
+    return null;
+  }
+}
+
+final class Partition<T> implements Many<T> {
   private final Queryable<T> queryable;
-  private final BiConsumer<? super Integer, ? super T> peek;
-  private final BiPredicate<? super Integer, ? super T> where;
+  private final Cons.Uni<? super T> peek;
+  private final Pred.Bi<? super Integer, ? super T> where;
 
   @Contract(pure = true)
-  public Partition(final Queryable<T> queryable, final BiConsumer<? super Integer, ? super T> peek, final BiPredicate<? super Integer, ? super T> where) {
+  public Partition(final Queryable<T> queryable, final Cons.Uni<? super T> peek, final Pred.Bi<? super Integer, ? super T> where) {
+    assert queryable != null && peek != null && where != null;
     this.queryable = queryable;
     this.peek = peek;
     this.where = where;
@@ -55,22 +63,25 @@ final class Partition<T> implements Partitionable<T> {
 
   @NotNull
   @Override
-  public final Iterator<T> iterator() {
+  public final Cursor<T> cursor() {
     final var result = new ArrayList<T>();
     var index = 0;
-    var cursor = queryable.iterator();
+    var cursor = queryable.cursor();
     var verified = false;
     if (cursor.hasNext()) {
       do
       {
-        final var it = cursor.next();
-        peek.accept(index, it);
-        verified = it != null && where.test(index, it);
-        if (verified) result.add(it);
+        final var element = cursor.next();
+        if (element != null) {
+          peek.accept(element);
+          verified = where.test(index, element);
+          if (verified)
+            result.add(element);
+        }
         index++;
       } while (cursor.hasNext() && verified);
     }
-    return result.iterator();
+    return Cursor.from(result.iterator());
   }
 }
 

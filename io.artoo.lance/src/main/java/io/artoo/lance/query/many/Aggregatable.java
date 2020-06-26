@@ -1,15 +1,13 @@
 package io.artoo.lance.query.many;
 
-import io.artoo.lance.cursor.Cursor;
-import io.artoo.lance.func.Cons;
+import io.artoo.lance.query.cursor.Cursor;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
+import io.artoo.lance.type.Eitherable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Iterator;
 
 import static io.artoo.lance.type.Nullability.nonNullable;
 
@@ -17,10 +15,7 @@ public interface Aggregatable<T> extends Countable<T>, Summable<T>, Averageable<
   @NotNull
   @Contract("_, _, _, _ -> new")
   default <A, R> One<A> aggregate(final A seed, final Pred.Uni<? super T> where, final Func.Uni<? super T, ? extends R> select, final Func.Bi<? super A, ? super R, ? extends A> aggregate) {
-    final var whr = nonNullable(where, "where");
-    final var sel = nonNullable(select, "select");
-    final var agr = nonNullable(aggregate, "aggregate");
-    return new Aggregate<T, A, R>(this, it -> {}, seed, whr, sel, agr);
+    return new Aggregate<T, A, R>(this, seed, nonNullable(where, "where"), nonNullable(select, "select"), nonNullable(aggregate, "aggregate"));
   }
 
   default <A, R> One<A> aggregate(final A seed, final Func.Uni<? super T, ? extends R> select, final Func.Bi<? super A, ? super R, ? extends A> aggregate) {
@@ -41,40 +36,56 @@ public interface Aggregatable<T> extends Countable<T>, Summable<T>, Averageable<
 }
 
 @SuppressWarnings("unchecked")
-final class Aggregate<T, A, R> implements One<A> {
+final class Aggregate<T, A, R> implements One<A>, Eitherable {
   private final Queryable<T> queryable;
-  private final Cons.Uni<? super T> peek;
   private final A seed;
   private final Pred.Uni<? super T> where;
   private final Func.Uni<? super T, ? extends R> select;
   private final Func.Bi<? super A, ? super R, ? extends A> aggregate;
 
-  Aggregate(final Queryable<T> queryable, final Cons.Uni<? super T> peek, final A seed, final Pred.Uni<? super T> where, final Func.Uni<? super T, ? extends R> select, final Func.Bi<? super A, ? super R, ? extends A> aggregate) {
-    assert queryable != null && peek != null && where != null && select != null && aggregate != null;
+  Aggregate(final Queryable<T> queryable, final A seed, final Pred.Uni<? super T> where, final Func.Uni<? super T, ? extends R> select, final Func.Bi<? super A, ? super R, ? extends A> aggregate) {
+    assert queryable != null && where != null && select != null && aggregate != null;
     this.queryable = queryable;
-    this.peek = peek;
     this.seed = seed;
     this.where = where;
     this.select = select;
     this.aggregate = aggregate;
   }
 
+  private class Aggregated {
+    private A value;
+
+    public Aggregated(final A value) {
+      this.value = value;
+    }
+  }
 
   @NotNull
   @Override
-  public final Iterator<A> iterator() {
-    var aggregated = seed;
-    for (final var it : queryable) {
-      if (it != null) {
-        peek.accept(it);
-        if (where.test(it)) {
-          final var selected = select.apply(it);
-          if (selected != null) {
-            aggregated = aggregated == null ? (A) selected : aggregate.apply(aggregated, selected);
-          }
-        }
+  public final Cursor<A> cursor() {
+    var result = Cursor.<A>empty();
+
+    final var aggregated = new Aggregated(seed);
+
+    for (var cursor = queryable.cursor(); cursor.hasNext(); ) {
+      cursor.next(element ->
+        either(
+          () -> aggregate(aggregated, element),
+          it -> aggregated.value = it,
+          result::halt
+        )
+      );
+    }
+    return result.append(aggregated.value);
+  }
+
+  private A aggregate(final Aggregated aggregated, final T element) throws Throwable {
+    if (where.tryTest(element)) {
+      final var selected = select.tryApply(element);
+      if (selected != null) {
+        return aggregated.value == null ? (A) selected : aggregate.apply(aggregated.value, selected);
       }
     }
-    return Cursor.of(aggregated);
+    return null;
   }
 }

@@ -1,6 +1,6 @@
 package io.artoo.lance.query.many;
 
-import io.artoo.lance.cursor.Cursor;
+import io.artoo.lance.query.cursor.Cursor;
 import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.query.One;
@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Iterator;
 
 import static io.artoo.lance.type.Nullability.nonNullable;
 
@@ -39,7 +38,7 @@ final class Sum<T, N extends Number, V> implements One<V> {
 
   @NotNull
   @Override
-  public Iterator<V> iterator() {
+  public Cursor<V> cursor() {
     N result = null;
     for (final var record : queryable) {
       if (record != null) {

@@ -1,22 +1,23 @@
 package io.artoo.lance.query.many;
 
+import io.artoo.lance.query.cursor.Cursor;
+import io.artoo.lance.func.Cons;
+import io.artoo.lance.func.Func;
 import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
+import io.artoo.lance.type.Eitherable;
+import io.artoo.lance.type.Sequence;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import static io.artoo.lance.type.Nullability.nonNullable;
 
 public interface Projectable<T> extends Queryable<T> {
-  default <R> Many<R> select(BiFunction<? super Integer, ? super T, ? extends R> select) {
+  default <R> Many<R> select(Func.Bi<? super Integer, ? super T, ? extends R> select) {
     nonNullable(select, "select");
-    return new Select<T, R>(this, (i, it) -> {}, select)::iterator;
+    return new Select<>(this, (i, it) -> {}, select);
   }
 
   default <R> Many<R> select(Function<? super T, ? extends R> select) {
@@ -24,24 +25,24 @@ public interface Projectable<T> extends Queryable<T> {
     return select((index, value) -> select.apply(value));
   }
 
-  default <R, M extends Many<R>> Many<R> selectMany(BiFunction<? super Integer, ? super T, ? extends M> select) {
+  default <R, M extends Many<R>> Many<R> selectMany(Func.Bi<? super Integer, ? super T, ? extends M> select) {
     nonNullable(select, "select");
-    return new SelectMany<>(this, (i, it) -> {}, select)::iterator;
+    return new SelectMany<>(this, select);
   }
 
   default <R, M extends Many<R>> Many<R> selectMany(Function<? super T, ? extends M> select) {
     nonNullable(select, "select");
-    return new SelectMany<>(this, (i, it) -> {}, (index, it) -> select.apply(it))::iterator;
+    return new SelectMany<>(this, (index, it) -> select.apply(it));
   }
 }
 
-final class Select<T, R> implements Projectable<R> {
+final class Select<T, R> implements Many<R>, Eitherable {
   private final Queryable<T> queryable;
-  private final BiConsumer<? super Integer, ? super T> peek;
-  private final BiFunction<? super Integer, ? super T, ? extends R> select;
+  private final Cons.Bi<? super Integer, ? super T> peek;
+  private final Func.Bi<? super Integer, ? super T, ? extends R> select;
 
   @Contract(pure = true)
-  public Select(final Queryable<T> queryable, final BiConsumer<? super Integer, ? super T> peek, final BiFunction<? super Integer, ? super T, ? extends R> select) {
+  public Select(final Queryable<T> queryable, final Cons.Bi<? super Integer, ? super T> peek, final Func.Bi<? super Integer, ? super T, ? extends R> select) {
     this.queryable = queryable;
     this.peek = peek;
     this.select = select;
@@ -49,49 +50,49 @@ final class Select<T, R> implements Projectable<R> {
 
   @NotNull
   @Override
-  public final Iterator<R> iterator() {
-    final var array = new ArrayList<R>();
+  public final Cursor<R> cursor() {
+    final var sequence = Sequence.<R>empty();
     var index = 0;
-    for (var cursor = queryable.iterator(); cursor.hasNext(); index++) {
+    for (var cursor = queryable.cursor(); cursor.hasNext(); index++) {
+      final var idx = index;
       final var next = cursor.next();
       peek.accept(index, next);
-      array.add(select.apply(index, next));
+      either(
+        () -> select.tryApply(idx, next),
+        sequence::concat,
+        er -> {}
+      );
     }
-    return array.iterator();
+    return sequence.cursor();
   }
 }
 
-final class SelectMany<T, R, Q extends Queryable<R>> implements Projectable<R> {
+final class SelectMany<T, R, Q extends Queryable<R>> implements Many<R>, Eitherable {
   private final Queryable<T> queryable;
-  private final BiConsumer<? super Integer, ? super T> peek;
-  private final BiFunction<? super Integer, ? super T, ? extends Q> select;
+  private final Func.Bi<? super Integer, ? super T, ? extends Q> select;
 
   @Contract(pure = true)
-  public SelectMany(final Queryable<T> queryable, final BiConsumer<? super Integer, ? super T> peek, final BiFunction<? super Integer, ? super T, ? extends Q> select) {
+  public SelectMany(final Queryable<T> queryable, final Func.Bi<? super Integer, ? super T, ? extends Q> select) {
     this.queryable = queryable;
-    this.peek = peek;
     this.select = select;
   }
 
   @NotNull
   @Override
-  public final Iterator<R> iterator() {
-    final var array = new ArrayList<R>();
+  public final Cursor<R> cursor() {
+    final var sequence = Sequence.<R>empty();
     var index = 0;
-    for (var cursor = queryable.iterator(); cursor.hasNext(); index++) {
-      var it = cursor.next();
-      if (it != null) {
-        peek.accept(index, it);
-        final var queried = select.apply(index, it);
-        if (queried != null) {
-          for (final var selected : queried) {
-            if (selected != null)
-              array.add(selected);
-          }
-        }
-      }
+    for (var cursor = queryable.cursor(); cursor.hasNext(); index++) {
+      final var idx = index;
+/*      cursor.either(element ->
+        either(
+          () -> select.invoke(idx, element),
+          res -> res.eventually(sequence::concat),
+          err -> sequence.cought(err)
+        )
+      );*/
     }
-    return array.iterator();
+    return sequence.cursor();
   }
 }
 

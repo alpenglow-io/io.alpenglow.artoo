@@ -2,35 +2,39 @@ package io.artoo.lance.query.cursor;
 
 import io.artoo.lance.func.Cons;
 
-final class Beep<R> implements Cursor<R> {
-  private final Cursor<R> cursor;
-  private final Cons.Uni<Throwable> beep;
+final class Beep<T> implements Cursor<T> {
+  private final Cursor<T> origin;
+  private final Cons.Uni<? super Throwable> beep;
 
-  Beep(final Cursor<R> cursor, final Cons.Uni<Throwable> beep) {
-    assert cursor != null && beep != null;
-    this.cursor = cursor;
+  Beep(final Cursor<T> origin, final Cons.Uni<? super Throwable> beep) {
+    this.origin = origin;
     this.beep = beep;
   }
 
-  private void beep() {
-    final var cause = cursor.cause();
-    if (cause != null) beep.accept(cause);
+  @Override
+  public Cursor<T> append(final T element) {
+    return origin.append(element);
+  }
+
+  @SafeVarargs
+  @Override
+  public final Cursor<T> next(final T... elements) {
+    return origin.next(elements);
+  }
+
+  @Override
+  public Cursor<T> cause(final Throwable cause) {
+    return origin.cause(cause);
   }
 
   @Override
   public boolean hasNext() {
-    beep();
-    return cursor.hasNext();
+    if (origin.hasCause()) beep.accept(origin.cause());
+    return origin.hasNext();
   }
 
   @Override
-  public R next() {
-    beep();
-    return cursor.next();
-  }
-
-  @Override
-  public Cursor<R> append(final R element) {
-    return Cursor.of(element);
+  public T next() {
+    return origin.next();
   }
 }

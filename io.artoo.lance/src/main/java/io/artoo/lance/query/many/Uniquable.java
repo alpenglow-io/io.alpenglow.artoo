@@ -60,7 +60,7 @@ final class At<T> implements One<T> {
     }
     if (count < index)
       returned = null;
-    return Cursor.of(returned);
+    return Cursor.local(returned);
   }
 }
 
@@ -94,6 +94,6 @@ final class Unique<T> implements One<T> {
         result = !single || result == null ? it : null;
       }
     }
-    return Cursor.of(result);
+    return Cursor.local(result);
   }
 }

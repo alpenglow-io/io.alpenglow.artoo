@@ -57,6 +57,16 @@ final class Distinct<T> implements Many<T> {
       }
 
       @Override
+      public Cursor<T> next(final T... elements) {
+        return null;
+      }
+
+      @Override
+      public Cursor<T> cause(final Throwable cause) {
+        return null;
+      }
+
+      @Override
       public boolean hasNext() {
         return iterator.hasNext();
       }

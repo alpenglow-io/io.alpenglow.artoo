@@ -67,7 +67,7 @@ final class Extremum<T, N extends Number, V> implements One<V> {
         }
       }
     }
-    return Cursor.of((V) compared);
+    return Cursor.local((V) compared);
   }
 
   private int compare(final N compared, final N numbered) {

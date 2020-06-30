@@ -1,29 +1,27 @@
 package io.artoo.lance.query.cursor;
 
 import io.artoo.lance.func.Cons;
-import io.artoo.lance.func.Pred;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import io.artoo.lance.func.Func;
 
-import java.util.Arrays;
 import java.util.Iterator;
 
 import static io.artoo.lance.type.Nullability.nonNullable;
-import static io.artoo.lance.type.Nullability.nullable;
 
-@SuppressWarnings("unchecked")
 public interface Cursor<T> extends Iterator<T> {
-  @SafeVarargs
-  @NotNull
-  @Contract("_ -> new")
-  static <T> Cursor<T> pipe(final T... elements) {
-    return new Pipe<>(elements);
-  }
-
   static <R> Cursor<R> from(Iterator<R> iterator) {
     return new Cursor<R>() {
       @Override
       public Cursor<R> append(final R element) {
+        return null;
+      }
+
+      @Override
+      public Cursor<R> next(final R... elements) {
+        return null;
+      }
+
+      @Override
+      public Cursor<R> cause(final Throwable cause) {
         return null;
       }
 
@@ -40,31 +38,30 @@ public interface Cursor<T> extends Iterator<T> {
   }
 
   Cursor<T> append(T element);
-  default boolean next(Pred.Uni<T> then) {
-    var still = hasNext();
-    final var next = next();
-    if (next != null) {
-      still &= then.test(next);
-    }
-    return still;
-  }
 
   default Throwable cause() { return null; }
+  default boolean hasCause() { return false; }
+
+  @SuppressWarnings("unchecked")
+  Cursor<T> next(final T... elements);
+  Cursor<T> cause(final Throwable cause);
+
+  default <R> R next(final Func.Uni<T, R> then) throws Throwable {
+    final var next = next();
+    if (next != null) {
+      return then.tryApply(next);
+    }
+    return null;
+  }
+
   default int size() { return 0; }
 
   default Cursor<T> peek(Cons.Uni<? super T> peek) { return new Peek<>(this, peek); }
-  default Cursor<T> beep(Cons.Uni<Throwable> beep) { return new Beep<>(this, beep); }
+  default Cursor<T> beep(Cons.Uni<? super Throwable> beep) { return new Beep<>(this, beep); }
 
-  default Cursor<T> halt(Throwable cause) { return new Halt<>(cause); }
-  default boolean hasHalted() { return false; }
-
-  static <R> Cursor<R> of(final R value) {
-    return nullable(value, Pipe::new, Cursor::empty);
-  }
-
-  @NotNull
-  static <R> Cursor<R> empty() {
-    return new Pipe<>((R[]) new Object[0]);
+  @SafeVarargs
+  static <R> Cursor<R> local(final R... elements) {
+    return new Local<>(nonNullable(elements, "elements"));
   }
 }
 

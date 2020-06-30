@@ -59,7 +59,7 @@ final class Sum<T, N extends Number, V> implements One<V> {
       }
     }
 
-    return Cursor.of((V) result);
+    return Cursor.local((V) result);
   }
 }
 

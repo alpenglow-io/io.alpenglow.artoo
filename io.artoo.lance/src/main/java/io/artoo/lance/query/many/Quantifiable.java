@@ -49,7 +49,7 @@ final class Any<T> implements One<Boolean> {
         found = where.test(it);
       }
     }
-    return Cursor.of(found);
+    return Cursor.local(found);
   }
 }
 
@@ -77,6 +77,6 @@ final class All<T> implements One<Boolean> {
         found = where.test(it);
       }
     }
-    return Cursor.of(found);
+    return Cursor.local(found);
   }
 }

@@ -6,19 +6,29 @@ import java.util.Arrays;
 
 import static java.util.Objects.nonNull;
 
-final class Pipe<R> implements Cursor<R> {
+final class Local<R> implements Cursor<R> {
   private R[] elements;
+  private Throwable cause;
   private int index;
 
+  Local() {
+    this(null, 0, null);
+  }
+
   @SafeVarargs
-  Pipe(R... elements) {
-    this(elements, 0);
+  Local(R... elements) {
+    this(elements, 0, null);
+  }
+
+  Local(Throwable cause) {
+    this(null, 0, cause);
   }
 
   @Contract(pure = true)
-  private Pipe(R[] elements, int index) {
+  private Local(R[] elements, int index, Throwable cause) {
     this.elements = elements;
     this.index = index;
+    this.cause = cause;
   }
 
   @Override
@@ -32,16 +42,42 @@ final class Pipe<R> implements Cursor<R> {
   }
 
   @Override
+  public Throwable cause() {
+    return cause;
+  }
+
+  @Override
+  public boolean hasCause() {
+    return cause != null;
+  }
+
+  @SafeVarargs
+  @Override
+  public final Cursor<R> next(final R... elements) {
+    this.elements = elements;
+    this.index = 0;
+    return this;
+  }
+
+  @Override
+  public Cursor<R> cause(final Throwable cause) {
+    this.elements = null;
+    this.cause = cause;
+    return this;
+  }
+
+  @Override
   public Cursor<R> append(final R element) {
     if (element != null) {
       elements = Arrays.copyOf(elements, elements.length + 1);
       elements[elements.length - 1] = element;
+      index = 0;
     }
     return this;
   }
 
   @Override
   public int size() {
-    return elements.length;
+    return elements == null ? 0 : elements.length;
   }
 }

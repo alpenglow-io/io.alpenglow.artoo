@@ -69,6 +69,16 @@ final class Where<T, R> implements Many<R> {
       }
 
       @Override
+      public Cursor<R> next(final R... elements) {
+        return null;
+      }
+
+      @Override
+      public Cursor<R> cause(final Throwable cause) {
+        return null;
+      }
+
+      @Override
       public boolean hasNext() {
         return iterator.hasNext();
       }

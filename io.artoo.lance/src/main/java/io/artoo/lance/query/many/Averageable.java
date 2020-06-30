@@ -19,8 +19,7 @@ public interface Averageable<T> extends Queryable<T> {
   }
 }
 
-@SuppressWarnings("StatementWithEmptyBody")
-final class Average<T, N extends Number> implements One<Double>, Eitherable {
+final class Average<T, N extends Number> implements One<Double> {
   private final Queryable<T> queryable;
   private final Func.Uni<? super T, ? extends N> select;
 
@@ -33,26 +32,21 @@ final class Average<T, N extends Number> implements One<Double>, Eitherable {
   @NotNull
   @Override
   public final Cursor<Double> cursor() {
+    final var res = Cursor.<Double>local();
+    var count = 0;
 
-
-    final class Result {
-      Double value = null;
-      Cursor<Double> cursor = Cursor.empty();
+    var cursor = queryable.cursor();
+    while (cursor.hasNext()) {
+      try {
+        final var selected = cursor.next(t -> select.tryApply(t).doubleValue());
+        res.next(res.hasNext() ? res.next() + selected : selected);
+        count++;
+      } catch (Throwable cause) {
+        res.cause(cause);
+      }
     }
-    final var result = new Result();
 
-    final var cursor = queryable.cursor();
-    while (
-      cursor.next(element ->
-        either(
-          () -> select.tryApply(element),
-          it -> result.value = result.value == null ? it.doubleValue() : result.value + it.doubleValue(),
-          cause -> result.cursor = result.cursor.halt(cause)
-        )
-      )
-    );
-
-    return result.cursor.hasHalted() || cursor.size() == 0 ? result.cursor : result.cursor.append(result.value / cursor.size());
+    return res.size() == 0 ? res : res.next(res.next() / count);
   }
 }
 

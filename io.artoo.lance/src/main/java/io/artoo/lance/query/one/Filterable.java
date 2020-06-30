@@ -42,7 +42,7 @@ final class Where<T, R> implements One<R> {
         result = select.apply(value);
       }
     }
-    return Cursor.of(result);
+    return Cursor.local(result);
   }
 }
 

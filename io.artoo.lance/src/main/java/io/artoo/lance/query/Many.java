@@ -14,7 +14,6 @@ import io.artoo.lance.query.many.Uniquable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.function.Supplier;
 
@@ -70,7 +69,7 @@ final class Array<T> implements Many<T> {
   @NotNull
   @Override
   public final Cursor<T> cursor() {
-    return Cursor.pipe(Arrays.copyOf(elements, elements.length));
+    return Cursor.local(Arrays.copyOf(elements, elements.length));
   }
 }
 
@@ -87,7 +86,7 @@ final class Repeat<T> implements Many<T> {
   @NotNull
   @Override
   public final Cursor<T> cursor() {
-    var cursor = Cursor.<T>empty();
+    var cursor = Cursor.<T>local();
     for (var index = 0; index < count; index++) {
       cursor = cursor.append(supplier.get());
     }
@@ -101,7 +100,7 @@ enum ManyRecord implements Many<Record> {
   @NotNull
   @Override
   public final Cursor<Record> cursor() {
-    return Cursor.empty();
+    return Cursor.local();
   }
 }
 

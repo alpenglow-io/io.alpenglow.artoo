@@ -63,11 +63,11 @@ final class Aggregate<T, A, R> implements One<A>, Eitherable {
   @NotNull
   @Override
   public final Cursor<A> cursor() {
-    var result = Cursor.<A>empty();
+    var result = Cursor.<A>local();
 
     final var aggregated = new Aggregated(seed);
 
-    for (var cursor = queryable.cursor(); cursor.hasNext(); ) {
+/*    for (var cursor = queryable.cursor(); cursor.hasNext(); ) {
       cursor.next(element ->
         either(
           () -> aggregate(aggregated, element),
@@ -75,7 +75,7 @@ final class Aggregate<T, A, R> implements One<A>, Eitherable {
           result::halt
         )
       );
-    }
+    }*/
     return result.append(aggregated.value);
   }
 

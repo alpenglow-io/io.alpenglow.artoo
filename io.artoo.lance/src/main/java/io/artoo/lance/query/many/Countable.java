@@ -41,6 +41,6 @@ final class Count<T> implements One<Integer> {
         }
       }
     }
-    return Cursor.of(counted);
+    return Cursor.local(counted);
   }
 }

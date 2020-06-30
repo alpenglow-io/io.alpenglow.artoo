@@ -37,7 +37,7 @@ record Lone<T>(T element) implements One<T> {
   @NotNull
   @Override
   public Cursor<T> cursor() {
-    return Cursor.of(element);
+    return Cursor.local(element);
   }
 }
 
@@ -47,6 +47,6 @@ enum NoRecord implements One<Record> {
   @NotNull
   @Override
   public Cursor<Record> cursor() {
-    return Cursor.empty();
+    return Cursor.local();
   }
 }

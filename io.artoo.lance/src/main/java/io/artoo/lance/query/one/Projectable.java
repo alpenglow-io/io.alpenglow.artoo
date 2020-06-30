@@ -36,7 +36,7 @@ final class Select<T, R> implements One<R> {
   public final Cursor<R> cursor() {
     R result = null;
     for (final var value : queryable) if (value != null) result = select.apply(value);
-    return Cursor.of(result);
+    return Cursor.local(result);
   }
 }
 
@@ -67,6 +67,16 @@ final class SelectOne<T, R, O extends One<R>> implements One<R> {
       }
 
       @Override
+      public Cursor<R> next(final R... elements) {
+        return null;
+      }
+
+      @Override
+      public Cursor<R> cause(final Throwable cause) {
+        return null;
+      }
+
+      @Override
       public boolean hasNext() {
         return iterator.hasNext();
       }
@@ -75,7 +85,7 @@ final class SelectOne<T, R, O extends One<R>> implements One<R> {
       public R next() {
         return iterator.next();
       }
-    } : Cursor.empty();
+    } : Cursor.local();
   }
 }
 

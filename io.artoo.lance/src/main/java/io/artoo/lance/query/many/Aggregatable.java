@@ -52,40 +52,24 @@ final class Aggregate<T, A, R> implements One<A>, Eitherable {
     this.aggregate = aggregate;
   }
 
-  private class Aggregated {
-    private A value;
-
-    public Aggregated(final A value) {
-      this.value = value;
-    }
-  }
-
   @NotNull
   @Override
   public final Cursor<A> cursor() {
-    var result = Cursor.<A>local();
+    var local = seed == null ? Cursor.<A>local() : Cursor.local(seed);
 
-    final var aggregated = new Aggregated(seed);
+    final var cursor = queryable.cursor();
+    while (cursor.hasNext()) {
+      try {
+        final var selected = cursor.next(it -> where.tryTest(it) ? select.tryApply(it) : null);
 
-/*    for (var cursor = queryable.cursor(); cursor.hasNext(); ) {
-      cursor.next(element ->
-        either(
-          () -> aggregate(aggregated, element),
-          it -> aggregated.value = it,
-          result::halt
-        )
-      );
-    }*/
-    return result.append(aggregated.value);
-  }
+        local.next(local.hasNext() ? aggregate.tryApply(local.next(), selected) : (A) selected);
 
-  private A aggregate(final Aggregated aggregated, final T element) throws Throwable {
-    if (where.tryTest(element)) {
-      final var selected = select.tryApply(element);
-      if (selected != null) {
-        return aggregated.value == null ? (A) selected : aggregate.apply(aggregated.value, selected);
+      } catch (Throwable throwable) {
+
+        local.cause(throwable);
       }
     }
-    return null;
+
+    return local;
   }
 }

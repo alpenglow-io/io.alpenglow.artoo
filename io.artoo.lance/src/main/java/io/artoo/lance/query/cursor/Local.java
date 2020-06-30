@@ -54,8 +54,10 @@ final class Local<R> implements Cursor<R> {
   @SafeVarargs
   @Override
   public final Cursor<R> next(final R... elements) {
-    this.elements = elements;
-    this.index = 0;
+    if (elements != null && elements.length > 0) {
+      this.elements = elements;
+      this.index = 0;
+    }
     return this;
   }
 

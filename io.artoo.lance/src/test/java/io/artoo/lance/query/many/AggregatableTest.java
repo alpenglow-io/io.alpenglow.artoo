@@ -54,24 +54,6 @@ class AggregatableTest {
     assertThat(max).isEqualTo(14);
     assertThat(min).isEqualTo(5);
   }
-
-  @Test
-  @DisplayName("should throw an exception when no comparable item found")
-  void shouldThrowExceptionSinceThereIsNoComparableItem() {
-    final var pets = from(new Pet("Barley", 8), new Pet("Boots", 4), new Pet("Whiskers", 1));
-
-    assertThat(pets.max()).isEmpty();
-  }
-
-  @Test
-  @DisplayName("should find max")
-  void shouldFindMaxByNumber() {
-    final var max = from(4_294_967_296L, 466_855_135L, 81125L).max().yield();
-    final var min = from(4_294_967_296L, 466_855_135L, 81125L).min().yield();
-
-    assertThat(max).isEqualTo(4294967296L);
-    assertThat(min).isEqualTo(81125L);
-  }
 }
 
 

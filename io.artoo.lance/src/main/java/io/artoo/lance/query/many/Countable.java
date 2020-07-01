@@ -7,6 +7,8 @@ import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
 import org.jetbrains.annotations.NotNull;
 
+import static java.lang.Boolean.TRUE;
+
 interface Countable<T> extends Queryable<T> {
   default One<Integer> count() {
     return this.count(it -> true);
@@ -32,15 +34,19 @@ final class Count<T> implements One<Integer> {
   @NotNull
   @Override
   public final Cursor<Integer> cursor() {
-    var counted = 0;
-    for (final var it : queryable) {
-      if (it != null) {
-        peek.accept(it);
-        if (where.test(it)) {
-          counted += 1;
+    final var counted = Cursor.local(0);
+
+    final var cursor = queryable.cursor();
+    while (cursor.hasNext() && !counted.hasCause()) {
+      try {
+        if (TRUE.equals(cursor.next(where::tryTest))) {
+          counted.next(counted.next() + 1);
         }
+      } catch (Throwable cause) {
+        counted.cause(cause);
       }
     }
-    return Cursor.local(counted);
+
+    return counted;
   }
 }

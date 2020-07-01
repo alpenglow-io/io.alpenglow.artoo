@@ -1,7 +1,6 @@
 package io.artoo.lance.query.many;
 
 import io.artoo.lance.query.cursor.Cursor;
-import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
@@ -15,7 +14,7 @@ public interface Quantifiable<T> extends Queryable<T> {
   }
 
   default One<Boolean> all(final Pred.Uni<? super T> where) {
-    return new All<>(this, it -> {}, nonNullable(where, "where"));
+    return new All<>(this, nonNullable(where, "where"));
   }
 
   default One<Boolean> any() { return this.any(t -> true); }
@@ -57,13 +56,11 @@ final class Any<T> implements One<Boolean> {
 
 final class All<T> implements One<Boolean> {
   private final Queryable<T> queryable;
-  private final Cons.Uni<? super T> peek;
   private final Pred.Uni<? super T> where;
 
-  All(final Queryable<T> queryable, final Cons.Uni<? super T> peek, final Pred.Uni<? super T> where) {
-    assert queryable != null && peek != null && where != null;
+  All(final Queryable<T> queryable, final Pred.Uni<? super T> where) {
+    assert queryable != null && where != null;
     this.queryable = queryable;
-    this.peek = peek;
     this.where = where;
   }
 

@@ -82,6 +82,11 @@ final class SelectOne<T, R, O extends One<R>> implements One<R> {
       }
 
       @Override
+      public boolean has(final R element) {
+        return false;
+      }
+
+      @Override
       public boolean hasNext() {
         return iterator.hasNext();
       }

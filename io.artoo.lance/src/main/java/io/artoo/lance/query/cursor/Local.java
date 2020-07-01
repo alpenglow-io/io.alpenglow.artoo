@@ -75,6 +75,18 @@ final class Local<R> implements Cursor<R> {
   }
 
   @Override
+  public boolean has(final R element) {
+    if (element != null && elements != null) {
+      for (var i = 0; i < elements.length; i++) {
+        if (element.equals(elements[i]) || element.equals(elements[elements.length - i - 1])) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  @Override
   public Cursor<R> append(final R element) {
     if (element != null) {
       elements = Arrays.copyOf(elements, elements.length + 1);

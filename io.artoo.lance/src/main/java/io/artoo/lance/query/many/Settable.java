@@ -38,48 +38,25 @@ final class Distinct<T> implements Many<T> {
   @NotNull
   @Override
   public final Cursor<T> cursor() {
-    final var result = new ArrayList<T>();
-    var index = 0;
-    for (var iterator = queryable.iterator(); iterator.hasNext(); index++) {
-      var it = iterator.next();
-      if (it != null)
-        peek.accept(index, it);
-      if (nonNull(it) && where.test(it) && !result.contains(it) || !where.test(it)) {
-        result.add(it);
+    final var distincted = Cursor.<T>local();
+
+    final var cursor = queryable.cursor();
+    try {
+      while (cursor.hasNext()) {
+        distincted.append(
+          cursor.fetch(next ->
+            where.tryTest(next) && !distincted.has(next)
+              ? next
+              : !where.tryTest(next)
+              ? next
+              : null
+          )
+        );
       }
+    } catch (Throwable throwable) {
+      distincted.grab(throwable);
     }
 
-    final var iterator = result.iterator();
-    return new Cursor<T>() {
-      @Override
-      public Cursor<T> append(final T element) {
-        return null;
-      }
-
-      @Override
-      public Cursor<T> set(final T... elements) {
-        return null;
-      }
-
-      @Override
-      public Cursor<T> grab(final Throwable cause) {
-        return null;
-      }
-
-      @Override
-      public Cursor<T> scroll() {
-        return null;
-      }
-
-      @Override
-      public boolean hasNext() {
-        return iterator.hasNext();
-      }
-
-      @Override
-      public T next() {
-        return iterator.next();
-      }
-    };
+    return distincted;
   }
 }

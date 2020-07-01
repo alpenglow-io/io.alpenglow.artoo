@@ -31,6 +31,11 @@ public interface Cursor<T> extends Iterator<T> {
       }
 
       @Override
+      public boolean has(final R element) {
+        return true;
+      }
+
+      @Override
       public boolean hasNext() {
         return iterator.hasNext();
       }
@@ -51,6 +56,7 @@ public interface Cursor<T> extends Iterator<T> {
   Cursor<T> grab(final Throwable cause);
 
   Cursor<T> scroll();
+  boolean has(T element);
 
   default <R> R fetch(final Func.Uni<T, R> then) throws Throwable {
     final var next = next();

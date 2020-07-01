@@ -50,4 +50,9 @@ final class Peek<R> implements Cursor<R> {
   public Cursor<R> scroll() {
     return origin.scroll();
   }
+
+  @Override
+  public boolean has(final R element) {
+    return origin.has(element);
+  }
 }

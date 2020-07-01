@@ -5,3 +5,9 @@ final class Index {
 
   static Index index() { return new Index(); }
 }
+
+final class Flag {
+  boolean value = false;
+
+  static Flag flag() { return new Flag(); }
+}

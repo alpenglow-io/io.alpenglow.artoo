@@ -47,7 +47,7 @@ public interface  Many<T> extends
   @Contract(value = " -> new", pure = true)
   @SuppressWarnings("unchecked")
   static <R> Many<R> none() {
-    return (Many<R>) ManyRecord.None;
+    return (Many<R>) DefaultMany.None;
   }
 
   @NotNull
@@ -94,12 +94,12 @@ final class Repeat<T> implements Many<T> {
   }
 }
 
-enum ManyRecord implements Many<Record> {
+enum DefaultMany implements Many<Object> {
   None;
 
   @NotNull
   @Override
-  public final Cursor<Record> cursor() {
+  public final Cursor<Object> cursor() {
     return Cursor.local();
   }
 }

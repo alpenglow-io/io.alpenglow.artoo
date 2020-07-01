@@ -23,7 +23,7 @@ public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Othe
   @Contract(value = " -> new", pure = true)
   @SuppressWarnings("unchecked")
   static <L> One<L> none() {
-    return (One<L>) NoRecord.None;
+    return (One<L>) DefaultOne.None;
   }
 
   default T yield() {
@@ -41,12 +41,12 @@ record Lone<T>(T element) implements One<T> {
   }
 }
 
-enum NoRecord implements One<Record> {
+enum DefaultOne implements One<Object> {
   None;
 
   @NotNull
   @Override
-  public Cursor<Record> cursor() {
+  public Cursor<Object> cursor() {
     return Cursor.local();
   }
 }

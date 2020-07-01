@@ -24,4 +24,10 @@ class CountableTest {
   void shouldCountEven() {
     assertThat(Many.from(1, 2, 3, 4).count(it -> it % 2 == 0).yield()).isEqualTo(2);
   }
+
+  @Test
+  @DisplayName("should count non nullable elements only")
+  void shouldCountNonNullableOnly() {
+    assertThat(Many.from(1, 2, null, "hi there", true, null).count().yield()).isEqualTo(4);
+  }
 }

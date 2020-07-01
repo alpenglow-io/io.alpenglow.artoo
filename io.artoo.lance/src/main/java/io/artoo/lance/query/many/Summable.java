@@ -1,7 +1,6 @@
 package io.artoo.lance.query.many;
 
 import io.artoo.lance.query.cursor.Cursor;
-import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
@@ -15,51 +14,81 @@ import static io.artoo.lance.type.Nullability.nonNullable;
 interface Summable<T> extends Queryable<T> {
   default <N extends Number> One<N> sum(final Func.Uni<? super T, ? extends N> select) {
     final var sel = nonNullable(select, "select");
-    return new Sum<>(this, it -> {}, sel);
+    return new Sum<>(this, sel);
   }
 
   default One<T> sum() {
-    return new Sum<>(this, it -> {}, it -> it instanceof Number n ? n : null);
+    return new Sum<>(this, it -> it instanceof Number n ? n : null);
   }
 }
 
 @SuppressWarnings({"unchecked"})
 final class Sum<T, N extends Number, V> implements One<V> {
   private final Queryable<T> queryable;
-  private final Cons.Uni<? super T> peek;
   private final Func.Uni<? super T, ? extends N> select;
 
-  Sum(final Queryable<T> queryable, final Cons.Uni<? super T> peek, final Func.Uni<? super T, ? extends N> select) {
-    assert queryable != null && peek != null && select != null;
+  Sum(final Queryable<T> queryable, final Func.Uni<? super T, ? extends N> select) {
+    assert queryable != null && select != null;
     this.queryable = queryable;
-    this.peek = peek;
     this.select = select;
   }
 
   @NotNull
   @Override
   public Cursor<V> cursor() {
-    N result = null;
-    for (final var record : queryable) {
-      if (record != null) {
-        peek.accept(record);
-        final var selected = select.apply(record);
-        if (selected != null) {
-          if (selected instanceof Byte val) result = (N) Byte.valueOf((byte) (result == null ? val : result.byteValue() + val));
-          if (selected instanceof Short val) result = (N) Short.valueOf((short) (result == null ? val : result.shortValue() + val));
-          if (selected instanceof Integer val) result = (N) Integer.valueOf(result == null ? val : result.intValue() + val);
-          if (selected instanceof Long val) result = (N) Long.valueOf(result == null ? val : result.longValue() + val);
+    final var summed = Cursor.<V>local();
 
-          if (selected instanceof Float val) result = (N) Float.valueOf(result == null ? val : result.floatValue() + val);
-          if (selected instanceof Double val) result = (N) Double.valueOf(result == null ? val : result.doubleValue() + val);
-
-          if (selected instanceof BigInteger val) result = (N) BigInteger.valueOf(result == null ? val.longValue() : result.longValue() + val.longValue());
-          if (selected instanceof BigDecimal val) result = (N) BigDecimal.valueOf(result == null ? val.doubleValue() : result.doubleValue() + val.doubleValue());
-        }
+    final var cursor = queryable.cursor();
+    try {
+      while (cursor.hasNext()) {
+        summed.set(
+          sum(
+            cursor.fetch(select::tryApply),
+            (N) summed.next()
+          )
+        );
       }
+    } catch (Throwable throwable) {
+      summed.grab(throwable);
     }
 
-    return Cursor.local((V) result);
+    return summed;
+  }
+
+  private V sum(final N selected, final N number) {
+    if (selected == null) {
+      return (V) number;
+
+    } else if (number == null) {
+      return (V) selected;
+
+    } else if (selected instanceof Byte val) {
+      return (V) Byte.valueOf((byte) (number.byteValue() + val));
+
+    } else if (selected instanceof Short val) {
+      return (V) Short.valueOf((short) (number.shortValue() + val));
+
+    } else if (selected instanceof Integer val) {
+      return (V) Integer.valueOf(number.intValue() + val);
+
+    } else if (selected instanceof Long val) {
+      return (V) Long.valueOf(number.longValue() + val);
+
+    } else if (selected instanceof Float val) {
+      return (V) Float.valueOf(number.floatValue() + val);
+
+    } else if (selected instanceof Double val) {
+      return (V) Double.valueOf(number.doubleValue() + val);
+
+    } else if (selected instanceof BigInteger val) {
+      return (V) BigInteger.valueOf(number.longValue() + val.longValue());
+
+    } else if (selected instanceof BigDecimal val) {
+      return (V) BigDecimal.valueOf(number.doubleValue() + val.doubleValue());
+
+    }
+
+    throw new IllegalStateException("Can't cast to unknown number type: " + selected.getClass().getName());
   }
 }
 

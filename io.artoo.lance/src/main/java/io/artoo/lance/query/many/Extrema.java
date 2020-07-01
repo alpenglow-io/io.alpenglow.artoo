@@ -1,7 +1,6 @@
 package io.artoo.lance.query.many;
 
 import io.artoo.lance.query.cursor.Cursor;
-import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
@@ -35,21 +34,19 @@ public interface Extrema<T> extends Queryable<T> {
   }
 
   private <N extends Number, V> One<V> extreme(int type, final Func.Uni<? super T, ? extends N> select) {
-    return new Extremum<T, N, V>(this, it -> {}, type, nonNullable(select, "select"));
+    return new Extremum<T, N, V>(this, type, nonNullable(select, "select"));
   }
 }
 
 @SuppressWarnings("unchecked")
 final class Extremum<T, N extends Number, V> implements One<V> {
   private final Queryable<T> queryable;
-  private final Cons.Uni<? super T> peek;
   private final int extreme;
   private final Func.Uni<? super T, ? extends N> number;
 
-  Extremum(final Queryable<T> queryable, final Cons.Uni<? super T> peek, final int extreme, final Func.Uni<? super T, ? extends N> number) {
-    assert queryable != null && peek != null && number != null;
+  Extremum(final Queryable<T> queryable, final int extreme, final Func.Uni<? super T, ? extends N> number) {
+    assert queryable != null && number != null;
     this.queryable = queryable;
-    this.peek = peek;
     this.extreme = extreme;
     this.number = number;
   }
@@ -57,21 +54,33 @@ final class Extremum<T, N extends Number, V> implements One<V> {
   @NotNull
   @Override
   public final Cursor<V> cursor() {
-    N compared = null;
-    for (final var it : queryable) {
-      if (it != null) {
-        peek.accept(it);
-        final var numbered = number.apply(it);
-        if (compared == null || numbered != null && compare(compared, numbered) == extreme) {
-          compared = numbered;
+    final var compared = Cursor.<V>local();
+
+    final var cursor = queryable.cursor();
+    while (cursor.hasNext() && !compared.hasCause()) {
+      try {
+        final var numbered = cursor.next(number::tryApply);
+
+        final var element = compared.next();
+        if (compare((N) element, numbered) == extreme) {
+          compared.next((V) numbered);
+        } else {
+          compared.next(element);
         }
+
+      } catch (Throwable cause) {
+        compared.cause(cause);
       }
     }
-    return Cursor.local((V) compared);
+
+    return compared;
   }
 
   private int compare(final N compared, final N numbered) {
-    if (numbered instanceof Byte b) {
+    if (compared == null && numbered != null) {
+      return extreme;
+
+    } else if (numbered instanceof Byte b) {
       return b > compared.byteValue() ? 1 : -1;
 
     } else if (numbered instanceof Short s) {

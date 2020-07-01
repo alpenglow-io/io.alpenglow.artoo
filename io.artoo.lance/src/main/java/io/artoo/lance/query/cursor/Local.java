@@ -38,7 +38,7 @@ final class Local<R> implements Cursor<R> {
 
   @Override
   public final R next() {
-    return elements.length > 0 && index < elements.length ? elements[index++] : null;
+    return hasNext() ? elements[index++] : null;
   }
 
   @Override

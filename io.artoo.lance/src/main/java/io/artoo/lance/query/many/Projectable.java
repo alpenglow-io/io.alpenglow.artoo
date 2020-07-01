@@ -1,23 +1,22 @@
 package io.artoo.lance.query.many;
 
 import io.artoo.lance.query.cursor.Cursor;
-import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.type.Eitherable;
 import io.artoo.lance.type.Sequence;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
+import static io.artoo.lance.query.many.Index.index;
 import static io.artoo.lance.type.Nullability.nonNullable;
 
 public interface Projectable<T> extends Queryable<T> {
   default <R> Many<R> select(Func.Bi<? super Integer, ? super T, ? extends R> select) {
     nonNullable(select, "select");
-    return new Select<>(this, (i, it) -> {}, select);
+    return new Select<>(this, select);
   }
 
   default <R> Many<R> select(Function<? super T, ? extends R> select) {
@@ -36,38 +35,38 @@ public interface Projectable<T> extends Queryable<T> {
   }
 }
 
-final class Select<T, R> implements Many<R>, Eitherable {
+final class Select<T, R> implements Many<R> {
   private final Queryable<T> queryable;
-  private final Cons.Bi<? super Integer, ? super T> peek;
   private final Func.Bi<? super Integer, ? super T, ? extends R> select;
 
   @Contract(pure = true)
-  public Select(final Queryable<T> queryable, final Cons.Bi<? super Integer, ? super T> peek, final Func.Bi<? super Integer, ? super T, ? extends R> select) {
+  public Select(final Queryable<T> queryable, final Func.Bi<? super Integer, ? super T, ? extends R> select) {
+    assert queryable != null && select != null;
     this.queryable = queryable;
-    this.peek = peek;
     this.select = select;
   }
 
   @NotNull
   @Override
   public final Cursor<R> cursor() {
-    final var sequence = Sequence.<R>empty();
-    var index = 0;
-    for (var cursor = queryable.cursor(); cursor.hasNext(); index++) {
-      final var idx = index;
-      final var next = cursor.next();
-      peek.accept(index, next);
-      either(
-        () -> select.tryApply(idx, next),
-        sequence::concat,
-        er -> {}
-      );
+    final var projected = Cursor.<R>local();
+
+    final var cursor = queryable.cursor();
+    try {
+      for (var index = index(); cursor.hasNext(); index.value++) {
+        projected.append(
+          cursor.next(it -> select.tryApply(index.value, it))
+        );
+      }
+    } catch (Throwable cause) {
+      projected.grab(cause);
     }
-    return sequence.cursor();
+
+    return projected;
   }
 }
 
-final class SelectMany<T, R, Q extends Queryable<R>> implements Many<R>, Eitherable {
+final class SelectMany<T, R, Q extends Queryable<R>> implements Many<R> {
   private final Queryable<T> queryable;
   private final Func.Bi<? super Integer, ? super T, ? extends Q> select;
 
@@ -80,19 +79,20 @@ final class SelectMany<T, R, Q extends Queryable<R>> implements Many<R>, Eithera
   @NotNull
   @Override
   public final Cursor<R> cursor() {
-    final var sequence = Sequence.<R>empty();
-    var index = 0;
-    for (var cursor = queryable.cursor(); cursor.hasNext(); index++) {
-      final var idx = index;
-/*      cursor.either(element ->
-        either(
-          () -> select.invoke(idx, element),
-          res -> res.eventually(sequence::concat),
-          err -> sequence.cought(err)
-        )
-      );*/
+    final var projectedMany = Cursor.<R>local();
+
+    final var cursor = queryable.cursor();
+    try {
+      for (var index = index(); cursor.hasNext(); index.value++) {
+        for (final var element : cursor.next(it -> select.tryApply(index.value, it))) {
+          projectedMany.append(element);
+        }
+      }
+    } catch (Throwable throwable) {
+      projectedMany.grab(throwable);
     }
-    return sequence.cursor();
+
+    return projectedMany;
   }
 }
 

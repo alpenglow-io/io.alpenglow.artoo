@@ -5,7 +5,6 @@ import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.type.Eitherable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,7 +35,7 @@ public interface Aggregatable<T> extends Countable<T>, Summable<T>, Averageable<
 }
 
 @SuppressWarnings("unchecked")
-final class Aggregate<T, A, R> implements One<A>, Eitherable {
+final class Aggregate<T, A, R> implements One<A> {
   private final Queryable<T> queryable;
   private final A seed;
   private final Pred.Uni<? super T> where;

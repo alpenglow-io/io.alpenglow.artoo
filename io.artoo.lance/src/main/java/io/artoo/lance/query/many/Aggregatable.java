@@ -62,11 +62,11 @@ final class Aggregate<T, A, R> implements One<A>, Eitherable {
       try {
         final var selected = cursor.next(it -> where.tryTest(it) ? select.tryApply(it) : null);
 
-        local.next(local.hasNext() ? aggregate.tryApply(local.next(), selected) : (A) selected);
+        local.set(local.hasNext() ? aggregate.tryApply(local.next(), selected) : (A) selected);
 
       } catch (Throwable throwable) {
 
-        local.cause(throwable);
+        local.grab(throwable);
       }
     }
 

@@ -37,10 +37,10 @@ final class Count<T> implements One<Integer> {
     while (cursor.hasNext() && !counted.hasCause()) {
       try {
         if (TRUE.equals(cursor.next(where::tryTest))) {
-          counted.next(counted.next() + 1);
+          counted.set(counted.next() + 1);
         }
       } catch (Throwable cause) {
-        counted.cause(cause);
+        counted.grab(cause);
       }
     }
 

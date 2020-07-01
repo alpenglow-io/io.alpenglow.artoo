@@ -53,7 +53,7 @@ final class Local<R> implements Cursor<R> {
 
   @SafeVarargs
   @Override
-  public final Cursor<R> next(final R... elements) {
+  public final Cursor<R> set(final R... elements) {
     if (elements != null && elements.length > 0) {
       this.elements = elements;
       this.index = 0;
@@ -62,7 +62,7 @@ final class Local<R> implements Cursor<R> {
   }
 
   @Override
-  public Cursor<R> cause(final Throwable cause) {
+  public Cursor<R> grab(final Throwable cause) {
     this.elements = null;
     this.cause = cause;
     return this;

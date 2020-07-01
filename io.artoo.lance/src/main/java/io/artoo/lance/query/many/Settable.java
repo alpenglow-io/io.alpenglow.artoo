@@ -57,12 +57,12 @@ final class Distinct<T> implements Many<T> {
       }
 
       @Override
-      public Cursor<T> next(final T... elements) {
+      public Cursor<T> set(final T... elements) {
         return null;
       }
 
       @Override
-      public Cursor<T> cause(final Throwable cause) {
+      public Cursor<T> grab(final Throwable cause) {
         return null;
       }
 

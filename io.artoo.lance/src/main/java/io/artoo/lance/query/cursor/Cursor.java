@@ -16,12 +16,12 @@ public interface Cursor<T> extends Iterator<T> {
       }
 
       @Override
-      public Cursor<R> next(final R... elements) {
+      public Cursor<R> set(final R... elements) {
         return null;
       }
 
       @Override
-      public Cursor<R> cause(final Throwable cause) {
+      public Cursor<R> grab(final Throwable cause) {
         return null;
       }
 
@@ -42,9 +42,8 @@ public interface Cursor<T> extends Iterator<T> {
   default Throwable cause() { return null; }
   default boolean hasCause() { return false; }
 
-  @SuppressWarnings("unchecked")
-  Cursor<T> next(final T... elements);
-  Cursor<T> cause(final Throwable cause);
+  Cursor<T> set(final T... elements);
+  Cursor<T> grab(final Throwable cause);
 
   default <R> R next(final Func.Uni<T, R> then) throws Throwable {
     final var next = next();

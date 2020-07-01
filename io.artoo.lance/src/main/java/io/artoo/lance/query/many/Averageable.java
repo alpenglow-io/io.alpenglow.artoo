@@ -4,7 +4,6 @@ import io.artoo.lance.func.Func;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
 import io.artoo.lance.query.cursor.Cursor;
-import io.artoo.lance.type.Eitherable;
 import org.jetbrains.annotations.NotNull;
 
 import static io.artoo.lance.type.Nullability.nonNullable;
@@ -39,14 +38,14 @@ final class Average<T, N extends Number> implements One<Double> {
     while (cursor.hasNext()) {
       try {
         final var selected = cursor.next(t -> select.tryApply(t).doubleValue());
-        res.next(res.hasNext() ? res.next() + selected : selected);
+        res.set(res.hasNext() ? res.next() + selected : selected);
         count++;
       } catch (Throwable cause) {
-        res.cause(cause);
+        res.grab(cause);
       }
     }
 
-    return res.size() == 0 ? res : res.next(res.next() / count);
+    return res.size() == 0 ? res : res.set(res.next() / count);
   }
 }
 

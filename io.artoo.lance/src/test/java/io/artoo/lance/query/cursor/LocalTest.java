@@ -26,19 +26,19 @@ class LocalTest {
 
   @Test
   void shouldReplaceNext() {
-    assertThat(Cursor.local(1).next(2).next()).isEqualTo(2);
+    assertThat(Cursor.local(1).set(2).next()).isEqualTo(2);
   }
 
   @Test
   void shouldReplaceMoreNext() {
-    assertThat(Cursor.local(1, 2, 3).next(4, 5, 6).next()).isEqualTo(4);
+    assertThat(Cursor.local(1, 2, 3).set(4, 5, 6).next()).isEqualTo(4);
   }
 
   @Test
   void shouldReplaceCause() {
     final var cause = new IllegalAccessException();
 
-    assertThat(Cursor.local().cause(cause).cause()).isEqualTo(cause);
+    assertThat(Cursor.local().grab(cause).cause()).isEqualTo(cause);
   }
 
   @Test

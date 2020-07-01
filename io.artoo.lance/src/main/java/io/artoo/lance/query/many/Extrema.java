@@ -63,13 +63,13 @@ final class Extremum<T, N extends Number, V> implements One<V> {
 
         final var element = compared.next();
         if (compare((N) element, numbered) == extreme) {
-          compared.next((V) numbered);
+          compared.set((V) numbered);
         } else {
-          compared.next(element);
+          compared.set(element);
         }
 
       } catch (Throwable cause) {
-        compared.cause(cause);
+        compared.grab(cause);
       }
     }
 

@@ -18,13 +18,13 @@ final class Beep<T> implements Cursor<T> {
 
   @SafeVarargs
   @Override
-  public final Cursor<T> next(final T... elements) {
-    return origin.next(elements);
+  public final Cursor<T> set(final T... elements) {
+    return origin.set(elements);
   }
 
   @Override
-  public Cursor<T> cause(final Throwable cause) {
-    return origin.cause(cause);
+  public Cursor<T> grab(final Throwable cause) {
+    return origin.grab(cause);
   }
 
   @Override

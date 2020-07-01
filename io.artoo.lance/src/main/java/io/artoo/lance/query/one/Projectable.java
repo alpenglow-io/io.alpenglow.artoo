@@ -67,12 +67,12 @@ final class SelectOne<T, R, O extends One<R>> implements One<R> {
       }
 
       @Override
-      public Cursor<R> next(final R... elements) {
+      public Cursor<R> set(final R... elements) {
         return null;
       }
 
       @Override
-      public Cursor<R> cause(final Throwable cause) {
+      public Cursor<R> grab(final Throwable cause) {
         return null;
       }
 

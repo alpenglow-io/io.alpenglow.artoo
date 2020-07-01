@@ -37,12 +37,12 @@ final class Peek<R> implements Cursor<R> {
 
   @SafeVarargs
   @Override
-  public final Cursor<R> next(final R... elements) {
-    return origin.next(elements);
+  public final Cursor<R> set(final R... elements) {
+    return origin.set(elements);
   }
 
   @Override
-  public Cursor<R> cause(final Throwable cause) {
-    return origin.cause(cause);
+  public Cursor<R> grab(final Throwable cause) {
+    return origin.grab(cause);
   }
 }

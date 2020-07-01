@@ -1,7 +1,6 @@
 package io.artoo.lance.query.many;
 
 import io.artoo.lance.query.cursor.Cursor;
-import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.Many;
@@ -9,8 +8,7 @@ import io.artoo.lance.query.Queryable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-
+import static io.artoo.lance.query.many.Index.index;
 import static io.artoo.lance.type.Nullability.nonNullable;
 
 public interface Filterable<T> extends Queryable<T> {
@@ -25,93 +23,82 @@ public interface Filterable<T> extends Queryable<T> {
 
   default <R> Many<R> ofType(final Class<? extends R> type) {
     final var t = nonNullable(type, "type");
-    return new OfType<>(this, (i, it) -> {}, t);
+    return new OfType<>(this, t);
   }
 
   default <R> Many<R> where(final Pred.Bi<? super Integer, ? super T> where, final Func.Bi<? super Integer, ? super T, ? extends R> select) {
     nonNullable(where, "where");
     nonNullable(select, "select");
-    return new Where<T, R>(this, (i, it) -> {}, where, select);
+    return new Where<T, R>(this, where, select);
   }
 }
 
 final class Where<T, R> implements Many<R> {
   private final Queryable<T> queryable;
-  private final Cons.Bi<? super Integer, ? super T> peek;
   private final Pred.Bi<? super Integer, ? super T> where;
   private final Func.Bi<? super Integer, ? super T, ? extends R> select;
 
   @Contract(pure = true)
-  Where(final Queryable<T> queryable, final Cons.Bi<? super Integer, ? super T> peek, final Pred.Bi<? super Integer, ? super T> where, final Func.Bi<? super Integer, ? super T, ? extends R> select) {
+  Where(final Queryable<T> queryable, final Pred.Bi<? super Integer, ? super T> where, final Func.Bi<? super Integer, ? super T, ? extends R> select) {
+    assert queryable != null && where != null && select != null;
     this.queryable = queryable;
-    this.peek = peek;
     this.where = where;
     this.select = select;
   }
 
-  @NotNull
   @Override
   public final Cursor<R> cursor() {
-    final var result = new ArrayList<R>();
-    var index = 0;
-    for (final var cursor = queryable.iterator(); cursor.hasNext(); index++) {
-      final var it = cursor.next();
-      peek.accept(index, it);
-      if (it != null && where.test(index, it)) {
-        result.add(select.apply(index, it));
+    final var filtered = Cursor.<R>local();
+
+    final var cursor = queryable.cursor();
+    for (var index = index(); cursor.hasNext() && !filtered.hasCause(); index.value++) {
+      try {
+        filtered.append(
+          cursor.<R>next(it -> where.tryTest(index.value, it)
+            ? select.tryApply(index.value, it)
+            : null
+          )
+        );
+      } catch (Throwable cause) {
+        filtered.grab(cause);
+
       }
     }
-    final var iterator = result.iterator();
-    return new Cursor<R>() {
-      @Override
-      public Cursor<R> append(final R element) {
-        return null;
-      }
 
-      @Override
-      public Cursor<R> next(final R... elements) {
-        return null;
-      }
-
-      @Override
-      public Cursor<R> cause(final Throwable cause) {
-        return null;
-      }
-
-      @Override
-      public boolean hasNext() {
-        return iterator.hasNext();
-      }
-
-      @Override
-      public R next() {
-        return iterator.next();
-      }
-    };
+    return filtered;
   }
 }
 
 final class OfType<T, R> implements Many<R> {
   private final Queryable<T> queryable;
-  private final Cons.Bi<? super Integer, ? super T> peek;
   private final Class<? extends R> type;
 
-  OfType(final Queryable<T> queryable, final Cons.Bi<? super Integer, ? super T> peek, final Class<? extends R> type) {
+  OfType(final Queryable<T> queryable, final Class<? extends R> type) {
+    assert queryable != null && type != null;
     this.queryable = queryable;
-    this.peek = peek;
     this.type = type;
   }
 
   @NotNull
   @Override
   public final Cursor<R> cursor() {
-    final var records = new ArrayList<R>();
-    for (final var record : queryable) {
-      if (type.isInstance(record)) {
-        records.add(type.cast(record));
+    final var typed = Cursor.<R>local();
+
+    final var cursor = queryable.cursor();
+    while (cursor.hasNext() && !typed.hasCause()) {
+      try {
+        typed.append(
+          cursor.next(it -> type.isInstance(it)
+            ? type.cast(it)
+            : null
+          )
+        );
+      } catch (Throwable cause) {
+        typed.grab(cause);
       }
     }
-    return Cursor.from(records.iterator());
+
+    return typed;
   }
 }
 

@@ -53,6 +53,10 @@ public interface Cursor<T> extends Iterator<T> {
   default boolean hasCause() { return false; }
 
   Cursor<T> set(final T... elements);
+  @SuppressWarnings("unchecked")
+  default Cursor<T> reset() {
+    return set((T[]) new Object[]{});
+  }
   Cursor<T> grab(final Throwable cause);
 
   Cursor<T> scroll();

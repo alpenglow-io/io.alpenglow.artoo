@@ -45,4 +45,9 @@ final class Peek<R> implements Cursor<R> {
   public Cursor<R> grab(final Throwable cause) {
     return origin.grab(cause);
   }
+
+  @Override
+  public Cursor<R> scroll() {
+    return origin.scroll();
+  }
 }

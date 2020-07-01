@@ -59,7 +59,7 @@ final class Aggregate<T, A, R> implements One<A> {
     final var cursor = queryable.cursor();
     while (cursor.hasNext()) {
       try {
-        final var selected = cursor.next(it -> where.tryTest(it) ? select.tryApply(it) : null);
+        final var selected = cursor.fetch(it -> where.tryTest(it) ? select.tryApply(it) : null);
 
         local.set(local.hasNext() ? aggregate.tryApply(local.next(), selected) : (A) selected);
 

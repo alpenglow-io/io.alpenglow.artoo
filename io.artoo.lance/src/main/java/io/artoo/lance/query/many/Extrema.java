@@ -59,7 +59,7 @@ final class Extremum<T, N extends Number, V> implements One<V> {
     final var cursor = queryable.cursor();
     while (cursor.hasNext() && !compared.hasCause()) {
       try {
-        final var numbered = cursor.next(number::tryApply);
+        final var numbered = cursor.fetch(number::tryApply);
 
         final var element = compared.next();
         if (compare((N) element, numbered) == extreme) {

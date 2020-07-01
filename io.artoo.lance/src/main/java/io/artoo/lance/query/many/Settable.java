@@ -67,6 +67,11 @@ final class Distinct<T> implements Many<T> {
       }
 
       @Override
+      public Cursor<T> scroll() {
+        return null;
+      }
+
+      @Override
       public boolean hasNext() {
         return iterator.hasNext();
       }

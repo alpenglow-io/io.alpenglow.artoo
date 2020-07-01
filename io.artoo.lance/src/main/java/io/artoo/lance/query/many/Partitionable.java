@@ -4,7 +4,6 @@ import io.artoo.lance.query.cursor.Cursor;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
-import org.jetbrains.annotations.Contract;
 
 import static io.artoo.lance.func.Pred.not;
 import static io.artoo.lance.query.many.Index.index;
@@ -55,7 +54,7 @@ final class Take<T> implements Many<T> {
     var keepTaking = true;
     try {
       for (var index = index(); cursor.hasNext() && keepTaking; index.value++) {
-        final var verified = cursor.next(it -> where.tryTest(index.value, it) ? it : null);
+        final var verified = cursor.fetch(it -> where.tryTest(index.value, it) ? it : null);
         taken.append(verified);
         keepTaking = verified != null;
       }
@@ -85,7 +84,7 @@ final class Skip<T> implements Many<T> {
     try {
       for (var index = index(); cursor.hasNext(); index.value++) {
         skipped.append(
-          cursor.next(it ->
+          cursor.fetch(it ->
             where.tryTest(index.value, it) && skipped.size() == 0
               ? null
               : it

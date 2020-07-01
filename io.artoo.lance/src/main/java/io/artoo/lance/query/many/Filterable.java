@@ -54,7 +54,7 @@ final class Where<T, R> implements Many<R> {
     for (var index = index(); cursor.hasNext() && !filtered.hasCause(); index.value++) {
       try {
         filtered.append(
-          cursor.<R>next(it -> where.tryTest(index.value, it)
+          cursor.<R>fetch(it -> where.tryTest(index.value, it)
             ? select.tryApply(index.value, it)
             : null
           )
@@ -88,7 +88,7 @@ final class OfType<T, R> implements Many<R> {
     while (cursor.hasNext() && !typed.hasCause()) {
       try {
         typed.append(
-          cursor.next(it -> type.isInstance(it)
+          cursor.fetch(it -> type.isInstance(it)
             ? type.cast(it)
             : null
           )

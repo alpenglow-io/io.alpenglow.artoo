@@ -69,6 +69,12 @@ final class Local<R> implements Cursor<R> {
   }
 
   @Override
+  public Cursor<R> scroll() {
+    index = 0;
+    return this;
+  }
+
+  @Override
   public Cursor<R> append(final R element) {
     if (element != null) {
       elements = Arrays.copyOf(elements, elements.length + 1);

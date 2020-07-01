@@ -36,7 +36,7 @@ final class Count<T> implements One<Integer> {
     final var cursor = queryable.cursor();
     while (cursor.hasNext() && !counted.hasCause()) {
       try {
-        if (TRUE.equals(cursor.next(where::tryTest))) {
+        if (TRUE.equals(cursor.fetch(where::tryTest))) {
           counted.set(counted.next() + 1);
         }
       } catch (Throwable cause) {

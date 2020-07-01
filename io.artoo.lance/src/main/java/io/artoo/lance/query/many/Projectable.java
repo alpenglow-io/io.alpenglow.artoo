@@ -4,7 +4,6 @@ import io.artoo.lance.query.cursor.Cursor;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.type.Sequence;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -55,7 +54,7 @@ final class Select<T, R> implements Many<R> {
     try {
       for (var index = index(); cursor.hasNext(); index.value++) {
         projected.append(
-          cursor.next(it -> select.tryApply(index.value, it))
+          cursor.fetch(it -> select.tryApply(index.value, it))
         );
       }
     } catch (Throwable cause) {
@@ -84,7 +83,7 @@ final class SelectMany<T, R, Q extends Queryable<R>> implements Many<R> {
     final var cursor = queryable.cursor();
     try {
       for (var index = index(); cursor.hasNext(); index.value++) {
-        for (final var element : cursor.next(it -> select.tryApply(index.value, it))) {
+        for (final var element : cursor.fetch(it -> select.tryApply(index.value, it))) {
           projectedMany.append(element);
         }
       }

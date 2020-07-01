@@ -37,7 +37,7 @@ final class Average<T, N extends Number> implements One<Double> {
     var cursor = queryable.cursor();
     while (cursor.hasNext()) {
       try {
-        final var selected = cursor.next(t -> select.tryApply(t).doubleValue());
+        final var selected = cursor.fetch(t -> select.tryApply(t).doubleValue());
         res.set(res.hasNext() ? res.next() + selected : selected);
         count++;
       } catch (Throwable cause) {

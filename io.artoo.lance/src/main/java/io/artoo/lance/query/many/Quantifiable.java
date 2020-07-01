@@ -21,35 +21,37 @@ public interface Quantifiable<T> extends Queryable<T> {
   default One<Boolean> any() { return this.any(t -> true); }
 
   default One<Boolean> any(final Pred.Uni<? super T> where) {
-    return new Any<>(this, it -> {}, nonNullable(where, "where"));
+    return new Any<>(this, nonNullable(where, "where"));
   }
 }
 
 final class Any<T> implements One<Boolean> {
   private final Queryable<T> queryable;
-  private final Cons.Uni<? super T> peek;
   private final Pred.Uni<? super T> where;
 
-  Any(final Queryable<T> queryable, final Cons.Uni<? super T> peek, final Pred.Uni<? super T> where) {
-    assert queryable != null && peek != null && where != null;
+  Any(final Queryable<T> queryable, final Pred.Uni<? super T> where) {
+    assert queryable != null && where != null;
     this.queryable = queryable;
-    this.peek = peek;
     this.where = where;
   }
 
   @NotNull
   @Override
   public final Cursor<Boolean> cursor() {
-    var found = false;
-    for (var iterator = queryable.iterator(); iterator.hasNext() && !found;) {
-      final var it = iterator.next();
-      if (it != null) {
-        peek.accept(it);
+    final var any = Cursor.local(false);
 
-        found = where.test(it);
+    final var cursor = queryable.cursor();
+    try {
+      while (cursor.hasNext() && !any.next()) {
+        any.set(
+          cursor.<Boolean>fetch(where::tryTest)
+        );
       }
+    } catch (Throwable throwable) {
+      any.grab(throwable);
     }
-    return Cursor.local(found);
+
+    return any.scroll();
   }
 }
 
@@ -68,15 +70,19 @@ final class All<T> implements One<Boolean> {
   @NotNull
   @Override
   public final Cursor<Boolean> cursor() {
-    var found = true;
-    for (var iterator = queryable.iterator(); iterator.hasNext() && found;) {
-      final var it = iterator.next();
-      if (it != null) {
-        peek.accept(it);
+    final var all = Cursor.local(true);
 
-        found = where.test(it);
+    final var cursor = queryable.cursor();
+    try {
+      while (cursor.hasNext() && all.next()) {
+        all.set(
+          cursor.fetch(where::tryTest)
+        );
       }
+    } catch (Throwable throwable) {
+      all.grab(throwable);
     }
-    return Cursor.local(found);
+
+    return all;
   }
 }

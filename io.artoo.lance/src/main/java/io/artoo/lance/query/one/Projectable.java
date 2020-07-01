@@ -77,6 +77,11 @@ final class SelectOne<T, R, O extends One<R>> implements One<R> {
       }
 
       @Override
+      public Cursor<R> scroll() {
+        return null;
+      }
+
+      @Override
       public boolean hasNext() {
         return iterator.hasNext();
       }

@@ -28,6 +28,11 @@ final class Beep<T> implements Cursor<T> {
   }
 
   @Override
+  public Cursor<T> scroll() {
+    return origin.scroll();
+  }
+
+  @Override
   public boolean hasNext() {
     if (origin.hasCause()) beep.accept(origin.cause());
     return origin.hasNext();

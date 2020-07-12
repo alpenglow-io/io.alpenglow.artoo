@@ -1,83 +1,52 @@
 package io.artoo.lance.query.cursor;
 
-import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Func;
+import io.artoo.lance.func.Suppl;
 
 import java.util.Iterator;
 
 import static io.artoo.lance.type.Nullability.nonNullable;
 
-public interface Cursor<T> extends Iterator<T> {
-  static <R> Cursor<R> from(Iterator<R> iterator) {
-    return new Cursor<R>() {
-      @Override
-      public Cursor<R> append(final R element) {
-        return null;
-      }
+public interface Cursor<R> extends Iterator<R> {
+  R fetch() throws Throwable;
 
-      @Override
-      public Cursor<R> set(final R... elements) {
-        return null;
-      }
-
-      @Override
-      public Cursor<R> grab(final Throwable cause) {
-        return null;
-      }
-
-      @Override
-      public Cursor<R> scroll() {
-        return null;
-      }
-
-      @Override
-      public boolean has(final R element) {
-        return true;
-      }
-
-      @Override
-      public boolean hasNext() {
-        return iterator.hasNext();
-      }
-
-      @Override
-      public R next() {
-        return iterator.next();
-      }
-    };
+  default <P> P fetch(final Func.Uni<R, P> then) throws Throwable {
+    return then.tryApply(fetch());
   }
 
-  Cursor<T> append(T element);
-
-  default Throwable cause() { return null; }
-  default boolean hasCause() { return false; }
-
-  Cursor<T> set(final T... elements);
-  @SuppressWarnings("unchecked")
-  default Cursor<T> reset() {
-    return set((T[]) new Object[]{});
+  default <P> Cursor<P> map(Func.Uni<? super R, ? extends P> map) {
+    return new Map<>(this, nonNullable(map, "map"));
   }
-  Cursor<T> grab(final Throwable cause);
 
-  Cursor<T> scroll();
-  boolean has(T element);
+  default <P, C extends Cursor<P>> Cursor<P> flatMap(Func.Uni<? super R, ? extends C> flatMap) {
+    return new Flat<>(new Map<>(this, nonNullable(flatMap, "flatMap")));
+  }
 
-  default <R> R fetch(final Func.Uni<T, R> then) throws Throwable {
-    final var next = next();
-    if (next != null) {
-      return then.tryApply(next);
+  default Cursor<R> close() throws Throwable {
+    R element = null;
+    while (hasNext()) element = fetch();
+    return Cursor.readonly(element);
+  }
+
+  default Cursor<R> concat(final Cursor<R> cursor) {
+    return new Concat<>(this, nonNullable(cursor, "cursor"));
+  }
+
+  default <C extends Cursor<R>> Cursor<R> or(final Suppl.Uni<? extends C> alternative) {
+    return this.hasNext() ? this : alternative.get();
+  }
+
+  default <E extends RuntimeException> Cursor<R> or(final String message, final Func.Uni<? super String, ? extends E> exception) {
+    if (this.hasNext()) {
+      return this;
+    } else {
+      throw exception.apply(message);
     }
-    return null;
   }
-
-  default int size() { return 0; }
-
-  default Cursor<T> peek(Cons.Uni<? super T> peek) { return new Peek<>(this, peek); }
-  default Cursor<T> beep(Cons.Uni<? super Throwable> beep) { return new Beep<>(this, beep); }
 
   @SafeVarargs
-  static <R> Cursor<R> local(final R... elements) {
-    return new Local<>(nonNullable(elements, "elements"));
+  static <R> Cursor<R> readonly(final R... elements) {
+    return new Readonly<>(nonNullable(elements, "elements"));
   }
 }
 

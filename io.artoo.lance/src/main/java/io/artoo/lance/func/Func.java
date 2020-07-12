@@ -1,5 +1,6 @@
 package io.artoo.lance.func;
 
+import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -14,6 +15,19 @@ public interface Func {
       } catch (Throwable throwable) {
         return null;
       }
+    }
+
+    default <V> Func.Uni<V, R> previous(Func.Uni<? super V, ? extends T> func) {
+      assert func != null;
+      return it -> tryApply(func.tryApply(it));
+    }
+
+    default <V> Func.Uni<T, V> then(Func.Uni<? super R, ? extends V> func) {
+      assert func != null;
+      return it -> {
+        final var applied = tryApply(it);
+        return func.tryApply(applied);
+      };
     }
   }
 

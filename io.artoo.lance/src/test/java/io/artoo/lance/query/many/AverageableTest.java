@@ -42,17 +42,4 @@ class AverageableTest {
       fail();
     }
   }
-
-  @Test
-  void shouldFail() {
-    final var cursor = Many.from("apple", null, "banana").average(this::tryCount).cursor();
-
-    assertThat(cursor.hasCause()).isTrue();
-    System.out.println(cursor.cause().getMessage());
-  }
-
-  private int tryCount(final String value) {
-    if (value.endsWith("ana")) throw new IllegalArgumentException("Can't get length of Italian-like words");
-    return value.length();
-  }
 }

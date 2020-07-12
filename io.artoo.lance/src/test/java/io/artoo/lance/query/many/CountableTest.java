@@ -16,7 +16,7 @@ class CountableTest {
   @Test
   @DisplayName("should count 0 on none elements")
   void shouldCountNone() {
-    assertThat(Many.none().count().yield()).isEqualTo(0);
+    assertThat(Many.empty().count().yield()).isEqualTo(0);
   }
 
   @Test

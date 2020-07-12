@@ -1,102 +1,20 @@
 package io.artoo.lance.query.one;
 
-import io.artoo.lance.query.cursor.Cursor;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import io.artoo.lance.query.operation.Select;
 
 import static io.artoo.lance.type.Nullability.nonNullable;
 
 public interface Projectable<T> extends Queryable<T> {
   default <R> One<R> select(final Func.Uni<? super T, ? extends R> select) {
-    nonNullable(select, "select");
-    return new Select<T, R>(this, select);
+    final var s = nonNullable(select, "select");
+    return () -> cursor().map(new Select<>((i, it) -> s.tryApply(it)));
   }
 
   default <R, O extends One<R>> One<R> selectOne(final Func.Uni<? super T, ? extends O> selectOne) {
-    return new SelectOne<>(this, nonNullable(selectOne, "selectOne"));
+    final var s = nonNullable(selectOne, "selectOne");
+    return () -> cursor().map(new Select<>((i, it) -> s.tryApply(it))).flatMap(Queryable::cursor);
   }
 }
-
-final class Select<T, R> implements One<R> {
-  private final Queryable<T> queryable;
-  private final Func.Uni<? super T, ? extends R> select;
-
-  @Contract(pure = true)
-  Select(final Queryable<T> queryable, final Func.Uni<? super T, ? extends R> select) {
-    assert queryable != null && select != null;
-    this.queryable = queryable;
-    this.select = select;
-  }
-
-  @NotNull
-  @Override
-  public final Cursor<R> cursor() {
-    R result = null;
-    for (final var value : queryable) if (value != null) result = select.apply(value);
-    return Cursor.local(result);
-  }
-}
-
-final class SelectOne<T, R, O extends One<R>> implements One<R> {
-  private final Queryable<T> queryable;
-  private final Func.Uni<? super T, ? extends O> select;
-
-  @Contract(pure = true)
-  SelectOne(final Queryable<T> queryable, final Func.Uni<? super T, ? extends O> select) {
-    this.queryable = queryable;
-    this.select = select;
-  }
-
-  @NotNull
-  @Override
-  public final Cursor<R> cursor() {
-    O selected = null;
-    for (final var value : queryable) {
-      if (value != null) {
-        selected = select.apply(value);
-      }
-    }
-    final var iterator = selected.iterator();
-    return selected != null ? new Cursor<R>() {
-      @Override
-      public Cursor<R> append(final R element) {
-        return null;
-      }
-
-      @Override
-      public Cursor<R> set(final R... elements) {
-        return null;
-      }
-
-      @Override
-      public Cursor<R> grab(final Throwable cause) {
-        return null;
-      }
-
-      @Override
-      public Cursor<R> scroll() {
-        return null;
-      }
-
-      @Override
-      public boolean has(final R element) {
-        return false;
-      }
-
-      @Override
-      public boolean hasNext() {
-        return iterator.hasNext();
-      }
-
-      @Override
-      public R next() {
-        return iterator.next();
-      }
-    } : Cursor.local();
-  }
-}
-
-

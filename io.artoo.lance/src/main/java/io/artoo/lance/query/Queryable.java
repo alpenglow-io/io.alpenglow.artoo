@@ -12,10 +12,14 @@ public interface Queryable<R> extends Iterable<R> {
     for (final var value : this) if (value != null) eventually.accept(value);
   }
 
-  Cursor<R> cursor();
+  Cursor<R> cursor() throws Throwable;
 
   @Override
-  default @NotNull Iterator<R> iterator() {
-    return cursor();
+  default Iterator<R> iterator() {
+    try {
+      return cursor();
+    } catch (Throwable error) {
+      return null;
+    }
   }
 }

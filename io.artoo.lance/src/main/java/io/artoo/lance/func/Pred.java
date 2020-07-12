@@ -41,6 +41,10 @@ public interface Pred {
         return false;
       }
     }
+
+    default Uni<A> not() {
+      return it -> !this.tryTest(it);
+    }
   }
 
   @FunctionalInterface

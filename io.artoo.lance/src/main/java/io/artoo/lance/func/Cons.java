@@ -8,13 +8,13 @@ import java.util.function.Consumer;
 import static io.artoo.lance.func.Func.Nothing.Nil;
 
 public interface Cons {
-  interface Uni<A> extends Consumer<A>, Func.Uni<A, Nothing> {
+  interface Uni<A> extends Consumer<A>, Func.Uni<A, A> {
     void tryAccept(A a) throws Throwable;
 
     @Override
-    default Nothing tryApply(A a) throws Throwable {
+    default A tryApply(A a) throws Throwable {
       tryAccept(a);
-      return Nil;
+      return a;
     }
 
     @Override
@@ -23,9 +23,9 @@ public interface Cons {
     }
 
     @Override
-    default Nothing apply(A a) {
+    default A apply(A a) {
       accept(a);
-      return Nil;
+      return a;
     }
   }
 

@@ -13,40 +13,72 @@ public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Othe
     return element != null ? One.lone(element) : One.none();
   }
 
-  @NotNull
-  @Contract("_ -> new")
   static <L> One<L> lone(final L element) {
     return new Lone<>(element);
   }
 
-  @NotNull
-  @Contract(value = " -> new", pure = true)
-  @SuppressWarnings("unchecked")
+  static <L> One<L> done(final Cursor<L> cursor) {
+    return new Done<>(cursor);
+  }
+
   static <L> One<L> none() {
-    return (One<L>) DefaultOne.None;
+    return new None<>();
   }
 
   default T yield() {
-    return cursor().next();
+    return iterator().next();
   }
 }
 
-record Lone<T>(T element) implements One<T> {
-  public Lone { assert element != null; }
+final class Lone<T> implements One<T> {
+  private final T element;
 
-  @NotNull
+  Lone(final T element) {
+    assert element != null;
+    this.element = element;
+  }
+
   @Override
-  public Cursor<T> cursor() {
-    return Cursor.local(element);
+  public final Cursor<T> cursor() {
+    return Cursor.readonly(element);
   }
 }
 
-enum DefaultOne implements One<Object> {
-  None;
+final class None<T> implements One<T> {
 
-  @NotNull
   @Override
-  public Cursor<Object> cursor() {
-    return Cursor.local();
+  public final Cursor<T> cursor() {
+    return Cursor.readonly();
   }
 }
+
+final class Done<T> implements One<T> {
+  private final Cursor<T> origin;
+
+  Done(final Cursor<T> origin) {
+    assert origin != null;
+    this.origin = origin;
+  }
+
+  @Override
+  public final Cursor<T> cursor() {
+    try {
+      class Last { T value; }
+
+      final var last = new Last();
+      if (origin.hasNext()) {
+
+        do origin.fetch(next -> last.value = next);
+        while (origin.hasNext());
+
+      }
+      return last.value == null ? Cursor.readonly() : Cursor.readonly(last.value);
+    } catch (Throwable throwable) {
+      throwable.printStackTrace();
+      return Cursor.readonly();
+    }
+  }
+}
+
+
+

@@ -11,7 +11,7 @@ public interface Peekable<T> extends Queryable<T> {
   }
 
   default Many<T> peek(Cons.Bi<? super Integer, ? super T> peek) {
-    return () -> cursor().map(new Peek<>(peek));
+    return () -> cursor().map(new Peek<T, T>(peek).butNulls());
   }
 }
 

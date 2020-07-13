@@ -17,8 +17,7 @@ final class Map<T, R> implements Cursor<R> {
 
   @Override
   public final R fetch() throws Throwable {
-    final var fetched = cursor.fetch();
-    return fetched == null ? null : map.tryApply(fetched);
+    return map.tryApply(cursor.fetch());
   }
 
   @Override

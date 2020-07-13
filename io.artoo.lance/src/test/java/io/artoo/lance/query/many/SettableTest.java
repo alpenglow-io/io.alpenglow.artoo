@@ -20,7 +20,6 @@ class SettableTest {
   }
 
   @Test
-  @Disabled
   @DisplayName("should avoid repeated numbers less than 50")
   void shouldJustAvoidRepeatedNumbersLessThan50() {
     final var distinct = Many.from(21, 46, 46, 55, 17, 21, 55, 55).distinct(number -> number < 50);
@@ -45,7 +44,6 @@ class SettableTest {
   }
 
   @Test
-  @Disabled
   @DisplayName("should distinct repeated records with condition")
   void shouldDistinctRecordsWithCondition() {
     final var distinct = Many.from(

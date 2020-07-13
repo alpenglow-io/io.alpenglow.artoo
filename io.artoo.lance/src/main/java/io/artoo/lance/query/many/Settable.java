@@ -14,7 +14,7 @@ public interface Settable<T> extends Queryable<T> {
 
   default Many<T> distinct(final Pred.Uni<? super T> where) {
     final var w = nonNullable(where, "where");
-    return () -> cursor().map(new Distinct<>(w));
+    return () -> cursor().map(new Distinct<T, T>(w).butNulls());
   }
 }
 

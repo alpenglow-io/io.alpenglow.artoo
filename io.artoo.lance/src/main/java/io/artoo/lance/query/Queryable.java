@@ -19,7 +19,7 @@ public interface Queryable<R> extends Iterable<R> {
     try {
       return cursor().shrink();
     } catch (Throwable error) {
-      return Cursor.readonly();
+      return Cursor.every();
     }
   }
 }

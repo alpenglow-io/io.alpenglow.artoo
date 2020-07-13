@@ -18,11 +18,11 @@ public final class Any<T> implements Func.Uni<T, Boolean> {
 
   @Override
   public final Boolean tryApply(final T element) throws Throwable {
-    if (where.tryTest(element)) {
+    if (element != null && where.tryTest(element)) {
       collected.add(element);
       return true;
     } else {
-      return null;
+      return false;
     }
   }
 }

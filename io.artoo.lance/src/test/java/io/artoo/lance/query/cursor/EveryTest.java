@@ -9,18 +9,18 @@ import java.util.concurrent.atomic.LongAdder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ReadonlyTest {
+class EveryTest {
   @Test
   void shouldIterateAllElements() {
     new LongAdder();
-    final Iterable<Integer> integers = () -> Cursor.readonly(1, 2, 3, 4);
+    final Iterable<Integer> integers = () -> Cursor.every(1, 2, 3, 4);
 
     assertThat(integers).containsExactly(1, 2, 3, 4);
   }
 
   @Test
   void shouldNotIterateOnEmpty() {
-    final Iterable<Integer> integers = Cursor::readonly;
+    final Iterable<Integer> integers = Cursor::every;
 
     assertThat(integers).isEmpty();
   }
@@ -36,7 +36,7 @@ class ReadonlyTest {
       list.add(integer);
     }
 
-    final Iterable<Integer> integers = () -> Cursor.readonly(list.toArray(new Integer[]{}));
+    final Iterable<Integer> integers = () -> Cursor.every(list.toArray(new Integer[]{}));
 
     assertThat(integers).isNotEmpty();
   }

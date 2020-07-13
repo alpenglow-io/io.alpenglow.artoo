@@ -1,6 +1,7 @@
 package io.artoo.lance.query.many;
 
 import io.artoo.lance.query.Many;
+import io.artoo.lance.query.One;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -10,13 +11,17 @@ class CountableTest {
   @Test
   @DisplayName("should count 3 on three elements")
   void shouldCount() {
-    assertThat(Many.from(1, 2, 3).count().yield()).isEqualTo(3);
+    final var count = Many.from(1, 2, 3).count().yield();
+
+    assertThat(count).isEqualTo(3);
   }
 
   @Test
   @DisplayName("should count 0 on none elements")
   void shouldCountNone() {
-    assertThat(Many.empty().count().yield()).isEqualTo(0);
+    final var count = Many.empty().count().yield();
+
+    assertThat(count).isEqualTo(0);
   }
 
   @Test
@@ -28,6 +33,8 @@ class CountableTest {
   @Test
   @DisplayName("should count non nullable elements only")
   void shouldCountNonNullableOnly() {
-    assertThat(Many.from(1, 2, null, "hi there", true, null).count().yield()).isEqualTo(4);
+    final var count = Many.from(1, 2, null, "hi there", true, null).count().yield();
+
+    assertThat(count).isEqualTo(4);
   }
 }

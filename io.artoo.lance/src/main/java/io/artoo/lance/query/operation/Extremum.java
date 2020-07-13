@@ -22,6 +22,8 @@ public final class Extremum<T, N extends Number, V> implements Func.Uni<T, V> {
 
   @Override
   public V tryApply(final T element) throws Throwable {
+    if (element == null) return extremed.value;
+
     final var numbered = number.tryApply(element);
     if (compare((N) extremed.value, numbered) == extreme) {
       extremed.value = (V) numbered;
@@ -58,6 +60,6 @@ public final class Extremum<T, N extends Number, V> implements Func.Uni<T, V> {
       return it.doubleValue() > BigDecimal.valueOf(compared.doubleValue()).doubleValue() ? 1 : -1;
     }
 
-    throw new IllegalStateException("Can't cast unknown number type");
+    return extreme * -1;
   }
 }

@@ -22,10 +22,10 @@ public interface Cursor<R> extends Iterator<R> {
     return new Shrink<>(this);
   }
 
-  default Cursor<R> fastForward() throws Throwable {
+  default Cursor<R> end() throws Throwable {
     R element = null;
     while (hasNext()) element = fetch();
-    return Cursor.readonly(element);
+    return Cursor.maybe(element);
   }
 
   default Cursor<R> concat(final Cursor<R> cursor) {
@@ -45,8 +45,20 @@ public interface Cursor<R> extends Iterator<R> {
   }
 
   @SafeVarargs
-  static <R> Cursor<R> readonly(final R... elements) {
-    return new Readonly<>(nonNullable(elements, "elements"));
+  static <R> Cursor<R> every(final R... elements) {
+    return new Every<>(nonNullable(elements, "elements"));
+  }
+
+  static <R> Cursor<R> just(final R element) {
+    return new Just<>(nonNullable(element, "element"));
+  }
+
+  static <R> Cursor<R> nothing() {
+    return new Nothing<>();
+  }
+
+  static <R> Cursor<R> maybe(final R element) {
+    return element == null ? nothing() : just(element);
   }
 }
 

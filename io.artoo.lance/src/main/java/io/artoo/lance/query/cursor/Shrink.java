@@ -20,7 +20,7 @@ final class Shrink<T> implements Cursor<T> {
     shrunk.fetched = null;
     while (hasNext && shrunk.fetched == null) {
       shrunk.fetched = cursor.next();
-      hasNext = shrunk.fetched != null;
+      hasNext = shrunk.fetched != null || cursor.hasNext();
     }
     return hasNext;
   }

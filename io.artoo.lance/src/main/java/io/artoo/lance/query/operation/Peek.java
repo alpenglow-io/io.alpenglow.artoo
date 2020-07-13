@@ -1,9 +1,11 @@
 package io.artoo.lance.query.operation;
 
 import io.artoo.lance.func.Cons.Bi;
+import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Func.Uni;
 
-public final class Peek<T> implements Uni<T, T> {
+@SuppressWarnings("unchecked")
+public final class Peek<T, R> implements Func.Uni<T, R> {
   private final Peeked peeked = new Peeked();
   private final Bi<? super Integer, ? super T> peek;
 
@@ -13,9 +15,9 @@ public final class Peek<T> implements Uni<T, T> {
   }
 
   @Override
-  public final T tryApply(final T element) throws Throwable {
+  public final R tryApply(final T element) throws Throwable {
     peek.tryAccept(peeked.index++, element);
-    return element;
+    return (R) element;
   }
 
   private final class Peeked {

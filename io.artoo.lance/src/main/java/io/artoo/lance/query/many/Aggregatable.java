@@ -11,7 +11,7 @@ public interface Aggregatable<T> extends Countable<T>, Summable<T>, Averageable<
   @NotNull
   @Contract("_, _, _, _ -> new")
   default <A, R> One<A> aggregate(final A seed, final Pred.Uni<? super T> where, final Func.Uni<? super T, ? extends R> select, final Func.Bi<? super A, ? super R, ? extends A> aggregate) {
-    return () -> cursor().map(new Aggregate<>(seed, where, select, aggregate)).fastForward();
+    return () -> cursor().map(new Aggregate<>(seed, where, select, aggregate)).end();
   }
 
   default <A, R> One<A> aggregate(final A seed, final Func.Uni<? super T, ? extends R> select, final Func.Bi<? super A, ? super R, ? extends A> aggregate) {

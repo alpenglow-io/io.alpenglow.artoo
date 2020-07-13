@@ -25,6 +25,10 @@ public interface Func {
       assert func != null;
       return it -> func.tryApply(tryApply(it));
     }
+
+    default Func.Uni<T, R> butNulls() {
+      return it -> it == null ? null : this.tryApply(it);
+    }
   }
 
   interface Bi<A, B, R> extends BiFunction<A, B, R> {

@@ -20,7 +20,7 @@ public interface Partitionable<T> extends Queryable<T> {
 
   default Many<T> skipWhile(final Pred.Bi<? super Integer, ? super T> where) {
     final var w = nonNullable(where, "where");
-    return () -> cursor().map(new Skip<>(w));
+    return () -> cursor().map(new Skip<T, T>(w).butNulls());
   }
 
   default Many<T> take(final int until) {
@@ -34,7 +34,7 @@ public interface Partitionable<T> extends Queryable<T> {
 
   default Many<T> takeWhile(final Pred.Bi<? super Integer, ? super T> where) {
     final var w = nonNullable(where, "where");
-    return () -> cursor().map(new Take<>(w));
+    return () -> cursor().map(new Take<T, T>(w).butNulls());
   }
 }
 

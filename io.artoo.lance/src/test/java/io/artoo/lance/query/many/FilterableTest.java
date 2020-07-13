@@ -14,9 +14,9 @@ class FilterableTest {
   @Test
   @DisplayName("should filter words with length 3")
   void shouldFilterWordsWithLength3() {
-    final var where = from("the", "quick", "brown", "fox", "jumps").where(word -> word.length() == 3);
+    final var where = from("the", "quick", "brown", "fox", "jumps", null).where(word -> word.length() == 3);
 
-    assertThat(where).contains("the", "fox");
+    assertThat(where).containsExactly("the", "fox");
   }
 
   @Test

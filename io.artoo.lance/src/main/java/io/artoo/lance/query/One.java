@@ -5,8 +5,6 @@ import io.artoo.lance.query.one.Filterable;
 import io.artoo.lance.query.one.Otherwise;
 import io.artoo.lance.query.one.Peekable;
 import io.artoo.lance.query.one.Projectable;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Otherwise<T> {
   static <T> One<T> of(final T element) {
@@ -40,15 +38,14 @@ final class Lone<T> implements One<T> {
 
   @Override
   public final Cursor<T> cursor() {
-    return Cursor.readonly(element);
+    return Cursor.just(element);
   }
 }
 
 final class None<T> implements One<T> {
-
   @Override
   public final Cursor<T> cursor() {
-    return Cursor.readonly();
+    return Cursor.nothing();
   }
 }
 
@@ -72,10 +69,10 @@ final class Done<T> implements One<T> {
         while (origin.hasNext());
 
       }
-      return last.value == null ? Cursor.readonly() : Cursor.readonly(last.value);
+      return Cursor.maybe(last.value);
     } catch (Throwable throwable) {
       throwable.printStackTrace();
-      return Cursor.readonly();
+      return Cursor.every();
     }
   }
 }

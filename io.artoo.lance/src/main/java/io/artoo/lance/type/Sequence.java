@@ -52,6 +52,6 @@ final class Locked<T> implements Sequence<T> {
 
   @Override
   public Cursor<T> cursor() {
-    return lock.read(() -> Cursor.readonly(array));
+    return lock.read(() -> Cursor.every(array));
   }
 }

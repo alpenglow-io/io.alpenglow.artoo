@@ -2,7 +2,7 @@ package io.artoo.lance.query.cursor;
 
 import static java.util.Objects.nonNull;
 
-final class Readonly<T> implements Cursor<T> {
+final class Every<T> implements Cursor<T> {
   private static final class Index {
     private int value = 0;
   }
@@ -11,7 +11,7 @@ final class Readonly<T> implements Cursor<T> {
   private final T[] elements;
 
   @SafeVarargs
-  Readonly(T... elements) {
+  Every(T... elements) {
     this.elements = elements;
   }
 

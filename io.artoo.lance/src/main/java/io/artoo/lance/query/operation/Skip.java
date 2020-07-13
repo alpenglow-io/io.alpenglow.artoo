@@ -1,9 +1,11 @@
 package io.artoo.lance.query.operation;
 
+import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Func.Uni;
 import io.artoo.lance.func.Pred.Bi;
 
-public final class Skip<T> implements Uni<T, T> {
+@SuppressWarnings("unchecked")
+public final class Skip<T, R> implements Func.Uni<T, R> {
   private final Skipped skipped = new Skipped();
   private final Bi<? super Integer, ? super T> where;
 
@@ -13,8 +15,8 @@ public final class Skip<T> implements Uni<T, T> {
   }
 
   @Override
-  public T tryApply(final T element) throws Throwable {
-    return where.tryTest(skipped.index++, element) && ++skipped.count == skipped.index ? null : element;
+  public R tryApply(final T element) throws Throwable {
+    return (R) (where.tryTest(skipped.index++, element) && ++skipped.count == skipped.index ? null : element);
   }
 
   private final class Skipped {

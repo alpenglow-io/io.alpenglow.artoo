@@ -35,7 +35,7 @@ final class OrderBy<T, K> implements Many<T> {
         result.sort(comparison);
       }
     }
-    return Cursor.readonly();
+    return Cursor.every();
   }
 
   private final class Couple {

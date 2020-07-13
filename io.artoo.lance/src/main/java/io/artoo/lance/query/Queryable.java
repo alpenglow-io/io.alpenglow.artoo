@@ -15,11 +15,11 @@ public interface Queryable<R> extends Iterable<R> {
   Cursor<R> cursor() throws Throwable;
 
   @Override
-  default Iterator<R> iterator() {
+  default @NotNull Iterator<R> iterator() {
     try {
-      return cursor();
+      return cursor().shrink();
     } catch (Throwable error) {
-      return null;
+      return Cursor.readonly();
     }
   }
 }

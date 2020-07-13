@@ -13,9 +13,9 @@ public final class Peek<T> implements Uni<T, T> {
   }
 
   @Override
-  @SuppressWarnings("unchecked")
-  public T tryApply(final T element) throws Throwable {
-    return (T) peek.tryApply(peeked.index++, element);
+  public final T tryApply(final T element) throws Throwable {
+    peek.tryAccept(peeked.index++, element);
+    return element;
   }
 
   private final class Peeked {

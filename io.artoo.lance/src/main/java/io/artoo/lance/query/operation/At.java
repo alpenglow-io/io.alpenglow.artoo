@@ -1,18 +1,18 @@
 package io.artoo.lance.query.operation;
 
-import io.artoo.lance.func.Func;
+import io.artoo.lance.func.Func.Uni;
 
-public final class At<T> implements Func.Uni<T, T> {
+public final class At<T> implements Uni<T, T> {
   private final int at;
-  private final At.Pointed pointed;
+  private final Pointed pointed;
 
   public At(final int at) {
     this.at = at;
-    this.pointed = new At.Pointed();
+    this.pointed = new Pointed();
   }
 
   @Override
-  public T tryApply(final T element) {
+  public final T tryApply(final T element) {
     return pointed.index++ == at ? element : null;
   }
 

@@ -16,10 +16,14 @@ public final class First<T> implements Func.Uni<T, T> {
 
   @Override
   public T tryApply(final T element) throws Throwable {
-    return (found.value |= where.tryTest(element)) ? element : null;
+    if (where.tryTest(element) && found.value == null) {
+      found.value = element;
+    }
+
+    return found.value;
   }
 
   private final class Found {
-    private boolean value = false;
+    private T value;
   }
 }

@@ -2,7 +2,6 @@ package io.artoo.lance.query.cursor;
 
 import static java.util.Objects.nonNull;
 
-@SuppressWarnings("StatementWithEmptyBody")
 final class Readonly<T> implements Cursor<T> {
   private static final class Index {
     private int value = 0;
@@ -23,9 +22,7 @@ final class Readonly<T> implements Cursor<T> {
 
   @Override
   public final T next() {
-    T element = null;
-    while (hasNext() && (element = elements[index.value++]) == null);
-    return element;
+    return hasNext() ? elements[index.value++] : null;
   }
 
   @Override

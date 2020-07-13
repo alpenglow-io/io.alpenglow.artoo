@@ -22,8 +22,8 @@ class MapTest {
   void shouldMapOnFetch() throws Throwable {
     final var map = new Map<>(Cursor.readonly(1, 2, 3), it -> it * 2);
 
-    assertThat(map.<Integer>fetch(it -> it)).isEqualTo(2);
-    assertThat(map.<Integer>fetch(it -> it)).isEqualTo(4);
-    assertThat(map.<Integer>fetch(it -> it)).isEqualTo(6);
+    assertThat(map.fetch()).isEqualTo(2);
+    assertThat(map.fetch()).isEqualTo(4);
+    assertThat(map.fetch()).isEqualTo(6);
   }
 }

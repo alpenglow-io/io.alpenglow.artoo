@@ -3,7 +3,10 @@ package io.artoo.lance.query.many;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.stream.Stream;
+
 import static io.artoo.lance.query.Many.from;
+import static java.lang.System.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class UniquableTest {
@@ -57,7 +60,10 @@ class UniquableTest {
   @Test
   @DisplayName("should find a single element only")
   void shouldFindASingleElementOnly() {
-    final var singleElement = from(9).single().yield();
+    final var singleElement = from(9)
+      .single()
+      .peek(out::println)
+      .yield();
     assertThat(singleElement).isEqualTo(9);
 
     final var singleEven = from(9, 34, 65, 87, 435, 3, 83, 23).single(number -> number % 2 == 0).yield();
@@ -67,10 +73,27 @@ class UniquableTest {
   @Test
   @DisplayName("should be empty if there's more than single element")
   void shouldEmptyIfThereIsMoreThanSingleElement() {
-    final var many = from(9, 65, 87, 435, 3, 83, 23, 87, 435, 67, 19);
+    final var single = from(9, 65, 87, 435, 3, 83, 23, 87, 435, 67, 19)
+      .single()
+      .peek(out::println);
 
-    assertThat(many.single()).isEmpty();
+    assertThat(single).isEmpty();
 
-    assertThat(many.single(number -> number < 20)).isEmpty();
+    //assertThat(many.single(number -> number < 20)).isEmpty();
+  }
+
+  @Test
+  @DisplayName("should be empty if there's more than single element on condition")
+  void shouldEmptyIfThereIsMoreThanSingleElementOnCondition() {
+    final var single = from(9, 65, 87, 435, 3, 83, 23, 87, 435, 67, 19)
+      .single(number -> number < 20);
+
+    for (var it : single)
+      out.println(it);
+
+    assertThat(single).isEmpty();
+  }
+
+  public static void main(String[] args) {
   }
 }

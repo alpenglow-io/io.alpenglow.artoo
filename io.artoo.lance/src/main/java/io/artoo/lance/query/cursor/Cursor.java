@@ -10,10 +10,6 @@ import static io.artoo.lance.type.Nullability.nonNullable;
 public interface Cursor<R> extends Iterator<R> {
   R fetch() throws Throwable;
 
-  default <P> P fetch(final Func.Uni<R, P> then) throws Throwable {
-    return then.tryApply(fetch());
-  }
-
   default <P> Cursor<P> map(Func.Uni<? super R, ? extends P> map) {
     return new Map<>(this, nonNullable(map, "map"));
   }
@@ -22,7 +18,11 @@ public interface Cursor<R> extends Iterator<R> {
     return new Flat<>(new Map<>(this, nonNullable(flatMap, "flatMap")));
   }
 
-  default Cursor<R> close() throws Throwable {
+  default Cursor<R> shrink() {
+    return new Shrink<>(this);
+  }
+
+  default Cursor<R> fastForward() throws Throwable {
     R element = null;
     while (hasNext()) element = fetch();
     return Cursor.readonly(element);

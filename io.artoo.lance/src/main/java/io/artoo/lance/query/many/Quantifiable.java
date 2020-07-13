@@ -15,14 +15,14 @@ public interface Quantifiable<T> extends Queryable<T> {
 
   default One<Boolean> all(final Pred.Uni<? super T> where) {
     final var w = nonNullable(where, "where");
-    return () -> cursor().map(new All<>(w)).close();
+    return () -> cursor().map(new All<>(w)).fastForward();
   }
 
   default One<Boolean> any() { return this.any(t -> true); }
 
   default One<Boolean> any(final Pred.Uni<? super T> where) {
     final var w = nonNullable(where, "where");
-    return () -> cursor().map(new Any<>(w)).close();
+    return () -> cursor().map(new Any<>(w)).fastForward();
   }
 }
 

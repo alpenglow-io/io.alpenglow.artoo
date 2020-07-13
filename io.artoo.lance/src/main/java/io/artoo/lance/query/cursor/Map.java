@@ -17,7 +17,8 @@ final class Map<T, R> implements Cursor<R> {
 
   @Override
   public final R fetch() throws Throwable {
-    return mapped.next;
+    final var fetched = cursor.fetch();
+    return fetched == null ? null : map.tryApply(fetched);
   }
 
   @Override
@@ -27,9 +28,7 @@ final class Map<T, R> implements Cursor<R> {
 
   @Override
   public boolean hasNext() {
-    var hasNext = cursor.hasNext();
-    while ((hasNext = cursor.hasNext()) && (mapped.next = map.apply(cursor.next())) == null);
-    return hasNext;
+    return cursor.hasNext();
   }
 
   @Override
@@ -40,11 +39,6 @@ final class Map<T, R> implements Cursor<R> {
       throwable.printStackTrace();
       return null;
     }
-  }
-
-  @Override
-  public <P> P fetch(final Func.Uni<R, P> let) throws Throwable {
-    return let.tryApply(fetch());
   }
 
   private final class Mapped {

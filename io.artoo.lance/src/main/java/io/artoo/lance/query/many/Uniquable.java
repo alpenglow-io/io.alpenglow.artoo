@@ -13,7 +13,7 @@ import static io.artoo.lance.type.Nullability.nullable;
 
 public interface Uniquable<T> extends Queryable<T> {
   default One<T> at(final int index) {
-    return () -> cursor().map(new At<>(index)).close();
+    return () -> cursor().map(new At<>(index)).fastForward();
   }
 
   default One<T> first() {
@@ -22,7 +22,7 @@ public interface Uniquable<T> extends Queryable<T> {
 
   default One<T> first(final Pred.Uni<? super T> where) {
     final var w = nonNullable(where, "where");
-    return () -> cursor().map(new First<>(w)).close();
+    return () -> cursor().map(new First<>(w)).fastForward();
   }
 
   default One<T> last() {
@@ -31,7 +31,7 @@ public interface Uniquable<T> extends Queryable<T> {
 
   default One<T> last(final Pred.Uni<? super T> where) {
     final var w = nonNullable(where, "where");
-    return () -> cursor().map(new Last<>(w)).close();
+    return () -> cursor().map(new Last<>(w)).fastForward();
   }
 
   default One<T> single() {
@@ -40,7 +40,11 @@ public interface Uniquable<T> extends Queryable<T> {
 
   default One<T> single(final Pred.Uni<? super T> where) {
     final var w = nonNullable(where, "where");
-    return () -> cursor().map(new Single<>(w)).close();
+    return () -> cursor()
+      .map(new Single<>(w))
+      .map(new Last<>(it -> true))
+      .fastForward()
+      .flatMap(it -> cursor().map(new At<>(it)));
   }
 }
 

@@ -20,13 +20,10 @@ public class Flat<T> implements Cursor<T> {
 
   @Override
   public boolean hasNext() {
-    flatten.hasNext |= cursor.hasNext();
+    flatten.hasNext = cursor.hasNext() || (flatten.cursor != null && flatten.cursor.hasNext());
 
-    if (flatten.hasNext) {
-      if (flatten.cursor == null || !flatten.cursor.hasNext()) {
+    if (flatten.hasNext && (flatten.cursor == null || !flatten.cursor.hasNext())) {
         flatten.cursor = cursor.next();
-        flatten.hasNext = flatten.cursor.hasNext();
-      }
     }
 
     return flatten.hasNext;

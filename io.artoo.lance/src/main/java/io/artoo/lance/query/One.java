@@ -68,7 +68,7 @@ final class Done<T> implements One<T> {
       final var last = new Last();
       if (origin.hasNext()) {
 
-        do origin.fetch(next -> last.value = next);
+        do last.value = origin.fetch();
         while (origin.hasNext());
 
       }

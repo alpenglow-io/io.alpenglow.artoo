@@ -13,8 +13,13 @@ final class Exceptionally<R> implements Cursor<R> {
   }
 
   @Override
-  public R fetch() throws Throwable {
-    return cursor.fetch();
+  public R fetch() {
+    try {
+      return cursor.fetch();
+    } catch (Throwable throwable) {
+      catch$.accept(throwable);
+      return null;
+    }
   }
 
   @Override

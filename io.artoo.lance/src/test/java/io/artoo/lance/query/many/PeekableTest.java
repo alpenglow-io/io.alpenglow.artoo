@@ -35,14 +35,30 @@ class PeekableTest {
   @Test
   @DisplayName("should exceptionally peek throwable")
   void shouldExceptionallyPeekThrowable() {
-    final var selected = Many.from(1, 2, 3, 4)
+    final var summed = Many.from(1, 2, 3, 4)
+      .peek(it -> out.println("From: " + it))
       .select(it -> {
         if (it == 3) throw new IllegalStateException("I don't like 3");
-        return it * 2;
+        return String.valueOf(it);
       })
-      .exceptionally(throwable -> assertThat(throwable.getMessage()).isEqualTo("I don't like 3"));
+      .peek(it -> out.println("Select result: " + it))
+      .exceptionally(throwable -> out.println("Exception handled: " + throwable.getMessage()))
+      .skip(1)
+      .peek(it -> out.println("Skip first element only"))
+      .concat("8")
+      .peek(it -> out.println("Concat.ed: " + it))
+      .select(it -> {
+        if (it.contains("4")) throw new IllegalArgumentException("Number too low");
+        return Integer.parseInt(it);
+      })
+      .peek(it -> out.println("Select result: " + it))
+      .exceptionally(throwable -> out.println("Second exception handled: " + throwable.getMessage()))
+      .sum()
+      .peek(it -> out.println("Sum result: " + it))
+      .where(it -> it >= 10)
+      .yield();
 
-    assertThat(selected).containsExactly(2, 4, 8);
+    assertThat(summed).isEqualTo(10);
   }
 
   @Test

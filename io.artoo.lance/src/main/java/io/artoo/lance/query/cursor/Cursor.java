@@ -24,15 +24,11 @@ public interface Cursor<R> extends Iterator<R> {
   }
 
   default Cursor<R> fastForward() {
-    try {
-      R element = null;
-      while (hasNext()) element = fetch();
+    R element = null;
+    while (hasNext())
+      element = next();
 
-      return Cursor.maybe(element);
-
-    } catch (Throwable throwable) {
-      return new Break<>(throwable);
-    }
+    return Cursor.maybe(element);
   }
 
   default Cursor<R> concat(final Cursor<R> cursor) {

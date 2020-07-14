@@ -1,6 +1,5 @@
 package io.artoo.lance.query.cursor;
 
-import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Func;
 
 final class Map<T, R> implements Cursor<R> {

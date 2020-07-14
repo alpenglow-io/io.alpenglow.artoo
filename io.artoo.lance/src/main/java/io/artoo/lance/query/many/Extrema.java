@@ -30,7 +30,7 @@ public interface Extrema<T> extends Queryable<T> {
   }
 
   private <N extends Number, V> One<V> extreme(int type, final Func.Uni<? super T, ? extends N> select) {
-    return () -> cursor().map(new Extremum<T, N, V>(type, nonNullable(select, "select"))).end();
+    return () -> cursor().map(new Extremum<T, N, V>(type, nonNullable(select, "select"))).fastForward();
   }
 }
 

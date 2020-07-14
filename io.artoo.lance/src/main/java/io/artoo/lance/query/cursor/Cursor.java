@@ -1,5 +1,6 @@
 package io.artoo.lance.query.cursor;
 
+import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Suppl;
 
@@ -22,10 +23,16 @@ public interface Cursor<R> extends Iterator<R> {
     return new Shrink<>(this);
   }
 
-  default Cursor<R> end() throws Throwable {
-    R element = null;
-    while (hasNext()) element = fetch();
-    return Cursor.maybe(element);
+  default Cursor<R> fastForward() {
+    try {
+      R element = null;
+      while (hasNext()) element = fetch();
+
+      return Cursor.maybe(element);
+
+    } catch (Throwable throwable) {
+      return new Break<>(throwable);
+    }
   }
 
   default Cursor<R> concat(final Cursor<R> cursor) {
@@ -42,6 +49,10 @@ public interface Cursor<R> extends Iterator<R> {
     } else {
       throw exception.apply(message);
     }
+  }
+
+  default Cursor<R> exceptionally(final Cons.Uni<? super Throwable> catch$) {
+    return new Exceptionally<>(this, catch$);
   }
 
   @SafeVarargs

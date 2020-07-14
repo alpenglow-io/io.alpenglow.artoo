@@ -10,7 +10,7 @@ import static io.artoo.lance.type.Nullability.nonNullable;
 public interface
 Averageable<T> extends Queryable<T> {
   default <N extends Number> One<Double> average(final Func.Uni<? super T, ? extends N> select) {
-    return () -> cursor().map(new Average<>(nonNullable(select, "select"))).end();
+    return () -> cursor().map(new Average<>(nonNullable(select, "select"))).fastForward();
   }
 
   default One<Double> average() {

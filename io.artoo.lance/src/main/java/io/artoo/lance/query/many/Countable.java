@@ -17,7 +17,7 @@ interface Countable<T> extends Queryable<T> {
     final var w = nonNullable(where, "where");
     return () -> cursor()
       .map(new Count<>(w))
-      .end()
+      .fastForward()
       .or(() -> Cursor.just(0));
   }
 }

@@ -10,6 +10,7 @@ import io.artoo.lance.query.many.Peekable;
 import io.artoo.lance.query.many.Projectable;
 import io.artoo.lance.query.many.Quantifiable;
 import io.artoo.lance.query.many.Settable;
+import io.artoo.lance.query.many.Sortable;
 import io.artoo.lance.query.many.Uniquable;
 
 import java.util.Arrays;
@@ -24,7 +25,8 @@ public interface  Many<T> extends
   Settable<T>,
   Concatenatable<T>,
   Otherwise<T>,
-  Peekable<T>
+  Peekable<T>,
+  Sortable<T>
 {
 
   @SafeVarargs

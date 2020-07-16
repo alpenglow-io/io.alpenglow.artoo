@@ -3,24 +3,16 @@ package io.artoo.lance.query.operation;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Pred;
 
-public final class Where<T, R> implements Func.Uni<T, R> {
-  private final class Index {
-    private int value = 0;
+public enum Where {;
+  public static <T> Func.Uni<T, T> on(final Index index, final Pred.Bi<? super Integer, ? super T> where) {
+    return it -> where.tryTest(index.value++, it) ? it : null;
   }
 
-  private final Pred.Bi<? super Integer, ? super T> where;
-  private final Func.Bi<? super Integer, ? super T, ? extends R> select;
-  private final Index index;
-
-  public Where(final Pred.Bi<? super Integer, ? super T> where, final Func.Bi<? super Integer, ? super T, ? extends R> select) {
-    assert where != null && select != null;
-    this.where = where;
-    this.select = select;
-    this.index = new Index();
+  public static <T> Func.Uni<T, T> on(final Pred.Uni<? super T> where) {
+    return it -> where.tryTest(it) ? it : null;
   }
 
-  @Override
-  public R tryApply(final T element) throws Throwable {
-    return where.tryTest(index.value++, element) ? select.tryApply(index.value, element) : null;
+  public static <T, R> Func.Uni<T, T> on(final Class<? extends R> type) {
+    return it -> type.isInstance(it) ? it : null;
   }
 }

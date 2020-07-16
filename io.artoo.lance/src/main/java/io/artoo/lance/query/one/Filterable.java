@@ -6,16 +6,17 @@ import io.artoo.lance.query.Queryable;
 import io.artoo.lance.query.operation.OfType;
 import io.artoo.lance.query.operation.Where;
 
+import static io.artoo.lance.query.operation.Select.as;
+import static io.artoo.lance.query.operation.Where.*;
+import static io.artoo.lance.query.operation.Where.on;
 import static io.artoo.lance.type.Nullability.nonNullable;
 
 public interface Filterable<T> extends Queryable<T> {
   default One<T> where(final Pred.Uni<? super T> where) {
-    final var w = nonNullable(where, "where");
-    return () -> cursor().map(new Where<>((i, it) -> w.tryTest(it), (i, it) -> it));
+    return () -> cursor().map(on(where));
   }
 
-  default <R> One<R> ofType(final Class<R> type) {
-    final var t = nonNullable(type, "type");
-    return () -> cursor().map(new OfType<>(t));
+  default <R> One<R> ofType(final Class<? extends R> type) {
+    return () -> cursor().map(on(type)).map(as(type));
   }
 }

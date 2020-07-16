@@ -26,7 +26,7 @@ public interface Func {
       return it -> func.tryApply(tryApply(it));
     }
 
-    default Func.Uni<T, R> butNulls() {
+    default Func.Uni<? super T, ? extends R> butNulls() {
       return it -> it == null ? null : this.tryApply(it);
     }
   }

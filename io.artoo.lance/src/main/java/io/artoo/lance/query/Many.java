@@ -29,7 +29,7 @@ public interface  Many<T> extends
 
   @SafeVarargs
   static <R> Many<R> from(final R... items) {
-    return () -> Cursor.every(Arrays.copyOf(items, items.length));
+    return () -> Cursor.every(items);
   }
 
   static Many<Object> fromAny(Object... objects) {

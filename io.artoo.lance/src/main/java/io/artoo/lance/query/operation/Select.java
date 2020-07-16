@@ -2,22 +2,19 @@ package io.artoo.lance.query.operation;
 
 import io.artoo.lance.func.Func;
 
-public final class Select<T, R> implements Func.Uni<T, R> {
-  private final Func.Bi<? super Integer, ? super T, ? extends R> select;
-  private final Selected selected;
-
-  public Select(final Func.Bi<? super Integer, ? super T, ? extends R> select) {
+public enum Select {;
+  public static <T, R> Func.Uni<T, R> as(final Index index, final Func.Bi<? super Integer, ? super T, ? extends R> select) {
     assert select != null;
-    this.select = select;
-    this.selected = new Selected();
+    return it -> select.tryApply(index.value++, it);
   }
 
-  @Override
-  public R tryApply(final T element) throws Throwable {
-    return select.tryApply(selected.index++, element);
+  public static <T, R> Func.Uni<T, R> as(final Func.Uni<? super T, ? extends R> select) {
+    assert select != null;
+    return select::tryApply;
   }
 
-  private final class Selected {
-    private int index = 0;
+  public static <T, R> Func.Uni<T, R> as(final Class<? extends R> type) {
+    assert type != null;
+    return type::cast;
   }
 }

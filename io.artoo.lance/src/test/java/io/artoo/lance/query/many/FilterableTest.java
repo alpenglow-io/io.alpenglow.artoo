@@ -44,6 +44,6 @@ class FilterableTest {
 
     final var texts = Many.fromAny(objects).ofType(String.class);
 
-    assertThat(texts).contains("apple", "passionfruit", "banana");
+    assertThat(texts).containsExactly("apple", "passionfruit", "banana");
   }
 }

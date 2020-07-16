@@ -1,9 +1,13 @@
 package io.artoo.lance.query.many;
 
+import io.artoo.lance.query.Many;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.stream.IntStream;
+
 import static io.artoo.lance.query.Many.from;
+import static java.util.stream.IntStream.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ProjectableTest {
@@ -13,14 +17,14 @@ class ProjectableTest {
     final var select = from("apple", "banana", "mango", "orange", "passionfruit", "grape")
       .select((index, fruit) -> String.format("%d - %s", index, fruit));
 
-    assertThat(select).containsAll(from(
+    assertThat(select).containsExactly(
       "0 - apple",
       "1 - banana",
       "2 - mango",
       "3 - orange",
       "4 - passionfruit",
       "5 - grape"
-    ));
+    );
   }
 
   @Test

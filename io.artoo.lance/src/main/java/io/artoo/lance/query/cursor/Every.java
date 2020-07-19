@@ -1,7 +1,6 @@
 package io.artoo.lance.query.cursor;
 
-import io.artoo.lance.type.Tuple;
-
+import java.util.Arrays;
 import java.util.Stack;
 
 import static java.util.Objects.nonNull;
@@ -91,5 +90,10 @@ public final class Every<T> implements Cursor<T> {
     input[index] = swap;
 
     return index;
+  }
+
+  @Override
+  public String toString() {
+    return "Cursor { elements = %s }".formatted(Arrays.toString(elements));
   }
 }

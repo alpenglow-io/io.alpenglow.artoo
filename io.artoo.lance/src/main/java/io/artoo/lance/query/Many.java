@@ -1,5 +1,7 @@
 package io.artoo.lance.query;
 
+import io.artoo.lance.func.Cons;
+import io.artoo.lance.func.Suppl;
 import io.artoo.lance.query.cursor.Cursor;
 import io.artoo.lance.query.many.Aggregatable;
 import io.artoo.lance.query.many.Concatenatable;
@@ -43,6 +45,10 @@ public interface  Many<T> extends
   static <R> Many<R> from(final Iterable<R> iterable) {
     return new Heap<>(iterable);
   }
+
+  static <R> Many<R> resultSet(final Suppl.Uni<Cursor<R>> cursor) {
+    return new ResultSet<>(cursor);
+  }
 }
 
 final class Array<T> implements Many<T> {
@@ -77,3 +83,13 @@ final class Heap<T> implements Many<T> {
   }
 }
 
+final class ResultSet<R> implements Many<R> {
+  private final Suppl.Uni<Cursor<R>> cursor;
+
+  ResultSet(final Suppl.Uni<Cursor<R>> cursor) {this.cursor = cursor;}
+
+  @Override
+  public final Cursor<R> cursor() throws Throwable {
+    return cursor.tryGet();
+  }
+}

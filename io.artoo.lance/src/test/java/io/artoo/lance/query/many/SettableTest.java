@@ -100,4 +100,24 @@ class SettableTest {
       "Gladstone"
     );
   }
+
+  @Test
+  @DisplayName("it should set difference of two sequences")
+  void shouldSetDifferenceOfTwoSequences() {
+    final Double[] numbers1 = { 2.0, 2.1, 2.2, 2.3, 2.4, 2.5 };
+    final Double[] numbers2 = { 2.2 };
+
+    final var actual = Many.from(numbers1).except(numbers2);
+    assertThat(actual).containsExactly(2.0, 2.1, 2.3, 2.4, 2.5);
+  }
+
+  @Test
+  @DisplayName("it should set difference of two sequences with one more")
+  void shouldSetDifferenceOfTwoSequencesWithOneMore() {
+    final Double[] numbers1 = { 2.0, 2.1, 2.2, 2.3, 2.4, 2.5 };
+    final Double[] numbers2 = { 2.2, 2.4 };
+
+    final var actual = Many.from(numbers1).except(numbers2);
+    assertThat(actual).containsExactly(2.0, 2.1, 2.3, 2.5);
+  }
 }

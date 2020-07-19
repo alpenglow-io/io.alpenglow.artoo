@@ -6,6 +6,7 @@ import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
 import io.artoo.lance.query.operation.Distinct;
 
+import static io.artoo.lance.query.Many.resultSet;
 import static io.artoo.lance.type.Nullability.nonNullable;
 
 @SuppressWarnings("unchecked")
@@ -16,7 +17,7 @@ public interface Settable<T> extends Queryable<T> {
 
   default Many<T> distinct(final Pred.Uni<? super T> where) {
     final var w = nonNullable(where, "where");
-    return () -> cursor().map(new Distinct<T, T>(w).butNulls());
+    return () -> cursor().map(new Distinct<T>(w).butNulls());
   }
 
   default Many<T> union(final T... elements) {
@@ -26,7 +27,7 @@ public interface Settable<T> extends Queryable<T> {
   default <Q extends Queryable<T>> Many<T> union(final Q queryable) {
     return () -> cursor()
       .concat(queryable.cursor())
-      .map(new Distinct<T, T>(it -> true));
+      .map(new Distinct<>(it -> true));
   }
 
   default Many<T> except(final T... elements) {
@@ -34,7 +35,15 @@ public interface Settable<T> extends Queryable<T> {
   }
 
   default <Q extends Queryable<T>> Many<T> except(final Q queryable) {
-    return Many.resultSet(() -> cursor().map(new Except<>(queryable)));
+    return resultSet(() -> cursor().map(new Except<>(queryable)));
+  }
+
+  default Many<T> intersect(final T... elements) {
+    return intersect(Many.from(elements));
+  }
+
+  default <Q extends Queryable<T>> Many<T> intersect(final Q queryable) {
+    return resultSet(() -> cursor().map(new Intersect<>(queryable)));
   }
 }
 
@@ -50,6 +59,21 @@ final class Except<T> implements Func.Uni<T, T> {
     T element = null;
     while (cursor.hasNext() && !(element = cursor.fetch()).equals(origin));
     return cursor.hasNext() || (element != null && element.equals(origin)) ? null : origin;
+  }
+}
+
+@SuppressWarnings("StatementWithEmptyBody")
+final class Intersect<T> implements Func.Uni<T, T> {
+  private final Queryable<T> queryable;
+
+  Intersect(final Queryable<T> queryable) {this.queryable = queryable;}
+
+  @Override
+  public T tryApply(final T origin) throws Throwable {
+    final var cursor = queryable.cursor();
+    T element = null;
+    while (cursor.hasNext() && (element = cursor.fetch()).equals(origin));
+    return element != null && element.equals(origin) ? origin : null;
   }
 }
 

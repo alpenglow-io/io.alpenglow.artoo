@@ -120,4 +120,14 @@ class SettableTest {
     final var actual = Many.from(numbers1).except(numbers2);
     assertThat(actual).containsExactly(2.0, 2.1, 2.3, 2.5);
   }
+
+  @Test
+  @DisplayName("it should set intersection of two sequences")
+  void shouldSetIntersectionOfTwoSequences() {
+    final Integer[] integers1 = { 44, 26, 92, 30, 71, 38 };
+    final Integer[] integers2 = { 39, 59, 83, 47, 26, 4, 30 };
+
+    final var actual = Many.from(integers1).intersect(integers2);
+    assertThat(actual).containsExactly(26, 30);
+  }
 }

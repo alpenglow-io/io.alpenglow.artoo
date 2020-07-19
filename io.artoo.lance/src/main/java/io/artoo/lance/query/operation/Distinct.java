@@ -6,8 +6,7 @@ import io.artoo.lance.func.Pred;
 import java.util.ArrayList;
 import java.util.Collection;
 
-@SuppressWarnings("unchecked")
-public final class Distinct<T, R> implements Func.Uni<T, R> {
+public final class Distinct<T> implements Func.Uni<T, T> {
   private final Pred.Uni<? super T> where;
   private final Collection<T> collected;
 
@@ -18,14 +17,14 @@ public final class Distinct<T, R> implements Func.Uni<T, R> {
   }
 
   @Override
-  public final R tryApply(final T element) throws Throwable {
+  public final T tryApply(final T element) throws Throwable {
     if (where.tryTest(element) && !collected.contains(element)) {
       collected.add(element);
-      return (R) element;
+      return element;
     } else if (where.tryTest(element) && collected.contains(element)) {
       return null;
     } else {
-      return (R) element;
+      return element;
     }
   }
 }

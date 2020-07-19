@@ -15,10 +15,7 @@ interface Countable<T> extends Queryable<T> {
 
   default One<Integer> count(final Pred.Uni<? super T> where) {
     final var w = nonNullable(where, "where");
-    return () -> cursor()
-      .map(new Count<>(w))
-      .fastForward()
-      .or(() -> Cursor.just(0));
+    return One.done(() -> cursor().map(new Count<>(w))).or(() -> Cursor.just(0));
   }
 }
 

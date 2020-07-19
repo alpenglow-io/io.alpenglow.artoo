@@ -10,6 +10,6 @@ import static io.artoo.lance.type.Nullability.nonNullable;
 public interface Peekable<T> extends Queryable<T> {
   default One<T> peek(final Cons.Uni<? super T> peek) {
     final var p = nonNullable(peek, "peek");
-    return () -> cursor().map(new Peek<T, T>((i, it) -> p.tryAccept(it))).fastForward();
+    return One.done(() -> cursor().map(new Peek<>((i, it) -> p.tryAccept(it))));
   }
 }

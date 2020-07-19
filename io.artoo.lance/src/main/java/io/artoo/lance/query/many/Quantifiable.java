@@ -1,5 +1,6 @@
 package io.artoo.lance.query.many;
 
+import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
@@ -16,14 +17,36 @@ public interface Quantifiable<T> extends Queryable<T> {
 
   default One<Boolean> all(final Pred.Uni<? super T> where) {
     final var w = nonNullable(where, "where");
-    return () -> cursor().map(new All<>(w)).fastForward();
+    return One.done(() -> cursor().map(new All<>(w)));
   }
 
   default One<Boolean> any() { return this.any(t -> true); }
 
   default One<Boolean> any(final Pred.Uni<? super T> where) {
-    final var w = nonNullable(where, "where");
-    return () -> cursor().map(new Any<>(w)).fastForward().or(() -> Cursor.just(false));
+    return One.done(() -> cursor().map(new Any<>(where))).or(false);
+  }
+
+  default One<Boolean> contains(final T element) {
+    return One.done(() -> cursor().map(new Contains<>(element)));
+  }
+
+  default One<Boolean> notContains(final T element) {
+    return One.done(() -> cursor().map(new Contains<>(element))).or(true);
   }
 }
+
+final class Contains<T> implements Func.Uni<T, Boolean> {
+  private final T element;
+
+  Contains(final T element) {
+    assert element != null;
+    this.element = element;
+  }
+
+  @Override
+  public Boolean tryApply(final T origin) {
+    return element.equals(origin) ? true : null;
+  }
+}
+
 

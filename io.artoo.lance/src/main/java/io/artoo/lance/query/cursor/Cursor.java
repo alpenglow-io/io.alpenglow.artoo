@@ -27,14 +27,6 @@ public interface Cursor<R> extends Iterator<R> {
     return null;
   }
 
-  default Cursor<R> fastForward() {
-    R element = null;
-    while (hasNext())
-      element = next();
-
-    return Cursor.maybe(element);
-  }
-
   static <T> Cursor<T> iteration(final Iterator<T> iterator) {
     return new Iteration<>(iterator);
   }

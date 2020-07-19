@@ -71,9 +71,9 @@ final class Intersect<T> implements Func.Uni<T, T> {
   @Override
   public T tryApply(final T origin) throws Throwable {
     final var cursor = queryable.cursor();
-    T element = null;
-    while (cursor.hasNext() && (element = cursor.fetch()).equals(origin));
-    return element != null && element.equals(origin) ? origin : null;
+    var element = cursor.fetch();
+    for (; cursor.hasNext() && !element.equals(origin); element = cursor.fetch());
+    return (element != null && element.equals(origin)) || cursor.hasNext() ? origin : null;
   }
 }
 

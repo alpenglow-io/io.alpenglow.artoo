@@ -1,5 +1,6 @@
 package io.artoo.lance.query;
 
+import io.artoo.lance.func.Suppl;
 import io.artoo.lance.query.cursor.Cursor;
 import io.artoo.lance.query.one.Filterable;
 import io.artoo.lance.query.one.Otherwise;
@@ -15,7 +16,7 @@ public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Othe
     return new Lone<>(element);
   }
 
-  static <L> One<L> done(final Cursor<L> cursor) {
+  static <L> One<L> done(final Suppl.Uni<Cursor<L>> cursor) {
     return new Done<>(cursor);
   }
 
@@ -49,31 +50,21 @@ final class None<T> implements One<T> {
   }
 }
 
+@SuppressWarnings({"StatementWithEmptyBody"})
 final class Done<T> implements One<T> {
-  private final Cursor<T> origin;
+  private final Suppl.Uni<Cursor<T>> cursor;
 
-  Done(final Cursor<T> origin) {
-    assert origin != null;
-    this.origin = origin;
+  Done(final Suppl.Uni<Cursor<T>> cursor) {
+    assert cursor != null;
+    this.cursor = cursor;
   }
 
   @Override
-  public final Cursor<T> cursor() {
-    try {
-      class Last { T value; }
-
-      final var last = new Last();
-      if (origin.hasNext()) {
-
-        do last.value = origin.fetch();
-        while (origin.hasNext());
-
-      }
-      return Cursor.maybe(last.value);
-    } catch (Throwable throwable) {
-      throwable.printStackTrace();
-      return Cursor.every();
-    }
+  public final Cursor<T> cursor() throws Throwable {
+    final var result = cursor.tryGet().shrink();
+    var element = result.next();
+    for (; result.hasNext(); element = result.next());
+    return Cursor.maybe(element);
   }
 }
 

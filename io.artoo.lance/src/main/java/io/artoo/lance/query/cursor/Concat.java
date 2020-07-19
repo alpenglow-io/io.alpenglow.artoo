@@ -1,44 +1,34 @@
 package io.artoo.lance.query.cursor;
 
-@SuppressWarnings("StatementWithEmptyBody")
 final class Concat<T> implements Cursor<T> {
-  private final Cursor<T> start;
-  private final Cursor<T> end;
-  private final Concatenated concatenated;
+  private final Cursors<T> queue;
 
-  Concat(final Cursor<T> start, final Cursor<T> end) {
-    this.start = start;
-    this.end = end;
-    this.concatenated = new Concatenated();
-  }
+  Concat(final Cursors<T> queue) {this.queue = queue;}
 
   @Override
   public final T fetch() throws Throwable {
-    T element = null;
-    while (hasNext() && (element = concatenated.cursor.fetch()) == null);
-    return element;
+    return !queue.isEmpty() && hasNext() ? queue.peek().fetch() : null;
   }
 
   @Override
   public boolean hasNext() {
-    concatenated.hasNext &= start.hasNext() || end.hasNext();
+    if (queue.isNotEmpty() && !queue.peek().hasNext()) queue.detach();
 
-    if (start.hasNext()) {
-      concatenated.cursor = start;
-    } else {
-      concatenated.cursor = end;
-    }
-
-    return concatenated.hasNext;
+    return !queue.isEmpty() && queue.peek().hasNext();
   }
 
   @Override
   public T next() {
-    return hasNext() ? concatenated.cursor.next() : null;
+    try {
+      return fetch();
+    } catch (Throwable throwable) {
+      return null;
+    }
   }
 
-  private final class Concatenated {
-    private boolean hasNext = true;
-    private Cursor<T> cursor;
+  @Override
+  public Cursor<T> concat(final Cursor<T> cursor) {
+    queue.attach(cursor);
+    return this;
   }
 }

@@ -13,8 +13,6 @@ import io.artoo.lance.query.many.Settable;
 import io.artoo.lance.query.many.Sortable;
 import io.artoo.lance.query.many.Uniquable;
 
-import java.util.Arrays;
-
 public interface  Many<T> extends
   Projectable<T>,
   Filterable<T>,
@@ -31,7 +29,7 @@ public interface  Many<T> extends
 
   @SafeVarargs
   static <R> Many<R> from(final R... items) {
-    return () -> Cursor.every(items);
+    return new Array<>(items);
   }
 
   static Many<Object> fromAny(Object... objects) {
@@ -40,6 +38,10 @@ public interface  Many<T> extends
 
   static <R> Many<R> empty() {
     return new Empty<>();
+  }
+
+  static <R> Many<R> from(final Iterable<R> iterable) {
+    return new Heap<>(iterable);
   }
 }
 
@@ -53,14 +55,25 @@ final class Array<T> implements Many<T> {
 
   @Override
   public final Cursor<T> cursor() {
-    return Cursor.every(Arrays.copyOf(elements, elements.length));
+    return Cursor.every(elements);
   }
 }
 
 final class Empty<T> implements Many<T> {
   @Override
   public final Cursor<T> cursor() {
-    return Cursor.every();
+    return Cursor.nothing();
+  }
+}
+
+final class Heap<T> implements Many<T> {
+  private final Iterable<T> iterable;
+
+  Heap(final Iterable<T> iterable) {this.iterable = iterable;}
+
+  @Override
+  public final Cursor<T> cursor() {
+    return Cursor.iteration(iterable.iterator());
   }
 }
 

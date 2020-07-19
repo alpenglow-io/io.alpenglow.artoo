@@ -1,5 +1,6 @@
 package io.artoo.lance.type;
 
+import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Func;
 import org.jetbrains.annotations.NotNull;
 
@@ -8,11 +9,9 @@ import java.util.Optional;
 import static io.artoo.lance.type.TupleType.has;
 import static io.artoo.lance.type.TupleType.tryComponentOf;
 
-@FunctionalInterface
-public interface Tuple<R extends Record> {
+public interface Tuple<R> {
   Class<R> type();
 
-  @FunctionalInterface
   interface Single<R extends Record, A> extends Tuple<R> {
     default A first() { return tryComponentOf(type(), 0); }
 
@@ -29,7 +28,6 @@ public interface Tuple<R extends Record> {
     }
   }
 
-  @FunctionalInterface
   interface Pair<R extends Record, A, B> extends Single<R, A> {
     default B second() { return tryComponentOf(type(), 1); }
 
@@ -46,7 +44,6 @@ public interface Tuple<R extends Record> {
     }
   }
 
-  @FunctionalInterface
   interface Triple<R extends Record, A, B, C> extends Pair<R, A, B> {
     default C third() { return tryComponentOf(type(), 2); }
 
@@ -59,7 +56,6 @@ public interface Tuple<R extends Record> {
     }
   }
 
-  @FunctionalInterface
   interface Quadruple<R extends Record, A, B, C, D> extends Triple<R, A, B, C> {
     default D forth() { return tryComponentOf(type(), 3); }
 

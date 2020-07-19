@@ -1,6 +1,6 @@
-package io.artoo.lance.task;
+package io.artoo.lance.thread;
 
-import io.artoo.lance.func.Run;
+import io.artoo.lance.func.Action;
 import io.artoo.lance.func.Suppl;
 
 import java.util.concurrent.locks.StampedLock;
@@ -10,7 +10,7 @@ public interface Lock {
     return new Stamped(new StampedLock());
   }
 
-  void write(Run run);
+  void write(Action run);
   <T> T read(Suppl.Uni<T> suppl);
 }
 
@@ -20,10 +20,10 @@ final class Stamped implements Lock {
   Stamped(final StampedLock lock) {this.lock = lock;}
 
   @Override
-  public void write(final Run run) {
+  public void write(final Action run) {
     final var stamp = this.lock.writeLock();
     try {
-      run.tryRun();
+      run.tryExecute();
     } catch (Throwable throwable) {
       throw new TaskException(throwable);
     } finally {

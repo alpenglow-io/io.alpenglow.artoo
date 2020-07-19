@@ -40,7 +40,9 @@ public interface Cons {
 
     @Override
     default void accept(A a, B b) {
-      try { tryAccept(a, b); } catch (Throwable ignored) {}
+      try { tryAccept(a, b); } catch (Throwable ignored) {
+        ignored.printStackTrace();
+      }
     }
 
     @Override

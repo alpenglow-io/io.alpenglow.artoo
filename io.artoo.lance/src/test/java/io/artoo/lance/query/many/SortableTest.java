@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import static io.artoo.lance.query.Many.from;
 import static io.artoo.lance.query.TestData.Pet;
+import static java.lang.System.out;
 import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -43,14 +44,11 @@ class SortableTest {
   @Test
   @DisplayName("should order by hashcode on big set of data")
   void shouldOrderByHashcodeOnBigSet() {
-    final var ints = range(0, 100_000).map(it -> 99_999 - it).boxed().toArray(Integer[]::new);
+    final var ints = range(0, 1_000_000).map(it -> 999_999 - it).boxed().toArray(Integer[]::new);
+    final var expected = range(0, 1_000_000).boxed().toArray(Integer[]::new);
 
-    final var array = new ArrayList<Integer>();
-    final var started = System.currentTimeMillis();
-    for (final var element : Many.from(ints).order()) array.add(element);
-    System.out.println(System.currentTimeMillis() - started);
+    final var actual = from(ints).order();
 
-    final var orderedInts = range(0, 100_000).boxed().toArray(Integer[]::new);
-    assertThat(array).containsExactly(orderedInts);
+    assertThat(actual).containsExactly(expected);
   }
 }

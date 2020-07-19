@@ -23,6 +23,10 @@ public interface Cursor<R> extends Iterator<R> {
     return new Shrink<>(this);
   }
 
+  default Cursor<R> order() throws Throwable {
+    return null;
+  }
+
   default Cursor<R> fastForward() {
     R element = null;
     while (hasNext())
@@ -31,12 +35,16 @@ public interface Cursor<R> extends Iterator<R> {
     return Cursor.maybe(element);
   }
 
-  default Cursor<R> concat(final Cursor<R> cursor) {
-    return new Concat<>(this, nonNullable(cursor, "cursor"));
+  static <T> Cursor<T> iteration(final Iterator<T> iterator) {
+    return new Iteration<>(iterator);
   }
 
-  default <C extends Cursor<R>> Cursor<R> or(final Suppl.Uni<? extends C> alternative) {
-    return this.hasNext() ? this : alternative.get();
+  default Cursor<R> concat(final Cursor<R> cursor) {
+    return new Concat<>(Cursors.queued(this, cursor));
+  }
+
+  default <C extends Cursor<R>> Cursor<R> or(final Suppl.Uni<? extends C> otherwise) {
+    return this.hasNext() ? this : otherwise.get();
   }
 
   default <E extends RuntimeException> Cursor<R> or(final String message, final Func.Uni<? super String, ? extends E> exception) {

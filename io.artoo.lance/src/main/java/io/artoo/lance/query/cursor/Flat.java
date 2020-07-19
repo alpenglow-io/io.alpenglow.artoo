@@ -1,11 +1,11 @@
 package io.artoo.lance.query.cursor;
 
 @SuppressWarnings("StatementWithEmptyBody")
-public class Flat<T> implements Cursor<T> {
+final class Flat<T> implements Cursor<T> {
   private final Cursor<Cursor<T>> cursor;
   private final Flatten flatten;
 
-  public Flat(final Cursor<Cursor<T>> cursor) {
+  Flat(final Cursor<Cursor<T>> cursor) {
     assert cursor != null;
     this.cursor = cursor;
     this.flatten = new Flatten();

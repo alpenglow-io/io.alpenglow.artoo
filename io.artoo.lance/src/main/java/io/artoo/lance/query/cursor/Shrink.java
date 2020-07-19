@@ -1,11 +1,18 @@
 package io.artoo.lance.query.cursor;
 
+import io.artoo.lance.func.Cons;
+
 final class Shrink<T> implements Cursor<T> {
   private final Cursor<T> cursor;
+  private final Cons.Uni<? super Throwable> catch$;
   private final Shrunk shrunk;
 
   Shrink(final Cursor<T> cursor) {
+    this(cursor, it -> {});
+  }
+  Shrink(final Cursor<T> cursor, final Cons.Uni<? super Throwable> catch$) {
     this.cursor = cursor;
+    this.catch$ = catch$;
     this.shrunk = new Shrunk();
   }
 
@@ -16,13 +23,18 @@ final class Shrink<T> implements Cursor<T> {
 
   @Override
   public boolean hasNext() {
-    var hasNext = cursor.hasNext();
-    shrunk.fetched = null;
-    while (hasNext && shrunk.fetched == null) {
-      shrunk.fetched = cursor.next();
-      hasNext = shrunk.fetched != null || cursor.hasNext();
+    try {
+      var hasNext = cursor.hasNext();
+      shrunk.fetched = null;
+      while (hasNext && shrunk.fetched == null) {
+        shrunk.fetched = cursor.next();
+        hasNext = shrunk.fetched != null || cursor.hasNext();
+      }
+      return hasNext;
+    } catch (Throwable throwable) {
+      catch$.accept(throwable);
+      return false;
     }
-    return hasNext;
   }
 
   @Override

@@ -2,7 +2,7 @@ package io.artoo.lance.type;
 
 import io.artoo.lance.query.cursor.Cursor;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.task.Lock;
+import io.artoo.lance.thread.Lock;
 
 import java.util.Arrays;
 

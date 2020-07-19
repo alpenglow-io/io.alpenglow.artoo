@@ -5,8 +5,6 @@ import io.artoo.lance.func.Suppl;
 import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
 
-import java.util.function.Supplier;
-
 import static io.artoo.lance.type.Nullability.nonNullable;
 
 public interface Otherwise<T> extends Queryable<T> {

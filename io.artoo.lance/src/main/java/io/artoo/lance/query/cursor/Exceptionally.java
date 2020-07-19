@@ -7,7 +7,6 @@ final class Exceptionally<R> implements Cursor<R> {
   private final Cons.Uni<? super Throwable> catch$;
 
   Exceptionally(final Cursor<R> cursor, final Cons.Uni<? super Throwable> catch$) {
-
     this.cursor = cursor;
     this.catch$ = catch$;
   }

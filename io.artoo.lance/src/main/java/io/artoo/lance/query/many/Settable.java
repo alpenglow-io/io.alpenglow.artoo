@@ -16,5 +16,16 @@ public interface Settable<T> extends Queryable<T> {
     final var w = nonNullable(where, "where");
     return () -> cursor().map(new Distinct<T, T>(w).butNulls());
   }
+
+  @SuppressWarnings("unchecked")
+  default Many<T> union(final T... elements) {
+    return union(Many.from(elements));
+  }
+
+  default <Q extends Queryable<T>> Many<T> union(final Q queryable) {
+    return () -> cursor()
+      .concat(queryable.cursor())
+      .map(new Distinct<T, T>(it -> true));
+  }
 }
 

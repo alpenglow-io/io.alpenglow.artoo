@@ -1,6 +1,5 @@
 package io.artoo.lance.type;
 
-import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Func;
 import org.jetbrains.annotations.NotNull;
 

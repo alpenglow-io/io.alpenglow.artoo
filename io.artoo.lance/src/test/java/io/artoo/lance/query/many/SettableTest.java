@@ -82,4 +82,22 @@ class SettableTest {
     final var actual = Many.from(ints1).union(ints2);
     assertThat(actual).containsExactly(5, 3, 9, 7, 8, 6, 4, 1, 0);
   }
+
+  @Test
+  @DisplayName("it should set union of two sequences of records")
+  void shouldSetUnionOfTwoSequencesOfRecords() {
+    final Pet[] pets1 = { new Pet("Goofy", 1), new Pet("Micky", 2), new Pet("Minnie", 3), new Pet("Donald", 4), new Pet("Scrooge", 5) };
+    final Pet[] pets2 = { new Pet("Scrooge", 5), new Pet("Daisy", 2), new Pet("Gladstone", 3), new Pet("Donald", 4) };
+
+    final var actual = Many.from(pets1).union(pets2).select(Pet::name);
+    assertThat(actual).containsExactly(
+      "Goofy",
+      "Micky",
+      "Minnie",
+      "Donald",
+      "Scrooge",
+      "Daisy",
+      "Gladstone"
+    );
+  }
 }

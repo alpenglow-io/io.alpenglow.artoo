@@ -1,6 +1,5 @@
 package io.artoo.lance.query;
 
-import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Suppl;
 import io.artoo.lance.query.cursor.Cursor;
 import io.artoo.lance.query.many.Aggregatable;
@@ -15,7 +14,7 @@ import io.artoo.lance.query.many.Settable;
 import io.artoo.lance.query.many.Sortable;
 import io.artoo.lance.query.many.Uniquable;
 
-public interface  Many<T> extends
+public interface Many<T> extends
   Projectable<T>,
   Filterable<T>,
   Partitionable<T>,
@@ -39,7 +38,7 @@ public interface  Many<T> extends
   }
 
   static <R> Many<R> empty() {
-    return new Empty<>();
+    return new Empty<>(Cursor.nothing());
   }
 
   static <R> Many<R> from(final Iterable<R> iterable) {
@@ -65,12 +64,7 @@ final class Array<T> implements Many<T> {
   }
 }
 
-final class Empty<T> implements Many<T> {
-  @Override
-  public final Cursor<T> cursor() {
-    return Cursor.nothing();
-  }
-}
+record Empty<T>(Cursor<T> cursor) implements Many<T> {}
 
 final class Heap<T> implements Many<T> {
   private final Iterable<T> iterable;

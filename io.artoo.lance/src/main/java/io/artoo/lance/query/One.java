@@ -21,7 +21,7 @@ public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Othe
   }
 
   static <L> One<L> none() {
-    return new None<>();
+    return new None<>(Cursor.nothing());
   }
 
   default T yield() {
@@ -43,12 +43,7 @@ final class Lone<T> implements One<T> {
   }
 }
 
-final class None<T> implements One<T> {
-  @Override
-  public final Cursor<T> cursor() {
-    return Cursor.nothing();
-  }
-}
+record None<T>(Cursor<T> cursor) implements One<T> {}
 
 @SuppressWarnings({"StatementWithEmptyBody"})
 final class Done<T> implements One<T> {

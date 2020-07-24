@@ -1,7 +1,8 @@
 package io.artoo.lance.query;
 
-import io.artoo.lance.query.cursor.Cursor;
+import io.artoo.lance.cursor.Cursor;
 import io.artoo.lance.func.Cons;
+import io.artoo.lance.task.Eventual;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
@@ -17,9 +18,21 @@ public interface Queryable<R> extends Iterable<R> {
   @Override
   default @NotNull Iterator<R> iterator() {
     try {
-      return cursor().shrink();
+      return cursor().yield();
     } catch (Throwable error) {
       return Cursor.every();
     }
+  }
+
+  default Many<R> asMany() {
+    return this::cursor;
+  }
+
+  default One<R> asOne() {
+    return this::cursor;
+  }
+
+  default Eventual<R> asEventual() {
+    return this::cursor;
   }
 }

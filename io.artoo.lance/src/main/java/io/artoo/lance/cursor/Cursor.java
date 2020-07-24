@@ -1,4 +1,4 @@
-package io.artoo.lance.query.cursor;
+package io.artoo.lance.cursor;
 
 import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Func;
@@ -19,20 +19,16 @@ public interface Cursor<R> extends Iterator<R> {
     return new Flat<>(new Map<>(this, nonNullable(flatMap, "flatMap")));
   }
 
-  default Cursor<R> shrink() {
-    return new Shrink<>(this);
+  default Cursor<R> yield() {
+    return new Yield<>(this);
   }
 
   default Cursor<R> order() throws Throwable {
-    return null;
-  }
-
-  static <T> Cursor<T> iteration(final Iterator<T> iterator) {
-    return new Iteration<>(iterator);
+    return this;
   }
 
   default Cursor<R> concat(final Cursor<R> cursor) {
-    return new Concat<>(Cursors.queued(this, cursor));
+    return new Concat<>(Cursors.enqueue(this, cursor));
   }
 
   default <C extends Cursor<R>> Cursor<R> or(final Suppl.Uni<? extends C> otherwise) {
@@ -54,6 +50,10 @@ public interface Cursor<R> extends Iterator<R> {
   @SafeVarargs
   static <R> Cursor<R> every(final R... elements) {
     return new Every<>(nonNullable(elements, "elements"));
+  }
+
+  static <T> Cursor<T> iteration(final Iterator<T> iterator) {
+    return new Iteration<>(iterator);
   }
 
   static <R> Cursor<R> just(final R element) {

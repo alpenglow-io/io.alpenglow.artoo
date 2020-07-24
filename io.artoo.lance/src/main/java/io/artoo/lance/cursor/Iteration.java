@@ -1,4 +1,4 @@
-package io.artoo.lance.query.cursor;
+package io.artoo.lance.cursor;
 
 import java.util.Iterator;
 

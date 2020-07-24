@@ -4,7 +4,6 @@ import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.query.cursor.Cursor;
 import io.artoo.lance.query.operation.All;
 import io.artoo.lance.query.operation.Any;
 

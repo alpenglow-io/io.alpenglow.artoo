@@ -1,4 +1,4 @@
-package io.artoo.lance.thread;
+package io.artoo.lance.task;
 
 import io.artoo.lance.func.Action;
 import io.artoo.lance.func.Suppl;

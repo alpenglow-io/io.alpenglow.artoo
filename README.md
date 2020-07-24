@@ -1,4 +1,7 @@
-<img src="https://raw.githubusercontent.com/trydent-io/artoo/master/artoo_stone.svg" width="256px" alt="artoo logo">
+[![Release](https://jitpack.io/v/User/Repo.svg)]
+(https://jitpack.io/#User/Repo)
+
+<img src="https://raw.githubusercontent.com/trydent-io/artoo/main/artoo_stone.svg" width="256px" alt="artoo logo">
 
 # Artoo: Artefacts Of Objects
 

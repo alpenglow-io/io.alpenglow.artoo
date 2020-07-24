@@ -1,7 +1,7 @@
 package io.artoo.lance.query;
 
 import io.artoo.lance.func.Suppl;
-import io.artoo.lance.query.cursor.Cursor;
+import io.artoo.lance.cursor.Cursor;
 import io.artoo.lance.query.many.Aggregatable;
 import io.artoo.lance.query.many.Concatenatable;
 import io.artoo.lance.query.many.Filterable;
@@ -42,7 +42,11 @@ public interface Many<T> extends
   }
 
   static <R> Many<R> from(final Iterable<R> iterable) {
-    return new Heap<>(iterable);
+    return new Iteration<>(iterable);
+  }
+
+  static Many<Integer> ints(final int start, final int end) {
+    return new Ints(start, end);
   }
 
   static <R> Many<R> resultSet(final Suppl.Uni<Cursor<R>> cursor) {
@@ -66,10 +70,10 @@ final class Array<T> implements Many<T> {
 
 record Empty<T>(Cursor<T> cursor) implements Many<T> {}
 
-final class Heap<T> implements Many<T> {
+final class Iteration<T> implements Many<T> {
   private final Iterable<T> iterable;
 
-  Heap(final Iterable<T> iterable) {this.iterable = iterable;}
+  Iteration(final Iterable<T> iterable) {this.iterable = iterable;}
 
   @Override
   public final Cursor<T> cursor() {
@@ -85,5 +89,26 @@ final class ResultSet<R> implements Many<R> {
   @Override
   public final Cursor<R> cursor() throws Throwable {
     return cursor.tryGet();
+  }
+}
+
+final class Ints implements Many<Integer> {
+  private final int start;
+  private final int end;
+
+  Ints(final int start, final int end) {
+    assert start < end;
+    this.start = start;
+    this.end = end;
+  }
+
+
+  @Override
+  public final Cursor<Integer> cursor() {
+    final var numbers = new Integer[end - start + 1];
+    for (int number = start, index = 0; number <= end; number++, index++) {
+      numbers[index] = number;
+    }
+    return Cursor.every(numbers);
   }
 }

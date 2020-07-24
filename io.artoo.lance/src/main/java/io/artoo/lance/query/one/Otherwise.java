@@ -1,13 +1,9 @@
 package io.artoo.lance.query.one;
 
 import io.artoo.lance.func.Suppl;
-import io.artoo.lance.query.cursor.Cursor;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.function.Supplier;
 
 import static io.artoo.lance.type.Nullability.nonNullable;
 

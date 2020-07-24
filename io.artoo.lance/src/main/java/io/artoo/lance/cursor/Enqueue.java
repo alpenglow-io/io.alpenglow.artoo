@@ -1,28 +1,14 @@
-package io.artoo.lance.query.cursor;
+package io.artoo.lance.cursor;
 
 import java.util.Arrays;
 
 import static java.lang.System.arraycopy;
 
-public interface Cursors<T> {
-  boolean isEmpty();
-  default boolean isNotEmpty() { return !isEmpty(); }
-
-  Cursors<T> attach(Cursor<T> cursor);
-  Cursor<T> detach();
-  Cursor<T> peek();
-
-  @SafeVarargs
-  static <T> Cursors<T> queued(final Cursor<T>... cursors) {
-    return new Queued<>(cursors);
-  }
-}
-
-@SuppressWarnings("unchecked")
-final class Queued<T> implements Cursors<T> {
+final class Enqueue<T> implements Cursors<T> {
   private Cursor<T>[] elements;
 
-  Queued(final Cursor<T>... elements) {this.elements = elements;}
+  @SafeVarargs
+  Enqueue(final Cursor<T>... elements) {this.elements = elements;}
 
   @Override
   public boolean isEmpty() {
@@ -36,6 +22,7 @@ final class Queued<T> implements Cursors<T> {
     return this;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public Cursor<T> detach() {
     if (isNotEmpty()) {

@@ -1,16 +1,16 @@
-package io.artoo.lance.query.cursor;
+package io.artoo.lance.cursor;
 
 import io.artoo.lance.func.Cons;
 
-final class Shrink<T> implements Cursor<T> {
+final class Yield<T> implements Cursor<T> {
   private final Cursor<T> cursor;
   private final Cons.Uni<? super Throwable> catch$;
   private final Shrunk shrunk;
 
-  Shrink(final Cursor<T> cursor) {
+  Yield(final Cursor<T> cursor) {
     this(cursor, it -> {});
   }
-  Shrink(final Cursor<T> cursor, final Cons.Uni<? super Throwable> catch$) {
+  Yield(final Cursor<T> cursor, final Cons.Uni<? super Throwable> catch$) {
     this.cursor = cursor;
     this.catch$ = catch$;
     this.shrunk = new Shrunk();

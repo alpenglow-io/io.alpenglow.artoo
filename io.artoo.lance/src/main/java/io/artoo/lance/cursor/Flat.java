@@ -1,4 +1,4 @@
-package io.artoo.lance.query.cursor;
+package io.artoo.lance.cursor;
 
 @SuppressWarnings("StatementWithEmptyBody")
 final class Flat<T> implements Cursor<T> {

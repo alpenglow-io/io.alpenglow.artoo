@@ -3,11 +3,8 @@ package io.artoo.lance.query.one;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.query.operation.OfType;
-import io.artoo.lance.query.operation.Where;
 
 import static io.artoo.lance.query.operation.Select.as;
-import static io.artoo.lance.query.operation.Where.*;
 import static io.artoo.lance.query.operation.Where.on;
 import static io.artoo.lance.type.Nullability.nonNullable;
 

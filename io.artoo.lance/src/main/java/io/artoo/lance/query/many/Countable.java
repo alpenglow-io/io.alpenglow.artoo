@@ -3,7 +3,7 @@ package io.artoo.lance.query.many;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.query.cursor.Cursor;
+import io.artoo.lance.cursor.Cursor;
 import io.artoo.lance.query.operation.Count;
 
 import static io.artoo.lance.type.Nullability.nonNullable;

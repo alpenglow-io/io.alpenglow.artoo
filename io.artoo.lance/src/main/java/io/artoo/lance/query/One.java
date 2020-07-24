@@ -1,7 +1,7 @@
 package io.artoo.lance.query;
 
 import io.artoo.lance.func.Suppl;
-import io.artoo.lance.query.cursor.Cursor;
+import io.artoo.lance.cursor.Cursor;
 import io.artoo.lance.query.one.Filterable;
 import io.artoo.lance.query.one.Otherwise;
 import io.artoo.lance.query.one.Peekable;
@@ -56,7 +56,7 @@ final class Done<T> implements One<T> {
 
   @Override
   public final Cursor<T> cursor() throws Throwable {
-    final var result = cursor.tryGet().shrink();
+    final var result = cursor.tryGet().yield();
     var element = result.next();
     for (; result.hasNext(); element = result.next());
     return Cursor.maybe(element);

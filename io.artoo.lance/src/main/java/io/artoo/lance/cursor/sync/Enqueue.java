@@ -1,14 +1,17 @@
-package io.artoo.lance.cursor;
+package io.artoo.lance.cursor.sync;
+
+import io.artoo.lance.cursor.Cursor;
+import io.artoo.lance.cursor.Cursors;
 
 import java.util.Arrays;
 
 import static java.lang.System.arraycopy;
 
-final class Enqueue<T> implements Cursors<T> {
+public final class Enqueue<T> implements Cursors<T> {
   private Cursor<T>[] elements;
 
   @SafeVarargs
-  Enqueue(final Cursor<T>... elements) {this.elements = elements;}
+  public Enqueue(final Cursor<T>... elements) {this.elements = elements;}
 
   @Override
   public boolean isEmpty() {

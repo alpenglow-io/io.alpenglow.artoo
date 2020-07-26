@@ -1,11 +1,13 @@
-package io.artoo.lance.cursor;
+package io.artoo.lance.cursor.sync;
+
+import io.artoo.lance.cursor.Cursor;
 
 @SuppressWarnings("StatementWithEmptyBody")
-final class Flat<T> implements Cursor<T> {
+public final class Flat<T> implements Cursor<T> {
   private final Cursor<Cursor<T>> cursor;
   private final Flatten flatten;
 
-  Flat(final Cursor<Cursor<T>> cursor) {
+  public Flat(final Cursor<Cursor<T>> cursor) {
     assert cursor != null;
     this.cursor = cursor;
     this.flatten = new Flatten();

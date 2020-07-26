@@ -1,4 +1,6 @@
-package io.artoo.lance.cursor;
+package io.artoo.lance.cursor.sync;
+
+import io.artoo.lance.cursor.Cursor;
 
 import java.util.Arrays;
 import java.util.Stack;
@@ -14,7 +16,7 @@ public final class Every<T> implements Cursor<T> {
   private final T[] elements;
 
   @SafeVarargs
-  Every(T... elements) {
+  public Every(T... elements) {
     this.elements = elements;
   }
 

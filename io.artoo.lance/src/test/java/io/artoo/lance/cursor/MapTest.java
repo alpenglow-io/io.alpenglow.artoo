@@ -1,7 +1,6 @@
 package io.artoo.lance.cursor;
 
-import io.artoo.lance.cursor.Cursor;
-import io.artoo.lance.cursor.Map;
+import io.artoo.lance.cursor.sync.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

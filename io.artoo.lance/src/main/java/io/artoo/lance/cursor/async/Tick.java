@@ -1,19 +1,12 @@
 package io.artoo.lance.cursor.async;
 
+import io.artoo.lance.cursor.Hand;
 import io.artoo.lance.func.Suppl;
-import io.artoo.lance.query.Many;
-import io.artoo.lance.task.Eventual;
 
-import java.math.BigInteger;
-import java.util.concurrent.ExecutionException;
-import java.util.stream.IntStream;
-
-import static java.lang.Thread.sleep;
-
-final class AsyncJust<T> implements AsyncCursor<T> {
+public final class Tick<T> implements Hand<T> {
   private final Suppl.Uni<T> task;
 
-  AsyncJust(final Suppl.Uni<T> task) {
+  public Tick(final Suppl.Uni<T> task) {
     assert task != null;
     this.task = task;
   }

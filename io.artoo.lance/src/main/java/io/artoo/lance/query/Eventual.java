@@ -1,10 +1,10 @@
-package io.artoo.lance.task;
+package io.artoo.lance.query;
 
-import io.artoo.lance.func.Suppl;
 import io.artoo.lance.cursor.Cursor;
-import io.artoo.lance.cursor.async.AsyncCursor;
-import io.artoo.lance.task.eventual.Awaitable;
-import io.artoo.lance.task.eventual.Projectable;
+import io.artoo.lance.cursor.Hand;
+import io.artoo.lance.func.Suppl;
+import io.artoo.lance.query.eventual.Awaitable;
+import io.artoo.lance.query.eventual.Projectable;
 
 public interface Eventual<T> extends Projectable<T>, Awaitable<T> {
   static <T> Eventual<T> promise(final Suppl.Uni<T> callable) {
@@ -22,6 +22,6 @@ final class Promise<T> implements Eventual<T> {
 
   @Override
   public final Cursor<T> cursor() {
-    return AsyncCursor.just(callable);
+    return Hand.tick(callable);
   }
 }

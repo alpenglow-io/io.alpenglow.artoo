@@ -1,10 +1,12 @@
-package io.artoo.lance.cursor;
+package io.artoo.lance.cursor.sync;
 
-final class Just<R> implements Cursor<R> {
+import io.artoo.lance.cursor.Cursor;
+
+public final class Just<R> implements Cursor<R> {
   private final R element;
   private final NotFetched notFetched;
 
-  Just(final R element) {
+  public Just(final R element) {
     this.element = element;
     this.notFetched = new NotFetched();
   }

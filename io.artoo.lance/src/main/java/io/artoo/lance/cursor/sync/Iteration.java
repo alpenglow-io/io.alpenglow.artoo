@@ -1,8 +1,10 @@
-package io.artoo.lance.cursor;
+package io.artoo.lance.cursor.sync;
+
+import io.artoo.lance.cursor.Cursor;
 
 import java.util.Iterator;
 
-final class Iteration<T> implements Cursor<T> {
+public final class Iteration<T> implements Cursor<T> {
   private final Iterator<T> iterator;
 
   public Iteration(final Iterator<T> Iterator) {

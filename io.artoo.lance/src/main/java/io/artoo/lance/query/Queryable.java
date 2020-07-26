@@ -1,8 +1,8 @@
 package io.artoo.lance.query;
 
 import io.artoo.lance.cursor.Cursor;
+import io.artoo.lance.cursor.Hand;
 import io.artoo.lance.func.Cons;
-import io.artoo.lance.task.Eventual;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
@@ -33,6 +33,6 @@ public interface Queryable<R> extends Iterable<R> {
   }
 
   default Eventual<R> asEventual() {
-    return this::cursor;
+    return () -> Hand.of(this.cursor());
   }
 }

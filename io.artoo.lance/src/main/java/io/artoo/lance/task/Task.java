@@ -7,23 +7,23 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public interface Task<T> {
-  Future<T> submit(final Suppl.Uni<T> suppl);
+  Future<T> commit(final Suppl.Uni<T> suppl);
 
-  static <T> Task<T> safe() {
-    return new SafeTask<>(Executors.newSingleThreadExecutor());
+  static <T> Task<T> single() {
+    return new Single<>(Executors.newSingleThreadExecutor());
   }
 }
 
-final class SafeTask<T> implements Task<T> {
+final class Single<T> implements Task<T> {
   private final ExecutorService service;
 
-  SafeTask(final ExecutorService service) {
+  Single(final ExecutorService service) {
     assert service != null;
     this.service = service;
   }
 
   @Override
-  public final Future<T> submit(final Suppl.Uni<T> suppl) {
+  public final Future<T> commit(final Suppl.Uni<T> suppl) {
     try {
       return service.submit(() -> {
         try {

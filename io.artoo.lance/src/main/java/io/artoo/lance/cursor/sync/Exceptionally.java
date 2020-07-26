@@ -1,12 +1,13 @@
-package io.artoo.lance.cursor;
+package io.artoo.lance.cursor.sync;
 
+import io.artoo.lance.cursor.Cursor;
 import io.artoo.lance.func.Cons;
 
-final class Exceptionally<R> implements Cursor<R> {
+public final class Exceptionally<R> implements Cursor<R> {
   private final Cursor<R> cursor;
   private final Cons.Uni<? super Throwable> catch$;
 
-  Exceptionally(final Cursor<R> cursor, final Cons.Uni<? super Throwable> catch$) {
+  public Exceptionally(final Cursor<R> cursor, final Cons.Uni<? super Throwable> catch$) {
     this.cursor = cursor;
     this.catch$ = catch$;
   }

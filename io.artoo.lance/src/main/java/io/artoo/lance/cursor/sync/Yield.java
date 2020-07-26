@@ -1,13 +1,14 @@
-package io.artoo.lance.cursor;
+package io.artoo.lance.cursor.sync;
 
+import io.artoo.lance.cursor.Cursor;
 import io.artoo.lance.func.Cons;
 
-final class Yield<T> implements Cursor<T> {
+public final class Yield<T> implements Cursor<T> {
   private final Cursor<T> cursor;
   private final Cons.Uni<? super Throwable> catch$;
   private final Shrunk shrunk;
 
-  Yield(final Cursor<T> cursor) {
+  public Yield(final Cursor<T> cursor) {
     this(cursor, it -> {});
   }
   Yield(final Cursor<T> cursor, final Cons.Uni<? super Throwable> catch$) {

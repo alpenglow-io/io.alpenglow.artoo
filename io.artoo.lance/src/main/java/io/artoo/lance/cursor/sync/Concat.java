@@ -1,9 +1,12 @@
-package io.artoo.lance.cursor;
+package io.artoo.lance.cursor.sync;
 
-final class Concat<T> implements Cursor<T> {
+import io.artoo.lance.cursor.Cursor;
+import io.artoo.lance.cursor.Cursors;
+
+public final class Concat<T> implements Cursor<T> {
   private final Cursors<T> queue;
 
-  Concat(final Cursors<T> queue) {this.queue = queue;}
+  public Concat(final Cursors<T> queue) {this.queue = queue;}
 
   @Override
   public final T fetch() throws Throwable {

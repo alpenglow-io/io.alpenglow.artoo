@@ -1,5 +1,14 @@
 package io.artoo.lance.cursor;
 
+import io.artoo.lance.cursor.sync.Concat;
+import io.artoo.lance.cursor.sync.Every;
+import io.artoo.lance.cursor.sync.Exceptionally;
+import io.artoo.lance.cursor.sync.Flat;
+import io.artoo.lance.cursor.sync.Iteration;
+import io.artoo.lance.cursor.sync.Just;
+import io.artoo.lance.cursor.sync.Map;
+import io.artoo.lance.cursor.sync.Nothing;
+import io.artoo.lance.cursor.sync.Yield;
 import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Suppl;
@@ -45,6 +54,10 @@ public interface Cursor<R> extends Iterator<R> {
 
   default Cursor<R> exceptionally(final Cons.Uni<? super Throwable> catch$) {
     return new Exceptionally<>(this, catch$);
+  }
+
+  default Hand<R> asHand() {
+    return this instanceof Hand<R> h ? h : Hand.of(this);
   }
 
   @SafeVarargs

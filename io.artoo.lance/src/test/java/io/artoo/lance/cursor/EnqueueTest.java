@@ -1,5 +1,6 @@
 package io.artoo.lance.cursor;
 
+import io.artoo.lance.cursor.sync.Enqueue;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

@@ -1,6 +1,8 @@
-package io.artoo.lance.cursor;
+package io.artoo.lance.cursor.sync;
 
-final class Nothing<R> implements Cursor<R> {
+import io.artoo.lance.cursor.Cursor;
+
+public final class Nothing<R> implements Cursor<R> {
   @Override
   public R fetch() {
     return null;

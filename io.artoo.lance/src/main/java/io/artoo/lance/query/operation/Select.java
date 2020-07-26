@@ -1,10 +1,6 @@
 package io.artoo.lance.query.operation;
 
-import io.artoo.lance.cursor.Cursor;
 import io.artoo.lance.func.Func;
-import io.artoo.lance.query.Queryable;
-
-import static io.artoo.lance.query.operation.Index.indexed;
 
 public interface Select {
   static <T, R> Func.Uni<T, R> as(final Index index, final Func.Bi<? super Integer, ? super T, ? extends R> select) {

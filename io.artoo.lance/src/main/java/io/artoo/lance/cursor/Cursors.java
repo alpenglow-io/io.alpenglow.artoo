@@ -1,8 +1,6 @@
 package io.artoo.lance.cursor;
 
-import java.util.Arrays;
-
-import static java.lang.System.arraycopy;
+import io.artoo.lance.cursor.sync.Enqueue;
 
 public interface Cursors<T> {
   boolean isEmpty();

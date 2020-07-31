@@ -1,4 +1,4 @@
-package io.artoo.lance.cursor.sync;
+package io.artoo.lance.cursor.pick;
 
 import io.artoo.lance.cursor.Cursor;
 
@@ -16,7 +16,8 @@ public final class Flat<T> implements Cursor<T> {
   @Override
   public final T fetch() throws Throwable {
     T element = null;
-    while (hasNext() && (element = flatten.cursor.fetch()) == null);
+    while (hasNext() && (element = flatten.cursor.fetch()) == null)
+      ;
     return element;
   }
 
@@ -25,7 +26,7 @@ public final class Flat<T> implements Cursor<T> {
     flatten.hasNext = cursor.hasNext() || (flatten.cursor != null && flatten.cursor.hasNext());
 
     if (flatten.hasNext && (flatten.cursor == null || !flatten.cursor.hasNext())) {
-        flatten.cursor = cursor.next();
+      flatten.cursor = cursor.next();
     }
 
     return flatten.hasNext;

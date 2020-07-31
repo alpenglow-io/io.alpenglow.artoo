@@ -1,4 +1,4 @@
-package io.artoo.lance.cursor.sync;
+package io.artoo.lance.cursor.pick;
 
 import io.artoo.lance.cursor.Cursor;
 import io.artoo.lance.cursor.Cursors;
@@ -15,7 +15,8 @@ public final class Concat<T> implements Cursor<T> {
 
   @Override
   public boolean hasNext() {
-    if (queue.isNotEmpty() && !queue.peek().hasNext()) queue.detach();
+    if (queue.isNotEmpty() && !queue.peek().hasNext())
+      queue.detach();
 
     return !queue.isEmpty() && queue.peek().hasNext();
   }

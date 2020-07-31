@@ -1,9 +1,10 @@
-package io.artoo.lance.cursor.sync;
+package io.artoo.lance.cursor.tick;
 
 import io.artoo.lance.cursor.Cursor;
+import io.artoo.lance.cursor.Tick;
 import io.artoo.lance.func.Func;
 
-public final class Map<T, R> implements Cursor<R> {
+public final class Map<T, R> implements Tick<R> {
   private final Cursor<T> cursor;
   private final Func.Uni<? super T, ? extends R> map;
 

@@ -1,6 +1,5 @@
 package io.artoo.lance.cursor;
 
-import io.artoo.lance.cursor.Cursor;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -14,14 +13,14 @@ class EveryTest {
   @Test
   void shouldIterateAllElements() {
     new LongAdder();
-    final Iterable<Integer> integers = () -> Cursor.every(1, 2, 3, 4);
+    final Iterable<Integer> integers = () -> Pick.every(1, 2, 3, 4);
 
     assertThat(integers).containsExactly(1, 2, 3, 4);
   }
 
   @Test
   void shouldNotIterateOnEmpty() {
-    final Iterable<Integer> integers = Cursor::every;
+    final Iterable<Integer> integers = Pick::every;
 
     assertThat(integers).isEmpty();
   }
@@ -37,7 +36,7 @@ class EveryTest {
       list.add(integer);
     }
 
-    final Iterable<Integer> integers = () -> Cursor.every(list.toArray(new Integer[]{}));
+    final Iterable<Integer> integers = () -> Pick.every(list.toArray(new Integer[]{}));
 
     assertThat(integers).isNotEmpty();
   }

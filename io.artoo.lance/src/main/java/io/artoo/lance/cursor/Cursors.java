@@ -1,7 +1,8 @@
 package io.artoo.lance.cursor;
 
-import io.artoo.lance.cursor.sync.Enqueue;
+import io.artoo.lance.cursor.pick.Enqueue;
 
+@SuppressWarnings("UnusedReturnValue")
 public interface Cursors<T> {
   boolean isEmpty();
   default boolean isNotEmpty() { return !isEmpty(); }
@@ -14,5 +15,6 @@ public interface Cursors<T> {
   static <T> Cursors<T> enqueue(final Cursor<T>... cursors) {
     return new Enqueue<>(cursors);
   }
+
 }
 

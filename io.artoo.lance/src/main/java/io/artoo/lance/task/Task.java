@@ -1,39 +1,27 @@
 package io.artoo.lance.task;
 
+import io.artoo.lance.cursor.Cursor;
+import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Suppl;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.RecursiveTask;
 
-public interface Task<T> {
-  Future<T> commit(final Suppl.Uni<T> suppl);
-
-  static <T> Task<T> single() {
-    return new Single<>(Executors.newSingleThreadExecutor());
+public interface Task<T> extends Future<T> {
+  static <T> RecursiveTask<T> returns(final Suppl.Uni<T> supplier) {
+    return new ReturningTask<>(supplier);
   }
 }
 
-final class Single<T> implements Task<T> {
-  private final ExecutorService service;
+final class ReturningTask<T> extends RecursiveTask<T> implements Task<T> {
+  private final Suppl.Uni<T> supplier;
 
-  Single(final ExecutorService service) {
-    assert service != null;
-    this.service = service;
+  ReturningTask(final Suppl.Uni<T> supplier) {
+    this.supplier = supplier;
   }
 
   @Override
-  public final Future<T> commit(final Suppl.Uni<T> suppl) {
-    try {
-      return service.submit(() -> {
-        try {
-          return suppl.tryGet();
-        } catch (Throwable throwable) {
-          throw new TaskException(throwable);
-        }
-      });
-    } finally {
-      service.shutdown();
-    }
+  protected T compute() {
+    return supplier.get();
   }
 }

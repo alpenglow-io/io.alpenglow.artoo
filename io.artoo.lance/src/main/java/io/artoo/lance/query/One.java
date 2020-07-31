@@ -1,5 +1,6 @@
 package io.artoo.lance.query;
 
+import io.artoo.lance.cursor.Pick;
 import io.artoo.lance.func.Suppl;
 import io.artoo.lance.cursor.Cursor;
 import io.artoo.lance.query.one.Filterable;
@@ -21,7 +22,7 @@ public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Othe
   }
 
   static <L> One<L> none() {
-    return new None<>(Cursor.nothing());
+    return new None<>(Pick.nothing());
   }
 
   default T yield() {
@@ -39,7 +40,7 @@ final class Lone<T> implements One<T> {
 
   @Override
   public final Cursor<T> cursor() {
-    return Cursor.just(element);
+    return Pick.just(element);
   }
 }
 
@@ -59,7 +60,7 @@ final class Done<T> implements One<T> {
     final var result = cursor.tryGet().yield();
     var element = result.next();
     for (; result.hasNext(); element = result.next());
-    return Cursor.maybe(element);
+    return Pick.maybe(element);
   }
 }
 

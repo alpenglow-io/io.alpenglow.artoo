@@ -5,7 +5,4 @@ module io.artoo.lance {
   exports io.artoo.lance.func;
   exports io.artoo.lance.type;
   exports io.artoo.lance.query;
-  exports io.artoo.lance.query.eventual;
-  exports io.artoo.lance.query.many;
-  exports io.artoo.lance.query.one;
 }

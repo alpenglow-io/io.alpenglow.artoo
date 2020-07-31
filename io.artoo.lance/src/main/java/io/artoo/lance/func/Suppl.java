@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 
 public interface Suppl {
   @FunctionalInterface
-  interface Uni<A> extends Supplier<A>, Func.Uni<Leftover, A> {
+  interface Uni<A> extends Supplier<A>, Callable<A>, Func.Uni<Leftover, A> {
     A tryGet() throws Throwable;
 
     @Override
@@ -29,6 +29,15 @@ public interface Suppl {
     default A apply(Leftover __) {
       return get();
     }
+
+    @Override
+    default A call() throws Exception {
+      try {
+        return tryGet();
+      } catch (Throwable throwable) {
+        throw new CallableException(throwable);
+      }
+    }
   }
 
   @FunctionalInterface
@@ -42,4 +51,10 @@ public interface Suppl {
   @SuppressWarnings("rawtypes")
   @FunctionalInterface
   interface Quad<R extends Record & Tuple.Quadruple> extends Uni<R> {}
+
+  final class CallableException extends Exception {
+    CallableException(Throwable throwable) {
+      super(throwable);
+    }
+  }
 }

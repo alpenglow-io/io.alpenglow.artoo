@@ -1,4 +1,4 @@
-package io.artoo.lance.cursor.sync;
+package io.artoo.lance.cursor.pick;
 
 import io.artoo.lance.cursor.Cursor;
 import io.artoo.lance.func.Cons;

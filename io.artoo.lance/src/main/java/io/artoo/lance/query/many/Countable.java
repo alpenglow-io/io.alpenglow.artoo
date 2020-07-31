@@ -1,5 +1,6 @@
 package io.artoo.lance.query.many;
 
+import io.artoo.lance.cursor.Pick;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
@@ -15,7 +16,7 @@ interface Countable<T> extends Queryable<T> {
 
   default One<Integer> count(final Pred.Uni<? super T> where) {
     final var w = nonNullable(where, "where");
-    return One.done(() -> cursor().map(new Count<>(w))).or(() -> Cursor.just(0));
+    return One.done(() -> cursor().map(new Count<>(w))).or(() -> Pick.just(0));
   }
 }
 

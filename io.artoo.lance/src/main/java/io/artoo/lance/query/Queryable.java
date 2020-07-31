@@ -1,7 +1,8 @@
 package io.artoo.lance.query;
 
 import io.artoo.lance.cursor.Cursor;
-import io.artoo.lance.cursor.Hand;
+import io.artoo.lance.cursor.Pick;
+import io.artoo.lance.cursor.Tick;
 import io.artoo.lance.func.Cons;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,19 +21,7 @@ public interface Queryable<R> extends Iterable<R> {
     try {
       return cursor().yield();
     } catch (Throwable error) {
-      return Cursor.every();
+      return Pick.nothing();
     }
-  }
-
-  default Many<R> asMany() {
-    return this::cursor;
-  }
-
-  default One<R> asOne() {
-    return this::cursor;
-  }
-
-  default Eventual<R> asEventual() {
-    return () -> Hand.of(this.cursor());
   }
 }

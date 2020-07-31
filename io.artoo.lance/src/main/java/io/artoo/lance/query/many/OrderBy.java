@@ -1,6 +1,7 @@
 package io.artoo.lance.query.many;
 
 import io.artoo.lance.cursor.Cursor;
+import io.artoo.lance.cursor.Pick;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
@@ -35,7 +36,7 @@ final class OrderBy<T, K> implements Many<T> {
         result.sort(comparison);
       }
     }
-    return Cursor.every();
+    return Pick.nothing();
   }
 
   private final class Couple {

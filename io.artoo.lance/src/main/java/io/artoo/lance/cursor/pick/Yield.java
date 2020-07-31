@@ -1,4 +1,4 @@
-package io.artoo.lance.cursor.sync;
+package io.artoo.lance.cursor.pick;
 
 import io.artoo.lance.cursor.Cursor;
 import io.artoo.lance.func.Cons;
@@ -11,6 +11,7 @@ public final class Yield<T> implements Cursor<T> {
   public Yield(final Cursor<T> cursor) {
     this(cursor, it -> {});
   }
+
   Yield(final Cursor<T> cursor, final Cons.Uni<? super Throwable> catch$) {
     this.cursor = cursor;
     this.catch$ = catch$;
@@ -48,7 +49,8 @@ public final class Yield<T> implements Cursor<T> {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private T fetched() {
-      if (fetched == null) hasNext();
+      if (fetched == null)
+        hasNext();
       return fetched;
     }
   }

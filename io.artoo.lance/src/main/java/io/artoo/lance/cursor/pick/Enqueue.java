@@ -1,4 +1,4 @@
-package io.artoo.lance.cursor.sync;
+package io.artoo.lance.cursor.pick;
 
 import io.artoo.lance.cursor.Cursor;
 import io.artoo.lance.cursor.Cursors;
@@ -11,7 +11,9 @@ public final class Enqueue<T> implements Cursors<T> {
   private Cursor<T>[] elements;
 
   @SafeVarargs
-  public Enqueue(final Cursor<T>... elements) {this.elements = elements;}
+  public Enqueue(final Cursor<T>... elements) {
+    this.elements = elements;
+  }
 
   @Override
   public boolean isEmpty() {

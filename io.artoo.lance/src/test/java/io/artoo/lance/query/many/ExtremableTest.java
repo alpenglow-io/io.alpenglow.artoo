@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static io.artoo.lance.query.TestData.Pet;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ExtremaTest {
+class ExtremableTest {
   @Test
   void shouldFindMaxByDefault() {
     final var max = Many.from(1, 2, 3, 4, null).max().yield();

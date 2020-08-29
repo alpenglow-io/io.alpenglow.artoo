@@ -1,27 +1,24 @@
 package io.artoo.lance.task;
 
-import io.artoo.lance.cursor.Cursor;
-import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Suppl;
+import io.artoo.lance.task.eventual.Awaitable;
+import io.artoo.lance.task.plan.Projectable;
 
-import java.util.concurrent.Future;
-import java.util.concurrent.RecursiveTask;
-
-public interface Task<T> extends Future<T> {
-  static <T> RecursiveTask<T> returns(final Suppl.Uni<T> supplier) {
-    return new ReturningTask<>(supplier);
+public interface Task<T> extends Projectable<T>, Awaitable<T> {
+  static <T> Task<T> returning(final Taskable<T> taskable) {
+    return new Returning<>(taskable);
   }
 }
 
-final class ReturningTask<T> extends RecursiveTask<T> implements Task<T> {
-  private final Suppl.Uni<T> supplier;
+final class Returning<T> implements Task<T> {
+  private final Taskable<T> taskable;
 
-  ReturningTask(final Suppl.Uni<T> supplier) {
-    this.supplier = supplier;
+  Returning(final Taskable<T> taskable) {
+    this.taskable = taskable;
   }
 
   @Override
-  protected T compute() {
-    return supplier.get();
+  public Suppl.Uni<T> task() {
+    return taskable.task();
   }
 }

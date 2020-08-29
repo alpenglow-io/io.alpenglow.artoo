@@ -42,6 +42,10 @@ public interface Func {
         return null;
       }
     }
+
+    default Func.Bi<? super A, ? super B, ? extends R> butNulls() {
+      return (a, b) -> a == null || b == null ? null : this.tryApply(a, b);
+    }
   }
 
   interface Tri<A, B, C, R> {

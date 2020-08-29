@@ -1,11 +1,8 @@
 package io.artoo.lance.cursor;
 
-import io.artoo.lance.cursor.tick.Await;
 import io.artoo.lance.cursor.tick.Map;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Suppl;
-import io.artoo.lance.query.Eventual;
-import io.artoo.lance.task.Task;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ForkJoinPool;
@@ -15,6 +12,7 @@ import java.util.concurrent.RecursiveTask;
 import static java.lang.System.out;
 import static java.lang.Thread.sleep;
 
+@SuppressWarnings("StatementWithEmptyBody")
 public interface Tick<T> extends Pick<T> {
   static <T> Tick<T> next(final Suppl.Uni<T> taskable) {
     return new Next<>(taskable);
@@ -27,12 +25,20 @@ public interface Tick<T> extends Pick<T> {
 
   @Override
   default Cursor<T> yield() {
-    return new Await<>(Task.returns(this::fetch));
+    final Cursor<T> cursor = Pick.nothing();
+/*    final Func.Uni<T, Cursor<T>> callback = Pick::just;
+    final var task = Task.returning(this::fetch);
+    final var pool = ForkJoinPool.commonPool();
+    pool.execute(task);
+    pool.execute(() -> {
+      while (!task.isDone())
+        ;
+      cursor.or(() -> Pick.just(task.getRawResult()));
+    });*/
+    return cursor;
   }
 
   static void main(String[] args) {
-
-
     CompletableFuture.supplyAsync(() -> {
       try {
         sleep(6000);
@@ -42,13 +48,13 @@ public interface Tick<T> extends Pick<T> {
       return 100;
     }).thenAccept(it -> out.println("Hello there: " + it));
 
-    Eventual.promise(
+    /*Eventual.closing(
       () -> {
         sleep(3000);
         return 100;
       })
       .await()
-      .eventually(it -> out.println("Hi there: " + it));
+      .eventually(it -> out.println("Hi there: " + it));*/
 
     out.println("Waiting for eventual result.");
 
@@ -57,6 +63,19 @@ public interface Tick<T> extends Pick<T> {
     var pool = new ForkJoinPool();
     var max = pool.invoke(new FindMaxTask(array, 0, array.length));
     System.out.println(max);
+
+    Func.Uni<int[], Integer> later = it -> {
+      var result = 0;
+      for (final var number : it) result += number;
+      return result;
+    };
+    final var then1 = later.then(it -> it * 2);
+    final var then2 = then1.then(it -> {
+      out.println(it);
+      return null;
+    });
+
+    then2.apply(array);
   }
 
   class FindMaxTask extends RecursiveTask<Integer> {
@@ -73,7 +92,7 @@ public interface Tick<T> extends Pick<T> {
     @Override
     protected Integer compute() {
       try {
-        sleep(1_000);
+        sleep(7_000);
       } catch (InterruptedException e) {
         e.printStackTrace();
       }

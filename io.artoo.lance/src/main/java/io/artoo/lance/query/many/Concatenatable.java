@@ -12,8 +12,7 @@ public interface Concatenatable<T> extends Queryable<T> {
   }
 
   default <Q extends Queryable<T>> Many<T> concat(final Q queryable) {
-    final var q = nonNullable(queryable, "queryable");
-    return () -> cursor().concat(q.cursor());
+    return Many.wany(cursor().concat(queryable.cursor()));
   }
 }
 

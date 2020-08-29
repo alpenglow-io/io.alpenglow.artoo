@@ -1,8 +1,6 @@
 package io.artoo.lance.query;
 
-import io.artoo.lance.cursor.Pick;
-import io.artoo.lance.func.Suppl;
-import io.artoo.lance.cursor.Cursor;
+import io.artoo.lance.next.Cursor;
 import io.artoo.lance.query.many.Aggregatable;
 import io.artoo.lance.query.many.Concatenatable;
 import io.artoo.lance.query.many.Filterable;
@@ -31,67 +29,29 @@ public interface Many<T> extends
 
   @SafeVarargs
   static <R> Many<R> from(final R... items) {
-    return new Array<>(items);
+    return new Wany<>(Cursor.every(items));
   }
 
   static Many<Object> fromAny(Object... objects) {
-    return new Array<>(objects);
+    return new Wany<>(Cursor.every(objects));
   }
 
   static <R> Many<R> empty() {
-    return new Empty<>(Pick.nothing());
-  }
-
-  static <R> Many<R> from(final Iterable<R> iterable) {
-    return new Iteration<>(iterable);
+    return new Empty<>(Cursor.nothing());
   }
 
   static Many<Integer> ints(final int start, final int end) {
     return new Ints(start, end);
   }
 
-  static <R> Many<R> resultSet(final Suppl.Uni<Cursor<R>> cursor) {
-    return new ResultSet<>(cursor);
-  }
-}
-
-final class Array<T> implements Many<T> {
-  private final T[] elements;
-
-  @SafeVarargs
-  Array(final T... elements) {
-    this.elements = elements;
-  }
-
-  @Override
-  public final Cursor<T> cursor() {
-    return Pick.every(elements);
+  static <R> Many<R> wany(final Cursor<R> cursor) {
+    return new Wany<>(cursor);
   }
 }
 
 record Empty<T>(Cursor<T> cursor) implements Many<T> {}
 
-final class Iteration<T> implements Many<T> {
-  private final Iterable<T> iterable;
-
-  Iteration(final Iterable<T> iterable) {this.iterable = iterable;}
-
-  @Override
-  public final Cursor<T> cursor() {
-    return Pick.iteration(iterable.iterator());
-  }
-}
-
-final class ResultSet<R> implements Many<R> {
-  private final Suppl.Uni<Cursor<R>> cursor;
-
-  ResultSet(final Suppl.Uni<Cursor<R>> cursor) {this.cursor = cursor;}
-
-  @Override
-  public final Cursor<R> cursor() throws Throwable {
-    return cursor.tryGet();
-  }
-}
+record Wany<T>(Cursor<T> cursor) implements Many<T> {}
 
 final class Ints implements Many<Integer> {
   private final int start;
@@ -110,6 +70,6 @@ final class Ints implements Many<Integer> {
     for (int number = start, index = 0; number <= end; number++, index++) {
       numbers[index] = number;
     }
-    return Pick.every(numbers);
+    return Cursor.every(numbers);
   }
 }

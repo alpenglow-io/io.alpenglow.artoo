@@ -1,8 +1,6 @@
 package io.artoo.lance.query;
 
-import io.artoo.lance.cursor.Pick;
-import io.artoo.lance.func.Suppl;
-import io.artoo.lance.cursor.Cursor;
+import io.artoo.lance.next.Cursor;
 import io.artoo.lance.query.one.Filterable;
 import io.artoo.lance.query.one.Otherwise;
 import io.artoo.lance.query.one.Peekable;
@@ -17,16 +15,16 @@ public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Othe
     return new Lone<>(element);
   }
 
-  static <L> One<L> done(final Suppl.Uni<Cursor<L>> cursor) {
+  static <T> One<T> done(Cursor<T> cursor) {
     return new Done<>(cursor);
   }
 
   static <L> One<L> none() {
-    return new None<>(Pick.nothing());
+    return new None<>(Cursor.nothing());
   }
 
   default T yield() {
-    return iterator().next();
+    return cursor().yield().next();
   }
 }
 
@@ -40,29 +38,19 @@ final class Lone<T> implements One<T> {
 
   @Override
   public final Cursor<T> cursor() {
-    return Pick.just(element);
+    return Cursor.just(element);
+  }
+}
+
+enum Default implements One<Object> {
+  None;
+
+  @Override
+  public final Cursor<Object> cursor() {
+    return io.artoo.lance.next.Cursor.nothing();
   }
 }
 
 record None<T>(Cursor<T> cursor) implements One<T> {}
 
-@SuppressWarnings({"StatementWithEmptyBody"})
-final class Done<T> implements One<T> {
-  private final Suppl.Uni<Cursor<T>> cursor;
-
-  Done(final Suppl.Uni<Cursor<T>> cursor) {
-    assert cursor != null;
-    this.cursor = cursor;
-  }
-
-  @Override
-  public final Cursor<T> cursor() throws Throwable {
-    final var result = cursor.tryGet().yield();
-    var element = result.next();
-    for (; result.hasNext(); element = result.next());
-    return Pick.maybe(element);
-  }
-}
-
-
-
+record Done<T>(Cursor<T> cursor) implements One<T> {}

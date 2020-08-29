@@ -11,11 +11,11 @@ public interface Peekable<T> extends Queryable<T> {
   }
 
   default Many<T> peek(Cons.Bi<? super Integer, ? super T> peek) {
-    return () -> cursor().map(new Peek<T, T>(peek).butNulls());
+    return Many.wany(cursor().peek(peek));
   }
 
   default Many<T> exceptionally(Cons.Uni<? super Throwable> catch$) {
-    return () -> cursor().exceptionally(catch$);
+    return Many.wany(cursor().exceptionally(catch$));
   }
 }
 

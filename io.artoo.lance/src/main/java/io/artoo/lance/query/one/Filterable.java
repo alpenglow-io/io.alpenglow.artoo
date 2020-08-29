@@ -10,10 +10,10 @@ import static io.artoo.lance.type.Nullability.nonNullable;
 
 public interface Filterable<T> extends Queryable<T> {
   default One<T> where(final Pred.Uni<? super T> where) {
-    return () -> cursor().map(on(where));
+    return One.done(cursor().where(where));
   }
 
   default <R> One<R> ofType(final Class<? extends R> type) {
-    return () -> cursor().map(on(type)).map(as(type));
+    return One.done(cursor().ofType(type));
   }
 }

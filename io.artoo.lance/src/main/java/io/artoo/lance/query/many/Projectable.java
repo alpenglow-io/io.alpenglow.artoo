@@ -10,19 +10,18 @@ import static io.artoo.lance.query.operation.Select.as;
 
 public interface Projectable<T> extends Queryable<T> {
   default <R> Many<R> select(Func.Bi<? super Integer, ? super T, ? extends R> select) {
-    return () -> cursor().map(as(indexed(), select).butNulls());
+    return Many.wany(cursor().select(select));
   }
 
   default <R> Many<R> select(Func.Uni<? super T, ? extends R> select) {
-    return () -> cursor().map(as(select).butNulls());
+    return Many.wany(cursor().select(select));
   }
 
-  @SuppressWarnings("unchecked")
   default <R, M extends Many<R>> Many<R> selectMany(Func.Bi<? super Integer, ? super T, ? extends M> select) {
-    return () -> cursor().map(as(indexed(), select).butNulls()).flatMap(Queryable::cursor);
+    return Many.wany(cursor().selectNext((index, it) -> select.tryApply(index, it).cursor()));
   }
 
   default <R, M extends Many<R>> Many<R> selectMany(Func.Uni<? super T, ? extends M> select) {
-    return () -> cursor().map(as(select)).flatMap(Queryable::cursor);
+    return Many.wany(cursor().selectNext(it -> select.tryApply(it).cursor()));
   }
 }

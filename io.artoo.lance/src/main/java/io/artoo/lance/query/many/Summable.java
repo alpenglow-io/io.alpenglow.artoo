@@ -9,11 +9,11 @@ import static io.artoo.lance.type.Nullability.nonNullable;
 
 interface Summable<T> extends Queryable<T> {
   default <N extends Number> One<N> sum(final Func.Uni<? super T, ? extends N> select) {
-    return One.done(() -> cursor().map(new Sum<T, N, N>(select)));
+    return One.done(cursor().sum(select));
   }
 
   default One<T> sum() {
-    return One.done(() -> cursor().map(new Sum<>(it -> it instanceof Number n ? n : null)));
+    return One.done(cursor().sum());
   }
 }
 

@@ -10,7 +10,7 @@ interface Countable<T> extends Queryable<T> {
   }
 
   default One<Integer> count(final Pred.Uni<? super T> where) {
-    return One.done(cursor().count(where));
+    return One.done(cursor().count(where).or(0));
   }
 }
 

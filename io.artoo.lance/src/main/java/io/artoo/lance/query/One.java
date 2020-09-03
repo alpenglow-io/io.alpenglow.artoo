@@ -24,7 +24,7 @@ public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Othe
   }
 
   default T yield() {
-    return cursor().yield().next();
+    return cursor().next();
   }
 }
 
@@ -51,8 +51,14 @@ final class Done<T> implements One<T> {
 
   @Override
   public Cursor<T> cursor() {
+    final var yielded = cursor.yield();
     T result = null;
-    while (cursor.hasNext()) result = cursor.next();
-    return Cursor.just(result);
+
+    while (yielded.hasNext()) {
+      var next = yielded.next();
+      if (next != null) result = next;
+    }
+
+    return Cursor.maybe(result);
   }
 }

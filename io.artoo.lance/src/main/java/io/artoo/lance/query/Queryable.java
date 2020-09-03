@@ -17,7 +17,7 @@ public interface Queryable<R> extends Iterable<R> {
   @Override
   default @NotNull Iterator<R> iterator() {
     try {
-      return cursor().yield();
+      return cursor();
     } catch (Throwable error) {
       return Cursor.nothing();
     }

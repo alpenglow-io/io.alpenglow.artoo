@@ -24,7 +24,7 @@ public interface Quantifiable<T> extends Queryable<T> {
   }
 
   default One<Boolean> notContains(final T element) {
-    return One.done(cursor().notContains(element)).or(true);
+    return One.done(cursor().notContains(element));
   }
 }
 

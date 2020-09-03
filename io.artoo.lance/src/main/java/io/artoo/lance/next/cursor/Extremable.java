@@ -14,7 +14,7 @@ public interface Extremable<T> extends Projectable<T> {
   }
 
   default <N extends Number, V> Cursor<V> extreme(int type, final Func.Uni<? super T, ? extends N> select) {
-    return select(new Extremum<T, N, V>(type, nonNullable(select, "select")));
+    return select(new Extremum<T, N, V>(type, select));
   }
 }
 

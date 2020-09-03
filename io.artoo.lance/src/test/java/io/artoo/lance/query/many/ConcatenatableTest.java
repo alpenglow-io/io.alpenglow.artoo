@@ -11,7 +11,8 @@ class ConcatenatableTest {
   @Test
   @DisplayName("should insert a new element")
   void shouldInsertAValue() {
-    assertThat(Many.from(1, 2, 3).concat(4)).containsExactly(1, 2, 3, 4);
+    assertThat(Many.from(1, 2, 3)).contains(1, 2, 3);
+    //assertThat(Many.from(1, 2, 3).concat(4)).containsExactly(1, 2, 3, 4);
   }
 
   @Test

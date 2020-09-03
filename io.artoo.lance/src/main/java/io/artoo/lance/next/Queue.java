@@ -73,3 +73,4 @@ final class Each<T> implements Queue<T> {
     return isNotEmpty() ? elements[0] : null;
   }
 }
+

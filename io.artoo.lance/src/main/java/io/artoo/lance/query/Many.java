@@ -51,7 +51,16 @@ public interface Many<T> extends
 
 record Empty<T>(Cursor<T> cursor) implements Many<T> {}
 
-record Wany<T>(Cursor<T> cursor) implements Many<T> {}
+final class Wany<T> implements Many<T> {
+  private final Cursor<T> cursor;
+
+  Wany(final Cursor<T> cursor) {this.cursor = cursor;}
+
+  @Override
+  public Cursor<T> cursor() {
+    return this.cursor;
+  }
+}
 
 final class Ints implements Many<Integer> {
   private final int start;

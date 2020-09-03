@@ -63,8 +63,8 @@ final class Exceptionally<R> implements Cursor<R> {
   }
 }
 
+@SuppressWarnings("StatementWithEmptyBody")
 final class Yield<T> implements Cursor<T> {
-  private final Shrunk shrunk = new Shrunk();
   private final Next<T> next;
   private final Cons.Uni<? super Throwable> catch$;
 
@@ -79,38 +79,19 @@ final class Yield<T> implements Cursor<T> {
 
   @Override
   public T fetch() {
-    return next();
+    T fetched = null;
+
+    try {
+      while (next.hasNext() && (fetched = next.fetch()) != null);
+    } catch (Throwable throwable) {
+      catch$.accept(throwable);
+    }
+
+    return fetched;
   }
 
   @Override
   public boolean hasNext() {
-    try {
-      var hasNext = next.hasNext();
-      shrunk.fetched = null;
-      while (hasNext && shrunk.fetched == null) {
-        shrunk.fetched = next.next();
-        hasNext = shrunk.fetched != null || next.hasNext();
-      }
-      return hasNext;
-    } catch (Throwable throwable) {
-      catch$.accept(throwable);
-      return false;
-    }
-  }
-
-  @Override
-  public T next() {
-    return shrunk.fetched();
-  }
-
-  private final class Shrunk {
-    private T fetched;
-
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    private T fetched() {
-      if (fetched == null)
-        hasNext();
-      return fetched;
-    }
+    return next.hasNext();
   }
 }

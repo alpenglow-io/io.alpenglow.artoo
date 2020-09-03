@@ -41,8 +41,8 @@ class SortableTest {
   @Test
   @DisplayName("should order by hashcode on big set of data")
   void shouldOrderByHashcodeOnBigSet() {
-    final var ints = range(0, 1_000_000).map(it -> 999_999 - it).boxed().toArray(Integer[]::new);
-    final var expected = range(0, 1_000_000).boxed().toArray(Integer[]::new);
+    final var ints = range(0, 1_000).map(it -> 999 - it).boxed().toArray(Integer[]::new);
+    final var expected = range(0, 1_000).boxed().toArray(Integer[]::new);
 
     final var actual = from(ints).order();
 

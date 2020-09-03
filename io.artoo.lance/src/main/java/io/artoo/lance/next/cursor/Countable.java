@@ -6,7 +6,7 @@ import io.artoo.lance.next.Cursor;
 
 public interface Countable<T> extends Projectable<T> {
   default Cursor<Integer> count(final Pred.Uni<? super T> where) {
-    return select(new Count<>(0, where)).or(0);
+    return select(new Count<>(0, where));
   }
 }
 

@@ -27,7 +27,7 @@ public interface Quantifiable<T> extends Projectable<T> {
   }
 
   default Cursor<Boolean> notContains(final T element) {
-    return select(new Contains<>(element)).or(true);
+    return contains(element).or(true);
   }
 }
 
@@ -40,8 +40,8 @@ final class Contains<T> implements Func.Uni<T, Boolean> {
   }
 
   @Override
-  public Boolean tryApply(final T item) {
-    return what.equals(item) ? true : null;
+  public Boolean tryApply(final T element) {
+    return what.equals(element) ? true : null;
   }
 }
 

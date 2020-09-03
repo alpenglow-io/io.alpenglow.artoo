@@ -41,15 +41,21 @@ class AggregatableTest {
   @Test
   @DisplayName("should find the max and min by selector")
   void shouldFindMaxAndMin() {
-    final var pets = from(
+    final var maxes = from(
       new Pet("Barley", 8),
       new Pet("Boots", 4),
       new Pet("Whiskers", 1)
     );
 
-    final var max = pets.max(pet -> pet.name().length() + pet.age()).yield();
+    final var max = maxes.max(pet -> pet.name().length() + pet.age()).yield();
 
-    final var min = pets.min(pet -> pet.name().length()).yield();
+    final var mins = from(
+      new Pet("Barley", 8),
+      new Pet("Boots", 4),
+      new Pet("Whiskers", 1)
+    );
+
+    final var min = mins.min(pet -> pet.name().length()).yield();
 
     assertThat(max).isEqualTo(14);
     assertThat(min).isEqualTo(5);

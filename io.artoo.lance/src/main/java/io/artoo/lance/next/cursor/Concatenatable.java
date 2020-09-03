@@ -6,7 +6,7 @@ import io.artoo.lance.next.Queue;
 
 public interface Concatenatable<T> extends Projectable<T> {
   default <N extends Next<T>> Cursor<T> concat(final N next) {
-    return new Concat<>(Queue.each(next));
+    return new Concat<>(Queue.each(this, next));
   }
 }
 

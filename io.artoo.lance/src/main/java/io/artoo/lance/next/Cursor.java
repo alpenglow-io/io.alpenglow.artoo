@@ -50,6 +50,10 @@ public interface Cursor<T> extends
     return new Just<>(item);
   }
 
+  static <T> Cursor<T> maybe(final T item) {
+    return item == null ? Cursor.nothing() : Cursor.just(item);
+  }
+
   static <T> Cursor<T> tick(final Suppl.Uni<T> callable) {
     return new Tick<>(callable);
   }

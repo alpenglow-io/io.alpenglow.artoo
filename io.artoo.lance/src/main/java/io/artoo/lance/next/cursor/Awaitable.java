@@ -1,9 +1,9 @@
 package io.artoo.lance.next.cursor;
 
-import io.artoo.lance.next.Next;
-import io.artoo.lance.next.Cursor;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Suppl;
+import io.artoo.lance.next.Cursor;
+import io.artoo.lance.next.Next;
 
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.FutureTask;

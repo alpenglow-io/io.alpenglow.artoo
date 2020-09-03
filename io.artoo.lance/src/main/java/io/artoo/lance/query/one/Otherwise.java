@@ -1,7 +1,7 @@
 package io.artoo.lance.query.one;
 
-import io.artoo.lance.func.Suppl;
 import io.artoo.lance.func.Func;
+import io.artoo.lance.func.Suppl;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
 
@@ -13,18 +13,14 @@ public interface Otherwise<T> extends Queryable<T> {
   }
 
   default <O extends One<T>> One<T> or(final O otherwise) {
-    final var o = nonNullable(otherwise, "otherwise");
-    return () -> cursor().or(o::cursor);
+    return One.done(cursor().or(otherwise.cursor()));
   }
 
   default <E extends RuntimeException> One<T> or(final String message, final Func.Uni<? super String, ? extends E> exception) {
-    final var m = nonNullable(message, "message");
-    final var e = nonNullable(exception, "exception");
-    return () -> cursor().or(m, e);
+    return One.done(cursor().or(message, exception));
   }
 
   default <E extends RuntimeException> One<T> or(final Suppl.Uni<? extends E> exception) {
-    final var e = nonNullable(exception, "exception");
-    return or(null, it -> e.tryGet());
+    return or(null, it -> exception.tryGet());
   }
 }

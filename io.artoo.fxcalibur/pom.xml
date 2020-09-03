@@ -4,25 +4,12 @@
     <groupId>io.artoo</groupId>
     <artifactId>io.artoo</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>io.artoo.fxcalibur</artifactId>
 
   <name>Fxcalibur</name>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>14</source>
-          <target>14</target>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 
   <properties>
     <controlsfx.version>11.0.2</controlsfx.version>

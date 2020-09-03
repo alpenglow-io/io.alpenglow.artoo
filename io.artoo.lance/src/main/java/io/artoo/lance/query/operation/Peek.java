@@ -2,7 +2,6 @@ package io.artoo.lance.query.operation;
 
 import io.artoo.lance.func.Cons.Bi;
 import io.artoo.lance.func.Func;
-import io.artoo.lance.func.Func.Uni;
 
 @SuppressWarnings("unchecked")
 public final class Peek<T, R> implements Func.Uni<T, R> {

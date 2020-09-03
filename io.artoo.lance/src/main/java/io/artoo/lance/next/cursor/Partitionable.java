@@ -4,8 +4,6 @@ import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.next.Cursor;
 
-import static io.artoo.lance.type.Nullability.nonNullable;
-
 public interface Partitionable<T> extends Projectable<T> {
 
   default Cursor<T> skipWhile(final Pred.Bi<? super Integer, ? super T> where) {

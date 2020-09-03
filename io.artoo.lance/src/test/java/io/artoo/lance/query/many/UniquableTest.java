@@ -3,10 +3,8 @@ package io.artoo.lance.query.many;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.stream.Stream;
-
 import static io.artoo.lance.query.Many.from;
-import static java.lang.System.*;
+import static java.lang.System.out;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class UniquableTest {

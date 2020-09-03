@@ -3,13 +3,6 @@ package io.artoo.lance.query.many;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.query.operation.At;
-import io.artoo.lance.query.operation.First;
-import io.artoo.lance.query.operation.Last;
-import io.artoo.lance.query.operation.Single;
-
-import static io.artoo.lance.type.Nullability.nonNullable;
-import static io.artoo.lance.type.Nullability.nullable;
 
 public interface Uniquable<T> extends Queryable<T> {
   default One<T> at(final int index) {

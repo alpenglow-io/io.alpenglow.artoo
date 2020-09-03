@@ -1,7 +1,6 @@
 package io.artoo.lance.query.operation;
 
 import io.artoo.lance.func.Func;
-import io.artoo.lance.func.Func.Uni;
 import io.artoo.lance.func.Pred.Bi;
 
 @SuppressWarnings("unchecked")

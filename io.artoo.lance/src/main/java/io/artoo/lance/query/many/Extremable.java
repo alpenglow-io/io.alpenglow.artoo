@@ -3,9 +3,6 @@ package io.artoo.lance.query.many;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.query.operation.Extremum;
-
-import static io.artoo.lance.type.Nullability.nonNullable;
 
 public interface Extremable<T> extends Queryable<T> {
   default <N extends Number> One<N> max(final Func.Uni<? super T, ? extends N> select) {

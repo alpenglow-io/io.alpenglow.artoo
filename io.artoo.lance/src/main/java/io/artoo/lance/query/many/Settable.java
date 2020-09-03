@@ -4,10 +4,8 @@ import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.query.operation.Distinct;
 
 import static io.artoo.lance.query.Many.wany;
-import static io.artoo.lance.type.Nullability.nonNullable;
 
 @SuppressWarnings("unchecked")
 public interface Settable<T> extends Queryable<T> {
@@ -16,8 +14,7 @@ public interface Settable<T> extends Queryable<T> {
   }
 
   default Many<T> distinct(final Pred.Uni<? super T> where) {
-    final var w = nonNullable(where, "where");
-    return () -> cursor().map(new Distinct<T>(where).butNulls());
+    return Many.wany(cursor().distinct(where));
   }
 
   default Many<T> union(final T... elements) {
@@ -25,9 +22,7 @@ public interface Settable<T> extends Queryable<T> {
   }
 
   default <Q extends Queryable<T>> Many<T> union(final Q queryable) {
-    return () -> cursor()
-      .concat(queryable.cursor())
-      .map(new Distinct<>(it -> true));
+    return Many.wany(cursor().union(queryable.cursor()));
   }
 
   default Many<T> except(final T... elements) {
@@ -35,7 +30,7 @@ public interface Settable<T> extends Queryable<T> {
   }
 
   default <Q extends Queryable<T>> Many<T> except(final Q queryable) {
-    return wany(() -> cursor().map(new Except<>(queryable)));
+    return Many.wany(cursor().except(queryable.cursor()));
   }
 
   default Many<T> intersect(final T... elements) {
@@ -43,7 +38,7 @@ public interface Settable<T> extends Queryable<T> {
   }
 
   default <Q extends Queryable<T>> Many<T> intersect(final Q queryable) {
-    return wany(() -> cursor().map(new Intersect<>(queryable)));
+    return Many.wany(cursor().intersect(queryable.cursor()));
   }
 }
 

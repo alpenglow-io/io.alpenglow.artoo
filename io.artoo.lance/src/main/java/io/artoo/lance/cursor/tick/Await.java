@@ -2,7 +2,6 @@ package io.artoo.lance.cursor.tick;
 
 import io.artoo.lance.cursor.Cursor;
 
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
 

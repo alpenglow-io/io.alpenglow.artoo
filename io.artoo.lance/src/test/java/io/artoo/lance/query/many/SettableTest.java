@@ -1,11 +1,8 @@
 package io.artoo.lance.query.many;
 
 import io.artoo.lance.query.Many;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.stream.Stream;
 
 import static io.artoo.lance.query.TestData.Pet;
 import static org.assertj.core.api.Assertions.assertThat;

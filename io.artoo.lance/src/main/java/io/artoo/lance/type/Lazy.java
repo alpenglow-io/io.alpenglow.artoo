@@ -2,9 +2,6 @@ package io.artoo.lance.type;
 
 import io.artoo.lance.func.Suppl;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.function.Supplier;
 
 import static io.artoo.lance.func.Func.Nothing.Nil;
 

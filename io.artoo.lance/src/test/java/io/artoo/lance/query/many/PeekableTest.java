@@ -1,7 +1,6 @@
 package io.artoo.lance.query.many;
 
 import io.artoo.lance.query.Many;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +8,6 @@ import java.util.stream.Stream;
 
 import static io.artoo.lance.query.TestData.Pet;
 import static java.lang.System.out;
-import static java.lang.System.setOut;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class PeekableTest {

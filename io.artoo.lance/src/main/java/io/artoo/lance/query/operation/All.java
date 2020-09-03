@@ -1,7 +1,6 @@
 package io.artoo.lance.query.operation;
 
 import io.artoo.lance.func.Func;
-import io.artoo.lance.func.Pred;
 import io.artoo.lance.func.Pred.Uni;
 
 public final class All<T> implements Func.Uni<T, Boolean> {

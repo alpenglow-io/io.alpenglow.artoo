@@ -1,7 +1,5 @@
 package io.artoo.lance.next;
 
-import io.artoo.lance.func.Cons;
-
 import java.util.Iterator;
 
 @SuppressWarnings("unchecked")

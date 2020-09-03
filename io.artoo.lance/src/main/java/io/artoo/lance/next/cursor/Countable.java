@@ -4,8 +4,6 @@ import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.next.Cursor;
 
-import static io.artoo.lance.type.Nullability.nonNullable;
-
 public interface Countable<T> extends Projectable<T> {
   default Cursor<Integer> count(final Pred.Uni<? super T> where) {
     return select(new Count<>(0, where)).or(0);

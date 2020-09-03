@@ -42,15 +42,17 @@ final class Lone<T> implements One<T> {
   }
 }
 
-enum Default implements One<Object> {
-  None;
-
-  @Override
-  public final Cursor<Object> cursor() {
-    return io.artoo.lance.next.Cursor.nothing();
-  }
-}
-
 record None<T>(Cursor<T> cursor) implements One<T> {}
 
-record Done<T>(Cursor<T> cursor) implements One<T> {}
+final class Done<T> implements One<T> {
+  private final Cursor<T> cursor;
+
+  Done(final Cursor<T> cursor) {this.cursor = cursor;}
+
+  @Override
+  public Cursor<T> cursor() {
+    T result = null;
+    while (cursor.hasNext()) result = cursor.next();
+    return Cursor.just(result);
+  }
+}

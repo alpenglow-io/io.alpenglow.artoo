@@ -19,31 +19,32 @@
 
     <encoding>UTF-8</encoding>
     <java.version>15</java.version>
+    <java.release>15</java.release>
     <maven.max.version>3.6.2</maven.max.version>
     <maven.min.version>3.3.9</maven.min.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
-    <maven.compiler.target>${java.version}</maven.compiler.target>
+    <maven.compiler.target>${java.release}</maven.compiler.target>
     <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
 
-    <annotations.version>19.0.0</annotations.version>
-    <assertj.version>3.16.1</assertj.version>
-    <junit.version>5.7.0-M1</junit.version>
-    <junit.platform.version>1.7.0-M1</junit.platform.version>
+    <annotations.version>20.1.0</annotations.version>
+    <assertj.version>3.17.1</assertj.version>
+    <junit.version>5.7.0-RC1</junit.version>
+    <junit.platform.version>1.7.0-RC1</junit.platform.version>
     <log4j.version>2.13.3</log4j.version>
-    <mockito.version>3.4.2</mockito.version>
+    <mockito.version>3.5.9</mockito.version>
     <slf4j.version>2.0.0-alpha1</slf4j.version>
 
-    <asm.version>8.0.1</asm.version>
+    <asm.version>9.0-beta</asm.version>
 
     <plugin-clean.version>3.1.0</plugin-clean.version>
     <plugin-compiler.version>3.8.1</plugin-compiler.version>
     <plugin-deploy.version>3.0.0-M1</plugin-deploy.version>
-    <plugin-enforcer.version>3.0.0-M2</plugin-enforcer.version>
+    <plugin-enforcer.version>3.0.0-M3</plugin-enforcer.version>
     <plugin-install.version>3.0.0-M1</plugin-install.version>
-    <plugin-jar.version>3.1.2</plugin-jar.version>
+    <plugin-jar.version>3.2.0</plugin-jar.version>
     <plugin-resources.version>3.1.0</plugin-resources.version>
-    <plugin-site.version>3.8.2</plugin-site.version>
-    <plugin-surefire.version>3.0.0-M3</plugin-surefire.version>
+    <plugin-site.version>3.9.0</plugin-site.version>
+    <plugin-surefire.version>3.0.0-M4</plugin-surefire.version>
     <plugin-versions.version>2.7</plugin-versions.version>
     <plugin-pmd.version>3.12.0</plugin-pmd.version>
     <plugin-github-release.version>0.5.1</plugin-github-release.version>
@@ -151,7 +152,7 @@
             </dependency>
           </dependencies>
           <configuration>
-            <release>${java.version}</release>
+            <release>${java.release}</release>
             <compilerArgs>
               <arg>--enable-preview</arg>
             </compilerArgs>

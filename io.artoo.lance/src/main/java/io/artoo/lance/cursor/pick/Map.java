@@ -1,7 +1,6 @@
 package io.artoo.lance.cursor.pick;
 
 import io.artoo.lance.cursor.Cursor;
-import io.artoo.lance.cursor.Pick;
 import io.artoo.lance.func.Func;
 
 public final class Map<T, R> implements Cursor<R> {

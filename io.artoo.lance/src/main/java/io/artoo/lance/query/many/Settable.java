@@ -5,8 +5,6 @@ import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
 
-import static io.artoo.lance.query.Many.wany;
-
 @SuppressWarnings("unchecked")
 public interface Settable<T> extends Queryable<T> {
   default Many<T> distinct() {
@@ -14,7 +12,7 @@ public interface Settable<T> extends Queryable<T> {
   }
 
   default Many<T> distinct(final Pred.Uni<? super T> where) {
-    return Many.wany(cursor().distinct(where));
+    return Many.of(cursor().distinct(where));
   }
 
   default Many<T> union(final T... elements) {
@@ -22,23 +20,15 @@ public interface Settable<T> extends Queryable<T> {
   }
 
   default <Q extends Queryable<T>> Many<T> union(final Q queryable) {
-    return Many.wany(cursor().union(queryable.cursor()));
+    return Many.of(cursor().union(queryable.cursor()));
   }
 
   default Many<T> except(final T... elements) {
-    return except(Many.from(elements));
-  }
-
-  default <Q extends Queryable<T>> Many<T> except(final Q queryable) {
-    return Many.wany(cursor().except(queryable.cursor()));
+    return Many.of(cursor().except(elements));
   }
 
   default Many<T> intersect(final T... elements) {
-    return intersect(Many.from(elements));
-  }
-
-  default <Q extends Queryable<T>> Many<T> intersect(final Q queryable) {
-    return Many.wany(cursor().intersect(queryable.cursor()));
+    return Many.of(cursor().intersect(elements));
   }
 }
 

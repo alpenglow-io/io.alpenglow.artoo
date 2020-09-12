@@ -17,9 +17,4 @@ public interface Next<T> extends Iterator<T> {
       return null;
     }
   }
-
-  @Override
-  default boolean hasNext() {
-    return false;
-  }
 }

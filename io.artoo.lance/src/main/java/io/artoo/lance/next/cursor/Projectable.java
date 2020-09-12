@@ -14,7 +14,7 @@ public interface Projectable<T> extends Otherwise<T> {
   }
 
   default <R, N extends Next<R>> Cursor<R> selectNext(final Func.Uni<? super T, ? extends N> select) {
-    return new SelectNext<R, N>(select(select));
+    return new SelectNext<R, N>(new Select<>(this, select.butNulls()));
   }
 
   default <R, N extends Next<R>> Cursor<R> selectNext(final Func.Bi<? super Integer, ? super T, ? extends N> selectWithIndex) {
@@ -64,34 +64,59 @@ final class Select<T, R> implements Cursor<R> {
 }
 
 final class SelectNext<T, N extends Next<T>> implements Cursor<T> {
-  private final Next<N> next;
   private final Flatten flatten = new Flatten();
+
+  private final Next<N> next;
 
   public SelectNext(final Next<N> next) {this.next = next;}
 
   @Override
   public T fetch() throws Throwable {
-    var element = flatten.next.fetch();
-    while (hasNext() && element == null) {
-      element = flatten.next.fetch();
+    if (flatten.value != null) {
+      final var fetched = flatten.value;
+      flatten.value = null;
+      return fetched;
+
+    } else if (flatten.cause != null) {
+      final var thrown = flatten.cause;
+      flatten.cause = null;
+      throw thrown;
     }
-    return element;
+
+    return null;
   }
 
   @Override
   public boolean hasNext() {
-    flatten.hasNext = next.hasNext() || (flatten.next != null && flatten.next.hasNext());
+    var done = false;
+    do
+    {
+      try {
+        if (flatten.next == null)
+          if (next.hasNext()) {
+            flatten.next = next.fetch();
+          } else {
+            done = true;
+          }
 
-    if (flatten.hasNext && (flatten.next == null || !flatten.next.hasNext())) {
-      flatten.next = next.next();
-    }
+        if (!done && flatten.next.hasNext()) {
+          flatten.value = flatten.next.fetch();
+        } else {
+          flatten.next = null;
+        }
 
-    return flatten.hasNext;
+      } catch (Throwable throwable) {
+        flatten.cause = throwable;
+      }
+    } while (flatten.value == null && flatten.cause == null && !done);
+
+    return flatten.value != null || flatten.cause != null;
   }
 
   private final class Flatten {
-    private boolean hasNext = true;
+    private Throwable cause;
     private Next<T> next;
+    private T value;
   }
 }
 

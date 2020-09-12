@@ -17,13 +17,13 @@ public interface Summable<T> extends Projectable<T> {
 }
 
 final class Sum<T, N extends Number, V> implements Func.Uni<T, V> {
+  private final Summed summed = new Summed();
+
   private final Func.Uni<? super T, ? extends N> select;
-  private final Summed summed;
 
   Sum(final Func.Uni<? super T, ? extends N> select) {
     assert select != null;
     this.select = select;
-    this.summed = new Summed();
   }
 
   @Override

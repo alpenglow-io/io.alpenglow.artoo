@@ -16,10 +16,6 @@ public interface Peekable<T> extends Projectable<T> {
   default Cursor<T> exceptionally(Cons.Uni<? super Throwable> catch$) {
     return new Exceptionally<>(this, catch$);
   }
-
-  default Cursor<T> yield() {
-    return new Yield<>(this);
-  }
 }
 
 final class Exceptionally<R> implements Cursor<R> {
@@ -58,40 +54,7 @@ final class Exceptionally<R> implements Cursor<R> {
   }
 
   @Override
-  public Cursor<R> yield() {
-    return new Yield<>(next, catch$);
-  }
-}
-
-@SuppressWarnings("StatementWithEmptyBody")
-final class Yield<T> implements Cursor<T> {
-  private final Next<T> next;
-  private final Cons.Uni<? super Throwable> catch$;
-
-  Yield(final Next<T> next) {
-    this(next, it -> {});
-  }
-
-  Yield(final Next<T> next, final Cons.Uni<? super Throwable> catch$) {
-    this.next = next;
-    this.catch$ = catch$;
-  }
-
-  @Override
-  public T fetch() {
-    T fetched = null;
-
-    try {
-      while (next.hasNext() && (fetched = next.fetch()) != null);
-    } catch (Throwable throwable) {
-      catch$.accept(throwable);
-    }
-
-    return fetched;
-  }
-
-  @Override
-  public boolean hasNext() {
-    return next.hasNext();
+  public final Cursor<R> scroll() {
+    return scroll(catch$);
   }
 }

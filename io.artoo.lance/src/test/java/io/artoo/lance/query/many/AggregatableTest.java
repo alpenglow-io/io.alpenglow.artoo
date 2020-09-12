@@ -1,5 +1,6 @@
 package io.artoo.lance.query.many;
 
+import io.artoo.lance.query.One;
 import io.artoo.lance.query.TestData.Pet;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,9 +12,11 @@ class AggregatableTest {
   @Test
   @DisplayName("should reduce to the longest name")
   void shouldReduceLongestName() {
-    final var aggregated = from("apple", "mango", "orange", "passionfruit", "grape")
-      .aggregate("", String::toUpperCase, (longest, next) -> longest.length() > next.length() ? longest : next)
-      .yield();
+    final var aggregate = from("apple", "mango", "orange", "passionfruit", "grape")
+      .aggregate("", String::toUpperCase, (longest, next) -> longest.length() > next.length() ? longest : next);
+
+    String aggregated = null;
+    for (final var result : aggregate) aggregated = result;
 
     assertThat(aggregated).isEqualTo("PASSIONFRUIT");
   }

@@ -16,7 +16,7 @@ public interface Quantifiable<T> extends Queryable<T> {
   default One<Boolean> any() { return this.any(t -> true); }
 
   default One<Boolean> any(final Pred.Uni<? super T> where) {
-    return One.done(cursor().any(where)).or(false);
+    return One.done(cursor().any(where));
   }
 
   default One<Boolean> contains(final T element) {

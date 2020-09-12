@@ -18,12 +18,18 @@ public interface Func {
 
     default <V> Func.Uni<V, R> previous(Func.Uni<? super V, ? extends T> func) {
       assert func != null;
-      return it -> tryApply(func.tryApply(it));
+      return it -> {
+        final var applied = func.tryApply(it);
+        return applied == null ? null : tryApply(applied);
+      };
     }
 
     default <V> Func.Uni<T, V> then(Func.Uni<? super R, ? extends V> func) {
       assert func != null;
-      return it -> func.tryApply(tryApply(it));
+      return it -> {
+        final var applied = tryApply(it);
+        return applied == null ? null : func.tryApply(applied);
+      };
     }
 
     default Func.Uni<? super T, ? extends R> butNulls() {

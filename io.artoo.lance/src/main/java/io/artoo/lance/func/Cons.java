@@ -9,6 +9,10 @@ import static io.artoo.lance.func.Func.Nothing.Nil;
 
 public interface Cons {
   interface Uni<A> extends Consumer<A>, Func.Uni<A, Nothing> {
+    static <T> Uni<T> nothing() {
+      return it -> {};
+    }
+
     void tryAccept(A a) throws Throwable;
 
     @Override

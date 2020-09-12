@@ -19,7 +19,6 @@ import io.artoo.lance.next.cursor.Summable;
 import io.artoo.lance.next.cursor.Uniquable;
 import io.artoo.lance.type.Lazy;
 
-import static io.artoo.lance.next.Default.Nothing;
 import static io.artoo.lance.type.Lazy.lazy;
 import static java.lang.System.out;
 import static java.util.concurrent.ForkJoinPool.commonPool;
@@ -40,10 +39,10 @@ public interface Cursor<T> extends
   Settable<T>,
   Sortable<T>,
   Summable<T>,
-  Uniquable<T>
-{
+  Uniquable<T> {
+
   static <T> Cursor<T> nothing() {
-    return Nothing.asGeneric();
+    return new Nothing<>();
   }
 
   static <T> Cursor<T> just(final T item) {
@@ -63,8 +62,8 @@ public interface Cursor<T> extends
     return new Every<>(items);
   }
 
-  static <T> Cursor<T> eventually(final Suppl.Uni<Next<T>> next) {
-    return new Eventually<>(next);
+  static <T> Cursor<T> later(final Suppl.Uni<Next<T>> next) {
+    return new Later<>(next);
   }
 
   static int heavyTask1() throws InterruptedException {
@@ -94,42 +93,82 @@ public interface Cursor<T> extends
 }
 
 final class Just<T> implements Cursor<T> {
-  private final T item;
+  private final T element;
   private boolean hasNext = true;
 
-  Just(final T item) {this.item = item;}
-
-  @Override
-  public T fetch() {
-    hasNext = false;
-    return item;
+  Just(final T element) {
+    try {
+      assert element != null;
+      this.element = element;
+    } catch (Throwable throwable) {
+      throw new IllegalStateException("element can't be null");
+    }
   }
 
   @Override
-  public boolean hasNext() {
+  public final T fetch() {
+    try {
+      return element;
+    } finally {
+      hasNext = false;
+    }
+  }
+
+  @Override
+  public final boolean hasNext() {
     return hasNext;
+  }
+
+  @Override
+  public final Cursor<T> open() {
+    return new Just<>(element);
   }
 }
 
 final class Every<T> implements Cursor<T> {
-  private final T[] items;
-  private int index = 0;
+  private final NonNull nonNull = new NonNull();
 
-  Every(final T[] items) {this.items = items;}
+  private final T[] elements;
+
+  Every(final T[] elements) {this.elements = elements;}
 
   @Override
   public T fetch() {
-    return items[index++];
+    try {
+      if (nonNull.value != null || hasNext()) {
+        return nonNull.value;
+      }
+    } finally {
+      nonNull.value = null;
+      nonNull.index++;
+    }
+    return null;
   }
 
   @Override
   public T[] fetchAll() {
-    return items;
+    return elements;
   }
 
   @Override
   public boolean hasNext() {
-    return index < items.length;
+    do {
+      if (nonNull.index < elements.length && nonNull.value == null) {
+        nonNull.value = elements[nonNull.index];
+      }
+    } while (nonNull.value == null && ++nonNull.index < elements.length);
+
+    return nonNull.value != null;
+  }
+
+  @Override
+  public final Cursor<T> open() {
+    return new Every<>(elements);
+  }
+
+  private final class NonNull {
+    private T value;
+    private int index = 0;
   }
 }
 
@@ -142,12 +181,17 @@ final class Tick<T> implements Cursor<T> {
   public T fetch() throws Throwable {
     return callable.call();
   }
+
+  @Override
+  public boolean hasNext() {
+    return false;
+  }
 }
 
-final class Eventually<T> implements Cursor<T> {
+final class Later<T> implements Cursor<T> {
   private final Lazy<Next<T>> next;
 
-  Eventually(final Suppl.Uni<Next<T>> next) {
+  Later(final Suppl.Uni<Next<T>> next) {
     assert next != null;
     this.next = lazy(next);
   }
@@ -173,11 +217,9 @@ final class Eventually<T> implements Cursor<T> {
   }
 }
 
-enum Default implements Cursor<Object> {
-  Nothing;
-
+final class Nothing<T> implements Cursor<T> {
   @Override
-  public Object fetch() {
+  public T fetch() {
     return null;
   }
 
@@ -187,12 +229,7 @@ enum Default implements Cursor<Object> {
   }
 
   @Override
-  public Object next() {
+  public T next() {
     return null;
-  }
-
-  @SuppressWarnings("unchecked")
-  public final <R> Cursor<R> asGeneric() {
-    return (Cursor<R>) this;
   }
 }

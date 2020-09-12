@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 public interface Sortable<T> extends Projectable<T> {
   default Cursor<T> order() {
-    return Cursor.eventually(new Order<>(this));
+    return Cursor.later(new Order<>(this));
   }
 }
 

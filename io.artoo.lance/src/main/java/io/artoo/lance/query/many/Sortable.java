@@ -5,6 +5,6 @@ import io.artoo.lance.query.Queryable;
 
 public interface Sortable<T> extends Queryable<T> {
   default Many<T> order() {
-    return Many.wany(cursor().order());
+    return Many.of(cursor().order());
   }
 }

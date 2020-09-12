@@ -74,10 +74,10 @@ class SettableTest {
   @DisplayName("it should set union of two sequences")
   void shouldSetUnionOfTwoSequences() {
     final Integer[] ints1 = { 5, 3, 9, 7, 5, 9, 3, 7 };
-    final Integer[] ints2 = { 8, 3, 6, 4, 4, 9, 1, 0 };
+    final Integer[] ints2 = { 8, 3, 6, 4, 4, 9, 1, 0, 2 };
 
     final var actual = Many.from(ints1).union(ints2);
-    assertThat(actual).containsExactly(5, 3, 9, 7, 8, 6, 4, 1, 0);
+    assertThat(actual).containsExactly(5, 3, 9, 7, 8, 6, 4, 1, 0, 2);
   }
 
   @Test

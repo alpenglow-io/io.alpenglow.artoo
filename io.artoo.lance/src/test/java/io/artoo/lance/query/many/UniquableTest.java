@@ -58,11 +58,8 @@ class UniquableTest {
   @Test
   @DisplayName("should find a single element only")
   void shouldFindASingleElementOnly() {
-    final var singleElement = from(9)
-      .single()
-      .peek(out::println)
-      .yield();
-    assertThat(singleElement).isEqualTo(9);
+    final var singled = from(9).single().yield();
+    assertThat(singled).isEqualTo(9);
 
     final var singleEven = from(9, 34, 65, 87, 435, 3, 83, 23).single(number -> number % 2 == 0).yield();
     assertThat(singleEven).isEqualTo(34);

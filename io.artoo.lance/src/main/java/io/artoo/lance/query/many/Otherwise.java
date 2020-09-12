@@ -11,20 +11,20 @@ public interface Otherwise<T> extends Queryable<T> {
   @SuppressWarnings("unchecked")
   default Many<T> or(final T... values) {
     nonNullable(values, "values");
-    return Many.wany(cursor().or(values));
+    return Many.of(cursor().or(values));
   }
 
   default Many<T> or(final Many<T> many) {
-    return Many.wany(cursor().or(many.cursor()));
+    return Many.of(cursor().or(many.cursor()));
   }
 
   default <E extends RuntimeException> Many<T> or(final String message, final Func.Uni<? super String, ? extends E> exception) {
-    return Many.wany(cursor().or(message, exception));
+    return Many.of(cursor().or(message, exception));
   }
 
   default <E extends RuntimeException> Many<T> or(final Suppl.Uni<? extends E> exception) {
     nonNullable(exception, "exception");
-    return  Many.wany(cursor().or("nothing", it -> exception.tryGet()));
+    return  Many.of(cursor().or("nothing", it -> exception.tryGet()));
   }
 }
 

@@ -16,7 +16,7 @@ public interface Partitionable<T> extends Queryable<T> {
   }
 
   default Many<T> skipWhile(final Pred.Bi<? super Integer, ? super T> where) {
-    return Many.wany(cursor().skipWhile(where));
+    return Many.of(cursor().skipWhile(where));
   }
 
   default Many<T> take(final int until) {
@@ -29,6 +29,6 @@ public interface Partitionable<T> extends Queryable<T> {
   }
 
   default Many<T> takeWhile(final Pred.Bi<? super Integer, ? super T> where) {
-    return Many.wany(cursor().takeWhile(where));
+    return Many.of(cursor().takeWhile(where));
   }
 }

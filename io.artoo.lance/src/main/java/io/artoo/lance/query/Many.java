@@ -12,6 +12,9 @@ import io.artoo.lance.query.many.Quantifiable;
 import io.artoo.lance.query.many.Settable;
 import io.artoo.lance.query.many.Sortable;
 import io.artoo.lance.query.many.Uniquable;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Iterator;
 
 public interface Many<T> extends
   Projectable<T>,
@@ -29,38 +32,44 @@ public interface Many<T> extends
 
   @SafeVarargs
   static <R> Many<R> from(final R... items) {
-    return new Wany<>(Cursor.every(items));
+    return new Some<>(Cursor.every(items));
   }
 
   static Many<Object> fromAny(Object... objects) {
-    return new Wany<>(Cursor.every(objects));
+    return new Some<>(Cursor.every(objects));
   }
 
   static <R> Many<R> empty() {
-    return new Empty<>(Cursor.nothing());
+    return new Empty<>();
   }
 
   static Many<Integer> ints(final int start, final int end) {
     return new Ints(start, end);
   }
 
-  static <R> Many<R> wany(final Cursor<R> cursor) {
-    return new Wany<>(cursor);
+  static <R> Many<R> of(final Cursor<R> cursor) {
+    return new Some<>(cursor);
   }
-}
 
-record Empty<T>(Cursor<T> cursor) implements Many<T> {}
-
-final class Wany<T> implements Many<T> {
-  private final Cursor<T> cursor;
-
-  Wany(final Cursor<T> cursor) {this.cursor = cursor;}
-
+  @NotNull
   @Override
-  public Cursor<T> cursor() {
-    return this.cursor;
+  default Iterator<T> iterator() {
+    try {
+      return cursor().scroll();
+    } catch (Throwable cause) {
+      return Cursor.nothing();
+    }
   }
 }
+
+final class Empty<T> implements Many<T> {
+  @Override
+  public final Cursor<T> cursor() {
+    return Cursor.nothing();
+  }
+}
+
+record Some<T>(Cursor<T> cursor) implements Many<T> {}
 
 final class Ints implements Many<Integer> {
   private final int start;
@@ -71,7 +80,6 @@ final class Ints implements Many<Integer> {
     this.start = start;
     this.end = end;
   }
-
 
   @Override
   public final Cursor<Integer> cursor() {

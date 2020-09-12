@@ -5,6 +5,9 @@ import io.artoo.lance.query.one.Filterable;
 import io.artoo.lance.query.one.Otherwise;
 import io.artoo.lance.query.one.Peekable;
 import io.artoo.lance.query.one.Projectable;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Iterator;
 
 public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Otherwise<T> {
   static <T> One<T> of(final T element) {
@@ -20,13 +23,19 @@ public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Othe
   }
 
   static <L> One<L> none() {
-    return new None<>(Cursor.nothing());
+    return new None<>();
   }
 
+  @Deprecated(forRemoval = true)
   default T yield() {
-    return cursor().next();
+    return iterator().next();
   }
-}
+
+  @NotNull
+  @Override
+  default Iterator<T> iterator() {
+    return cursor().close();
+  }
 
 final class Lone<T> implements One<T> {
   private final T element;
@@ -42,23 +51,12 @@ final class Lone<T> implements One<T> {
   }
 }
 
-record None<T>(Cursor<T> cursor) implements One<T> {}
-
-final class Done<T> implements One<T> {
-  private final Cursor<T> cursor;
-
-  Done(final Cursor<T> cursor) {this.cursor = cursor;}
-
+final class None<T> implements One<T> {
   @Override
-  public Cursor<T> cursor() {
-    final var yielded = cursor.yield();
-    T result = null;
-
-    while (yielded.hasNext()) {
-      var next = yielded.next();
-      if (next != null) result = next;
-    }
-
-    return Cursor.maybe(result);
+  public final Cursor<T> cursor() {
+    return Cursor.nothing();
   }
+}
+
+record Done<T>(Cursor<T> cursor) implements One<T> {}
 }

@@ -21,13 +21,12 @@ public interface Extremable<T> extends Projectable<T> {
 final class Extremum<T, N extends Number, V> implements Func.Uni<T, V> {
   private final class Extremed { private V value; }
 
-  private final Extremed extremed;
+  private final Extremed extremed = new Extremed();
   private final int extreme;
   private final Func.Uni<? super T, ? extends N> number;
 
   Extremum(final int extreme, final Func.Uni<? super T, ? extends N> number) {
     assert number != null;
-    this.extremed = new Extremed();
     this.extreme = extreme;
     this.number = number;
   }

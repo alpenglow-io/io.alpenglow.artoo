@@ -12,7 +12,7 @@ public interface Concatenatable<T> extends Queryable<T> {
   }
 
   default <Q extends Queryable<T>> Many<T> concat(final Q queryable) {
-    return Many.wany(cursor().concat(queryable.cursor()));
+    return Many.of(cursor().concat(queryable.cursor()));
   }
 }
 

@@ -7,15 +7,12 @@ import io.artoo.lance.next.Next;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 @SuppressWarnings("unchecked")
 public interface Settable<T> extends Concatenatable<T> {
-  default Cursor<T> distinct() {
-    return distinct(it -> true);
-  }
-
   default Cursor<T> distinct(final Pred.Uni<? super T> where) {
-    return select(new Distinct<T>(where));
+    return select(new Distinct<>(where));
   }
 
   default Cursor<T> union(final T... elements) {
@@ -27,47 +24,37 @@ public interface Settable<T> extends Concatenatable<T> {
   }
 
   default Cursor<T> except(final T... elements) {
-    return except(Cursor.every(elements));
-  }
-
-  default <N extends Next<T>> Cursor<T> except(final N next) {
-    return select(new Except<>(next));
+    return select(new Except<>(elements));
   }
 
   default Cursor<T> intersect(final T... elements) {
-    return intersect(Cursor.every(elements));
-  }
-
-  default <N extends Next<T>> Cursor<T> intersect(final N next) {
-    return select(new Intersect<>(next));
+    return select(new Intersect<>(elements));
   }
 }
 
-@SuppressWarnings("StatementWithEmptyBody")
 final class Except<T> implements Func.Uni<T, T> {
-  private final Next<T> next;
+  private final T[] elements;
 
-  Except(final Next<T> next) {this.next = next;}
+  Except(final T[] elements) {this.elements = elements;}
 
   @Override
-  public final T tryApply(final T origin) throws Throwable {
-    T element = null;
-    while (next.hasNext() && !(element = next.fetch()).equals(origin));
-    return next.hasNext() || (element != null && element.equals(origin)) ? null : origin;
+  public final T tryApply(final T origin) {
+    var search = 0;
+    while (search < elements.length && !Objects.equals(elements[search], origin)) { search++; }
+    return search == elements.length ? origin : null;
   }
 }
 
-@SuppressWarnings("StatementWithEmptyBody")
 final class Intersect<T> implements Func.Uni<T, T> {
-  private final Next<T> next;
+  private final T[] elements;
 
-  Intersect(final Next<T> next) {this.next = next;}
+  Intersect(final T[] elements) {this.elements = elements;}
 
   @Override
-  public T tryApply(final T origin) throws Throwable {
-    var element = next.fetch();
-    for (; next.hasNext() && !element.equals(origin); element = next.fetch());
-    return (element != null && element.equals(origin)) || next.hasNext() ? origin : null;
+  public T tryApply(final T origin) {
+    var search = 0;
+    while (search < elements.length && !Objects.equals(elements[search], origin)) { search++; }
+    return search == elements.length ? null : origin;
   }
 }
 

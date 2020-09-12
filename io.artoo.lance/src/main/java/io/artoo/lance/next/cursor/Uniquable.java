@@ -9,30 +9,23 @@ public interface Uniquable<T> extends Projectable<T> {
     return select(new At<>(index));
   }
 
-  default Cursor<T> first() {
-    return first(it -> true);
-  }
-
   default Cursor<T> first(final Pred.Uni<? super T> where) {
     return select(new First<>(where));
-  }
-
-  default Cursor<T> last() {
-    return last(it -> true);
   }
 
   default Cursor<T> last(final Pred.Uni<? super T> where) {
     return select(new Last<>(where));
   }
 
-  default Cursor<T> single() {
-    return single(it -> true);
+  default Cursor<T> last() {
+    return select(new Last<>());
   }
 
   default Cursor<T> single(final Pred.Uni<? super T> where) {
     return select(new Single<>(where))
-      .select(new Last<>(it -> true))
-      .selectNext(it -> select(new At<>(it)));
+      .close()
+      .open()
+      .selectNext(indexOfSingle -> open().select(new At<>(indexOfSingle)));
   }
 }
 
@@ -94,6 +87,10 @@ final class First<T> implements Func.Uni<T, T> {
 final class Last<T> implements Func.Uni<T, T> {
   private final Found found = new Found();
   private final Pred.Uni<? super T> where;
+
+  Last() {
+    this(it -> true);
+  }
 
   Last(final Pred.Uni<? super T> where) {
     assert where != null;

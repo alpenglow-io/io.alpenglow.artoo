@@ -27,11 +27,13 @@ public interface Quantifiable<T> extends Projectable<T> {
   }
 
   default Cursor<Boolean> notContains(final T element) {
-    return contains(element).or(true);
+    return select(new Contains<>(element).not());
   }
 }
 
-final class Contains<T> implements Func.Uni<T, Boolean> {
+final class Contains<T> implements Pred.Uni<T> {
+  private boolean contained = false;
+
   private final T what;
 
   Contains(final T what) {
@@ -40,8 +42,9 @@ final class Contains<T> implements Func.Uni<T, Boolean> {
   }
 
   @Override
-  public Boolean tryApply(final T element) {
-    return what.equals(element) ? true : null;
+  public boolean tryTest(final T element) {
+    contained = contained || what.equals(element);
+    return contained;
   }
 }
 

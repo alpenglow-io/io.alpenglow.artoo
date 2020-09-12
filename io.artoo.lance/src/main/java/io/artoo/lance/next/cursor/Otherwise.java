@@ -5,7 +5,7 @@ import io.artoo.lance.func.Suppl;
 import io.artoo.lance.next.Cursor;
 import io.artoo.lance.next.Next;
 
-public interface Otherwise<T> extends Next<T> {
+public interface Otherwise<T> extends Actionable<T> {
   @SuppressWarnings("unchecked")
   default Cursor<T> or(final T... values) {
     return or(Cursor.every(values));
@@ -24,44 +24,66 @@ public interface Otherwise<T> extends Next<T> {
   }
 }
 
-@SuppressWarnings("StatementWithEmptyBody")
 final class Or<T> implements Cursor<T> {
-  private Boolean hasLeft;
+  private final Actual actual = new Actual();
 
   private final Next<T> left;
   private final Next<T> right;
 
   Or(final Next<T> left, final Next<T> right) {
+    assert left != null && right != null;
     this.left = left;
     this.right = right;
   }
 
   @Override
   public T fetch() throws Throwable {
-    T fetched = null;
-
     try {
-      if (hasLeft == null || hasLeft) {
-        while (left.hasNext() && (fetched = left.fetch()) == null)
-          ;
-
-        if (hasLeft == null) hasLeft = fetched != null;
+      if (actual.next == null && hasNext() && actual.value != null) {
+        return actual.value;
       }
-    } catch (Throwable throwable) {
-      hasLeft = false;
+
+      if (actual.next != null && (actual.value != null || (hasNext() && actual.cause == null))) {
+        return actual.value;
+      }
+
+      if (actual.next != null && actual.cause != null) {
+        throw actual.cause;
+      }
+    } finally {
+      actual.value = null;
+      actual.cause = null;
     }
 
-    if (!hasLeft) {
-      while (right.hasNext() && (fetched = right.fetch()) == null)
-        ;
-    }
-
-    return fetched;
+    return null;
   }
 
   @Override
   public boolean hasNext() {
-    return (left.hasNext() && (hasLeft == null || hasLeft)) || ((hasLeft == null || !hasLeft) && right.hasNext());
+    try {
+      do
+      {
+        if (actual.next == null && left.hasNext()) {
+          actual.next = left;
+        } else if (actual.next == null && right.hasNext()) {
+          actual.next = right;
+        }
+
+        if (actual.value == null && actual.next != null) {
+          actual.value = actual.next.fetch();
+        }
+      } while (actual.value == null && actual.cause == null && (actual.next != null && actual.next.hasNext()));
+    } catch (Throwable throwable) {
+      actual.cause = throwable;
+    }
+
+    return actual.value != null || actual.cause != null;
+  }
+
+  private final class Actual {
+    public Throwable cause;
+    private Next<T> next;
+    private T value;
   }
 }
 

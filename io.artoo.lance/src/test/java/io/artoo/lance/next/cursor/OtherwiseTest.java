@@ -27,7 +27,7 @@ class OtherwiseTest {
   @Test
   @DisplayName("should retrieve another value when cursor has next as null")
   void shouldRetrieveOrValueWhenNull() {
-    final var cursor = Cursor.just(null).or(1);
+    final var cursor = Cursor.maybe(null).or(1);
 
     assertThat(cursor.next()).isEqualTo(1);
   }
@@ -45,11 +45,12 @@ class OtherwiseTest {
   @Test
   @DisplayName("should not retrieve other values when cursor just has one next valid")
   void shouldNotRetrieveOrValuesWhenAtLeastOne() {
-    final var cursor = Cursor.every(null, 4, null, null, null).or(1, 2, 3);
+    final var cursor = Cursor.every(null, 4, null, null, 1).or(1, 2, 3);
+
+
 
     assertThat(cursor.next()).isEqualTo(4);
-    assertThat(cursor.hasNext()).isTrue();
-    assertThat(cursor.next()).isEqualTo(null);
+    assertThat(cursor.next()).isEqualTo(1);
     assertThat(cursor.hasNext()).isFalse();
   }
 
@@ -65,7 +66,7 @@ class OtherwiseTest {
   @Test
   @DisplayName("should not raise an exception when cursor has an or value")
   void shouldNotRaiseException() {
-    final var cursor = Cursor.just(null).or("No values", IllegalStateException::new).or(1);
+    final var cursor = Cursor.maybe(null).or("No values", IllegalStateException::new).or(1);
 
     assertThat(cursor.next()).isEqualTo(1);
   }

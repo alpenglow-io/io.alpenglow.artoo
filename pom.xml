@@ -27,14 +27,14 @@
     <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
 
     <annotations.version>20.1.0</annotations.version>
-    <assertj.version>3.17.1</assertj.version>
-    <junit.version>5.7.0-RC1</junit.version>
-    <junit.platform.version>1.7.0-RC1</junit.platform.version>
+    <assertj.version>3.17.2</assertj.version>
+    <junit.version>5.7.0</junit.version>
+    <junit.platform.version>1.7.0</junit.platform.version>
     <log4j.version>2.13.3</log4j.version>
-    <mockito.version>3.5.9</mockito.version>
+    <mockito.version>3.5.13</mockito.version>
     <slf4j.version>2.0.0-alpha1</slf4j.version>
 
-    <asm.version>9.0-beta</asm.version>
+    <asm.version>9.0</asm.version>
 
     <plugin-clean.version>3.1.0</plugin-clean.version>
     <plugin-compiler.version>3.8.1</plugin-compiler.version>

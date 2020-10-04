@@ -8,11 +8,11 @@ import java.util.Optional;
 import static io.artoo.lance.type.TupleType.has;
 import static io.artoo.lance.type.TupleType.tryComponentOf;
 
-public interface Tuple<R> {
-  Class<R> type();
+public interface Tuple<R extends Record> {
+  Class<R> $type();
 
   interface Single<R extends Record, A> extends Tuple<R> {
-    default A first() { return tryComponentOf(type(), 0); }
+    default A first() { return tryComponentOf($type(), 0); }
 
     default <T extends Record> T to(final @NotNull Func.Uni<? super A, ? extends T> to) {
       return to.apply(first());
@@ -28,7 +28,7 @@ public interface Tuple<R> {
   }
 
   interface Pair<R extends Record, A, B> extends Single<R, A> {
-    default B second() { return tryComponentOf(type(), 1); }
+    default B second() { return tryComponentOf($type(), 1); }
 
     default <T extends Record> T to(final @NotNull Func.Bi<? super A, ? super B, ? extends T> to) {
       return to.apply(first(), second());
@@ -44,7 +44,7 @@ public interface Tuple<R> {
   }
 
   interface Triple<R extends Record, A, B, C> extends Pair<R, A, B> {
-    default C third() { return tryComponentOf(type(), 2); }
+    default C third() { return tryComponentOf($type(), 2); }
 
     default <T extends Record> T as(final @NotNull Func.Tri<? super A, ? super B, ? super C, ? extends T> as) {
       return as.apply(first(), second(), third());
@@ -56,7 +56,7 @@ public interface Tuple<R> {
   }
 
   interface Quadruple<R extends Record, A, B, C, D> extends Triple<R, A, B, C> {
-    default D forth() { return tryComponentOf(type(), 3); }
+    default D forth() { return tryComponentOf($type(), 3); }
 
     default <T extends Record> T as(final @NotNull Func.Quad<? super A, ? super B, ? super C, ? super D, ? extends T> as) {
       return as.apply(first(), second(), third(), forth());

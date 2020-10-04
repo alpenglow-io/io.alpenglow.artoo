@@ -1,6 +1,6 @@
 package io.artoo.lance.query;
 
-import io.artoo.lance.next.Cursor;
+import io.artoo.lance.fetcher.Cursor;
 import io.artoo.lance.query.many.Aggregatable;
 import io.artoo.lance.query.many.Concatenatable;
 import io.artoo.lance.query.many.Filterable;
@@ -12,9 +12,6 @@ import io.artoo.lance.query.many.Quantifiable;
 import io.artoo.lance.query.many.Settable;
 import io.artoo.lance.query.many.Sortable;
 import io.artoo.lance.query.many.Uniquable;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Iterator;
 
 public interface Many<T> extends
   Projectable<T>,
@@ -32,11 +29,11 @@ public interface Many<T> extends
 
   @SafeVarargs
   static <R> Many<R> from(final R... items) {
-    return new Some<>(Cursor.every(items));
+    return new Some<>(Cursor.open(items));
   }
 
   static Many<Object> fromAny(Object... objects) {
-    return new Some<>(Cursor.every(objects));
+    return new Some<>(Cursor.open(objects));
   }
 
   static <R> Many<R> empty() {
@@ -49,16 +46,6 @@ public interface Many<T> extends
 
   static <R> Many<R> of(final Cursor<R> cursor) {
     return new Some<>(cursor);
-  }
-
-  @NotNull
-  @Override
-  default Iterator<T> iterator() {
-    try {
-      return cursor().scroll();
-    } catch (Throwable cause) {
-      return Cursor.nothing();
-    }
   }
 }
 
@@ -87,6 +74,6 @@ final class Ints implements Many<Integer> {
     for (int number = start, index = 0; number <= end; number++, index++) {
       numbers[index] = number;
     }
-    return Cursor.every(numbers);
+    return Cursor.open(numbers);
   }
 }

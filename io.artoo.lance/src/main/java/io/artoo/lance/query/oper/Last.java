@@ -1,13 +1,13 @@
-package io.artoo.lance.query.operation;
+package io.artoo.lance.query.oper;
 
 import io.artoo.lance.func.Func;
-import io.artoo.lance.func.Pred.Uni;
+import io.artoo.lance.func.Pred;
 
-public final class First<T> implements Func.Uni<T, T> {
-  private final Uni<? super T> where;
+public final class Last<T> implements Func.Uni<T, T> {
+  private final Pred.Uni<? super T> where;
   private final Found found;
 
-  public First(final Uni<? super T> where) {
+  public Last(final Pred.Uni<? super T> where) {
     assert where != null;
     this.where = where;
     this.found = new Found();
@@ -15,10 +15,9 @@ public final class First<T> implements Func.Uni<T, T> {
 
   @Override
   public T tryApply(final T element) throws Throwable {
-    if (where.tryTest(element) && found.value == null) {
+    if (where.tryTest(element)) {
       found.value = element;
     }
-
     return found.value;
   }
 

@@ -1,4 +1,4 @@
-package io.artoo.lance.query.operation;
+package io.artoo.lance.query.oper;
 
 public final class Index {
   public int value = 0;

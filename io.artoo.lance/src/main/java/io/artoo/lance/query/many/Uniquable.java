@@ -3,10 +3,16 @@ package io.artoo.lance.query.many;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
+import io.artoo.lance.query.oper.At;
+import io.artoo.lance.query.oper.First;
+import io.artoo.lance.query.oper.Last;
+import io.artoo.lance.query.oper.Single;
+
+import static io.artoo.lance.type.Nullability.nonNullable;
 
 public interface Uniquable<T> extends Queryable<T> {
   default One<T> at(final int index) {
-    return One.done(cursor().at(index));
+    return () -> cursor().map(new At<>(index)).scroll();
   }
 
   default One<T> first() {
@@ -14,7 +20,7 @@ public interface Uniquable<T> extends Queryable<T> {
   }
 
   default One<T> first(final Pred.Uni<? super T> where) {
-    return One.done(cursor().first(where));
+    return () -> cursor().map(new First<>(where)).scroll();
   }
 
   default One<T> last() {
@@ -22,7 +28,7 @@ public interface Uniquable<T> extends Queryable<T> {
   }
 
   default One<T> last(final Pred.Uni<? super T> where) {
-    return One.done(cursor().last(where));
+    return () -> cursor().map(new Last<>(where)).scroll();
   }
 
   default One<T> single() {
@@ -30,7 +36,11 @@ public interface Uniquable<T> extends Queryable<T> {
   }
 
   default One<T> single(final Pred.Uni<? super T> where) {
-    return One.done(cursor().single(where));
+    return () -> cursor()
+      .map(new Single<>(where))
+      .map(new Last<>(it -> true))
+      .scroll()
+      .flatMap(it -> cursor().map(new At<>(it)));
   }
 }
 

@@ -53,4 +53,3 @@ public interface Cursor<T> extends Iterator<T> {
   }
 }
 
-

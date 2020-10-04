@@ -11,7 +11,7 @@ import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class SortableTest {
-  @Test
+/*  @Test
   @Disabled
   @DisplayName("should order pets by their age")
   void shouldOrderByAge() {
@@ -28,7 +28,7 @@ class SortableTest {
       new Pet("Boots", 4),
       new Pet("Barley", 8)
     );
-  }
+  }*/
 
   @Test
   @DisplayName("should order by hashcode")

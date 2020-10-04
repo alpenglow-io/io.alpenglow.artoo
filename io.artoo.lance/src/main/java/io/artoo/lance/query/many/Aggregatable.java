@@ -3,10 +3,11 @@ package io.artoo.lance.query.many;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.One;
+import io.artoo.lance.query.oper.Aggregate;
 
 public interface Aggregatable<T> extends Countable<T>, Summable<T>, Averageable<T>, Extremable<T> {
   default <A, R> One<A> aggregate(final A seed, final Pred.Uni<? super T> where, final Func.Uni<? super T, ? extends R> select, final Func.Bi<? super A, ? super R, ? extends A> aggregate) {
-    return One.done(cursor().aggregate(seed, where, select, aggregate));
+    return () -> cursor().map(new Aggregate<>(seed, where, select, aggregate)).scroll();
   }
 
   default <A, R> One<A> aggregate(final A seed, final Func.Uni<? super T, ? extends R> select, final Func.Bi<? super A, ? super R, ? extends A> aggregate) {

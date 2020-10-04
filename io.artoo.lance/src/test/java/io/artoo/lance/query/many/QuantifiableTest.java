@@ -73,7 +73,7 @@ class QuantifiableTest {
       "Philips"
     );
   }
-
+/*
   @Test
   @DisplayName("it should contain the element")
   void shouldContainElement() {
@@ -88,5 +88,5 @@ class QuantifiableTest {
     final var actual = Many.from(1, 2, 3 ,4).notContains(5).yield();
 
     assertThat(actual).isTrue();
-  }
+  }*/
 }

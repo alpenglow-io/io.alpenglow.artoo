@@ -1,15 +1,25 @@
 package io.artoo.lance.query;
 
+import io.artoo.lance.fetcher.Cursor;
 import io.artoo.lance.func.Cons;
-import io.artoo.lance.next.Cursor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
-public interface Queryable<R> extends Iterable<R> {
-  default void eventually(final Cons.Uni<R> eventually) {
-    for (final var value : this) if (value != null) eventually.accept(value);
+public interface Queryable<T> extends Iterable<T> {
+  Cursor<T> cursor();
+
+  @NotNull
+  @Override
+  default Iterator<T> iterator() {
+    try {
+      return cursor().close();
+    } catch (Throwable cause) {
+      return Cursor.nothing();
+    }
   }
 
-  Cursor<R> cursor();
+  default void eventually(final Cons.Uni<T> eventually) {
+    for (final var value : this) if (value != null) eventually.accept(value);
+  }
 }

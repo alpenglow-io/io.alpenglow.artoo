@@ -3,6 +3,8 @@ package io.artoo.lance.query.many;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
+import io.artoo.lance.query.oper.Skip;
+import io.artoo.lance.query.oper.Take;
 
 import static io.artoo.lance.type.Nullability.nonNullable;
 
@@ -16,7 +18,7 @@ public interface Partitionable<T> extends Queryable<T> {
   }
 
   default Many<T> skipWhile(final Pred.Bi<? super Integer, ? super T> where) {
-    return Many.of(cursor().skipWhile(where));
+    return () -> cursor().map(new Skip<T, T>(where));
   }
 
   default Many<T> take(final int until) {
@@ -24,11 +26,10 @@ public interface Partitionable<T> extends Queryable<T> {
   }
 
   default Many<T> takeWhile(final Pred.Uni<? super T> where) {
-    nonNullable(where, "where");
     return takeWhile((index, param) -> where.test(param));
   }
 
   default Many<T> takeWhile(final Pred.Bi<? super Integer, ? super T> where) {
-    return Many.of(cursor().takeWhile(where));
+    return () -> cursor().map(new Take<T, T>(where));
   }
 }

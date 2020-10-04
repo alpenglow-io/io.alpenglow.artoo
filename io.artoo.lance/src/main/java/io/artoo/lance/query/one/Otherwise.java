@@ -13,11 +13,11 @@ public interface Otherwise<T> extends Queryable<T> {
   }
 
   default <O extends One<T>> One<T> or(final O otherwise) {
-    return One.done(cursor().or(otherwise.cursor()));
+    return () -> cursor().or(otherwise::cursor);
   }
 
   default <E extends RuntimeException> One<T> or(final String message, final Func.Uni<? super String, ? extends E> exception) {
-    return One.done(cursor().or(message, exception));
+    return () -> cursor().or(message, exception);
   }
 
   default <E extends RuntimeException> One<T> or(final Suppl.Uni<? extends E> exception) {

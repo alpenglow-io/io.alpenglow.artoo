@@ -1,6 +1,6 @@
 package io.artoo.lance.query;
 
-import io.artoo.lance.next.Cursor;
+import io.artoo.lance.fetcher.Cursor;
 import io.artoo.lance.query.one.Filterable;
 import io.artoo.lance.query.one.Otherwise;
 import io.artoo.lance.query.one.Peekable;
@@ -18,12 +18,9 @@ public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Othe
     return new Lone<>(element);
   }
 
-  static <T> One<T> done(Cursor<T> cursor) {
-    return new Done<>(cursor);
-  }
-
+  @SuppressWarnings("unchecked")
   static <L> One<L> none() {
-    return new None<>();
+    return (One<L>) None.Default;
   }
 
   @Deprecated(forRemoval = true)
@@ -31,32 +28,21 @@ public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Othe
     return iterator().next();
   }
 
-  @NotNull
-  @Override
-  default Iterator<T> iterator() {
-    return cursor().close();
+  record Lone<T>(T element) implements One<T> {
+    public Lone { assert element != null; }
+
+    @Override
+    public final Cursor<T> cursor() {
+      return Cursor.open(element);
+    }
   }
 
-final class Lone<T> implements One<T> {
-  private final T element;
+  enum None implements One<Object> {
+    Default;
 
-  Lone(final T element) {
-    assert element != null;
-    this.element = element;
+    @Override
+    public final Cursor<Object> cursor() {
+      return Cursor.nothing();
+    }
   }
-
-  @Override
-  public final Cursor<T> cursor() {
-    return Cursor.just(element);
-  }
-}
-
-final class None<T> implements One<T> {
-  @Override
-  public final Cursor<T> cursor() {
-    return Cursor.nothing();
-  }
-}
-
-record Done<T>(Cursor<T> cursor) implements One<T> {}
 }

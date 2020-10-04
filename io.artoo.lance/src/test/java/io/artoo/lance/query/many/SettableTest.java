@@ -70,7 +70,7 @@ class SettableTest {
     );
   }
 
-  @Test
+/*  @Test
   @DisplayName("it should set union of two sequences")
   void shouldSetUnionOfTwoSequences() {
     final Integer[] ints1 = { 5, 3, 9, 7, 5, 9, 3, 7 };
@@ -78,9 +78,9 @@ class SettableTest {
 
     final var actual = Many.from(ints1).union(ints2);
     assertThat(actual).containsExactly(5, 3, 9, 7, 8, 6, 4, 1, 0, 2);
-  }
+  }*/
 
-  @Test
+/*  @Test
   @DisplayName("it should set union of two sequences of records")
   void shouldSetUnionOfTwoSequencesOfRecords() {
     final Pet[] pets1 = { new Pet("Goofy", 1), new Pet("Micky", 2), new Pet("Minnie", 3), new Pet("Donald", 4), new Pet("Scrooge", 5) };
@@ -96,9 +96,9 @@ class SettableTest {
       "Daisy",
       "Gladstone"
     );
-  }
+  }*/
 
-  @Test
+/*  @Test
   @DisplayName("it should set difference of two sequences")
   void shouldSetDifferenceOfTwoSequences() {
     final Double[] numbers1 = { 2.0, 2.1, 2.2, 2.3, 2.4, 2.5 };
@@ -106,9 +106,9 @@ class SettableTest {
 
     final var actual = Many.from(numbers1).except(numbers2);
     assertThat(actual).containsExactly(2.0, 2.1, 2.3, 2.4, 2.5);
-  }
+  }*/
 
-  @Test
+/*  @Test
   @DisplayName("it should set difference of two sequences with one more")
   void shouldSetDifferenceOfTwoSequencesWithOneMore() {
     final Double[] numbers1 = { 2.0, 2.1, 2.2, 2.3, 2.4, 2.5 };
@@ -116,9 +116,9 @@ class SettableTest {
 
     final var actual = Many.from(numbers1).except(numbers2);
     assertThat(actual).containsExactly(2.0, 2.1, 2.3, 2.5);
-  }
+  }*/
 
-  @Test
+/*  @Test
   @DisplayName("it should set intersection of two sequences")
   void shouldSetIntersectionOfTwoSequences() {
     final Integer[] integers1 = { 44, 26, 92, 30, 71, 38 };
@@ -126,5 +126,5 @@ class SettableTest {
 
     final var actual = Many.from(integers1).intersect(integers2);
     assertThat(actual).containsExactly(26, 30);
-  }
+  }*/
 }

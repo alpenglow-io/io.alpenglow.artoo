@@ -4,6 +4,7 @@ import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
+import io.artoo.lance.query.oper.Distinct;
 
 @SuppressWarnings("unchecked")
 public interface Settable<T> extends Queryable<T> {
@@ -12,9 +13,9 @@ public interface Settable<T> extends Queryable<T> {
   }
 
   default Many<T> distinct(final Pred.Uni<? super T> where) {
-    return Many.of(cursor().distinct(where));
+    return () -> cursor().map(new Distinct<>(where));
   }
-
+/*
   default Many<T> union(final T... elements) {
     return union(Many.from(elements));
   }
@@ -29,7 +30,7 @@ public interface Settable<T> extends Queryable<T> {
 
   default Many<T> intersect(final T... elements) {
     return Many.of(cursor().intersect(elements));
-  }
+  }*/
 }
 
 @SuppressWarnings("StatementWithEmptyBody")

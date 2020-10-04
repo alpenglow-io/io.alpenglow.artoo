@@ -55,7 +55,6 @@ final class SyncLazy<T> implements Lazy<T> {
     return initialized;
   }
 
-  @Contract(" -> this")
   private Lazy<T> unset() {
     this.value = Nil;
     return this;

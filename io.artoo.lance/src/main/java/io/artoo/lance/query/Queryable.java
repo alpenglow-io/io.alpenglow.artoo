@@ -26,4 +26,9 @@ public interface Queryable<T> extends Iterable<T> {
       }
     }
   }
+
+  @SuppressWarnings("StatementWithEmptyBody")
+  default void eventually() {
+    for (final var value : this);
+  }
 }

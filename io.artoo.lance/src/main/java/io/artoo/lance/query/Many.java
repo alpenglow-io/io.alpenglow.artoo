@@ -4,6 +4,7 @@ import io.artoo.lance.fetcher.Cursor;
 import io.artoo.lance.query.many.Aggregatable;
 import io.artoo.lance.query.many.Concatenatable;
 import io.artoo.lance.query.many.Filterable;
+import io.artoo.lance.query.many.Matchable;
 import io.artoo.lance.query.many.Otherwise;
 import io.artoo.lance.query.many.Partitionable;
 import io.artoo.lance.query.many.Peekable;
@@ -24,8 +25,8 @@ public interface Many<T> extends
   Concatenatable<T>,
   Otherwise<T>,
   Peekable<T>,
-  Sortable<T>
-{
+  Sortable<T>,
+  Matchable<T> {
 
   @SafeVarargs
   static <R> Many<R> from(final R... items) {

@@ -6,7 +6,7 @@ import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
 import io.artoo.lance.query.oper.Count;
 
-interface Countable<T> extends Queryable<T> {
+public interface Countable<T> extends Queryable<T> {
   default One<Integer> count() {
     return count(it -> true);
   }

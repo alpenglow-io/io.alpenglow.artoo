@@ -2,11 +2,12 @@ package io.artoo.lance.query;
 
 import io.artoo.lance.fetcher.Cursor;
 import io.artoo.lance.query.one.Filterable;
+import io.artoo.lance.query.one.Matchable;
 import io.artoo.lance.query.one.Otherwise;
 import io.artoo.lance.query.one.Peekable;
 import io.artoo.lance.query.one.Projectable;
 
-public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Otherwise<T> {
+public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Otherwise<T>, Matchable<T> {
   static <T> One<T> of(final T element) {
     return element != null ? One.lone(element) : One.none();
   }

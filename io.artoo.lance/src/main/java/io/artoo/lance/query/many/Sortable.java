@@ -3,13 +3,10 @@ package io.artoo.lance.query.many;
 import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
 
-import static java.util.Arrays.sort;
+import static io.artoo.lance.fetcher.routine.Routine.sort;
 
 public interface Sortable<T> extends Queryable<T> {
   default Many<T> order() {
-    return () -> cursor().mapArray(elements -> {
-      sort(elements);
-      return elements;
-    });
+    return () -> cursor().invoke(sort());
   }
 }

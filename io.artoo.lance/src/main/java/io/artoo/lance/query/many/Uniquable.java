@@ -36,11 +36,7 @@ public interface Uniquable<T> extends Queryable<T> {
   }
 
   default One<T> single(final Pred.Uni<? super T> where) {
-    return () -> cursor()
-      .map(new Single<>(where))
-      .map(new Last<>(it -> true))
-      .scroll()
-      .flatMap(it -> cursor().map(new At<>(it)));
+    return () -> cursor().map(new Single<>(where)).scroll();
   }
 }
 

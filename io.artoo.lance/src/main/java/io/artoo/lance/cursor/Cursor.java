@@ -16,10 +16,6 @@ import static io.artoo.lance.type.Nullability.nonNullable;
 public interface Cursor<T> extends Iterator<T> {
   T fetch() throws Throwable;
 
-  default Cursor<T> order() throws Throwable {
-    return this;
-  }
-
   default <P> Cursor<P> map(Func.Uni<? super T, ? extends P> map) {
     return new Map<>(this, nonNullable(map, "map"));
   }
@@ -30,10 +26,6 @@ public interface Cursor<T> extends Iterator<T> {
 
   default Cursor<T> concat(final Cursor<T> cursor) {
     return new Concat<>(Cursors.enqueue(this, cursor));
-  }
-
-  default Cursor<T> exceptionally(final Cons.Uni<? super Throwable> catch$) {
-    return new Exceptionally<>(this, catch$);
   }
 
   default Cursor<T> yield() {

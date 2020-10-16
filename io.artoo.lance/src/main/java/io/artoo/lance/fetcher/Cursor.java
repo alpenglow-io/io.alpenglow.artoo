@@ -1,9 +1,19 @@
 package io.artoo.lance.fetcher;
 
-public interface Cursor<T> extends Projector<T>, Other<T>, Closer<T> {
+import io.artoo.lance.fetcher.cursor.Closer;
+import io.artoo.lance.fetcher.cursor.Invoker;
+import io.artoo.lance.fetcher.cursor.Mapper;
+import io.artoo.lance.fetcher.cursor.Other;
+import io.artoo.lance.fetcher.routine.Routine;
+
+public interface Cursor<T> extends Mapper<T>, Other<T>, Closer<T>, Invoker<T> {
   @SafeVarargs
   static <T> Cursor<T> open(final T... elements) {
     return new Open<>(elements);
+  }
+
+  static <T> Cursor<T> link(final Fetcher<T> prev, final Fetcher<T> next) {
+    return new Link<>(prev, next);
   }
 
   @SuppressWarnings("unchecked")
@@ -16,10 +26,11 @@ public interface Cursor<T> extends Projector<T>, Other<T>, Closer<T> {
   }
 }
 
-record Open<T>(T[] elements, Index index) implements Cursor<T> {
-  public Open(T[] elements) {
-    this(elements, new Index());
-  }
+final class Open<T> implements Cursor<T> {
+  private final Index index = Index.incremental();
+  private final T[] elements;
+
+  Open(final T[] elements) {this.elements = elements;}
 
   @Override
   public final T fetch() {
@@ -28,6 +39,46 @@ record Open<T>(T[] elements, Index index) implements Cursor<T> {
     } finally {
       index.inc();
     }
+  }
+
+  @Override
+  public boolean hasNext() {
+    var hasNext = index.value() < elements.length;
+    while (hasNext && elements[index.value()] == null) {
+      index.inc();
+      hasNext = index.value() < elements.length;
+    }
+    return hasNext;
+  }
+
+  @Override
+  public <R> Cursor<R> invoke(final Routine<T, R> routine) {
+    return routine.onArray().apply(elements);
+  }
+}
+
+final class Link<T> implements Cursor<T> {
+  private final Fetcher<T> prev;
+  private final Fetcher<T> next;
+
+  Link(final Fetcher<T> prev, final Fetcher<T> next) {
+    this.prev = prev;
+    this.next = next;
+  }
+
+  @Override
+  public <R> Cursor<R> invoke(final Routine<T, R> routine) {
+    return routine.onFetcher().apply(this);
+  }
+
+  @Override
+  public T fetch() throws Throwable {
+    return prev.hasNext() ? prev.fetch() : next.fetch();
+  }
+
+  @Override
+  public boolean hasNext() {
+    return prev.hasNext() || next.hasNext();
   }
 }
 
@@ -42,6 +93,11 @@ enum Nothing implements Cursor<Object> {
   @Override
   public boolean hasNext() {
     return false;
+  }
+
+  @Override
+  public <R> Cursor<R> invoke(final Routine<Object, R> routine) {
+    return Cursor.nothing();
   }
 }
 

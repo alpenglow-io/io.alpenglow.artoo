@@ -5,9 +5,6 @@ import io.artoo.lance.query.one.Filterable;
 import io.artoo.lance.query.one.Otherwise;
 import io.artoo.lance.query.one.Peekable;
 import io.artoo.lance.query.one.Projectable;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Iterator;
 
 public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Otherwise<T> {
   static <T> One<T> of(final T element) {
@@ -27,22 +24,20 @@ public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Othe
   default T yield() {
     return iterator().next();
   }
+}
 
-  record Lone<T>(T element) implements One<T> {
-    public Lone { assert element != null; }
-
-    @Override
-    public final Cursor<T> cursor() {
-      return Cursor.open(element);
-    }
-  }
-
-  enum None implements One<Object> {
-    Default;
-
-    @Override
-    public final Cursor<Object> cursor() {
-      return Cursor.nothing();
-    }
+record Lone<T>(Cursor<T> cursor) implements One<T> {
+  Lone(final T element) {
+    this(Cursor.open(element));
   }
 }
+
+enum None implements One<Object> {
+  Default;
+
+  @Override
+  public final Cursor<Object> cursor() {
+    return Cursor.nothing();
+  }
+}
+

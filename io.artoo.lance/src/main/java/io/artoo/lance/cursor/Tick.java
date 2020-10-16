@@ -12,7 +12,6 @@ import java.util.concurrent.RecursiveTask;
 import static java.lang.System.out;
 import static java.lang.Thread.sleep;
 
-@SuppressWarnings("StatementWithEmptyBody")
 public interface Tick<T> extends Pick<T> {
   static <T> Tick<T> next(final Suppl.Uni<T> taskable) {
     return new Next<>(taskable);

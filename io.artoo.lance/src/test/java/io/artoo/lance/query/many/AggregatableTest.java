@@ -1,6 +1,5 @@
 package io.artoo.lance.query.many;
 
-import io.artoo.lance.query.One;
 import io.artoo.lance.query.TestData.Pet;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +25,8 @@ class AggregatableTest {
   void shouldReduceTotalForEvens() {
     final var aggregated = from(4, 8, 8, 3, 9, 0, 7, 8, 2)
       .aggregate(0, (total, next) -> next % 2 == 0 ? ++total : total)
-      .yield();
+      .iterator()
+      .next();
 
     assertThat(aggregated).isEqualTo(6);
   }
@@ -36,7 +36,8 @@ class AggregatableTest {
   void shouldReduceReversePhrase() {
     final var aggregated = from("the quick brown fox jumps over the lazy dog".split(" "))
       .aggregate((reversed, next) -> next + " " + reversed)
-      .yield();
+      .iterator()
+      .next();
 
     assertThat(aggregated).isEqualTo("dog lazy the over jumps fox brown quick the");
   }

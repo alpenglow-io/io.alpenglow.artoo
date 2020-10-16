@@ -9,22 +9,29 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 class AverageableTest {
   @Test
-  @DisplayName("should reduce doubles and integers to same average")
-  void shouldReduceDoublesAverage() {
-    final var doublesAvg = Many.from(78.0, 92.0, 100.0, 37.0, 81.0).average().yield();
-    final var integersAvg = Many.from(78, 92, 100, 37, 81).average().yield();
+  @DisplayName("should average doubles")
+  void shouldAverageDoubles() {
+    final var averaged = Many.from(78.0, 92.0, 100.0, 37.0, 81.0).average().yield();
 
     final var expected = 77.6;
-    assertThat(doublesAvg).isEqualTo(expected);
-    assertThat(integersAvg).isEqualTo(expected);
+    assertThat(averaged).isEqualTo(expected);
+  }
+
+  @Test
+  @DisplayName("should average integers")
+  void shouldAverageIntegers() {
+    final var averaged = Many.from(78, 92, 100, 37, 81).average().yield();
+
+    final var expected = 77.6;
+    assertThat(averaged).isEqualTo(expected);
   }
 
   @Test
   @DisplayName("should reduce to average even with nullables")
   void shouldReduceAverageWithNullables() {
-    final var average = Many.fromAny(null, 10007L, 37L, 399846234235L).average().yield();
+    final var averaged = Many.fromAny(null, 10007L, 37L, 399846234235L).average().yield();
 
-    assertThat(average).isEqualTo(133282081426.33333);
+    assertThat(averaged).isEqualTo(133282081426.33333);
   }
 
   @Test

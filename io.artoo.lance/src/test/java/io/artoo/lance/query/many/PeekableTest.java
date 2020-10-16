@@ -46,7 +46,7 @@ class PeekableTest {
       .concat("8")
       .peek(it -> out.println("Concat.ed: " + it))
       .select(it -> {
-        if (it.contains("4")) throw new IllegalArgumentException("Number too low");
+        if (it.contains("4")) throw new IllegalArgumentException("I don't like 4");
         return Integer.parseInt(it);
       })
       .peek(it -> out.println("Select result: " + it))

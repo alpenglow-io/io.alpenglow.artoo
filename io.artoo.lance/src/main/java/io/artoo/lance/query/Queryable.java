@@ -20,6 +20,10 @@ public interface Queryable<T> extends Iterable<T> {
   }
 
   default void eventually(final Cons.Uni<T> eventually) {
-    for (final var value : this) if (value != null) eventually.accept(value);
+    for (final var value : this) {
+      if (value != null) {
+        eventually.accept(value);
+      }
+    }
   }
 }

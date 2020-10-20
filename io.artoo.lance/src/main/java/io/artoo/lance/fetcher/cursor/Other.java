@@ -6,13 +6,13 @@ import io.artoo.lance.fetcher.routine.Routine;
 import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Suppl;
-import io.artoo.lance.type.Lazy;
+import io.artoo.lance.type.Value;
 
 import java.util.concurrent.atomic.AtomicReference;
 
 public interface Other<T> extends Fetcher<T> {
   default <C extends Cursor<T>> Cursor<T> or(final Suppl.Uni<? extends C> alternative) {
-    return new Or<>(this, Lazy.of(alternative));
+    return new Or<>(this, Value.lazy(alternative));
   }
 
   default <E extends RuntimeException> Cursor<T> or(final String message, final Func.Uni<? super String, ? extends E> exception) {
@@ -27,9 +27,9 @@ public interface Other<T> extends Fetcher<T> {
 final class Or<T, C extends Cursor<T>> implements Cursor<T> {
   private final AtomicReference<Fetcher<T>> reference = new AtomicReference<>();
   private final Fetcher<T> source;
-  private final Lazy<? extends C> other;
+  private final Value<? extends C> other;
 
-  Or(final Fetcher<T> source, final Lazy<? extends C> other) {
+  Or(final Fetcher<T> source, final Value<? extends C> other) {
     this.source = source;
     this.other = other;
   }

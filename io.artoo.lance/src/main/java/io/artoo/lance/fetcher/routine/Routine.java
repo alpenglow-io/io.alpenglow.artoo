@@ -4,10 +4,6 @@ import io.artoo.lance.fetcher.Cursor;
 import io.artoo.lance.fetcher.Fetcher;
 import io.artoo.lance.func.Func;
 
-import java.util.Arrays;
-
-import static java.lang.System.arraycopy;
-
 public sealed interface Routine<T, R> permits Sort, Concat {
   static <T> Sort<T> sort() { return new Sort<>(); }
   static <T> Concat<T> concat(T[] elements) { return new Concat.Array<>(elements); }

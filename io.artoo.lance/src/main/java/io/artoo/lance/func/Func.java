@@ -31,10 +31,6 @@ public interface Func {
         return applied == null ? null : func.tryApply(applied);
       };
     }
-
-    default Func.Uni<? super T, ? extends R> butNulls() {
-      return it -> it == null ? null : this.tryApply(it);
-    }
   }
 
   interface Bi<A, B, R> extends BiFunction<A, B, R> {
@@ -72,6 +68,18 @@ public interface Func {
     default R apply(A a, B b, C c, D d) {
       try {
         return this.tryApply(a, b, c, d);
+      } catch (Throwable throwable) {
+        return null;
+      }
+    }
+  }
+
+  interface Quin<A, B, C, D, E, R> {
+    R tryApply(A a, B b, C c, D d, E e) throws Throwable;
+
+    default R apply(A a, B b, C c, D d, E e) {
+      try {
+        return this.tryApply(a, b, c, d, e);
       } catch (Throwable throwable) {
         return null;
       }

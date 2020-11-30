@@ -1,11 +1,11 @@
 package io.artoo.lance.func;
 
 import io.artoo.lance.func.Func.Leftover;
-import io.artoo.lance.func.Func.Nothing;
+import io.artoo.lance.func.Func.Default;
 
-import static io.artoo.lance.func.Func.Nothing.Nil;
+import static io.artoo.lance.func.Func.Default.Nothing;
 
-public interface Action extends Runnable, Func.Uni<Leftover, Nothing> {
+public interface Action extends Runnable, Func.Uni<Leftover, Default> {
   void tryExecute() throws Throwable;
 
   @Override
@@ -17,8 +17,8 @@ public interface Action extends Runnable, Func.Uni<Leftover, Nothing> {
   }
 
   @Override
-  default Nothing tryApply(Leftover __) throws Throwable {
+  default Default tryApply(Leftover __) throws Throwable {
     tryExecute();
-    return Nil;
+    return Nothing;
   }
 }

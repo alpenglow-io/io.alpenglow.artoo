@@ -1,14 +1,14 @@
 package io.artoo.lance.func;
 
-import io.artoo.lance.func.Func.Nothing;
+import io.artoo.lance.func.Func.Default;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import static io.artoo.lance.func.Func.Nothing.Nil;
+import static io.artoo.lance.func.Func.Default.Nothing;
 
 public interface Cons {
-  interface Uni<A> extends Consumer<A>, Func.Uni<A, Nothing> {
+  interface Uni<A> extends Consumer<A>, Func.Uni<A, Default> {
     static <T> Uni<T> nothing() {
       return it -> {};
     }
@@ -16,9 +16,9 @@ public interface Cons {
     void tryAccept(A a) throws Throwable;
 
     @Override
-    default Nothing tryApply(A a) throws Throwable {
+    default Default tryApply(A a) throws Throwable {
       tryAccept(a);
-      return Nil;
+      return Nothing;
     }
 
     @Override
@@ -27,19 +27,19 @@ public interface Cons {
     }
 
     @Override
-    default Nothing apply(A a) {
+    default Default apply(A a) {
       accept(a);
-      return Nil;
+      return Nothing;
     }
   }
 
-  interface Bi<A, B> extends BiConsumer<A, B>, Func.Bi<A, B, Nothing> {
+  interface Bi<A, B> extends BiConsumer<A, B>, Func.Bi<A, B, Default> {
     void tryAccept(A a, B b) throws Throwable;
 
     @Override
-    default Nothing tryApply(A a, B b) throws Throwable {
+    default Default tryApply(A a, B b) throws Throwable {
       tryAccept(a, b);
-      return Nil;
+      return Nothing;
     }
 
     @Override
@@ -50,19 +50,19 @@ public interface Cons {
     }
 
     @Override
-    default Nothing apply(A a, B b) {
+    default Default apply(A a, B b) {
       accept(a, b);
-      return Nil;
+      return Nothing;
     }
   }
 
-  interface Tri<A, B, C> extends Func.Tri<A, B, C, Nothing> {
+  interface Tri<A, B, C> extends Func.Tri<A, B, C, Default> {
     void tryAccept(A a, B b, C c) throws Throwable;
 
     @Override
-    default Nothing tryApply(A a, B b, C c) throws Throwable {
+    default Default tryApply(A a, B b, C c) throws Throwable {
       tryAccept(a, b, c);
-      return Nil;
+      return Nothing;
     }
 
     default void accept(A a, B b, C c) {
@@ -70,19 +70,19 @@ public interface Cons {
     }
 
     @Override
-    default Nothing apply(A a, B b, C c) {
+    default Default apply(A a, B b, C c) {
       accept(a, b, c);
-      return Nil;
+      return Nothing;
     }
   }
 
-  interface Quad<A, B, C, D> extends Func.Quad<A, B, C, D, Nothing> {
+  interface Quad<A, B, C, D> extends Func.Quad<A, B, C, D, Default> {
     void tryAccept(A a, B b, C c, D d) throws Throwable;
 
     @Override
-    default Nothing tryApply(A a, B b, C c, D d) throws Throwable {
+    default Default tryApply(A a, B b, C c, D d) throws Throwable {
       tryAccept(a, b, c, d);
-      return Nil;
+      return Nothing;
     }
 
     default void accept(A a, B b, C c, D d) {
@@ -90,9 +90,9 @@ public interface Cons {
     }
 
     @Override
-    default Nothing apply(A a, B b, C c, D d) {
+    default Default apply(A a, B b, C c, D d) {
       accept(a, b, c, d);
-      return Nil;
+      return Nothing;
     }
   }
 }

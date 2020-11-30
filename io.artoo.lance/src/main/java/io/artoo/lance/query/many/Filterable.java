@@ -2,7 +2,9 @@ package io.artoo.lance.query.many;
 
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.Many;
+import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
+import io.artoo.lance.query.oper.NotOfType;
 import io.artoo.lance.query.oper.OfType;
 import io.artoo.lance.query.oper.Where;
 
@@ -17,6 +19,10 @@ public interface Filterable<T> extends Queryable<T> {
 
   default <R> Many<R> ofType(final Class<? extends R> type) {
     return () -> cursor().map(new OfType<>(type));
+  }
+
+  default <R> Many<T> notOfType(final Class<? extends R> type) {
+    return () -> cursor().map(new NotOfType<>(type));
   }
 }
 

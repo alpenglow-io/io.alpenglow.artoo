@@ -1,9 +1,11 @@
 package io.artoo.lance.type;
 
 import io.artoo.lance.func.Func;
+import io.artoo.lance.query.One;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.RecordComponent;
 import java.util.Optional;
 
 import static io.artoo.lance.type.TupleType.has;
@@ -82,21 +84,24 @@ public interface Tuple<R extends Record> {
 }
 
 @SuppressWarnings("unchecked")
-enum TupleType {;
-  static <R extends Record, T> @NotNull Optional<T> componentOf(final Object instance, @NotNull final Class<R> type, final int index) {
-    try {
-      return Optional.ofNullable(
-        index >= 0 && type.getRecordComponents().length > index
-          ? (T) type.getRecordComponents()[index].getAccessor().invoke(instance)
-          : null
-      );
-    } catch (ClassCastException | IllegalAccessException | InvocationTargetException e) {
-      return Optional.empty();
-    }
+enum TupleType {
+  ;
+
+  static <R extends Record, T> @NotNull One<T> componentOf(final Object instance, @NotNull final Class<R> type, final int index) {
+    return One.of(index)
+      .where(it -> it >= 0 && type.getRecordComponents().length > it)
+      .select(it -> type.getRecordComponents()[it])
+      .select(RecordComponent::getAccessor)
+      .select(it -> it.invoke(instance))
+      .select(it -> (T) it);
   }
 
   static <R extends Record, T> @NotNull T tryComponentOf(final Object instance, @NotNull final Class<R> type, final int index) {
-    return TupleType.<R, T>componentOf(instance, type, index).orElseThrow(IllegalStateException::new);
+    return TupleType
+      .<R, T>componentOf(instance, type, index)
+      .exceptionally(IllegalStateException::new)
+      .or("Can't get record-type component: " + type.getCanonicalName(), IllegalStateException::new)
+      .yield();
   }
 
   static <T> boolean has(final T property, final T value) {

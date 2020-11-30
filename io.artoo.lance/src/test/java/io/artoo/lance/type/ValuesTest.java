@@ -57,7 +57,7 @@ class ValuesTest {
     );
 
     pool.invokeAll(pops);
-    pool.awaitTermination(10, SECONDS);
+    pool.awaitTermination(20, SECONDS);
 
     assertThat(values.pop()).isNull();
   }

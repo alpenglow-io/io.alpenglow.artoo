@@ -3,13 +3,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.github.trydent-io</groupId>
+  <groupId>io.artoo</groupId>
   <artifactId>io.artoo</artifactId>
   <packaging>pom</packaging>
   <version>1.0.0-SNAPSHOT</version>
   <modules>
     <module>io.artoo.fxcalibur</module>
     <module>io.artoo.lance</module>
+    <module>io.artoo.gwen</module>
+    <module>io.artoo.anacleto</module>
   </modules>
 
   <name>Artoo</name>
@@ -23,15 +25,15 @@
     <maven.max.version>3.6.2</maven.max.version>
     <maven.min.version>3.3.9</maven.min.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
-    <maven.compiler.target>${java.release}</maven.compiler.target>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
     <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
 
     <annotations.version>20.1.0</annotations.version>
-    <assertj.version>3.17.2</assertj.version>
+    <assertj.version>3.18.0</assertj.version>
     <junit.version>5.7.0</junit.version>
     <junit.platform.version>1.7.0</junit.platform.version>
     <log4j.version>2.13.3</log4j.version>
-    <mockito.version>3.5.15</mockito.version>
+    <mockito.version>3.6.0</mockito.version>
     <slf4j.version>2.0.0-alpha1</slf4j.version>
 
     <asm.version>9.0</asm.version>
@@ -45,11 +47,11 @@
     <plugin-jar.version>3.2.0</plugin-jar.version>
     <plugin-pmd.version>3.13.0</plugin-pmd.version>
     <plugin-release.version>3.0.0-M1</plugin-release.version>
-    <plugin-resources.version>3.1.0</plugin-resources.version>
-    <plugin-site.version>3.9.0</plugin-site.version>
-    <plugin-surefire.version>3.0.0-M4</plugin-surefire.version>
-    <plugin-versions.version>2.7</plugin-versions.version>
-    <plugin-source.version>3.0.1</plugin-source.version>
+    <plugin-resources.version>3.2.0</plugin-resources.version>
+    <plugin-site.version>3.9.1</plugin-site.version>
+    <plugin-surefire.version>3.0.0-M5</plugin-surefire.version>
+    <plugin-versions.version>2.8.1</plugin-versions.version>
+    <plugin-source.version>3.2.1</plugin-source.version>
   </properties>
 
   <dependencies>
@@ -199,7 +201,7 @@
             <goal>test</goal>
           </goals>
           <configuration>
-            <forkCount>0</forkCount>
+            <argLine>--enable-preview</argLine>
           </configuration>
         </plugin>
         <plugin>
@@ -315,21 +317,11 @@
       </plugin>
     </plugins>
   </build>
-
+<!--
   <repositories>
     <repository>
       <id>jitpack.io</id>
       <url>https://jitpack.io</url>
     </repository>
-  </repositories>
-  <pluginRepositories>
-    <pluginRepository>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <id>bintray-cy6ergn0m-maven</id>
-      <name>bintray-plugins</name>
-      <url>http://dl.bintray.com/cy6ergn0m/maven</url>
-    </pluginRepository>
-  </pluginRepositories>
+  </repositories>-->
 </project>

@@ -5,11 +5,12 @@ import io.artoo.lance.func.Suppl;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import static io.artoo.lance.func.Func.Nothing.Nil;
+import static io.artoo.lance.func.Func.Default.Nothing;
+import static io.artoo.lance.type.Nullability.nonNullable;
 
-public sealed interface Value<T> extends Suppl.Uni<T> permits ReadWrite, Absent, Lazy {
-  static <T> Value<T> readWrite(final T value) {
-    return new ReadWrite<>(value);
+public sealed interface Value<T> extends Suppl.Uni<T> permits Late, Absent, Lazy {
+  static <T> Value<T> late() {
+    return new Late<>();
   }
 
   @SuppressWarnings("unchecked")
@@ -21,7 +22,8 @@ public sealed interface Value<T> extends Suppl.Uni<T> permits ReadWrite, Absent,
     return new Lazy<>(supplier);
   }
 
-  default Value<T> put(T value) { return this; }
+  default Value<T> set(T value) { return this; }
+  default Value<T> set(Suppl.Uni<T> value) { return set(value.get()); }
 
   @Override
   default T tryGet() { return null; }
@@ -30,11 +32,12 @@ public sealed interface Value<T> extends Suppl.Uni<T> permits ReadWrite, Absent,
 enum Absent implements Value<Object> {Default}
 
 @SuppressWarnings({"EqualsWhichDoesntCheckParameterClass"})
-final class ReadWrite<T> implements Value<T> {
+final class Late<T> implements Value<T> {
   private final ReadWriteLock lock = new ReentrantReadWriteLock();
   private T value;
 
-  ReadWrite(final T value) {
+  Late() { this(null); }
+  Late(final T value) {
     this.value = value;
   }
 
@@ -50,11 +53,25 @@ final class ReadWrite<T> implements Value<T> {
   }
 
   @Override
-  public final Value<T> put(final T value) {
+  public final Value<T> set(final T value) {
     final var write = this.lock.writeLock();
     try {
       write.lock();
       this.value = value;
+    } finally {
+      write.unlock();
+    }
+    return this;
+  }
+
+  @Override
+  public Value<T> set(final Suppl.Uni<T> value) {
+    final var write = this.lock.writeLock();
+    try {
+      write.lock();
+      this.value = value.tryGet();
+    } catch (Throwable throwable) {
+      throwable.printStackTrace();
     } finally {
       write.unlock();
     }
@@ -84,7 +101,7 @@ final class Lazy<T> implements Value<T> {
   Lazy(final Suppl.Uni<T> supplier) {
     this(
       supplier,
-      Absent.Default
+      Nothing
     );
   }
   private Lazy(final Suppl.Uni<T> supplier, final Object value) {
@@ -96,12 +113,12 @@ final class Lazy<T> implements Value<T> {
   @SuppressWarnings("unchecked")
   public final T tryGet() {
     final var v1 = value;
-    if (!v1.equals(Nil))
+    if (!v1.equals(Nothing))
       return (T) v1;
     else
       synchronized (this) {
         final var v2 = value;
-        return !v2.equals(Nil) ? (T) v1 : set();
+        return !v2.equals(Nothing) ? (T) v1 : set();
       }
   }
 
@@ -112,9 +129,17 @@ final class Lazy<T> implements Value<T> {
   }
 
   @Override
-  public final Value<T> put(final T value) {
+  public final Value<T> set(final T value) {
     synchronized (this) {
       this.supplier = () -> value;
+      return this;
+    }
+  }
+
+  @Override
+  public Value<T> set(final Suppl.Uni<T> value) {
+    synchronized (this) {
+      this.supplier = value;
       return this;
     }
   }

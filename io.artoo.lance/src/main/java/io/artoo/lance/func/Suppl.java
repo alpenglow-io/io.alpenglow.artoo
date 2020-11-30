@@ -21,6 +21,7 @@ public interface Suppl {
       try {
         return tryGet();
       } catch (Throwable throwable) {
+        throwable.printStackTrace();
         return null;
       }
     }

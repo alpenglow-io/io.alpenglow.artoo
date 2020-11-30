@@ -86,6 +86,6 @@ public interface Func {
     }
   }
 
-  enum Nothing {Nil}
+  enum Default {Nothing}
   enum Leftover {__}
 }

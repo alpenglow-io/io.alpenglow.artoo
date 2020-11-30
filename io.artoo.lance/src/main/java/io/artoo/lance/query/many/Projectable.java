@@ -14,11 +14,11 @@ public interface Projectable<T> extends Queryable<T> {
     return select((index, value) -> select.tryApply(value));
   }
 
-  default <R, M extends Many<R>> Many<R> selectMany(Func.Bi<? super Integer, ? super T, ? extends M> select) {
-    return () -> cursor().map(new Select<T, M>(select)).flatMap(Queryable::cursor);
+  default <R, Q extends Queryable<R>> Many<R> selectMany(Func.Bi<? super Integer, ? super T, ? extends Q> select) {
+    return () -> cursor().map(new Select<T, Q>(select)).flatMap(Queryable::cursor);
   }
 
-  default <R, M extends Many<R>> Many<R> selectMany(Func.Uni<? super T, ? extends M> select) {
+  default <R, Q extends Queryable<R>> Many<R> selectMany(Func.Uni<? super T, ? extends Q> select) {
     return selectMany((i, it) -> select.tryApply(it));
   }
 }

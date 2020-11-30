@@ -1,6 +1,8 @@
 package io.artoo.lance.query;
 
 import io.artoo.lance.fetcher.Cursor;
+import io.artoo.lance.func.Func;
+import io.artoo.lance.func.Suppl;
 import io.artoo.lance.query.one.Filterable;
 import io.artoo.lance.query.one.Matchable;
 import io.artoo.lance.query.one.Otherwise;
@@ -16,9 +18,17 @@ public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Othe
     return new Lone<>(element);
   }
 
+  static <T> One<T> of(final Suppl.Uni<T> suppl) {
+    return new Pone<>(suppl);
+  }
+
   @SuppressWarnings("unchecked")
   static <L> One<L> none() {
     return (One<L>) None.Default;
+  }
+
+  static <A extends AutoCloseable, T, O extends One<T>> One<T> go(Suppl.Uni<? extends A> going, Func.Uni<? super A, ? extends O> then) {
+    return new Gone<>(going, then);
   }
 
   @Deprecated(forRemoval = true)
@@ -27,9 +37,29 @@ public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Othe
   }
 }
 
-record Lone<T>(Cursor<T> cursor) implements One<T> {
-  Lone(final T element) {
-    this(Cursor.open(element));
+final class Lone<T> implements One<T> {
+  private final T element;
+
+  public Lone(final T element) {
+    this.element = element;
+  }
+
+  @Override
+  public Cursor<T> cursor() {
+    return Cursor.open(element);
+  }
+}
+
+final class Pone<T> implements One<T> {
+  private final Suppl.Uni<T> suppl;
+
+  public Pone(final Suppl.Uni<T> suppl) {
+    this.suppl = suppl;
+  }
+
+  @Override
+  public Cursor<T> cursor() {
+    return Cursor.open(suppl.get());
   }
 }
 
@@ -42,3 +72,21 @@ enum None implements One<Object> {
   }
 }
 
+final class Gone<A extends AutoCloseable, T, O extends One<T>> implements One<T> {
+  private final Suppl.Uni<? extends A> doing;
+  private final Func.Uni<? super A, ? extends O> then;
+
+  Gone(final Suppl.Uni<? extends A> doing, final Func.Uni<? super A, ? extends O> then) {
+    this.doing = doing;
+    this.then = then;
+  }
+
+  @Override
+  public final Cursor<T> cursor() {
+    try (final var auto = doing.tryGet()) {
+      return then.tryApply(auto).cursor();
+    } catch (Throwable e) {
+      return Cursor.nothing();
+    }
+  }
+}

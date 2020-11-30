@@ -5,6 +5,7 @@ import io.artoo.lance.fetcher.cursor.Invoker;
 import io.artoo.lance.fetcher.cursor.Mapper;
 import io.artoo.lance.fetcher.cursor.Other;
 import io.artoo.lance.fetcher.routine.Routine;
+import io.artoo.lance.func.Suppl;
 
 public interface Cursor<T> extends Mapper<T>, Other<T>, Closer<T>, Invoker<T> {
   @SafeVarargs
@@ -100,4 +101,3 @@ enum Nothing implements Cursor<Object> {
     return Cursor.nothing();
   }
 }
-

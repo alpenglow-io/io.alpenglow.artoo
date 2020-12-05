@@ -1,8 +1,12 @@
-package io.artoo.anacleto.ui;
+package io.artoo.anacleto.ui.element;
 
+import com.googlecode.lanterna.gui2.Panel;
 import com.googlecode.lanterna.gui2.TextBox;
 import com.googlecode.lanterna.gui2.Window;
 import com.googlecode.lanterna.input.KeyStroke;
+import io.artoo.anacleto.ui.Element;
+import io.artoo.anacleto.ui.OnAttached;
+import io.artoo.anacleto.ui.OnInput;
 import io.artoo.lance.type.Value;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -18,21 +22,17 @@ public interface Text extends Element<TextBox> {
     return new Input();
   }
 
-  final class Area implements Text, OnInput, OnAttached {
-    private final Value<TextBox> textArea = Value.late();
-
+  final class Area extends LazyElement<TextBox> implements Text, OnInput, OnAttached {
     private static final int MODAL_BORDERS = 2;
 
     @Override
     public TextBox content() {
-      return textArea
-        .set(new TextBox("", MULTI_LINE))
-        .get();
+      return new TextBox("", MULTI_LINE);
     }
 
     @Override
     public void onInput(final Window window, final KeyStroke keyStroke, final AtomicBoolean deliverEvent) {
-      final var text = textArea.get();
+      final var text = element.get();
 
       final var textWidth = text.getSize().getColumns();
       final var textX = text.getPosition().getColumn();
@@ -52,7 +52,7 @@ public interface Text extends Element<TextBox> {
     }
   }
 
-  final class Input implements Text {
+  final class Input extends LazyElement<TextBox> implements Text {
     @Override
     public TextBox content() {
       return new TextBox();

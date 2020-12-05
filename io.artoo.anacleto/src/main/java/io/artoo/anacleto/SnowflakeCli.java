@@ -1,28 +1,25 @@
 package io.artoo.anacleto;
 
-import io.artoo.anacleto.ui.Button;
-import io.artoo.anacleto.ui.Frame;
-import io.artoo.anacleto.ui.Label;
-import io.artoo.anacleto.ui.Section;
-
-import static io.artoo.anacleto.ui.Scene.scene;
+import io.artoo.anacleto.ui.Scene;
 
 public class SnowflakeCli {
   public static void main(String[] args) {
-    final var scene = scene();
+    final var scene = Scene.frame();
     scene.open(
-      Frame.textual(
-        "Winter",
-        Section.border(location ->
-          switch (location) {
-            case TOP -> Label.text("Something nice over here!");
-            case LEFT -> Section.vertical(
-              Label.text("I'm on the left")
-            );
-            case CENTER -> scene.prop().textArea();
-            case BOTTOM -> Button.close();
-            case RIGHT -> null;
-          }
+      scene.sectionBorder(location -> location
+        .top(
+          scene.label("Something nice over here!")
+        )
+        .left(
+          scene.sectionVertical(
+            scene.button("Cliccami tutto!")
+          )
+        )
+        .center(
+          scene.textArea()
+        )
+        .bottom(
+          scene.buttonClose()
         )
       )
     );

@@ -38,6 +38,7 @@ public interface Pred {
       try {
         return tryTest(a);
       } catch (Throwable throwable) {
+        throwable.printStackTrace();
         return false;
       }
     }
@@ -61,6 +62,7 @@ public interface Pred {
       try {
         return tryTest(a, b);
       } catch (Throwable throwable) {
+        throwable.printStackTrace();
         return false;
       }
     }

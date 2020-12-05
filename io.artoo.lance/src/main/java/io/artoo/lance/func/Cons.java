@@ -23,7 +23,11 @@ public interface Cons {
 
     @Override
     default void accept(A a) {
-      try { tryAccept(a); } catch (Throwable ignored) {}
+      try {
+        tryAccept(a);
+      } catch (Throwable throwable) {
+        throwable.printStackTrace();
+      }
     }
 
     @Override
@@ -44,8 +48,10 @@ public interface Cons {
 
     @Override
     default void accept(A a, B b) {
-      try { tryAccept(a, b); } catch (Throwable ignored) {
-        ignored.printStackTrace();
+      try {
+        tryAccept(a, b);
+      } catch (Throwable throwable) {
+        throwable.printStackTrace();
       }
     }
 
@@ -66,7 +72,11 @@ public interface Cons {
     }
 
     default void accept(A a, B b, C c) {
-      try { tryAccept(a, b, c); } catch (Throwable ignored) {}
+      try {
+        tryAccept(a, b, c);
+      } catch (Throwable throwable) {
+        throwable.printStackTrace();
+      }
     }
 
     @Override
@@ -86,7 +96,11 @@ public interface Cons {
     }
 
     default void accept(A a, B b, C c, D d) {
-      try { tryAccept(a, b, c, d); } catch (Throwable ignored) {}
+      try {
+        tryAccept(a, b, c, d);
+      } catch (Throwable throwable) {
+        throwable.printStackTrace();
+      }
     }
 
     @Override

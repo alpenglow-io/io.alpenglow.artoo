@@ -1,35 +1,23 @@
 package io.artoo.anacleto.ui;
 
 import com.googlecode.lanterna.gui2.MultiWindowTextGUI;
-import com.googlecode.lanterna.gui2.TextGUI;
-import com.googlecode.lanterna.gui2.Window;
-import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
-import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
-import io.artoo.lance.type.Value;
-
-import java.util.Map;
+import io.artoo.anacleto.ui.element.Modal;
 
 public interface Frame {
-  static Frame textual(final String title, final Section section) {
-    return
-      new Textual(
-        new Terminal.Screen(
-          new DefaultTerminalFactory()
-        ),
-        new Modal.FullSize(
-          title,
-          section
-        )
-      );
+  static Frame terminal(Modal modal) {
+    return new Terminal(
+      io.artoo.anacleto.ui.Terminal.screen(),
+      modal
+    );
   }
 
   void render(Scene scene);
 
-  final class Textual implements Frame {
-    private final Terminal terminal;
+  final class Terminal implements Frame {
+    private final io.artoo.anacleto.ui.Terminal terminal;
     private final Modal modal;
 
-    private Textual(final Terminal terminal, final Modal modal) {
+    private Terminal(final io.artoo.anacleto.ui.Terminal terminal, final Modal modal) {
       this.terminal = terminal;
       this.modal = modal;
     }
@@ -37,13 +25,11 @@ public interface Frame {
     @Override
     public void render(Scene scene) {
       terminal.using(screen -> {
-        final var window = modal.content();
+        final var window = modal.yield();
 
         for (var element : scene.elements()) {
-          if (element instanceof Element.Attached<?> attached) {
-            if (attached.origin() instanceof OnAttached onAttached) {
-              onAttached.onAttached(window);
-            }
+          if (element instanceof OnAttached onAttached) {
+            onAttached.onAttached(window);
           }
         }
 

@@ -8,6 +8,10 @@ import static com.googlecode.lanterna.screen.Screen.RefreshType.AUTOMATIC;
 import static com.googlecode.lanterna.screen.TabBehaviour.CONVERT_TO_TWO_SPACES;
 
 public sealed interface Terminal permits Terminal.Screen {
+  static Terminal screen() {
+    return new Terminal.Screen(new DefaultTerminalFactory());
+  }
+
   <T> T using(Func.Uni<? super com.googlecode.lanterna.screen.Screen, ? extends T> using);
 
   final class Screen implements Terminal {

@@ -1,7 +1,8 @@
-package io.artoo.anacleto.ui;
+package io.artoo.anacleto.ui.element;
 
 import com.googlecode.lanterna.gui2.Window;
-import io.artoo.lance.type.Value;
+import io.artoo.anacleto.ui.Element;
+import io.artoo.anacleto.ui.OnAttached;
 
 public interface Button extends Element<com.googlecode.lanterna.gui2.Button> {
   static Button text(final String text) {
@@ -11,10 +12,10 @@ public interface Button extends Element<com.googlecode.lanterna.gui2.Button> {
     return new Button.Close();
   }
 
-  final class Text implements Button {
+  final class Text extends LazyElement<com.googlecode.lanterna.gui2.Button> implements Button {
     private final String text;
 
-    private Text(final String text) {this.text = text;}
+    public Text(final String text) {this.text = text;}
 
     @Override
     public com.googlecode.lanterna.gui2.Button content() {
@@ -22,19 +23,17 @@ public interface Button extends Element<com.googlecode.lanterna.gui2.Button> {
     }
   }
 
-  final class Close implements Button, OnAttached {
-    private final Value<com.googlecode.lanterna.gui2.Button> button = Value.late();
-
+  final class Close extends LazyElement<com.googlecode.lanterna.gui2.Button> implements Button, OnAttached {
     private Close() {}
 
     @Override
     public com.googlecode.lanterna.gui2.Button content() {
-      return button.set(new com.googlecode.lanterna.gui2.Button("Close")).get();
+      return new com.googlecode.lanterna.gui2.Button("Close");
     }
 
     @Override
     public void onAttached(final Window window) {
-      button.get().addListener(it -> window.close());
+      element.get().addListener(it -> window.close());
     }
   }
 }

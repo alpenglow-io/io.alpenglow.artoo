@@ -2,8 +2,23 @@ package io.artoo.lance.func;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 public interface Func {
+  interface Unary<T> extends UnaryOperator<T> {
+    T tryApply(T t) throws Throwable;
+
+    @Override
+    default T apply(T t) {
+      try {
+        return tryApply(t);
+      } catch (Throwable throwable) {
+        throwable.printStackTrace();
+        return null;
+      }
+    }
+  }
+
   interface Uni<T, R> extends Function<T, R> {
     R tryApply(T t) throws Throwable;
 
@@ -12,6 +27,7 @@ public interface Func {
       try {
         return this.tryApply(t);
       } catch (Throwable throwable) {
+        throwable.printStackTrace();
         return null;
       }
     }
@@ -41,6 +57,7 @@ public interface Func {
       try {
         return this.tryApply(a, b);
       } catch (Throwable throwable) {
+        throwable.printStackTrace();
         return null;
       }
     }
@@ -57,6 +74,7 @@ public interface Func {
       try {
         return this.tryApply(a, b, c);
       } catch (Throwable throwable) {
+        throwable.printStackTrace();
         return null;
       }
     }
@@ -69,6 +87,7 @@ public interface Func {
       try {
         return this.tryApply(a, b, c, d);
       } catch (Throwable throwable) {
+        throwable.printStackTrace();
         return null;
       }
     }
@@ -81,6 +100,7 @@ public interface Func {
       try {
         return this.tryApply(a, b, c, d, e);
       } catch (Throwable throwable) {
+        throwable.printStackTrace();
         return null;
       }
     }

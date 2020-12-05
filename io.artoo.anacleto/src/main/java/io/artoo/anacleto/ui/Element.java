@@ -1,29 +1,20 @@
 package io.artoo.anacleto.ui;
 
-import io.artoo.lance.type.Value;
+import com.googlecode.lanterna.gui2.Component;
+import io.artoo.lance.fetcher.Cursor;
+import io.artoo.lance.query.One;
 
-public interface Element<T> {
-  T content();
+public interface Element<T> extends One<T> {
+  static Element<? extends Component> empty() {
+    return Default.Empty;
+  }
 
-  final class Attached<T> implements Element<T> {
-    private final Value<T> value;
-    private final Element<T> origin;
-
-    Attached(final Element<T> origin) {
-      this(Value.late(), origin);
-    }
-    private Attached(final Value<T> value, final Element<T> origin) {
-      this.value = value;
-      this.origin = origin;
-    }
+  enum Default implements Element<Component> {
+    Empty;
 
     @Override
-    public T content() {
-      return value.set(origin::content).get();
-    }
-
-    public Element<T> origin() {
-      return origin;
+    public Cursor<Component> cursor() {
+      return Cursor.nothing();
     }
   }
 }

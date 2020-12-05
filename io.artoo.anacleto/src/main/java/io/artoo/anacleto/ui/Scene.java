@@ -1,6 +1,12 @@
 package io.artoo.anacleto.ui;
 
-import com.googlecode.lanterna.gui2.Window;
+import io.artoo.anacleto.ui.element.Modal;
+import io.artoo.anacleto.ui.element.Section;
+import io.artoo.anacleto.ui.scene.Buttonable;
+import io.artoo.anacleto.ui.scene.Labelable;
+import io.artoo.anacleto.ui.scene.Modalable;
+import io.artoo.anacleto.ui.scene.Sectionable;
+import io.artoo.anacleto.ui.scene.Textable;
 import io.artoo.lance.type.Value;
 
 import java.util.Collection;
@@ -8,52 +14,40 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 
-public sealed interface Scene permits Scene.Impl {
-  static Scene scene() {
-    return new Impl(new ConcurrentHashMap<>(), Value.late());
+public sealed interface Scene extends Sectionable, Textable, Modalable, Buttonable, Labelable permits Scene.Frame {
+  static Scene frame() {
+    return new Frame(new ConcurrentHashMap<>(), Value.late());
   }
 
-  Window window();
-
-  Scene open(Frame frame);
-
-  default Props prop() {
-    return new Props(Id.random(), this);
-  }
-
-  <T> Scene prop(Id id, Element<T> element);
-  default <T> Scene prop(String id, Element<T> element) {
-    return prop(Id.from(id), element);
-  }
-  default <T> Scene prop(Element<T> element) {
-    return prop(Id.random(), element);
-  }
+  Scene open(Modal modal);
+  Scene open(Section section);
 
   Collection<Element<?>> elements();
 
-  final class Impl implements Scene {
+  final class Frame implements Scene {
     private final Map<Id, Element<?>> elements;
-    private final Value<Frame> frame;
+    private final Value<io.artoo.anacleto.ui.Frame> frame;
 
-    private Impl(final Map<Id, Element<?>> elements, final Value<Frame> frame) {
+    private Frame(final Map<Id, Element<?>> elements, final Value<io.artoo.anacleto.ui.Frame> frame) {
       this.elements = elements;
       this.frame = frame;
     }
 
     @Override
-    public Window window() {
-      return (Window) elements.get(Modal.FullSize.ID).content();
+    public Scene open(final Modal modal) {
+      this.frame.set(io.artoo.anacleto.ui.Frame.terminal(modal)).get().render(this);
+      return this;
     }
 
     @Override
-    public Scene open(final Frame frame) {
-      this.frame.set(frame).get().render(this);
+    public Scene open(final Section section) {
+      this.frame.set(io.artoo.anacleto.ui.Frame.terminal(Modal.fullSize("", section))).get().render(this);
       return this;
     }
 
     @Override
     public <T> Scene prop(final Id id, final Element<T> element) {
-      elements.put(id, new Element.Attached<>(element));
+      elements.put(id, element);
       return this;
     }
 
@@ -61,19 +55,5 @@ public sealed interface Scene permits Scene.Impl {
     public Collection<Element<?>> elements() {
       return elements.values();
     }
-
-   /* @Override
-    public <T> T append(final Node<T> node) {
-      final var length = props.get().length;
-
-      props
-        .set(() -> Arrays.copyOf(props.get(), length + 1))
-        .get()[props.get().length - 1] = node;
-
-      elements.put(node.id(), props.get()[length].element());
-      return (T) elements.get(node.id());
-    }*/
-
-
   }
 }

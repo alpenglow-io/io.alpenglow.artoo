@@ -5,6 +5,8 @@ import io.artoo.lance.fetcher.Fetcher;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.query.Many;
 
+import java.util.Iterator;
+
 final class Curry<T, R> implements Routine<T, R> {
   private final Func.Uni<? super T, ? extends R> map;
 
@@ -29,6 +31,18 @@ final class Curry<T, R> implements Routine<T, R> {
       var many = Many.<R>empty();
       while (fetcher.hasNext()) {
         many = many.concat(map.tryApply(fetcher.fetch()));
+      }
+      return many.cursor();
+    };
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public Func.Uni<Iterator<T>, Cursor<R>> onIterator() {
+    return iterator -> {
+      var many = Many.<R>empty();
+      while (iterator.hasNext()) {
+        many = many.concat(map.tryApply(iterator.next()));
       }
       return many.cursor();
     };

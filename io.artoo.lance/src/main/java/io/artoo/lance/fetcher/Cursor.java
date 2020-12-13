@@ -5,7 +5,8 @@ import io.artoo.lance.fetcher.cursor.Invoker;
 import io.artoo.lance.fetcher.cursor.Mapper;
 import io.artoo.lance.fetcher.cursor.Other;
 import io.artoo.lance.fetcher.routine.Routine;
-import io.artoo.lance.func.Suppl;
+
+import java.util.Iterator;
 
 public interface Cursor<T> extends Mapper<T>, Other<T>, Closer<T>, Invoker<T> {
   @SafeVarargs
@@ -24,6 +25,31 @@ public interface Cursor<T> extends Mapper<T>, Other<T>, Closer<T>, Invoker<T> {
 
   static <T> Cursor<T> maybe(final T element) {
     return element == null ? nothing() : open(element);
+  }
+
+  static <T> Cursor<T> iteration(final Iterator<T> iterator) {
+    return new Iteration<>(iterator);
+  }
+}
+
+final class Iteration<T> implements Cursor<T> {
+  private final Iterator<T> iterator;
+
+  Iteration(final Iterator<T> iterator) {this.iterator = iterator;}
+
+  @Override
+  public T fetch() throws Throwable {
+    return iterator.next();
+  }
+
+  @Override
+  public <R> Cursor<R> invoke(final Routine<T, R> routine) {
+    return routine.onIterator().apply(iterator);
+  }
+
+  @Override
+  public boolean hasNext() {
+    return iterator.hasNext();
   }
 }
 

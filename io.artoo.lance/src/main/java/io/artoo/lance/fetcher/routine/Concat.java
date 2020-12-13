@@ -4,6 +4,7 @@ import io.artoo.lance.fetcher.Cursor;
 import io.artoo.lance.func.Func;
 
 import java.util.Arrays;
+import java.util.Iterator;
 
 import static java.lang.System.arraycopy;
 
@@ -27,6 +28,11 @@ sealed interface Concat<T> extends Routine<T, T> permits Concat.Array, Concat.Fe
     public Func.Uni<io.artoo.lance.fetcher.Fetcher<T>, Cursor<T>> onFetcher() {
       return prev -> Cursor.link(prev, Cursor.open(next));
     }
+
+    @Override
+    public Func.Uni<Iterator<T>, Cursor<T>> onIterator() {
+      return prev -> Cursor.link(Cursor.iteration(prev), Cursor.open(next));
+    }
   }
 
   final class Fetcher<T> implements Concat<T> {
@@ -42,6 +48,11 @@ sealed interface Concat<T> extends Routine<T, T> permits Concat.Array, Concat.Fe
     @Override
     public Func.Uni<io.artoo.lance.fetcher.Fetcher<T>, Cursor<T>> onFetcher() {
       return prev -> Cursor.link(prev, next);
+    }
+
+    @Override
+    public Func.Uni<Iterator<T>, Cursor<T>> onIterator() {
+      return prev -> Cursor.link(Cursor.iteration(prev), next);
     }
   }
 }

@@ -4,6 +4,7 @@ import io.artoo.lance.fetcher.Cursor;
 import io.artoo.lance.func.Cons;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public interface Queryable<T> extends Iterable<T> {
@@ -15,6 +16,7 @@ public interface Queryable<T> extends Iterable<T> {
     try {
       return cursor().close();
     } catch (Throwable cause) {
+      cause.printStackTrace();
       return Cursor.nothing();
     }
   }

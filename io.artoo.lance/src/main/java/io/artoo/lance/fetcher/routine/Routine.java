@@ -4,6 +4,8 @@ import io.artoo.lance.fetcher.Cursor;
 import io.artoo.lance.fetcher.Fetcher;
 import io.artoo.lance.func.Func;
 
+import java.util.Iterator;
+
 public sealed interface Routine<T, R> permits Sort, Concat, Curry {
   static <T> Sort<T> sort() { return new Sort<>(); }
   static <T> Concat<T> concat(T[] elements) { return new Concat.Array<>(elements); }
@@ -14,6 +16,7 @@ public sealed interface Routine<T, R> permits Sort, Concat, Curry {
 
   Func.Uni<T[], Cursor<R>> onArray();
   Func.Uni<Fetcher<T>, Cursor<R>> onFetcher();
+  Func.Uni<Iterator<T>, Cursor<R>> onIterator();
 
   @SuppressWarnings("unchecked")
   default Func.Uni<T, Cursor<R>> onPlain() {

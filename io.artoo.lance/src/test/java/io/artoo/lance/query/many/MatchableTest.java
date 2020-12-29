@@ -13,8 +13,8 @@ class MatchableTest {
     enum Value { Default; int val = 0; }
 
     fromAny("value", 1, 12.3, true, 'a')
-      .when(String.class, it -> Value.Default.val = it.length())
-      .when(Character.class, it -> Value.Default.val++)
+      .when(String.class, it -> { Value.Default.val = it.length(); })
+      .when(Character.class, it -> { Value.Default.val++; })
       .eventually();
 
     assertThat(Value.Default.val).isEqualTo(6);
@@ -26,8 +26,8 @@ class MatchableTest {
     enum Value { Default; int val = 0; }
 
     fromAny("value", 1, 12.3, true, 'a')
-      .when(String.class, it -> Value.Default.val = it.length())
-      .when(Character.class, it -> Value.Default.val++)
+      .when(String.class, it -> { Value.Default.val = it.length(); })
+      .when(Character.class, it -> { Value.Default.val++; })
       .eventually();
 
     assertThat(Value.Default.val).isEqualTo(6);

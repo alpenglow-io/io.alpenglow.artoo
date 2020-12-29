@@ -1,6 +1,5 @@
 package io.artoo.frost.scene.element;
 
-import com.googlecode.lanterna.gui2.Window;
 import io.artoo.frost.scene.Element;
 import io.artoo.frost.scene.OnAttached;
 
@@ -8,6 +7,7 @@ public interface Button extends Element<com.googlecode.lanterna.gui2.Button> {
   static Button text(final String text) {
     return new Button.Text(text);
   }
+
   static Button close() {
     return new Button.Close();
   }
@@ -32,8 +32,14 @@ public interface Button extends Element<com.googlecode.lanterna.gui2.Button> {
     }
 
     @Override
-    public void onAttached(final Window window) {
-      element.get().addListener(it -> window.close());
+    public void onAttached(final Modal modal) {
+      element.get(button ->
+        modal.get(window ->
+          button.addListener(it ->
+            window.close()
+          )
+        )
+      );
     }
   }
 }

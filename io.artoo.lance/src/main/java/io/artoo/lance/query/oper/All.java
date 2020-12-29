@@ -15,10 +15,10 @@ public final class All<T> implements Func.Uni<T, Boolean> {
 
   @Override
   public Boolean tryApply(final T element) throws Throwable {
-    return (allOfThem.value &= where.tryApply(element));
+    return (allOfThem.value &= where.tryTest(element));
   }
 
-  private final class AllOfThem {
+  private static final class AllOfThem {
     private boolean value = true;
   }
 }

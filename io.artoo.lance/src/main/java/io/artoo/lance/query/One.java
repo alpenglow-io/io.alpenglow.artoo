@@ -31,7 +31,6 @@ public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Othe
     return new Gone<>(going, then);
   }
 
-  @Deprecated(forRemoval = true)
   default T yield() {
     return iterator().next();
   }

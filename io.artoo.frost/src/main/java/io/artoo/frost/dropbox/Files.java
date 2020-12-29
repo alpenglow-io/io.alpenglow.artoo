@@ -6,17 +6,21 @@ import io.artoo.lance.fetcher.Cursor;
 import io.artoo.lance.query.Many;
 
 public interface Files extends Many<FileMetadata> {
-  static Files files(DbxClientV2 client, String path) {
-    return new Files.Regulars(new Entries.Dropped(client, path));
+  static Files ofRoot(DbxClientV2 client) {
+    return new Files.Dbx(Entries.ofRoot(client));
   }
 
-  final class Regulars implements Files {
+  static Files of(String path, DbxClientV2 client) {
+    return new Files.Dbx(Entries.of(path, client));
+  }
+
+  final class Dbx implements Files {
     private final Entries entries;
 
-    Regulars(final Entries entries) {this.entries = entries;}
+    private Dbx(final Entries entries) {this.entries = entries;}
 
     @Override
-    public Cursor<FileMetadata> cursor() {
+    public final Cursor<FileMetadata> cursor() {
       return entries
         .ofType(FileMetadata.class)
         .cursor();

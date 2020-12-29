@@ -61,6 +61,7 @@ public interface Section extends Element<Panel> {
       private Location() {
         this(Element.empty(), Element.empty(), Element.empty(), Element.empty(), Element.empty());
       }
+
       private Location(
         final Element<? extends Component> top,
         final Element<? extends Component> bottom,
@@ -126,11 +127,11 @@ public interface Section extends Element<Panel> {
       }
 
       private Panel apply(final Panel panel) {
-        for (final var component : top)     panel.addComponent(component.setLayoutData(TOP));
-        for (final var component : bottom)  panel.addComponent(component.setLayoutData(BOTTOM));
-        for (final var component : center)  panel.addComponent(component.setLayoutData(CENTER));
-        for (final var component : left)    panel.addComponent(component.setLayoutData(LEFT));
-        for (final var component : right)   panel.addComponent(component.setLayoutData(RIGHT));
+        top.get(component -> panel.addComponent(component.setLayoutData(TOP)));
+        bottom.get(component -> panel.addComponent(component.setLayoutData(BOTTOM)));
+        center.get(component -> panel.addComponent(component.setLayoutData(CENTER)));
+        left.get(component -> panel.addComponent(component.setLayoutData(LEFT)));
+        right.get(component -> panel.addComponent(component.setLayoutData(RIGHT)));
 
         return panel;
       }
@@ -150,10 +151,8 @@ public interface Section extends Element<Panel> {
     public final Panel content() {
       final var panel = new Panel(new LinearLayout(direction));
 
-      for (final var node : elements) {
-        for (final var component : node) {
-          panel.addComponent(component);
-        }
+      for (final var component : elements) {
+        component.get(panel::addComponent);
       }
 
       return panel;

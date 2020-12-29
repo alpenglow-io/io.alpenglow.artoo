@@ -8,21 +8,21 @@ import io.artoo.lance.query.Many;
 
 public interface Entries extends Many<Metadata> {
   static Entries ofRoot(DbxClientV2 client) {
-    return new Dropped(client);
+    return new Entries.Dbx(client);
   }
 
-  static Entries of(DbxClientV2 client, String path) {
-    return new Dropped(client, path);
+  static Entries of(String path, DbxClientV2 client) {
+    return new Entries.Dbx(path, client);
   }
 
-  final class Dropped implements Entries {
+  final class Dbx implements Entries {
     private static final String ROOT = "";
 
     private final DbxClientV2 client;
     private final String path;
 
-    Dropped(final DbxClientV2 client) { this(client, ROOT); }
-    Dropped(final DbxClientV2 client, final String path) {
+    private Dbx(final DbxClientV2 client) { this(ROOT, client); }
+    private Dbx(final String path, final DbxClientV2 client) {
       this.client = client;
       this.path = path;
     }
@@ -30,12 +30,14 @@ public interface Entries extends Many<Metadata> {
     @Override
     public final Cursor<Metadata> cursor() {
       try {
-        return Cursor.open(client
-          .files()
-          .listFolder(path)
-          .getEntries()
-          .toArray(new Metadata[0])
-        );
+        return
+          Cursor.iteration(
+            client
+              .files()
+              .listFolder(path)
+              .getEntries()
+              .iterator()
+          );
       } catch (DbxException e) {
         e.printStackTrace();
         return Cursor.nothing();

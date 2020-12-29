@@ -29,7 +29,7 @@ public sealed interface Modal extends Element<Window> permits Modal.FullSize {
       final var window = new BasicWindow();
       window.setTitle(title);
 
-      for (final var component : inner) window.setComponent(component);
+      inner.get(window::setComponent);
 
       window.setHints(List.of(Window.Hint.FULL_SCREEN));
 

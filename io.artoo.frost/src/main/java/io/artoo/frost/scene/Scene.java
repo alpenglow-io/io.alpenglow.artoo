@@ -7,42 +7,49 @@ import io.artoo.frost.scene.scene.Labelable;
 import io.artoo.frost.scene.scene.Modalable;
 import io.artoo.frost.scene.scene.Sectionable;
 import io.artoo.frost.scene.scene.Textable;
-import io.artoo.lance.type.Value;
+import io.artoo.lance.func.Func;
+import io.artoo.lance.type.Late;
+import io.artoo.lance.type.Let;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 
-public sealed interface Scene extends Sectionable, Textable, Modalable, Buttonable, Labelable permits Scene.Frame {
-  static Scene frame() {
-    return new Frame(new ConcurrentHashMap<>(), Value.late());
+public sealed interface Scene extends Sectionable, Textable, Modalable, Buttonable, Labelable, Let<Scene> permits Scene.Internal {
+  static Scene scene() {
+    return new Internal(new ConcurrentHashMap<>(), Late.init());
   }
 
   Scene open(Modal modal);
+
   Scene open(Section section);
 
   Collection<Element<?>> elements();
 
-  final class Frame implements Scene {
+  final class Internal implements Scene {
     private final Map<Id, Element<?>> elements;
-    private final Value<io.artoo.frost.scene.Frame> frame;
+    private final Late<Frame> frame;
 
-    private Frame(final Map<Id, Element<?>> elements, final Value<io.artoo.frost.scene.Frame> frame) {
+    private Internal(final Map<Id, Element<?>> elements, final Late<Frame> frame) {
       this.elements = elements;
       this.frame = frame;
     }
 
     @Override
     public Scene open(final Modal modal) {
-      this.frame.set(io.artoo.frost.scene.Frame.terminal(modal)).get().render(this);
-      return this;
+      return this.frame
+        .set(() -> Frame.terminal(modal))
+        .get(frame -> frame.render(this))
+        .let(it -> this);
     }
 
     @Override
     public Scene open(final Section section) {
-      this.frame.set(io.artoo.frost.scene.Frame.terminal(Modal.fullSize("", section))).get().render(this);
-      return this;
+      return this.frame
+        .set(() -> Frame.terminal(Modal.fullSize("", section)))
+        .get(frame -> frame.render(this))
+        .let(it -> this);
     }
 
     @Override
@@ -54,6 +61,11 @@ public sealed interface Scene extends Sectionable, Textable, Modalable, Buttonab
     @Override
     public Collection<Element<?>> elements() {
       return elements.values();
+    }
+
+    @Override
+    public final <R> R let(final Func.Uni<? super Scene, ? extends R> func) {
+      return func.apply(this);
     }
   }
 }

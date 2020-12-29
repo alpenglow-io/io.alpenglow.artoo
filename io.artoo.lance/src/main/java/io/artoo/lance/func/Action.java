@@ -1,24 +1,26 @@
 package io.artoo.lance.func;
 
-import io.artoo.lance.func.Func.Leftover;
-import io.artoo.lance.func.Func.Default;
+import java.util.concurrent.Callable;
 
-import static io.artoo.lance.func.Func.Default.Nothing;
-
-public interface Action extends Runnable, Func.Uni<Leftover, Default> {
+public interface Action extends Runnable, Callable<Void> {
   void tryExecute() throws Throwable;
 
   @Override
   default void run() {
     try {
       tryExecute();
-    } catch (Throwable ignored) {
+    } catch (Throwable throwable) {
+      throwable.printStackTrace();
     }
   }
 
   @Override
-  default Default tryApply(Leftover __) throws Throwable {
-    tryExecute();
-    return Nothing;
+  default Void call() throws Exception {
+    try {
+      tryExecute();
+    } catch (Throwable throwable) {
+      throw new CallableException(throwable);
+    }
+    return null;
   }
 }

@@ -28,17 +28,22 @@
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
 
-    <vertx.version>4.0.0</vertx.version>
-    <slf4j.version>2.0.0-alpha1</slf4j.version>
+    <!-- compile deps -->
     <annotations.version>20.1.0</annotations.version>
-    <assertj.version>3.18.0</assertj.version>
-    <junit.version>5.7.0</junit.version>
-    <junit.platform.version>1.7.0</junit.platform.version>
-    <log4j.version>2.13.3</log4j.version>
-    <mockito.version>3.6.0</mockito.version>
-
     <asm.version>9.0</asm.version>
 
+    <!-- deps -->
+    <vertx.version>4.0.0</vertx.version>
+    <slf4j.version>2.0.0-alpha1</slf4j.version>
+    <log4j.version>2.14.0</log4j.version>
+
+    <!-- test deps -->
+    <assertj.version>3.18.1</assertj.version>
+    <junit.platform.version>1.7.0</junit.platform.version>
+    <junit.version>5.7.0</junit.version>
+    <mockito.version>3.6.28</mockito.version>
+
+    <!-- maven plugs -->
     <plugin-clean.version>3.1.0</plugin-clean.version>
     <plugin-compiler.version>3.8.1</plugin-compiler.version>
     <plugin-deploy.version>3.0.0-M1</plugin-deploy.version>

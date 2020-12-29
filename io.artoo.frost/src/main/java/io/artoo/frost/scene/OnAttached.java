@@ -1,7 +1,7 @@
 package io.artoo.frost.scene;
 
-import com.googlecode.lanterna.gui2.Window;
+import io.artoo.frost.scene.element.Modal;
 
 public interface OnAttached {
-  void onAttached(Window window);
+  void onAttached(Modal modal);
 }

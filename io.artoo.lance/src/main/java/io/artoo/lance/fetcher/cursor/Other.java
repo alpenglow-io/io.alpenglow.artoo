@@ -6,13 +6,14 @@ import io.artoo.lance.fetcher.routine.Routine;
 import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Suppl;
-import io.artoo.lance.type.Value;
+import io.artoo.lance.type.Late;
+import io.artoo.lance.type.Let;
 
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.Iterator;
 
 public interface Other<T> extends Fetcher<T> {
   default <C extends Cursor<T>> Cursor<T> or(final Suppl.Uni<? extends C> alternative) {
-    return new Or<>(this, Value.lazy(alternative));
+    return new Or<>(this, Let.lazy(alternative));
   }
 
   default <E extends RuntimeException> Cursor<T> or(final String message, final Func.Uni<? super String, ? extends E> exception) {
@@ -25,25 +26,25 @@ public interface Other<T> extends Fetcher<T> {
 }
 
 final class Or<T, C extends Cursor<T>> implements Cursor<T> {
-  private final AtomicReference<Fetcher<T>> reference = new AtomicReference<>();
+  private final Late<Fetcher<T>> reference = Late.init();
   private final Fetcher<T> source;
-  private final Value<? extends C> other;
+  private final Let<? extends C> other;
 
-  Or(final Fetcher<T> source, final Value<? extends C> other) {
+  Or(final Fetcher<T> source, final Let<? extends C> other) {
     this.source = source;
     this.other = other;
   }
 
   @Override
   public final T fetch() throws Throwable {
-    return hasNext() ? reference.get().fetch() : null;
+    return hasNext() ? reference.let(Fetcher::fetch) : null;
   }
 
   @Override
   public final boolean hasNext() {
-    if (reference.get() == null) reference.set(source.hasNext() ? source : other.get());
+    other.get(otherwise -> reference.set(() -> source.hasNext() ? source : otherwise));
 
-    return reference.get().hasNext();
+    return reference.let(Iterator::hasNext);
   }
 
   @Override

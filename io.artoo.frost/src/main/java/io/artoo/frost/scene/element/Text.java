@@ -30,8 +30,10 @@ public interface Text extends Element<TextBox> {
 
     @Override
     public void onInput(final Window window, final KeyStroke keyStroke, final AtomicBoolean deliverEvent) {
-      final var text = element.get();
+      element.get(text -> wrap(window, text));
+    }
 
+    private void wrap(final Window window, final TextBox text) {
       final var textWidth = text.getSize().getColumns();
       final var textX = text.getPosition().getColumn();
       final var textY = text.getPosition().getRow();
@@ -45,8 +47,8 @@ public interface Text extends Element<TextBox> {
     }
 
     @Override
-    public void onAttached(final Window window) {
-      window.addWindowListener(this);
+    public void onAttached(final Modal modal) {
+      modal.get(window -> window.addWindowListener(this));
     }
   }
 

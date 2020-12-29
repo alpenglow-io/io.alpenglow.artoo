@@ -106,6 +106,12 @@ public interface Func {
     }
   }
 
-  enum Default {Nothing}
+  enum Default {
+    Nothing;
+
+    public boolean notEquals(Object value) {
+      return !this.equals(value);
+    }
+  }
   enum Leftover {__}
 }

@@ -16,7 +16,7 @@ import static com.googlecode.lanterna.gui2.BorderLayout.Location.RIGHT;
 import static com.googlecode.lanterna.gui2.BorderLayout.Location.TOP;
 import static com.googlecode.lanterna.gui2.Direction.HORIZONTAL;
 import static com.googlecode.lanterna.gui2.Direction.VERTICAL;
-import static io.artoo.lance.type.Nullability.nonNullable;
+import static io.artoo.lance.scope.Nullability.nonNullable;
 
 public interface Section extends Element<Panel> {
   static Section border(Func.Unary<Border.Location> location) {

@@ -1,10 +1,9 @@
-package io.artoo.lance.type;
+package io.artoo.lance.scope;
 
 import io.artoo.lance.func.Action;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 

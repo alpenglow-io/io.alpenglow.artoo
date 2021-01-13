@@ -8,8 +8,8 @@ import io.artoo.frost.scene.scene.Modalable;
 import io.artoo.frost.scene.scene.Sectionable;
 import io.artoo.frost.scene.scene.Textable;
 import io.artoo.lance.func.Func;
-import io.artoo.lance.type.Late;
-import io.artoo.lance.type.Let;
+import io.artoo.lance.scope.Late;
+import io.artoo.lance.scope.Let;
 
 import java.util.Collection;
 import java.util.Map;

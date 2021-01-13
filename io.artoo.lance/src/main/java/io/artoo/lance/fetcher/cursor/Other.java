@@ -6,8 +6,8 @@ import io.artoo.lance.fetcher.routine.Routine;
 import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Suppl;
-import io.artoo.lance.type.Late;
-import io.artoo.lance.type.Let;
+import io.artoo.lance.scope.Late;
+import io.artoo.lance.scope.Let;
 
 import java.util.Iterator;
 

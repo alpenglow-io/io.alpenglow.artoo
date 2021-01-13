@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static io.artoo.lance.type.Nullability.nonNullable;
+import static io.artoo.lance.scope.Nullability.nonNullable;
 
 public interface Convertable<T> extends Queryable<T> {
   default @NotNull <K, E> Map<? extends K, ? extends E> asMap(final Func.Uni<? super T, ? extends K> key, final Func.Uni<? super T, ? extends E> element) {

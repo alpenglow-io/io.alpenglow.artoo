@@ -1,9 +1,8 @@
 package io.artoo.lance.cursor;
 
 import java.util.Arrays;
-import java.util.Iterator;
 
-import static io.artoo.lance.type.Nullability.nonNullable;
+import static io.artoo.lance.scope.Nullability.nonNullable;
 import static java.util.Objects.nonNull;
 
 public interface Pick<T> extends Cursor<T> {

@@ -2,7 +2,7 @@ package io.artoo.frost.scene;
 
 import com.googlecode.lanterna.gui2.Component;
 import io.artoo.lance.func.Func;
-import io.artoo.lance.type.Let;
+import io.artoo.lance.scope.Let;
 
 public interface Element<T> extends Let<T> {
   static Element<? extends Component> empty() {

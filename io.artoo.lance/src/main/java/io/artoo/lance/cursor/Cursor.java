@@ -1,17 +1,15 @@
 package io.artoo.lance.cursor;
 
 import io.artoo.lance.cursor.pick.Concat;
-import io.artoo.lance.cursor.pick.Exceptionally;
 import io.artoo.lance.cursor.pick.Flat;
 import io.artoo.lance.cursor.pick.Map;
 import io.artoo.lance.cursor.pick.Yield;
-import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Suppl;
 
 import java.util.Iterator;
 
-import static io.artoo.lance.type.Nullability.nonNullable;
+import static io.artoo.lance.scope.Nullability.nonNullable;
 
 public interface Cursor<T> extends Iterator<T> {
   T fetch() throws Throwable;

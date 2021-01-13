@@ -1,4 +1,4 @@
-package io.artoo.lance.type.random;
+package io.artoo.lance.scope.random;
 
 import io.artoo.lance.func.Func;
 

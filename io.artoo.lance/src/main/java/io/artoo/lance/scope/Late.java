@@ -1,4 +1,4 @@
-package io.artoo.lance.type;
+package io.artoo.lance.scope;
 
 import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Suppl;

@@ -1,4 +1,4 @@
-package io.artoo.lance.type;
+package io.artoo.lance.scope;
 
 import java.util.Arrays;
 import java.util.concurrent.locks.ReadWriteLock;

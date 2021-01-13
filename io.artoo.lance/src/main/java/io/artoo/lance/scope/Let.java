@@ -1,11 +1,8 @@
-package io.artoo.lance.type;
+package io.artoo.lance.scope;
 
 import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Suppl;
-import io.artoo.lance.type.random.Random;
-
-import java.util.function.Consumer;
 
 import static io.artoo.lance.func.Func.Default.Nothing;
 

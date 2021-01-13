@@ -1,4 +1,4 @@
-package io.artoo.lance.type;
+package io.artoo.lance.scope;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

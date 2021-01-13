@@ -8,7 +8,7 @@ import io.artoo.lance.query.oper.First;
 import io.artoo.lance.query.oper.Last;
 import io.artoo.lance.query.oper.Single;
 
-import static io.artoo.lance.type.Nullability.nonNullable;
+import static io.artoo.lance.scope.Nullability.nonNullable;
 
 public interface Uniquable<T> extends Queryable<T> {
   default One<T> at(final int index) {

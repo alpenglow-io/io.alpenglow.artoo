@@ -1,6 +1,6 @@
 package io.artoo.lance.func;
 
-import io.artoo.lance.type.Tuple;
+import io.artoo.lance.scope.Tuple;
 
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;

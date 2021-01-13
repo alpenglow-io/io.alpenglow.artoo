@@ -6,7 +6,7 @@ import io.artoo.lance.query.Queryable;
 import io.artoo.lance.query.oper.Skip;
 import io.artoo.lance.query.oper.Take;
 
-import static io.artoo.lance.type.Nullability.nonNullable;
+import static io.artoo.lance.scope.Nullability.nonNullable;
 
 public interface Partitionable<T> extends Queryable<T> {
   default Many<T> skip(final int until) {

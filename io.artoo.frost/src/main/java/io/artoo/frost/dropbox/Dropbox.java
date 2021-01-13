@@ -2,10 +2,9 @@ package io.artoo.frost.dropbox;
 
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.v2.DbxClientV2;
-import io.artoo.frost.dropbox.Entries.Dbx;
-import io.artoo.lance.type.Let;
+import io.artoo.lance.scope.Let;
 
-import static io.artoo.lance.type.Let.lazy;
+import static io.artoo.lance.scope.Let.lazy;
 
 public interface Dropbox {
   static Dropbox client(final String accessToken) {

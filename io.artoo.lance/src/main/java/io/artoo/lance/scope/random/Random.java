@@ -1,7 +1,7 @@
-package io.artoo.lance.type.random;
+package io.artoo.lance.scope.random;
 
 import io.artoo.lance.func.Func;
-import io.artoo.lance.type.Let;
+import io.artoo.lance.scope.Let;
 
 import static io.artoo.lance.func.Func.Default.Nothing;
 import static java.lang.StrictMath.log;

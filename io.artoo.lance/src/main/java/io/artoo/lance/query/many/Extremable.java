@@ -5,7 +5,7 @@ import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
 import io.artoo.lance.query.oper.Extremum;
 
-import static io.artoo.lance.type.Nullability.nonNullable;
+import static io.artoo.lance.scope.Nullability.nonNullable;
 
 public interface Extremable<T> extends Queryable<T> {
   private One<T> extreme(int type) {

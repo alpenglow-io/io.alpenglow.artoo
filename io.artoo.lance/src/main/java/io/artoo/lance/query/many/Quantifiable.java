@@ -7,7 +7,7 @@ import io.artoo.lance.query.Queryable;
 import io.artoo.lance.query.oper.All;
 import io.artoo.lance.query.oper.Any;
 
-import static io.artoo.lance.type.Nullability.nonNullable;
+import static io.artoo.lance.scope.Nullability.nonNullable;
 
 public interface Quantifiable<T> extends Queryable<T> {
   default <R> One<Boolean> all(final Class<R> type) {

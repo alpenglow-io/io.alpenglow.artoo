@@ -1,15 +1,13 @@
-package io.artoo.lance.type;
+package io.artoo.lance.scope;
 
 import io.artoo.lance.func.Func;
 import io.artoo.lance.query.One;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.RecordComponent;
-import java.util.Optional;
 
-import static io.artoo.lance.type.TupleType.has;
-import static io.artoo.lance.type.TupleType.tryComponentOf;
+import static io.artoo.lance.scope.TupleType.has;
+import static io.artoo.lance.scope.TupleType.tryComponentOf;
 
 public interface Tuple<R extends Record> {
   Class<R> $type();

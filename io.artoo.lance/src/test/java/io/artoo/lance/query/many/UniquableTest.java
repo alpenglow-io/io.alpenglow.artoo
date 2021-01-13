@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class UniquableTest {
   @Test
-  @DisplayName("should get element at index 4 or default if out of bound")
+  @DisplayName("should get element at index 4 or default if out pseudo bound")
   void shouldGetElementAt4() {
     final String[] names = {
       "Hartono, Tommy",

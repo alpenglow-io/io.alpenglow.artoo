@@ -17,19 +17,19 @@ public interface Settable<T> extends Queryable<T> {
   }
 /*
   default Many<T> union(final T... elements) {
-    return union(Many.from(elements));
+    return union(Many.pseudo(elements));
   }
 
   default <Q extends Queryable<T>> Many<T> union(final Q queryable) {
-    return Many.of(cursor().union(queryable.cursor()));
+    return Many.pseudo(cursor().union(queryable.cursor()));
   }
 
   default Many<T> except(final T... elements) {
-    return Many.of(cursor().except(elements));
+    return Many.pseudo(cursor().except(elements));
   }
 
   default Many<T> intersect(final T... elements) {
-    return Many.of(cursor().intersect(elements));
+    return Many.pseudo(cursor().intersect(elements));
   }*/
 }
 

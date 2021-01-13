@@ -76,7 +76,7 @@ class QuantifiableTest {
   @Test
   @DisplayName("it should contain the element")
   void shouldContainElement() {
-    final var actual = Many.from(1, 2, 3, 4).contains(3).yield();
+    final var actual = Many.pseudo(1, 2, 3, 4).contains(3).yield();
 
     assertThat(actual).isTrue();
   }
@@ -84,7 +84,7 @@ class QuantifiableTest {
   @Test
   @DisplayName("it should not contain the element")
   void shouldNotContainElement() {
-    final var actual = Many.from(1, 2, 3 ,4).notContains(5).yield();
+    final var actual = Many.pseudo(1, 2, 3 ,4).notContains(5).yield();
 
     assertThat(actual).isTrue();
   }*/

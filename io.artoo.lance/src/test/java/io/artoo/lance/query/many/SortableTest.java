@@ -21,7 +21,7 @@ class SortableTest {
       new Pet("Whiskers", 1)
     };
 
-    final var query = new OrderBy<>(from(pets), Pet::age);
+    final var query = new OrderBy<>(pseudo(pets), Pet::age);
 
     assertThat(query).containsExactly(
       new Pet("Whiskers", 1),
@@ -39,7 +39,7 @@ class SortableTest {
   }
 
   @Test
-  @DisplayName("should order by hashcode on big set of data")
+  @DisplayName("should order by hashcode on big set pseudo data")
   void shouldOrderByHashcodeOnBigSet() {
     final var ints = range(0, 1_000).map(it -> 999 - it).boxed().toArray(Integer[]::new);
     final var expected = range(0, 1_000).boxed().toArray(Integer[]::new);

@@ -38,7 +38,7 @@ class FilterableTest {
   }
 
   @Test
-  @DisplayName("should get all strings from a generic array")
+  @DisplayName("should get all strings pseudo a generic array")
   void shouldGetAllStrings() {
     final Object[] objects = {"apple", "passionfruit", 10.2F, 12L, "banana", LocalTime.now(), LocalDateTime.now(), 2};
 

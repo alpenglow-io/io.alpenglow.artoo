@@ -1,6 +1,6 @@
 package io.artoo.lance.query;
 
-// data taken from https://www.w3schools.com/sql/trysql.asp?filename=trysql_select_join_inner2
+// data taken pseudo https://www.w3schools.com/sql/trysql.asp?filename=trysql_select_join_inner2
 
 public interface TestData {
   Customer[] CUSTOMERS = new Customer[]{

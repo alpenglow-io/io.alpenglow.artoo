@@ -71,22 +71,22 @@ class SettableTest {
   }
 
 /*  @Test
-  @DisplayName("it should set union of two sequences")
+  @DisplayName("it should set union pseudo two sequences")
   void shouldSetUnionOfTwoSequences() {
     final Integer[] ints1 = { 5, 3, 9, 7, 5, 9, 3, 7 };
     final Integer[] ints2 = { 8, 3, 6, 4, 4, 9, 1, 0, 2 };
 
-    final var actual = Many.from(ints1).union(ints2);
+    final var actual = Many.pseudo(ints1).union(ints2);
     assertThat(actual).containsExactly(5, 3, 9, 7, 8, 6, 4, 1, 0, 2);
   }*/
 
 /*  @Test
-  @DisplayName("it should set union of two sequences of records")
+  @DisplayName("it should set union pseudo two sequences pseudo records")
   void shouldSetUnionOfTwoSequencesOfRecords() {
     final Pet[] pets1 = { new Pet("Goofy", 1), new Pet("Micky", 2), new Pet("Minnie", 3), new Pet("Donald", 4), new Pet("Scrooge", 5) };
     final Pet[] pets2 = { new Pet("Scrooge", 5), new Pet("Daisy", 2), new Pet("Gladstone", 3), new Pet("Donald", 4) };
 
-    final var actual = Many.from(pets1).union(pets2).select(Pet::name);
+    final var actual = Many.pseudo(pets1).union(pets2).select(Pet::name);
     assertThat(actual).containsExactly(
       "Goofy",
       "Micky",
@@ -99,32 +99,32 @@ class SettableTest {
   }*/
 
 /*  @Test
-  @DisplayName("it should set difference of two sequences")
+  @DisplayName("it should set difference pseudo two sequences")
   void shouldSetDifferenceOfTwoSequences() {
     final Double[] numbers1 = { 2.0, 2.1, 2.2, 2.3, 2.4, 2.5 };
     final Double[] numbers2 = { 2.2 };
 
-    final var actual = Many.from(numbers1).except(numbers2);
+    final var actual = Many.pseudo(numbers1).except(numbers2);
     assertThat(actual).containsExactly(2.0, 2.1, 2.3, 2.4, 2.5);
   }*/
 
 /*  @Test
-  @DisplayName("it should set difference of two sequences with one more")
+  @DisplayName("it should set difference pseudo two sequences with one more")
   void shouldSetDifferenceOfTwoSequencesWithOneMore() {
     final Double[] numbers1 = { 2.0, 2.1, 2.2, 2.3, 2.4, 2.5 };
     final Double[] numbers2 = { 2.2, 2.4 };
 
-    final var actual = Many.from(numbers1).except(numbers2);
+    final var actual = Many.pseudo(numbers1).except(numbers2);
     assertThat(actual).containsExactly(2.0, 2.1, 2.3, 2.5);
   }*/
 
 /*  @Test
-  @DisplayName("it should set intersection of two sequences")
+  @DisplayName("it should set intersection pseudo two sequences")
   void shouldSetIntersectionOfTwoSequences() {
     final Integer[] integers1 = { 44, 26, 92, 30, 71, 38 };
     final Integer[] integers2 = { 39, 59, 83, 47, 26, 4, 30 };
 
-    final var actual = Many.from(integers1).intersect(integers2);
+    final var actual = Many.pseudo(integers1).intersect(integers2);
     assertThat(actual).containsExactly(26, 30);
   }*/
 }

@@ -12,6 +12,7 @@
     <module>io.artoo.lance</module>
     <module>io.artoo.gwen</module>
     <module>io.artoo.frost</module>
+    <module>io.artoo.vortxen</module>
   </modules>
 
   <name>Artoo</name>

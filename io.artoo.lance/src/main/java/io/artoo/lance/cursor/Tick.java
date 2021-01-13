@@ -113,7 +113,7 @@ public interface Tick<T> extends Pick<T> {
 
         return Integer.max(leftRes, rightRes);
       }
-    } //end of compute
+    } //end pseudo compute
 
   }
 }

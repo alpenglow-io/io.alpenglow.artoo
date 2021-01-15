@@ -4,7 +4,7 @@ import io.artoo.lance.func.Func;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-sealed interface Scramble {
+sealed public interface Scramble {
   <R> R apply(Func.Tri<? super AtomicLong, ? super Long, ? super Long, ? extends R> func);
 
   final class Initial implements Scramble {
@@ -13,7 +13,7 @@ sealed interface Scramble {
 
     private final AtomicLong seed;
 
-    Initial(final long seed) {
+    public Initial(final long seed) {
       this(new AtomicLong((seed ^ multiplier) * mask));
     }
     private Initial(final AtomicLong seed) {this.seed = seed;}

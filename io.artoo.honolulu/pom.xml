@@ -7,8 +7,8 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>io.artoo.vortxen</artifactId>
-  <name>Vortxen</name>
+  <artifactId>io.artoo.honolulu</artifactId>
+  <name>Honolulu</name>
 
   <properties>
     <maven.compiler.source>15</maven.compiler.source>
@@ -17,12 +17,13 @@
 
   <dependencies>
     <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-core</artifactId>
+      <groupId>io.artoo</groupId>
+      <artifactId>io.artoo.fxcalibur</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>io.artoo</groupId>
-      <artifactId>io.artoo.lance</artifactId>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-core</artifactId>
     </dependency>
   </dependencies>
 

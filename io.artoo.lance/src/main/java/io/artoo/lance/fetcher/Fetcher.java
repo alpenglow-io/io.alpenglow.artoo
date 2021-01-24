@@ -10,7 +10,7 @@ public interface Fetcher<T> extends Iterator<T> {
     try {
       return fetch();
     } catch (Throwable throwable) {
-      throw new FetchException(throwable);
+      throw FetchException.wrapping(throwable);
     }
   }
 }

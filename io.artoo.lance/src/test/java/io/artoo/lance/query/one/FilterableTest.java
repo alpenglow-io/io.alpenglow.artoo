@@ -11,14 +11,14 @@ class FilterableTest {
   @Test
   @DisplayName("fuffy should be vaxed")
   void shouldBeVaxed() {
-    final var fuffy = One.of(new Pet("Fuffy", true)).where(Pet::vaxed);
+    final var fuffy = One.from(new Pet("Fuffy", true)).where(Pet::vaxed);
 
     assertThat(fuffy).isNotEmpty();
   }
 
   @Test
   void shouldNotBeOlderThan5() {
-    final var fuffy = One.of(new Pet("Fuffy", 7)).where(pet -> pet.age() <= 5);
+    final var fuffy = One.from(new Pet("Fuffy", 7)).where(pet -> pet.age() <= 5);
 
     assertThat(fuffy).isEmpty();
   }
@@ -26,7 +26,7 @@ class FilterableTest {
   @Test
   @DisplayName("fuffy should be a pet-type")
   void shouldBeAPet() {
-    final var fuffy = One.of((Record) new Pet("Fuffy", 5)).ofType(Pet.class);
+    final var fuffy = One.from((Record) new Pet("Fuffy", 5)).ofType(Pet.class);
 
     assertThat(fuffy.iterator().next()).isExactlyInstanceOf(Pet.class);
   }

@@ -16,8 +16,8 @@ public interface Other<T> extends Fetcher<T> {
     return new Or<>(this, Let.lazy(alternative));
   }
 
-  default <E extends RuntimeException> Cursor<T> or(final String message, final Func.Uni<? super String, ? extends E> exception) {
-    return new OrException<>(this, message, exception);
+  default <E extends RuntimeException> Cursor<T> or(final String message, final Func.Bi<? super String, ? super Throwable, ? extends E> exception) {
+    return new Er<>(this, message, exception);
   }
 
   default Cursor<T> exceptionally(Cons.Uni<? super Throwable> catch$) {
@@ -55,12 +55,12 @@ final class Or<T, C extends Cursor<T>> implements Cursor<T> {
   }
 }
 
-final class OrException<T, E extends RuntimeException> implements Cursor<T> {
+final class Er<T, E extends RuntimeException> implements Cursor<T> {
   private final Fetcher<T> source;
   private final String message;
-  private final Func.Uni<? super String, ? extends E> exception;
+  private final Func.Bi<? super String, ? super Throwable, ? extends E> exception;
 
-  OrException(final Fetcher<T> source, final String message, final Func.Uni<? super String, ? extends E> exception) {
+  Er(final Fetcher<T> source, final String message, final Func.Bi<? super String, ? super Throwable, ? extends E> exception) {
     this.source = source;
     this.message = message;
     this.exception = exception;
@@ -68,10 +68,14 @@ final class OrException<T, E extends RuntimeException> implements Cursor<T> {
 
   @Override
   public final T fetch() throws Throwable {
-    if (hasNext()) {
-      return source.fetch();
-    } else {
-      throw exception.apply(message);
+    try {
+      if (hasNext()) {
+        return source.fetch();
+      } else {
+        throw exception.apply(message, null);
+      }
+    } catch (Throwable throwable) {
+      throw exception.apply(message, throwable);
     }
   }
 

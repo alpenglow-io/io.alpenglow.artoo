@@ -10,9 +10,8 @@
   <modules>
     <module>io.artoo.fxcalibur</module>
     <module>io.artoo.lance</module>
-    <module>io.artoo.gwen</module>
     <module>io.artoo.frost</module>
-    <module>io.artoo.vortxen</module>
+    <module>io.artoo.honolulu</module>
   </modules>
 
   <name>Artoo</name>
@@ -40,6 +39,7 @@
 
     <!-- test deps -->
     <assertj.version>3.18.1</assertj.version>
+    <awaitility.version>4.0.3</awaitility.version>
     <junit.platform.version>1.7.0</junit.platform.version>
     <junit.version>5.7.0</junit.version>
     <mockito.version>3.6.28</mockito.version>
@@ -94,7 +94,7 @@
       </dependency>
       <dependency>
         <groupId>org.apache.logging.log4j</groupId>
-        <artifactId>log4j-slf4j-impl</artifactId>
+        <artifactId>log4j-slf4j18-impl</artifactId>
         <version>${log4j.version}</version>
       </dependency>
 
@@ -129,6 +129,12 @@
         <version>${mockito.version}</version>
         <scope>test</scope>
       </dependency>
+      <dependency>
+        <groupId>org.awaitility</groupId>
+        <artifactId>awaitility</artifactId>
+        <version>${awaitility.version}</version>
+        <scope>test</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -145,7 +151,7 @@
     </dependency>
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-slf4j-impl</artifactId>
+      <artifactId>log4j-slf4j18-impl</artifactId>
     </dependency>
 
     <!-- tests -->
@@ -168,6 +174,10 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.awaitility</groupId>
+      <artifactId>awaitility</artifactId>
     </dependency>
   </dependencies>
 

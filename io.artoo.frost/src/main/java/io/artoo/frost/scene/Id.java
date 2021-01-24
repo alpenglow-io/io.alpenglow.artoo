@@ -9,7 +9,7 @@ public record Id(String value) {
   public Id {assert value != null;}
 
   public static One<Id> of(final String value) {
-    return One.of(value)
+    return One.from(value)
       .where(Objects::nonNull)
       .select(Id::new);
   }

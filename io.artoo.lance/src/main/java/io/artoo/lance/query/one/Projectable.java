@@ -10,7 +10,7 @@ public interface Projectable<T> extends Queryable<T> {
     return () -> cursor().map(new Select<>((i, it) -> select.tryApply(it)));
   }
 
-  default <R, O extends One<R>> One<R> selectOne(final Func.Uni<? super T, ? extends O> selectOne) {
+  default <R, O extends One<R>> One<R> selection(final Func.Uni<? super T, ? extends O> selectOne) {
     return () -> cursor().map(new Select<>((i, it) -> selectOne.tryApply(it))).flatMap(Queryable::cursor);
   }
 }

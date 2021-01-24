@@ -10,7 +10,7 @@ import io.artoo.lance.query.one.Peekable;
 import io.artoo.lance.query.one.Projectable;
 
 public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Otherwise<T>, Matchable<T> {
-  static <T> One<T> of(final T element) {
+  static <T> One<T> from(final T element) {
     return element != null ? One.lone(element) : One.none();
   }
 
@@ -18,7 +18,7 @@ public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Othe
     return new Lone<>(element);
   }
 
-  static <T> One<T> of(final Suppl.Uni<T> suppl) {
+  static <T> One<T> from(final Suppl.Uni<T> suppl) {
     return new Pone<>(suppl);
   }
 

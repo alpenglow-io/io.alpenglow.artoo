@@ -86,7 +86,7 @@ enum TupleType {
   ;
 
   static <R extends Record, T> @NotNull One<T> componentOf(final Object instance, @NotNull final Class<R> type, final int index) {
-    return One.of(index)
+    return One.from(index)
       .where(it -> it >= 0 && type.getRecordComponents().length > it)
       .select(it -> type.getRecordComponents()[it])
       .select(RecordComponent::getAccessor)

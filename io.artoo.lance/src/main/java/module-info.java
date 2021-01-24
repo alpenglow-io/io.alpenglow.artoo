@@ -2,6 +2,8 @@ module io.artoo.lance {
   //noinspection JavaRequiresAutoModule
   requires transitive org.jetbrains.annotations;
 
+  requires static io.vertx.core;
+
   exports io.artoo.lance.cursor;
   exports io.artoo.lance.fetcher;
   exports io.artoo.lance.func;

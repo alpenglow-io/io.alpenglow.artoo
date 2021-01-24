@@ -18,12 +18,12 @@ public interface Otherwise<T> extends Queryable<T> {
     return () -> cursor().or(many::cursor);
   }
 
-  default <E extends RuntimeException> Many<T> or(final String message, final Func.Uni<? super String, ? extends E> exception) {
+  default <E extends RuntimeException> Many<T> or(final String message, final Func.Bi<? super String, ? super Throwable, ? extends E> exception) {
     return () -> cursor().or(message, exception);
   }
 
   default <E extends RuntimeException> Many<T> or(final Suppl.Uni<? extends E> exception) {
-    return () -> cursor().or(null, it -> exception.tryGet());
+    return () -> cursor().or(null, (it, throwable) -> exception.tryGet());
   }
 }
 

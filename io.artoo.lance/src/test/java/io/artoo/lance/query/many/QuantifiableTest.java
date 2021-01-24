@@ -1,5 +1,6 @@
 package io.artoo.lance.query.many;
 
+import io.artoo.lance.query.Many;
 import io.artoo.lance.query.TestData.Pet;
 import io.artoo.lance.query.TestData.PetOwner;
 import org.junit.jupiter.api.DisplayName;
@@ -72,7 +73,20 @@ class QuantifiableTest {
       "Philips"
     );
   }
-/*
+
+  @Test
+  void shouldFailWhenThrowsException() {
+    Many.from(1, 2, 3, 4)
+      .select(it -> {
+        if (it > 0) throw new IllegalStateException("Damn");
+        return it;
+      })
+      .or("Damnazione", IllegalArgumentException::new)
+      .all(it -> it > 0)
+      .eventually();
+  }
+
+  /*
   @Test
   @DisplayName("it should contain the element")
   void shouldContainElement() {

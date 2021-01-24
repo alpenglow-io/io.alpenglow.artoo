@@ -42,7 +42,7 @@ class ProjectableTest {
   @Test
   @DisplayName("should split every word")
   void shouldDoASelection() {
-    final var manySelected = from("an apple a day", "the quick brown fox").selectMany(phrase -> from(phrase.split(" ")));
+    final var manySelected = from("an apple a day", "the quick brown fox").selection(phrase -> from(phrase.split(" ")));
 
     assertThat(manySelected).containsExactly(
       "an",

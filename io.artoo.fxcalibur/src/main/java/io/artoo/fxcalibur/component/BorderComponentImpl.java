@@ -26,10 +26,10 @@ final class BorderComponentImpl<B extends BorderPane> implements BorderComponent
 
   @Override
   public B origin() {
-    final B origin = border.origin();
-    for (ParentProperty property : properties)
+    final var origin = border.origin();
+    for (var property : properties)
       property.onParent(origin);
-    for (BorderPosition position : positions)
+    for (var position : positions)
       position.onBorder(origin);
     return origin;
   }

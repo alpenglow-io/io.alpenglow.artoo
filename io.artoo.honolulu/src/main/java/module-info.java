@@ -1,6 +1,7 @@
 module io.artoo.honolulu {
   requires io.artoo.fxcalibur;
-  requires io.vertx.core;
+  requires org.slf4j;
+  requires org.apache.logging.log4j;
 
   opens io.artoo.honolulu to javafx.graphics;
 }

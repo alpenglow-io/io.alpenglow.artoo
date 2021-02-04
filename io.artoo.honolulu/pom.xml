@@ -15,16 +15,76 @@
     <maven.compiler.target>15</maven.compiler.target>
   </properties>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-base</artifactId>
+        <version>15.0.1</version>
+        <classifier>linux</classifier>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <dependencies>
     <dependency>
       <groupId>io.artoo</groupId>
       <artifactId>io.artoo.fxcalibur</artifactId>
       <version>1.0.0-SNAPSHOT</version>
+      <exclusions>
+        <exclusion>
+          <groupId>edu.washington.cs.types.checker</groupId>
+          <artifactId>checker-framework</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>javax.activation</groupId>
+          <artifactId>activation</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.sun.mail</groupId>
+          <artifactId>javax.mail</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jdeps-plugin</artifactId>
+        <version>3.1.2</version>
+        <executions>
+          <execution>
+            <phase>compile</phase>
+            <goals>
+              <goal>jdkinternals</goal>
+            </goals>
+            <configuration>
+              <dependenciesToAnalyzeIncludes>
+                <include>*:*</include>
+              </dependenciesToAnalyzeIncludes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jlink-plugin</artifactId>
+        <version>3.1.0</version>
+        <extensions>true</extensions>
+        <configuration>
+          <compress>2</compress>
+          <noHeaderFiles>true</noHeaderFiles>
+          <stripDebug>true</stripDebug>
+          <noManPages>true</noManPages>
+          <launcher>honolulu=io.artoo.honolulu/io.artoo.honolulu.Main</launcher>
+          <finalName>honolulu</finalName>
+          <addOptions>
+            <addOption>--enable-preview</addOption>
+          </addOptions>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-maven-plugin</artifactId>
@@ -39,6 +99,29 @@
           <options>--enable-preview</options>
           <jlinkImageName>honolulu</jlinkImageName>
           <jlinkZipName>honolulu</jlinkZipName>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.panteleyev</groupId>
+        <artifactId>jpackage-maven-plugin</artifactId>
+        <version>1.4.0</version>
+        <configuration>
+          <name>Honolulu</name>
+          <appVersion>1.0.3</appVersion>
+          <vendor>io.artoo</vendor>
+          <module>io.artoo.honolulu/io.artoo.honolulu.Main</module>
+          <runtimeImage>target/honolulu</runtimeImage>
+          <modulePath>${java.home}/jmods</modulePath>
+          <destination>target/dist</destination>
+          <linuxShortcut>true</linuxShortcut>
+          <linuxPackageName>honolulu</linuxPackageName>
+          <linuxAppCategory>Utilities</linuxAppCategory>
+          <linuxMenuGroup>Utilities</linuxMenuGroup>
+          <icon>/usr/share/icons/Pop/256x256/categories/applications-graphics.png</icon>
+          <javaOptions>
+            <option>--enable-preview</option>
+            <option>-Dfile.encoding=UTF-8</option>
+          </javaOptions>
         </configuration>
       </plugin>
     </plugins>

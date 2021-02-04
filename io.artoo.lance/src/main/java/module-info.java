@@ -1,7 +1,5 @@
 module io.artoo.lance {
-  //noinspection JavaRequiresAutoModule
-  requires static transitive org.jetbrains.annotations;
-
+  requires static org.jetbrains.annotations;
   requires static io.vertx.core;
 
   exports io.artoo.lance.cursor;

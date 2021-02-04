@@ -12,7 +12,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +38,6 @@ public final class Honolulu extends Application {
       .eventually(show(stage));
   }
 
-  @NotNull
   private Func.Uni<BorderPane, Scene> newScene() {
     return it -> {
       final var scene = new Scene(it, Color.BLACK);
@@ -55,7 +53,6 @@ public final class Honolulu extends Application {
     };
   }
 
-  @NotNull
   private Cons.Uni<Throwable> alert() {
     return throwable -> {
       final var alert = new Alert(ERROR);
@@ -73,7 +70,6 @@ public final class Honolulu extends Application {
     };
   }
 
-  @NotNull
   private Cons.Uni<Scene> show(final Stage stage) {
     return scene -> {
       stage.setScene(scene);

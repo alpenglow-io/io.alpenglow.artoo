@@ -14,8 +14,33 @@
 
   <properties>
     <controlsfx.version>11.0.2</controlsfx.version>
-    <javafx.version>13.0.2</javafx.version>
+    <javafx.version>15.0.1</javafx.version>
   </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-base</artifactId>
+        <version>${javafx.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-controls</artifactId>
+        <version>${javafx.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-media</artifactId>
+        <version>${javafx.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-web</artifactId>
+        <version>${javafx.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
     <dependency>
@@ -23,42 +48,31 @@
       <artifactId>io.artoo.lance</artifactId>
       <version>1.0.0-SNAPSHOT</version>
     </dependency>
+
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-base</artifactId>
-      <version>14.0.1</version>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
-      <version>14.0.1</version>
     </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-media</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-web</artifactId>
+      <optional>true</optional>
+    </dependency>
+
     <dependency>
       <groupId>org.controlsfx</groupId>
       <artifactId>controlsfx</artifactId>
       <version>${controlsfx.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.openjfx</groupId>
-          <artifactId>javafx-base</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.openjfx</groupId>
-          <artifactId>javafx-graphics</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.openjfx</groupId>
-          <artifactId>javafx-controls</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.openjfx</groupId>
-          <artifactId>javafx-media</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.openjfx</groupId>
-          <artifactId>javafx-web</artifactId>
-        </exclusion>
-      </exclusions>
+      <optional>true</optional>
     </dependency>
   </dependencies>
 </project>

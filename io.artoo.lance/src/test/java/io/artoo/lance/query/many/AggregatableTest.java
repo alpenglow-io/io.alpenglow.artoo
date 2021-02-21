@@ -1,6 +1,6 @@
 package io.artoo.lance.query.many;
 
-import io.artoo.lance.query.TestData.Pet;
+import io.artoo.lance.query.Test.Pet;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

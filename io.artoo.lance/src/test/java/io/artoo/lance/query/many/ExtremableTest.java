@@ -3,7 +3,7 @@ package io.artoo.lance.query.many;
 import io.artoo.lance.query.Many;
 import org.junit.jupiter.api.Test;
 
-import static io.artoo.lance.query.TestData.Pet;
+import static io.artoo.lance.query.Test.Pet;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ExtremableTest {

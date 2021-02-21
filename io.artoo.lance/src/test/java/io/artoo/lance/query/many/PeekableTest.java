@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.stream.Stream;
 
-import static io.artoo.lance.query.TestData.Pet;
+import static io.artoo.lance.query.Test.Pet;
 import static java.lang.System.out;
 import static org.assertj.core.api.Assertions.assertThat;
 

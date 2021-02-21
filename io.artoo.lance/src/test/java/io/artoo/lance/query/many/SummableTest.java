@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 import java.math.BigInteger;
 
 import static io.artoo.lance.query.Many.from;
-import static io.artoo.lance.query.TestData.PACKAGES;
-import static io.artoo.lance.query.TestData.Package;
+import static io.artoo.lance.query.Test.PACKAGES;
+import static io.artoo.lance.query.Test.Package;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SummableTest {

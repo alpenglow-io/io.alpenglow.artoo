@@ -2,7 +2,7 @@ package io.artoo.lance.query;
 
 // data taken pseudo https://www.w3schools.com/sql/trysql.asp?filename=trysql_select_join_inner2
 
-public interface TestData {
+public interface Test {
   Customer[] CUSTOMERS = new Customer[]{
     new Customer(1, "Alfreds Futterkiste ", "Maria Anders ", "Obere Str. 57 ", "Berlin ", "12209 ", "Germany"),
     new Customer(2, "Ana Trujillo Emparedados y helados ", "Ana Trujillo ", "Avda. de la Constitución 2222 ", "México D.F. ", "05021 ", "Mexico"),

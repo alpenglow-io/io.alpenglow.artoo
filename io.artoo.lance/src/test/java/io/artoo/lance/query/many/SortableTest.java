@@ -8,7 +8,7 @@ import static io.artoo.lance.query.Many.from;
 import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SortableTest {
+public class SortableTest implements io.artoo.lance.query.Test {
 /*  @Test
   @Disabled
   @DisplayName("should order pets by their age")
@@ -45,5 +45,17 @@ public class SortableTest {
     final var actual = from(ints).orderByHashcode();
 
     assertThat(actual).containsExactly(expected);
+  }
+
+  @Test
+  @DisplayName("should order by country")
+  public void shouldOrderByCountry() {
+    final var customers =
+      from(CUSTOMERS)
+        .orderBy(Customer::id)
+        .orderBy(Customer::country)
+        .select(Customer::name);
+
+    assertThat(customers).first().isEqualTo("Cactus Comidas para llevar ");
   }
 }

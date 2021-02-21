@@ -8,11 +8,11 @@ import static io.artoo.lance.query.Many.from;
 import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class SortableTest {
+public class SortableTest {
 /*  @Test
   @Disabled
   @DisplayName("should order pets by their age")
-  void shouldOrderByAge() {
+  public void shouldOrderByAge() {
     final var pets = new Pet[]{
       new Pet("Barley", 8),
       new Pet("Boots", 4),
@@ -30,7 +30,7 @@ class SortableTest {
 
   @Test
   @DisplayName("should order by hashcode")
-  void shouldOrderByHashcode() {
+  public void shouldOrderByHashcode() {
     final var ordered = Many.from(4, 3, 2, 1).orderByHashcode();
 
     assertThat(ordered).containsExactly(1, 2, 3, 4);
@@ -38,7 +38,7 @@ class SortableTest {
 
   @Test
   @DisplayName("should order by hashcode on big pseudo data set")
-  void shouldOrderByHashcodeOnBigSet() {
+  public void shouldOrderByHashcodeOnBigSet() {
     final var ints = range(0, 1_000).map(it -> 999 - it).boxed().toArray(Integer[]::new);
     final var expected = range(0, 1_000).boxed().toArray(Integer[]::new);
 

@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 import static io.artoo.lance.query.Many.fromAny;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class MatchableTest {
+public class MatchableTest {
   @Test
   @DisplayName("should match when string")
-  void shouldMatchWhenStringOrCharacter() {
+  public void shouldMatchWhenStringOrCharacter() {
     enum Value { Default; int val = 0; }
 
     fromAny("value", 1, 12.3, true, 'a')
@@ -22,7 +22,7 @@ class MatchableTest {
 
   @Test
   @DisplayName("should match when string")
-  void shouldMatchWhenString() {
+  public void shouldMatchWhenString() {
     enum Value { Default; int val = 0; }
 
     fromAny("value", 1, 12.3, true, 'a')

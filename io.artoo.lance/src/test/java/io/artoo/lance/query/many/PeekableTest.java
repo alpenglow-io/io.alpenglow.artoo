@@ -10,14 +10,14 @@ import static io.artoo.lance.query.TestData.Pet;
 import static java.lang.System.out;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PeekableTest {
-  static class Touched {
+public class PeekableTest {
+  static public class Touched {
     int value = 0;
   }
 
   @Test
   @DisplayName("should peek every element in many")
-  void shouldPeekElements() {
+  public void shouldPeekElements() {
     final var touched = new Touched();
 
     final var summed = Many.from(1, 2, 3, 4)
@@ -32,7 +32,7 @@ class PeekableTest {
 
   @Test
   @DisplayName("should exceptionally peek throwable")
-  void shouldExceptionallyPeekThrowable() {
+  public void shouldExceptionallyPeekThrowable() {
     final var summed = Many.from(1, 2, 3, 4)
       .peek(it -> out.println("From: " + it))
       .select(it -> {
@@ -60,7 +60,7 @@ class PeekableTest {
   }
 
   @Test
-  void shouldPeekOrdered() {
+  public void shouldPeekOrdered() {
     Many.from(1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4)
       .peek(it -> out.println("I'm " + it))
       .distinct()

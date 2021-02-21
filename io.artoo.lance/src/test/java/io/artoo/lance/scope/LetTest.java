@@ -4,9 +4,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class LetTest {
+public class LetTest {
   @Test
-  void shouldBeLazySet() {
+  public void shouldBeLazySet() {
     enum Dummy { $; int value = 0; }
 
     final var dummy = Dummy.$;

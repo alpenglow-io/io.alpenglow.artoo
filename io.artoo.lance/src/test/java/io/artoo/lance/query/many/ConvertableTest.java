@@ -8,10 +8,10 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ConvertableTest {
+public class ConvertableTest {
   @Test
   @DisplayName("should convert a many to a list")
-  void shouldConvertAsList() {
+  public void shouldConvertAsList() {
     final var list = Many.from(1, 2, 3, 4).asList();
 
     assertThat(list).containsExactly(1, 2, 3, 4);
@@ -19,7 +19,7 @@ class ConvertableTest {
 
   @Test
   @DisplayName("should convert a many from an array to an array")
-  void shouldConvertAnArrayManyAsArray() {
+  public void shouldConvertAnArrayManyAsArray() {
     final var array = Many.from(1, 2, 3, 4).asArrayOf(Integer.class);
 
     assertThat(array).containsExactly(1, 2, 3, 4);
@@ -27,7 +27,7 @@ class ConvertableTest {
 
   @Test
   @DisplayName("should convert a many from an iterable to an array")
-  void shouldConvertAnIterableManyAsArray() {
+  public void shouldConvertAnIterableManyAsArray() {
     record Dog(String name) {}
     final var dogs = new Dog[] {
       new Dog("Fuffy"), new Dog("Argos"), new Dog("Cerberos"), new Dog("Zeus")

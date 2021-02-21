@@ -9,9 +9,9 @@ import java.util.concurrent.Executors;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ValuesTest {
+public class ValuesTest {
   @Test
-  void shouldPushValuesOnEmpty() {
+  public void shouldPushValuesOnEmpty() {
     final var empty = Values.<Integer>empty();
 
     final var pushed = empty.push(1);
@@ -21,7 +21,7 @@ class ValuesTest {
   }
 
   @Test
-  void shouldPushValuesAndPopByThreads() throws InterruptedException {
+  public void shouldPushValuesAndPopByThreads() throws InterruptedException {
     final var values = Values.<Integer>lock();
 
     final var pool = Executors.newFixedThreadPool(20);

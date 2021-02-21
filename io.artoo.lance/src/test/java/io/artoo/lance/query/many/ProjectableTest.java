@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 import static io.artoo.lance.query.Many.from;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ProjectableTest {
+public class ProjectableTest {
   @Test
   @DisplayName("should select with index")
-  void shouldSelectWithIndex() {
+  public void shouldSelectWithIndex() {
     final var select = from("apple", "banana", "mango", "orange", "passionfruit", "grape")
       .select((index, fruit) -> String.format("%d - %s", index, fruit));
 
@@ -25,7 +25,7 @@ class ProjectableTest {
 
   @Test
   @DisplayName("should say every fruit is a fruit")
-  void shouldSelect() {
+  public void shouldSelect() {
     final var select = from("apple", "banana", "mango", "orange", "passionfruit", "grape")
       .select(fruit -> fruit + " is a fruit.");
 
@@ -41,7 +41,7 @@ class ProjectableTest {
 
   @Test
   @DisplayName("should split every word")
-  void shouldDoASelection() {
+  public void shouldDoASelection() {
     final var manySelected = from("an apple a day", "the quick brown fox").selection(phrase -> from(phrase.split(" ")));
 
     assertThat(manySelected).containsExactly(

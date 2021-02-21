@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class CountableTest {
+public class CountableTest {
   @Test
   @DisplayName("should count 3 on three elements")
-  void shouldCount() {
+  public void shouldCount() {
     final var count = Many.from(1, 2, 3).count().yield();
 
     assertThat(count).isEqualTo(3);
@@ -17,7 +17,7 @@ class CountableTest {
 
   @Test
   @DisplayName("should count 0 on none elements")
-  void shouldCountNone() {
+  public void shouldCountNone() {
     final var count = Many.empty().count().yield();
 
     assertThat(count).isEqualTo(0);
@@ -25,13 +25,13 @@ class CountableTest {
 
   @Test
   @DisplayName("should count 2 on even elements")
-  void shouldCountEven() {
+  public void shouldCountEven() {
     assertThat(Many.from(1, 2, 3, 4).count(it -> it % 2 == 0).yield()).isEqualTo(2);
   }
 
   @Test
   @DisplayName("should count non nullable elements only")
-  void shouldCountNonNullableOnly() {
+  public void shouldCountNonNullableOnly() {
     final var count = Many.from(1, 2, null, "hi there", true, null).count().yield();
 
     assertThat(count).isEqualTo(4);

@@ -4,9 +4,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class LateTest {
+public class LateTest {
   @Test
-  void shouldSetAValueOnce() {
+  public void shouldSetAValueOnce() {
     final var late = Late.<String>init();
 
     late.set(() -> "A Value");

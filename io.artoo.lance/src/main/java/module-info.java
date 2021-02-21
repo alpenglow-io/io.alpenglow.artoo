@@ -1,4 +1,6 @@
 module io.artoo.lance {
+  opens io.artoo.lance to org.junit.jupiter;
+
   requires static org.jetbrains.annotations;
 
   exports io.artoo.lance.func;

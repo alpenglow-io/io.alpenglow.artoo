@@ -8,10 +8,10 @@ import static io.artoo.lance.func.Pred.not;
 import static io.artoo.lance.query.Many.from;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PartitionableTest {
+public class PartitionableTest {
   @Test
   @DisplayName("should take first 3 rows")
-  void shouldTake3Rows() {
+  public void shouldTake3Rows() {
     final var taken = from(59, 82, 70, 56, 92, 98, 85).take(3);
 
     assertThat(taken).containsExactly(59, 82, 70);
@@ -19,7 +19,7 @@ class PartitionableTest {
 
   @Test
   @DisplayName("should take all fruits until orange is met")
-  void shouldTakeAllUntilOrange() {
+  public void shouldTakeAllUntilOrange() {
     final var taken = from("apple", "banana", "mango", "orange", "passionfruit", "grape").takeWhile(not(text -> text.equals("orange")));
 
     assertThat(taken).containsExactly("apple", "banana", "mango");
@@ -27,7 +27,7 @@ class PartitionableTest {
 
   @Test
   @DisplayName("should take all fruits until fruit.length is greater than index")
-  void shouldTakeWithIndex() {
+  public void shouldTakeWithIndex() {
     final var query = from("apple", "passionfruit", "banana", "mango", "orange", "blueberry", "grape", "strawberry").takeWhile((index, fruit) -> fruit.length() >= index);
 
     assertThat(query).containsExactly("apple", "passionfruit", "banana", "mango", "orange", "blueberry");
@@ -35,7 +35,7 @@ class PartitionableTest {
 
   @Test
   @DisplayName("should skip first three numbers")
-  void shouldSkipFirst3() {
+  public void shouldSkipFirst3() {
     final var skipped = Many.from(59, 82, 70, 56, 92, 98, 85).skip(3);
 
     assertThat(skipped).containsExactly(56, 92, 98, 85);
@@ -43,7 +43,7 @@ class PartitionableTest {
 
   @Test
   @DisplayName("should skip while number is lesser or equal than 90")
-  void shouldSkipWhileNumbersLesserOrEqualThan90() {
+  public void shouldSkipWhileNumbersLesserOrEqualThan90() {
     final var query = Many.from(59, 82, 70, 56, 92, 98, 85).skipWhile(number -> number <= 90);
 
     assertThat(query).containsExactly(92, 98, 85);
@@ -51,7 +51,7 @@ class PartitionableTest {
 
   @Test
   @DisplayName("should skip while amount is greater than the index by 1000")
-  void shouldSkipWhileAmountGreaterThanIndexBy1000() {
+  public void shouldSkipWhileAmountGreaterThanIndexBy1000() {
     final var query = Many.from(5000, 2500, 9000, 8000, 6500, 4000, 1500, 5500).skipWhile((index, amount) -> amount > index * 1000);
 
     assertThat(query).containsExactly(4000, 1500, 5500);

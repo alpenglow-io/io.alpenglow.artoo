@@ -6,44 +6,44 @@ import org.junit.jupiter.api.Test;
 import static io.artoo.lance.query.TestData.Pet;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ExtremableTest {
+public class ExtremableTest {
   @Test
-  void shouldFindMaxByDefault() {
+  public void shouldFindMaxByDefault() {
     final var max = Many.from(1, 2, 3, 4, null).max().yield();
 
     assertThat(max).isEqualTo(4);
   }
 
   @Test
-  void shouldFindMinByDefault() {
+  public void shouldFindMinByDefault() {
     final var min = Many.from(null, 1, 2, 3, 4).min().yield();
 
     assertThat(min).isEqualTo(1);
   }
 
   @Test
-  void shouldNotFindMaxByDefaultWithRecords() {
+  public void shouldNotFindMaxByDefaultWithRecords() {
     final var max = Many.from(new Pet("Pluto", 1), null, new Pet("Fuffy", 2), new Pet("Cerberos", 3)).max();
 
     assertThat(max).isEmpty();
   }
 
   @Test
-  void shouldNotFindMinByDefaultWithRecords() {
+  public void shouldNotFindMinByDefaultWithRecords() {
     final var min = Many.from(new Pet("Pluto", 1), new Pet("Fuffy", 2), new Pet("Cerberos", 3)).min();
 
     assertThat(min).isEmpty();
   }
 
   @Test
-  void shouldFindMaxBySelecting() {
+  public void shouldFindMaxBySelecting() {
     final var max = Many.from(new Pet("Pluto", 33), new Pet("Fuffy", 22), new Pet("Cerberos", 41)).max(Pet::age).yield();
 
     assertThat(max).isEqualTo(41);
   }
 
   @Test
-  void shouldFindMinBySelecting() {
+  public void shouldFindMinBySelecting() {
     final var min = Many.from(new Pet("Pluto", 33), null, new Pet("Fuffy", 22), new Pet("Cerberos", 41)).min(Pet::age).yield();
 
 

@@ -10,9 +10,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
-class ValueTest {
+public class ValueTest {
   @Test
-  void shouldGetValue() throws InterruptedException {
+  public void shouldGetValue() throws InterruptedException {
     final var value = Let.lazy(() -> 0);
 
     final var pool = Executors.newFixedThreadPool(5);

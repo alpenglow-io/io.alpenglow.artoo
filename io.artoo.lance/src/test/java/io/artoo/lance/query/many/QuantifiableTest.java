@@ -9,10 +9,10 @@ import org.junit.jupiter.api.Test;
 import static io.artoo.lance.query.Many.from;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class QuantifiableTest {
+public class QuantifiableTest {
   @Test
   @DisplayName("not all pets should start with letter B")
-  void shouldNotStartAllWithB() {
+  public void shouldNotStartAllWithB() {
 
     final var all = from(new Pet("Barley", 10), new Pet("Boots", 4), new Pet("Whiskers", 6))
       .all(pet -> pet.name().startsWith("B"))
@@ -23,7 +23,7 @@ class QuantifiableTest {
 
   @Test
   @DisplayName("should contains an element")
-  void shouldHaveAnyElement() {
+  public void shouldHaveAnyElement() {
     final var any = from(1, 2).any().yield();
 
     assertThat(any).isTrue();
@@ -31,7 +31,7 @@ class QuantifiableTest {
 
   @Test
   @DisplayName("should not contains elements")
-  void shouldNotHaveAnyElement() {
+  public void shouldNotHaveAnyElement() {
     final var any = from().any().yield();
 
     assertThat(any).isFalse();
@@ -39,7 +39,7 @@ class QuantifiableTest {
 
   @Test
   @DisplayName("should have an even number")
-  void shouldHaveEvenNumber() {
+  public void shouldHaveEvenNumber() {
     final var any = from(1, 2).any(number -> number % 2 == 0).yield();
 
     assertThat(any).isTrue();
@@ -47,7 +47,7 @@ class QuantifiableTest {
 
   @Test
   @DisplayName("should find 3 people with pets")
-  void shouldHaveThreePeople() {
+  public void shouldHaveThreePeople() {
     final PetOwner[] owners = {
       new PetOwner(
         "Haas",
@@ -75,7 +75,7 @@ class QuantifiableTest {
   }
 
   @Test
-  void shouldFailWhenThrowsException() {
+  public void shouldFailWhenThrowsException() {
     Many.from(1, 2, 3, 4)
       .select(it -> {
         if (it > 0) throw new IllegalStateException("Damn");
@@ -89,7 +89,7 @@ class QuantifiableTest {
   /*
   @Test
   @DisplayName("it should contain the element")
-  void shouldContainElement() {
+  public void shouldContainElement() {
     final var actual = Many.pseudo(1, 2, 3, 4).contains(3).yield();
 
     assertThat(actual).isTrue();
@@ -97,7 +97,7 @@ class QuantifiableTest {
 
   @Test
   @DisplayName("it should not contain the element")
-  void shouldNotContainElement() {
+  public void shouldNotContainElement() {
     final var actual = Many.pseudo(1, 2, 3 ,4).notContains(5).yield();
 
     assertThat(actual).isTrue();

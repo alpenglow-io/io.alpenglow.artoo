@@ -7,10 +7,10 @@ import static io.artoo.lance.query.Many.from;
 import static java.lang.System.out;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class UniquableTest {
+public class UniquableTest {
   @Test
   @DisplayName("should get element at index 4 or default if out pseudo bound")
-  void shouldGetElementAt4() {
+  public void shouldGetElementAt4() {
     final String[] names = {
       "Hartono, Tommy",
       "Adams, Terry",
@@ -24,7 +24,7 @@ class UniquableTest {
 
   @Test
   @DisplayName("should get first element")
-  void shouldGetFirst() {
+  public void shouldGetFirst() {
     final var first = from(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19).first().yield();
 
     assertThat(first).isEqualTo(9);
@@ -32,7 +32,7 @@ class UniquableTest {
 
   @Test
   @DisplayName("should get first even number")
-  void shouldGetFirstEvenNumber() {
+  public void shouldGetFirstEvenNumber() {
     final var first = from(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19).first(number -> number % 2 == 0).yield();
 
     assertThat(first).isEqualTo(34);
@@ -40,7 +40,7 @@ class UniquableTest {
 
   @Test
   @DisplayName("should get last element")
-  void shouldGetLast() {
+  public void shouldGetLast() {
     final var last = from(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19).last().yield();
 
     assertThat(last).isEqualTo(19);
@@ -48,7 +48,7 @@ class UniquableTest {
 
   @Test
   @DisplayName("should get last even number")
-  void shouldGetLastEvenNumber() {
+  public void shouldGetLastEvenNumber() {
 
     final var last = from(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19).last(number -> number % 2 == 0).yield();
 
@@ -57,7 +57,7 @@ class UniquableTest {
 
   @Test
   @DisplayName("should find a single element only")
-  void shouldFindASingleElementOnly() {
+  public void shouldFindASingleElementOnly() {
     final var singled = from(9).single().yield();
 
     assertThat(singled).isEqualTo(9);
@@ -65,7 +65,7 @@ class UniquableTest {
 
   @Test
   @DisplayName("should find a single element according to condition")
-  void shouldFindSingleByCondition() {
+  public void shouldFindSingleByCondition() {
     final var singleEven = from(9, 34, 65, 87, 435, 3, 83, 23).single(number -> number % 2 == 0).yield();
 
     assertThat(singleEven).isEqualTo(34);
@@ -73,7 +73,7 @@ class UniquableTest {
 
   @Test
   @DisplayName("should be empty if there's more than single element")
-  void shouldEmptyIfThereIsMoreThanSingleElement() {
+  public void shouldEmptyIfThereIsMoreThanSingleElement() {
     final var single = from(9, 65, 87, 435, 3, 83, 23, 87, 435, 67, 19)
       .single()
       .peek(out::println);
@@ -85,7 +85,7 @@ class UniquableTest {
 
   @Test
   @DisplayName("should be empty if there's more than single element on condition")
-  void shouldEmptyIfThereIsMoreThanSingleElementOnCondition() {
+  public void shouldEmptyIfThereIsMoreThanSingleElementOnCondition() {
     final var single = from(9, 65, 87, 435, 3, 83, 23, 87, 435, 67, 19)
       .single(number -> number < 20);
 
@@ -93,8 +93,5 @@ class UniquableTest {
       out.println(it);
 
     assertThat(single).isEmpty();
-  }
-
-  public static void main(String[] args) {
   }
 }

@@ -6,9 +6,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class ProjectableTest {
+public class ProjectableTest {
   @Test
-  void shouldFailWhenSelectThrowsException() {
+  public void shouldFailWhenSelectThrowsException() {
     assertThrows(FetchException.class,
       () -> One.from(1).select(it -> { throw new IllegalStateException("Damn!"); }).eventually(),
       "Damn!"

@@ -2,8 +2,6 @@ package io.artoo.lance.query.eventual.task;
 
 import io.artoo.lance.func.Func;
 import io.artoo.lance.query.One;
-import io.artoo.lance.query.Queryable;
-import io.artoo.lance.query.oper.Select;
 import io.artoo.lance.query.eventual.Task;
 import io.artoo.lance.query.eventual.Eventual;
 

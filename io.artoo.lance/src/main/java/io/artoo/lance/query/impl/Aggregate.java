@@ -1,4 +1,4 @@
-package io.artoo.lance.query.oper;
+package io.artoo.lance.query.impl;
 
 import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Pred;

@@ -3,8 +3,8 @@ package io.artoo.lance.query.many;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.query.oper.Skip;
-import io.artoo.lance.query.oper.Take;
+import io.artoo.lance.query.impl.Skip;
+import io.artoo.lance.query.impl.Take;
 
 import static io.artoo.lance.scope.Nullability.nonNullable;
 

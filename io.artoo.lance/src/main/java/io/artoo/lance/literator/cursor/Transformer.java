@@ -1,6 +1,5 @@
-package io.artoo.lance.literator.cursor.impl;
+package io.artoo.lance.literator.cursor;
 
-import io.artoo.lance.literator.cursor.Cursor;
 import io.artoo.lance.literator.Literator;
 import io.artoo.lance.literator.cursor.routine.Routine;
 

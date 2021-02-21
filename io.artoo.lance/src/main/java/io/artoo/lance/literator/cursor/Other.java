@@ -1,9 +1,8 @@
-package io.artoo.lance.literator.cursor.impl;
+package io.artoo.lance.literator.cursor;
 
 import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Suppl;
-import io.artoo.lance.literator.cursor.Cursor;
 import io.artoo.lance.literator.Literator;
 import io.artoo.lance.literator.cursor.routine.Routine;
 import io.artoo.lance.scope.Late;
@@ -25,18 +24,28 @@ public interface Other<T> extends Literator<T> {
   }
 }
 
-final class Or<T, C extends Cursor<T>> implements Cursor<T> {
+abstract class As<T> implements Transformer<T> {
+  protected final Literator<T> source;
+
+  protected As(final Literator<T> source) {this.source = source;}
+
+  @Override
+  public final <R> R as(final Routine<T, R> routine) {
+    return source instanceof Cursor<T> cursor ? cursor.as(routine) : Cursor.<T>nothing().as(routine);
+  }
+}
+
+final class Or<T, C extends Cursor<T>> extends As<T> implements Cursor<T> {
   private final Late<Literator<T>> reference = Late.init();
-  private final Literator<T> source;
   private final Let<? extends C> other;
 
   Or(final Literator<T> source, final Let<? extends C> other) {
-    this.source = source;
+    super(source);
     this.other = other;
   }
 
   @Override
-  public final T fetch() throws Throwable {
+  public final T fetch() {
     return hasNext() ? reference.let(Literator::fetch) : null;
   }
 
@@ -46,20 +55,14 @@ final class Or<T, C extends Cursor<T>> implements Cursor<T> {
 
     return reference.let(Iterator::hasNext);
   }
-
-  @Override
-  public <R> R as(final Routine<T, R> routine) {
-    return source instanceof Cursor<T> cursor ? cursor.as(routine) : Cursor.<T>nothing().as(routine);
-  }
 }
 
-final class Er<T, E extends RuntimeException> implements Cursor<T> {
-  private final Literator<T> source;
+final class Er<T, E extends RuntimeException> extends As<T> implements Cursor<T> {
   private final String message;
   private final Func.Bi<? super String, ? super Throwable, ? extends E> exception;
 
   Er(final Literator<T> source, final String message, final Func.Bi<? super String, ? super Throwable, ? extends E> exception) {
-    this.source = source;
+    super(source);
     this.message = message;
     this.exception = exception;
   }
@@ -81,19 +84,13 @@ final class Er<T, E extends RuntimeException> implements Cursor<T> {
   public final boolean hasNext() {
     return source.hasNext();
   }
-
-  @Override
-  public <R> R as(final Routine<T, R> routine) {
-    return source instanceof Cursor<T> cursor ? cursor.as(routine) : Cursor.<T>nothing().as(routine);
-  }
 }
 
-final class Catch<T> implements Cursor<T> {
-  private final Literator<T> source;
+final class Catch<T> extends As<T> implements Cursor<T> {
   private final Cons.Uni<? super Throwable> catch$;
 
   Catch(final Literator<T> source, final Cons.Uni<? super Throwable> catch$) {
-    this.source = source;
+    super(source);
     this.catch$ = catch$;
   }
 
@@ -110,10 +107,5 @@ final class Catch<T> implements Cursor<T> {
   @Override
   public final boolean hasNext() {
     return source.hasNext();
-  }
-
-  @Override
-  public <R> R as(final Routine<T, R> routine) {
-    return source instanceof Cursor<T> cursor ? cursor.as(routine) : Cursor.<T>nothing().as(routine);
   }
 }

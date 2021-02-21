@@ -1,10 +1,6 @@
 package io.artoo.lance.literator.cursor;
 
 import io.artoo.lance.literator.Literator;
-import io.artoo.lance.literator.cursor.impl.Closer;
-import io.artoo.lance.literator.cursor.impl.Mappable;
-import io.artoo.lance.literator.cursor.impl.Other;
-import io.artoo.lance.literator.cursor.impl.Transformer;
 import io.artoo.lance.literator.cursor.impl.Iteration;
 import io.artoo.lance.literator.cursor.impl.Link;
 import io.artoo.lance.literator.cursor.impl.Nothing;
@@ -12,7 +8,7 @@ import io.artoo.lance.literator.cursor.impl.Open;
 
 import java.util.Iterator;
 
-public interface Cursor<T> extends Mappable<T>, Other<T>, Closer<T>, Transformer<T> {
+public interface Cursor<T> extends Mapper<T>, Other<T>, Closer<T>, Transformer<T> {
   @SafeVarargs
   static <T> Cursor<T> open(final T... elements) {
     return new Open<>(elements);

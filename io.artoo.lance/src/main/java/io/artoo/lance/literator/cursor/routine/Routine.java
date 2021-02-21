@@ -1,16 +1,15 @@
 package io.artoo.lance.literator.cursor.routine;
 
-import io.artoo.lance.literator.Literator;
 import io.artoo.lance.func.Func;
+import io.artoo.lance.literator.Literator;
 
 import java.util.Iterator;
 import java.util.List;
 
-public sealed interface Routine<T, R> permits Concat, Convert, Curry, Sort {
+public sealed interface Routine<T, R> permits Concat, Convert, Sort {
   static <T> Sort<T> orderByHashcode() { return new Sort.Hashcode<>(); }
   static <T> Concat<T> concat(T[] elements) { return new Concat.Array<>(elements); }
   static <T> Concat<T> concat(Literator<T> elements) { return new Concat.Fetcher<>(elements); }
-  static <T, R> Curry<T, R> curry(final Func.Uni<? super T, ? extends R> map) { return new Curry<>(map); }
 
   static <T> Convert<T, List<T>> list() { return new Convert.Listable<>(); }
 

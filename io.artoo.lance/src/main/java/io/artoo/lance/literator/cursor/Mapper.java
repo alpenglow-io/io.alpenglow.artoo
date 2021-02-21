@@ -1,11 +1,10 @@
-package io.artoo.lance.literator.cursor.impl;
+package io.artoo.lance.literator.cursor;
 
-import io.artoo.lance.literator.cursor.Cursor;
 import io.artoo.lance.literator.Literator;
 import io.artoo.lance.literator.cursor.routine.Routine;
 import io.artoo.lance.func.Func;
 
-public interface Mappable<T> extends Literator<T> {
+public interface Mapper<T> extends Literator<T> {
   default <R> Cursor<R> map(final Func.Uni<? super T, ? extends R> map) {
     return new Map<>(this, map);
   }

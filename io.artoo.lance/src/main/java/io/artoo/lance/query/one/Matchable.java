@@ -3,11 +3,10 @@ package io.artoo.lance.query.one;
 import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Pred;
-import io.artoo.lance.query.Many;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.query.oper.WhenType;
-import io.artoo.lance.query.oper.WhenWhere;
+import io.artoo.lance.query.impl.WhenType;
+import io.artoo.lance.query.impl.WhenWhere;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unchecked")

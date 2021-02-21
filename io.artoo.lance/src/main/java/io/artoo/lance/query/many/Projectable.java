@@ -3,7 +3,7 @@ package io.artoo.lance.query.many;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.query.oper.Select;
+import io.artoo.lance.query.impl.Select;
 
 public interface Projectable<T> extends Queryable<T> {
   default <R> Many<R> select(Func.Bi<? super Integer, ? super T, ? extends R> select) {

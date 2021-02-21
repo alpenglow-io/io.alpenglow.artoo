@@ -4,6 +4,7 @@ module io.artoo.lance {
   exports io.artoo.lance.func;
   exports io.artoo.lance.literator;
   exports io.artoo.lance.literator.cursor;
+  exports io.artoo.lance.literator.cursor.routine;
   exports io.artoo.lance.scope;
   exports io.artoo.lance.query;
 }

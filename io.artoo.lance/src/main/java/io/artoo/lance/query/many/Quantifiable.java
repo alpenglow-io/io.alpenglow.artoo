@@ -4,8 +4,8 @@ import io.artoo.lance.func.Pred;
 import io.artoo.lance.literator.cursor.Cursor;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.query.oper.All;
-import io.artoo.lance.query.oper.Any;
+import io.artoo.lance.query.impl.All;
+import io.artoo.lance.query.impl.Any;
 
 import static io.artoo.lance.scope.Nullability.nonNullable;
 

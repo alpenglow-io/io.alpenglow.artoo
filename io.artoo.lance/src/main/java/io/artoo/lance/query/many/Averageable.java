@@ -3,7 +3,7 @@ package io.artoo.lance.query.many;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.query.oper.Average;
+import io.artoo.lance.query.impl.Average;
 
 public interface Averageable<T> extends Queryable<T> {
   default <N extends Number> One<Double> average(final Func.Uni<? super T, ? extends N> select) {

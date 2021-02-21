@@ -3,10 +3,10 @@ package io.artoo.lance.query.many;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.query.oper.At;
-import io.artoo.lance.query.oper.First;
-import io.artoo.lance.query.oper.Last;
-import io.artoo.lance.query.oper.Single;
+import io.artoo.lance.query.impl.At;
+import io.artoo.lance.query.impl.First;
+import io.artoo.lance.query.impl.Last;
+import io.artoo.lance.query.impl.Single;
 
 import static io.artoo.lance.scope.Nullability.nonNullable;
 

@@ -1,8 +1,9 @@
 package io.artoo.lance.query;
 
-import io.artoo.lance.fetcher.Cursor;
+import io.artoo.lance.literator.cursor.Cursor;
 import io.artoo.lance.query.many.Aggregatable;
 import io.artoo.lance.query.many.Concatenatable;
+import io.artoo.lance.query.many.Convertable;
 import io.artoo.lance.query.many.Filterable;
 import io.artoo.lance.query.many.Matchable;
 import io.artoo.lance.query.many.Otherwise;
@@ -15,18 +16,19 @@ import io.artoo.lance.query.many.Sortable;
 import io.artoo.lance.query.many.Uniquable;
 
 public interface Many<T> extends
-  Projectable<T>,
-  Filterable<T>,
-  Partitionable<T>,
-  Uniquable<T>,
   Aggregatable<T>,
+  Concatenatable<T>,
+  Convertable<T>,
+  Filterable<T>,
+  Matchable<T>,
+  Otherwise<T>,
+  Partitionable<T>,
+  Peekable<T>,
+  Projectable<T>,
   Quantifiable<T>,
   Settable<T>,
-  Concatenatable<T>,
-  Otherwise<T>,
-  Peekable<T>,
   Sortable<T>,
-  Matchable<T> {
+  Uniquable<T> {
 
   @SafeVarargs
   static <R> Many<R> from(final R... items) {
@@ -47,6 +49,10 @@ public interface Many<T> extends
 
   static <R> Many<R> of(final Cursor<R> cursor) {
     return new Some<>(cursor);
+  }
+
+  static <R> Many<R> from(Iterable<R> iterable) {
+    return Many.of(Cursor.iteration(iterable.iterator()));
   }
 }
 

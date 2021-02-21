@@ -2,7 +2,7 @@ package io.artoo.frost.dropbox;
 
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FolderMetadata;
-import io.artoo.lance.fetcher.Cursor;
+import io.artoo.lance.literator.cursor.Cursor;
 import io.artoo.lance.query.Many;
 
 public interface Folders extends Many<FolderMetadata> {

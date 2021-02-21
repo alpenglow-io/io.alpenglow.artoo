@@ -1,6 +1,6 @@
 package io.artoo.lance.query.many;
 
-import io.artoo.lance.fetcher.Cursor;
+import io.artoo.lance.literator.cursor.Cursor;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;

@@ -1,15 +1,17 @@
 package io.artoo.lance.query.many;
 
 import io.artoo.lance.func.Func;
+import io.artoo.lance.literator.cursor.routine.Routine;
 import io.artoo.lance.query.Queryable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static io.artoo.lance.literator.cursor.routine.Routine.*;
+import static io.artoo.lance.literator.cursor.routine.Routine.list;
 import static io.artoo.lance.scope.Nullability.nonNullable;
 
 public interface Convertable<T> extends Queryable<T> {
@@ -23,10 +25,7 @@ public interface Convertable<T> extends Queryable<T> {
   }
 
   default List<T> asList() {
-    final List<T> list = new ArrayList<>();
-    for (final var value : this)
-      list.add(value);
-    return list;
+    return cursor().as(list());
   }
 
   default Collection<T> asCollection() {
@@ -35,5 +34,9 @@ public interface Convertable<T> extends Queryable<T> {
 
   default Iterable<T> asIterable() {
     return asCollection();
+  }
+
+  default T[] asArrayOf(Class<T> type) {
+    return cursor().as(array(type));
   }
 }

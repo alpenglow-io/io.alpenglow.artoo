@@ -1,6 +1,6 @@
 package io.artoo.lance.query;
 
-import io.artoo.lance.fetcher.Cursor;
+import io.artoo.lance.literator.cursor.Cursor;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Suppl;
 import io.artoo.lance.query.one.Filterable;

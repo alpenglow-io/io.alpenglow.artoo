@@ -1,10 +1,9 @@
 package io.artoo.lance.query;
 
-import io.artoo.lance.fetcher.Cursor;
+import io.artoo.lance.literator.cursor.Cursor;
 import io.artoo.lance.func.Cons;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 
 public interface Queryable<T> extends Iterable<T> {

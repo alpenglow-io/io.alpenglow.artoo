@@ -1,6 +1,7 @@
-package io.artoo.lance.fetcher.routine;
+package io.artoo.lance.literator.cursor.routine;
 
-import io.artoo.lance.fetcher.Cursor;
+import io.artoo.lance.literator.cursor.Cursor;
+import io.artoo.lance.literator.Literator;
 import io.artoo.lance.func.Func;
 
 import java.util.Arrays;
@@ -8,7 +9,7 @@ import java.util.Iterator;
 
 import static java.lang.System.arraycopy;
 
-sealed interface Concat<T> extends Routine<T, T> permits Concat.Array, Concat.Fetcher {
+sealed interface Concat<T> extends Routine<T, Cursor<T>> permits Concat.Array, Concat.Fetcher {
   final class Array<T> implements Concat<T> {
     private final T[] next;
 
@@ -25,7 +26,7 @@ sealed interface Concat<T> extends Routine<T, T> permits Concat.Array, Concat.Fe
     }
 
     @Override
-    public Func.Uni<io.artoo.lance.fetcher.Fetcher<T>, Cursor<T>> onFetcher() {
+    public Func.Uni<Literator<T>, Cursor<T>> onLiterator() {
       return prev -> Cursor.link(prev, Cursor.open(next));
     }
 
@@ -36,9 +37,9 @@ sealed interface Concat<T> extends Routine<T, T> permits Concat.Array, Concat.Fe
   }
 
   final class Fetcher<T> implements Concat<T> {
-    private final io.artoo.lance.fetcher.Fetcher<T> next;
+    private final Literator<T> next;
 
-    Fetcher(final io.artoo.lance.fetcher.Fetcher<T> next) {this.next = next;}
+    Fetcher(final Literator<T> next) {this.next = next;}
 
     @Override
     public final Func.Uni<T[], Cursor<T>> onArray() {
@@ -46,7 +47,7 @@ sealed interface Concat<T> extends Routine<T, T> permits Concat.Array, Concat.Fe
     }
 
     @Override
-    public Func.Uni<io.artoo.lance.fetcher.Fetcher<T>, Cursor<T>> onFetcher() {
+    public Func.Uni<Literator<T>, Cursor<T>> onLiterator() {
       return prev -> Cursor.link(prev, next);
     }
 

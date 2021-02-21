@@ -1,13 +1,13 @@
-package io.artoo.lance.fetcher.routine;
+package io.artoo.lance.literator.cursor.routine;
 
-import io.artoo.lance.fetcher.Cursor;
-import io.artoo.lance.fetcher.Fetcher;
+import io.artoo.lance.literator.cursor.Cursor;
+import io.artoo.lance.literator.Literator;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.query.Many;
 
 import java.util.Iterator;
 
-final class Curry<T, R> implements Routine<T, R> {
+final class Curry<T, R> implements Routine<T, Cursor<R>> {
   private final Func.Uni<? super T, ? extends R> map;
 
   Curry(final Func.Uni<? super T, ? extends R> map) {this.map = map;}
@@ -26,7 +26,7 @@ final class Curry<T, R> implements Routine<T, R> {
 
   @SuppressWarnings("unchecked")
   @Override
-  public Func.Uni<Fetcher<T>, Cursor<R>> onFetcher() {
+  public Func.Uni<Literator<T>, Cursor<R>> onLiterator() {
     return fetcher -> {
       var many = Many.<R>empty();
       while (fetcher.hasNext()) {

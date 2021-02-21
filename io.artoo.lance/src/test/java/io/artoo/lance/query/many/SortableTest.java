@@ -1,12 +1,10 @@
 package io.artoo.lance.query.many;
 
 import io.artoo.lance.query.Many;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.artoo.lance.query.Many.from;
-import static io.artoo.lance.query.TestData.Pet;
 import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,18 +31,18 @@ class SortableTest {
   @Test
   @DisplayName("should order by hashcode")
   void shouldOrderByHashcode() {
-    final var ordered = Many.from(4, 3, 2, 1).order();
+    final var ordered = Many.from(4, 3, 2, 1).orderByHashcode();
 
     assertThat(ordered).containsExactly(1, 2, 3, 4);
   }
 
   @Test
-  @DisplayName("should order by hashcode on big set pseudo data")
+  @DisplayName("should order by hashcode on big pseudo data set")
   void shouldOrderByHashcodeOnBigSet() {
     final var ints = range(0, 1_000).map(it -> 999 - it).boxed().toArray(Integer[]::new);
     final var expected = range(0, 1_000).boxed().toArray(Integer[]::new);
 
-    final var actual = from(ints).order();
+    final var actual = from(ints).orderByHashcode();
 
     assertThat(actual).containsExactly(expected);
   }

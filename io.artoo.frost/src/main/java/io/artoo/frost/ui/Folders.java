@@ -33,7 +33,7 @@ public interface Folders extends Section {
         .foldersOf("/docs")
         .select(FolderMetadata::getName)
         .select(String::trim)
-        .order()
+        .orderByHashcode()
         .select(folder -> scene.button(folder));
     }
   }

@@ -1,11 +1,11 @@
-package io.artoo.lance.fetcher.cursor;
+package io.artoo.lance.literator.cursor.impl;
 
-import io.artoo.lance.fetcher.Cursor;
-import io.artoo.lance.fetcher.Fetcher;
-import io.artoo.lance.fetcher.routine.Routine;
+import io.artoo.lance.literator.cursor.Cursor;
+import io.artoo.lance.literator.Literator;
+import io.artoo.lance.literator.cursor.routine.Routine;
 import io.artoo.lance.func.Func;
 
-public interface Mapper<T> extends Fetcher<T> {
+public interface Mappable<T> extends Literator<T> {
   default <R> Cursor<R> map(final Func.Uni<? super T, ? extends R> map) {
     return new Map<>(this, map);
   }
@@ -16,10 +16,10 @@ public interface Mapper<T> extends Fetcher<T> {
 }
 
 final class Map<T, R> implements Cursor<R> {
-  private final Fetcher<T> source;
+  private final Literator<T> source;
   private final Func.Uni<? super T, ? extends R> map;
 
-  Map(final Fetcher<T> source, final Func.Uni<? super T, ? extends R> map) {
+  Map(final Literator<T> source, final Func.Uni<? super T, ? extends R> map) {
     this.source = source;
     this.map = map;
   }
@@ -41,46 +41,46 @@ final class Map<T, R> implements Cursor<R> {
   }
 
   @Override
-  public <P> Cursor<P> invoke(final Routine<R, P> routine) {
-    return routine.onFetcher().apply(this);
+  public <R1> R1 as(final Routine<R, R1> routine) {
+    return routine.onLiterator().apply(this);
   }
 }
 
 final class Flat<T> implements Cursor<T> {
   private final Flatten<T> flatten = new Flatten<>();
-  private final Fetcher<Fetcher<T>> origin;
+  private final Literator<Literator<T>> origin;
 
-  Flat(final Fetcher<Fetcher<T>> origin) {this.origin = origin;}
+  Flat(final Literator<Literator<T>> origin) {this.origin = origin;}
 
   @SuppressWarnings("StatementWithEmptyBody")
   @Override
   public final T fetch() throws Throwable {
     T element = null;
-    while (hasNext() && (element = flatten.fetcher().fetch()) == null)
+    while (hasNext() && (element = flatten.literator().fetch()) == null)
       ;
     return element;
   }
 
   @Override
   public boolean hasNext() {
-    flatten.hasNext(origin.hasNext() || (flatten.fetcher() != null && flatten.fetcher().hasNext()));
+    flatten.hasNext(origin.hasNext() || (flatten.literator() != null && flatten.literator().hasNext()));
 
-    if (flatten.hasNext() && (flatten.fetcher() == null || !flatten.fetcher().hasNext())) {
-      flatten.fetcher(origin.next());
+    if (flatten.hasNext() && (flatten.literator() == null || !flatten.literator().hasNext())) {
+      flatten.literator(origin.next());
     }
 
     return flatten.hasNext();
   }
 
   @Override
-  public <R> Cursor<R> invoke(final Routine<T, R> routine) {
-    return routine.onFetcher().apply(this);
+  public <R> R as(final Routine<T, R> routine) {
+    return routine.onLiterator().apply(this);
   }
 }
 
 final class Flatten<T> {
   private boolean hasNext = true;
-  private Fetcher<T> fetcher;
+  private Literator<T> literator;
   private final Object lock = new Object() {};
 
   public final Flatten<T> hasNext(boolean hasNext) {
@@ -92,12 +92,12 @@ final class Flatten<T> {
 
   public final boolean hasNext() { return hasNext; }
 
-  public final Flatten<T> fetcher(Fetcher<T> fetcher) {
+  public final Flatten<T> literator(Literator<T> literator) {
     synchronized (lock) {
-      this.fetcher = fetcher;
+      this.literator = literator;
     }
     return this;
   }
 
-  public final Fetcher<T> fetcher() { return fetcher; }
+  public final Literator<T> literator() { return literator; }
 }

@@ -1,10 +1,10 @@
-package io.artoo.lance.fetcher.cursor;
+package io.artoo.lance.literator.cursor.impl;
 
-import io.artoo.lance.fetcher.Cursor;
-import io.artoo.lance.fetcher.Fetcher;
-import io.artoo.lance.fetcher.routine.Routine;
+import io.artoo.lance.literator.cursor.Cursor;
+import io.artoo.lance.literator.Literator;
+import io.artoo.lance.literator.cursor.routine.Routine;
 
-public interface Closer<T> extends Fetcher<T> {
+public interface Closer<T> extends Literator<T> {
   default Cursor<T> close() {
     return new Close<>(this);
   }
@@ -21,9 +21,9 @@ public interface Closer<T> extends Fetcher<T> {
 
 final class Close<T> implements Cursor<T> {
   private T closed = null;
-  private final Fetcher<T> source;
+  private final Literator<T> source;
 
-  Close(Fetcher<T> source) {
+  Close(Literator<T> source) {
     this.source = source;
   }
 
@@ -52,8 +52,8 @@ final class Close<T> implements Cursor<T> {
   }
 
   @Override
-  public final <R> Cursor<R> invoke(final Routine<T, R> routine) {
-    return source instanceof Cursor<T> cursor ? cursor.invoke(routine) : Cursor.nothing();
+  public <R> R as(final Routine<T, R> routine) {
+    return source instanceof Cursor<T> cursor ? cursor.as(routine) : Cursor.<T>nothing().as(routine);
   }
 }
 
@@ -61,8 +61,8 @@ final class Closed<T> {
   private T fetched;
 
   @SuppressWarnings("ResultOfMethodCallIgnored")
-  private T fetched(Fetcher<T> fetcher) {
-    if (fetched == null) fetcher.hasNext();
+  private T fetched(Literator<T> literator) {
+    if (fetched == null) literator.hasNext();
     return fetched;
   }
 

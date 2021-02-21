@@ -1,17 +1,17 @@
-package io.artoo.lance.fetcher.cursor;
+package io.artoo.lance.literator.cursor.impl;
 
-import io.artoo.lance.fetcher.Cursor;
-import io.artoo.lance.fetcher.Fetcher;
-import io.artoo.lance.fetcher.routine.Routine;
 import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Suppl;
+import io.artoo.lance.literator.cursor.Cursor;
+import io.artoo.lance.literator.Literator;
+import io.artoo.lance.literator.cursor.routine.Routine;
 import io.artoo.lance.scope.Late;
 import io.artoo.lance.scope.Let;
 
 import java.util.Iterator;
 
-public interface Other<T> extends Fetcher<T> {
+public interface Other<T> extends Literator<T> {
   default <C extends Cursor<T>> Cursor<T> or(final Suppl.Uni<? extends C> alternative) {
     return new Or<>(this, Let.lazy(alternative));
   }
@@ -26,18 +26,18 @@ public interface Other<T> extends Fetcher<T> {
 }
 
 final class Or<T, C extends Cursor<T>> implements Cursor<T> {
-  private final Late<Fetcher<T>> reference = Late.init();
-  private final Fetcher<T> source;
+  private final Late<Literator<T>> reference = Late.init();
+  private final Literator<T> source;
   private final Let<? extends C> other;
 
-  Or(final Fetcher<T> source, final Let<? extends C> other) {
+  Or(final Literator<T> source, final Let<? extends C> other) {
     this.source = source;
     this.other = other;
   }
 
   @Override
   public final T fetch() throws Throwable {
-    return hasNext() ? reference.let(Fetcher::fetch) : null;
+    return hasNext() ? reference.let(Literator::fetch) : null;
   }
 
   @Override
@@ -48,19 +48,17 @@ final class Or<T, C extends Cursor<T>> implements Cursor<T> {
   }
 
   @Override
-  public final <R> Cursor<R> invoke(final Routine<T, R> routine) {
-    if (source instanceof Cursor<T> cursor)
-      cursor.invoke(routine);
-    return Cursor.nothing();
+  public <R> R as(final Routine<T, R> routine) {
+    return source instanceof Cursor<T> cursor ? cursor.as(routine) : Cursor.<T>nothing().as(routine);
   }
 }
 
 final class Er<T, E extends RuntimeException> implements Cursor<T> {
-  private final Fetcher<T> source;
+  private final Literator<T> source;
   private final String message;
   private final Func.Bi<? super String, ? super Throwable, ? extends E> exception;
 
-  Er(final Fetcher<T> source, final String message, final Func.Bi<? super String, ? super Throwable, ? extends E> exception) {
+  Er(final Literator<T> source, final String message, final Func.Bi<? super String, ? super Throwable, ? extends E> exception) {
     this.source = source;
     this.message = message;
     this.exception = exception;
@@ -85,16 +83,16 @@ final class Er<T, E extends RuntimeException> implements Cursor<T> {
   }
 
   @Override
-  public final <R> Cursor<R> invoke(final Routine<T, R> routine) {
-    return source instanceof Cursor<T> cursor ? cursor.invoke(routine) : Cursor.nothing();
+  public <R> R as(final Routine<T, R> routine) {
+    return source instanceof Cursor<T> cursor ? cursor.as(routine) : Cursor.<T>nothing().as(routine);
   }
 }
 
 final class Catch<T> implements Cursor<T> {
-  private final Fetcher<T> source;
+  private final Literator<T> source;
   private final Cons.Uni<? super Throwable> catch$;
 
-  Catch(final Fetcher<T> source, final Cons.Uni<? super Throwable> catch$) {
+  Catch(final Literator<T> source, final Cons.Uni<? super Throwable> catch$) {
     this.source = source;
     this.catch$ = catch$;
   }
@@ -115,7 +113,7 @@ final class Catch<T> implements Cursor<T> {
   }
 
   @Override
-  public final <R> Cursor<R> invoke(final Routine<T, R> routine) {
-    return source instanceof Cursor<T> cursor ? cursor.invoke(routine) : Cursor.nothing();
+  public <R> R as(final Routine<T, R> routine) {
+    return source instanceof Cursor<T> cursor ? cursor.as(routine) : Cursor.<T>nothing().as(routine);
   }
 }

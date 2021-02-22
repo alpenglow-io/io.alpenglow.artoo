@@ -2,7 +2,6 @@ package io.artoo.fxcalibur.component;
 
 import io.artoo.fxcalibur.property.IdProperty;
 import io.artoo.fxcalibur.property.ParentProperty;
-import javafx.application.Platform;
 import javafx.scene.Parent;
 
 import java.util.function.Supplier;

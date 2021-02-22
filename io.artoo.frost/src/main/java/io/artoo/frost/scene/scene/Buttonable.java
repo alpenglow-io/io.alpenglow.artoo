@@ -1,7 +1,7 @@
 package io.artoo.frost.scene.scene;
 
-import io.artoo.frost.scene.element.Button;
 import io.artoo.frost.scene.Id;
+import io.artoo.frost.scene.element.Button;
 
 public interface Buttonable extends Propable {
   default Button button(final String label) {

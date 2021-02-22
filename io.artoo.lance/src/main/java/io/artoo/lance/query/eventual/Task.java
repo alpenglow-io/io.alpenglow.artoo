@@ -4,7 +4,6 @@ import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Suppl;
 import io.artoo.lance.query.eventual.task.Projectable;
 
-import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;

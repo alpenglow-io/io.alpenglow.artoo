@@ -1,10 +1,13 @@
-package io.artoo.lance.literator.cursor;
+package io.artoo.lance.literator;
 
-import io.artoo.lance.literator.Literator;
-import io.artoo.lance.literator.cursor.impl.Iteration;
-import io.artoo.lance.literator.cursor.impl.Link;
-import io.artoo.lance.literator.cursor.impl.Nothing;
-import io.artoo.lance.literator.cursor.impl.Open;
+import io.artoo.lance.literator.cursor.Closable;
+import io.artoo.lance.literator.cursor.Iteration;
+import io.artoo.lance.literator.cursor.Link;
+import io.artoo.lance.literator.cursor.Mappable;
+import io.artoo.lance.literator.cursor.Nothing;
+import io.artoo.lance.literator.cursor.Open;
+import io.artoo.lance.literator.cursor.Substitutable;
+import io.artoo.lance.literator.cursor.Transformable;
 
 import java.util.Iterator;
 

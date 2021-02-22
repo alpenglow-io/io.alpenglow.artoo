@@ -5,8 +5,6 @@ import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
 import io.artoo.lance.query.impl.Sum;
 
-import static io.artoo.lance.scope.Nullability.nonNullable;
-
 public interface Summable<T> extends Queryable<T> {
   default <N extends Number> One<N> sum(final Func.Uni<? super T, ? extends N> select) {
     return () -> cursor().map(new Sum<T, N, N>(select)).scroll();

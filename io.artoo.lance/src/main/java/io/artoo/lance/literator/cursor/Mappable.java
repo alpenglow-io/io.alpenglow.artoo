@@ -1,8 +1,9 @@
 package io.artoo.lance.literator.cursor;
 
+import io.artoo.lance.func.Func;
+import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.literator.Literator;
 import io.artoo.lance.literator.cursor.routine.Routine;
-import io.artoo.lance.func.Func;
 
 public interface Mappable<T> extends Literator<T> {
   default <R> Cursor<R> map(final Func.Uni<? super T, ? extends R> map) {

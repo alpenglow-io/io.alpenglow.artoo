@@ -1,4 +1,4 @@
-package io.artoo.lance.literator.cursor.impl;
+package io.artoo.lance.literator.cursor;
 
 sealed interface Index permits Incremental, NonIncremental {
   static Index incremental() { return new Incremental(); }

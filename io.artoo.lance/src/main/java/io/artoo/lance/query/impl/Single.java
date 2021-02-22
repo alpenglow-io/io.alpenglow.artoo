@@ -3,9 +3,6 @@ package io.artoo.lance.query.impl;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Pred.Uni;
 
-import static java.util.Arrays.binarySearch;
-import static java.util.Arrays.copyOf;
-
 public final class Single<T> implements Func.Uni<T, T> {
   enum NoSingle {Found}
 

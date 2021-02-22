@@ -1,12 +1,10 @@
 package io.artoo.lance.query.many;
 
-import io.artoo.lance.literator.cursor.Cursor;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Suppl;
+import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
-
-import static io.artoo.lance.scope.Nullability.nonNullable;
 
 public interface Otherwise<T> extends Queryable<T> {
   @SuppressWarnings("unchecked")

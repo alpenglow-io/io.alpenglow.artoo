@@ -5,8 +5,6 @@ import io.artoo.lance.func.Suppl;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
 
-import static io.artoo.lance.scope.Nullability.nonNullable;
-
 public interface Otherwise<T> extends Queryable<T> {
   default One<T> or(final T element) {
     return or(One.from(element));

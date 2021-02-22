@@ -1,6 +1,6 @@
-package io.artoo.lance.literator.cursor.impl;
+package io.artoo.lance.literator.cursor;
 
-import io.artoo.lance.literator.cursor.Cursor;
+import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.literator.cursor.routine.Routine;
 
 import java.util.Iterator;
@@ -11,7 +11,7 @@ public final class Iteration<T> implements Cursor<T> {
   public Iteration(final Iterator<T> iterator) {this.iterator = iterator;}
 
   @Override
-  public T fetch() throws Throwable {
+  public T fetch() {
     return iterator.next();
   }
 

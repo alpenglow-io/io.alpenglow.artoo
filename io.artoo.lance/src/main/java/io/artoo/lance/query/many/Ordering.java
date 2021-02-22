@@ -1,14 +1,15 @@
 package io.artoo.lance.query.many;
 
 import io.artoo.lance.func.Func;
-import io.artoo.lance.literator.cursor.Cursor;
+import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.literator.cursor.routine.sort.Sort;
 import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
 
 import java.util.Arrays;
 
-import static io.artoo.lance.literator.cursor.routine.sort.Sort.*;
+import static io.artoo.lance.literator.cursor.routine.sort.Sort.By;
+import static io.artoo.lance.literator.cursor.routine.sort.Sort.byDefault;
 import static io.artoo.lance.query.many.Ordering.Arrange.asc;
 
 public sealed interface Ordering<T> extends Many<T> {

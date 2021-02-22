@@ -3,7 +3,7 @@ package io.artoo.frost.dropbox;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.Metadata;
-import io.artoo.lance.literator.cursor.Cursor;
+import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.query.Many;
 
 public interface Entries extends Many<Metadata> {

@@ -1,9 +1,8 @@
 package io.artoo.lance.literator.cursor.routine.sort;
 
 import io.artoo.lance.func.Func;
+import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.literator.Literator;
-import io.artoo.lance.literator.cursor.Cursor;
-import io.artoo.lance.query.many.Ordering;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
@@ -11,9 +10,6 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
-
-import static io.artoo.lance.query.many.Ordering.Arrange.asc;
-import static java.lang.Integer.compare;
 
 public final class Arranged<T> implements Sort<T> {
   private final By<T, Object>[] bys;

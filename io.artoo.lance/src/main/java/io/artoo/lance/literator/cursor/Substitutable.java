@@ -3,6 +3,7 @@ package io.artoo.lance.literator.cursor;
 import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Suppl;
+import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.literator.Literator;
 import io.artoo.lance.literator.cursor.routine.Routine;
 import io.artoo.lance.scope.Late;

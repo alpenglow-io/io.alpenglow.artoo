@@ -1,6 +1,6 @@
 package io.artoo.lance.query;
 
-import io.artoo.lance.literator.cursor.Cursor;
+import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.query.many.Aggregatable;
 import io.artoo.lance.query.many.Concatenatable;
 import io.artoo.lance.query.many.Convertable;

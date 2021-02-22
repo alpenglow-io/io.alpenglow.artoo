@@ -1,7 +1,7 @@
 package io.artoo.lance.query;
 
-import io.artoo.lance.literator.cursor.Cursor;
 import io.artoo.lance.func.Cons;
+import io.artoo.lance.literator.Cursor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;

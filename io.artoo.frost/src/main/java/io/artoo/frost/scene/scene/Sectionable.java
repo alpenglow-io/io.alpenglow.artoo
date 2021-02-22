@@ -5,7 +5,6 @@ import io.artoo.frost.scene.Element;
 import io.artoo.frost.scene.element.Section;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.query.Many;
-import io.artoo.lance.query.Queryable;
 
 public interface Sectionable extends Propable {
   default Section sectionBorder(Func.Unary<Section.Border.Location> location) {

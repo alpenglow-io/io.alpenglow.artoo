@@ -1,7 +1,7 @@
 package io.artoo.lance.literator.cursor.routine.sort;
 
 import io.artoo.lance.func.Func;
-import io.artoo.lance.literator.cursor.Cursor;
+import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.literator.cursor.routine.Routine;
 import io.artoo.lance.query.many.Ordering;
 

@@ -1,8 +1,8 @@
 package io.artoo.lance.query;
 
-import io.artoo.lance.literator.cursor.Cursor;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Suppl;
+import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.query.one.Filterable;
 import io.artoo.lance.query.one.Matchable;
 import io.artoo.lance.query.one.Otherwise;

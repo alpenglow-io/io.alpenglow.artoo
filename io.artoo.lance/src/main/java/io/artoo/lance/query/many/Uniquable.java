@@ -8,8 +8,6 @@ import io.artoo.lance.query.impl.First;
 import io.artoo.lance.query.impl.Last;
 import io.artoo.lance.query.impl.Single;
 
-import static io.artoo.lance.scope.Nullability.nonNullable;
-
 public interface Uniquable<T> extends Queryable<T> {
   default One<T> at(final int index) {
     return () -> cursor().map(new At<>(index)).scroll();

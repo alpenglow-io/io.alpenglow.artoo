@@ -1,7 +1,6 @@
 package io.artoo.lance.query.eventual;
 
 import java.util.Random;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
 

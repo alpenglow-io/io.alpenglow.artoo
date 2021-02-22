@@ -3,6 +3,8 @@ package io.artoo.lance.literator.cursor.impl;
 import io.artoo.lance.literator.cursor.Cursor;
 import io.artoo.lance.literator.cursor.routine.Routine;
 
+import java.util.Arrays;
+
 public final class Open<T> implements Cursor<T> {
   private final Index index = Index.incremental();
   private final T[] elements;
@@ -30,6 +32,6 @@ public final class Open<T> implements Cursor<T> {
 
   @Override
   public <R> R as(final Routine<T, R> routine) {
-    return routine.onArray().apply(elements);
+    return routine.onArray().apply(Arrays.copyOf(elements, elements.length));
   }
 }

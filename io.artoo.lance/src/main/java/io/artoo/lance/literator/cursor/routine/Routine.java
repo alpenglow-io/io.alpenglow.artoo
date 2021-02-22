@@ -2,12 +2,12 @@ package io.artoo.lance.literator.cursor.routine;
 
 import io.artoo.lance.func.Func;
 import io.artoo.lance.literator.Literator;
+import io.artoo.lance.literator.cursor.routine.sort.Sort;
 
 import java.util.Iterator;
 import java.util.List;
 
 public sealed interface Routine<T, R> permits Concat, Convert, Sort {
-  static <T> Sort<T> orderByHashcode() { return new Sort.ByHashcode<>(); }
   static <T> Concat<T> concat(T[] elements) { return new Concat.Array<>(elements); }
   static <T> Concat<T> concat(Literator<T> elements) { return new Concat.Fetcher<>(elements); }
 
@@ -15,10 +15,6 @@ public sealed interface Routine<T, R> permits Concat, Convert, Sort {
 
   static <T> Convert<T, T[]> array(final Class<T> type) {
     return new Convert.Arrayable<>(type);
-  }
-
-  static <R, T> Sort<T> orderBy(Func.Uni<? super T, ? extends R> field) {
-    return new Sort.ByField<>(field);
   }
 
   Func.Uni<T[], R> onArray();

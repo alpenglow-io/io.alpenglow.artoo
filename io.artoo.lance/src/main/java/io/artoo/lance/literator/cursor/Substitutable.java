@@ -10,7 +10,7 @@ import io.artoo.lance.scope.Let;
 
 import java.util.Iterator;
 
-public interface Other<T> extends Literator<T> {
+public interface Substitutable<T> extends Literator<T> {
   default <C extends Cursor<T>> Cursor<T> or(final Suppl.Uni<? extends C> alternative) {
     return new Or<>(this, Let.lazy(alternative));
   }
@@ -24,7 +24,7 @@ public interface Other<T> extends Literator<T> {
   }
 }
 
-abstract class As<T> implements Transformer<T> {
+abstract class As<T> implements Transformable<T> {
   protected final Literator<T> source;
 
   protected As(final Literator<T> source) {this.source = source;}
@@ -68,7 +68,7 @@ final class Er<T, E extends RuntimeException> extends As<T> implements Cursor<T>
   }
 
   @Override
-  public final T fetch() throws Throwable {
+  public final T fetch() {
     try {
       if (hasNext()) {
         return source.fetch();

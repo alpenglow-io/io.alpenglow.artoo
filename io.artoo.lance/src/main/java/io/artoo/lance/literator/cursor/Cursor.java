@@ -8,7 +8,7 @@ import io.artoo.lance.literator.cursor.impl.Open;
 
 import java.util.Iterator;
 
-public interface Cursor<T> extends Mapper<T>, Other<T>, Closer<T>, Transformer<T> {
+public interface Cursor<T> extends Mappable<T>, Substitutable<T>, Closable<T>, Transformable<T> {
   @SafeVarargs
   static <T> Cursor<T> open(final T... elements) {
     return new Open<>(elements);

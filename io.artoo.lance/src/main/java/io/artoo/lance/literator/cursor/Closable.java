@@ -3,7 +3,7 @@ package io.artoo.lance.literator.cursor;
 import io.artoo.lance.literator.Literator;
 import io.artoo.lance.literator.cursor.routine.Routine;
 
-public interface Closer<T> extends Literator<T> {
+public interface Closable<T> extends Literator<T> {
   default Cursor<T> close() {
     return new Close<>(this);
   }

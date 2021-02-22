@@ -20,7 +20,7 @@ sealed interface Concat<T> extends Routine<T, Cursor<T>> permits Concat.Array, C
       return prev -> {
         final var length = prev.length + next.length;
         final var copied = Arrays.copyOf(prev, length);
-        arraycopy(next, 0, copied, prev.length, length);
+        arraycopy(next, 0, copied, prev.length, next.length);
         return Cursor.open(copied);
       };
     }

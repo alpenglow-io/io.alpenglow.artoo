@@ -60,7 +60,7 @@ public class SortableTest implements io.artoo.lance.query.Test {
 
   @Test
   @DisplayName("should order by country ascending, name descending, id descending")
-  void shouldOrderByCountryAndId() {
+  public void shouldOrderByCountryAndId() {
     final var customers = new Customer[]{
       CUSTOMERS[47],
       CUSTOMERS[64],
@@ -91,7 +91,7 @@ public class SortableTest implements io.artoo.lance.query.Test {
 
   @Test
   @DisplayName("should order a non-trivial ascending and descending arrangement")
-  void shouldOrderAComplexAscendingAndDescendingArrangement() {
+  public void shouldOrderAComplexAscendingAndDescendingArrangement() {
     final var customers = new Customer[]{
       CUSTOMERS[17],
       CUSTOMERS[4],
@@ -122,5 +122,12 @@ public class SortableTest implements io.artoo.lance.query.Test {
       CUSTOMERS[4],
       CUSTOMERS[17]
     );
+  }
+
+  @Test
+  public void checker() {
+    for (final var customer : from(CUSTOMERS).concat(CUSTOMERS).concat(CUSTOMERS).order().by(Customer::id, desc)) {
+      System.out.println(customer);
+    }
   }
 }

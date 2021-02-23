@@ -5,6 +5,7 @@ import io.artoo.lance.query.many.Aggregatable;
 import io.artoo.lance.query.many.Concatenatable;
 import io.artoo.lance.query.many.Convertable;
 import io.artoo.lance.query.many.Filterable;
+import io.artoo.lance.query.many.Joinable;
 import io.artoo.lance.query.many.Matchable;
 import io.artoo.lance.query.many.Otherwise;
 import io.artoo.lance.query.many.Partitionable;
@@ -20,6 +21,7 @@ public interface Many<T> extends
   Concatenatable<T>,
   Convertable<T>,
   Filterable<T>,
+  Joinable<T>,
   Matchable<T>,
   Otherwise<T>,
   Partitionable<T>,

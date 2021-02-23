@@ -70,11 +70,15 @@ public final class Arranged<T> implements Sort<T> {
 
   @Override
   public Func.Uni<Literator<T>, Cursor<T>> onLiterator() {
-    return null;
+    return li -> onIterator().apply(li);
   }
 
   @Override
   public Func.Uni<Iterator<T>, Cursor<T>> onIterator() {
-    return null;
+    return it -> {
+      final var list = new SortedList<T>(matching());
+      it.forEachRemaining(list::add);
+      return Cursor.iteration(list.iterator());
+    };
   }
 }

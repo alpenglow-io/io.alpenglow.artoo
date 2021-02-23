@@ -18,6 +18,6 @@ public enum Nothing implements Cursor<Object> {
 
   @Override
   public <R> R as(final Routine<Object, R> routine) {
-    return routine.onPlain().apply(null);
+    return routine.onSelf().apply(null);
   }
 }

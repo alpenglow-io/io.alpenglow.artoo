@@ -4,12 +4,13 @@ import io.artoo.lance.func.Func;
 import io.artoo.lance.literator.Literator;
 import io.artoo.lance.literator.cursor.routine.concat.Concat;
 import io.artoo.lance.literator.cursor.routine.convert.Convert;
+import io.artoo.lance.literator.cursor.routine.join.Join;
 import io.artoo.lance.literator.cursor.routine.sort.Sort;
 
 import java.util.Iterator;
 import java.util.List;
 
-public sealed interface Routine<T, R> permits Concat, Convert, Sort {
+public sealed interface Routine<T, R> permits Join, Concat, Convert, Sort {
 
   static <T> Convert<T, List<T>> list() { return new Convert.Listable<>(); }
 
@@ -22,7 +23,7 @@ public sealed interface Routine<T, R> permits Concat, Convert, Sort {
   Func.Uni<Iterator<T>, R> onIterator();
 
   @SuppressWarnings("unchecked")
-  default Func.Uni<T, R> onPlain() {
+  default Func.Uni<T, R> onSelf() {
     return it -> (R) it;
   }
 }

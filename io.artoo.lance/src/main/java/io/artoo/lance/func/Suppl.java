@@ -1,6 +1,7 @@
 package io.artoo.lance.func;
 
-import io.artoo.lance.scope.Tuple;
+import io.artoo.lance.tuple.Pair;
+import io.artoo.lance.tuple.Tuple;
 
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
@@ -42,7 +43,7 @@ public interface Suppl {
 
   @FunctionalInterface
   @SuppressWarnings("rawtypes")
-  interface Bi<R extends Record & Tuple.Pair> extends Uni<R> {}
+  interface Bi<R extends Record & Pair> extends Uni<R> {}
 
   @FunctionalInterface
   @SuppressWarnings("rawtypes")

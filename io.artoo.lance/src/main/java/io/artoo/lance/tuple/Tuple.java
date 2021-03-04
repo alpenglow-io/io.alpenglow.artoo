@@ -1,4 +1,4 @@
-package io.artoo.lance.scope;
+package io.artoo.lance.tuple;
 
 import io.artoo.lance.func.Func;
 import io.artoo.lance.query.One;
@@ -6,46 +6,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.RecordComponent;
 
-import static io.artoo.lance.scope.TupleType.has;
-import static io.artoo.lance.scope.TupleType.tryComponentOf;
+import static io.artoo.lance.tuple.TupleType.has;
+import static io.artoo.lance.tuple.TupleType.tryComponentOf;
 
 public interface Tuple<R extends Record> {
-  Class<R> $type();
-
-  interface Single<R extends Record, A> extends Tuple<R> {
-    default A first() { return tryComponentOf(this, $type(), 0); }
-
-    default <T extends Record> T to(final @NotNull Func.Uni<? super A, ? extends T> to) {
-      return to.apply(first());
-    }
-
-    default <T> T as(final @NotNull Func.Uni<? super A, ? extends T> as) {
-      return as.apply(first());
-    }
-
-    default boolean is(final A value) {
-      return has(first(), value);
-    }
-  }
-
-  interface Pair<R extends Record, A, B> extends Single<R, A> {
-    default B second() { return tryComponentOf(this, $type(), 1); }
-
-    default <T extends Record> T to(final @NotNull Func.Bi<? super A, ? super B, ? extends T> to) {
-      return to.apply(first(), second());
-    }
-
-    default <T> T as(final @NotNull Func.Bi<? super A, ? super B, ? extends T> as) {
-      return as.apply(first(), second());
-    }
-
-    default boolean is(final A value1, final B value2) {
-      return is(value1) && has(second(), value2);
-    }
-  }
+  Class<R> type$();
 
   interface Triple<R extends Record, A, B, C> extends Pair<R, A, B> {
-    default C third() { return tryComponentOf(this, $type(), 2); }
+    default C third() { return tryComponentOf(this, type$(), 2); }
 
     default <T extends Record> T as(final @NotNull Func.Tri<? super A, ? super B, ? super C, ? extends T> as) {
       return as.apply(first(), second(), third());
@@ -57,7 +25,7 @@ public interface Tuple<R extends Record> {
   }
 
   interface Quadruple<R extends Record, A, B, C, D> extends Triple<R, A, B, C> {
-    default D forth() { return tryComponentOf(this, $type(), 3); }
+    default D forth() { return tryComponentOf(this, type$(), 3); }
 
     default <T extends Record> T as(final @NotNull Func.Quad<? super A, ? super B, ? super C, ? super D, ? extends T> as) {
       return as.apply(first(), second(), third(), forth());
@@ -69,7 +37,7 @@ public interface Tuple<R extends Record> {
   }
 
   interface Quintuple<R extends Record, A, B, C, D, E> extends Quadruple<R, A, B, C, D> {
-    default E fifth() { return tryComponentOf(this, $type(), 4); }
+    default E fifth() { return tryComponentOf(this, type$(), 4); }
 
     default <T extends Record> T as(final @NotNull Func.Quin<? super A, ? super B, ? super C, ? super D, ? super E, ? extends T> as) {
       return as.apply(first(), second(), third(), forth(), fifth());
@@ -97,7 +65,6 @@ enum TupleType {
   static <R extends Record, T> @NotNull T tryComponentOf(final Object instance, @NotNull final Class<R> type, final int index) {
     return TupleType
       .<R, T>componentOf(instance, type, index)
-      .exceptionally(IllegalStateException::new)
       .or("Can't get record-type component: " + type.getCanonicalName(), IllegalStateException::new)
       .yield();
   }

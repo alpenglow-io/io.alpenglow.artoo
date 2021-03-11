@@ -8,21 +8,21 @@ import io.artoo.lance.query.Many;
 
 public interface Entries extends Many<Metadata> {
   static Entries ofRoot(DbxClientV2 client) {
-    return new Entries.Dbx(client);
+    return new Dropbox(client);
   }
 
   static Entries of(String path, DbxClientV2 client) {
-    return new Entries.Dbx(path, client);
+    return new Dropbox(path, client);
   }
 
-  final class Dbx implements Entries {
+  final class Dropbox implements Entries {
     private static final String ROOT = "";
 
     private final DbxClientV2 client;
     private final String path;
 
-    private Dbx(final DbxClientV2 client) { this(ROOT, client); }
-    private Dbx(final String path, final DbxClientV2 client) {
+    private Dropbox(final DbxClientV2 client) { this(ROOT, client); }
+    private Dropbox(final String path, final DbxClientV2 client) {
       this.client = client;
       this.path = path;
     }

@@ -3,6 +3,7 @@ package io.artoo.lance.tuple;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 enum Type {
   ;
@@ -12,10 +13,11 @@ enum Type {
     try {
       assert index >= 0 && type.getRecordComponents().length > index;
 
-      return (T) type
+      final var method = type
         .getRecordComponents()[index]
-        .getAccessor()
-        .invoke(instance);
+        .getAccessor();
+      if (!method.canAccess(instance)) method.setAccessible(true);
+      return (T) method.invoke(instance);
     } catch (IllegalAccessException | InvocationTargetException e) {
       throw new NominalTupleException("Can't invoke nominal tuple %s component of index %d.".formatted(type.getSimpleName(), index), e);
     }

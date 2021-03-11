@@ -20,8 +20,8 @@ public interface Quintuple<R extends Record & Quintuple<R, A, B, C, D, E>, A, B,
   default D forth() { return forthOf(this, type$()); }
   default E fifth() { return fifthOf(this, type$()); }
 
-  default <N extends Record> N to(final @NotNull Func.Quad<? super A, ? super B, ? super C, ? super D, ? extends N> to) {
-    return to.apply(first(), second(), third(), forth());
+  default <N extends Record> N to(final @NotNull Func.Quin<? super A, ? super B, ? super C, ? super D, ? super E, ? extends N> to) {
+    return to.apply(first(), second(), third(), forth(), fifth());
   }
 
   default <T extends Record> T as(final @NotNull Func.Quin<? super A, ? super B, ? super C, ? super D, ? super E, ? extends T> as) {

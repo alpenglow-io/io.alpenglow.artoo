@@ -11,6 +11,7 @@
     <module>io.artoo.lance</module>
     <module>io.artoo.frost</module>
     <module>io.artoo.honolulu</module>
+    <module>io.artoo.bom</module>
   </modules>
 
   <name>Artoo</name>

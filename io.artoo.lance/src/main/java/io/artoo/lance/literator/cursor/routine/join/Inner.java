@@ -4,12 +4,12 @@ import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.literator.Literator;
-import io.artoo.lance.query.many.Joinable.Joined;
+import io.artoo.lance.tuple.Tuple;
 
 import java.util.Iterator;
 import java.util.Objects;
 
-final class Inner<T, R> implements Join<T, Cursor<Joined<T, R>>> {
+final class Inner<T, R> implements Join<T, Cursor<Tuple.OfTwo<T, R>>> {
   private final Cursor<R> cursor;
   private final Pred.Bi<? super T, ? super R> pred;
 
@@ -24,17 +24,17 @@ final class Inner<T, R> implements Join<T, Cursor<Joined<T, R>>> {
   }
 
   @Override
-  public Func.Uni<T[], Cursor<Joined<T, R>>> onArray() {
+  public Func.Uni<T[], Cursor<Tuple.OfTwo<T, R>>> onArray() {
     return ts -> cursor.to(new Nested<>(ts, pred));
   }
 
   @Override
-  public Func.Uni<Literator<T>, Cursor<Joined<T, R>>> onLiterator() {
+  public Func.Uni<Literator<T>, Cursor<Tuple.OfTwo<T, R>>> onLiterator() {
     return null;
   }
 
   @Override
-  public Func.Uni<Iterator<T>, Cursor<Joined<T, R>>> onIterator() {
+  public Func.Uni<Iterator<T>, Cursor<Tuple.OfTwo<T, R>>> onIterator() {
     return null;
   }
 }

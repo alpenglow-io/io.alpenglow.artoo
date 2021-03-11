@@ -9,4 +9,5 @@ module io.artoo.lance {
   exports io.artoo.lance.query;
   exports io.artoo.lance.query.many;
   exports io.artoo.lance.query.one;
+  exports io.artoo.lance.tuple;
 }

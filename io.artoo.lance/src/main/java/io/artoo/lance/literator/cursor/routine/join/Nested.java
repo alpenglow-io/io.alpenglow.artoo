@@ -5,13 +5,14 @@ import io.artoo.lance.func.Pred;
 import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.literator.Literator;
 import io.artoo.lance.query.many.Joinable;
+import io.artoo.lance.tuple.Tuple;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Iterator;
 
 @SuppressWarnings("unchecked")
-public final class Nested<R, T> implements Join<R, Cursor<Joinable.Joining.Joined<T, R>>> {
+public final class Nested<R, T> implements Join<R, Cursor<Tuple.OfTwo<T, R>>> {
   private final T[] ts;
   private final Pred.Bi<? super T, ? super R> pred;
 
@@ -21,13 +22,13 @@ public final class Nested<R, T> implements Join<R, Cursor<Joinable.Joining.Joine
   }
 
   @NotNull
-  private Cursor<Joinable.Joining.Joined<T, R>> joinArray(final R[] rs) {
-    var joineds = (Joinable.Joining.Joined<T, R>[]) new Joinable.Joining.Joined[0];
+  private Cursor<Tuple.OfTwo<T, R>> joinArray(final R[] rs) {
+    var joineds = (Tuple.OfTwo<T, R>[]) new Tuple.OfTwo[0];
     for (final var t : ts) {
       for (final var r : rs) {
         if (pred.test(t, r)) {
           joineds = Arrays.copyOf(joineds, joineds.length + 1);
-          joineds[joineds.length - 1] = new Joinable.Joining.Joined<>(t, r);
+          joineds[joineds.length - 1] = Tuple.of(t, r);
         }
       }
     }
@@ -35,17 +36,17 @@ public final class Nested<R, T> implements Join<R, Cursor<Joinable.Joining.Joine
   }
 
   @Override
-  public Func.Uni<R[], Cursor<Joinable.Joining.Joined<T, R>>> onArray() {
+  public Func.Uni<R[], Cursor<Tuple.OfTwo<T, R>>> onArray() {
     return this::joinArray;
   }
 
   @Override
-  public Func.Uni<Literator<R>, Cursor<Joinable.Joining.Joined<T, R>>> onLiterator() {
+  public Func.Uni<Literator<R>, Cursor<Tuple.OfTwo<T, R>>> onLiterator() {
     return null;
   }
 
   @Override
-  public Func.Uni<Iterator<R>, Cursor<Joinable.Joining.Joined<T, R>>> onIterator() {
+  public Func.Uni<Iterator<R>, Cursor<Tuple.OfTwo<T, R>>> onIterator() {
     return null;
   }
 }

@@ -1,6 +1,6 @@
 package io.artoo.lance.scope;
 
-import io.artoo.lance.tuple.Tuple;
+import io.artoo.lance.tuple.Quintuple;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TupleTest {
   @Test
   public void shouldBeAQuintuple() {
-    record Five(Integer value1, Integer value2, Integer value3, Integer value4, Integer value5) implements Tuple.Quintuple<Five, Integer, Integer, Integer, Integer, Integer> {
+    record Five(Integer value1, Integer value2, Integer value3, Integer value4, Integer value5) implements Quintuple<Five, Integer, Integer, Integer, Integer, Integer> {
       @Override
       public Class<Five> type$() {
         return Five.class;

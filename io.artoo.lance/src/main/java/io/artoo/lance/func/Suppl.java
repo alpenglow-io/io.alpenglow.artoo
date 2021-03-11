@@ -1,7 +1,8 @@
 package io.artoo.lance.func;
 
 import io.artoo.lance.tuple.Pair;
-import io.artoo.lance.tuple.Tuple;
+import io.artoo.lance.tuple.Quadruple;
+import io.artoo.lance.tuple.Triple;
 
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
@@ -47,10 +48,10 @@ public interface Suppl {
 
   @FunctionalInterface
   @SuppressWarnings("rawtypes")
-  interface Tri<R extends Record & Tuple.Triple> extends Uni<R> {}
+  interface Tri<R extends Record & Triple> extends Uni<R> {}
 
   @SuppressWarnings("rawtypes")
   @FunctionalInterface
-  interface Quad<R extends Record & Tuple.Quadruple> extends Uni<R> {}
+  interface Quad<R extends Record & Quadruple> extends Uni<R> {}
 
 }

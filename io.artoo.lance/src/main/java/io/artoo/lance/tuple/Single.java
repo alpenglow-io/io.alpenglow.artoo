@@ -1,15 +1,15 @@
 package io.artoo.lance.tuple;
 
+import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Func;
-import io.artoo.lance.literator.Cursor;
-import io.artoo.lance.query.One;
+import io.artoo.lance.func.Pred;
 import org.jetbrains.annotations.NotNull;
 
-import static io.artoo.lance.tuple.TupleType.has;
-import static io.artoo.lance.tuple.TupleType.tryComponentOf;
+import static io.artoo.lance.tuple.Type.firstOf;
+import static io.artoo.lance.tuple.Type.has;
 
-public interface Single<R extends Record, A> extends One<A>, Tuple<R> {
-  default A first() { return tryComponentOf(this, type$(), 0); }
+public interface Single<R extends Record & Single<R, A>, A> extends Tuple<R> {
+  default A first() { return firstOf(this, type$()); }
 
   default <T extends Record> T to(final @NotNull Func.Uni<? super A, ? extends T> to) {
     return to.apply(first());
@@ -23,8 +23,22 @@ public interface Single<R extends Record, A> extends One<A>, Tuple<R> {
     return has(first(), value);
   }
 
-  @Override
-  default Cursor<A> cursor() {
-    return Cursor.open(first());
+  default R map(Func.Uni<? super A, ? extends R> map) {
+    return map.apply(first());
+  }
+
+  default <F extends Record & Single<F, R>> R flatMap(Func.Uni<? super A, ? extends F> func) {
+    return func.apply(first()).first();
+  }
+
+  @SuppressWarnings("unchecked")
+  default R filter(Pred.Uni<? super A> pred) {
+    return pred.apply(first()) ? (R) this : null;
+  }
+
+  @SuppressWarnings("unchecked")
+  default R peek(Cons.Uni<? super A> cons) {
+    cons.apply(first());
+    return (R) this;
   }
 }

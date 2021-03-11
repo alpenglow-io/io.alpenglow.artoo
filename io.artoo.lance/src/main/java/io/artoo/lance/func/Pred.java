@@ -24,6 +24,11 @@ public interface Pred {
     return (a, b, c, d) -> !predicate.tryTest(a, b, c, d);
   }
 
+  static <A, B, C, D, E> Pred.Quin<A, B, C, D, E> not(final Pred.Quin<A, B, C, D, E> predicate) {
+    assert predicate != null;
+    return (a, b, c, d, e) -> !predicate.tryTest(a, b, c, d, e);
+  }
+
   @FunctionalInterface
   interface Uni<A> extends Predicate<A>, Func.Uni<A, Boolean> {
     boolean tryTest(A a) throws Throwable;
@@ -85,6 +90,16 @@ public interface Pred {
     @Override
     default Boolean tryApply(A a, B b, C c, D d) throws Throwable {
       return tryTest(a, b, c, d);
+    }
+  }
+
+  @FunctionalInterface
+  interface Quin<A, B, C, D, E> extends Func.Quin<A, B, C, D, E, Boolean> {
+    boolean tryTest(A a, B b, C c, D d, E e) throws Throwable;
+
+    @Override
+    default Boolean tryApply(A a, B b, C c, D d, E e) throws Throwable {
+      return tryTest(a, b, c, d, e);
     }
   }
 

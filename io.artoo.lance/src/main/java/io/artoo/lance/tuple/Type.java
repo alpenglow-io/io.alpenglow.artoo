@@ -1,17 +1,20 @@
 package io.artoo.lance.tuple;
 
+import io.artoo.lance.query.Many;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.RecordComponent;
 
 enum Type {
   ;
 
   @SuppressWarnings("unchecked")
-  static <R extends Record, T> @NotNull T componentOf(final Object instance, @NotNull final Class<R> type, final int index) {
+  static <T> @NotNull T componentOf(final Object instance, final int index) {
+    final var type = instance.getClass();
     try {
-      assert index >= 0 && type.getRecordComponents().length > index;
+      assert index >= 0 && type.isRecord() && type.getRecordComponents().length > index;
 
       final var method = type
         .getRecordComponents()[index]
@@ -23,21 +26,21 @@ enum Type {
     }
   }
 
-  static <R extends Record, T> @NotNull T firstOf(final Object instance, final Class<R> type) { return componentOf(instance, type, 0); }
+  static <T> @NotNull T firstOf(final Object instance) { return componentOf(instance, 0); }
 
-  static <R extends Record, T> @NotNull T secondOf(final Object instance, final Class<R> type) { return componentOf(instance, type, 1); }
+  static <T> @NotNull T secondOf(final Object instance) { return componentOf(instance, 1); }
 
-  static <R extends Record, T> @NotNull T thirdOf(final Object instance, final Class<R> type) { return componentOf(instance, type, 2); }
+  static <T> @NotNull T thirdOf(final Object instance) { return componentOf(instance, 2); }
 
-  static <R extends Record, T> @NotNull T forthOf(final Object instance, final Class<R> type) { return componentOf(instance, type, 3); }
+  static <T> @NotNull T forthOf(final Object instance) { return componentOf(instance, 3); }
 
-  static <R extends Record, T> @NotNull T fifthOf(final Object instance, final Class<R> type) { return componentOf(instance, type, 4); }
+  static <T> @NotNull T fifthOf(final Object instance) { return componentOf(instance, 4); }
 
-  static <R extends Record, T> @NotNull T sixthOf(final Object instance, final Class<R> type) { return componentOf(instance, type, 5); }
+  static <T> @NotNull T sixthOf(final Object instance) { return componentOf(instance, 5); }
 
-  static <R extends Record, T> @NotNull T seventhOf(final Object instance, final Class<R> type) { return componentOf(instance, type, 6); }
+  static <T> @NotNull T seventhOf(final Object instance) { return componentOf(instance, 6); }
 
-  static <R extends Record, T> @NotNull T eighthOf(final Object instance, final Class<R> type) { return componentOf(instance, type, 7); }
+  static <T> @NotNull T eighthOf(final Object instance) { return componentOf(instance, 7); }
 
   static <T> boolean has(final T property, final T value) {
     if (property == null && value == null) {
@@ -45,5 +48,26 @@ enum Type {
     }
     assert property != null;
     return property.equals(value);
+  }
+
+  static Many<?> asMany(final Object instance) {
+    final var type = instance.getClass();
+    var index = 0;
+    try {
+      if (!type.isRecord()) return Many.empty();
+
+      final var elements = new Object[type.getRecordComponents().length];
+      final var components = type.getRecordComponents();
+
+      for (var i = 0; i < components.length; index = ++i) {
+        final var method = components[i].getAccessor();
+        if (!method.canAccess(instance)) method.setAccessible(true);
+        elements[i] = method.invoke(instance);
+      }
+
+      return Many.fromAny(elements);
+    } catch (IllegalAccessException | InvocationTargetException e) {
+      throw new NominalTupleException("Can't invoke nominal tuple %s component of index %d.".formatted(type.getSimpleName(), index), e);
+    }
   }
 }

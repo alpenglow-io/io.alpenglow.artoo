@@ -8,8 +8,8 @@ import org.jetbrains.annotations.NotNull;
 import static io.artoo.lance.tuple.Type.firstOf;
 import static io.artoo.lance.tuple.Type.has;
 
-public interface Single<R extends Record & Single<R, A>, A> extends Tuple<R> {
-  default A first() { return firstOf(this, type$()); }
+public interface Single<A> extends Tuple {
+  default A first() { return firstOf(this); }
 
   default <T extends Record> T to(final @NotNull Func.Uni<? super A, ? extends T> to) {
     return to.apply(first());
@@ -23,22 +23,16 @@ public interface Single<R extends Record & Single<R, A>, A> extends Tuple<R> {
     return has(first(), value);
   }
 
-  default R map(Func.Uni<? super A, ? extends R> map) {
+  default <R extends Record & Single<A>> R map(Func.Uni<? super A, ? extends R> map) {
     return map.apply(first());
   }
 
-  default <F extends Record & Single<F, R>> R flatMap(Func.Uni<? super A, ? extends F> func) {
+  default <R extends Record & Single<A>, F extends Record & Single<R>> R flatMap(Func.Uni<? super A, ? extends F> func) {
     return func.apply(first()).first();
   }
 
-  @SuppressWarnings("unchecked")
-  default R filter(Pred.Uni<? super A> pred) {
-    return pred.apply(first()) ? (R) this : null;
-  }
-
-  @SuppressWarnings("unchecked")
-  default R peek(Cons.Uni<? super A> cons) {
+  default Single<A> peek(Cons.Uni<? super A> cons) {
     cons.apply(first());
-    return (R) this;
+    return this;
   }
 }

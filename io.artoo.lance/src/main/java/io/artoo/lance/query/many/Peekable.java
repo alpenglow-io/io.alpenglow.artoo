@@ -3,7 +3,7 @@ package io.artoo.lance.query.many;
 import io.artoo.lance.func.Cons;
 import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.query.impl.Peek;
+import io.artoo.lance.query.internal.Peek;
 
 public interface Peekable<T> extends Queryable<T> {
   default Many<T> peek(Cons.Uni<? super T> peek) {

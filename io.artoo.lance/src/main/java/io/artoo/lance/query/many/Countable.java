@@ -4,7 +4,7 @@ import io.artoo.lance.func.Pred;
 import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.query.impl.Count;
+import io.artoo.lance.query.internal.Count;
 
 public interface Countable<T> extends Queryable<T> {
   default One<Integer> count() {

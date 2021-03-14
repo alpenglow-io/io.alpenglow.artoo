@@ -3,7 +3,7 @@ package io.artoo.lance.query.one;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.query.impl.Select;
+import io.artoo.lance.query.internal.Select;
 
 public interface Projectable<T> extends Queryable<T> {
   default <R> One<R> select(final Func.Uni<? super T, ? extends R> select) {

@@ -3,8 +3,8 @@ package io.artoo.lance.query.many;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.query.impl.Skip;
-import io.artoo.lance.query.impl.Take;
+import io.artoo.lance.query.internal.Skip;
+import io.artoo.lance.query.internal.Take;
 
 public interface Partitionable<T> extends Queryable<T> {
   default Many<T> skip(final int until) {

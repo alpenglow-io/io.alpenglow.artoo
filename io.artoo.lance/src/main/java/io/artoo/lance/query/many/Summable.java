@@ -3,7 +3,7 @@ package io.artoo.lance.query.many;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.query.impl.Sum;
+import io.artoo.lance.query.internal.Sum;
 
 public interface Summable<T> extends Queryable<T> {
   default <N extends Number> One<N> sum(final Func.Uni<? super T, ? extends N> select) {

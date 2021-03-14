@@ -10,9 +10,9 @@ import static io.artoo.lance.tuple.Type.has;
 import static io.artoo.lance.tuple.Type.secondOf;
 
 
-public interface Pair<R extends Record & Pair<R, A, B>, A, B> extends Tuple<R> {
-  default A first() { return firstOf(this, type$()); }
-  default B second() { return secondOf(this, type$()); }
+public interface Pair<A, B> extends Tuple {
+  default A first() { return firstOf(this); }
+  default B second() { return secondOf(this); }
 
   default <T extends Record> T to(final @NotNull Func.Bi<? super A, ? super B, ? extends T> to) {
     return to.apply(first(), second());
@@ -26,22 +26,16 @@ public interface Pair<R extends Record & Pair<R, A, B>, A, B> extends Tuple<R> {
     return has(first(), value1) && has(second(), value2);
   }
 
-  default R map(Func.Bi<? super A, ? super B, ? extends R> map) {
+  default <R extends Record & Pair<A, B>> R map(Func.Bi<? super A, ? super B, ? extends R> map) {
     return map.apply(first(), second());
   }
 
-  default <F extends Record & Single<F, R>> R flatMap(Func.Bi<? super A, ? super B, ? extends F> func) {
+  default <R extends Record & Pair<A, B>, F extends Record & Single<R>> R flatMap(Func.Bi<? super A, ? super B, ? extends F> func) {
     return func.apply(first(), second()).first();
   }
 
-  @SuppressWarnings("unchecked")
-  default R filter(Pred.Bi<? super A, ? super B> pred) {
-    return pred.apply(first(), second()) ? (R) this : null;
-  }
-
-  @SuppressWarnings("unchecked")
-  default R peek(Cons.Bi<? super A, ? super B> cons) {
+  default Pair<A, B> peek(Cons.Bi<? super A, ? super B> cons) {
     cons.apply(first(), second());
-    return (R) this;
+    return this;
   }
 }

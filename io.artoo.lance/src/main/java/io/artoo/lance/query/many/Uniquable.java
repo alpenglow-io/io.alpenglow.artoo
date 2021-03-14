@@ -3,10 +3,10 @@ package io.artoo.lance.query.many;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.query.impl.At;
-import io.artoo.lance.query.impl.First;
-import io.artoo.lance.query.impl.Last;
-import io.artoo.lance.query.impl.Single;
+import io.artoo.lance.query.internal.At;
+import io.artoo.lance.query.internal.First;
+import io.artoo.lance.query.internal.Last;
+import io.artoo.lance.query.internal.Single;
 
 public interface Uniquable<T> extends Queryable<T> {
   default One<T> at(final int index) {

@@ -4,7 +4,7 @@ import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.query.impl.Distinct;
+import io.artoo.lance.query.internal.Distinct;
 
 @SuppressWarnings("unchecked")
 public interface Settable<T> extends Queryable<T> {

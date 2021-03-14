@@ -5,6 +5,7 @@ import io.artoo.lance.func.Pred;
 import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.literator.Literator;
 import io.artoo.lance.query.many.Joinable;
+import io.artoo.lance.tuple.Pair;
 import io.artoo.lance.tuple.Tuple;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,7 +13,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 @SuppressWarnings("unchecked")
-public final class Nested<R, T> implements Join<R, Cursor<Tuple.OfTwo<T, R>>> {
+public final class Nested<R, T> implements Join<R, Cursor<Pair<T, R>>> {
   private final T[] ts;
   private final Pred.Bi<? super T, ? super R> pred;
 
@@ -22,8 +23,8 @@ public final class Nested<R, T> implements Join<R, Cursor<Tuple.OfTwo<T, R>>> {
   }
 
   @NotNull
-  private Cursor<Tuple.OfTwo<T, R>> joinArray(final R[] rs) {
-    var joineds = (Tuple.OfTwo<T, R>[]) new Tuple.OfTwo[0];
+  private Cursor<Pair<T, R>> joinArray(final R[] rs) {
+    var joineds = (Pair<T, R>[]) new Pair[0];
     for (final var t : ts) {
       for (final var r : rs) {
         if (pred.test(t, r)) {
@@ -36,17 +37,17 @@ public final class Nested<R, T> implements Join<R, Cursor<Tuple.OfTwo<T, R>>> {
   }
 
   @Override
-  public Func.Uni<R[], Cursor<Tuple.OfTwo<T, R>>> onArray() {
+  public Func.Uni<R[], Cursor<Pair<T, R>>> onArray() {
     return this::joinArray;
   }
 
   @Override
-  public Func.Uni<Literator<R>, Cursor<Tuple.OfTwo<T, R>>> onLiterator() {
+  public Func.Uni<Literator<R>, Cursor<Pair<T, R>>> onLiterator() {
     return null;
   }
 
   @Override
-  public Func.Uni<Iterator<R>, Cursor<Tuple.OfTwo<T, R>>> onIterator() {
+  public Func.Uni<Iterator<R>, Cursor<Pair<T, R>>> onIterator() {
     return null;
   }
 }

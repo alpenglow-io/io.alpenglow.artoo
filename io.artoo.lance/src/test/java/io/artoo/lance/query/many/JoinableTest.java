@@ -34,7 +34,7 @@ public class JoinableTest implements io.artoo.lance.query.Test {
     final var customers =
       from(customers1)
         .join(from(customers2))
-        .select$((customer, customer2) -> customer);
+        .select((customer, customer2) -> customer);
 
     assertThat(customers).containsExactly(
       CUSTOMERS[2],
@@ -56,7 +56,7 @@ public class JoinableTest implements io.artoo.lance.query.Test {
       from(ORDERS)
         .join(customers)
         .on((order, customer) -> order.customerId() == customer.id())
-        .select(tuple -> new OrderCustomer(tuple.first().id(), tuple.second().name()))
+        .select((order, customer) -> new OrderCustomer(order.id(), customer.name()))
         .order().by(OrderCustomer::name).by(OrderCustomer::orderId, desc);
 
     assertThat(orderCustomers).first().isEqualTo(new OrderCustomer(10308, "Ana Trujillo Emparedados y helados"));

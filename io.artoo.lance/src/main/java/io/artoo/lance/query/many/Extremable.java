@@ -3,7 +3,7 @@ package io.artoo.lance.query.many;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.query.impl.Extremum;
+import io.artoo.lance.query.internal.Extremum;
 
 public interface Extremable<T> extends Queryable<T> {
   private One<T> extreme(int type) {

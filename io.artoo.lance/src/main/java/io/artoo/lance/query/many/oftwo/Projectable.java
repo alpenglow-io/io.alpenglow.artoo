@@ -22,4 +22,12 @@ public interface Projectable<A, B> extends Queryable.OfTwo<A, B> {
   default <R, Q extends Queryable<R>> Many<R> selection(Func.Bi<? super A, ? super B, ? extends Q> select) {
     return selection((i, first, second) -> select.tryApply(first, second));
   }
+
+  default <P extends Pair<A, B>> Many.OfTwo<A, B> to(Func.Bi<? super A, ? super B, ? extends P> func) {
+    return () -> cursor().map(pair -> func.tryApply(pair.first(), pair.second()));
+  }
+
+  default <Q extends Queryable.OfTwo<A, B>> Many.OfTwo<A, B> too(Func.Bi<? super A, ? super B, ? extends Q> func) {
+    return () -> cursor().flatMap(pair -> func.tryApply(pair.first(), pair.second()).cursor());
+  }
 }

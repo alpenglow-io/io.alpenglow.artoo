@@ -2,7 +2,6 @@ package io.artoo.lance.tuple;
 
 import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Func;
-import io.artoo.lance.func.Pred;
 import org.jetbrains.annotations.NotNull;
 
 import static io.artoo.lance.tuple.Type.firstOf;
@@ -14,7 +13,7 @@ public interface Pair<A, B> extends Tuple {
   default A first() { return firstOf(this); }
   default B second() { return secondOf(this); }
 
-  default <T extends Record> T to(final @NotNull Func.Bi<? super A, ? super B, ? extends T> to) {
+  default <R extends Record> R to(final @NotNull Func.Bi<? super A, ? super B, ? extends R> to) {
     return to.apply(first(), second());
   }
 

@@ -13,11 +13,11 @@ public interface Tuple {
 
   record OfTwo<A, B>(A first, B second) implements Pair<A, B> {}
 
-  record OfThree<A, B, C>(A first, B second, C third) implements Triple<OfThree<A, B, C>, A, B, C> {}
+  record OfThree<A, B, C>(A first, B second, C third) implements Triple<A, B, C> {}
 
-  record OfFour<A, B, C, D>(A first, B second, C third, D forth) implements Quadruple<OfFour<A, B, C, D>, A, B, C, D> {}
+  record OfFour<A, B, C, D>(A first, B second, C third, D forth) implements Quadruple<A, B, C, D> {}
 
-  record OfFive<A, B, C, D, E>(A first, B second, C third, D forth, E fifth) implements Quintuple<OfFive<A, B, C, D, E>, A, B, C, D, E> {}
+  record OfFive<A, B, C, D, E>(A first, B second, C third, D forth, E fifth) implements Quintuple<A, B, C, D, E> {}
 
   default Many<?> asQueryable() {
     return Type.asMany(this);

@@ -1,6 +1,7 @@
 package io.artoo.lance.query.many;
 
 import io.artoo.lance.query.Many;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -125,6 +126,7 @@ public class SortableTest implements io.artoo.lance.query.Test {
   }
 
   @Test
+  @Disabled
   public void checker() {
     for (final var customer : from(CUSTOMERS).concat(CUSTOMERS).concat(CUSTOMERS).order().by(Customer::id, desc)) {
       System.out.println(customer);

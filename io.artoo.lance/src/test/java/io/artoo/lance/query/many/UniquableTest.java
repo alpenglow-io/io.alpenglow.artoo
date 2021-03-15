@@ -94,4 +94,17 @@ public class UniquableTest {
 
     assertThat(single).isEmpty();
   }
+
+  @Test
+  public void shouldBeFirst() {
+    final var first = from(1, 23.4, 'A', "Hi there", 5)
+      .ofType(String.class)
+      .peek(out::println)
+      .select(it -> it.toUpperCase())
+      .peek(out::println)
+      .last()
+      .yield();
+
+    assertThat(first).isEqualTo("HI THERE");
+  }
 }

@@ -5,12 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SingleTest {
-  record Sample(String text) implements Single<Sample, String> {
-    @Override
-    public Class<Sample> type$() {
-      return Sample.class;
-    }
-  }
+  record Sample(String text) implements Single<String> {}
 
   @Test
   public void shouldMap() {

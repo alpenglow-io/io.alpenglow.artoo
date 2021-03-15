@@ -11,7 +11,7 @@ public interface Extremable<T> extends Queryable<T> {
   }
 
   private <N extends Number, V> One<V> extreme(int type, final Func.Uni<? super T, ? extends N> select) {
-    return () -> cursor().map(new Extremum<T, N, V>(type, select)).scroll();
+    return () -> cursor().map(new Extremum<T, N, V>(type, select)).walkDown();
   }
 
   default <N extends Number> One<N> max(final Func.Uni<? super T, ? extends N> select) {

@@ -7,7 +7,7 @@ import io.artoo.lance.query.internal.Aggregate;
 
 public interface Aggregatable<T> extends Countable<T>, Summable<T>, Averageable<T>, Extremable<T> {
   default <A, R> One<A> aggregate(final A seed, final Pred.Uni<? super T> where, final Func.Uni<? super T, ? extends R> select, final Func.Bi<? super A, ? super R, ? extends A> aggregate) {
-    return () -> cursor().map(new Aggregate<>(seed, where, select, aggregate)).scroll();
+    return () -> cursor().map(new Aggregate<>(seed, where, select, aggregate)).walkDown();
   }
 
   default <A, R> One<A> aggregate(final A seed, final Func.Uni<? super T, ? extends R> select, final Func.Bi<? super A, ? super R, ? extends A> aggregate) {

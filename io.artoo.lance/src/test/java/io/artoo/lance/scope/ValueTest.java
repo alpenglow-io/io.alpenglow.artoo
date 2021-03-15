@@ -1,6 +1,7 @@
 package io.artoo.lance.scope;
 
 import io.artoo.lance.func.Action;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 public class ValueTest {
   @Test
+  @Disabled
   public void shouldGetValue() throws InterruptedException {
     final var value = Let.lazy(() -> 0);
 

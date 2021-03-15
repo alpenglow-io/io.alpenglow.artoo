@@ -5,15 +5,8 @@ import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
 import io.artoo.lance.query.internal.Average;
 
-public interface Averageable<T> extends Queryable<T> {
-  default <N extends Number> One<Double> average(final Func.Uni<? super T, ? extends N> select) {
-    return () -> cursor().map(new Average<>(select)).scroll();
-  }
-
-  default One<Double> average() {
-    return average(it -> it instanceof Number n ? n.doubleValue() : null);
+public interface Averageable<A, B> extends Queryable.OfTwo<A, B> {
+  default <N extends Number> One<Double> average(final Func.Bi<? super A, ? super B, ? extends N> select) {
+    return () -> cursor().map(new Average<>(pair -> select.tryApply(pair.first(), pair.second()))).walkDown();
   }
 }
-
-
-

@@ -9,10 +9,20 @@ public interface Closable<T> extends Literator<T> {
     return new Close<>(this);
   }
 
-  default Cursor<T> scroll() {
+  default Cursor<T> walkDown() {
     T element = null;
     while (hasNext()) {
       element = next();
+    }
+
+    return Cursor.maybe(element);
+  }
+
+  default Cursor<T> walkThrough() {
+    T element = null;
+    while (hasNext()) {
+      final var next = next();
+      element = next != null ? next : element;
     }
 
     return Cursor.maybe(element);
@@ -55,19 +65,6 @@ final class Close<T> implements Cursor<T> {
   public <R> R as(final Routine<T, R> routine) {
     return source instanceof Cursor<T> cursor ? cursor.as(routine) : Cursor.<T>nothing().as(routine);
   }
-}
-
-final class Closed<T> {
-  private T fetched;
-
-  @SuppressWarnings("ResultOfMethodCallIgnored")
-  private T fetched(Literator<T> literator) {
-    if (fetched == null) literator.hasNext();
-    return fetched;
-  }
-
-  public final T fetched() { return fetched; }
-  public final void fetched(T value) { this.fetched = value; }
 }
 
 

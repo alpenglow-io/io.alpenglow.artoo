@@ -3,14 +3,15 @@ package io.artoo.lance.query.many.oftwo;
 import io.artoo.lance.literator.cursor.routine.concat.Concat;
 import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
+import io.artoo.lance.tuple.Pair;
 
-public interface Concatenatable<T> extends Queryable<T> {
+public interface Concatenatable<A, B> extends Queryable.OfTwo<A, B> {
   @SuppressWarnings("unchecked")
-  default Many<T> concat(final T... elements) {
-    return () -> cursor().to(Concat.array(elements));
+  default <P extends Pair<A, B>> Many.OfTwo<A, B> concat(final P... tuples) {
+    return () -> cursor().to(Concat.array(tuples));
   }
 
-  default <Q extends Queryable<T>> Many<T> concat(final Q queryable) {
+  default <Q extends Queryable.OfTwo<A, B>> Many.OfTwo<A, B> concat(final Q queryable) {
     return () -> cursor().to(Concat.liter(queryable.cursor()));
   }
 }

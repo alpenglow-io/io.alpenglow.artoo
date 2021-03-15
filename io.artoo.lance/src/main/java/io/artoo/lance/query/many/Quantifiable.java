@@ -13,13 +13,13 @@ public interface Quantifiable<T> extends Queryable<T> {
   }
 
   default One<Boolean> all(final Pred.Uni<? super T> where) {
-    return () -> cursor().map(new All<>(where)).scroll();
+    return () -> cursor().map(new All<>(where)).walkDown();
   }
 
   default One<Boolean> any() { return this.any(t -> true); }
 
   default One<Boolean> any(final Pred.Uni<? super T> where) {
-    return () -> cursor().map(new Any<>(where)).scroll().or(() -> Cursor.open(false));
+    return () -> cursor().map(new Any<>(where)).walkDown().or(() -> Cursor.open(false));
   }
 /*
   default One<Boolean> contains(final T element) {

@@ -34,6 +34,8 @@ public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Othe
   default T yield() {
     return iterator().next();
   }
+
+  interface OfTwo<A, B> extends Queryable.OfTwo<A, B> {}
 }
 
 final class Lone<T> implements One<T> {

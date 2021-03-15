@@ -4,14 +4,11 @@ import io.artoo.lance.func.Func;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
 import io.artoo.lance.query.internal.Sum;
+import io.artoo.lance.tuple.Pair;
 
-public interface Summable<T> extends Queryable<T> {
-  default <N extends Number> One<N> sum(final Func.Uni<? super T, ? extends N> select) {
-    return () -> cursor().map(new Sum<T, N, N>(select)).scroll();
-  }
-
-  default One<T> sum() {
-    return () -> cursor().map(new Sum<T, Number, T>(it -> it instanceof Number n ? n : null)).scroll();
+public interface Summable<A, B> extends Queryable.OfTwo<A, B> {
+  default <N extends Number> One<N> sum(final Func.Bi<? super A, ? super B, ? extends N> select) {
+    return () -> cursor().map(new Sum<Pair<A, B>, N, N>(pair -> select.tryApply(pair.first(), pair.second()))).walkDown();
   }
 }
 

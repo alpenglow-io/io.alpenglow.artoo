@@ -15,6 +15,7 @@ import io.artoo.lance.query.many.Quantifiable;
 import io.artoo.lance.query.many.Settable;
 import io.artoo.lance.query.many.Sortable;
 import io.artoo.lance.query.many.Uniquable;
+import io.artoo.lance.query.many.oftwo.Pairable;
 import io.artoo.lance.tuple.Pair;
 
 public interface Many<T> extends
@@ -58,7 +59,7 @@ public interface Many<T> extends
     return Many.of(Cursor.iteration(iterable.iterator()));
   }
 
-  interface OfTwo<A, B> extends io.artoo.lance.query.many.oftwo.Projectable<A, B> {}
+  interface OfTwo<A, B> extends Pairable<A, B> {}
 }
 
 final class Empty<T> implements Many<T> {

@@ -5,29 +5,30 @@ import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
 import io.artoo.lance.query.internal.Skip;
 import io.artoo.lance.query.internal.Take;
+import io.artoo.lance.tuple.Pair;
 
-public interface Partitionable<T> extends Queryable<T> {
-  default Many<T> skip(final int until) {
-    return skipWhile((index, it) -> index < until);
+public interface Partitionable<A, B> extends Queryable.OfTwo<A, B> {
+  default Many.OfTwo<A, B> skip(final int until) {
+    return skipWhile((index, first, second) -> index < until);
   }
 
-  default Many<T> skipWhile(final Pred.Uni<? super T> where) {
-    return skipWhile((index, it) -> where.test(it));
+  default Many.OfTwo<A, B> skipWhile(final Pred.Bi<? super A, ? super B> where) {
+    return skipWhile((index, first, second) -> where.test(first, second));
   }
 
-  default Many<T> skipWhile(final Pred.Bi<? super Integer, ? super T> where) {
-    return () -> cursor().map(new Skip<T, T>(where));
+  default Many.OfTwo<A, B> skipWhile(final Pred.Tri<? super Integer, ? super A, ? super B> where) {
+    return () -> cursor().map(new Skip<Pair<A, B>, Pair<A, B>>((index, pair) -> where.tryTest(index, pair.first(), pair.second())));
   }
 
-  default Many<T> take(final int until) {
-    return takeWhile((index, it) -> index < until);
+  default Many.OfTwo<A, B> take(final int until) {
+    return takeWhile((index, first, second) -> index < until);
   }
 
-  default Many<T> takeWhile(final Pred.Uni<? super T> where) {
-    return takeWhile((index, param) -> where.test(param));
+  default Many.OfTwo<A, B> takeWhile(final Pred.Bi<? super A, ? super B> where) {
+    return takeWhile((index, first, second) -> where.test(first, second));
   }
 
-  default Many<T> takeWhile(final Pred.Bi<? super Integer, ? super T> where) {
-    return () -> cursor().map(new Take<T, T>(where));
+  default Many.OfTwo<A, B> takeWhile(final Pred.Tri<? super Integer, ? super A, ? super B> where) {
+    return () -> cursor().map(new Take<Pair<A, B>, Pair<A, B>>((index, pair) -> where.tryTest(index, pair.first(), pair.second())));
   }
 }

@@ -11,11 +11,11 @@ import static io.artoo.lance.tuple.Type.has;
 import static io.artoo.lance.tuple.Type.secondOf;
 import static io.artoo.lance.tuple.Type.thirdOf;
 
-public interface Quadruple<R extends Record & Quadruple<R, A, B, C, D>, A, B, C, D> extends Tuple<R> {
-  default A first() { return firstOf(this, type$()); }
-  default B second() { return secondOf(this, type$()); }
-  default C third() { return thirdOf(this, type$()); }
-  default D forth() { return forthOf(this, type$()); }
+public interface Quadruple<A, B, C, D> extends Tuple {
+  default A first() { return firstOf(this); }
+  default B second() { return secondOf(this); }
+  default C third() { return thirdOf(this); }
+  default D forth() { return forthOf(this); }
 
   default <N extends Record> N to(final @NotNull Func.Quad<? super A, ? super B, ? super C, ? super D, ? extends N> to) {
     return to.apply(first(), second(), third(), forth());
@@ -29,22 +29,16 @@ public interface Quadruple<R extends Record & Quadruple<R, A, B, C, D>, A, B, C,
     return has(first(), value1) && has(second(), value2) && has(third(), value3) && has(forth(), value4);
   }
 
-  default R map(Func.Quad<? super A, ? super B, ? super C, ? super D, ? extends R> map) {
+  default <R extends Record & Quadruple<A, B, C, D>> R map(Func.Quad<? super A, ? super B, ? super C, ? super D, ? extends R> map) {
     return map.apply(first(), second(), third(), forth());
   }
 
-  default <F extends Record & Single<F, R>> R flatMap(Func.Quad<? super A, ? super B, ? super C, ? super D, ? extends F> func) {
+  default <R extends Record & Quadruple<A, B, C, D>, F extends Record & Single<R>> R flatMap(Func.Quad<? super A, ? super B, ? super C, ? super D, ? extends F> func) {
     return func.apply(first(), second(), third(), forth()).first();
   }
 
-  @SuppressWarnings("unchecked")
-  default R filter(Pred.Quad<? super A, ? super B, ? super C, ? super D> pred) {
-    return pred.apply(first(), second(), third(), forth()) ? (R) this : null;
-  }
-
-  @SuppressWarnings("unchecked")
-  default R peek(Cons.Quad<? super A, ? super B, ? super C, ? super D> cons) {
+  default Quadruple<A, B, C, D> peek(Cons.Quad<? super A, ? super B, ? super C, ? super D> cons) {
     cons.apply(first(), second(), third(), forth());
-    return (R) this;
+    return this;
   }
 }

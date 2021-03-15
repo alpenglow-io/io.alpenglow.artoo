@@ -10,10 +10,10 @@ import static io.artoo.lance.tuple.Type.has;
 import static io.artoo.lance.tuple.Type.secondOf;
 import static io.artoo.lance.tuple.Type.thirdOf;
 
-public interface Triple<R extends Record & Triple<R, A, B, C>, A, B, C> extends Tuple<R> {
-  default A first() { return firstOf(this, type$()); }
-  default B second() { return secondOf(this, type$()); }
-  default C third() { return thirdOf(this, type$()); }
+public interface Triple<A, B, C> extends Tuple {
+  default A first() { return firstOf(this); }
+  default B second() { return secondOf(this); }
+  default C third() { return thirdOf(this); }
 
   default <T extends Record> T to(final @NotNull Func.Tri<? super A, ? super B, ? super C, ? extends T> to) {
     return to.apply(first(), second(), third());
@@ -27,23 +27,17 @@ public interface Triple<R extends Record & Triple<R, A, B, C>, A, B, C> extends 
     return has(first(), value1) && has(second(), value2) && has(third(), value3);
   }
 
-  default R map(Func.Tri<? super A, ? super B, ? super C, ? extends R> map) {
+  default <R extends Record & Triple<A, B, C>> R map(Func.Tri<? super A, ? super B, ? super C, ? extends R> map) {
     return map.apply(first(), second(), third());
   }
 
-  default <F extends Record & Single<F, R>> R flatMap(Func.Tri<? super A, ? super B, ? super C, ? extends F> func) {
+  default <R extends Record & Triple<A, B, C>, F extends Record & Single<R>> R flatMap(Func.Tri<? super A, ? super B, ? super C, ? extends F> func) {
     return func.apply(first(), second(), third()).first();
   }
 
-  @SuppressWarnings("unchecked")
-  default R filter(Pred.Tri<? super A, ? super B, ? super C> pred) {
-    return pred.apply(first(), second(), third()) ? (R) this : null;
-  }
-
-  @SuppressWarnings("unchecked")
-  default R peek(Cons.Tri<? super A, ? super B, ? super C> cons) {
+  default Triple<A, B, C> peek(Cons.Tri<? super A, ? super B, ? super C> cons) {
     cons.apply(first(), second(), third());
-    return (R) this;
+    return this;
   }
 
 }

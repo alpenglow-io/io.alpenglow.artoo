@@ -8,33 +8,33 @@ import io.artoo.lance.query.internal.First;
 import io.artoo.lance.query.internal.Last;
 import io.artoo.lance.query.internal.Single;
 
-public interface Uniquable<T> extends Queryable<T> {
-  default One<T> at(final int index) {
-    return () -> cursor().map(new At<>(index)).scroll();
+public interface Uniquable<A, B> extends Queryable.OfTwo<A, B> {
+  default One.OfTwo<A, B> at(final int index) {
+    return () -> cursor().map(new At<>(index)).walkDown();
   }
 
-  default One<T> first() {
-    return first(it -> true);
+  default One.OfTwo<A, B> first() {
+    return first((first, second) -> true);
   }
 
-  default One<T> first(final Pred.Uni<? super T> where) {
-    return () -> cursor().map(new First<>(where)).scroll();
+  default One.OfTwo<A, B> first(final Pred.Bi<? super A, ? super B> where) {
+    return () -> cursor().map(new First<>(pair -> where.tryTest(pair.first(), pair.second()))).walkDown();
   }
 
-  default One<T> last() {
-    return last(it -> true);
+  default One.OfTwo<A, B> last() {
+    return last((first, second) -> true);
   }
 
-  default One<T> last(final Pred.Uni<? super T> where) {
-    return () -> cursor().map(new Last<>(where)).scroll();
+  default One.OfTwo<A, B> last(final Pred.Bi<? super A, ? super B> where) {
+    return () -> cursor().map(new Last<>(pair -> where.tryTest(pair.first(), pair.second()))).walkDown();
   }
 
-  default One<T> single() {
-    return single(it -> true);
+  default One.OfTwo<A, B> single() {
+    return single((first, second) -> true);
   }
 
-  default One<T> single(final Pred.Uni<? super T> where) {
-    return () -> cursor().map(new Single<>(where)).scroll();
+  default One.OfTwo<A, B> single(final Pred.Bi<? super A, ? super B> where) {
+    return () -> cursor().map(new Single<>(pair -> where.tryTest(pair.first(), pair.second()))).walkDown();
   }
 }
 

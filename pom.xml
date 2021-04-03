@@ -12,6 +12,7 @@
     <module>io.artoo.frost</module>
     <module>io.artoo.honolulu</module>
     <module>io.artoo.bom</module>
+    <module>io.artoo.camelot</module>
   </modules>
 
   <name>Artoo</name>
@@ -20,12 +21,14 @@
     <artoo.version>0.0.1-alpha</artoo.version>
 
     <encoding>UTF-8</encoding>
-    <java.version>15</java.version>
-    <java.release>15</java.release>
+    <java.version>16</java.version>
+    <java.release>16</java.release>
     <maven.min.version>3.6.0</maven.min.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
+
+    <mainClass>NONE</mainClass>
 
     <!-- compile deps -->
     <annotations.version>20.1.0</annotations.version>
@@ -58,6 +61,9 @@
     <plugin-versions.version>2.8.1</plugin-versions.version>
     <plugin-source.version>3.2.1</plugin-source.version>
     <plugin-assembly.version>3.3.0</plugin-assembly.version>
+    <plugin-exec.version>3.0.0</plugin-exec.version>
+    <plugin-frontend.version>1.11.2</plugin-frontend.version>
+    <node.version>14.16.0</node.version>
   </properties>
 
   <dependencyManagement>
@@ -232,6 +238,24 @@
               </goals>
             </execution>
           </executions>
+        </plugin>
+
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>${plugin-exec.version}</version>
+          <configuration>
+            <mainClass>${mainClass}</mainClass>
+          </configuration>
+        </plugin>
+
+        <plugin>
+            <groupId>com.github.eirslett</groupId>
+            <artifactId>frontend-maven-plugin</artifactId>
+            <version>${plugin-frontend.version}</version>
+            <configuration>
+              <nodeVersion>${node.version}</nodeVersion>
+            </configuration>
         </plugin>
 
       </plugins>

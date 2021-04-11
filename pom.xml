@@ -13,6 +13,8 @@
     <module>io.artoo.honolulu</module>
     <module>io.artoo.bom</module>
     <module>io.artoo.camelot</module>
+    <module>io.artoo.parry</module>
+    <module>io.arto.ddd</module>
   </modules>
 
   <name>Artoo</name>

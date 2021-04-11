@@ -1,4 +1,4 @@
-package io.artoo.ddd.util;
+package io.artoo.ddd.domain.util;
 
 public interface Lettering {
   String REGEX = "([a-z0-9])([A-Z0-9]+)";

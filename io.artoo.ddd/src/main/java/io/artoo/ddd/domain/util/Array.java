@@ -1,4 +1,4 @@
-package io.artoo.ddd.util;
+package io.artoo.ddd.domain.util;
 
 import java.util.Arrays;
 

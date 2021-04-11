@@ -1,7 +1,7 @@
-package io.artoo.ddd.command;
+package io.artoo.ddd.domain.bus;
 
-import io.artoo.ddd.Domain;
-import io.artoo.ddd.util.Lettering;
+import io.artoo.ddd.domain.Domain;
+import io.artoo.ddd.domain.util.Lettering;
 import io.vertx.core.Future;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.json.JsonObject;
@@ -16,7 +16,7 @@ public interface CommandBus {
   <C extends Domain.Command> CommandBus when(Class<C> command, Consumer<C> handler);
 
   static CommandBus create(EventBus eventBus) {
-    return new InMemory(eventBus);
+    return new io.artoo.ddd.domain.event.InMemory(eventBus);
   }
 }
 

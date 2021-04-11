@@ -1,8 +1,7 @@
-package io.artoo.ddd.repository;
+package io.artoo.ddd.item;
 
-import io.artoo.ddd.aggregate.Item;
-import io.artoo.ddd.event.EventStore;
-import io.artoo.ddd.util.Lettering;
+import io.artoo.ddd.domain.event.EventStore;
+import io.artoo.ddd.domain.util.Lettering;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;

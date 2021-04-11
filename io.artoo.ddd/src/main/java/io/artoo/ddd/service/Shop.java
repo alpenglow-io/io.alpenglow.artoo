@@ -1,8 +1,8 @@
 package io.artoo.ddd.service;
 
-import io.artoo.ddd.aggregate.Item;
-import io.artoo.ddd.command.CommandBus;
-import io.artoo.ddd.repository.Items;
+import io.artoo.ddd.item.Item;
+import io.artoo.ddd.domain.bus.CommandBus;
+import io.artoo.ddd.item.Items;
 
 public interface Shop {
   static Shop service(Items items, CommandBus commandBus) {

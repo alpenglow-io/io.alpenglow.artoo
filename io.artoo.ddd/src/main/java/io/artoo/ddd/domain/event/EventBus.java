@@ -1,7 +1,8 @@
-package io.artoo.ddd.event;
+package io.artoo.ddd.domain.event;
 
-import io.artoo.ddd.Domain;
-import io.artoo.ddd.util.Lettering;
+import io.artoo.ddd.domain.Domain;
+import io.artoo.ddd.domain.event.EventStore.EventLog;
+import io.artoo.ddd.domain.util.Lettering;
 import io.vertx.core.Future;
 import io.vertx.core.json.JsonObject;
 
@@ -12,7 +13,7 @@ import static io.vertx.core.Future.succeededFuture;
 public interface EventBus {
   <E extends Domain.Event> Future<Void> emit(E event);
 
-  <E extends Domain.Event> Future<Void> when(Class<E> event, Consumer<E> consumer);
+  <E extends Domain.Event> Future<Void> on(Class<E> event, Consumer<EventLog> consumer);
 
   static EventBus create(io.vertx.core.eventbus.EventBus eventBus) {
     return new InMemory(eventBus);
@@ -31,8 +32,8 @@ final class InMemory implements EventBus, Lettering {
   }
 
   @Override
-  public <E extends Domain.Event> Future<Void> when(final Class<E> event, final Consumer<E> consumer) {
-    eventBus.<JsonObject>localConsumer(asKebabCase(event), message -> consumer.accept(message.body().mapTo(event)));
+  public <E extends Domain.Event> Future<Void> on(final Class<E> event, final Consumer<EventLog> consumer) {
+    eventBus.<JsonObject>localConsumer(asKebabCase(event), message -> consumer.accept(message.body().mapTo(EventLog.class)));
     return succeededFuture();
   }
 }

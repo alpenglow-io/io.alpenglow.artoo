@@ -1,4 +1,4 @@
-module io.arto.ddd {
+module io.artoo.ddd {
   requires io.artoo.lance;
 
   requires org.jetbrains.annotations;

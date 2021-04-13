@@ -11,4 +11,8 @@ public interface Array {
     if (copied.length - source.length >= 0) arraycopy(elements, 0, copied, source.length, copied.length - source.length);
     return copied;
   }
+
+  default <T> T[] copy(T[] source) {
+    return Arrays.copyOf(source, source.length);
+  }
 }

@@ -1,10 +1,10 @@
 package io.artoo.ddd;
 
-import io.artoo.ddd.item.Item;
+import io.artoo.ddd.order.Order;
 import io.artoo.ddd.domain.bus.CommandBus;
 import io.artoo.ddd.domain.event.EventBus;
 import io.artoo.ddd.domain.event.EventStore;
-import io.artoo.ddd.item.Items;
+import io.artoo.ddd.order.Orders;
 import io.artoo.ddd.service.Shop;
 import io.vertx.core.Vertx;
 
@@ -23,21 +23,21 @@ public enum Main {;
     final var eventBus = EventBus.create(messageBus);
     final var eventStore = EventStore.create(eventBus);
 
-    final var items = Items.from(eventStore);
+    final var items = Orders.from(eventStore);
 
     final var shop = Shop.service(items, commandBus);
 
     final var id = UUID.randomUUID();
 
-    commandBus.send(new Item.Command.Put(id));
-    commandBus.send(new Item.Command.Take(id, Instant.now()));
-    commandBus.send(new Item.Command.Pay(id, Instant.now()));
+    commandBus.send(new Order.Command.Put(id));
+    commandBus.send(new Order.Command.Take(id, Instant.now()));
+    commandBus.send(new Order.Command.Pay(id, Instant.now()));
 
     Thread.sleep(1000);
-    final var oldItem = Item.from(eventStore.historyOf(Item.class, id));
+    final var oldItem = Order.from(eventStore.historyOf(Order.class, id));
     out.println(oldItem);
     items.save(oldItem);
-    final var newItem = Item.from(eventStore.historyOf(Item.class, id));
+    final var newItem = Order.from(eventStore.historyOf(Order.class, id));
     out.println(newItem);
   }
 }

@@ -1,59 +1,79 @@
 package io.artoo.ddd.domain.event;
 
 import io.artoo.ddd.domain.Domain;
+import io.artoo.ddd.domain.Domain.Event.Log;
 import io.artoo.ddd.domain.util.Array;
-import io.artoo.ddd.domain.util.Lettering;
+import io.artoo.lance.func.Func;
 import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.query.Many;
 
+import java.time.Instant;
 import java.util.Arrays;
 
-import static io.artoo.ddd.domain.event.EventStore.EventLog;
-
-public interface EventStore extends Many<EventLog> {
-  record EventLog(Id id, String eventName, Domain.Change change, Id aggregateId, String aggregateName) {}
-
+public interface EventStore extends Many<Log> {
   static EventStore create(EventBus eventBus) {
     return new InMemory(eventBus);
   }
 
-  <E extends Domain.Change, P extends Pending<P, E>> P commit(Id id, P pending);
-}
+  <E extends Domain.Event, U extends UnitOfWork<E>> Many<Log> commit(U unitOfWork, Func.Uni<? super U, ? extends Id> id);
 
-final class InMemory implements EventStore, Lettering, Array {
-  private enum Sync { Lock }
-  private final Sync lock;
+  final class InMemory implements EventStore {
+    private static final class Logs implements Array {
+      private Log[] logs;
 
-  private volatile EventLog[] eventLogs;
-  private final EventBus eventBus;
+      private Logs(Log... logs) {
+        this.logs = logs;
+      }
 
-  InMemory(final EventBus eventBus) {
-    this(
-      Sync.Lock,
-      new EventLog[] {},
-      eventBus
-    );
-  }
-  private InMemory(final Sync lock, final EventLog[] eventLogs, final EventBus eventBus) {
-    this.lock = lock;
-    this.eventLogs = eventLogs;
-    this.eventBus = eventBus;
-  }
-  @Override
-  public <E extends Domain.Change, P extends Pending<P, E>> P commit(final Id id, final P pending) {
-    synchronized (lock) {
-      for (final var change : pending) {
-        eventLogs = push(this.eventLogs, new EventLog(Id.random(), asKebabCase(change.getClass()), change, id, asKebabCase(pending.getClass())));
-        eventBus.emit(change);
+      private void push(Log log) {
+        logs = push(logs, log);
+      }
+
+      private Log[] copy() {
+        return copy(logs);
       }
     }
-    return pending;
-  }
 
-  @Override
-  public Cursor<EventLog> cursor() {
-    synchronized (lock) {
-      return Cursor.open(Arrays.copyOf(this.eventLogs, eventLogs.length));
+    private enum Sync {Lock}
+
+    private final Sync lock;
+    private volatile Logs logs;
+
+    private final EventBus eventBus;
+
+    private InMemory(final EventBus eventBus) {
+      this(
+        Sync.Lock,
+        new Log[]{},
+        eventBus
+      );
+    }
+
+    private InMemory(final Sync lock, final Log[] logs, final EventBus eventBus) {
+      this.lock = lock;
+      this.logs = new Logs(logs);
+      this.eventBus = eventBus;
+    }
+
+    @Override
+    public <E extends Domain.Event, U extends UnitOfWork<E>> Many<Log> commit(final U unitOfWork, final Func.Uni<? super U, ? extends Id> id) {
+      synchronized (lock) {
+        return
+          Many.from(id.apply(unitOfWork)).selection(aggregateId ->
+            unitOfWork
+              .select(event -> new Log(Id.random(), event.$name(), event, aggregateId, unitOfWork.$name(), Instant.now()))
+              .peek(log -> logs.push(log))
+              .peek(eventBus::emit)
+          );
+      }
+    }
+
+    @Override
+    public Cursor<Domain.Event.Log> cursor() {
+      synchronized (lock) {
+        return Cursor.open(logs.copy());
+      }
     }
   }
 }
+

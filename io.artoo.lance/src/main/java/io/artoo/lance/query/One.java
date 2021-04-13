@@ -22,13 +22,17 @@ public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Othe
     return new Pone<>(suppl);
   }
 
+  static <T> One<T> gone(final String message, final Func.Uni<? super String, ? extends RuntimeException> error) {
+    return new Gone<>(message, error);
+  }
+
   @SuppressWarnings("unchecked")
   static <L> One<L> none() {
     return (One<L>) None.Default;
   }
 
-  static <A extends AutoCloseable, T, O extends One<T>> One<T> go(Suppl.Uni<? extends A> going, Func.Uni<? super A, ? extends O> then) {
-    return new Gone<>(going, then);
+  static <A extends AutoCloseable, T, O extends One<T>> One<T> done(Suppl.Uni<? extends A> going, Func.Uni<? super A, ? extends O> then) {
+    return new Done<>(going, then);
   }
 
   default T yield() {
@@ -64,6 +68,21 @@ final class Pone<T> implements One<T> {
   }
 }
 
+final class Gone<T> implements One<T> {
+  private final String message;
+  private final Func.Uni<? super String, ? extends RuntimeException> error;
+
+  Gone(final String message, final Func.Uni<? super String, ? extends RuntimeException> error) {
+    this.message = message;
+    this.error = error;
+  }
+
+  @Override
+  public Cursor<T> cursor() {
+    throw error.apply(message);
+  }
+}
+
 enum None implements One<Object> {
   Default;
 
@@ -73,11 +92,11 @@ enum None implements One<Object> {
   }
 }
 
-final class Gone<A extends AutoCloseable, T, O extends One<T>> implements One<T> {
+final class Done<A extends AutoCloseable, T, O extends One<T>> implements One<T> {
   private final Suppl.Uni<? extends A> doing;
   private final Func.Uni<? super A, ? extends O> then;
 
-  Gone(final Suppl.Uni<? extends A> doing, final Func.Uni<? super A, ? extends O> then) {
+  Done(final Suppl.Uni<? extends A> doing, final Func.Uni<? super A, ? extends O> then) {
     this.doing = doing;
     this.then = then;
   }

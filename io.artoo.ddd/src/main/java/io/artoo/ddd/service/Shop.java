@@ -1,42 +1,42 @@
 package io.artoo.ddd.service;
 
-import io.artoo.ddd.item.Item;
+import io.artoo.ddd.order.Order;
 import io.artoo.ddd.domain.bus.CommandBus;
-import io.artoo.ddd.item.Items;
+import io.artoo.ddd.order.Orders;
 
 public interface Shop {
-  static Shop service(Items items, CommandBus commandBus) {
-    return new Service(items, commandBus);
+  static Shop service(Orders orders, CommandBus commandBus) {
+    return new Service(orders, commandBus);
   }
 
-  void stock(Item.Command.Put command);
-  void take(Item.Command.Take command);
-  void pay(Item.Command.Pay command);
+  void stock(Order.Command.Put command);
+  void take(Order.Command.Take command);
+  void pay(Order.Command.Pay command);
 }
 
 final class Service implements Shop {
-  private final Items items;
+  private final Orders orders;
 
-  Service(final Items items, final CommandBus commandBus) {
-    this.items = items;
+  Service(final Orders orders, final CommandBus commandBus) {
+    this.orders = orders;
     commandBus
-      .when(Item.Command.Put.class, this::stock)
-      .when(Item.Command.Take.class, this::take)
-      .when(Item.Command.Pay.class, this::pay);
+      .when(Order.Command.Put.class, this::stock)
+      .when(Order.Command.Take.class, this::take)
+      .when(Order.Command.Pay.class, this::pay);
   }
 
   @Override
-  public void stock(final Item.Command.Put command) {
-    items.save(Item.create().put(command.uuid()));
+  public void stock(final Order.Command.Put command) {
+    orders.save(Order.create().put(command.uuid()));
   }
 
   @Override
-  public void take(final Item.Command.Take command) {
-    items.save(items.findBy(command.uuid()).take(command.uuid(), command.when()));
+  public void take(final Order.Command.Take command) {
+    orders.save(orders.findBy(command.uuid()).take(command.uuid(), command.when()));
   }
 
   @Override
-  public void pay(final Item.Command.Pay command) {
-    items.save(items.findBy(command.uuid()).pay(command.uuid(), command.when()));
+  public void pay(final Order.Command.Pay command) {
+    orders.save(orders.findBy(command.uuid()).pay(command.uuid(), command.when()));
   }
 }

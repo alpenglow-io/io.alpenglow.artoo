@@ -1,6 +1,7 @@
 package io.artoo.lance.query.one;
 
 import io.artoo.lance.func.Func;
+import io.artoo.lance.query.Many;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
 import io.artoo.lance.query.internal.Select;
@@ -10,7 +11,7 @@ public interface Projectable<T> extends Queryable<T> {
     return () -> cursor().map(new Select<>((i, it) -> select.tryApply(it)));
   }
 
-  default <R, O extends One<R>> One<R> selection(final Func.Uni<? super T, ? extends O> selectOne) {
+  default <R, Q extends Queryable<R>> Many<R> selection(final Func.Uni<? super T, ? extends Q> selectOne) {
     return () -> cursor().map(new Select<>((i, it) -> selectOne.tryApply(it))).flatMap(Queryable::cursor);
   }
 }

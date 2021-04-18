@@ -20,4 +20,28 @@ public enum Domain {
     Changes changes();
   }
 
+  public interface Aggregate<R extends Record> extends One<Pending<R>> {}
+
+  public sealed interface Pending<R extends Record> {
+    Id id();
+    R state();
+    Changes changes();
+
+    static <R extends Record> Pending<R> state(R record) {
+      return new State<>(Id.random(), record, Changes.none());
+    }
+
+    static <R extends Record> Pending<R> state(R record, Event... events) {
+      return new State<>(Id.random(), record, Changes.uncommitted(events));
+    }
+
+    Pending<R> change(R state, Domain.Event... events);
+  }
+
+  private record State<R extends Record>(Id id, R state, Changes changes) implements Pending<R> {
+    @Override
+    public Pending<R> change(R state, Domain.Event... events) {
+      return new State<>(id, state, changes.append(events));
+    }
+  }
 }

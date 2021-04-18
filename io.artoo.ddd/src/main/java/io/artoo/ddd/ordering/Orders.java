@@ -1,6 +1,7 @@
 package io.artoo.ddd.ordering;
 
-import io.artoo.ddd.domain.event.EventStore;
+import io.artoo.ddd.domain.EventStore;
+import io.artoo.ddd.domain.event.InMemory;
 import io.artoo.ddd.domain.util.Lettering;
 import io.artoo.ddd.ordering.Order.Event.Approved;
 
@@ -12,7 +13,9 @@ public interface Orders {
     return new EventSourced(store);
   }
 
-  Order save(Order order);
+  default Order save(Order order) {
+    return InMemory.Store.commit(order);
+  }
 
   Order findBy(UUID id);
 
@@ -28,14 +31,7 @@ final class EventSourced implements Orders, Lettering {
 
   @Override
   public Order save(final Order order) {
-    return eventStore.commit(
-      order,
-      it -> it
-        .ofType(Approved.class)
-        .select(Approved::id)
-        .single()
-        .yield()
-    );
+    return eventStore.commit(order);
   }
 
   @Override

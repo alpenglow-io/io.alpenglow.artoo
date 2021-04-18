@@ -1,85 +1,72 @@
 package io.artoo.ddd.ordering;
 
-import io.artoo.ddd.domain.Changes;
-import io.artoo.ddd.domain.Id;
-import io.artoo.lance.literator.Cursor;
+import io.artoo.ddd.domain.Domain.Pending;
+import io.artoo.ddd.domain.Domain.Aggregate;
+import io.artoo.ddd.domain.History;
 import io.artoo.lance.query.One;
 
 import java.time.Instant;
 
 import static io.artoo.ddd.ordering.Order.Status.ApprovalPending;
 import static io.artoo.ddd.ordering.Order.Status.Approved;
-import static io.artoo.ddd.ordering.Ordering.*;
+import static io.artoo.ddd.ordering.Order.Status.Disapproved;
+import static io.artoo.ddd.ordering.Order.Status.RevisionPending;
+import static io.artoo.ddd.ordering.Ordering.Approved;
+import static io.artoo.ddd.ordering.Ordering.ReviseCancelled;
+import static io.artoo.ddd.ordering.Ordering.ReviseConfirmed;
+import static io.artoo.ddd.ordering.Ordering.Revised;
 
-public interface Order extends One<Order.State> {
-  enum Status { ApprovalPending, Approved, Rejected, RevisionPending, CancelPending, Canceled, Done}
+public interface Order extends Aggregate<Order.State> {
+  enum Status {ApprovalPending, Approved, Disapproved, Rejected, RevisionPending, CancelPending, Canceled, Done}
 
-  record State(Status status) {
+  record State(Status status) {}
+
+  static Order from(History history) {
+    return history
+      .aggregate(
+        Order.create(),
+        (order, source) -> {
+          if (source.event() instanceof Approved approved) return order.approve(Instant.now());
+          if (source.event() instanceof Revised revised) return order.revise(Instant.now());
+
+          throw new IllegalStateException();
+        }
+      )
+      .yield();
   }
 
-  static Order make(Id id) {
-    return new Initial(id);
+  static Order create() {
+    return () -> One
+      .from(new State(ApprovalPending))
+      .select(Pending::state)
+      .cursor();
   }
 
   default Order approve(Instant actual) {
     return () -> this
-      .where(state -> state.status == ApprovalPending)
-      .selection(state -> new InProgress(this, Changes.append(Made.event(actual)), Approved))
+      .where(aggregate -> aggregate.state().status == ApprovalPending)
+      .select(aggregate -> aggregate.change(new State(Approved), Ordering.Approved.event(actual)))
       .cursor();
   }
 
   default Order revise(Instant actual) {
     return () -> this
-      .where(state -> state.status == Approved)
-      .selection(state -> new InProgress(this, Changes.append(), status))
+      .where(aggregate -> aggregate.state().status == Approved)
+      .select(aggregate -> aggregate.change(new State(RevisionPending), Revised.event(actual)))
+      .cursor();
   }
 
-  final class Initial implements Order {
-    private final Id id;
-
-    private Initial(final Id id) {
-      this.id = id;
-    }
-
-    @Override
-    public Cursor<State> cursor() {
-      return Cursor.open(new State(ApprovalPending));
-    }
+  default Order confirmRevise(Instant actual) {
+    return () -> this
+      .where(aggregate -> aggregate.state().status == RevisionPending)
+      .select(aggregate -> aggregate.change(new State(Approved), ReviseConfirmed.event(actual)))
+      .cursor();
   }
 
-  final class InProgress implements Order {
-    private final Order order;
-    private final Changes changes;
-    private final Status status;
-
-    public InProgress(final Order order, final Changes changes, final Status status) {
-      this.order = order;
-      this.changes = changes;
-      this.status = status;
-    }
-
-    @Override
-    public Cursor<State> cursor() {
-      return Cursor.open(new State(status));
-    }
-  }
-
-  final class Final implements Order {
-    private final Status status;
-    private final Changes changes;
-
-    public Final(final Status status, final Changes changes) {
-      this.status = status;
-      this.changes = changes;
-    }
-
-    @Override
-    public Cursor<State> cursor() {
-      return changes
-        .last()
-        .where(event -> event instanceof Made && status == Status.Done)
-        .select(event -> Changes.append(event))
-        .cursor();
-    }
+  default Order cancelRevise() {
+    return () -> this
+      .where(aggregate -> aggregate.state().status == RevisionPending)
+      .select(aggregate -> aggregate.change(new State(Disapproved), ReviseCancelled.event(Instant.now())))
+      .cursor();
   }
 }

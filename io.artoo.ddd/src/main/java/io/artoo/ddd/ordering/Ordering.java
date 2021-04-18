@@ -19,7 +19,7 @@ public enum Ordering {;
 
       @Override
       public Changes changes() {
-        return Changes.append(Made.event(actual));
+        return Changes.uncommitted(Made.event(actual));
       }
     }
   }
@@ -28,10 +28,42 @@ public enum Ordering {;
   public interface Cancel extends Domain.Command {}
 
   public interface Made extends Domain.Event {
-    static Made event(Instant actual) {
+    static Made event() {
+      return new Default();
+    }
+
+    record Default() implements Made {}
+  }
+
+  public interface Approved extends Domain.Event {
+    static Approved event(Instant actual) {
       return new Default(actual);
     }
 
-    record Default(Instant actual) implements Made {}
+    record Default(Instant actual) implements Approved {}
+  }
+
+  public interface Revised extends Domain.Event {
+    static Revised event(Instant actual) {
+      return new Default(actual);
+    }
+
+    record Default(Instant actual) implements Revised {}
+  }
+
+  public interface ReviseConfirmed extends Domain.Event {
+    static ReviseConfirmed event(Instant actual) {
+      return new Default(actual);
+    }
+
+    record Default(Instant actual) implements ReviseConfirmed {}
+  }
+
+  public interface ReviseCancelled extends Domain.Event {
+    static ReviseCancelled event(Instant actual) {
+      return new Default(actual);
+    }
+
+    record Default(Instant actual) implements ReviseCancelled {}
   }
 }

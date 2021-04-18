@@ -1,21 +1,28 @@
-package io.artoo.ddd.domain.event;
+package io.artoo.ddd.domain;
 
-import io.artoo.ddd.domain.Domain;
 import io.artoo.ddd.domain.Domain.Event.Log;
-import io.artoo.ddd.domain.Id;
+import io.artoo.ddd.domain.event.EventBus;
 import io.artoo.ddd.domain.util.Array;
-import io.artoo.lance.func.Func;
 import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.query.Many;
 
-import java.time.Instant;
-
-public interface EventStore extends Many<Log> {
+@SuppressWarnings({"Convert2MethodRef", "unchecked"})
+public interface EventStore extends Many<EventStore.Log> {
+  record Log(Id id, Domain.Event event) {}
   static EventStore create(EventBus eventBus) {
     return new InMemory(eventBus);
   }
 
-  <E extends Domain.Event, U extends UnitOfWork<E>> Many<Log> commit(U unitOfWork, Func.Uni<? super U, ? extends Id> id);
+  default <A extends Domain.Aggregate<R>, R extends Record> A commit(A aggregate) {
+    return (A) (Domain.Aggregate<R>) () -> Cursor.nothing();
+  }
+
+  default History findHistoryBy(Id id) {
+    return () -> this
+      .where(log -> log.id().equals(id))
+      .select(log -> new History.Source(log.id(), log.event()))
+      .cursor();
+  }
 
   final class InMemory implements EventStore {
     private static final class Logs implements Array {
@@ -56,20 +63,7 @@ public interface EventStore extends Many<Log> {
     }
 
     @Override
-    public <E extends Domain.Event, U extends UnitOfWork<E>> Many<Log> commit(final U unitOfWork, final Func.Uni<? super U, ? extends Id> id) {
-      synchronized (lock) {
-        return
-          Many.from(id.apply(unitOfWork)).selection(aggregateId ->
-            unitOfWork
-              .select(event -> new Log(Id.random(), event.$name(), event, aggregateId, unitOfWork.$name(), Instant.now()))
-              .peek(log -> logs.push(log))
-              .peek(eventBus::emit)
-          );
-      }
-    }
-
-    @Override
-    public Cursor<Domain.Event.Log> cursor() {
+    public Cursor<Log> cursor() {
       synchronized (lock) {
         return Cursor.open(logs.copy());
       }

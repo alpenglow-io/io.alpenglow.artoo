@@ -1,4 +1,4 @@
-package io.artoo.ddd.domain.event;
+package io.artoo.ddd.domain;
 
 import io.artoo.lance.func.Func;
 import io.artoo.lance.scope.Let;

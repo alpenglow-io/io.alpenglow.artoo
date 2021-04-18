@@ -7,6 +7,8 @@ module io.artoo.ddd {
   requires com.fasterxml.jackson.databind;
   requires io.artoo.ladylake;
 
-  opens io.artoo.ddd.order to com.fasterxml.jackson.databind;
+  opens io.artoo.ddd.ordering to com.fasterxml.jackson.databind;
+
+  exports io.artoo.ddd.domain;
 
 }

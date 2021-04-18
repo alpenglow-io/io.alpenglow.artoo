@@ -1,8 +1,8 @@
-package io.artoo.ddd.order;
+package io.artoo.ddd.ordering;
 
 import io.artoo.ddd.domain.event.EventStore;
 import io.artoo.ddd.domain.util.Lettering;
-import io.artoo.ddd.order.Order.Event.Approved;
+import io.artoo.ddd.ordering.Order.Event.Approved;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;

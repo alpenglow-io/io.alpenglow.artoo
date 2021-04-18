@@ -1,8 +1,8 @@
 package io.artoo.ddd.service;
 
-import io.artoo.ddd.order.Order;
+import io.artoo.ddd.ordering.Order;
 import io.artoo.ddd.domain.bus.CommandBus;
-import io.artoo.ddd.order.Orders;
+import io.artoo.ddd.ordering.Orders;
 
 public interface Shop {
   static Shop service(Orders orders, CommandBus commandBus) {

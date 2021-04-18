@@ -2,13 +2,13 @@ package io.artoo.ddd.domain.event;
 
 import io.artoo.ddd.domain.Domain;
 import io.artoo.ddd.domain.Domain.Event.Log;
+import io.artoo.ddd.domain.Id;
 import io.artoo.ddd.domain.util.Array;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.query.Many;
 
 import java.time.Instant;
-import java.util.Arrays;
 
 public interface EventStore extends Many<Log> {
   static EventStore create(EventBus eventBus) {

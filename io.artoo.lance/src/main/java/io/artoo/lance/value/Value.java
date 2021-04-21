@@ -11,4 +11,9 @@ public interface Value<T, V extends Value<T, V>> extends Suppl.Uni<T> {
   default boolean is(V value) {
     return equals(value);
   }
+
+  T value();
+
+  @Override
+  default T tryGet() { return val(); }
 }

@@ -1,10 +1,9 @@
-package io.artoo.ddd.domain;
+package io.artoo.ddd.core;
 
-import io.artoo.ddd.domain.event.EventBus;
+import io.artoo.ddd.core.event.EventBus;
 import io.artoo.lance.query.Many;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.many.Concatenatable;
-import io.artoo.lance.query.many.Countable;
 import io.artoo.lance.value.Symbol;
 
 import java.time.Instant;

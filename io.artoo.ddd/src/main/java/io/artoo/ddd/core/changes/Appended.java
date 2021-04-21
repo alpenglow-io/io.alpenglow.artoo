@@ -1,7 +1,7 @@
-package io.artoo.ddd.domain.changes;
+package io.artoo.ddd.core.changes;
 
-import io.artoo.ddd.domain.Changes;
-import io.artoo.ddd.domain.Domain;
+import io.artoo.ddd.core.Changes;
+import io.artoo.ddd.core.Domain;
 import io.artoo.lance.literator.Cursor;
 
 public final class Appended implements Changes {

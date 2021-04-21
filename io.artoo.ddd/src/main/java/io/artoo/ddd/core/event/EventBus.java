@@ -1,6 +1,6 @@
-package io.artoo.ddd.domain.event;
+package io.artoo.ddd.core.event;
 
-import io.artoo.ddd.domain.Domain;
+import io.artoo.ddd.core.Domain;
 import io.vertx.core.Future;
 import io.vertx.core.json.JsonObject;
 

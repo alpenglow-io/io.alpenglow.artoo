@@ -1,10 +1,10 @@
 package io.artoo.ddd;
 
-import io.artoo.ddd.ordering.Order;
-import io.artoo.ddd.domain.bus.CommandBus;
-import io.artoo.ddd.domain.event.EventBus;
-import io.artoo.ddd.domain.EventStore;
-import io.artoo.ddd.ordering.Orders;
+import io.artoo.ddd.forum.Order;
+import io.artoo.ddd.core.bus.CommandBus;
+import io.artoo.ddd.core.event.EventBus;
+import io.artoo.ddd.core.EventStore;
+import io.artoo.ddd.forum.Orders;
 import io.artoo.ddd.service.Shop;
 import io.vertx.core.Vertx;
 

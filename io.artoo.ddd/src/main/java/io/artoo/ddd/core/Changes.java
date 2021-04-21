@@ -1,7 +1,7 @@
-package io.artoo.ddd.domain;
+package io.artoo.ddd.core;
 
-import io.artoo.ddd.domain.changes.Appended;
-import io.artoo.ddd.domain.changes.Uncommitted;
+import io.artoo.ddd.core.changes.Appended;
+import io.artoo.ddd.core.changes.Uncommitted;
 import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.query.Many;
 

@@ -1,23 +1,23 @@
-package io.artoo.ddd.ordering;
+package io.artoo.ddd.forum;
 
-import io.artoo.ddd.domain.Domain;
-import io.artoo.ddd.domain.Domain.Aggregate;
-import io.artoo.ddd.domain.Domain.UnitOfWork;
-import io.artoo.ddd.domain.History;
-import io.artoo.ddd.domain.Id;
-import io.artoo.ddd.ordering.order.Changeable;
+import io.artoo.ddd.core.Domain;
+import io.artoo.ddd.core.Domain.Aggregate;
+import io.artoo.ddd.core.Domain.UnitOfWork;
+import io.artoo.ddd.core.History;
+import io.artoo.ddd.core.Id;
+import io.artoo.ddd.forum.domain.Changeable;
 import io.artoo.lance.literator.Cursor;
 
 import java.time.Instant;
 
-import static io.artoo.ddd.ordering.Order.Status.ApprovalPending;
-import static io.artoo.ddd.ordering.Order.Status.Approved;
-import static io.artoo.ddd.ordering.Order.Status.Disapproved;
-import static io.artoo.ddd.ordering.Order.Status.RevisionPending;
-import static io.artoo.ddd.ordering.Ordering.Approved;
-import static io.artoo.ddd.ordering.Ordering.ReviseCancelled;
-import static io.artoo.ddd.ordering.Ordering.ReviseConfirmed;
-import static io.artoo.ddd.ordering.Ordering.Revised;
+import static io.artoo.ddd.forum.Order.Status.ApprovalPending;
+import static io.artoo.ddd.forum.Order.Status.Approved;
+import static io.artoo.ddd.forum.Order.Status.Disapproved;
+import static io.artoo.ddd.forum.Order.Status.RevisionPending;
+import static io.artoo.ddd.forum.Ordering.Approved;
+import static io.artoo.ddd.forum.Ordering.ReviseCancelled;
+import static io.artoo.ddd.forum.Ordering.ReviseConfirmed;
+import static io.artoo.ddd.forum.Ordering.Revised;
 
 public sealed interface Order extends Changeable, Aggregate {
   enum Status {ApprovalPending, Approved, Disapproved, Rejected, RevisionPending, CancelPending, Canceled, Done}

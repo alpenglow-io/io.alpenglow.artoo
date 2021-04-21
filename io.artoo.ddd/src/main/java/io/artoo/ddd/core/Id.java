@@ -1,4 +1,4 @@
-package io.artoo.ddd.domain;
+package io.artoo.ddd.core;
 
 import io.artoo.lance.value.Value;
 

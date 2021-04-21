@@ -1,7 +1,7 @@
-package io.artoo.ddd.ordering;
+package io.artoo.ddd.forum;
 
-import io.artoo.ddd.domain.Changes;
-import io.artoo.ddd.domain.Domain;
+import io.artoo.ddd.core.Changes;
+import io.artoo.ddd.core.Domain;
 
 import java.time.Instant;
 

@@ -1,9 +1,9 @@
-package io.artoo.ddd.ordering;
+package io.artoo.ddd.forum;
 
-import io.artoo.ddd.domain.EventStore;
-import io.artoo.ddd.domain.Id;
-import io.artoo.ddd.ordering.Ordering.Approved;
-import io.artoo.ddd.ordering.Ordering.Made;
+import io.artoo.ddd.core.EventStore;
+import io.artoo.ddd.core.Id;
+import io.artoo.ddd.forum.Ordering.Approved;
+import io.artoo.ddd.forum.Ordering.Made;
 import io.artoo.lance.query.One;
 
 public interface Orders {

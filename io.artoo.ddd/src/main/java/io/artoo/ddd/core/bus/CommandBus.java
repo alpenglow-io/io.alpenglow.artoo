@@ -1,7 +1,6 @@
-package io.artoo.ddd.domain.bus;
+package io.artoo.ddd.core.bus;
 
-import io.artoo.ddd.domain.Domain;
-import io.artoo.ladylake.type.SimpleName;
+import io.artoo.ddd.core.Domain;
 import io.vertx.core.Future;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.json.JsonObject;

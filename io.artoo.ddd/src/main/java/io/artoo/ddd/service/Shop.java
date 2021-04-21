@@ -2,6 +2,7 @@ package io.artoo.ddd.service;
 
 import io.artoo.ddd.ordering.Order;
 import io.artoo.ddd.domain.bus.CommandBus;
+import io.artoo.ddd.ordering.Ordering;
 import io.artoo.ddd.ordering.Orders;
 
 public interface Shop {
@@ -20,8 +21,8 @@ final class Service implements Shop {
   Service(final Orders orders, final CommandBus commandBus) {
     this.orders = orders;
     commandBus
-      .when(Order.Command.Put.class, this::stock)
-      .when(Order.Command.Take.class, this::take)
+      .when(Ordering.Put.class, this::stock)
+      .when(Ordering.Command.Take.class, this::take)
       .when(Order.Command.Pay.class, this::pay);
   }
 

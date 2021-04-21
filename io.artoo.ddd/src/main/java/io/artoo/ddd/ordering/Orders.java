@@ -11,7 +11,7 @@ public interface Orders {
     return new EventSourced(store);
   }
 
-  Order save(Order order);
+  One<Order> save(Order order);
 
   Order findBy(Id id);
 }
@@ -24,12 +24,12 @@ final class EventSourced implements Orders {
   }
 
   @Override
-  public Order save(final Order order) {
+  public One<Order> save(final Order order) {
     return eventStore
       .commit(order)
       .where(count -> count > 0)
       .select(it -> order)
-      .otherwise("Can't save order", IllegalStateException::new);
+      .or("Can't save order", IllegalStateException::new);
   }
 
   @Override

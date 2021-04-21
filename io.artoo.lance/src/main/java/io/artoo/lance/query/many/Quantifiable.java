@@ -6,6 +6,7 @@ import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
 import io.artoo.lance.query.internal.All;
 import io.artoo.lance.query.internal.Any;
+import io.artoo.lance.query.internal.None;
 
 public interface Quantifiable<T> extends Queryable<T> {
   default <R> One<Boolean> all(final Class<R> type) {
@@ -14,6 +15,14 @@ public interface Quantifiable<T> extends Queryable<T> {
 
   default One<Boolean> all(final Pred.Uni<? super T> where) {
     return () -> cursor().map(new All<>(where)).walkDown();
+  }
+
+  default <R> One<Boolean> none(final Class<R> type) {
+    return none(type::isInstance);
+  }
+
+  default One<Boolean> none(final Pred.Uni<? super T> where) {
+    return () -> cursor().map(new None<>(where)).walkDown();
   }
 
   default One<Boolean> any() { return this.any(t -> true); }

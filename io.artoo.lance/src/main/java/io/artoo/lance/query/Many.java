@@ -7,7 +7,7 @@ import io.artoo.lance.query.many.Convertable;
 import io.artoo.lance.query.many.Filterable;
 import io.artoo.lance.query.many.Joinable;
 import io.artoo.lance.query.many.Matchable;
-import io.artoo.lance.query.many.Otherwise;
+import io.artoo.lance.query.many.Elseable;
 import io.artoo.lance.query.many.Partitionable;
 import io.artoo.lance.query.many.Peekable;
 import io.artoo.lance.query.many.Projectable;
@@ -16,7 +16,6 @@ import io.artoo.lance.query.many.Settable;
 import io.artoo.lance.query.many.Sortable;
 import io.artoo.lance.query.many.Uniquable;
 import io.artoo.lance.query.many.oftwo.Pairable;
-import io.artoo.lance.tuple.Pair;
 
 public interface Many<T> extends
   Aggregatable<T>,
@@ -25,7 +24,7 @@ public interface Many<T> extends
   Filterable<T>,
   Joinable<T>,
   Matchable<T>,
-  Otherwise<T>,
+  Elseable<T>,
   Partitionable<T>,
   Peekable<T>,
   Projectable<T>,
@@ -44,7 +43,7 @@ public interface Many<T> extends
   }
 
   static <R> Many<R> empty() {
-    return new Empty<>();
+    return Cursor::nothing;
   }
 
   static Many<Integer> ints(final int start, final int end) {
@@ -60,13 +59,6 @@ public interface Many<T> extends
   }
 
   interface OfTwo<A, B> extends Pairable<A, B> {}
-}
-
-final class Empty<T> implements Many<T> {
-  @Override
-  public final Cursor<T> cursor() {
-    return Cursor.nothing();
-  }
 }
 
 record Some<T>(Cursor<T> cursor) implements Many<T> {}

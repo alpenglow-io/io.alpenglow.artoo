@@ -27,29 +27,10 @@ public enum Ordering {;
   public interface Revise extends Domain.Command {}
   public interface Cancel extends Domain.Command {}
 
-  public interface Made extends Domain.Event {
-    static Made event() {
-      return new Default();
-    }
+  public record Made() implements Domain.Event {}
+  public record Approved(Instant actual) implements Domain.Event {}
 
-    record Default() implements Made {}
-  }
-
-  public interface Approved extends Domain.Event {
-    static Approved event(Instant actual) {
-      return new Default(actual);
-    }
-
-    record Default(Instant actual) implements Approved {}
-  }
-
-  public interface Revised extends Domain.Event {
-    static Revised event(Instant actual) {
-      return new Default(actual);
-    }
-
-    record Default(Instant actual) implements Revised {}
-  }
+  public record Revised(Instant actual) implements Domain.Event {}
 
   public interface ReviseConfirmed extends Domain.Event {
     static ReviseConfirmed event(Instant actual) {

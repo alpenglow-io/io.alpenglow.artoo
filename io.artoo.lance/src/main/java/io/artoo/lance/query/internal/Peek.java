@@ -19,7 +19,7 @@ public final class Peek<T, R> implements Func.Uni<T, R> {
     return (R) element;
   }
 
-  private final class Peeked {
+  private static final class Peeked {
     private int index;
   }
 }

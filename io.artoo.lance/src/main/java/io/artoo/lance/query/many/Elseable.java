@@ -6,8 +6,8 @@ import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
 
-public interface Otherwise<T> extends Queryable<T> {
-  @SuppressWarnings("unchecked")
+@SuppressWarnings("unchecked")
+public interface Elseable<T> extends Queryable<T> {
   default Many<T> or(final T... values) {
     return () -> cursor().or(() -> Cursor.open(values));
   }

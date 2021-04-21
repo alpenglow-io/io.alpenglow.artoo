@@ -1,13 +1,14 @@
 package io.artoo.ddd.domain.bus;
 
 import io.artoo.ddd.domain.Domain;
-import io.artoo.ddd.domain.util.Lettering;
+import io.artoo.ladylake.type.SimpleName;
 import io.vertx.core.Future;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.json.JsonObject;
 
 import java.util.function.Consumer;
 
+import static io.artoo.ladylake.type.SimpleName.simpleNameOf;
 import static io.vertx.core.Future.succeededFuture;
 
 public interface CommandBus {
@@ -19,20 +20,20 @@ public interface CommandBus {
     return new InMemory(eventBus);
   }
 
-  final class InMemory implements CommandBus, Lettering {
+  final class InMemory implements CommandBus {
     private final EventBus eventBus;
 
     private InMemory(final EventBus eventBus) {this.eventBus = eventBus;}
 
     @Override
     public <C extends Domain.Command> Future<Void> send(final C command) {
-      eventBus.publish(asKebabCase(command.getClass()), JsonObject.mapFrom(command));
+      eventBus.publish(command.$name(), JsonObject.mapFrom(command));
       return succeededFuture();
     }
 
     @Override
     public <C extends Domain.Command> CommandBus when(final Class<C> command, final Consumer<C> handler) {
-      eventBus.<JsonObject>localConsumer(asKebabCase(command), message -> handler.accept(message.body().mapTo(command)));
+      eventBus.<JsonObject>localConsumer(simpleNameOf(command).toString(), message -> handler.accept(message.body().mapTo(command)));
       return this;
     }
   }

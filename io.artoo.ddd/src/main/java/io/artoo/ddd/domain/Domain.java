@@ -1,6 +1,9 @@
 package io.artoo.ddd.domain;
 
 import io.artoo.lance.query.One;
+import io.artoo.lance.value.Symbol;
+
+import java.time.Instant;
 
 import static io.artoo.ladylake.text.Text.Case;
 import static io.artoo.ladylake.type.SimpleName.simpleNameOf;
@@ -8,40 +11,40 @@ import static io.artoo.ladylake.type.SimpleName.simpleNameOf;
 public enum Domain {
   ;
 
-  public interface Message<R extends Record> extends One<R> {
+  public sealed interface Object permits Aggregate, Command, Event {
     default String $name() { return simpleNameOf(this).to(Case.Kebab); }
   }
 
-  public interface Event {
+  public non-sealed interface Event extends Domain.Object {}
+  public record EventMessage(Symbol eventId, Domain.Event event, Id aggregateId, Instant persistedAt, Instant emittedAt) {}
 
-  }
+  public non-sealed interface Command extends Domain.Object {}
 
-  public interface Command {
-    Changes changes();
-  }
+  public non-sealed interface Aggregate extends One<UnitOfWork>, Domain.Object {}
 
-  public interface Aggregate<R extends Record> extends One<Pending<R>> {}
-
-  public sealed interface Pending<R extends Record> {
-    Id id();
-    R state();
+  public sealed interface UnitOfWork {
+    Symbol id();
+    Id aggregateId();
     Changes changes();
 
-    static <R extends Record> Pending<R> state(R record) {
-      return new State<>(Id.random(), record, Changes.none());
+    static UnitOfWork work(Id id) {
+      return new Work(id, Changes.none());
     }
 
-    static <R extends Record> Pending<R> state(R record, Event... events) {
-      return new State<>(Id.random(), record, Changes.uncommitted(events));
+    static UnitOfWork work(Event... events) {
+      return new Work(Id.random(), Changes.uncommitted(events));
     }
 
-    Pending<R> change(R state, Domain.Event... events);
+    UnitOfWork change(Domain.Event... events);
   }
 
-  private record State<R extends Record>(Id id, R state, Changes changes) implements Pending<R> {
+  private record Work(Symbol id, Id aggregateId, Changes changes) implements UnitOfWork {
+    private Work(Id aggregateId, Changes changes) {
+      this(Symbol.unique(), aggregateId, changes);
+    }
     @Override
-    public Pending<R> change(R state, Domain.Event... events) {
-      return new State<>(id, state, changes.append(events));
+    public UnitOfWork change(Domain.Event... events) {
+      return new Work(aggregateId, changes.append(events));
     }
   }
 }

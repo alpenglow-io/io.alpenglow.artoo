@@ -21,7 +21,7 @@ public enum Main {;
 
     final var commandBus = CommandBus.create(messageBus);
     final var eventBus = EventBus.create(messageBus);
-    final var eventStore = EventStore.create(eventBus);
+    final var eventStore = EventStore.inMemory(eventBus);
 
     final var items = Orders.from(eventStore);
 

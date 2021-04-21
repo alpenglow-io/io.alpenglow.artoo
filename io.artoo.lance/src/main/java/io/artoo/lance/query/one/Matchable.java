@@ -19,7 +19,7 @@ public interface Matchable<T> extends Queryable<T> {
     return () -> cursor().map(new WhenType<>(type, unary(cons)));
   }
 
-  default <R> One<T> when(final Class<R> type, Func.Uni<? super R, ? extends T> func) {
+  default <R> One<?> when$(final Class<R> type, Func.Uni<? super R, ?> func) {
     return () -> cursor().map(new WhenType<>(type, func));
   }
 

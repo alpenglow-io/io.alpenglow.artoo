@@ -5,12 +5,12 @@ import io.artoo.lance.func.Suppl;
 import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.query.one.Filterable;
 import io.artoo.lance.query.one.Matchable;
-import io.artoo.lance.query.one.Otherwise;
+import io.artoo.lance.query.one.Elseable;
 import io.artoo.lance.query.one.Peekable;
 import io.artoo.lance.query.one.Projectable;
 
-public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Otherwise<T>, Matchable<T> {
-  static <T> One<T> from(final T element) {
+public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Elseable<T>, Matchable<T> {
+  static <T> One<T> maybe(final T element) {
     return element != null ? One.lone(element) : One.none();
   }
 
@@ -19,7 +19,7 @@ public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Othe
   }
 
   static <T> One<T> from(final Suppl.Uni<T> suppl) {
-    return new Pone<>(suppl);
+    return new Hone<>(suppl);
   }
 
   static <T> One<T> gone(final String message, final Func.Uni<? super String, ? extends RuntimeException> error) {
@@ -33,10 +33,6 @@ public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Othe
 
   static <A extends AutoCloseable, T, O extends One<T>> One<T> done(Suppl.Uni<? extends A> going, Func.Uni<? super A, ? extends O> then) {
     return new Done<>(going, then);
-  }
-
-  default T yield() {
-    return iterator().next();
   }
 
   interface OfTwo<A, B> extends Queryable.OfTwo<A, B> {}
@@ -55,16 +51,22 @@ final class Lone<T> implements One<T> {
   }
 }
 
-final class Pone<T> implements One<T> {
+final class Hone<T> implements One<T> {
   private final Suppl.Uni<T> suppl;
 
-  public Pone(final Suppl.Uni<T> suppl) {
+  public Hone(final Suppl.Uni<T> suppl) {
     this.suppl = suppl;
   }
 
   @Override
   public Cursor<T> cursor() {
-    return Cursor.open(suppl.get());
+    try {
+      return Cursor.open(suppl.tryGet());
+    } catch (Throwable cause) {
+      return One
+        .<T>gone("Can't get value", it -> new IllegalStateException(it, cause))
+        .cursor();
+    }
   }
 }
 

@@ -1,23 +1,24 @@
 package io.artoo.ddd.domain;
 
-import io.artoo.lance.func.Func;
-import io.artoo.lance.scope.Let;
+import io.artoo.lance.value.Value;
 
 import java.util.UUID;
 
 import static java.util.UUID.randomUUID;
 
-public sealed interface Id extends Let<UUID> {
+public sealed interface Id extends Value<UUID, Id> {
   static Id random() {
     return new Random();
   }
+
+  default boolean is(Id id) { return equals(id); }
 
   record Random(UUID uuid) implements Id {
     public Random() { this(randomUUID()); };
 
     @Override
-    public <R> R let(Func.Uni<? super UUID, ? extends R> func) {
-      return func.apply(uuid);
+    public UUID tryGet() throws Throwable {
+      return uuid;
     }
   }
 }

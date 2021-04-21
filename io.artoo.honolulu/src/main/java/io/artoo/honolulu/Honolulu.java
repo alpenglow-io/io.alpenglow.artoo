@@ -26,7 +26,7 @@ public final class Honolulu extends Application {
 
   @Override
   public void start(final Stage stage) {
-    One.from("/home/guada/imgs/avatars/Wheeljack.png")
+    One.maybe("/home/guada/imgs/avatars/Wheeljack.png")
       .select(Paths::get)
       .select(Files::readAllBytes)
       .select(ByteArrayInputStream::new)

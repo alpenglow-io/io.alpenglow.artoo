@@ -1,71 +1,100 @@
 package io.artoo.ddd.domain;
 
-import io.artoo.ddd.domain.Domain.Event.Log;
 import io.artoo.ddd.domain.event.EventBus;
-import io.artoo.ddd.domain.util.Array;
-import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.query.Many;
+import io.artoo.lance.query.One;
+import io.artoo.lance.query.many.Concatenatable;
+import io.artoo.lance.query.many.Countable;
+import io.artoo.lance.value.Symbol;
 
-@SuppressWarnings({"Convert2MethodRef", "unchecked"})
-public interface EventStore extends Many<EventStore.Log> {
-  record Log(Id id, Domain.Event event) {}
-  static EventStore create(EventBus eventBus) {
+import java.time.Instant;
+import java.util.concurrent.atomic.AtomicReference;
+
+public interface EventStore {
+  static EventStore inMemory(EventBus eventBus) {
     return new InMemory(eventBus);
   }
 
-  default <A extends Domain.Aggregate<R>, R extends Record> A commit(A aggregate) {
-    return (A) (Domain.Aggregate<R>) () -> Cursor.nothing();
-  }
+  <A extends Domain.Aggregate> One<Integer> commit(A aggregate);
 
-  default History findHistoryBy(Id id) {
-    return () -> this
-      .where(log -> log.id().equals(id))
-      .select(log -> new History.Source(log.id(), log.event()))
-      .cursor();
-  }
+  History findHistoryBy(Id id);
 
   final class InMemory implements EventStore {
-    private static final class Logs implements Array {
-      private Log[] logs;
-
-      private Logs(Log... logs) {
-        this.logs = logs;
-      }
-
-      private void push(Log log) {
-        logs = push(logs, log);
-      }
-
-      private Log[] copy() {
-        return copy(logs);
-      }
-    }
-
+    private record EventLog(
+      Symbol eventId,
+      String eventName,
+      Domain.Event eventData,
+      Id aggregateId,
+      String aggregateName,
+      Symbol workId,
+      Instant persistedAt
+    ) {}
     private enum Sync {Lock}
 
     private final Sync lock;
-    private volatile Logs logs;
 
+    private volatile AtomicReference<Many<EventLog>> eventLogs;
     private final EventBus eventBus;
 
     private InMemory(final EventBus eventBus) {
       this(
         Sync.Lock,
-        new Log[]{},
+        Many.empty(),
         eventBus
       );
     }
 
-    private InMemory(final Sync lock, final Log[] logs, final EventBus eventBus) {
+    private InMemory(final Sync lock, final Many<EventLog> eventLogs, final EventBus eventBus) {
       this.lock = lock;
-      this.logs = new Logs(logs);
+      this.eventLogs = new AtomicReference<>(eventLogs);
       this.eventBus = eventBus;
     }
 
     @Override
-    public Cursor<Log> cursor() {
+    public <A extends Domain.Aggregate> One<Integer> commit(final A aggregate) {
       synchronized (lock) {
-        return Cursor.open(logs.copy());
+        return aggregate
+          .select(work ->
+            eventLogs
+              .get()
+              .any(log -> log.workId.is(work.id()))
+              .where(it -> !it)
+              .selection(it ->
+                work
+                  .changes()
+                  .select(event ->
+                    new EventLog(
+                      Symbol.unique(),
+                      event.$name(),
+                      event,
+                      work.aggregateId(),
+                      aggregate.$name(),
+                      work.id(),
+                      Instant.now()
+                    )
+                  )
+              )
+          )
+          .peek(logs -> eventLogs
+            .accumulateAndGet(logs, Concatenatable::concat)
+            .eventually(log -> eventBus.emit(new Domain.EventMessage(log.eventId, log.eventData, log.aggregateId, log.persistedAt, Instant.now())))
+          )
+          .select(logs -> logs.count())
+          .otherwise("Can't commit aggregate", IllegalStateException::new);
+      }
+    }
+
+    @Override
+    public History findHistoryBy(final Id aggregateId) {
+      synchronized (lock) {
+        return
+          History.past(
+            eventLogs
+              .get()
+              .where(log -> log.aggregateId.is(aggregateId))
+              .select(log -> log.eventData)
+              .asArrayOf(Domain.Event.class)
+          );
       }
     }
   }

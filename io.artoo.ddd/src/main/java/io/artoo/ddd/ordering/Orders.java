@@ -1,28 +1,22 @@
 package io.artoo.ddd.ordering;
 
 import io.artoo.ddd.domain.EventStore;
-import io.artoo.ddd.domain.event.InMemory;
-import io.artoo.ddd.domain.util.Lettering;
-import io.artoo.ddd.ordering.Order.Event.Approved;
-
-import java.time.ZonedDateTime;
-import java.util.UUID;
+import io.artoo.ddd.domain.Id;
+import io.artoo.ddd.ordering.Ordering.Approved;
+import io.artoo.ddd.ordering.Ordering.Made;
+import io.artoo.lance.query.One;
 
 public interface Orders {
   static Orders from(EventStore store) {
     return new EventSourced(store);
   }
 
-  default Order save(Order order) {
-    return InMemory.Store.commit(order);
-  }
+  Order save(Order order);
 
-  Order findBy(UUID id);
-
-  Order findBy(UUID id, ZonedDateTime at);
+  Order findBy(Id id);
 }
 
-final class EventSourced implements Orders, Lettering {
+final class EventSourced implements Orders {
   private final EventStore eventStore;
 
   EventSourced(final EventStore eventStore) {
@@ -31,16 +25,26 @@ final class EventSourced implements Orders, Lettering {
 
   @Override
   public Order save(final Order order) {
-    return eventStore.commit(order);
+    return eventStore
+      .commit(order)
+      .where(count -> count > 0)
+      .select(it -> order)
+      .otherwise("Can't save order", IllegalStateException::new);
   }
 
   @Override
-  public Order findBy(final UUID id) {
-    return Order.from(eventStore.historyOf(Order.class, id));
-  }
-
-  @Override
-  public Order findBy(final UUID id, final ZonedDateTime at) {
-    return null;
+  public Order findBy(final Id aggregateId) {
+    return eventStore
+      .findHistoryBy(aggregateId)
+      .aggregate(
+        Order.create(aggregateId),
+        (order, event) -> One.lone(event)
+          .when$(Made.class, made -> order)
+          .when$(Approved.class, approved -> order.approve(approved.actual()))
+          .when$(Ordering.Revised.class, revised -> order.revise(revised.actual()))
+          .ofType(Order.class)
+          .otherwise("Can't create order aggregate", IllegalStateException::new)
+      )
+      .otherwise("Can't aggregate events", IllegalStateException::new);
   }
 }

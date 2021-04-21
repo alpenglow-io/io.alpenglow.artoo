@@ -1,5 +1,6 @@
 module io.artoo.lance {
   requires static org.jetbrains.annotations;
+  requires static java.logging;
 
   exports io.artoo.lance.func;
   exports io.artoo.lance.literator;
@@ -10,4 +11,5 @@ module io.artoo.lance {
   exports io.artoo.lance.query.many;
   exports io.artoo.lance.query.one;
   exports io.artoo.lance.tuple;
+  exports io.artoo.lance.value;
 }

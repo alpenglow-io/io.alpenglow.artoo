@@ -5,9 +5,9 @@ import io.artoo.lance.func.Suppl;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
 
-public interface Otherwise<T> extends Queryable<T> {
+public interface Elseable<T> extends Queryable<T> {
   default One<T> or(final T element) {
-    return or(One.from(element));
+    return or(One.maybe(element));
   }
 
   default <O extends One<T>> One<T> or(final O otherwise) {
@@ -20,5 +20,17 @@ public interface Otherwise<T> extends Queryable<T> {
 
   default <E extends RuntimeException> One<T> or(final Suppl.Uni<? extends E> exception) {
     return or(null, (it, throwable) -> exception.tryGet());
+  }
+
+  default T otherwise(final T other) {
+    return or(other).iterator().next();
+  }
+
+  default <E extends RuntimeException> T otherwise(final String message, final Func.Bi<? super String, ? super Throwable, ? extends E> exception) {
+    return or(message, exception).iterator().next();
+  }
+
+  default <E extends RuntimeException> T otherwise(final Suppl.Uni<? extends E> exception) {
+    return or(exception).iterator().next();
   }
 }

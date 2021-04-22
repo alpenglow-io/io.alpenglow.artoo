@@ -1,6 +1,7 @@
 package io.artoo.ddd.core;
 
 import io.artoo.lance.query.One;
+import io.artoo.lance.tuple.Triple;
 import io.artoo.lance.value.Symbol;
 
 import java.time.Instant;
@@ -22,10 +23,14 @@ public enum Domain {
 
   public non-sealed interface Aggregate extends One<UnitOfWork>, Domain.Object {}
 
-  public sealed interface UnitOfWork {
+  public sealed interface UnitOfWork extends Triple<Symbol, Id, Changes> {
     Symbol id();
     Id aggregateId();
     Changes changes();
+
+    @Override default Symbol first() { return id(); }
+    @Override default Id second() { return aggregateId(); }
+    @Override default Changes third() { return changes(); }
 
     static UnitOfWork work(Id id) {
       return new Work(id, Changes.none());

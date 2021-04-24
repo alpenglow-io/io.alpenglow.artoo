@@ -15,5 +15,5 @@ public interface Value<T, V extends Value<T, V>> extends Suppl.Uni<T> {
   T value();
 
   @Override
-  default T tryGet() { return val(); }
+  default T tryGet() { return value(); }
 }

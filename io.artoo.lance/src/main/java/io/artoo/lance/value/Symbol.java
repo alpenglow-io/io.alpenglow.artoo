@@ -18,10 +18,9 @@ public interface Symbol extends Value<Long, Symbol> {
       throw new IllegalStateException(cause);
     }
   }
-  long value();
 }
 
-record Unique(long value) implements Symbol {
+record Unique(Long value) implements Symbol {
   Unique(UUID uuid, MessageDigest sha512) {
     this(new BigInteger(1, sha512.digest(uuid.toString().getBytes(UTF_8))).longValue());
   }

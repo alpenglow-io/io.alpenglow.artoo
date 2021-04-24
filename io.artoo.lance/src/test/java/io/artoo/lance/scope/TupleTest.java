@@ -3,6 +3,8 @@ package io.artoo.lance.scope;
 import io.artoo.lance.tuple.Quintuple;
 import org.junit.jupiter.api.Test;
 
+import java.util.Locale;
+
 import static java.lang.System.out;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,7 +28,7 @@ public class TupleTest {
       .asQueryable()
       .ofType(Integer.class)
       .sum()
-      .yield();
+      .otherwise(-1);
 
     assertThat(summed).isEqualTo(6);
   }
@@ -37,10 +39,10 @@ public class TupleTest {
       .asQueryable()
       .ofType(String.class)
       .peek(out::println)
-      .select(it -> it.toUpperCase())
+      .select(it -> it.toUpperCase(Locale.getDefault()))
       .peek(out::println)
       .first()
-      .yield();
+      .otherwise("");
 
     assertThat(upperCased).isEqualTo("HI THERE");
   }

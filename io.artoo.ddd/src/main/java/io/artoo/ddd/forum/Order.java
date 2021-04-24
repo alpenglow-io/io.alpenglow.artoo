@@ -5,7 +5,6 @@ import io.artoo.ddd.core.Domain.Aggregate;
 import io.artoo.ddd.core.Domain.UnitOfWork;
 import io.artoo.ddd.core.History;
 import io.artoo.ddd.core.Id;
-import io.artoo.ddd.forum.domain.Changeable;
 import io.artoo.lance.literator.Cursor;
 
 import java.time.Instant;

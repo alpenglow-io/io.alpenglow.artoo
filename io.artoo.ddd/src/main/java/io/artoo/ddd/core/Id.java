@@ -1,5 +1,6 @@
 package io.artoo.ddd.core;
 
+import io.artoo.lance.query.One;
 import io.artoo.lance.value.Value;
 
 import java.util.UUID;
@@ -7,18 +8,17 @@ import java.util.UUID;
 import static java.util.UUID.randomUUID;
 
 public sealed interface Id extends Value<UUID, Id> {
-  static Id random() {
-    return new Random();
+  static Id uuid() { return new Uuid(); }
+  static One<Id> uuid(String value) {
+    return One.maybe(value).select(UUID::fromString).select(Uuid::new);
   }
+}
 
-  default boolean is(Id id) { return equals(id); }
+record Uuid(UUID value) implements Id {
+  public Uuid() { this(randomUUID()); }
 
-  record Random(UUID uuid) implements Id {
-    public Random() { this(randomUUID()); };
-
-    @Override
-    public UUID tryGet() throws Throwable {
-      return uuid;
-    }
+  @Override
+  public UUID tryGet() {
+    return value;
   }
 }

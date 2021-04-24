@@ -9,19 +9,18 @@ import java.time.Instant;
 import static io.artoo.ladylake.text.Text.Case;
 import static io.artoo.ladylake.type.SimpleName.simpleNameOf;
 
-public enum Domain {
-  ;
+public sealed interface Domain {
+  enum Type implements Domain { Write, Read}
 
-  public sealed interface Object permits Aggregate, Command, Event {
+  sealed interface Message permits Act, Fact {
     default String $name() { return simpleNameOf(this).to(Case.Kebab); }
   }
 
-  public non-sealed interface Event extends Domain.Object {}
-  public record EventMessage(Symbol eventId, Domain.Event event, Id aggregateId, Instant persistedAt, Instant emittedAt) {}
+  non-sealed interface Fact extends Message {}
+  non-sealed interface Act extends Message {
+    Id modelId();
+  }
 
-  public non-sealed interface Command extends Domain.Object {}
-
-  public non-sealed interface Aggregate extends One<UnitOfWork>, Domain.Object {}
 
   public sealed interface UnitOfWork extends Triple<Symbol, Id, Changes> {
     Symbol id();

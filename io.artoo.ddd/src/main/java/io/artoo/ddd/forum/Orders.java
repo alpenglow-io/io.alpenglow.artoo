@@ -1,13 +1,13 @@
 package io.artoo.ddd.forum;
 
-import io.artoo.ddd.core.EventStore;
+import io.artoo.ddd.core.Transaction;
 import io.artoo.ddd.core.Id;
 import io.artoo.ddd.forum.Ordering.Approved;
 import io.artoo.ddd.forum.Ordering.Made;
 import io.artoo.lance.query.One;
 
 public interface Orders {
-  static Orders from(EventStore store) {
+  static Orders from(Transaction store) {
     return new EventSourced(store);
   }
 
@@ -17,15 +17,15 @@ public interface Orders {
 }
 
 final class EventSourced implements Orders {
-  private final EventStore eventStore;
+  private final Transaction transaction;
 
-  EventSourced(final EventStore eventStore) {
-    this.eventStore = eventStore;
+  EventSourced(final Transaction transaction) {
+    this.transaction = transaction;
   }
 
   @Override
   public One<Order> save(final Order order) {
-    return eventStore
+    return transaction
       .commit(order)
       .where(count -> count > 0)
       .select(it -> order)
@@ -34,7 +34,7 @@ final class EventSourced implements Orders {
 
   @Override
   public Order findBy(final Id aggregateId) {
-    return eventStore
+    return transaction
       .findHistoryBy(aggregateId)
       .aggregate(
         Order.create(aggregateId),

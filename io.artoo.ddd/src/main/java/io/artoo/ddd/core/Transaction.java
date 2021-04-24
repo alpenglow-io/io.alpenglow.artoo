@@ -9,8 +9,8 @@ import io.artoo.lance.value.Symbol;
 import java.time.Instant;
 import java.util.concurrent.atomic.AtomicReference;
 
-public interface EventStore {
-  static EventStore inMemory(EventBus eventBus) {
+public interface Transaction extends Many<Metadata, Domain.Fact> {
+  static Transaction inMemory(EventBus eventBus) {
     return new InMemory(eventBus);
   }
 
@@ -18,13 +18,13 @@ public interface EventStore {
 
   History findHistoryBy(Id id);
 
-  final class InMemory implements EventStore {
+  final class InMemory implements Transaction {
     private record EventLog(
       Symbol eventId,
       String eventName,
-      Domain.Event eventData,
-      Id aggregateId,
-      String aggregateName,
+      Domain.Fact eventFact,
+      Id modelId,
+      String modelName,
       Symbol workId,
       Instant persistedAt
     ) {}
@@ -76,7 +76,7 @@ public interface EventStore {
           )
           .peek(logs -> eventLogs
             .accumulateAndGet(logs, Concatenatable::concat)
-            .eventually(log -> eventBus.emit(new Domain.EventMessage(log.eventId, log.eventData, log.aggregateId, log.persistedAt, Instant.now())))
+            .eventually(log -> eventBus.emit(new Domain.EventMessage(log.eventId, log.eventFact, log.modelId, log.persistedAt, Instant.now())))
           )
           .select(logs -> logs.count())
           .otherwise("Can't commit aggregate", IllegalStateException::new);
@@ -90,8 +90,8 @@ public interface EventStore {
           History.past(
             eventLogs
               .get()
-              .where(log -> log.aggregateId.is(aggregateId))
-              .select(log -> log.eventData)
+              .where(log -> log.modelId.is(aggregateId))
+              .select(log -> log.eventFact)
               .asArrayOf(Domain.Event.class)
           );
       }

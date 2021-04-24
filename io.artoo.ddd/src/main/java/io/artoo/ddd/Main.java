@@ -3,7 +3,7 @@ package io.artoo.ddd;
 import io.artoo.ddd.forum.Order;
 import io.artoo.ddd.core.bus.CommandBus;
 import io.artoo.ddd.core.event.EventBus;
-import io.artoo.ddd.core.EventStore;
+import io.artoo.ddd.core.Transaction;
 import io.artoo.ddd.forum.Orders;
 import io.artoo.ddd.service.Shop;
 import io.vertx.core.Vertx;
@@ -21,7 +21,7 @@ public enum Main {;
 
     final var commandBus = CommandBus.create(messageBus);
     final var eventBus = EventBus.create(messageBus);
-    final var eventStore = EventStore.inMemory(eventBus);
+    final var eventStore = Transaction.inMemory(eventBus);
 
     final var items = Orders.from(eventStore);
 

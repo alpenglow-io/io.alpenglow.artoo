@@ -3,7 +3,6 @@ package io.artoo.ddd.forum;
 import io.artoo.ddd.core.Domain;
 import io.artoo.ddd.core.Domain.Aggregate;
 import io.artoo.ddd.core.Domain.UnitOfWork;
-import io.artoo.ddd.core.History;
 import io.artoo.ddd.core.Id;
 import io.artoo.lance.literator.Cursor;
 

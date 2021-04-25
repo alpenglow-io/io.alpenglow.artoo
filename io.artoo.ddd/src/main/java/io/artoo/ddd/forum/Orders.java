@@ -1,6 +1,5 @@
 package io.artoo.ddd.forum;
 
-import io.artoo.ddd.core.Transaction;
 import io.artoo.ddd.core.Id;
 import io.artoo.ddd.forum.Ordering.Approved;
 import io.artoo.ddd.forum.Ordering.Made;

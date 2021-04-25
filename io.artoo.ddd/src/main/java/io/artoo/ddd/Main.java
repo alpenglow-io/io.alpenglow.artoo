@@ -3,7 +3,6 @@ package io.artoo.ddd;
 import io.artoo.ddd.forum.Order;
 import io.artoo.ddd.core.bus.CommandBus;
 import io.artoo.ddd.core.event.EventBus;
-import io.artoo.ddd.core.Transaction;
 import io.artoo.ddd.forum.Orders;
 import io.artoo.ddd.service.Shop;
 import io.vertx.core.Vertx;

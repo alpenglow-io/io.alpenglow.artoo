@@ -17,9 +17,7 @@ public sealed interface Domain {
   }
 
   non-sealed interface Fact extends Message {}
-  non-sealed interface Act extends Message {
-    Id modelId();
-  }
+  non-sealed interface Act extends Message {}
 
 
   public sealed interface UnitOfWork extends Triple<Symbol, Id, Changes> {

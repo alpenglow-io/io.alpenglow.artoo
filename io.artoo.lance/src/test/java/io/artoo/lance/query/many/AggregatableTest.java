@@ -51,7 +51,7 @@ public class AggregatableTest {
       new Pet("Whiskers", 1)
     );
 
-    final var max = maxes.max(pet -> pet.name().length() + pet.age()).yield();
+    final var max = maxes.max(pet -> pet.name().length() + pet.age()).otherwise(-1);
 
     final var mins = from(
       new Pet("Barley", 8),
@@ -59,7 +59,7 @@ public class AggregatableTest {
       new Pet("Whiskers", 1)
     );
 
-    final var min = mins.min(pet -> pet.name().length()).yield();
+    final var min = mins.min(pet -> pet.name().length()).otherwise(-1);
 
     assertThat(max).isEqualTo(14);
     assertThat(min).isEqualTo(5);

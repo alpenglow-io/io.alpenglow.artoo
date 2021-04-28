@@ -1,17 +1,14 @@
 package io.artoo.ddd.forum.post;
 
-import io.artoo.ddd.core.Domain;
-import io.artoo.ddd.core.Id;
-import io.artoo.lance.func.Cons;
-import io.artoo.lance.func.Func;
+import io.artoo.ddd.forum.post.domain.Domain;
+import io.artoo.ddd.forum.post.service.Service;
 import io.artoo.lance.query.One;
 import io.artoo.lance.value.Value;
 
 import java.net.URL;
-import java.time.Instant;
-import java.util.UUID;
 
-public sealed interface Post {
+public sealed interface Post extends Domain, Service {
+  enum Namespace implements Post {}
   enum Type implements Post {Article, Link}
 
   record Title(String value) implements Value<String, Title> {
@@ -38,22 +35,6 @@ public sealed interface Post {
         .select(URL::new)
         .select(Link::new);
     }
-  }
-
-  interface Entity {}
-
-  interface CreateArticle extends Func.Bi<Id, CreateArticle.Command, Domain.UnitOfWork> {
-    record Command(Title title, Text text, Instant createdAt) {}
-  }
-  interface CreateLink extends Func.Bi<Id, CreateLink.Command, Domain.UnitOfWork> {
-    record Command(Title title, Link link, Instant createdAt) {}
-  }
-
-  interface ArticleCreated extends Cons.Uni<ArticleCreated.Event> {
-    record Event(Title title, Text text, Instant createdAt) {}
-  }
-  interface LinkCreated extends Cons.Uni<LinkCreated.Event> {
-    record Event(Title title, Link link, Instant createdAt) {}
   }
 }
 

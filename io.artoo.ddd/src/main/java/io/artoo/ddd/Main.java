@@ -1,16 +1,6 @@
 package io.artoo.ddd;
 
-import io.artoo.ddd.forum.Order;
-import io.artoo.ddd.core.bus.CommandBus;
-import io.artoo.ddd.core.event.EventBus;
-import io.artoo.ddd.forum.Orders;
-import io.artoo.ddd.service.Shop;
 import io.vertx.core.Vertx;
-
-import java.time.Instant;
-import java.util.UUID;
-
-import static java.lang.System.out;
 
 public enum Main {;
 
@@ -18,6 +8,7 @@ public enum Main {;
     final var vertx = Vertx.vertx();
     final var messageBus = vertx.eventBus();
 
+    /*
     final var commandBus = CommandBus.create(messageBus);
     final var eventBus = EventBus.create(messageBus);
     final var eventStore = Transaction.inMemory(eventBus);
@@ -38,5 +29,7 @@ public enum Main {;
     items.save(oldItem);
     final var newItem = Order.from(eventStore.historyOf(Order.class, id));
     out.println(newItem);
+
+     */
   }
 }

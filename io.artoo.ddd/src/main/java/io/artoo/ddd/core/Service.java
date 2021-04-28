@@ -1,10 +1,8 @@
 package io.artoo.ddd.core;
 
-import io.artoo.ddd.core.event.EventBus;
 import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.query.Many;
-import io.artoo.lance.query.One;
 import io.artoo.lance.query.many.Concatenatable;
 import io.artoo.lance.value.Symbol;
 
@@ -16,22 +14,24 @@ public sealed interface Service {
 
   record EventLog<F extends Record & Domain.Fact>(Symbol eventId, F eventData, Id modelId, Instant persistedAt, Instant emittedAt) {}
 
-  interface Omnibus extends Many<Domain.Message> {
-    Omnibus whenever(Class<Domain.Message> type, Cons.Uni<Domain.Message> consumer);
+  interface Bus extends Many<Domain.Message> {
+    Bus whenever(Class<Domain.Message> type, Cons.Uni<Domain.Message> consumer);
   }
 
   interface Ledger {
-    Many<Domain.Fact> load(Id id, String name);
-    Many<Domain.Fact> save(Domain.Fact... facts);
+    Many<Domain.Fact> load(Id id);
+
+    Many<Domain.Fact> save(Id id, Many<Domain.Fact> facts);
   }
 
-  interface Model<M extends Model<M>> {
-    M open(final Id id);
-    M submit();
+  interface Model {
+    Transaction<Many<Domain.Fact>> open(final Id id);
+
+    <M extends Many<Domain.Fact>> Transaction<M> open(final Id id, Func.Uni<? super Many<Domain.Fact>, ? extends M> reconstructor);
   }
 
-  interface Transaction {
-    One<Integer> commit(Func.Unary<Many<Domain.Fact>> changes);
+  interface Transaction<M extends Many<Domain.Fact>> {
+    void commit(Func.Uni<? super M, ? extends Many<Domain.Fact>> submit);
   }
 
   interface Operation<A extends Record & Domain.Act> extends Func.Bi<Id, A, Void> {
@@ -44,125 +44,100 @@ public sealed interface Service {
   }
 }
 
-final class Aggregate implements Service.Model<Aggregate> {
+final class Volatile implements Service.Model {
   private final Service.Ledger ledger;
-  private final Many<Domain.Fact> facts;
 
-  Aggregate(Service.Ledger ledger, Many<Domain.Fact> facts) {
+  Volatile(Service.Ledger ledger) {
     this.ledger = ledger;
-    this.facts = facts;
   }
 
   @Override
-  public Aggregate open(Id id) {
-    return new Aggregate(ledger, ledger.load(id, "aggregate"));
+  public Service.Transaction<Many<Domain.Fact>> open(final Id id) {
+    return new Uncommitted<>(ledger, id);
   }
 
-  public Aggregate
-
   @Override
-  public Aggregate submit() {
-    return null;
+  public <M extends Many<Domain.Fact>> Service.Transaction<M> open(final Id id, final Func.Uni<? super Many<Domain.Fact>, ? extends M> reconstructor) {
+    return new Uncommitted<>(ledger, id, reconstructor);
   }
 }
 
-final class State implements Service.Model {
-  private final Sync lock;
-  private final AtomicReference<Many<Mutation>> mutations;
-  private final EventBus eventBus;
+final class Uncommitted<M extends Many<Domain.Fact>> implements Service.Transaction<M> {
+  private final Service.Ledger ledger;
+  private final Id id;
+  private final Func.Uni<? super Many<Domain.Fact>, ? extends M> reconstructor;
 
-  private State(final EventBus eventBus) {
-    this(
-      Sync.Lock,
-      Many.empty(),
-      eventBus
-    );
+  @SuppressWarnings("unchecked")
+  Uncommitted(final Service.Ledger ledger, final Id id) {
+    this(ledger, id, facts -> (M) facts);
   }
-
-  private State(final Sync lock, final Many<Mutation> mutations, final EventBus eventBus) {
-    this.lock = lock;
-    this.mutations = new AtomicReference<>(mutations);
-    this.eventBus = eventBus;
+  Uncommitted(final Service.Ledger ledger, final Id id, final Func.Uni<? super Many<Domain.Fact>, ? extends M> reconstructor) {
+    this.ledger = ledger;
+    this.id = id;
+    this.reconstructor = reconstructor;
   }
 
   @Override
-  public final Service.Transaction open(Id modelId) {
+  public void commit(final Func.Uni<? super M, ? extends Many<Domain.Fact>> submit) {
+    ledger.save(id, submit.apply(reconstructor.apply(ledger.load(id))));
+  }
+}
+
+final class Stateful implements Service.Ledger {
+  private final Sync lock;
+  private final AtomicReference<Many<Mutation>> mutations;
+  private final Service.Bus bus;
+
+  private Stateful(final Service.Bus bus) {
+    this(
+      Sync.Lock,
+      Many.empty(),
+      bus
+    );
+  }
+
+  private Stateful(final Sync lock, final Many<Mutation> mutations, final Service.Bus bus) {
+    this.lock = lock;
+    this.mutations = new AtomicReference<>(mutations);
+    this.bus = bus;
+  }
+
+  @Override
+  public Many<Domain.Fact> load(final Id id) {
     synchronized (lock) {
-      return changes -> {
-        final Many<Domain.Fact> select = mutations
-          .get()
-          .where(mutation -> mutation.modelId.is(modelId))
-          .select(mutation -> mutation.eventFact);
-        return mutations.accumulateAndGet(
-          changes.apply(select).select(fact -> new Mutation(Symbol.unique(), fact.$name(), fact, ))
-          ,
-          Concatenatable::concat
-        )
-          .count();
-      };
+      return Many.from(mutations.get()
+        .where(mutation -> mutation.modelId.is(id))
+        .select(mutation -> mutation.fact)
+        .asArrayOf(Domain.Fact.class)
+      );
+    }
+  }
+
+  @Override
+  public Many<Domain.Fact> save(Id id, final Many<Domain.Fact> facts) {
+    synchronized (lock) {
+      return
+        mutations
+          .accumulateAndGet(
+            Symbol.unique().asQueryable()
+              .selection(workId -> facts.select(fact -> new Mutation(Symbol.unique(), fact.$name(), fact, id, "random-name", workId, Instant.now())))
+              .peek(System.out::println),
+            Concatenatable::concat
+          )
+          .select(mutation -> mutation.fact);
     }
   }
 
   private enum Sync {Lock}
 
   private record Mutation(
-    Symbol eventId,
-    String eventName,
-    Domain.Fact eventFact,
+    Symbol factId,
+    String factName,
+    Domain.Fact fact,
     Id modelId,
     String modelName,
-    Symbol workId,
-    Instant persistedAt,
-    Instant emittedAt
+    Long workId,
+    Instant persistedAt
   ) {
-  }
-
-
-  @Override
-  public <A extends Domain.Aggregate> One<Integer> commit(final A aggregate) {
-    synchronized (lock) {
-      return aggregate
-        .select(work ->
-          mutations
-            .get()
-            .any(log -> log.workId.is(work.id()))
-            .where(it -> !it)
-            .selection(it ->
-              work
-                .changes()
-                .select(event ->
-                  new Commit(
-                    Symbol.unique(),
-                    event.$name(),
-                    event,
-                    work.aggregateId(),
-                    aggregate.$name(),
-                    work.id(),
-                    Instant.now()
-                  )
-                )
-            )
-        )
-        .peek(logs -> mutations
-          .accumulateAndGet(logs, Concatenatable::concat)
-          .eventually(log -> eventBus.emit(new Domain.EventMessage(log.eventId, log.eventFact, log.modelId, log.persistedAt, Instant.now())))
-        )
-        .select(logs -> logs.count())
-        .otherwise("Can't commit aggregate", IllegalStateException::new);
-    }
-  }
-
-  @Override
-  public History findHistoryBy(final Id aggregateId) {
-    synchronized (lock) {
-      return
-        History.past(
-          mutations
-            .get()
-            .where(log -> log.modelId.is(aggregateId))
-            .select(log -> log.eventFact)
-            .asArrayOf(Domain.Event.class)
-        );
-    }
   }
 }

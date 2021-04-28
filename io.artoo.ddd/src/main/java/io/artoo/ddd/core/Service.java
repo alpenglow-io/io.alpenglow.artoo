@@ -9,22 +9,25 @@ import io.artoo.lance.query.many.Concatenatable;
 import io.artoo.lance.value.Symbol;
 
 import java.time.Instant;
-import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
 
 public sealed interface Service {
-  enum Type implements Service {Write, Read}
+  enum Namespace implements Service {}
 
-  record EventLog<F extends Record & Domain.Fact>(Symbol eventId, F eventData, Id modelId, Instant persistedAt,
-                                                  Instant emittedAt) {
-  }
+  record EventLog<F extends Record & Domain.Fact>(Symbol eventId, F eventData, Id modelId, Instant persistedAt, Instant emittedAt) {}
 
   interface Omnibus extends Many<Domain.Message> {
     Omnibus whenever(Class<Domain.Message> type, Cons.Uni<Domain.Message> consumer);
   }
 
-  interface Model {
-    Transaction open(final Id modelId);
+  interface Ledger {
+    Many<Domain.Fact> load(Id id, String name);
+    Many<Domain.Fact> save(Domain.Fact... facts);
+  }
+
+  interface Model<M extends Model<M>> {
+    M open(final Id id);
+    M submit();
   }
 
   interface Transaction {
@@ -38,6 +41,28 @@ public sealed interface Service {
   }
 
   interface Projection<F extends Record & Domain.Fact> extends Func.Uni<EventLog<F>, Void> {
+  }
+}
+
+final class Aggregate implements Service.Model<Aggregate> {
+  private final Service.Ledger ledger;
+  private final Many<Domain.Fact> facts;
+
+  Aggregate(Service.Ledger ledger, Many<Domain.Fact> facts) {
+    this.ledger = ledger;
+    this.facts = facts;
+  }
+
+  @Override
+  public Aggregate open(Id id) {
+    return new Aggregate(ledger, ledger.load(id, "aggregate"));
+  }
+
+  public Aggregate
+
+  @Override
+  public Aggregate submit() {
+    return null;
   }
 }
 

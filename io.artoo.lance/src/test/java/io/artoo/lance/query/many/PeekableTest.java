@@ -24,7 +24,7 @@ public class PeekableTest {
       .peek(element -> touched.value += element)
       .sum()
       .peek(out::println)
-      .yield();
+      .otherwise(-1);
 
     assertThat(summed).isEqualTo(10);
     assertThat(touched.value).isEqualTo(10);
@@ -54,7 +54,7 @@ public class PeekableTest {
       .sum()
       .peek(it -> out.println("Sum result: " + it))
       .where(it -> it >= 10)
-      .yield();
+      .otherwise(-1);
 
     assertThat(summed).isEqualTo(10);
   }

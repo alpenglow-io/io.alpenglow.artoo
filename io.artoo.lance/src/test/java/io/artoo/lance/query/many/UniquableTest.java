@@ -19,13 +19,13 @@ public class UniquableTest {
       "Ito, Shu"
     };
 
-    assertThat(from(names).at(4).yield()).isEqualTo("Ito, Shu");
+    assertThat(from(names).at(4).otherwise("none")).isEqualTo("Ito, Shu");
   }
 
   @Test
   @DisplayName("should get first element")
   public void shouldGetFirst() {
-    final var first = from(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19).first().yield();
+    final var first = from(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19).first().otherwise(-1);
 
     assertThat(first).isEqualTo(9);
   }
@@ -33,7 +33,7 @@ public class UniquableTest {
   @Test
   @DisplayName("should get first even number")
   public void shouldGetFirstEvenNumber() {
-    final var first = from(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19).first(number -> number % 2 == 0).yield();
+    final var first = from(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19).first(number -> number % 2 == 0).otherwise(-1);
 
     assertThat(first).isEqualTo(34);
   }
@@ -41,7 +41,7 @@ public class UniquableTest {
   @Test
   @DisplayName("should get last element")
   public void shouldGetLast() {
-    final var last = from(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19).last().yield();
+    final var last = from(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19).last().otherwise(-1);
 
     assertThat(last).isEqualTo(19);
   }
@@ -50,7 +50,7 @@ public class UniquableTest {
   @DisplayName("should get last even number")
   public void shouldGetLastEvenNumber() {
 
-    final var last = from(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19).last(number -> number % 2 == 0).yield();
+    final var last = from(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19).last(number -> number % 2 == 0).otherwise(-1);
 
     assertThat(last).isEqualTo(12);
   }
@@ -58,7 +58,7 @@ public class UniquableTest {
   @Test
   @DisplayName("should find a single element only")
   public void shouldFindASingleElementOnly() {
-    final var singled = from(9).single().yield();
+    final var singled = from(9).single().otherwise(-1);
 
     assertThat(singled).isEqualTo(9);
   }
@@ -66,7 +66,7 @@ public class UniquableTest {
   @Test
   @DisplayName("should find a single element according to condition")
   public void shouldFindSingleByCondition() {
-    final var singleEven = from(9, 34, 65, 87, 435, 3, 83, 23).single(number -> number % 2 == 0).yield();
+    final var singleEven = from(9, 34, 65, 87, 435, 3, 83, 23).single(number -> number % 2 == 0).otherwise(-1);
 
     assertThat(singleEven).isEqualTo(34);
   }
@@ -103,7 +103,7 @@ public class UniquableTest {
       .select(it -> it.toUpperCase())
       .peek(out::println)
       .last()
-      .yield();
+      .otherwise("none");
 
     assertThat(first).isEqualTo("HI THERE");
   }

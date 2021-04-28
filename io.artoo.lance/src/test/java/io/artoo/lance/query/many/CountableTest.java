@@ -10,7 +10,7 @@ public class CountableTest {
   @Test
   @DisplayName("should count 3 on three elements")
   public void shouldCount() {
-    final var count = Many.from(1, 2, 3).count().yield();
+    final var count = Many.from(1, 2, 3).count().otherwise(-1);
 
     assertThat(count).isEqualTo(3);
   }
@@ -18,7 +18,7 @@ public class CountableTest {
   @Test
   @DisplayName("should count 0 on none elements")
   public void shouldCountNone() {
-    final var count = Many.empty().count().yield();
+    final var count = Many.empty().count().otherwise(-1);
 
     assertThat(count).isEqualTo(0);
   }
@@ -26,13 +26,13 @@ public class CountableTest {
   @Test
   @DisplayName("should count 2 on even elements")
   public void shouldCountEven() {
-    assertThat(Many.from(1, 2, 3, 4).count(it -> it % 2 == 0).yield()).isEqualTo(2);
+    assertThat(Many.from(1, 2, 3, 4).count(it -> it % 2 == 0).otherwise(-1)).isEqualTo(2);
   }
 
   @Test
   @DisplayName("should count non nullable elements only")
   public void shouldCountNonNullableOnly() {
-    final var count = Many.from(1, 2, null, "hi there", true, null).count().yield();
+    final var count = Many.from(1, 2, null, "hi there", true, null).count().otherwise(-1);
 
     assertThat(count).isEqualTo(4);
   }

@@ -1,7 +1,5 @@
 package io.artoo.ddd.forum.post;
 
-import io.artoo.ddd.forum.post.domain.Domain;
-import io.artoo.ddd.forum.post.service.Service;
 import io.artoo.lance.query.One;
 import io.artoo.lance.value.Value;
 

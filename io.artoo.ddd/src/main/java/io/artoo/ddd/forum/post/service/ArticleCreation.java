@@ -5,7 +5,9 @@ import io.artoo.ddd.core.Service;
 import io.artoo.ddd.forum.post.Post;
 
 public interface ArticleCreation extends Service.Operation<Post.CreateArticle> {
-  static ArticleCreation
+  static ArticleCreation of(Service.Model model) {
+    return new Handler(model);
+  }
 
   final class Handler implements ArticleCreation {
     private final Service.Model model;

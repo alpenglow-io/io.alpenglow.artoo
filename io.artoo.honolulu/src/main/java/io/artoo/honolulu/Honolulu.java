@@ -43,7 +43,7 @@ public final class Honolulu extends Application {
       final var scene = new Scene(it, Color.BLACK);
 
       scene.setOnKeyTyped(event ->
-        One.from(event.getCode())
+        One.lone(event.getCode())
           .where(code -> KeyCode.NUMPAD1.isKeypadKey())
           .peek(code -> event.consume())
           .eventually(code -> log.info("Keypad 1 has been pressed!"))

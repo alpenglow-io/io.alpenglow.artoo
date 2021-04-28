@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public sealed interface Service {
   enum Namespace implements Service {}
 
-  record EventLog<F extends Record & Domain.Fact>(Symbol eventId, F eventData, Id modelId, Instant persistedAt, Instant emittedAt) {}
+  record EventLog<F extends Domain.Fact>(Symbol eventId, F eventData, Id modelId, Instant persistedAt, Instant emittedAt) {}
 
   interface Bus extends Many<Domain.Message> {
     Bus whenever(Class<Domain.Message> type, Cons.Uni<Domain.Message> consumer);
@@ -40,7 +40,7 @@ public sealed interface Service {
   interface Reaction<F extends Record & Domain.Fact> extends Func.Uni<EventLog<F>, Void> {
   }
 
-  interface Projection<F extends Record & Domain.Fact> extends Func.Uni<EventLog<F>, Void> {
+  interface Projection<F extends Domain.Fact> extends Func.Uni<EventLog<F>, Void> {
   }
 }
 

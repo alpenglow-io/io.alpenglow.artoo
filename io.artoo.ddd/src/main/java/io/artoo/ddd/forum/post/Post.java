@@ -1,12 +1,17 @@
 package io.artoo.ddd.forum.post;
 
+import io.artoo.ddd.forum.post.domain.Command;
+import io.artoo.ddd.forum.post.domain.Event;
+import io.artoo.ddd.forum.post.service.Operation;
+import io.artoo.ddd.forum.post.service.Projection;
 import io.artoo.lance.query.One;
 import io.artoo.lance.value.Value;
 
 import java.net.URL;
 
-public sealed interface Post extends Domain, Service {
-  enum Namespace implements Post {}
+public sealed interface Post extends Event, Command, Operation, Projection, Service {
+  enum Namespace implements Post { POST }
+
   enum Type implements Post {Article, Link}
 
   record Title(String value) implements Value<String, Title> {

@@ -1,7 +1,9 @@
 package io.artoo.lance.query.many;
 
 import io.artoo.lance.func.Func;
+import io.artoo.lance.func.Suppl;
 import io.artoo.lance.query.Many;
+import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
 import io.artoo.lance.query.internal.Select;
 

@@ -35,6 +35,11 @@ public interface Queryable<T> extends Iterable<T> {
     for (final var value : this);
   }
 
+  default <Z> Z eventually(Z returning) {
+    eventually();
+    return returning;
+  }
+
   interface OfTwo<A, B> extends Iterable<Pair<A, B>> {
     Cursor<Pair<A, B>> cursor();
 

@@ -10,7 +10,9 @@ import static java.util.UUID.randomUUID;
 public sealed interface Id extends Value<UUID, Id> {
   static Id uuid() { return new Uuid(); }
   static One<Id> uuid(String value) {
-    return One.maybe(value).select(UUID::fromString).select(Uuid::new);
+    return One.maybe(value)
+      .select(UUID::fromString)
+      .select(Uuid::new);
   }
 }
 

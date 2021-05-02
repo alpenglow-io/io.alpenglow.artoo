@@ -18,8 +18,8 @@ public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Else
     return new Lone<>(element);
   }
 
-  static <T> One<T> from(final Suppl.Uni<T> suppl) {
-    return new Hone<>(suppl);
+  static <T> One<T> from(final Suppl.Uni<T> supply) {
+    return new Sone<>(supply);
   }
 
   static <T> One<T> gone(final String message, final Func.Uni<? super String, ? extends RuntimeException> error) {
@@ -51,10 +51,10 @@ final class Lone<T> implements One<T> {
   }
 }
 
-final class Hone<T> implements One<T> {
+final class Sone<T> implements One<T> {
   private final Suppl.Uni<T> suppl;
 
-  public Hone(final Suppl.Uni<T> suppl) {
+  public Sone(final Suppl.Uni<T> suppl) {
     this.suppl = suppl;
   }
 

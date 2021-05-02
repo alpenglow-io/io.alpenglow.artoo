@@ -1,5 +1,6 @@
 package io.artoo.lance.query;
 
+import io.artoo.lance.func.Suppl;
 import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.query.many.Aggregatable;
 import io.artoo.lance.query.many.Concatenatable;
@@ -36,6 +37,10 @@ public interface Many<T> extends
   @SafeVarargs
   static <R> Many<R> from(final R... items) {
     return new Some<>(Cursor.open(items));
+  }
+
+  static <R> Many<R> from(final Suppl.Uni<R[]> supply) {
+    return new Supplied<>(supply);
   }
 
   static Many<Object> fromAny(Object... objects) {
@@ -80,5 +85,21 @@ final class Ints implements Many<Integer> {
       numbers[index] = number;
     }
     return Cursor.open(numbers);
+  }
+}
+
+final class Supplied<R> implements Many<R> {
+  private final Suppl.Uni<R[]> supply;
+
+  Supplied(final Suppl.Uni<R[]> supply) {this.supply = supply;}
+
+  @Override
+  public Cursor<R> cursor() {
+    try {
+      return Cursor.open(supply.tryGet());
+    } catch (Throwable cause) {
+      cause.printStackTrace();
+      return Cursor.nothing();
+    }
   }
 }

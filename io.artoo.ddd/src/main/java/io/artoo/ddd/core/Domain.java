@@ -6,10 +6,11 @@ import static io.artoo.ladylake.type.SimpleName.simpleNameOf;
 public sealed interface Domain {
   enum Namespace implements Domain {}
 
-  sealed interface Message permits Act, Fact {
+  sealed interface Message permits Act, Fact, Tract {
     default String $name() { return simpleNameOf(this).to(Case.Kebab); }
   }
 
   non-sealed interface Fact extends Message {}
   non-sealed interface Act extends Message {}
+  non-sealed interface Tract extends Message {}
 }

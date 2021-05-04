@@ -17,17 +17,17 @@ public enum Main {;
 
     final var shop = Shop.service(items, commandBus);
 
-    final var id = UUID.randomUUID();
+    final var stateId = UUID.randomUUID();
 
-    commandBus.send(new Order.Command.Put(id));
-    commandBus.send(new Order.Command.Take(id, Instant.now()));
-    commandBus.send(new Order.Command.Pay(id, Instant.now()));
+    commandBus.send(new Order.Command.Put(stateId));
+    commandBus.send(new Order.Command.Take(stateId, Instant.now()));
+    commandBus.send(new Order.Command.Pay(stateId, Instant.now()));
 
     Thread.sleep(1000);
-    final var oldItem = Order.from(eventStore.historyOf(Order.class, id));
+    final var oldItem = Order.from(eventStore.historyOf(Order.class, stateId));
     out.println(oldItem);
     items.save(oldItem);
-    final var newItem = Order.from(eventStore.historyOf(Order.class, id));
+    final var newItem = Order.from(eventStore.historyOf(Order.class, stateId));
     out.println(newItem);
 
      */

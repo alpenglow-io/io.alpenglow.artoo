@@ -14,31 +14,32 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.stream.Collectors.groupingBy;
 
-public interface Ledger extends Many<Ledger.Past> {
+public interface Store extends Many<Store.Past> {
   State state(Id stateId);
 
-  Ledger attach(Id stateId, Domain.Fact fact, String stateAlias);
+  Store submit(Id stateId, Domain.Fact fact, String stateAlias);
 
-  default Ledger attach(Id id, Domain.Fact fact) {
-    return attach(id, fact, null);
+  default Store submit(Id id, Domain.Fact fact) {
+    return submit(id, fact, null);
   }
 
   record Past(Id stateId, Change... changes) {}
   record Change(String factName, Domain.Fact fact, Instant persistedAt) {}
+  record EventLog(String factName, Domain.Fact fact, Id stateId, String stateAlias, Instant persistedAt, Instant emittedAt) {}
 }
 
-final class InMemory implements Ledger {
+final class Event implements Store {
   private final Map<Symbol, Transaction> transactions;
   private final Service.Bus bus;
 
-  InMemory(final Service.Bus bus) {
+  Event(final Service.Bus bus) {
     this(
       new ConcurrentHashMap<>(),
       bus
     );
   }
 
-  private InMemory(final Map<Symbol, Transaction> transactions, final Service.Bus bus) {
+  private Event(final Map<Symbol, Transaction> transactions, final Service.Bus bus) {
     this.transactions = transactions;
     this.bus = bus;
   }
@@ -49,7 +50,7 @@ final class InMemory implements Ledger {
   }
 
   @Override
-  public Ledger attach(final Id stateId, final Domain.Fact fact, final String stateAlias) {
+  public Store submit(final Id stateId, final Domain.Fact fact, final String stateAlias) {
     return One
       .lone(new Transaction(stateId, fact, stateAlias))
       .peek(tx -> transactions.put(tx.transactionId, tx))

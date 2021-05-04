@@ -16,11 +16,10 @@ public sealed interface Service {
 
   interface Operation<A extends Record & Domain.Act> extends Cons.Bi<Id, A> {}
 
-  interface Reaction<F extends Domain.Fact> extends Cons.Uni<EventLog<F>> {}
+  interface Reaction extends Cons.Uni<EventLog> {}
 
-  interface Projection<F extends Domain.Fact> extends Cons.Uni<EventLog<F>> {}
+  interface Projection extends Cons.Uni<EventLog> {}
 
-  record EventLog<F extends Domain.Fact>(Symbol eventId, F eventData, Id modelId, Instant persistedAt, Instant emittedAt) {}
 
 }
 

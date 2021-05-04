@@ -5,7 +5,7 @@ import io.artoo.ddd.forum.post.Post;
 import io.artoo.ddd.forum.post.domain.Event;
 
 public sealed interface Projection permits Post {
-  interface MaterializeNewArticle extends Service.Projection<Event> {
+  interface MaterializeNewArticle extends Service.Projection {
 
   }
 }

@@ -36,11 +36,11 @@ public sealed interface Service permits Post {
 
       @Override
       public void tryAccept(final EventLog<Domain.Fact> eventLog) throws Throwable {
-        final var event = eventLog.eventData();
+        final var event = eventLog.fact();
 
         newArticles
-          .single(entry -> entry.id.is(eventLog.modelId()))
-          .or(new Entry(eventLog.modelId()))
+          .single(entry -> entry.id.is(eventLog.stateId()))
+          .or(new Entry(eventLog.stateId()))
           .select(entry ->
             event instanceof ArticleCreated created ? new Entry(entry.id, created.title(), created.text())
               :

@@ -6,35 +6,43 @@ import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Suppl;
 import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.query.Many;
+import io.artoo.lance.query.One;
 
-public interface View extends Many<View.Preview> {
-  record Preview(Id correlationId, Domain.Tract... tracts) {}
+import static io.artoo.ddd.core.lookup.Materializations.*;
 
-  void materialize(Id correlationId, Suppl.Uni<? extends Domain.Tract> tract);
-  void materialize(Id correlationId, Func.Unary<Domain.Tract> tract);
+public interface View extends Many<Domain.Tract> {
+
+  void materialize(Suppl.Uni<? extends Domain.Tract> tract);
+
+  void materialize(Func.Unary<Domain.Tract> tract);
 }
 
-final class Reflect implements View {
-  private final Catalog catalog;
-  private final Id id;
+final class Materialized implements View {
+  private final Materializations materializations;
+  private final String name;
 
-  Reflect(Catalog catalog, Id id) {
-    this.catalog = catalog;
-    this.id = id;
+  Materialized(final Materializations materializations, final String name) {
+    this.materializations = materializations;
+    this.name = name;
   }
 
   @Override
-  public void materialize(Id correlationId, Suppl.Uni<? extends Domain.Tract> tract) {
-    catalog.project(correlationId, )
+  public Cursor<Domain.Tract> cursor() {
+    return materializations
+      .where(it -> it.$name().equals(name))
+      .cursor();
   }
 
   @Override
-  public void materialize(Id correlationId, Func.Unary<Domain.Tract> tract) {
-
+  public void materialize(Suppl.Uni<? extends Domain.Tract> tract) {
+    this.materializations.submit(tract.get());
   }
 
   @Override
-  public Cursor<Preview> cursor() {
-    return null;
+  public void materialize(Func.Unary<Domain.Tract> tract) {
+    this.materializations
+      .where(it -> it.$name().equals(name))
+      .select(tract::tryApply)
+      .eventually(materializations::submit);
   }
 }

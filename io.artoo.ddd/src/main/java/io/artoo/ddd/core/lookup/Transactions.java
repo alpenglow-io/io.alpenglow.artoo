@@ -12,34 +12,29 @@ import java.time.Instant;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static java.util.stream.Collectors.groupingBy;
-
-public interface Store extends Many<Store.Past> {
+public interface Transactions extends Many<Domain.Fact> {
   State state(Id stateId);
 
-  Store submit(Id stateId, Domain.Fact fact, String stateAlias);
-
-  default Store submit(Id id, Domain.Fact fact) {
+  Transactions submit(Id stateId, Domain.Fact fact, String stateAlias);
+  default Transactions submit(Id id, Domain.Fact fact) {
     return submit(id, fact, null);
   }
 
-  record Past(Id stateId, Change... changes) {}
-  record Change(String factName, Domain.Fact fact, Instant persistedAt) {}
   record EventLog(String factName, Domain.Fact fact, Id stateId, String stateAlias, Instant persistedAt, Instant emittedAt) {}
 }
 
-final class Event implements Store {
+final class Ledger implements Transactions {
   private final Map<Symbol, Transaction> transactions;
   private final Service.Bus bus;
 
-  Event(final Service.Bus bus) {
+  Ledger(final Service.Bus bus) {
     this(
       new ConcurrentHashMap<>(),
       bus
     );
   }
 
-  private Event(final Map<Symbol, Transaction> transactions, final Service.Bus bus) {
+  private Ledger(final Map<Symbol, Transaction> transactions, final Service.Bus bus) {
     this.transactions = transactions;
     this.bus = bus;
   }
@@ -50,7 +45,7 @@ final class Event implements Store {
   }
 
   @Override
-  public Store submit(final Id stateId, final Domain.Fact fact, final String stateAlias) {
+  public Transactions submit(final Id stateId, final Domain.Fact fact, final String stateAlias) {
     return One
       .lone(new Transaction(stateId, fact, stateAlias))
       .peek(tx -> transactions.put(tx.transactionId, tx))
@@ -58,21 +53,10 @@ final class Event implements Store {
   }
 
   @Override
-  public Cursor<Past> cursor() {
-    return Cursor.iteration(
-      transactions.values().stream()
-        .collect(groupingBy(tx -> tx.stateId))
-        .entrySet().stream()
-        .map(entry ->
-          new Past(
-            entry.getKey(),
-            entry.getValue().stream()
-              .map(tx -> new Change(tx.factName, tx.fact, tx.persistedAt))
-              .toArray(Change[]::new)
-          )
-        )
-        .iterator()
-    );
+  public Cursor<Domain.Fact> cursor() {
+    return Many.from(transactions.values())
+      .select(Transaction::fact)
+      .cursor();
   }
 
   record Transaction(Symbol transactionId, String factName, Domain.Fact fact, Id stateId, String stateAlias, Instant persistedAt) {

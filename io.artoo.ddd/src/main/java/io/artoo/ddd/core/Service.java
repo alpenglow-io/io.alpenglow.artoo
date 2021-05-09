@@ -20,6 +20,6 @@ public sealed interface Service {
 
   interface Projection extends Cons.Uni<EventLog> {}
 
-
+  record EventLog(String factName, Domain.Fact fact, Id stateId, String stateAlias, Instant persistedAt, Instant emittedAt) {}
 }
 

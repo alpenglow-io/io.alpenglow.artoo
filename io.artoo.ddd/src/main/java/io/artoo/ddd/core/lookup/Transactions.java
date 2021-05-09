@@ -13,14 +13,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public interface Transactions extends Many<Domain.Fact> {
-  State state(Id stateId);
+  Transactions state(Id model);
 
-  Transactions submit(Id stateId, Domain.Fact fact, String stateAlias);
-  default Transactions submit(Id id, Domain.Fact fact) {
-    return submit(id, fact, null);
-  }
-
-  record EventLog(String factName, Domain.Fact fact, Id stateId, String stateAlias, Instant persistedAt, Instant emittedAt) {}
+  Transactions submit(Id model, Domain.Fact fact);
 }
 
 final class Ledger implements Transactions {
@@ -40,14 +35,14 @@ final class Ledger implements Transactions {
   }
 
   @Override
-  public State state(final Id stateId) {
-    return new Dump(this, stateId);
+  public State state(final Id model) {
+    return new Dump(this, model);
   }
 
   @Override
-  public Transactions submit(final Id stateId, final Domain.Fact fact, final String stateAlias) {
+  public Transactions submit(final Id model, final Domain.Fact fact, final String stateAlias) {
     return One
-      .lone(new Transaction(stateId, fact, stateAlias))
+      .lone(new Transaction(model, fact, stateAlias))
       .peek(tx -> transactions.put(tx.transactionId, tx))
       .eventually(this);
   }

@@ -13,6 +13,8 @@
   <properties>
     <vertx.version>4.0.3</vertx.version>
     <jackson.version>2.12.1</jackson.version>
+    <sqlite.version>3.34.0</sqlite.version>
+    <hsqldb.version>2.6.0</hsqldb.version>
   </properties>
 
   <dependencyManagement>
@@ -51,6 +53,12 @@
       <artifactId>annotations</artifactId>
       <version>RELEASE</version>
       <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
+      <version>${hsqldb.version}</version>
     </dependency>
   </dependencies>
 </project>

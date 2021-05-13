@@ -16,6 +16,7 @@
     <module>io.artoo.parry</module>
     <module>io.artoo.ddd</module>
     <module>io.artoo.ladylake</module>
+    <module>io.artoo.stone</module>
   </modules>
 
   <name>Artoo</name>

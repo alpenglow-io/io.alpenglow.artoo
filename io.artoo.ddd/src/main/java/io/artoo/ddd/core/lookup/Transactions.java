@@ -1,12 +1,13 @@
 package io.artoo.ddd.core.lookup;
 
 import io.artoo.ddd.core.Domain;
-import io.artoo.ddd.core.Id;
+import io.artoo.lance.value.Id;
 import io.artoo.ddd.core.Service;
 import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.query.Many;
 import io.artoo.lance.query.One;
 import io.artoo.lance.value.Symbol;
+import io.artoo.lance.value.Table;
 
 import java.time.Instant;
 import java.util.Map;
@@ -19,17 +20,17 @@ public interface Transactions extends Many<Domain.Fact> {
 }
 
 final class Ledger implements Transactions {
-  private final Map<Symbol, Transaction> transactions;
+  private final Table<Transaction> transactions;
   private final Service.Bus bus;
 
   Ledger(final Service.Bus bus) {
     this(
-      new ConcurrentHashMap<>(),
+      Table.inMemory(),
       bus
     );
   }
 
-  private Ledger(final Map<Symbol, Transaction> transactions, final Service.Bus bus) {
+  private Ledger(final Table<Transaction> transactions, final Service.Bus bus) {
     this.transactions = transactions;
     this.bus = bus;
   }
@@ -54,7 +55,7 @@ final class Ledger implements Transactions {
       .cursor();
   }
 
-  record Transaction(Symbol transactionId, String factName, Domain.Fact fact, Id stateId, String stateAlias, Instant persistedAt) {
+  record Transaction(String factName, Domain.Fact fact, Id stateId, String stateAlias, Instant persistedAt) {
     public Transaction(Id stateId, Domain.Fact fact, String stateAlias) {
       this(Symbol.unique(), fact.$name(), fact, stateId, stateAlias, Instant.now());
     }

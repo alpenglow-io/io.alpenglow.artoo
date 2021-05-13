@@ -1,7 +1,7 @@
 package io.artoo.ddd.forum.post;
 
 import io.artoo.ddd.core.Domain;
-import io.artoo.ddd.core.Id;
+import io.artoo.lance.value.Id;
 import io.artoo.ddd.core.Service.EventLog;
 import io.artoo.ddd.core.Service.Entity;
 import io.artoo.ddd.core.Service.Operation;

@@ -1,7 +1,7 @@
 package io.artoo.ddd.core.lookup;
 
 import io.artoo.ddd.core.Domain;
-import io.artoo.ddd.core.Id;
+import io.artoo.lance.value.Id;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.query.Many;

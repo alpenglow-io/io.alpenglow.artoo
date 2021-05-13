@@ -34,10 +34,6 @@ public interface Elseable<T> extends Queryable<T> {
     return or(message, exception).iterator().next();
   }
 
-  default <E extends RuntimeException> T otherwise(String message, Func.Uni<? super String, ? extends E> exception) {
-    return or(message, exception).iterator().next();
-  }
-
   default <E extends RuntimeException> T otherwise(final Suppl.Uni<? extends E> exception) {
     return or(exception).iterator().next();
   }

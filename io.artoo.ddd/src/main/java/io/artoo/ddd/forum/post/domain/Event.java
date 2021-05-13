@@ -1,7 +1,7 @@
 package io.artoo.ddd.forum.post.domain;
 
 import io.artoo.ddd.core.Domain;
-import io.artoo.ddd.core.Id;
+import io.artoo.lance.value.Id;
 import io.artoo.ddd.forum.member.Member;
 import io.artoo.ddd.forum.post.Post;
 import io.artoo.lance.tuple.Pair;

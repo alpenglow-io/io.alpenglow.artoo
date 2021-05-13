@@ -1,14 +1,10 @@
 package io.artoo.ddd.core.lookup;
 
 import io.artoo.ddd.core.Domain;
-import io.artoo.ddd.core.Id;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Suppl;
 import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.query.Many;
-import io.artoo.lance.query.One;
-
-import static io.artoo.ddd.core.lookup.Materializations.*;
 
 public interface View extends Many<Domain.Tract> {
 

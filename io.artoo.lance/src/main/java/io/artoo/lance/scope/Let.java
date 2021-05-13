@@ -4,7 +4,6 @@ import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Suppl;
 
-import javax.sql.DataSource;
 
 import static io.artoo.lance.func.Func.Default.Nothing;
 
@@ -14,7 +13,7 @@ public interface Let<T> {
   }
 
   <R> R let(final Func.Uni<? super T, ? extends R> func);
-  default Let<DataSource> get(final Cons.Uni<? super T> func) {
+  default Let<T> get(final Cons.Uni<? super T> func) {
     let(it -> {
       func.accept(it);
       return null;

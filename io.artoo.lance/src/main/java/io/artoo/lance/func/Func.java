@@ -106,6 +106,32 @@ public interface Func {
     }
   }
 
+  interface Sex<A, B, C, D, E, F, R> {
+    R tryApply(A a, B b, C c, D d, E e, F f) throws Throwable;
+
+    default R apply(A a, B b, C c, D d, E e, F f) {
+      try {
+        return this.tryApply(a, b, c, d, e, f);
+      } catch (Throwable throwable) {
+        throwable.printStackTrace();
+        return null;
+      }
+    }
+  }
+
+  interface Sect<A, B, C, D, E, F, G, R> {
+    R tryApply(A a, B b, C c, D d, E e, F f, G g) throws Throwable;
+
+    default R apply(A a, B b, C c, D d, E e, F f, G g) {
+      try {
+        return this.tryApply(a, b, c, d, e, f, g);
+      } catch (Throwable throwable) {
+        throwable.printStackTrace();
+        return null;
+      }
+    }
+  }
+
   enum Default {
     Nothing;
 

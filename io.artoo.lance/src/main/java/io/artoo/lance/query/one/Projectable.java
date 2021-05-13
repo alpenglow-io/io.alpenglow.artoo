@@ -15,4 +15,8 @@ public interface Projectable<T> extends Queryable<T> {
   default <R, Q extends Queryable<R>> Many<R> selection(final Func.Uni<? super T, ? extends Q> selectQ) {
     return () -> cursor().map(new Select<>((i, it) -> selectQ.tryApply(it))).flatMap(Queryable::cursor);
   }
+
+  default <R> One<R> select(final Suppl.Uni<? extends R> select) {
+    return () -> cursor().map(new Select<T, R>((i, it) -> select.tryGet()));
+  }
 }

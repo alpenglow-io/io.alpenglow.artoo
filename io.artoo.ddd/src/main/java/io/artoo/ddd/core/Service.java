@@ -2,7 +2,7 @@ package io.artoo.ddd.core;
 
 import io.artoo.lance.func.Cons;
 import io.artoo.lance.query.Many;
-import io.artoo.lance.value.Symbol;
+import io.artoo.lance.value.Id;
 
 import java.time.Instant;
 

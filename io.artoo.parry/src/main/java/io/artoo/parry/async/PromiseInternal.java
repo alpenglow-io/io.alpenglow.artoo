@@ -10,8 +10,6 @@
  */
 package io.artoo.parry.async;
 
-import io.netty.util.concurrent.FutureListener;
-import io.vertx.core.impl.ContextInternal;
 
 /**
  * @author <a href="mailto:julien@julienviet.com">Julien Viet</a>

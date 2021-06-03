@@ -1,9 +1,7 @@
-package io.artoo.lance.value.snowflake;
+package io.artoo.lance.value.twitter;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Random;
 import java.util.UUID;
 
 public final class Snowflake {

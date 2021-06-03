@@ -1,4 +1,4 @@
-package io.artoo.lance.value.snowflake;
+package io.artoo.lance.value.twitter;
 
 import java.util.Objects;
 

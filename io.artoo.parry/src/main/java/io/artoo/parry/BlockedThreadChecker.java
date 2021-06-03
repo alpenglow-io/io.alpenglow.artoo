@@ -1,13 +1,11 @@
 package io.artoo.parry;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.WeakHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 public class BlockedThreadChecker {
 
@@ -20,7 +18,7 @@ public class BlockedThreadChecker {
     TimeUnit maxExecTimeUnit();
   }
 
-  private static final Logger log = LoggerFactory.getLogger(BlockedThreadChecker.class);
+  private static final Logger log = Logger.getLogger(BlockedThreadChecker.class.getCanonicalName());
 
   private final Map<Thread, Task> threads = new WeakHashMap<>();
   private final Timer timer; // Need to use our own timer - can't use event loop for this

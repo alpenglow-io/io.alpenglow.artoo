@@ -11,15 +11,14 @@
 
 package io.artoo.parry.async;
 
-import io.vertx.core.Future;
-import io.vertx.core.impl.ContextInternal;
+import io.artoo.parry.ContextInternal;
 
 /**
  * Promise implementation.
  *
  * @author <a href="mailto:julien@julienviet.com">Julien Viet</a>
  */
-public final class PromiseImpl<T> extends io.vertx.core.impl.future.FutureImpl<T> implements PromiseInternal<T>, Listener<T> {
+public final class PromiseImpl<T> extends FutureImpl<T> implements PromiseInternal<T>, Listener<T> {
 
   /**
    * Create a promise that hasn't completed yet
@@ -59,7 +58,7 @@ public final class PromiseImpl<T> extends io.vertx.core.impl.future.FutureImpl<T
   }
 
   @Override
-  public void operationComplete(io.netty.util.concurrent.Future<T> future) {
+  public void operationComplete(Future<T> future) {
     if (future.isSuccess()) {
       complete(future.getNow());
     } else {

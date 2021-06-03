@@ -25,4 +25,8 @@ hs_err_pid*
 *.iml
 **/target
 nb*.xml
+**/.settings
+**/.vscode
+.classpath
+.project
 

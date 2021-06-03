@@ -1,6 +1,11 @@
 package io.artoo.parry;
 
+import io.artoo.parry.async.AsyncResult;
+import io.artoo.parry.async.Future;
 import io.artoo.parry.async.Handler;
+import io.artoo.parry.async.Promise;
+import io.artoo.parry.async.PromiseImpl;
+import io.artoo.parry.async.PromiseInternal;
 
 import java.util.List;
 
@@ -87,7 +92,7 @@ abstract class AbstractContext implements ContextInternal {
 
   @Override
   public final <T> void executeBlockingInternal(Handler<Promise<T>> action, Handler<AsyncResult<T>> resultHandler) {
-    Future<T> fut = executeBlockingInternal(action);
+    var fut = executeBlockingInternal(action);
     setResultHandler(this, fut, resultHandler);
   }
 

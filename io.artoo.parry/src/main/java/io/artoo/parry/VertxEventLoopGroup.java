@@ -14,6 +14,7 @@ package io.artoo.parry;
 import io.artoo.parry.eventloop.AbstractEventExecutorGroup;
 import io.artoo.parry.eventloop.Channel;
 import io.artoo.parry.eventloop.ChannelFuture;
+import io.artoo.parry.eventloop.ChannelPromise;
 import io.artoo.parry.eventloop.EventExecutor;
 import io.artoo.parry.eventloop.EventLoop;
 import io.artoo.parry.eventloop.EventLoopGroup;
@@ -158,7 +159,7 @@ public final class VertxEventLoopGroup extends AbstractEventExecutorGroup implem
       if (this == o) return true;
       if (o == null || getClass() != o.getClass()) return false;
 
-      EventLoopHolder that = (EventLoopHolder) o;
+      final var that = (EventLoopHolder) o;
       return Objects.equals(worker, that.worker);
     }
 

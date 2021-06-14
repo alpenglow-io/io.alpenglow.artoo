@@ -64,7 +64,7 @@ public final class Snowflake {
    * @return generator
    */
   public static Snowflake createDefault(int generatorId) {
-    return new Snowflake(generatorId, TimeSource.createDefault(), Structure.create(), SequenceOverflowStrategy.SPIN_WAIT);
+    return new Snowflake(generatorId, TimeSource.createDefault(), Structure.create(), SequenceOverflowStrategy.SpinWait);
   }
 
   /**
@@ -90,8 +90,8 @@ public final class Snowflake {
         // Same timeslot
         if (sequence >= maxSequence) {
           switch (this.strategy) {
-            case THROW_EXCEPTION -> throw new IllegalStateException("Sequence overflow");
-            case SPIN_WAIT -> spinWaitForNextTick(lastTimestamp);
+            case ThrowException -> throw new IllegalStateException("Sequence overflow");
+            case SpinWait -> spinWaitForNextTick(lastTimestamp);
           }
           return next();
         }

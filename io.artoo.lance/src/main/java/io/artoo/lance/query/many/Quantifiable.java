@@ -14,7 +14,7 @@ public interface Quantifiable<T> extends Queryable<T> {
   }
 
   default One<Boolean> every(final Pred.Uni<? super T> where) {
-    return () -> cursor().map(new Every<>(where)).walkDown();
+    return () -> cursor().map(new Every<>(where)).keepNull();
   }
 
   default <R> One<Boolean> none(final Class<R> type) {
@@ -22,13 +22,13 @@ public interface Quantifiable<T> extends Queryable<T> {
   }
 
   default One<Boolean> none(final Pred.Uni<? super T> where) {
-    return () -> cursor().map(new None<>(where)).walkDown();
+    return () -> cursor().map(new None<>(where)).keepNull();
   }
 
   default One<Boolean> some() { return this.some(t -> true); }
 
   default One<Boolean> some(final Pred.Uni<? super T> where) {
-    return () -> cursor().map(new Some<>(where)).walkDown().or(() -> Cursor.open(false));
+    return () -> cursor().map(new Some<>(where)).keepNull().or(() -> Cursor.open(false));
   }
 }
 

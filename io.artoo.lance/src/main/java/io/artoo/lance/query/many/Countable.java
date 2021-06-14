@@ -12,7 +12,7 @@ public interface Countable<T> extends Queryable<T> {
   }
 
   default One<Integer> count(final Pred.Uni<? super T> where) {
-    return () -> cursor().map(new Count<>(where)).or(() -> Cursor.open(0)).walkDown();
+    return () -> cursor().map(new Count<>(where)).or(() -> Cursor.open(0)).keepNull();
   }
 }
 

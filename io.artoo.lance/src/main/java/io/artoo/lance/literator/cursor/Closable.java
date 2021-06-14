@@ -9,7 +9,7 @@ public interface Closable<T> extends Literator<T> {
     return new Close<>(this);
   }
 
-  default Cursor<T> walkDown() {
+  default Cursor<T> keepNull() {
     T element = null;
     while (hasNext()) {
       element = next();
@@ -18,7 +18,7 @@ public interface Closable<T> extends Literator<T> {
     return Cursor.maybe(element);
   }
 
-  default Cursor<T> walkThrough() {
+  default Cursor<T> skipNull() {
     T element = null;
     while (hasNext()) {
       final var next = next();

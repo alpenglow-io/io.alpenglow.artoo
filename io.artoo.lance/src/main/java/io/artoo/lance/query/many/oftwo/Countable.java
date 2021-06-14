@@ -15,7 +15,7 @@ public interface Countable<A, B> extends Queryable.OfTwo<A, B> {
     return () -> cursor()
       .map(new Count<>(pair -> where.tryTest(pair.first(), pair.second())))
       .or(() -> Cursor.open(0))
-      .walkDown();
+      .keepNull();
   }
 }
 

@@ -10,7 +10,7 @@ import io.artoo.lance.query.internal.Single;
 
 public interface Uniquable<A, B> extends Queryable.OfTwo<A, B> {
   default One.OfTwo<A, B> at(final int index) {
-    return () -> cursor().map(new At<>(index)).walkDown();
+    return () -> cursor().map(new At<>(index)).keepNull();
   }
 
   default One.OfTwo<A, B> first() {
@@ -18,7 +18,7 @@ public interface Uniquable<A, B> extends Queryable.OfTwo<A, B> {
   }
 
   default One.OfTwo<A, B> first(final Pred.Bi<? super A, ? super B> where) {
-    return () -> cursor().map(new First<>(pair -> where.tryTest(pair.first(), pair.second()))).walkDown();
+    return () -> cursor().map(new First<>(pair -> where.tryTest(pair.first(), pair.second()))).keepNull();
   }
 
   default One.OfTwo<A, B> last() {
@@ -26,7 +26,7 @@ public interface Uniquable<A, B> extends Queryable.OfTwo<A, B> {
   }
 
   default One.OfTwo<A, B> last(final Pred.Bi<? super A, ? super B> where) {
-    return () -> cursor().map(new Last<>(pair -> where.tryTest(pair.first(), pair.second()))).walkDown();
+    return () -> cursor().map(new Last<>(pair -> where.tryTest(pair.first(), pair.second()))).keepNull();
   }
 
   default One.OfTwo<A, B> single() {
@@ -34,7 +34,7 @@ public interface Uniquable<A, B> extends Queryable.OfTwo<A, B> {
   }
 
   default One.OfTwo<A, B> single(final Pred.Bi<? super A, ? super B> where) {
-    return () -> cursor().map(new Single<>(pair -> where.tryTest(pair.first(), pair.second()))).walkDown();
+    return () -> cursor().map(new Single<>(pair -> where.tryTest(pair.first(), pair.second()))).keepNull();
   }
 }
 

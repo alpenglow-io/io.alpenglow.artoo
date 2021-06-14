@@ -15,7 +15,7 @@ public class QuantifiableTest {
   public void shouldNotStartAllWithB() {
 
     final var all = from(new Pet("Barley", 10), new Pet("Boots", 4), new Pet("Whiskers", 6))
-      .all(pet -> pet.name().startsWith("B"))
+      .every(pet -> pet.name().startsWith("B"))
       .otherwise(true);
 
     assertThat(all).isFalse();
@@ -24,7 +24,7 @@ public class QuantifiableTest {
   @Test
   @DisplayName("should contains an element")
   public void shouldHaveAnyElement() {
-    final var any = from(1, 2).any().otherwise(false);
+    final var any = from(1, 2).some().otherwise(false);
 
     assertThat(any).isTrue();
   }
@@ -32,7 +32,7 @@ public class QuantifiableTest {
   @Test
   @DisplayName("should not contains elements")
   public void shouldNotHaveAnyElement() {
-    final var any = from().any().otherwise(true);
+    final var any = from().some().otherwise(true);
 
     assertThat(any).isFalse();
   }
@@ -40,7 +40,7 @@ public class QuantifiableTest {
   @Test
   @DisplayName("should have an even number")
   public void shouldHaveEvenNumber() {
-    final var any = from(1, 2).any(number -> number % 2 == 0).otherwise(false);
+    final var any = from(1, 2).some(number -> number % 2 == 0).otherwise(false);
 
     assertThat(any).isTrue();
   }
@@ -64,7 +64,7 @@ public class QuantifiableTest {
     };
 
     final var selected = from(owners)
-      .where(person -> from(person.pets()).any().otherwise(false))
+      .where(person -> from(person.pets()).some().otherwise(false))
       .select(PetOwner::name);
 
     assertThat(selected).containsExactly(
@@ -82,7 +82,7 @@ public class QuantifiableTest {
         return it;
       })
       .or("Damnazione", IllegalArgumentException::new)
-      .all(it -> it > 0)
+      .every(it -> it > 0)
       .eventually();
   }
 

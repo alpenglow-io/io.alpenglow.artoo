@@ -11,7 +11,6 @@ public sealed interface Binary extends Random<Integer> permits Binary.Digit {
 
   <R> R let(int bits, Func.Uni<? super Integer, ? extends R> func);
 
-  @SuppressWarnings("StatementWithEmptyBody")
   final class Digit implements Binary {
     private static final long addend = 0xBL;
 
@@ -23,14 +22,14 @@ public sealed interface Binary extends Random<Integer> permits Binary.Digit {
     public <R> R let(int bits, final Func.Uni<? super Integer, ? extends R> func) {
       return scramble.apply((atomic, multiplier, mask) -> {
         var random = Integer.MIN_VALUE;
-        for (
-          long old = atomic.get(), next = (old * multiplier + addend) & mask;
 
-          !atomic.compareAndSet(old, next);
+        long
+          old = atomic.get(),
+          next = (old * multiplier + addend) & mask;
+        while (!atomic.compareAndSet(old, next)) {
+          random = (int) (next >>> (48 - bits));
+        }
 
-          random = (int) (next >>> (48 - bits))
-        )
-          ;
         return func.apply(random);
       });
     }

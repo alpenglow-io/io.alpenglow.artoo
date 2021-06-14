@@ -1,4 +1,4 @@
-package io.artoo.lance.value.twitter;
+package io.artoo.lance.value.snowflake;
 
 import java.time.Instant;
 import java.util.Objects;
@@ -14,7 +14,7 @@ public final class Snowflake {
   private final long generatorId;
   private final TimeSource timeSource;
   private final Structure structure;
-  private final Options options;
+  private final SequenceOverflowStrategy strategy;
 
   // precalculated variables for bit magic
   private final long maxSequence;
@@ -33,10 +33,10 @@ public final class Snowflake {
 
   // Structure:
   // time || generator || sequence
-  private Snowflake(long generatorId, TimeSource timeSource, Structure structure, Options options) {
+  private Snowflake(long generatorId, TimeSource timeSource, Structure structure, SequenceOverflowStrategy strategy) {
     this.timeSource = Objects.requireNonNull(timeSource, "timeSource");
     this.structure = Objects.requireNonNull(structure, "structure");
-    this.options = Objects.requireNonNull(options, "options");
+    this.strategy = Objects.requireNonNull(strategy, "options");
 
     if (generatorId < 0 || generatorId >= structure.maxGenerators()) {
       throw new IllegalArgumentException("generatorId must be between 0 (inclusive) and " + structure.maxGenerators() + " (exclusive), but was " + generatorId);
@@ -50,8 +50,8 @@ public final class Snowflake {
     shiftGenerator = this.structure.sequenceBits();
   }
 
-  public static Snowflake createCustom(long generatorId, TimeSource timeSource, Structure structure, Options options) {
-    return new Snowflake(generatorId, timeSource, structure, options);
+  public static Snowflake createCustom(long generatorId, TimeSource timeSource, Structure structure, SequenceOverflowStrategy strategy) {
+    return new Snowflake(generatorId, timeSource, structure, strategy);
   }
 
   /**
@@ -64,7 +64,7 @@ public final class Snowflake {
    * @return generator
    */
   public static Snowflake createDefault(int generatorId) {
-    return new Snowflake(generatorId, TimeSource.createDefault(), Structure.createDefault(), Options.createDefault());
+    return new Snowflake(generatorId, TimeSource.createDefault(), Structure.create(), SequenceOverflowStrategy.SPIN_WAIT);
   }
 
   /**
@@ -89,7 +89,10 @@ public final class Snowflake {
       if (timestamp == lastTimestamp) {
         // Same timeslot
         if (sequence >= maxSequence) {
-          handleSequenceOverflow();
+          switch (this.strategy) {
+            case THROW_EXCEPTION -> throw new IllegalStateException("Sequence overflow");
+            case SPIN_WAIT -> spinWaitForNextTick(lastTimestamp);
+          }
           return next();
         }
         sequence++;
@@ -100,14 +103,6 @@ public final class Snowflake {
       }
 
       return (timestamp << shiftTime) + (generatorId << shiftGenerator) + sequence;
-    }
-  }
-
-  private void handleSequenceOverflow() {
-    switch (this.options.getSequenceOverflowStrategy()) {
-      case THROW_EXCEPTION -> throw new IllegalStateException("Sequence overflow");
-      case SPIN_WAIT -> spinWaitForNextTick(lastTimestamp);
-      default -> throw new AssertionError("Unexpected enum value: " + this.options.getSequenceOverflowStrategy());
     }
   }
 
@@ -127,11 +122,13 @@ public final class Snowflake {
   public static void main(String[] args) {
     final var snowflake = Snowflake.createDefault(512);
     var now = Instant.now();
-    for (int i = 0; i < 100_000_000; i++) snowflake.next();
+    long next = 0;
+    for (int i = 0; i < 100_000_000; i++) next = snowflake.next();
     System.out.println(Instant.now().toEpochMilli() - now.toEpochMilli());
 
     now = Instant.now();
-    for (int i = 0; i < 100_000_000; i++) UUID.randomUUID();
+    UUID random = null;
+    for (int i = 0; i < 100_000_000; i++) random = UUID.randomUUID();
     System.out.println(Instant.now().toEpochMilli() - now.toEpochMilli());
   }
 }

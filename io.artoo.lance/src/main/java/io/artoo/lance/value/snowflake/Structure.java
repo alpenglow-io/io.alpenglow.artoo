@@ -1,4 +1,4 @@
-package io.artoo.lance.value.twitter;
+package io.artoo.lance.value.snowflake;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -28,7 +28,7 @@ public record Structure(int timestampBits, int generatorBits, int sequenceBits) 
    *
    * @return structure
    */
-  public static Structure createDefault() {
+  public static Structure create() {
     return new Structure(41, 10, 12);
   }
 

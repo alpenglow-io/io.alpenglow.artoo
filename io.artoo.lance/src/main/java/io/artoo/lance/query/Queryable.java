@@ -3,7 +3,6 @@ package io.artoo.lance.query;
 import io.artoo.lance.func.Cons;
 import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.tuple.Pair;
-import io.artoo.lance.tuple.Tuple;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;

@@ -10,20 +10,20 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public interface Table<R extends Record> extends Many<R> {
 
-  static <R extends Record> Table<R> inMemory() {
-    return new InMemory<>(Id::universal);
+  static <R extends Record> Table<R> local() {
+    return new Local<>(Id::universal);
   }
 
-  One<Id> insert(final R record);
-  Table<R> update(final Id id, final R record);
-  One<R> delete(final Id id);
+  One<Id> add(final R record);
+  Table<R> replace(final Id id, final R record);
+  One<R> remove(final Id id);
 
-  final class InMemory<R extends Record> implements Table<R> {
+  final class Local<R extends Record> implements Table<R> {
     private final Map<Id, R> local;
     private final Suppl.Uni<Id> id;
 
-    InMemory(Suppl.Uni<Id> id) { this(new ConcurrentHashMap<>(), id); }
-    private InMemory(final Map<Id, R> local, Suppl.Uni<Id> id) {
+    Local(Suppl.Uni<Id> id) { this(new ConcurrentHashMap<>(), id); }
+    private Local(final Map<Id, R> local, Suppl.Uni<Id> id) {
       this.local = local;
       this.id = id;
     }
@@ -34,19 +34,19 @@ public interface Table<R extends Record> extends Many<R> {
     }
 
     @Override
-    public One<Id> insert(final R record) {
+    public One<Id> add(final R record) {
       final var id = this.id.get();
       return One.maybe(local.put(id, record)).select(() -> id);
     }
 
     @Override
-    public Table<R> update(final Id id, final R record) {
+    public Table<R> replace(final Id id, final R record) {
       local.put(id, record);
       return this;
     }
 
     @Override
-    public One<R> delete(final Id id) {
+    public One<R> remove(final Id id) {
       return One.maybe(local.remove(id));
     }
   }

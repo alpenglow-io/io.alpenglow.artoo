@@ -10,8 +10,6 @@ import io.artoo.lance.value.Symbol;
 import io.artoo.lance.value.Table;
 
 import java.time.Instant;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public interface Transactions extends Many<Domain.Fact> {
   Transactions state(Id model);
@@ -25,7 +23,7 @@ final class Ledger implements Transactions {
 
   Ledger(final Service.Bus bus) {
     this(
-      Table.inMemory(),
+      Table.local(),
       bus
     );
   }

@@ -2,25 +2,37 @@ package io.artoo.lance.query.internal;
 
 import io.artoo.lance.func.Func;
 
-public final class Select<T, R> implements Func.Uni<T, R> {
-  private final Func.Bi<? super Integer, ? super T, ? extends R> select;
-  private final Selected selected;
+import java.util.concurrent.atomic.AtomicReference;
 
-  public Select(final Func.Uni<? super T, ? extends R> select) {
-    this((i, it) -> select.tryApply(it));
+public final class Select<T, R> implements Func.Uni<T, Select.Selected<T, R, Select<T, R>>> {
+  public record Selected<T, R, F extends Func.Uni<T, Selected<T, R, F>>>(F select, R value) {}
+  private final Func.Bi<? super Integer, ? super T, ? extends R> select;
+
+  private final int index;
+  private Select(final Func.Bi<? super Integer, ? super T, ? extends R> select) {
+    this(0, select);
   }
-  public Select(final Func.Bi<? super Integer, ? super T, ? extends R> select) {
+
+  private Select(final int index, final Func.Bi<? super Integer, ? super T, ? extends R> select) {
     assert select != null;
+    this.index = index;
     this.select = select;
-    this.selected = new Selected();
   }
 
   @Override
-  public R tryApply(final T element) throws Throwable {
-    return select.tryApply(selected.index++, element);
+  public Selected<T, R, Select<T, R>> tryApply(final T t) throws Throwable {
+    return
+      new Selected<>(
+        new Select<>(index + 1, select),
+        select.tryApply(index, t)
+      );
   }
 
-  private static final class Selected {
-    private int index = 0;
+  public static <T, R> AtomicReference<Select<T, R>> reference(final Func.Uni<? super T, ? extends R> select) {
+    return reference((i, it) -> select.tryApply(it));
+  }
+
+  public static <T, R> AtomicReference<Select<T, R>> reference(final Func.Bi<? super Integer, ? super T, ? extends R> select) {
+    return new AtomicReference<>(new Select<>(select));
   }
 }

@@ -5,10 +5,13 @@ import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
 import io.artoo.lance.query.internal.Select;
 import io.artoo.lance.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 public interface Projectable<A, B> extends Queryable.OfTwo<A, B> {
   default <R> Many<R> select(Func.Tri<? super Integer, ? super A, ? super B, ? extends R> select) {
-    return () -> cursor().map(new Select<>((index, record) -> select.apply(index, record.first(), record.second())));
+    return () -> cursor().map(as(Select.reference((index, record) -> select.apply(index, record.first(), record.second()))));
   }
 
   default <R> Many<R> select(Func.Bi<? super A, ? super B, ? extends R> select) {
@@ -16,7 +19,7 @@ public interface Projectable<A, B> extends Queryable.OfTwo<A, B> {
   }
 
   default <R, Q extends Queryable<R>> Many<R> selection(Func.Tri<? super Integer, ? super A, ? super B, ? extends Q> select) {
-    return () -> cursor().map(new Select<Pair<A, B>, Q>((i, pair) -> select.tryApply(i, pair.first(), pair.second()))).flatMap(Queryable::cursor);
+    return () -> cursor().map(as(Select.reference(((i, pair) -> select.tryApply(i, pair.first(), pair.second()))))).flatMap(Queryable::cursor);
   }
 
   default <R, Q extends Queryable<R>> Many<R> selection(Func.Bi<? super A, ? super B, ? extends Q> select) {
@@ -29,5 +32,14 @@ public interface Projectable<A, B> extends Queryable.OfTwo<A, B> {
 
   default <Q extends Queryable.OfTwo<A, B>> Many.OfTwo<A, B> too(Func.Bi<? super A, ? super B, ? extends Q> func) {
     return () -> cursor().flatMap(pair -> func.tryApply(pair.first(), pair.second()).cursor());
+  }
+
+  @NotNull
+  private <R> Func.Uni<Pair<A, B>, R> as(final AtomicReference<Select<Pair<A, B>, R>> selected) {
+    return element -> {
+      final var applied = selected.get().tryApply(element);
+      selected.set(applied.select());
+      return applied.value();
+    };
   }
 }

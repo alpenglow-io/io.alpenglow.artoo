@@ -52,13 +52,13 @@ public class FilterableTest {
 /*    final Object[] objects = {"apple", "passionfruit", 10.2F, 12L, "banana", LocalTime.now(), LocalDateTime.now(), 2};
 
     for (
-      final var value :
+      final var returning :
       Many.fromAny(objects)
         .when(String.class, it -> assertThat(it).isIn("apple", "passionfruit", "banana"))
         .<Long>when(it -> it.equals(12L), it -> assertThat(it).isEqualTo(12L))
         .<Float>when(it -> it.equals(10.2F), it -> assertThat(it).isEqualTo(10.2F))
     ) {
-      assertThat(value).isNotNull();
+      assertThat(returning).isNotNull();
     }*/
   }
 }

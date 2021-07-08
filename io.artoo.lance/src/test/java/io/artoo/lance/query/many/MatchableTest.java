@@ -12,7 +12,7 @@ public class MatchableTest {
   public void shouldMatchWhenStringOrCharacter() {
     enum Value { Default; int val = 0; }
 
-    fromAny("value", 1, 12.3, true, 'a')
+    fromAny("returning", 1, 12.3, true, 'a')
       .when(String.class, it -> { Value.Default.val = it.length(); })
       .when(Character.class, it -> { Value.Default.val++; })
       .eventually();
@@ -25,7 +25,7 @@ public class MatchableTest {
   public void shouldMatchWhenString() {
     enum Value { Default; int val = 0; }
 
-    fromAny("value", 1, 12.3, true, 'a')
+    fromAny("returning", 1, 12.3, true, 'a')
       .when(String.class, it -> { Value.Default.val = it.length(); })
       .when(Character.class, it -> { Value.Default.val++; })
       .eventually();

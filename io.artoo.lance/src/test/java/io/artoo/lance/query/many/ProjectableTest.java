@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ProjectableTest {
   @Test
-  @DisplayName("should select with index")
+  @DisplayName("should func with index")
   public void shouldSelectWithIndex() {
     final var select = from("apple", "banana", "mango", "orange", "passionfruit", "grape")
       .select((index, fruit) -> String.format("%d - %s", index, fruit));

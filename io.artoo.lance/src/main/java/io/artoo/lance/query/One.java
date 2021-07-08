@@ -64,7 +64,7 @@ final class Sone<T> implements One<T> {
       return Cursor.open(suppl.tryGet());
     } catch (Throwable cause) {
       return One
-        .<T>gone("Can't get value", it -> new IllegalStateException(it, cause))
+        .<T>gone("Can't get returning", it -> new IllegalStateException(it, cause))
         .cursor();
     }
   }

@@ -86,7 +86,7 @@ public class SettableTest {
     final Pet[] pets1 = { new Pet("Goofy", 1), new Pet("Micky", 2), new Pet("Minnie", 3), new Pet("Donald", 4), new Pet("Scrooge", 5) };
     final Pet[] pets2 = { new Pet("Scrooge", 5), new Pet("Daisy", 2), new Pet("Gladstone", 3), new Pet("Donald", 4) };
 
-    final var actual = Many.pseudo(pets1).union(pets2).select(Pet::name);
+    final var actual = Many.pseudo(pets1).union(pets2).func(Pet::name);
     assertThat(actual).containsExactly(
       "Goofy",
       "Micky",

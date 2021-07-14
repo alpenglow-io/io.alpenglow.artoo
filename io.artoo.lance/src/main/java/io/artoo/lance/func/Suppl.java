@@ -7,9 +7,9 @@ import io.artoo.lance.tuple.Triple;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
-public interface Suppl {
+public enum Suppl {;
   @FunctionalInterface
-  interface Uni<A> extends Supplier<A>, Callable<A>, Func.Uni<Void, A> {
+  public interface Uni<A> extends Supplier<A>, Callable<A>, Func.Uni<Void, A> {
     A tryGet() throws Throwable;
 
     @Override
@@ -44,14 +44,14 @@ public interface Suppl {
 
   @FunctionalInterface
   @SuppressWarnings("rawtypes")
-  interface Bi<R extends Record & Pair> extends Uni<R> {}
+  public interface Bi<R extends Record & Pair> extends Uni<R> {}
 
   @FunctionalInterface
   @SuppressWarnings("rawtypes")
-  interface Tri<R extends Record & Triple> extends Uni<R> {}
+  public interface Tri<R extends Record & Triple> extends Uni<R> {}
 
   @SuppressWarnings("rawtypes")
   @FunctionalInterface
-  interface Quad<R extends Record & Quadruple> extends Uni<R> {}
+  public interface Quad<R extends Record & Quadruple> extends Uni<R> {}
 
 }

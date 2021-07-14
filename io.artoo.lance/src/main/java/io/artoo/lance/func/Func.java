@@ -4,8 +4,8 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
-public interface Func {
-  interface Unary<T> extends UnaryOperator<T> {
+public enum Func {;
+  public interface Unary<T> extends UnaryOperator<T> {
     T tryApply(T t) throws Throwable;
 
     @Override
@@ -19,7 +19,7 @@ public interface Func {
     }
   }
 
-  interface Uni<T, R> extends Function<T, R> {
+  public interface Uni<T, R> extends Function<T, R> {
     R tryApply(T t) throws Throwable;
 
     @Override
@@ -49,7 +49,7 @@ public interface Func {
     }
   }
 
-  interface Bi<A, B, R> extends BiFunction<A, B, R> {
+  public interface Bi<A, B, R> extends BiFunction<A, B, R> {
     R tryApply(A a, B b) throws Throwable;
 
     @Override
@@ -67,7 +67,7 @@ public interface Func {
     }
   }
 
-  interface Tri<A, B, C, R> {
+  public interface Tri<A, B, C, R> {
     R tryApply(A a, B b, C c) throws Throwable;
 
     default R apply(A a, B b, C c) {
@@ -80,7 +80,7 @@ public interface Func {
     }
   }
 
-  interface Quad<A, B, C, D, R> {
+  public interface Quad<A, B, C, D, R> {
     R tryApply(A a, B b, C c, D d) throws Throwable;
 
     default R apply(A a, B b, C c, D d) {
@@ -93,7 +93,7 @@ public interface Func {
     }
   }
 
-  interface Quin<A, B, C, D, E, R> {
+  public interface Quin<A, B, C, D, E, R> {
     R tryApply(A a, B b, C c, D d, E e) throws Throwable;
 
     default R apply(A a, B b, C c, D d, E e) {
@@ -106,7 +106,7 @@ public interface Func {
     }
   }
 
-  interface Sex<A, B, C, D, E, F, R> {
+  public interface Sex<A, B, C, D, E, F, R> {
     R tryApply(A a, B b, C c, D d, E e, F f) throws Throwable;
 
     default R apply(A a, B b, C c, D d, E e, F f) {
@@ -119,7 +119,7 @@ public interface Func {
     }
   }
 
-  interface Sect<A, B, C, D, E, F, G, R> {
+  public interface Sect<A, B, C, D, E, F, G, R> {
     R tryApply(A a, B b, C c, D d, E e, F f, G g) throws Throwable;
 
     default R apply(A a, B b, C c, D d, E e, F f, G g) {

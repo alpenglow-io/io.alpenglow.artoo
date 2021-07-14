@@ -3,8 +3,8 @@ package io.artoo.lance.func;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-public interface Cons {
-  interface Uni<A> extends Consumer<A>, Func.Uni<A, Void> {
+public enum Cons {;
+  public interface Uni<A> extends Consumer<A>, Func.Uni<A, Void> {
     static <T> Uni<T> nothing() {
       return it -> {};
     }
@@ -33,7 +33,7 @@ public interface Cons {
     }
   }
 
-  interface Bi<A, B> extends BiConsumer<A, B>, Func.Bi<A, B, Void> {
+  public interface Bi<A, B> extends BiConsumer<A, B>, Func.Bi<A, B, Void> {
     void tryAccept(A a, B b) throws Throwable;
 
     @Override
@@ -58,7 +58,7 @@ public interface Cons {
     }
   }
 
-  interface Tri<A, B, C> extends Func.Tri<A, B, C, Void> {
+  public interface Tri<A, B, C> extends Func.Tri<A, B, C, Void> {
     void tryAccept(A a, B b, C c) throws Throwable;
 
     @Override
@@ -82,7 +82,7 @@ public interface Cons {
     }
   }
 
-  interface Quad<A, B, C, D> extends Func.Quad<A, B, C, D, Void> {
+  public interface Quad<A, B, C, D> extends Func.Quad<A, B, C, D, Void> {
     void tryAccept(A a, B b, C c, D d) throws Throwable;
 
     @Override
@@ -106,7 +106,7 @@ public interface Cons {
     }
   }
 
-  interface Quin<A, B, C, D, E> extends Func.Quin<A, B, C, D, E, Void> {
+  public interface Quin<A, B, C, D, E> extends Func.Quin<A, B, C, D, E, Void> {
     void tryAccept(A a, B b, C c, D d, E e) throws Throwable;
 
     @Override

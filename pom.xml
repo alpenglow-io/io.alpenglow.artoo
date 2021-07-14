@@ -14,7 +14,6 @@
     <module>io.artoo.bom</module>
     <module>io.artoo.camelot</module>
     <module>io.artoo.parry</module>
-    <module>io.artoo.ddd</module>
     <module>io.artoo.ladylake</module>
     <module>io.artoo.stone</module>
   </modules>
@@ -39,7 +38,7 @@
     <asm.version>9.2</asm.version>
 
     <!-- deps -->
-    <vertx.version>4.0.2</vertx.version>
+    <vertx.version>4.1.1</vertx.version>
     <log4j.version>2.14.0</log4j.version>
     <logback.version>1.3.0-alpha5</logback.version>
 
@@ -78,6 +77,14 @@
         <artifactId>annotations</artifactId>
         <version>${annotations.version}</version>
         <scope>compile</scope>
+        <optional>true</optional>
+      </dependency>
+
+      <dependency>
+        <groupId>io.vertx</groupId>
+        <artifactId>vertx-stack-depchain</artifactId>
+        <version>${vertx.version}</version>
+        <type>pom</type>
         <optional>true</optional>
       </dependency>
 

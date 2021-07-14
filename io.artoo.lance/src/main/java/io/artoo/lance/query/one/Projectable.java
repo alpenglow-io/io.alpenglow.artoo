@@ -6,8 +6,6 @@ import io.artoo.lance.query.Many;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
 import io.artoo.lance.query.internal.Select;
-import io.artoo.lance.query.internal.Tail;
-import org.jetbrains.annotations.NotNull;
 
 public interface Projectable<T> extends Queryable<T> {
   default <R> One<R> select(final Func.Uni<? super T, ? extends R> select) {
@@ -20,10 +18,5 @@ public interface Projectable<T> extends Queryable<T> {
 
   default <R> One<R> select(final Suppl.Uni<? extends R> select) {
     return () -> cursor().map(as(Select.indexed((i, it) -> select.tryGet())));
-  }
-
-  @NotNull
-  private <R> Func.Uni<T, R> as(final Select.Atomic<Select<T, R>> selected) {
-    return element -> selected.let(it -> it.apply(element), Tail::func).returning();
   }
 }

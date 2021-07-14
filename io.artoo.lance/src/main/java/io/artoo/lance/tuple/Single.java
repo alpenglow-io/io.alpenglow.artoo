@@ -2,7 +2,6 @@ package io.artoo.lance.tuple;
 
 import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Func;
-import io.artoo.lance.func.Pred;
 import org.jetbrains.annotations.NotNull;
 
 import static io.artoo.lance.tuple.Type.firstOf;

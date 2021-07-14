@@ -1,4 +1,4 @@
-package io.artoo.lance.query.internal;
+package io.artoo.lance.query;
 
 import io.artoo.lance.func.Func;
 

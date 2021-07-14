@@ -4,7 +4,6 @@ import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.literator.Literator;
-import io.artoo.lance.query.many.Joinable;
 import io.artoo.lance.tuple.Pair;
 import io.artoo.lance.tuple.Tuple;
 import org.jetbrains.annotations.NotNull;

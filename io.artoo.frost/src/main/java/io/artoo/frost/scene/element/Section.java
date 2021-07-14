@@ -42,7 +42,7 @@ public interface Section extends Element<Panel> {
   }
 
   final class Border extends LazyElement<Panel> implements Section {
-    private final Func.Unary<Border.Location> location;
+    private final Func.Unary<Location> location;
 
     private Border(final Func.Unary<Location> location) {this.location = location;}
 

@@ -4,7 +4,6 @@ import io.artoo.lance.func.Pred;
 import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.literator.cursor.routine.Routine;
 import io.artoo.lance.tuple.Pair;
-import io.artoo.lance.tuple.Tuple;
 
 public sealed interface Join<A, B> extends Routine<A, B> permits Inner, Nested {
 

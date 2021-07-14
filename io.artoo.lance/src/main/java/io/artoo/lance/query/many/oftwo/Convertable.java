@@ -1,10 +1,8 @@
 package io.artoo.lance.query.many.oftwo;
 
 import io.artoo.lance.func.Func;
-import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.query.Queryable;
 import io.artoo.lance.tuple.Pair;
-import io.artoo.lance.tuple.Tuple;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -12,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static io.artoo.lance.literator.cursor.routine.Routine.array;
 import static io.artoo.lance.literator.cursor.routine.Routine.list;
 import static io.artoo.lance.scope.Nullability.nonNullable;
 

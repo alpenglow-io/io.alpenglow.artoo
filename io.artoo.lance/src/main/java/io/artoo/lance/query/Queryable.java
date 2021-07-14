@@ -1,7 +1,9 @@
 package io.artoo.lance.query;
 
 import io.artoo.lance.func.Cons;
+import io.artoo.lance.func.Func;
 import io.artoo.lance.literator.Cursor;
+import io.artoo.lance.task.Atomic;
 import io.artoo.lance.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,6 +41,13 @@ public interface Queryable<T> extends Iterable<T> {
     return returning;
   }
 
+  @NotNull
+  default <R, F extends Func.Uni<T, Tail<T, R, F>>> Func.Uni<T, R> as(final Atomic<F> atomically) {
+    return element -> atomically.let(it -> it.apply(element), Tail::func)
+      .orElseThrow(() -> new IllegalStateException("Can't select atomically"))
+      .returning();
+  }
+
   interface OfTwo<A, B> extends Iterable<Pair<A, B>> {
     Cursor<Pair<A, B>> cursor();
 
@@ -61,9 +70,18 @@ public interface Queryable<T> extends Iterable<T> {
       }
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
+    @SuppressWarnings("UnnecessaryContinue")
     default void eventually() {
-      for (final var value : this);
+      for (final var value : this) {
+        continue;
+      }
+    }
+
+    @NotNull
+    default <R, F extends Func.Uni<Pair<A, B>, Tail<Pair<A, B>, R, F>>> Func.Uni<Pair<A, B>, R> as(final Atomic<F> atomically) {
+      return element -> atomically.let(it -> it.apply(element), Tail::func)
+        .orElseThrow(() -> new IllegalStateException("Can't select atomically"))
+        .returning();
     }
   }
 }

@@ -5,9 +5,6 @@ import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
 import io.artoo.lance.query.internal.Select;
 import io.artoo.lance.tuple.Pair;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.concurrent.atomic.AtomicReference;
 
 public interface Projectable<A, B> extends Queryable.OfTwo<A, B> {
   default <R> Many<R> select(Func.Tri<? super Integer, ? super A, ? super B, ? extends R> select) {
@@ -34,12 +31,4 @@ public interface Projectable<A, B> extends Queryable.OfTwo<A, B> {
     return () -> cursor().flatMap(pair -> func.tryApply(pair.first(), pair.second()).cursor());
   }
 
-  @NotNull
-  private <R> Func.Uni<Pair<A, B>, R> as(final AtomicReference<Select<Pair<A, B>, R>> selected) {
-    return element -> {
-      final var applied = selected.get().tryApply(element);
-      selected.set(applied.func());
-      return applied.returning();
-    };
-  }
 }

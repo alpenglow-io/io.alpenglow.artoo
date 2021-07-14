@@ -3,9 +3,7 @@ package io.artoo.lance.query.many.oftwo;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.query.internal.NotOfType;
 import io.artoo.lance.query.internal.OfTwoTypes;
-import io.artoo.lance.query.internal.OfType;
 import io.artoo.lance.query.internal.Where;
 
 public interface Filterable<A, B> extends Queryable.OfTwo<A, B> {

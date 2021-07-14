@@ -132,7 +132,7 @@ public enum Func {;
     }
   }
 
-  enum Default {
+  public enum Default {
     Nothing;
 
     public boolean notEquals(Object value) {

@@ -43,9 +43,10 @@ public class AverageableTest {
   }
 
   @Test
-  @DisplayName("should be null average since there's no numbers")
+  @DisplayName("should be null since there's no numbers")
   public void shouldBeNullSinceNoNumbers() {
     for (final var ignored : Many.from("apple", "banana", "mango", "orange", "passionfruit", "grape").average()) {
+      System.out.println(ignored);
       fail();
     }
   }

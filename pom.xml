@@ -16,6 +16,7 @@
     <module>io.artoo.parry</module>
     <module>io.artoo.ladylake</module>
     <module>io.artoo.stone</module>
+    <module>io.artoo.anacleto</module>
   </modules>
 
   <name>Artoo</name>
@@ -24,8 +25,8 @@
     <artoo.version>0.0.1-alpha</artoo.version>
 
     <encoding>UTF-8</encoding>
-    <java.version>16</java.version>
-    <java.release>16</java.release>
+    <java.version>17</java.version>
+    <java.release>17</java.release>
     <maven.min.version>3.6.0</maven.min.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>

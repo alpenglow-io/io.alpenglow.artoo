@@ -46,12 +46,12 @@ final class Or<T, C extends Cursor<T>> extends As<T> implements Cursor<T> {
   }
 
   @Override
-  public final T fetch() {
+  public T fetch() {
     return hasNext() ? reference.let(Literator::fetch) : null;
   }
 
   @Override
-  public final boolean hasNext() {
+  public boolean hasNext() {
     other.get(otherwise -> reference.set(() -> source.hasNext() ? source : otherwise));
 
     return reference.let(Iterator::hasNext);
@@ -69,7 +69,7 @@ final class Er<T, E extends RuntimeException> extends As<T> implements Cursor<T>
   }
 
   @Override
-  public final T fetch() {
+  public T fetch() {
     try {
       if (hasNext()) {
         return source.fetch();
@@ -82,7 +82,7 @@ final class Er<T, E extends RuntimeException> extends As<T> implements Cursor<T>
   }
 
   @Override
-  public final boolean hasNext() {
+  public boolean hasNext() {
     return source.hasNext();
   }
 }
@@ -96,7 +96,7 @@ final class Catch<T> extends As<T> implements Cursor<T> {
   }
 
   @Override
-  public final T fetch() {
+  public T fetch() {
     try {
       return source.fetch();
     } catch (Throwable throwable) {
@@ -106,7 +106,7 @@ final class Catch<T> extends As<T> implements Cursor<T> {
   }
 
   @Override
-  public final boolean hasNext() {
+  public boolean hasNext() {
     return source.hasNext();
   }
 }

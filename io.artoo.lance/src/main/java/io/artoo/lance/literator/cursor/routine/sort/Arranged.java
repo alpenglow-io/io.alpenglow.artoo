@@ -3,7 +3,6 @@ package io.artoo.lance.literator.cursor.routine.sort;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.literator.Literator;
-import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -17,14 +16,13 @@ public final class Arranged<T> implements Sort<T> {
   public Arranged(final By<T, Object>[] bys) {this.bys = bys;}
 
   @Override
-  public Func.Uni<T[], Cursor<T>> onArray() {
+  public Func.MaybeFunction<T[], Cursor<T>> onArray() {
     return ts -> {
       Arrays.sort(ts, matching());
       return Cursor.open(ts);
     };
   }
 
-  @NotNull
   private Comparator<T> matching() {
     return (entry1, entry2) -> {
       var compared = bys.length;
@@ -69,12 +67,12 @@ public final class Arranged<T> implements Sort<T> {
   }
 
   @Override
-  public Func.Uni<Literator<T>, Cursor<T>> onLiterator() {
+  public Func.MaybeFunction<Literator<T>, Cursor<T>> onLiterator() {
     return li -> onIterator().apply(li);
   }
 
   @Override
-  public Func.Uni<Iterator<T>, Cursor<T>> onIterator() {
+  public Func.MaybeFunction<Iterator<T>, Cursor<T>> onIterator() {
     return it -> {
       final var list = new SortedList<T>(matching());
       it.forEachRemaining(list::add);

@@ -4,7 +4,7 @@ import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.query.internal.Distinct;
+import io.artoo.lance.query.func.Distinct;
 
 @SuppressWarnings("unchecked")
 public interface Settable<T> extends Queryable<T> {
@@ -12,7 +12,7 @@ public interface Settable<T> extends Queryable<T> {
     return distinct(it -> true);
   }
 
-  default Many<T> distinct(final Pred.Uni<? super T> where) {
+  default Many<T> distinct(final Pred.MaybePredicate<? super T> where) {
     return () -> cursor().map(new Distinct<>(where));
   }
 /*
@@ -34,7 +34,7 @@ public interface Settable<T> extends Queryable<T> {
 }
 
 @SuppressWarnings("StatementWithEmptyBody")
-final class Except<T> implements Func.Uni<T, T> {
+final class Except<T> implements Func.MaybeFunction<T, T> {
   private final Queryable<T> queryable;
 
   Except(final Queryable<T> queryable) {this.queryable = queryable;}
@@ -49,7 +49,7 @@ final class Except<T> implements Func.Uni<T, T> {
 }
 
 @SuppressWarnings("StatementWithEmptyBody")
-final class Intersect<T> implements Func.Uni<T, T> {
+final class Intersect<T> implements Func.MaybeFunction<T, T> {
   private final Queryable<T> queryable;
 
   Intersect(final Queryable<T> queryable) {this.queryable = queryable;}

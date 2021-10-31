@@ -12,7 +12,7 @@ public interface Origin<D extends DataSource> {
     return new Registered<>(driver, dataSource);
   }
 
-  One<Database> database(Cons.Uni<? super D> set);
+  One<Database> database(Cons.MaybeConsumer<? super D> set);
 
   final class Registered<D extends DataSource> implements Origin<D> {
     private final transient Driver driver;
@@ -24,7 +24,7 @@ public interface Origin<D extends DataSource> {
     }
 
     @Override
-    public One<Database> database(final Cons.Uni<? super D> set) {
+    public One<Database> database(final Cons.MaybeConsumer<? super D> set) {
       return One.maybe(driver)
         .peek(DriverManager::registerDriver)
         .or("Can't register driver %s".formatted(driver.getClass().getCanonicalName()), message -> new IllegalStateException(message))

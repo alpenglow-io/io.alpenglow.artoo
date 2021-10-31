@@ -3,12 +3,12 @@ package io.artoo.lance.query.many;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.query.internal.NotOfType;
-import io.artoo.lance.query.internal.OfType;
-import io.artoo.lance.query.internal.Where;
+import io.artoo.lance.query.func.NotOfType;
+import io.artoo.lance.query.func.OfType;
+import io.artoo.lance.query.func.Where;
 
 public interface Filterable<T> extends Queryable<T> {
-  default Many<T> where(final Pred.Uni<? super T> where) {
+  default Many<T> where(final Pred.MaybePredicate<? super T> where) {
     return where((index, param) -> where.tryTest(param));
   }
 

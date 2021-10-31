@@ -6,7 +6,6 @@ import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.literator.Literator;
 import io.artoo.lance.tuple.Pair;
 import io.artoo.lance.tuple.Tuple;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -21,7 +20,6 @@ public final class Nested<R, T> implements Join<R, Cursor<Pair<T, R>>> {
     this.pred = pred;
   }
 
-  @NotNull
   private Cursor<Pair<T, R>> joinArray(final R[] rs) {
     var joineds = (Pair<T, R>[]) new Pair[0];
     for (final var t : ts) {
@@ -36,17 +34,17 @@ public final class Nested<R, T> implements Join<R, Cursor<Pair<T, R>>> {
   }
 
   @Override
-  public Func.Uni<R[], Cursor<Pair<T, R>>> onArray() {
+  public Func.MaybeFunction<R[], Cursor<Pair<T, R>>> onArray() {
     return this::joinArray;
   }
 
   @Override
-  public Func.Uni<Literator<R>, Cursor<Pair<T, R>>> onLiterator() {
+  public Func.MaybeFunction<Literator<R>, Cursor<Pair<T, R>>> onLiterator() {
     return null;
   }
 
   @Override
-  public Func.Uni<Iterator<R>, Cursor<Pair<T, R>>> onIterator() {
+  public Func.MaybeFunction<Iterator<R>, Cursor<Pair<T, R>>> onIterator() {
     return null;
   }
 }

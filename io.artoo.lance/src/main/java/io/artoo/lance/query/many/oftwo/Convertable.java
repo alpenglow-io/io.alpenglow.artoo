@@ -3,7 +3,6 @@ package io.artoo.lance.query.many.oftwo;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.query.Queryable;
 import io.artoo.lance.tuple.Pair;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
@@ -14,7 +13,7 @@ import static io.artoo.lance.literator.cursor.routine.Routine.list;
 import static io.artoo.lance.scope.Nullability.nonNullable;
 
 public interface Convertable<A, B> extends Queryable.OfTwo<A, B> {
-  default @NotNull <K, E> Map<? extends K, ? extends E> asMap(final Func.Bi<? super A, ? super B, ? extends K> key, final Func.Bi<? super A, ? super B, ? extends E> value) {
+  default <K, E> Map<? extends K, ? extends E> asMap(final Func.MaybeBiFunction<? super A, ? super B, ? extends K> key, final Func.MaybeBiFunction<? super A, ? super B, ? extends E> value) {
     nonNullable(key, "key");
     nonNullable(value, "element");
     final var map = new ConcurrentHashMap<K, E>();

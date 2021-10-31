@@ -1,57 +1,41 @@
 package io.artoo.lance.func;
 
+import io.artoo.lance.scope.Maybe;
 import io.artoo.lance.tuple.Pair;
 import io.artoo.lance.tuple.Quadruple;
 import io.artoo.lance.tuple.Triple;
 
-import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
-public enum Suppl {;
+public sealed interface Suppl {
+  enum Namespace implements Suppl {}
+
   @FunctionalInterface
-  public interface Uni<A> extends Supplier<A>, Callable<A>, Func.Uni<Void, A> {
+  interface MaybeSupplier<A> extends Supplier<A> {
     A tryGet() throws Throwable;
 
-    @Override
-    default A tryApply(Void unused) throws Throwable {
-      return tryGet();
-    }
-
-    @Override
-    default A get() {
+    default Maybe<A> maybeGet() {
       try {
-        return tryGet();
+        return Maybe.value(tryGet());
       } catch (Throwable throwable) {
-        throwable.printStackTrace();
-        return null;
+        return Maybe.error(throwable);
       }
     }
 
     @Override
-    default A apply(Void unused) {
-      return get();
-    }
-
-    @Override
-    default A call() throws Exception {
-      try {
-        return tryGet();
-      } catch (Throwable throwable) {
-        throw new CallableException(throwable);
-      }
-    }
+    default A get() { return maybeGet().eventually(); }
   }
 
   @FunctionalInterface
   @SuppressWarnings("rawtypes")
-  public interface Bi<R extends Record & Pair> extends Uni<R> {}
+  interface MaybeBiSupplier<R extends Record & Pair> extends MaybeSupplier<R> {}
 
   @FunctionalInterface
   @SuppressWarnings("rawtypes")
-  public interface Tri<R extends Record & Triple> extends Uni<R> {}
+  interface Tri<R extends Record & Triple> extends MaybeSupplier<R> {}
 
   @SuppressWarnings("rawtypes")
   @FunctionalInterface
-  public interface Quad<R extends Record & Quadruple> extends Uni<R> {}
+  interface Quad<R extends Record & Quadruple> extends MaybeSupplier<R> {}
 
 }

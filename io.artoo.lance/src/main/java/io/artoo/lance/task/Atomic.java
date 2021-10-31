@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 public interface Atomic<T> {
-  <R> Optional<R> let(Func.Uni<? super T, ? extends R> map, Func.Uni<? super R, ? extends T> update);
+  <R> Optional<R> let(Func.MaybeFunction<? super T, ? extends R> map, Func.MaybeFunction<? super R, ? extends T> update);
 
   static <T> Atomic<T> reference(final T value) {
     return new Reference<>(value);
@@ -19,7 +19,7 @@ public interface Atomic<T> {
     private Reference(final AtomicReference<T> reference) {this.reference = reference;}
 
     @Override
-    public <R> Optional<R> let(final Func.Uni<? super T, ? extends R> map, final Func.Uni<? super R, ? extends T> update) {
+    public <R> Optional<R> let(final Func.MaybeFunction<? super T, ? extends R> map, final Func.MaybeFunction<? super R, ? extends T> update) {
       T prev = reference.get(), next = null;
       R applied = null;
       for (var haveNext = false;;) {

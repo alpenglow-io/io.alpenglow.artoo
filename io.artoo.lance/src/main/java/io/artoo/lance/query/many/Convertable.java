@@ -2,7 +2,6 @@ package io.artoo.lance.query.many;
 
 import io.artoo.lance.func.Func;
 import io.artoo.lance.query.Queryable;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
@@ -14,7 +13,7 @@ import static io.artoo.lance.literator.cursor.routine.Routine.list;
 import static io.artoo.lance.scope.Nullability.nonNullable;
 
 public interface Convertable<T> extends Queryable<T> {
-  default @NotNull <K, E> Map<? extends K, ? extends E> asMap(final Func.Uni<? super T, ? extends K> key, final Func.Uni<? super T, ? extends E> element) {
+  default <K, E> Map<? extends K, ? extends E> asMap(final Func.MaybeFunction<? super T, ? extends K> key, final Func.MaybeFunction<? super T, ? extends E> element) {
     nonNullable(key, "key");
     nonNullable(element, "element");
     final var map = new ConcurrentHashMap<K, E>();

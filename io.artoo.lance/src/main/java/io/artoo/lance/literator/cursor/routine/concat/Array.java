@@ -15,7 +15,7 @@ public final class Array<T> implements Concat<T> {
   Array(final T[] next) {this.next = next;}
 
   @Override
-  public final Func.Uni<T[], Cursor<T>> onArray() {
+  public final Func.MaybeFunction<T[], Cursor<T>> onArray() {
     return prev -> {
       final var length = prev.length + next.length;
       final var copied = Arrays.copyOf(prev, length);
@@ -25,12 +25,12 @@ public final class Array<T> implements Concat<T> {
   }
 
   @Override
-  public Func.Uni<Literator<T>, Cursor<T>> onLiterator() {
+  public Func.MaybeFunction<Literator<T>, Cursor<T>> onLiterator() {
     return prev -> Cursor.link(prev, Cursor.open(next));
   }
 
   @Override
-  public Func.Uni<Iterator<T>, Cursor<T>> onIterator() {
+  public Func.MaybeFunction<Iterator<T>, Cursor<T>> onIterator() {
     return prev -> Cursor.link(Cursor.iteration(prev), Cursor.open(next));
   }
 }

@@ -18,12 +18,12 @@ public sealed interface Routine<T, R> permits Join, Concat, Convert, Sort {
     return new Convert.Arrayable<>(type);
   }
 
-  Func.Uni<T[], R> onArray();
-  Func.Uni<Literator<T>, R> onLiterator();
-  Func.Uni<Iterator<T>, R> onIterator();
+  Func.MaybeFunction<T[], R> onArray();
+  Func.MaybeFunction<Literator<T>, R> onLiterator();
+  Func.MaybeFunction<Iterator<T>, R> onIterator();
 
   @SuppressWarnings("unchecked")
-  default Func.Uni<T, R> onSelf() {
+  default Func.MaybeFunction<T, R> onSelf() {
     return it -> (R) it;
   }
 }

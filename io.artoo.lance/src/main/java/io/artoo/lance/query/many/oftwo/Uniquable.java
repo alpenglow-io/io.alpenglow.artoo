@@ -3,10 +3,10 @@ package io.artoo.lance.query.many.oftwo;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.query.internal.At;
-import io.artoo.lance.query.internal.First;
-import io.artoo.lance.query.internal.Last;
-import io.artoo.lance.query.internal.Single;
+import io.artoo.lance.query.func.At;
+import io.artoo.lance.query.func.First;
+import io.artoo.lance.query.func.Last;
+import io.artoo.lance.query.func.Single;
 
 public interface Uniquable<A, B> extends Queryable.OfTwo<A, B> {
   default One.OfTwo<A, B> at(final int index) {

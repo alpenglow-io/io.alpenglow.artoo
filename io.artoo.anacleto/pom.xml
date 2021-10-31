@@ -12,8 +12,6 @@
   <name>Anacleto</name>
 
   <properties>
-    <maven.compiler.source>16</maven.compiler.source>
-    <maven.compiler.target>16</maven.compiler.target>
     <h2.version>1.4.200</h2.version>
   </properties>
 

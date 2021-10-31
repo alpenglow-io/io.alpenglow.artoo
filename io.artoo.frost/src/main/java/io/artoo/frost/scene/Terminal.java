@@ -12,7 +12,7 @@ public sealed interface Terminal permits Terminal.Screen {
     return new Terminal.Screen(new DefaultTerminalFactory());
   }
 
-  <T> T using(Func.Uni<? super com.googlecode.lanterna.screen.Screen, ? extends T> using);
+  <T> T using(Func.MaybeFunction<? super com.googlecode.lanterna.screen.Screen, ? extends T> using);
 
   final class Screen implements Terminal {
     private final TerminalFactory factory;
@@ -20,7 +20,7 @@ public sealed interface Terminal permits Terminal.Screen {
     public Screen(final TerminalFactory factory) {this.factory = factory;}
 
     @Override
-    public <T> T using(final Func.Uni<? super com.googlecode.lanterna.screen.Screen, ? extends T> using) {
+    public <T> T using(final Func.MaybeFunction<? super com.googlecode.lanterna.screen.Screen, ? extends T> using) {
       if (factory instanceof DefaultTerminalFactory f) {
         try (final var screen = f.createScreen()) {
           screen.refresh(AUTOMATIC);

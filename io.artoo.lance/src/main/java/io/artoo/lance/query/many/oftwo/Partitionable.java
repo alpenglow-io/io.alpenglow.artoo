@@ -3,8 +3,8 @@ package io.artoo.lance.query.many.oftwo;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.query.internal.Skip;
-import io.artoo.lance.query.internal.Take;
+import io.artoo.lance.query.func.Skip;
+import io.artoo.lance.query.func.Take;
 import io.artoo.lance.tuple.Pair;
 
 public interface Partitionable<A, B> extends Queryable.OfTwo<A, B> {

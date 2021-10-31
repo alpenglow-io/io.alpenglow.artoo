@@ -6,20 +6,20 @@ import io.artoo.lance.literator.Literator;
 import io.artoo.lance.literator.cursor.routine.Routine;
 
 public interface Mappable<T> extends Literator<T> {
-  default <R> Cursor<R> map(final Func.Uni<? super T, ? extends R> map) {
+  default <R> Cursor<R> map(final Func.MaybeFunction<? super T, ? extends R> map) {
     return new Map<>(this, map);
   }
 
-  default <R, C extends Cursor<R>> Cursor<R> flatMap(final Func.Uni<? super T, ? extends C> flatMap) {
+  default <R, C extends Cursor<R>> Cursor<R> flatMap(final Func.MaybeFunction<? super T, ? extends C> flatMap) {
     return new Flat<>(new Map<>(this, flatMap));
   }
 }
 
 final class Map<T, R> implements Cursor<R> {
   private final Literator<T> source;
-  private final Func.Uni<? super T, ? extends R> map;
+  private final Func.MaybeFunction<? super T, ? extends R> map;
 
-  Map(final Literator<T> source, final Func.Uni<? super T, ? extends R> map) {
+  Map(final Literator<T> source, final Func.MaybeFunction<? super T, ? extends R> map) {
     this.source = source;
     this.map = map;
   }
@@ -31,7 +31,7 @@ final class Map<T, R> implements Cursor<R> {
   }
 
   @Override
-  public <P> Cursor<P> map(final Func.Uni<? super R, ? extends P> mapAgain) {
+  public <P> Cursor<P> map(final Func.MaybeFunction<? super R, ? extends P> mapAgain) {
     return new Map<>(source, map.then(mapAgain));
   }
 

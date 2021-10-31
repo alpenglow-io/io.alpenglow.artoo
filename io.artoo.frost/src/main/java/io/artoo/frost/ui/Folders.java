@@ -24,7 +24,7 @@ public final class Folders implements Section {
   }
 
   @Override
-  public <R> R let(final Func.Uni<? super Panel, ? extends R> func) {
+  public <R> R let(final Func.MaybeFunction<? super Panel, ? extends R> func) {
     return scene.sectionVertical(withButtons()).let(func);
   }
 

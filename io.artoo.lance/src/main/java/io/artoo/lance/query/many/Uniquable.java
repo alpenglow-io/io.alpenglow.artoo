@@ -3,10 +3,10 @@ package io.artoo.lance.query.many;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.query.internal.At;
-import io.artoo.lance.query.internal.First;
-import io.artoo.lance.query.internal.Last;
-import io.artoo.lance.query.internal.Single;
+import io.artoo.lance.query.func.At;
+import io.artoo.lance.query.func.First;
+import io.artoo.lance.query.func.Last;
+import io.artoo.lance.query.func.Single;
 
 public interface Uniquable<T> extends Queryable<T> {
   default One<T> at(final int index) {
@@ -17,7 +17,7 @@ public interface Uniquable<T> extends Queryable<T> {
     return first(it -> true);
   }
 
-  default One<T> first(final Pred.Uni<? super T> where) {
+  default One<T> first(final Pred.MaybePredicate<? super T> where) {
     return () -> cursor().map(new First<>(where)).skipNull();
   }
 
@@ -25,7 +25,7 @@ public interface Uniquable<T> extends Queryable<T> {
     return last(it -> true);
   }
 
-  default One<T> last(final Pred.Uni<? super T> where) {
+  default One<T> last(final Pred.MaybePredicate<? super T> where) {
     return () -> cursor().map(new Last<>(where)).skipNull();
   }
 
@@ -33,7 +33,7 @@ public interface Uniquable<T> extends Queryable<T> {
     return single(it -> true);
   }
 
-  default One<T> single(final Pred.Uni<? super T> where) {
+  default One<T> single(final Pred.MaybePredicate<? super T> where) {
     return () -> cursor().map(new Single<>(where)).keepNull();
   }
 }

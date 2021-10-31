@@ -14,12 +14,12 @@ public sealed interface Convert<T, R> extends Routine<T, R> permits Convert.List
 
   final class Listable<T> implements Convert<T, List<T>> {
     @Override
-    public Func.Uni<T[], List<T>> onArray() {
+    public Func.MaybeFunction<T[], List<T>> onArray() {
       return ts -> List.of(Arrays.copyOf(ts, ts.length));
     }
 
     @Override
-    public Func.Uni<Literator<T>, List<T>> onLiterator() {
+    public Func.MaybeFunction<Literator<T>, List<T>> onLiterator() {
       return ft -> {
         final var list = new ArrayList<T>();
         ft.forEachRemaining(list::add);
@@ -28,7 +28,7 @@ public sealed interface Convert<T, R> extends Routine<T, R> permits Convert.List
     }
 
     @Override
-    public Func.Uni<Iterator<T>, List<T>> onIterator() {
+    public Func.MaybeFunction<Iterator<T>, List<T>> onIterator() {
       return it -> {
         final var list = new ArrayList<T>();
         it.forEachRemaining(list::add);
@@ -46,17 +46,17 @@ public sealed interface Convert<T, R> extends Routine<T, R> permits Convert.List
     }
 
     @Override
-    public Func.Uni<T[], T[]> onArray() {
+    public Func.MaybeFunction<T[], T[]> onArray() {
       return ts -> Arrays.copyOf(ts, ts.length);
     }
 
     @Override
-    public Func.Uni<Literator<T>, T[]> onLiterator() {
+    public Func.MaybeFunction<Literator<T>, T[]> onLiterator() {
       return li -> onIterator().apply(li);
     }
 
     @Override
-    public Func.Uni<Iterator<T>, T[]> onIterator() {
+    public Func.MaybeFunction<Iterator<T>, T[]> onIterator() {
       return it -> {
         var list = new ArrayList<>();
         it.forEachRemaining(list::add);

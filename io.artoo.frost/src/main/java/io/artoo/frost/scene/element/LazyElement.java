@@ -10,7 +10,7 @@ public abstract class LazyElement<T> implements Element<T> {
   public abstract T content();
 
   @Override
-  public <R> R let(final Func.Uni<? super T, ? extends R> func) {
+  public <R> R let(final Func.MaybeFunction<? super T, ? extends R> func) {
     return element.let(func);
   }
 }

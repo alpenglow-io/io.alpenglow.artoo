@@ -16,16 +16,16 @@ public interface Database {
     return table(record, it -> record.getConstructor(it.getClass()).newInstance(it));
   }
 
-  default <R extends Record, A> One<Table<R>> table(Class<R> record, Func.Uni<? super A, ? extends R> reverse) {
+  default <R extends Record, A> One<Table<R>> table(Class<R> record, Func.MaybeFunction<? super A, ? extends R> reverse) {
     return this.<R, A, Object>table(record, (o, o2) -> reverse.tryApply(o));
   }
-  default <R extends Record, A, B> One<Table<R>> table(Class<R> record, Func.Bi<? super A, ? super B, ? extends R> reverse) {
+  default <R extends Record, A, B> One<Table<R>> table(Class<R> record, Func.MaybeBiFunction<? super A, ? super B, ? extends R> reverse) {
     return this.<R, A, B, Object>table(record, (a, b, o) -> reverse.tryApply(a, b));
   }
-  default <R extends Record, A, B, C> One<Table<R>> table(Class<R> record, Func.Tri<? super A, ? super B, ? super C, ? extends R> reverse) {
+  default <R extends Record, A, B, C> One<Table<R>> table(Class<R> record, Func.MaybeTriFunction<? super A, ? super B, ? super C, ? extends R> reverse) {
     return this.<R, A, B, C, Object>table(record, (a, b, c, o) -> reverse.tryApply(a, b, c));
   }
-  default <R extends Record, A, B, C, D> One<Table<R>> table(Class<R> record, Func.Quad<? super A, ? super B, ? super C, ? super D, ? extends R> reverse) {
+  default <R extends Record, A, B, C, D> One<Table<R>> table(Class<R> record, Func.MaybeQuadFunction<? super A, ? super B, ? super C, ? super D, ? extends R> reverse) {
     return this.<R, A, B, C, D, Object>table(record, (a, b, c, d, o) -> reverse.tryApply(a, b, c, d));
   }
   default <R extends Record, A, B, C, D, E> One<Table<R>> table(Class<R> record, Func.Quin<? super A, ? super B, ? super C, ? super D, ? super E, ? extends R> reverse) {

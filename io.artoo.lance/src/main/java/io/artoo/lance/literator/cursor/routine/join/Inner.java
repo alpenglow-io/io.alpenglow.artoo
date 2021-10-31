@@ -24,17 +24,17 @@ final class Inner<A, B> implements Join<A, Cursor<Pair<A, B>>> {
   }
 
   @Override
-  public Func.Uni<A[], Cursor<Pair<A, B>>> onArray() {
+  public Func.MaybeFunction<A[], Cursor<Pair<A, B>>> onArray() {
     return ts -> cursor.to(new Nested<>(ts, pred));
   }
 
   @Override
-  public Func.Uni<Literator<A>, Cursor<Pair<A, B>>> onLiterator() {
+  public Func.MaybeFunction<Literator<A>, Cursor<Pair<A, B>>> onLiterator() {
     return null;
   }
 
   @Override
-  public Func.Uni<Iterator<A>, Cursor<Pair<A, B>>> onIterator() {
+  public Func.MaybeFunction<Iterator<A>, Cursor<Pair<A, B>>> onIterator() {
     return null;
   }
 }

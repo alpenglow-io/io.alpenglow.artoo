@@ -1,5 +1,4 @@
 module io.artoo.lance {
-  requires static org.jetbrains.annotations;
   requires static java.logging;
 
   exports io.artoo.lance.func;

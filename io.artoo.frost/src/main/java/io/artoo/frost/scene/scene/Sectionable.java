@@ -7,7 +7,7 @@ import io.artoo.lance.func.Func;
 import io.artoo.lance.query.Many;
 
 public interface Sectionable extends Propable {
-  default Section sectionBorder(Func.Unary<Section.Border.Location> location) {
+  default Section sectionBorder(Func.MaybeUnaryOperator<Section.Border.Location> location) {
     final var section = Section.border(location);
     this.prop(section);
     return section;

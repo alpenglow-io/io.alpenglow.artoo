@@ -12,15 +12,15 @@ import io.artoo.lance.scope.Let;
 import java.util.Iterator;
 
 public interface Substitutable<T> extends Literator<T> {
-  default <C extends Cursor<T>> Cursor<T> or(final Suppl.Uni<? extends C> alternative) {
+  default <C extends Cursor<T>> Cursor<T> or(final Suppl.MaybeSupplier<? extends C> alternative) {
     return new Or<>(this, Let.lazy(alternative));
   }
 
-  default <E extends RuntimeException> Cursor<T> or(final String message, final Func.Bi<? super String, ? super Throwable, ? extends E> exception) {
+  default <E extends RuntimeException> Cursor<T> or(final String message, final Func.MaybeBiFunction<? super String, ? super Throwable, ? extends E> exception) {
     return new Er<>(this, message, exception);
   }
 
-  default Cursor<T> exceptionally(Cons.Uni<? super Throwable> catch$) {
+  default Cursor<T> exceptionally(Cons.MaybeConsumer<? super Throwable> catch$) {
     return new Catch<>(this, catch$);
   }
 }
@@ -32,7 +32,10 @@ abstract class As<T> implements Transformable<T> {
 
   @Override
   public final <R> R as(final Routine<T, R> routine) {
-    return source instanceof Cursor<T> cursor ? cursor.as(routine) : Cursor.<T>nothing().as(routine);
+    return switch (source) {
+      case Cursor<T> cursor -> cursor.as(routine);
+      default -> Cursor.<T>nothing().as(routine);
+    };
   }
 }
 
@@ -60,9 +63,9 @@ final class Or<T, C extends Cursor<T>> extends As<T> implements Cursor<T> {
 
 final class Er<T, E extends RuntimeException> extends As<T> implements Cursor<T> {
   private final String message;
-  private final Func.Bi<? super String, ? super Throwable, ? extends E> exception;
+  private final Func.MaybeBiFunction<? super String, ? super Throwable, ? extends E> exception;
 
-  Er(final Literator<T> source, final String message, final Func.Bi<? super String, ? super Throwable, ? extends E> exception) {
+  Er(final Literator<T> source, final String message, final Func.MaybeBiFunction<? super String, ? super Throwable, ? extends E> exception) {
     super(source);
     this.message = message;
     this.exception = exception;
@@ -88,9 +91,9 @@ final class Er<T, E extends RuntimeException> extends As<T> implements Cursor<T>
 }
 
 final class Catch<T> extends As<T> implements Cursor<T> {
-  private final Cons.Uni<? super Throwable> catch$;
+  private final Cons.MaybeConsumer<? super Throwable> catch$;
 
-  Catch(final Literator<T> source, final Cons.Uni<? super Throwable> catch$) {
+  Catch(Literator<T> source, Cons.MaybeConsumer<? super Throwable> catch$) {
     super(source);
     this.catch$ = catch$;
   }

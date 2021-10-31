@@ -4,7 +4,7 @@ import io.artoo.lance.func.Func;
 
 public interface Json {
   interface Schema {
-    interface Field<T, R> extends Func.Uni<T, R> {
+    interface Field<T, R> extends Func.MaybeFunction<T, R> {
 /*
       enum text implements Field<String, String> { field; }
       enum numb implements Field<String, String> { field; }

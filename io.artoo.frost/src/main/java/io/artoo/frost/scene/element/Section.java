@@ -19,7 +19,7 @@ import static com.googlecode.lanterna.gui2.Direction.VERTICAL;
 import static io.artoo.lance.scope.Nullability.nonNullable;
 
 public interface Section extends Element<Panel> {
-  static Section border(Func.Unary<Border.Location> location) {
+  static Section border(Func.MaybeUnaryOperator<Border.Location> location) {
     return new Border(location);
   }
 
@@ -42,9 +42,9 @@ public interface Section extends Element<Panel> {
   }
 
   final class Border extends LazyElement<Panel> implements Section {
-    private final Func.Unary<Location> location;
+    private final Func.MaybeUnaryOperator<Location> location;
 
-    private Border(final Func.Unary<Location> location) {this.location = location;}
+    private Border(final Func.MaybeUnaryOperator<Location> location) {this.location = location;}
 
     @Override
     public final Panel content() {

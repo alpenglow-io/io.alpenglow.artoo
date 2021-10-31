@@ -13,7 +13,7 @@ import static java.lang.System.out;
 import static java.util.stream.IntStream.range;
 
 public interface Task<T> extends Projectable<T> {
-  static <T> Task<T> async(Suppl.Uni<T> supplier) {
+  static <T> Task<T> async(Suppl.MaybeSupplier<T> supplier) {
     return new Async<>(supplier);
   }
 
@@ -64,15 +64,15 @@ enum Threads {
 
 final class Async<T> implements Task<T> {
   private final Threads threads;
-  private final Suppl.Uni<T> supplier;
+  private final Suppl.MaybeSupplier<T> supplier;
 
-  private final Cons.Uni<T> func;
+  private final Cons.MaybeConsumer<T> func;
 
-  Async(final Suppl.Uni<T> supplier) {
+  Async(final Suppl.MaybeSupplier<T> supplier) {
     this(Threads.ForkJoin, supplier);
   }
 
-  private Async(final Threads threads, final Suppl.Uni<T> supplier) {
+  private Async(final Threads threads, final Suppl.MaybeSupplier<T> supplier) {
     this.threads = threads;
     this.supplier = supplier;
     this.func = it -> {
@@ -84,7 +84,7 @@ final class Async<T> implements Task<T> {
 
   @Override
   public void await() {
-    final var submitted = threads.service.submit(() -> func.apply(supplier.get()));
+    final var submitted = threads.service.submit(() -> func.accept(supplier.get()));
 
   }
 }

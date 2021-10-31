@@ -8,12 +8,12 @@ import io.artoo.lance.query.many.Ordering;
 import static io.artoo.lance.query.many.Ordering.Arrange.asc;
 
 public sealed interface Sort<T> extends Routine<T, Cursor<T>> permits Default, Arranged {
-  record By<T, R>(Func.Uni<? super T, ? extends R> field, Ordering.Arrange arrange) {
-    public By(Func.Uni<? super T, ? extends R> field) {
+  record By<T, R>(Func.MaybeFunction<? super T, ? extends R> field, Ordering.Arrange arrange) {
+    public By(Func.MaybeFunction<? super T, ? extends R> field) {
       this(field, asc);
     }
 
-    public static <T, R> By<T, R> with(Func.Uni<? super T, ? extends R> field, Ordering.Arrange arrange) {
+    public static <T, R> By<T, R> with(Func.MaybeFunction<? super T, ? extends R> field, Ordering.Arrange arrange) {
       return new By<>(field, arrange);
     }
 

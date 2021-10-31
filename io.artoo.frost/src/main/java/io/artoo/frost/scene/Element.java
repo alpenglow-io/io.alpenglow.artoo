@@ -12,7 +12,7 @@ public interface Element<T> extends Let<T> {
   enum Default implements Element<Component> {
     Empty;
     @Override
-    public <R> R let(final Func.Uni<? super Component, ? extends R> func) {
+    public <R> R let(final Func.MaybeFunction<? super Component, ? extends R> func) {
       return null;
     }
   }

@@ -15,11 +15,11 @@ import static io.artoo.lance.query.many.Ordering.Arrange.asc;
 public sealed interface Ordering<T> extends Many<T> {
   enum Arrange {asc, desc}
 
-  default <R> Ordering<T> by(Func.Uni<? super T, ? extends R> field) {
+  default <R> Ordering<T> by(Func.MaybeFunction<? super T, ? extends R> field) {
     return by(field, asc);
   }
 
-  default <R> Ordering<T> by(Func.Uni<? super T, ? extends R> field, Arrange arrange) {
+  default <R> Ordering<T> by(Func.MaybeFunction<? super T, ? extends R> field, Arrange arrange) {
     return new OrderBy<>(this, By.with(field, arrange));
   }
 }
@@ -35,7 +35,7 @@ final class Order<T> implements Ordering<T> {
   }
 
   @Override
-  public <R> Ordering<T> by(final Func.Uni<? super T, ? extends R> field, final Arrange arrange) {
+  public <R> Ordering<T> by(final Func.MaybeFunction<? super T, ? extends R> field, final Arrange arrange) {
     return new OrderBy<>(queryable, By.with(field, arrange));
   }
 }
@@ -56,7 +56,7 @@ final class OrderBy<T> implements Ordering<T> {
   }
 
   @Override
-  public <R> Ordering<T> by(final Func.Uni<? super T, ? extends R> field, final Arrange arrange) {
+  public <R> Ordering<T> by(final Func.MaybeFunction<? super T, ? extends R> field, final Arrange arrange) {
     final var copied = Arrays.copyOf(bys, bys.length + 1);
     copied[bys.length] = By.with(field, arrange);
     return new OrderBy<>(queryable, copied);

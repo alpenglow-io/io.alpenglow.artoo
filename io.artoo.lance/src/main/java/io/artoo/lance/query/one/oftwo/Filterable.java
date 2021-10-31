@@ -3,8 +3,8 @@ package io.artoo.lance.query.one.oftwo;
 import io.artoo.lance.func.Pred;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.query.internal.OfTwoTypes;
-import io.artoo.lance.query.internal.Where;
+import io.artoo.lance.query.func.OfTwoTypes;
+import io.artoo.lance.query.func.Where;
 
 public interface Filterable<A, B> extends Queryable.OfTwo<A, B> {
   default One.OfTwo<A, B> where(final Pred.Bi<? super A, ? super B> where) {

@@ -39,7 +39,7 @@ public interface Many<T> extends
     return new Some<>(Cursor.open(items));
   }
 
-  static <R> Many<R> from(final Suppl.Uni<R[]> supply) {
+  static <R> Many<R> from(final Suppl.MaybeSupplier<R[]> supply) {
     return new Supplied<>(supply);
   }
 
@@ -89,9 +89,9 @@ final class Ints implements Many<Integer> {
 }
 
 final class Supplied<R> implements Many<R> {
-  private final Suppl.Uni<R[]> supply;
+  private final Suppl.MaybeSupplier<R[]> supply;
 
-  Supplied(final Suppl.Uni<R[]> supply) {this.supply = supply;}
+  Supplied(final Suppl.MaybeSupplier<R[]> supply) {this.supply = supply;}
 
   @Override
   public Cursor<R> cursor() {

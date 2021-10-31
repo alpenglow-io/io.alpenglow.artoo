@@ -1,17 +1,14 @@
 package io.artoo.lance.tuple;
 
 import io.artoo.lance.query.Many;
-import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.RecordComponent;
 
 enum Type {
   ;
 
   @SuppressWarnings("unchecked")
-  static <T> @NotNull T componentOf(final Object instance, final int index) {
+  static <T> T componentOf(final Object instance, final int index) {
     final var type = instance.getClass();
     try {
       assert index >= 0 && type.isRecord() && type.getRecordComponents().length > index;
@@ -26,21 +23,21 @@ enum Type {
     }
   }
 
-  static <T> @NotNull T firstOf(final Object instance) { return componentOf(instance, 0); }
+  static <T> T firstOf(final Object instance) { return componentOf(instance, 0); }
 
-  static <T> @NotNull T secondOf(final Object instance) { return componentOf(instance, 1); }
+  static <T> T secondOf(final Object instance) { return componentOf(instance, 1); }
 
-  static <T> @NotNull T thirdOf(final Object instance) { return componentOf(instance, 2); }
+  static <T> T thirdOf(final Object instance) { return componentOf(instance, 2); }
 
-  static <T> @NotNull T forthOf(final Object instance) { return componentOf(instance, 3); }
+  static <T> T forthOf(final Object instance) { return componentOf(instance, 3); }
 
-  static <T> @NotNull T fifthOf(final Object instance) { return componentOf(instance, 4); }
+  static <T> T fifthOf(final Object instance) { return componentOf(instance, 4); }
 
-  static <T> @NotNull T sixthOf(final Object instance) { return componentOf(instance, 5); }
+  static <T> T sixthOf(final Object instance) { return componentOf(instance, 5); }
 
-  static <T> @NotNull T seventhOf(final Object instance) { return componentOf(instance, 6); }
+  static <T> T seventhOf(final Object instance) { return componentOf(instance, 6); }
 
-  static <T> @NotNull T eighthOf(final Object instance) { return componentOf(instance, 7); }
+  static <T> T eighthOf(final Object instance) { return componentOf(instance, 7); }
 
   static <T> boolean has(final T property, final T value) {
     if (property == null && value == null) {

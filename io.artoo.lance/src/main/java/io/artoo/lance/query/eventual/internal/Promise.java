@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
 import static java.util.stream.IntStream.range;
 
 public interface Promise<T> extends Next<T> {
-  static <T> Promise<T> async(Suppl.Uni<T> job) {
+  static <T> Promise<T> async(Suppl.MaybeSupplier<T> job) {
     return new Async<>(job, it -> it);
   }
 
@@ -30,10 +30,10 @@ public interface Promise<T> extends Next<T> {
 }
 
 final class Async<T, R> implements Promise<R> {
-  private final Suppl.Uni<T> job;
-  private Func.Uni<? super T, ? extends R> tick;
+  private final Suppl.MaybeSupplier<T> job;
+  private Func.MaybeFunction<? super T, ? extends R> tick;
 
-  Async(final Suppl.Uni<T> job, final Func.Uni<? super T, ? extends R> tick) {
+  Async(final Suppl.MaybeSupplier<T> job, final Func.MaybeFunction<? super T, ? extends R> tick) {
     this.job = job;
     this.tick = tick;
   }
@@ -41,10 +41,10 @@ final class Async<T, R> implements Promise<R> {
   @Override
   public void await() {
     final var service = Executors.newSingleThreadExecutor();
-    service.submit(() -> tick.apply(job.call()));
+    service.submit(() -> tick.apply(job.get()));
   }
 
-  public <P> Next<P> select(final Func.Uni<? super R, ? extends P> select) {
+  public <P> Next<P> select(final Func.MaybeFunction<? super R, ? extends P> select) {
     return new Async<>(this.job, tick.then(select));
   }
 }

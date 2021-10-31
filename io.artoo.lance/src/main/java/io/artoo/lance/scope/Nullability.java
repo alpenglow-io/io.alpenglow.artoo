@@ -1,8 +1,5 @@
 package io.artoo.lance.scope;
 
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -12,14 +9,12 @@ import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNullElse;
 
 public interface Nullability {
-  @Contract("_, _ -> param1")
   static <T> T nonNullable(final T any, final String argument) {
     if (isNull(any))
       throw illegalArgument(argument);
     return any;
   }
 
-  @NotNull
   private static IllegalArgumentException illegalArgument(String argument) {
     return new IllegalArgumentException(
       requireNonNullElse(argument, """
@@ -30,18 +25,18 @@ public interface Nullability {
     );
   }
 
-  static <T, R> R nonNullable(final T value, @NotNull final String argument, @NotNull final Function<T, R> then) {
+  static <T, R> R nonNullable(final T value, final String argument, final Function<T, R> then) {
     return nonNullable(then, "then").apply(nonNullable(value, argument));
   }
 
-  static <R> R nonNullable(final Object[] values, @NotNull final String[] arguments, final Supplier<R> suppl) {
+  static <R> R nonNullable(final Object[] values, final String[] arguments, final Supplier<R> suppl) {
     for (var index = 0; index < values.length; index++)
       if (values[index] == null)
         throw illegalArgument(arguments[index]);
     return suppl.get();
   }
 
-  static boolean areNonNullable(@NotNull final Object... arguments) {
+  static boolean areNonNullable(final Object... arguments) {
     var areNonNullable = true;
     for (var i = 0; i < arguments.length && areNonNullable; i++) {
       try {
@@ -53,12 +48,10 @@ public interface Nullability {
     return areNonNullable;
   }
 
-  @Contract("_, _ -> param1")
   static <T> T nonNullableState(final T any, final String argument) {
     return nonNullableState(any, argument, "%s can't have a null-state.");
   }
 
-  @Contract("_, _, _ -> param1")
   static <T> T nonNullableState(final T any, final String argument, final String formatted) {
     if (isNull(any)) {
       throw new IllegalStateException(

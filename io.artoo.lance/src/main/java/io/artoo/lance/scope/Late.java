@@ -10,7 +10,7 @@ public interface Late<T> extends Let<T> {
     return new Late.Init<>();
   }
 
-  Late<T> set(Suppl.Uni<? extends T> suppl);
+  Late<T> set(Suppl.MaybeSupplier<? extends T> suppl);
 
   sealed interface Writeonce<T> extends Late<T> permits Late.Init {}
 
@@ -23,7 +23,7 @@ public interface Late<T> extends Let<T> {
     }
 
     @Override
-    public Late<T> set(final Suppl.Uni<? extends T> suppl) {
+    public Late<T> set(final Suppl.MaybeSupplier<? extends T> suppl) {
       final var unsyncd = this.value;
       if (Nothing.equals(unsyncd)) {
         synchronized (this) {
@@ -38,7 +38,7 @@ public interface Late<T> extends Let<T> {
     }
 
     @Override
-    public <R> R let(final Func.Uni<? super T, ? extends R> func) {
+    public <R> R let(final Func.MaybeFunction<? super T, ? extends R> func) {
       final var unsyncd = this.value;
       if (Nothing.notEquals(unsyncd)) {
         synchronized (this) {

@@ -9,7 +9,7 @@ public final class Decimal64 implements Random<Double> {
   public Decimal64(final Binary bit) {this.bit = bit;}
 
   @Override
-  public <R> R let(final Func.Uni<? super Double, ? extends R> func) {
+  public <R> R let(final Func.MaybeFunction<? super Double, ? extends R> func) {
     return
       bit.let(26, rnd1 ->
         bit.let(27, rnd2 ->

@@ -24,7 +24,7 @@ public final class Gaussian implements Random<Double> {
   }
 
   @Override
-  public <R> R let(final Func.Uni<? super Double, ? extends R> func) {
+  public <R> R let(final Func.MaybeFunction<? super Double, ? extends R> func) {
     if (next.equals(Nothing)) {
       synchronized (this) {
         if (next.equals(Nothing)) {

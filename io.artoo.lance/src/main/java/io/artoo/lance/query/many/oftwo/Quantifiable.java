@@ -4,8 +4,8 @@ import io.artoo.lance.func.Pred;
 import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.query.internal.Every;
-import io.artoo.lance.query.internal.Some;
+import io.artoo.lance.query.func.Every;
+import io.artoo.lance.query.func.Some;
 
 public interface Quantifiable<A, B> extends Queryable.OfTwo<A, B> {
   default <X, Y> One<Boolean> all(final Class<X> type1, final Class<Y> type2) {

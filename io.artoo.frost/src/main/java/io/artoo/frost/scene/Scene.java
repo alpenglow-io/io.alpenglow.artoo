@@ -64,7 +64,7 @@ public sealed interface Scene extends Sectionable, Textable, Modalable, Buttonab
     }
 
     @Override
-    public final <R> R let(final Func.Uni<? super Scene, ? extends R> func) {
+    public final <R> R let(final Func.MaybeFunction<? super Scene, ? extends R> func) {
       return func.apply(this);
     }
   }

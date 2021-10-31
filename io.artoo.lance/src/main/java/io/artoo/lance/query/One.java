@@ -3,11 +3,20 @@ package io.artoo.lance.query;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Suppl;
 import io.artoo.lance.literator.Cursor;
+import io.artoo.lance.query.one.Elseable;
 import io.artoo.lance.query.one.Filterable;
 import io.artoo.lance.query.one.Matchable;
-import io.artoo.lance.query.one.Elseable;
 import io.artoo.lance.query.one.Peekable;
 import io.artoo.lance.query.one.Projectable;
+
+enum None implements One<Object> {
+  Empty;
+
+  @Override
+  public final Cursor<Object> cursor() {
+    return Cursor.nothing();
+  }
+}
 
 public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Elseable<T>, Matchable<T> {
   static <T> One<T> maybe(final T element) {
@@ -18,20 +27,20 @@ public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Else
     return new Lone<>(element);
   }
 
-  static <T> One<T> from(final Suppl.Uni<T> supply) {
+  static <T> One<T> from(final Suppl.MaybeSupplier<T> supply) {
     return new Sone<>(supply);
   }
 
-  static <T> One<T> gone(final String message, final Func.Uni<? super String, ? extends RuntimeException> error) {
+  static <T> One<T> gone(final String message, final Func.MaybeFunction<? super String, ? extends RuntimeException> error) {
     return new Gone<>(message, error);
   }
 
   @SuppressWarnings("unchecked")
   static <L> One<L> none() {
-    return (One<L>) None.Default;
+    return (One<L>) None.Empty;
   }
 
-  static <A extends AutoCloseable, T, O extends One<T>> One<T> done(Suppl.Uni<? extends A> going, Func.Uni<? super A, ? extends O> then) {
+  static <A extends AutoCloseable, T, O extends One<T>> One<T> done(Suppl.MaybeSupplier<? extends A> going, Func.MaybeFunction<? super A, ? extends O> then) {
     return new Done<>(going, then);
   }
 
@@ -52,9 +61,9 @@ final class Lone<T> implements One<T> {
 }
 
 final class Sone<T> implements One<T> {
-  private final Suppl.Uni<T> suppl;
+  private final Suppl.MaybeSupplier<T> suppl;
 
-  public Sone(final Suppl.Uni<T> suppl) {
+  public Sone(final Suppl.MaybeSupplier<T> suppl) {
     this.suppl = suppl;
   }
 
@@ -72,9 +81,9 @@ final class Sone<T> implements One<T> {
 
 final class Gone<T> implements One<T> {
   private final String message;
-  private final Func.Uni<? super String, ? extends RuntimeException> error;
+  private final Func.MaybeFunction<? super String, ? extends RuntimeException> error;
 
-  Gone(final String message, final Func.Uni<? super String, ? extends RuntimeException> error) {
+  Gone(final String message, final Func.MaybeFunction<? super String, ? extends RuntimeException> error) {
     this.message = message;
     this.error = error;
   }
@@ -85,20 +94,11 @@ final class Gone<T> implements One<T> {
   }
 }
 
-enum None implements One<Object> {
-  Default;
-
-  @Override
-  public final Cursor<Object> cursor() {
-    return Cursor.nothing();
-  }
-}
-
 final class Done<A extends AutoCloseable, T, O extends One<T>> implements One<T> {
-  private final Suppl.Uni<? extends A> doing;
-  private final Func.Uni<? super A, ? extends O> then;
+  private final Suppl.MaybeSupplier<? extends A> doing;
+  private final Func.MaybeFunction<? super A, ? extends O> then;
 
-  Done(final Suppl.Uni<? extends A> doing, final Func.Uni<? super A, ? extends O> then) {
+  Done(final Suppl.MaybeSupplier<? extends A> doing, final Func.MaybeFunction<? super A, ? extends O> then) {
     this.doing = doing;
     this.then = then;
   }

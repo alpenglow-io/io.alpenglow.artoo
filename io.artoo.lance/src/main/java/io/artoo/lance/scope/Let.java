@@ -8,12 +8,12 @@ import io.artoo.lance.func.Suppl;
 import static io.artoo.lance.func.Func.Default.Nothing;
 
 public interface Let<T> {
-  static <T> Let<T> lazy(final Suppl.Uni<T> supplier) {
+  static <T> Let<T> lazy(final Suppl.MaybeSupplier<T> supplier) {
     return new Let.Lazy<>(supplier);
   }
 
-  <R> R let(final Func.Uni<? super T, ? extends R> func);
-  default Let<T> get(final Cons.Uni<? super T> func) {
+  <R> R let(final Func.MaybeFunction<? super T, ? extends R> func);
+  default Let<T> get(final Cons.MaybeConsumer<? super T> func) {
     let(it -> {
       func.accept(it);
       return null;
@@ -24,24 +24,24 @@ public interface Let<T> {
   sealed interface Readonly<T> extends Let<T> permits Let.Lazy {}
 
   final class Lazy<T> implements Readonly<T> {
-    private final Suppl.Uni<? extends T> suppl;
+    private final Suppl.MaybeSupplier<? extends T> suppl;
     private volatile Object value;
 
-    private Lazy(final Suppl.Uni<T> suppl) {
+    private Lazy(final Suppl.MaybeSupplier<T> suppl) {
       this(
         suppl,
         Nothing
       );
     }
 
-    private Lazy(final Suppl.Uni<? extends T> suppl, final Object value) {
+    private Lazy(final Suppl.MaybeSupplier<? extends T> suppl, final Object value) {
       this.suppl = suppl;
       this.value = value;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <R> R let(final Func.Uni<? super T, ? extends R> func) {
+    public <R> R let(final Func.MaybeFunction<? super T, ? extends R> func) {
       final var unsyncd = value;
       if (Nothing.equals(unsyncd)) {
         synchronized (this) {

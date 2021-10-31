@@ -11,7 +11,7 @@ import static javafx.scene.layout.Priority.NEVER;
 import static javafx.scene.layout.Priority.SOMETIMES;
 
 @FunctionalInterface
-public interface ColumnProperty extends Cons.Uni<ColumnConstraints> {
+public interface ColumnProperty extends Cons.MaybeConsumer<ColumnConstraints> {
   static ColumnProperty width(Percent percent) {
     return it -> it.setPercentWidth(percent.get());
   }

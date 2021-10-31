@@ -1,47 +1,55 @@
 package io.artoo.lance.func;
 
+import io.artoo.lance.scope.Maybe;
+
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
-public enum Func {;
-  public interface Unary<T> extends UnaryOperator<T> {
+public sealed interface Func {
+  enum Namespace implements Func {}
+
+  interface MaybeUnaryOperator<T> extends UnaryOperator<T> {
     T tryApply(T t) throws Throwable;
+
+    default Maybe<T> maybeApply(T t) {
+      try {
+        return Maybe.value(tryApply(t));
+      } catch (Throwable throwable) {
+        return Maybe.error(throwable);
+      }
+    }
 
     @Override
     default T apply(T t) {
-      try {
-        return tryApply(t);
-      } catch (Throwable throwable) {
-        throwable.printStackTrace();
-        return null;
-      }
+      return maybeApply(t).eventually();
     }
   }
 
-  public interface Uni<T, R> extends Function<T, R> {
+  interface MaybeFunction<T, R> extends Function<T, R> {
     R tryApply(T t) throws Throwable;
 
-    @Override
-    default R apply(T t) {
+    default Maybe<R> maybeApply(T t) {
       try {
-        return this.tryApply(t);
+        return Maybe.value(this.tryApply(t));
       } catch (Throwable throwable) {
-        throwable.printStackTrace();
-        return null;
+        return Maybe.error(throwable);
       }
     }
 
-    default <V> Func.Uni<V, R> previous(Func.Uni<? super V, ? extends T> func) {
-      assert func != null;
+    @Override
+    default R apply(T t) {
+      return maybeApply(t).eventually();
+    }
+
+    default <V> MaybeFunction<V, R> previous(MaybeFunction<? super V, ? extends T> func) {
       return it -> {
         final var applied = func.tryApply(it);
         return applied == null ? null : tryApply(applied);
       };
     }
 
-    default <V> Func.Uni<T, V> then(Func.Uni<? super R, ? extends V> func) {
-      assert func != null;
+    default <V> MaybeFunction<T, V> then(MaybeFunction<? super R, ? extends V> func) {
       return it -> {
         final var applied = tryApply(it);
         return applied == null ? null : func.tryApply(applied);
@@ -49,90 +57,96 @@ public enum Func {;
     }
   }
 
-  public interface Bi<A, B, R> extends BiFunction<A, B, R> {
+  interface MaybeBiFunction<A, B, R> extends BiFunction<A, B, R> {
     R tryApply(A a, B b) throws Throwable;
 
-    @Override
-    default R apply(A a, B b) {
+    default Maybe<R> maybeApply(A a, B b) {
       try {
-        return this.tryApply(a, b);
+        return Maybe.value(tryApply(a, b));
       } catch (Throwable throwable) {
-        throwable.printStackTrace();
-        return null;
+        return Maybe.error(throwable);
       }
     }
 
-    default Func.Bi<? super A, ? super B, ? extends R> butNulls() {
+    @Override
+    default R apply(A a, B b) {
+      return maybeApply(a, b).eventually();
+    }
+
+    default MaybeBiFunction<? super A, ? super B, ? extends R> butNulls() {
       return (a, b) -> a == null || b == null ? null : this.tryApply(a, b);
     }
   }
 
-  public interface Tri<A, B, C, R> {
+  interface MaybeTriFunction<A, B, C, R> {
     R tryApply(A a, B b, C c) throws Throwable;
 
-    default R apply(A a, B b, C c) {
+    default Maybe<R> maybeApply(A a, B b, C c) {
       try {
-        return this.tryApply(a, b, c);
+        return Maybe.value(tryApply(a, b, c));
       } catch (Throwable throwable) {
-        throwable.printStackTrace();
-        return null;
+        return Maybe.error(throwable);
       }
+    }
+
+    default R apply(A a, B b, C c) {
+      return maybeApply(a, b, c).eventually();
     }
   }
 
-  public interface Quad<A, B, C, D, R> {
+  interface MaybeQuadFunction<A, B, C, D, R> {
     R tryApply(A a, B b, C c, D d) throws Throwable;
 
-    default R apply(A a, B b, C c, D d) {
+    default Maybe<R> maybeApply(A a, B b, C c, D d) {
       try {
-        return this.tryApply(a, b, c, d);
+        return Maybe.value(tryApply(a, b, c, d));
       } catch (Throwable throwable) {
-        throwable.printStackTrace();
-        return null;
+        return Maybe.error(throwable);
       }
+    }
+
+    default R apply(A a, B b, C c, D d) {
+      return maybeApply(a, b, c, d).eventually();
     }
   }
 
-  public interface Quin<A, B, C, D, E, R> {
+  interface Quin<A, B, C, D, E, R> {
     R tryApply(A a, B b, C c, D d, E e) throws Throwable;
 
-    default R apply(A a, B b, C c, D d, E e) {
+    default Maybe<R> apply(A a, B b, C c, D d, E e) {
       try {
-        return this.tryApply(a, b, c, d, e);
+        return Maybe.value(tryApply(a, b, c, d, e));
       } catch (Throwable throwable) {
-        throwable.printStackTrace();
-        return null;
+        return Maybe.error(throwable);
       }
     }
   }
 
-  public interface Sex<A, B, C, D, E, F, R> {
+  interface Sex<A, B, C, D, E, F, R> {
     R tryApply(A a, B b, C c, D d, E e, F f) throws Throwable;
 
-    default R apply(A a, B b, C c, D d, E e, F f) {
+    default Maybe<R> apply(A a, B b, C c, D d, E e, F f) {
       try {
-        return this.tryApply(a, b, c, d, e, f);
+        return Maybe.value(tryApply(a, b, c, d, e, f));
       } catch (Throwable throwable) {
-        throwable.printStackTrace();
-        return null;
+        return Maybe.error(throwable);
       }
     }
   }
 
-  public interface Sect<A, B, C, D, E, F, G, R> {
+  interface Sect<A, B, C, D, E, F, G, R> {
     R tryApply(A a, B b, C c, D d, E e, F f, G g) throws Throwable;
 
-    default R apply(A a, B b, C c, D d, E e, F f, G g) {
+    default Maybe<R> apply(A a, B b, C c, D d, E e, F f, G g) {
       try {
-        return this.tryApply(a, b, c, d, e, f, g);
+        return Maybe.value(tryApply(a, b, c, d, e, f, g));
       } catch (Throwable throwable) {
-        throwable.printStackTrace();
-        return null;
+        return Maybe.error(throwable);
       }
     }
   }
 
-  public enum Default {
+  enum Default {
     Nothing;
 
     public boolean notEquals(Object value) {

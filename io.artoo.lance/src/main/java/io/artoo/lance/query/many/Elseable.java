@@ -16,11 +16,11 @@ public interface Elseable<T> extends Queryable<T> {
     return () -> cursor().or(many::cursor);
   }
 
-  default <E extends RuntimeException> Many<T> or(final String message, final Func.Bi<? super String, ? super Throwable, ? extends E> exception) {
+  default <E extends RuntimeException> Many<T> or(final String message, final Func.MaybeBiFunction<? super String, ? super Throwable, ? extends E> exception) {
     return () -> cursor().or(message, exception);
   }
 
-  default <E extends RuntimeException> Many<T> or(final Suppl.Uni<? extends E> exception) {
+  default <E extends RuntimeException> Many<T> or(final Suppl.MaybeSupplier<? extends E> exception) {
     return () -> cursor().or(null, (it, throwable) -> exception.tryGet());
   }
 }

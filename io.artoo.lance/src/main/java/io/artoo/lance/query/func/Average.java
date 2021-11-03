@@ -5,8 +5,8 @@ import io.artoo.lance.query.Tail;
 import io.artoo.lance.task.Atomic;
 
 public interface Average<T, N extends Number> extends Func.MaybeFunction<T, Tail<T, Double, Average<T, N>>> {
-  static <T, N extends Number> Atomic<Average<T, N>> accumulated(Func.MaybeFunction<? super T, ? extends N> func) {
-    return Atomic.reference(new Accumulated<>(null, 0, func));
+  static <T, N extends Number> Average<T, N> accumulated(Func.MaybeFunction<? super T, ? extends N> func) {
+    return new Accumulated<>(null, 0, func);
   }
 
   final class Accumulated<T, N extends Number> implements Average<T, N> {

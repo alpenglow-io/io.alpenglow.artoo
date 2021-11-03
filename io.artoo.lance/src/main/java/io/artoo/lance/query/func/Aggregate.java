@@ -7,13 +7,13 @@ import io.artoo.lance.query.Tail;
 import io.artoo.lance.task.Atomic;
 
 public interface Aggregate<T, A, R> extends MaybeFunction<T, Tail<T, A, Aggregate<T, A, R>>> {
-  static <T, A, R> Atomic<Aggregate<T, A, R>> seeded(
+  static <T, A, R> Aggregate<T, A, R> seeded(
     A seed,
     MaybePredicate<? super T> where,
     MaybeFunction<? super T, ? extends R> select,
     MaybeBiFunction<? super A, ? super R, ? extends A> aggregate
   ) {
-    return Atomic.reference(new Seeded<>(seed, where, select, aggregate));
+    return new Seeded<>(seed, where, select, aggregate);
   }
 
   final class Seeded<T, A, R> implements Aggregate<T, A, R> {

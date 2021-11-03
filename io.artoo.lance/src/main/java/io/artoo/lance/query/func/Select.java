@@ -5,12 +5,12 @@ import io.artoo.lance.query.Tail;
 import io.artoo.lance.task.Atomic;
 
 public interface Select<T, R> extends Func.MaybeFunction<T, Tail<T, R, Select<T, R>>> {
-  static <T, R> Atomic<Select<T, R>> indexed(final Func.MaybeFunction<? super T, ? extends R> select) {
+  static <T, R> Select<T, R> indexed(final Func.MaybeFunction<? super T, ? extends R> select) {
     return indexed((i, it) -> select.tryApply(it));
   }
 
-  static <T, R> Atomic<Select<T, R>> indexed(final Func.MaybeBiFunction<? super Integer, ? super T, ? extends R> select) {
-    return Atomic.reference(new Indexed<>(select));
+  static <T, R> Select<T, R> indexed(final Func.MaybeBiFunction<? super Integer, ? super T, ? extends R> select) {
+    return new Indexed<>(select);
   }
 
   final class Indexed<T, R> implements Select<T, R> {

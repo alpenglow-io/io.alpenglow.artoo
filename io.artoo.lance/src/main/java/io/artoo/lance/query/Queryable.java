@@ -16,7 +16,6 @@ public interface Queryable<T> extends Iterable<T> {
     try {
       return cursor().close();
     } catch (Throwable cause) {
-      cause.printStackTrace();
       return Cursor.nothing();
     }
   }
@@ -31,7 +30,7 @@ public interface Queryable<T> extends Iterable<T> {
 
   @SuppressWarnings("StatementWithEmptyBody")
   default void eventually() {
-    for (final var value : this);
+    for (final var ignored : this);
   }
 
   default <Z> Z eventually(Z returning) {
@@ -39,7 +38,11 @@ public interface Queryable<T> extends Iterable<T> {
     return returning;
   }
 
-  default <R, F extends Func.MaybeFunction<T, Tail<T, R, F>>> Func.MaybeFunction<T, R> as(final Atomic<F> atomically) {
+  default <R, F extends Func.MaybeFunction<T, Tail<T, R, F>>> Func.MaybeFunction<T, R> as(final F func) {
+    return as(Atomic.reference(func));
+  }
+
+  private <R, F extends Func.MaybeFunction<T, Tail<T, R, F>>> Func.MaybeFunction<T, R> as(final Atomic<F> atomically) {
     return element -> atomically.let(it -> it.apply(element), Tail::func)
       .orElseThrow(() -> new IllegalStateException("Can't select atomically"))
       .returning();
@@ -73,7 +76,11 @@ public interface Queryable<T> extends Iterable<T> {
       }
     }
 
-    default <R, F extends Func.MaybeFunction<Pair<A, B>, Tail<Pair<A, B>, R, F>>> Func.MaybeFunction<Pair<A, B>, R> as(final Atomic<F> atomically) {
+    default <R, F extends Func.MaybeFunction<Pair<A, B>, Tail<Pair<A, B>, R, F>>> Func.MaybeFunction<Pair<A, B>, R> as(final F func) {
+      return as(Atomic.reference(func));
+    }
+
+    private <R, F extends Func.MaybeFunction<Pair<A, B>, Tail<Pair<A, B>, R, F>>> Func.MaybeFunction<Pair<A, B>, R> as(final Atomic<F> atomically) {
       return element -> atomically.let(it -> it.apply(element), Tail::func)
         .orElseThrow(() -> new IllegalStateException("Can't select atomically"))
         .returning();

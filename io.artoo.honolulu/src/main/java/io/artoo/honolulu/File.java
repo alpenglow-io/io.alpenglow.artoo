@@ -25,7 +25,7 @@ public interface File extends Let<InputStream> {
     }
 
     @Override
-    public <R> R let(final Func.Uni<? super InputStream, ? extends R> func) {
+    public <R> R let(final Func.MaybeFunction<? super InputStream, ? extends R> func) {
       return input.let(func);
     }
   }

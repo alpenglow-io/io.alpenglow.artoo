@@ -1,7 +1,7 @@
 package io.artoo.honolulu;
 
-import io.artoo.lance.func.Cons;
-import io.artoo.lance.func.Func;
+import io.artoo.lance.func.Cons.MaybeConsumer;
+import io.artoo.lance.func.Func.MaybeFunction;
 import io.artoo.lance.query.One;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -31,14 +31,14 @@ public final class Honolulu extends Application {
       .select(Files::readAllBytes)
       .select(ByteArrayInputStream::new)
       .select(Image::new)
-      .select(ImageView::new)
-      .select(BorderPane::new)
+      .select((MaybeFunction<Image, ImageView>) ImageView::new)
+      .select((MaybeFunction<ImageView, BorderPane>) BorderPane::new)
       .select(newScene())
       .exceptionally(alert())
       .eventually(show(stage));
   }
 
-  private Func.Uni<BorderPane, Scene> newScene() {
+  private MaybeFunction<BorderPane, Scene> newScene() {
     return it -> {
       final var scene = new Scene(it, Color.BLACK);
 
@@ -53,7 +53,7 @@ public final class Honolulu extends Application {
     };
   }
 
-  private Cons.Uni<Throwable> alert() {
+  private MaybeConsumer<Throwable> alert() {
     return throwable -> {
       final var alert = new Alert(ERROR);
       alert.setTitle("Exception!");
@@ -70,7 +70,7 @@ public final class Honolulu extends Application {
     };
   }
 
-  private Cons.Uni<Scene> show(final Stage stage) {
+  private MaybeConsumer<Scene> show(final Stage stage) {
     return scene -> {
       stage.setScene(scene);
       stage.centerOnScreen();

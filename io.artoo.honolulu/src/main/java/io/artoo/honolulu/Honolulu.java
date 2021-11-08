@@ -29,13 +29,14 @@ public final class Honolulu extends Application {
     One.maybe("/home/guada/imgs/avatars/Wheeljack.png")
       .select(Paths::get)
       .select(Files::readAllBytes)
-      .select(ByteArrayInputStream::new)
-      .select(Image::new)
-      .select((MaybeFunction<Image, ImageView>) ImageView::new)
-      .select((MaybeFunction<ImageView, BorderPane>) BorderPane::new)
+      .select(this::asImageInPane)
       .select(newScene())
       .exceptionally(alert())
       .eventually(show(stage));
+  }
+
+  private BorderPane asImageInPane(byte[] buf) {
+    return new BorderPane(new ImageView(new Image(new ByteArrayInputStream(buf))));
   }
 
   private MaybeFunction<BorderPane, Scene> newScene() {

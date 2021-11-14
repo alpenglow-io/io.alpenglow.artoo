@@ -5,10 +5,9 @@ import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.query.many.Aggregatable;
 import io.artoo.lance.query.many.Concatenatable;
 import io.artoo.lance.query.many.Convertable;
+import io.artoo.lance.query.many.Elseable;
 import io.artoo.lance.query.many.Filterable;
 import io.artoo.lance.query.many.Joinable;
-import io.artoo.lance.query.many.Matchable;
-import io.artoo.lance.query.many.Elseable;
 import io.artoo.lance.query.many.Partitionable;
 import io.artoo.lance.query.many.Peekable;
 import io.artoo.lance.query.many.Projectable;
@@ -24,7 +23,6 @@ public interface Many<T> extends
   Convertable<T>,
   Filterable<T>,
   Joinable<T>,
-  Matchable<T>,
   Elseable<T>,
   Partitionable<T>,
   Peekable<T>,

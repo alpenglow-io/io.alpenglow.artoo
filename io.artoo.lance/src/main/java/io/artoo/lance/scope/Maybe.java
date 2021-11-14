@@ -3,7 +3,7 @@ package io.artoo.lance.scope;
 import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Pred;
-import io.artoo.lance.func.Suppl;
+import io.artoo.lance.func.Suppl.MaybeSupplier;
 import io.artoo.lance.query.One;
 
 import java.util.Optional;
@@ -61,7 +61,7 @@ public final class Maybe<T> {
     };
   }
 
-  public T eventually() {
+  public T nullable() {
     return switch (right) {
       case null -> throw new ScopeException(left);
       default -> right;
@@ -78,7 +78,14 @@ public final class Maybe<T> {
     };
   }
 
-  public Maybe<T> or(Suppl.MaybeSupplier<? extends T> other) {
+  public T otherwise(MaybeSupplier<T> value) {
+    return switch (right) {
+      case null -> value.get();
+      default -> right;
+    };
+  }
+
+  public Maybe<T> or(MaybeSupplier<? extends T> other) {
     return switch (right) {
       case null -> new Maybe<>(other.get());
       default -> this;

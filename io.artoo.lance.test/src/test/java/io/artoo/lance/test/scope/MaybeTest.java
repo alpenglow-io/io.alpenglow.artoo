@@ -10,6 +10,6 @@ class MaybeTest {
   @Test
   @DisplayName("should eventually get value")
   void shouldNotThrowException() {
-    assertThat(Maybe.value("value").eventually()).isEqualTo("value");
+    assertThat(Maybe.value("value").nullable()).isEqualTo("value");
   }
 }

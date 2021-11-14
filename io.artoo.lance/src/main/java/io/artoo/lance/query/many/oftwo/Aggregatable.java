@@ -2,24 +2,12 @@ package io.artoo.lance.query.many.oftwo;
 
 import io.artoo.lance.func.Func;
 import io.artoo.lance.func.Pred;
+import io.artoo.lance.func.tail.Aggregate;
 import io.artoo.lance.query.One;
-import io.artoo.lance.query.func.Aggregate;
-import io.artoo.lance.tuple.Pair;
 
 public interface Aggregatable<A, B> extends Countable<A, B>, Summable<A, B>, Averageable<A, B>, Extremable<A, B> {
   default <S, R> One<S> aggregate(final S seed, final Pred.Bi<? super A, ? super B> where, final Func.MaybeBiFunction<? super A, ? super B, ? extends R> select, final Func.MaybeBiFunction<? super S, ? super R, ? extends S> aggregate) {
-    return () -> cursor()
-      .map(
-        as(
-          Aggregate.<Pair<A, B>, S, R>seeded(
-            seed,
-            it -> where.tryTest(it.first(), it.second()),
-            it -> select.tryApply(it.first(), it.second()),
-            aggregate
-          )
-        )
-      )
-      .keepNull();
+    return cursor().map(rec(Aggregate.with(seed, it -> where.tryTest(it.first(), it.second()), it -> select.tryApply(it.first(), it.second()), aggregate)))::keepNull;
   }
 
   default <S, R> One<S> aggregate(final S seed, final Func.MaybeBiFunction<? super A, ? super B, ? extends R> select, final Func.MaybeBiFunction<? super S, ? super R, ? extends S> aggregate) {

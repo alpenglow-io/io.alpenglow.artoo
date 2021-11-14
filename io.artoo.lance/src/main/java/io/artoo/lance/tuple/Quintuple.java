@@ -18,11 +18,11 @@ public interface Quintuple<A, B, C, D, E> extends Tuple {
   default E fifth() { return fifthOf(this); }
 
   default <N extends Record> N to(final Func.Quin<? super A, ? super B, ? super C, ? super D, ? super E, ? extends N> to) {
-    return to.apply(first(), second(), third(), forth(), fifth()).eventually();
+    return to.apply(first(), second(), third(), forth(), fifth()).nullable();
   }
 
   default <T extends Record> T as(final Func.Quin<? super A, ? super B, ? super C, ? super D, ? super E, ? extends T> as) {
-    return as.apply(first(), second(), third(), forth(), fifth()).eventually();
+    return as.apply(first(), second(), third(), forth(), fifth()).nullable();
   }
 
   default boolean is(final A value1, final B value2, final C value3, final D value4, final E value5) {
@@ -30,11 +30,11 @@ public interface Quintuple<A, B, C, D, E> extends Tuple {
   }
 
   default <R extends Record & Quintuple<A, B, C, D, E>> R map(Func.Quin<? super A, ? super B, ? super C, ? super D, ? super E, ? extends R> map) {
-    return map.apply(first(), second(), third(), forth(), fifth()).eventually();
+    return map.apply(first(), second(), third(), forth(), fifth()).nullable();
   }
 
   default <R extends Record & Quintuple<A, B, C, D, E>, F extends Record & Single<R>> R flatMap(Func.Quin<? super A, ? super B, ? super C, ? super D, ? super E, ? extends F> func) {
-    return func.apply(first(), second(), third(), forth(), fifth()).eventually().first();
+    return func.apply(first(), second(), third(), forth(), fifth()).nullable().first();
   }
 
   default Quintuple<A, B, C, D, E> peek(Cons.Quin<? super A, ? super B, ? super C, ? super D, ? super E> cons) {

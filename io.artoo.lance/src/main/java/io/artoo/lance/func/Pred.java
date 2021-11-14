@@ -42,7 +42,7 @@ public sealed interface Pred {
 
     @Override
     default boolean test(A a) {
-      return verify(a).or(() -> false).eventually();
+      return verify(a).or(() -> false).nullable();
     }
 
     default MaybePredicate<A> not() {

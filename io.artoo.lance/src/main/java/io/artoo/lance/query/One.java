@@ -5,7 +5,6 @@ import io.artoo.lance.func.Suppl;
 import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.query.one.Elseable;
 import io.artoo.lance.query.one.Filterable;
-import io.artoo.lance.query.one.Matchable;
 import io.artoo.lance.query.one.Peekable;
 import io.artoo.lance.query.one.Projectable;
 
@@ -18,7 +17,7 @@ enum None implements One<Object> {
   }
 }
 
-public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Elseable<T>, Matchable<T> {
+public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Elseable<T> {
   static <T> One<T> maybe(final T element) {
     return element != null ? One.lone(element) : One.none();
   }

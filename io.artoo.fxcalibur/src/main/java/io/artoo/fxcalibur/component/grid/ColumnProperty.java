@@ -1,6 +1,6 @@
 package io.artoo.fxcalibur.component.grid;
 
-import io.artoo.lance.func.Cons;
+import io.artoo.lance.test.func.Cons;
 import javafx.scene.layout.ColumnConstraints;
 
 import static javafx.geometry.HPos.CENTER;

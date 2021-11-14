@@ -1,14 +1,14 @@
 package io.artoo.lance.query.many.oftwo;
 
 import io.artoo.lance.func.Func;
+import io.artoo.lance.func.tail.Select;
 import io.artoo.lance.query.Many;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.query.func.Select;
 import io.artoo.lance.tuple.Pair;
 
 public interface Projectable<A, B> extends Queryable.OfTwo<A, B> {
   default <R> Many<R> select(Func.MaybeTriFunction<? super Integer, ? super A, ? super B, ? extends R> select) {
-    return () -> cursor().map(as(Select.indexed((index, record) -> select.apply(index, record.first(), record.second()))));
+    return () -> cursor().map(rec(Select.with((index, record) -> select.apply(index, record.first(), record.second()))));
   }
 
   default <R> Many<R> select(Func.MaybeBiFunction<? super A, ? super B, ? extends R> select) {
@@ -16,7 +16,7 @@ public interface Projectable<A, B> extends Queryable.OfTwo<A, B> {
   }
 
   default <R, Q extends Queryable<R>> Many<R> selection(Func.MaybeTriFunction<? super Integer, ? super A, ? super B, ? extends Q> select) {
-    return () -> cursor().map(as(Select.indexed(((i, pair) -> select.tryApply(i, pair.first(), pair.second()))))).flatMap(Queryable::cursor);
+    return () -> cursor().map(rec(Select.with(((i, pair) -> select.tryApply(i, pair.first(), pair.second()))))).flatMap(Queryable::cursor);
   }
 
   default <R, Q extends Queryable<R>> Many<R> selection(Func.MaybeBiFunction<? super A, ? super B, ? extends Q> select) {

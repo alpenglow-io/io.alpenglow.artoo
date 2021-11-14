@@ -3,31 +3,31 @@ package io.artoo.lance.query.many;
 import io.artoo.lance.func.Func;
 import io.artoo.lance.query.One;
 import io.artoo.lance.query.Queryable;
-import io.artoo.lance.query.func.Extremum;
+import io.artoo.lance.query.func.Extreme;
 
 public interface Extremable<T> extends Queryable<T> {
-  private One<T> extreme(int type) {
-    return this.extreme(type, it -> it instanceof Number n ? n : null);
+  private One<T> extreme() {
+    return this.extreme(it -> it instanceof Number n ? n : null);
   }
 
-  private <N extends Number, V> One<V> extreme(int type, final Func.MaybeFunction<? super T, ? extends N> select) {
-    return () -> cursor().map(new Extremum<T, N, V>(type, select)).keepNull();
+  private <N extends Number, V> One<V> extreme(final Func.MaybeFunction<? super T, ? extends N> select) {
+    return () -> cursor().map(rec(Extreme.<T, N, V>max(select))).keepNull();
   }
 
   default <N extends Number> One<N> max(final Func.MaybeFunction<? super T, ? extends N> select) {
-    return extreme(1, select);
+    return () -> cursor().map(rec(Extreme.<T, N, N>max(select))).keepNull();
   }
 
   default One<T> max() {
-    return extreme(1);
+    return () -> cursor().map(rec(Extreme.<T, Number, T>max())).keepNull();
   }
 
   default <N extends Number> One<N> min(final Func.MaybeFunction<? super T, ? extends N> select) {
-    return extreme(-1, select);
+    return () -> cursor().map(rec(Extreme.<T, N, N>min(select))).keepNull();
   }
 
   default One<T> min() {
-    return extreme(-1);
+    return () -> cursor().map(rec(Extreme.<T, Number, T>min())).keepNull();
   }
 
 }

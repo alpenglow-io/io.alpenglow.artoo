@@ -2,8 +2,9 @@ package io.artoo.lance.query;
 
 import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Func;
+import io.artoo.lance.func.TailFunction;
+import io.artoo.lance.func.TailFunction.Tailrec;
 import io.artoo.lance.literator.Cursor;
-import io.artoo.lance.task.Atomic;
 import io.artoo.lance.tuple.Pair;
 
 import java.util.Iterator;
@@ -16,6 +17,7 @@ public interface Queryable<T> extends Iterable<T> {
     try {
       return cursor().close();
     } catch (Throwable cause) {
+      cause.printStackTrace();
       return Cursor.nothing();
     }
   }
@@ -30,7 +32,8 @@ public interface Queryable<T> extends Iterable<T> {
 
   @SuppressWarnings("StatementWithEmptyBody")
   default void eventually() {
-    for (final var ignored : this);
+    for (final var ignored : this)
+      ;
   }
 
   default <Z> Z eventually(Z returning) {
@@ -38,14 +41,8 @@ public interface Queryable<T> extends Iterable<T> {
     return returning;
   }
 
-  default <R, F extends Func.MaybeFunction<T, Tail<T, R, F>>> Func.MaybeFunction<T, R> as(final F func) {
-    return as(Atomic.reference(func));
-  }
-
-  private <R, F extends Func.MaybeFunction<T, Tail<T, R, F>>> Func.MaybeFunction<T, R> as(final Atomic<F> atomically) {
-    return element -> atomically.let(it -> it.apply(element), Tail::func)
-      .orElseThrow(() -> new IllegalStateException("Can't select atomically"))
-      .returning();
+  default <R, F extends Tailrec<T, R, F> & TailFunction<T, R, F>> Func.MaybeFunction<T, R> rec(final F tailrec) {
+    return element -> tailrec.on(element).result();
   }
 
   interface OfTwo<A, B> extends Iterable<Pair<A, B>> {
@@ -76,14 +73,8 @@ public interface Queryable<T> extends Iterable<T> {
       }
     }
 
-    default <R, F extends Func.MaybeFunction<Pair<A, B>, Tail<Pair<A, B>, R, F>>> Func.MaybeFunction<Pair<A, B>, R> as(final F func) {
-      return as(Atomic.reference(func));
-    }
-
-    private <R, F extends Func.MaybeFunction<Pair<A, B>, Tail<Pair<A, B>, R, F>>> Func.MaybeFunction<Pair<A, B>, R> as(final Atomic<F> atomically) {
-      return element -> atomically.let(it -> it.apply(element), Tail::func)
-        .orElseThrow(() -> new IllegalStateException("Can't select atomically"))
-        .returning();
+    default <R, F extends Tailrec<Pair<A, B>, R, F> & TailFunction<Pair<A, B>, R, F>> Func.MaybeFunction<Pair<A, B>, R> rec(final F tailrec) {
+      return element -> tailrec.on(element).result();
     }
   }
 }

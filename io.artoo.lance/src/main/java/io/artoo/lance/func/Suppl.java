@@ -23,7 +23,7 @@ public sealed interface Suppl {
     }
 
     @Override
-    default A get() { return maybeGet().eventually(); }
+    default A get() { return maybeGet().nullable(); }
   }
 
   @FunctionalInterface

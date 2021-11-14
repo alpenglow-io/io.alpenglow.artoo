@@ -22,7 +22,7 @@ public sealed interface Func {
 
     @Override
     default T apply(T t) {
-      return maybeApply(t).eventually();
+      return maybeApply(t).otherwise("Can't result unary operator", IllegalCallerException::new);
     }
   }
 
@@ -39,7 +39,7 @@ public sealed interface Func {
 
     @Override
     default R apply(T t) {
-      return maybeApply(t).eventually();
+      return maybeApply(t).nullable();
     }
 
     default <V> MaybeFunction<V, R> previous(MaybeFunction<? super V, ? extends T> func) {
@@ -70,7 +70,7 @@ public sealed interface Func {
 
     @Override
     default R apply(A a, B b) {
-      return maybeApply(a, b).eventually();
+      return maybeApply(a, b).nullable();
     }
 
     default MaybeBiFunction<? super A, ? super B, ? extends R> butNulls() {
@@ -90,7 +90,7 @@ public sealed interface Func {
     }
 
     default R apply(A a, B b, C c) {
-      return maybeApply(a, b, c).eventually();
+      return maybeApply(a, b, c).nullable();
     }
   }
 
@@ -106,7 +106,7 @@ public sealed interface Func {
     }
 
     default R apply(A a, B b, C c, D d) {
-      return maybeApply(a, b, c, d).eventually();
+      return maybeApply(a, b, c, d).nullable();
     }
   }
 

@@ -16,8 +16,6 @@ class ExtremeTest {
     assertThat(maximum.on(3).next().on(2).next().on(1).result()).isEqualTo(3);
   }
 
-  record Pet(String name, int age) {}
-
   @Test
   @DisplayName("should compute maximum on records")
   void shouldComputeMaximumOnRecords() {
@@ -52,4 +50,6 @@ class ExtremeTest {
       .result()
     ).isEqualTo(11);
   }
+
+  record Pet(String name, int age) {}
 }

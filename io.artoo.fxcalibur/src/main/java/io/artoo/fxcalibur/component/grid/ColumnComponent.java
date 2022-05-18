@@ -1,11 +1,7 @@
-package io.artoo.fxcalibur.component.grid;  private <N extends Number, V> One<V> extreme(Extreme.Type type, final Func.MaybeBiFunction<? super A, ? super B, ? extends N> select) {
-    return () -> cursor().map(rec(new Extreme<Pair<A, B>, N, V>(null, type, pair -> select.tryApply(pair.first(), pair.second())))).keepNull();
-  }
-
-
+package io.artoo.fxcalibur.component.grid;
 
 import io.artoo.fxcalibur.component.Component;
-import io.artoo.lance.test.func.Cons;
+import io.artoo.lance.func.Cons;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 

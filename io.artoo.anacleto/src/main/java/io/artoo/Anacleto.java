@@ -1,8 +1,8 @@
 package io.artoo;
 
-public enum Anacleto {;
+interface Anacleto {
 
-  public static void main(String[] args) {
+  static void main(String... args) {
 
   }
 }

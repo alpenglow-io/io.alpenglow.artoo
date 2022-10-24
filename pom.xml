@@ -11,11 +11,8 @@
     <module>io.artoo.lance</module>
     <module>io.artoo.lance.test</module>
     <module>io.artoo.frost</module>
-    <module>io.artoo.honolulu</module>
     <module>io.artoo.bom</module>
-    <module>io.artoo.camelot</module>
     <module>io.artoo.parry</module>
-    <module>io.artoo.ladylake</module>
     <module>io.artoo.stone</module>
     <module>io.artoo.anacleto</module>
   </modules>
@@ -26,8 +23,8 @@
     <artoo.version>0.0.1-alpha</artoo.version>
 
     <encoding>UTF-8</encoding>
-    <java.version>18</java.version>
-    <java.release>18</java.release>
+    <java.version>19</java.version>
+    <java.release>19</java.release>
     <maven.min.version>3.6.0</maven.min.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -131,11 +128,6 @@
   </dependencyManagement>
 
   <dependencies>
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-    </dependency>
-
     <!-- tests -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>

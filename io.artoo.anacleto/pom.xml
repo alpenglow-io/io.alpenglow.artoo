@@ -10,37 +10,13 @@
   <artifactId>io.artoo.anacleto</artifactId>
 
   <name>Anacleto</name>
+  <description>Mini Actor System</description>
 
   <properties>
-    <h2.version>1.4.200</h2.version>
+    <h2.version>2.1.214</h2.version>
   </properties>
 
   <dependencies>
-    <dependency>
-      <groupId>io.artoo</groupId>
-      <artifactId>io.artoo.lance</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-web</artifactId>
-      <version>${vertx.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-jdbc-client</artifactId>
-      <version>${vertx.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-pg-client</artifactId>
-      <version>${vertx.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-sql-client-templates</artifactId>
-      <version>${vertx.version}</version>
-    </dependency>
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>

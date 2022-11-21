@@ -1,7 +1,7 @@
 package io.artoo.lance.func.tail;
 
 import io.artoo.lance.func.Func;
-import io.artoo.lance.func.TailFunction.Tailrec;
+import io.artoo.lance.func.Recursive.Tailrec;
 
 public final class Select<T, R> extends Tailrec<T, R, Select<T, R>> {
   private final Func.MaybeBiFunction<? super Integer, ? super T, ? extends R> select;

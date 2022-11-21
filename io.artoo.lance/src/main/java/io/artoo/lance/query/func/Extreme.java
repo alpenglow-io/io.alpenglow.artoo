@@ -1,7 +1,7 @@
 package io.artoo.lance.query.func;
 
 import io.artoo.lance.func.Func;
-import io.artoo.lance.func.TailFunction.Tailrec;
+import io.artoo.lance.func.Recursive.Tailrec;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

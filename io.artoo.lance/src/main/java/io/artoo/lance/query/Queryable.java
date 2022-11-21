@@ -2,8 +2,8 @@ package io.artoo.lance.query;
 
 import io.artoo.lance.func.Cons;
 import io.artoo.lance.func.Func;
-import io.artoo.lance.func.TailFunction;
-import io.artoo.lance.func.TailFunction.Tailrec;
+import io.artoo.lance.func.Recursive;
+import io.artoo.lance.func.Recursive.Tailrec;
 import io.artoo.lance.literator.Cursor;
 import io.artoo.lance.tuple.Pair;
 
@@ -41,7 +41,7 @@ public interface Queryable<T> extends Iterable<T> {
     return returning;
   }
 
-  default <R, F extends Tailrec<T, R, F> & TailFunction<T, R, F>> Func.MaybeFunction<T, R> rec(final F tailrec) {
+  default <R, F extends Tailrec<T, R, F> & Recursive<T, R, F>> Func.MaybeFunction<T, R> rec(final F tailrec) {
     return element -> tailrec.on(element).result();
   }
 
@@ -73,7 +73,7 @@ public interface Queryable<T> extends Iterable<T> {
       }
     }
 
-    default <R, F extends Tailrec<Pair<A, B>, R, F> & TailFunction<Pair<A, B>, R, F>> Func.MaybeFunction<Pair<A, B>, R> rec(final F tailrec) {
+    default <R, F extends Tailrec<Pair<A, B>, R, F> & Recursive<Pair<A, B>, R, F>> Func.MaybeFunction<Pair<A, B>, R> rec(final F tailrec) {
       return element -> tailrec.on(element).result();
     }
   }

@@ -1,10 +1,10 @@
 package io.artoo.lance.func.tail;
 
 import io.artoo.lance.func.Func.MaybeFunction;
-import io.artoo.lance.func.TailFunction;
-import io.artoo.lance.func.TailFunction.Tailrec;
+import io.artoo.lance.func.Recursive;
+import io.artoo.lance.func.Recursive.Tailrec;
 
-public final class Average<T, N extends Number> extends Tailrec<T, Double, Average<T, N>> implements TailFunction<T, Double, Average<T, N>> {
+public final class Average<T, N extends Number> extends Tailrec<T, Double, Average<T, N>> implements Recursive<T, Double, Average<T, N>> {
   private final Double accumulated;
   private final int counted;
   private final MaybeFunction<? super T, ? extends N> select;

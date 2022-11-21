@@ -3,7 +3,7 @@ package io.artoo.lance.func.tail;
 import io.artoo.lance.func.Func.MaybeBiFunction;
 import io.artoo.lance.func.Func.MaybeFunction;
 import io.artoo.lance.func.Pred.MaybePredicate;
-import io.artoo.lance.func.TailFunction.Tailrec;
+import io.artoo.lance.func.Recursive.Tailrec;
 
 @SuppressWarnings("unchecked")
 public final class Aggregate<T, A, R> extends Tailrec<T, A, Aggregate<T, A, R>> {

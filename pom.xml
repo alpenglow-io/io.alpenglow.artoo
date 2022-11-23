@@ -2,26 +2,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>io.artoo</groupId>
-  <artifactId>io.artoo</artifactId>
+  <groupId>io.alpenglow.artoo</groupId>
+  <artifactId>artoo</artifactId>
   <packaging>pom</packaging>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>0.0.1-SNAPSHOT</version>
   <modules>
-    <module>io.artoo.fxcalibur</module>
-    <module>io.artoo.lance</module>
-    <module>io.artoo.lance.test</module>
-    <module>io.artoo.frost</module>
-    <module>io.artoo.bom</module>
-    <module>io.artoo.parry</module>
-    <module>io.artoo.stone</module>
-    <module>io.artoo.anacleto</module>
+    <module>lance</module>
+    <module>lance.test</module>
   </modules>
 
   <name>Artoo</name>
 
   <properties>
-    <artoo.version>0.0.1-alpha</artoo.version>
-
     <encoding>UTF-8</encoding>
     <java.version>19</java.version>
     <java.release>19</java.release>
@@ -29,8 +21,6 @@
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
-
-    <mainClass>NONE</mainClass>
 
     <!-- compile deps -->
     <annotations.version>20.1.0</annotations.version>

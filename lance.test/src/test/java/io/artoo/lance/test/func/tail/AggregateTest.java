@@ -1,6 +1,6 @@
-package io.artoo.lance.test.func.tail;
+package lance.test.func.tail;
 
-import io.artoo.lance.func.tail.Aggregate;
+import lance.func.tail.Aggregate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

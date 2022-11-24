@@ -1,14 +1,14 @@
-package io.artoo.lance.test.query.many;
+package lance.test.query.many;
 
-import io.artoo.lance.query.Many;
+import lance.query.Many;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
 
-import static io.artoo.lance.query.Many.from;
-import static io.artoo.lance.test.query.Test.PACKAGES;
-import static io.artoo.lance.test.query.Test.Package;
+import static lance.query.Many.from;
+import static lance.test.query.Test.PACKAGES;
+import static lance.test.query.Test.Package;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SummableTest {

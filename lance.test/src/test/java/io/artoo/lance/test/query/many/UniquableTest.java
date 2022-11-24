@@ -1,9 +1,9 @@
-package io.artoo.lance.test.query.many;
+package lance.test.query.many;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.artoo.lance.query.Many.from;
+import static lance.query.Many.from;
 import static java.lang.System.out;
 import static org.assertj.core.api.Assertions.assertThat;
 

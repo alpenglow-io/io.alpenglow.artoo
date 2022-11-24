@@ -1,13 +1,13 @@
-package io.artoo.lance.test.query.many;
+package lance.test.query.many;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.artoo.lance.query.Many.from;
-import static io.artoo.lance.query.many.Ordering.Arrange.desc;
+import static lance.query.Many.from;
+import static lance.query.many.Ordering.Arrange.desc;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class JoinableTest implements io.artoo.lance.test.query.Test {
+public class JoinableTest implements lance.test.query.Test {
   @Test
   @DisplayName("should join two many naturally")
   public void shouldJoinNaturally() {

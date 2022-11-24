@@ -1,6 +1,6 @@
-package io.artoo.lance.test.scope;
+package lance.test.scope;
 
-import io.artoo.lance.tuple.Quintuple;
+import lance.tuple.Quintuple;
 import org.junit.jupiter.api.Test;
 
 import java.util.Locale;

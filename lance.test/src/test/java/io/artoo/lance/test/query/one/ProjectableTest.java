@@ -1,7 +1,7 @@
-package io.artoo.lance.test.query.one;
+package lance.test.query.one;
 
-import io.artoo.lance.literator.FetchException;
-import io.artoo.lance.query.One;
+import lance.literator.FetchException;
+import lance.query.One;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;

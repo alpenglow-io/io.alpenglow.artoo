@@ -1,6 +1,6 @@
-package io.artoo.lance.test.scope;
+package lance.test.scope;
 
-import io.artoo.lance.scope.Maybe;
+import lance.scope.Maybe;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

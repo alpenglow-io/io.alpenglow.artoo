@@ -1,6 +1,6 @@
-package io.artoo.lance.test.func.tail;
+package lance.test.func.tail;
 
-import io.artoo.lance.func.tail.Select;
+import lance.func.tail.Select;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -1,0 +1,40 @@
+package lance.literator.cursor.routine.join;
+
+import lance.func.Func;
+import lance.func.Pred;
+import lance.literator.Cursor;
+import lance.literator.Literator;
+import lance.tuple.Pair;
+
+import java.util.Iterator;
+import java.util.Objects;
+
+final class Inner<A, B> implements Join<A, Cursor<Pair<A, B>>> {
+  private final Cursor<B> cursor;
+  private final Pred.Bi<? super A, ? super B> pred;
+
+  Inner(final Cursor<B> cursor) {
+    this(
+      cursor,
+      Objects::equals
+    );
+  }
+  Inner(final Cursor<B> cursor, final Pred.Bi<? super A, ? super B> pred) {this.cursor = cursor;
+    this.pred = pred;
+  }
+
+  @Override
+  public Func.MaybeFunction<A[], Cursor<Pair<A, B>>> onArray() {
+    return ts -> cursor.to(new Nested<>(ts, pred));
+  }
+
+  @Override
+  public Func.MaybeFunction<Literator<A>, Cursor<Pair<A, B>>> onLiterator() {
+    return null;
+  }
+
+  @Override
+  public Func.MaybeFunction<Iterator<A>, Cursor<Pair<A, B>>> onIterator() {
+    return null;
+  }
+}

@@ -1,17 +1,17 @@
-package io.artoo.lance.test.query.many;
+package lance.test.query.many;
 
-import io.artoo.lance.query.Many;
+import lance.query.Many;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.artoo.lance.query.Many.from;
-import static io.artoo.lance.query.many.Ordering.Arrange.asc;
-import static io.artoo.lance.query.many.Ordering.Arrange.desc;
+import static lance.query.Many.from;
+import static lance.query.many.Ordering.Arrange.asc;
+import static lance.query.many.Ordering.Arrange.desc;
 import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SortableTest implements io.artoo.lance.test.query.Test {
+public class SortableTest implements lance.test.query.Test {
   @Test
   @DisplayName("should order by hashcode")
   public void shouldOrderByHashcode() {

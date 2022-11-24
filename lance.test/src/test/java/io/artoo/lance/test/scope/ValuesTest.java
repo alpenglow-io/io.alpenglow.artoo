@@ -1,6 +1,6 @@
-package io.artoo.lance.test.scope;
+package lance.test.scope;
 
-import io.artoo.lance.scope.Values;
+import lance.scope.Values;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 

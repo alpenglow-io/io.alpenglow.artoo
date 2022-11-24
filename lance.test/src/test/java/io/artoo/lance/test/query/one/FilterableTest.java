@@ -1,10 +1,10 @@
-package io.artoo.lance.test.query.one;
+package lance.test.query.one;
 
-import io.artoo.lance.query.One;
+import lance.query.One;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.artoo.lance.test.query.Test.Pet;
+import static lance.test.query.Test.Pet;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FilterableTest {

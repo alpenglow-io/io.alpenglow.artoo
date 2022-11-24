@@ -1,13 +1,13 @@
-package io.artoo.lance.test.query.many;
+package lance.test.query.many;
 
-import io.artoo.lance.query.Many;
+import lance.query.Many;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-import static io.artoo.lance.query.Many.from;
+import static lance.query.Many.from;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FilterableTest {

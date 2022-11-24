@@ -1,6 +1,6 @@
-package io.artoo.lance.test.tuple;
+package lance.test.tuple;
 
-import io.artoo.lance.tuple.Single;
+import lance.tuple.Single;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

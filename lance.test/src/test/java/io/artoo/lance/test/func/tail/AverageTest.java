@@ -1,6 +1,6 @@
-package io.artoo.lance.test.func.tail;
+package lance.test.func.tail;
 
-import io.artoo.lance.func.tail.Average;
+import lance.func.tail.Average;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

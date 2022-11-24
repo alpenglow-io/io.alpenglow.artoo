@@ -1,6 +1,6 @@
-package io.artoo.lance.test.func.tail;
+package lance.test.func.tail;
 
-import io.artoo.lance.query.func.Extreme;
+import lance.query.func.Extreme;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

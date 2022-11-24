@@ -1,6 +1,6 @@
-package io.artoo.lance.test.scope;
+package lance.test.scope;
 
-import io.artoo.lance.scope.Late;
+import lance.scope.Late;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

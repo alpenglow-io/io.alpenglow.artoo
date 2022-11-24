@@ -1,7 +1,7 @@
-package io.artoo.lance.test.scope;
+package lance.test.scope;
 
-import io.artoo.lance.func.Action;
-import io.artoo.lance.scope.Let;
+import lance.func.Action;
+import lance.scope.Let;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 

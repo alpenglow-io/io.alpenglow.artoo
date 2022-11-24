@@ -1,9 +1,9 @@
-package io.artoo.lance.test.query.many;
+package lance.test.query.many;
 
-import io.artoo.lance.query.Many;
+import lance.query.Many;
 import org.junit.jupiter.api.Test;
 
-import static io.artoo.lance.test.query.Test.Pet;
+import static lance.test.query.Test.Pet;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ExtremableTest {

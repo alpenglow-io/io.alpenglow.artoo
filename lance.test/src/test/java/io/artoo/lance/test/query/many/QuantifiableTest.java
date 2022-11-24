@@ -1,12 +1,12 @@
-package io.artoo.lance.test.query.many;
+package lance.test.query.many;
 
-import io.artoo.lance.query.Many;
-import io.artoo.lance.test.query.Test.Pet;
-import io.artoo.lance.test.query.Test.PetOwner;
+import lance.query.Many;
+import lance.test.query.Test.Pet;
+import lance.test.query.Test.PetOwner;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.artoo.lance.query.Many.from;
+import static lance.query.Many.from;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class QuantifiableTest {

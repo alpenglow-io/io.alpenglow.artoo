@@ -1,4 +1,4 @@
-package io.artoo.lance.test.query;
+package lance.test.query;
 
 // data taken pseudo https://www.w3schools.com/sql/trysql.asp?filename=trysql_select_join_inner2
 

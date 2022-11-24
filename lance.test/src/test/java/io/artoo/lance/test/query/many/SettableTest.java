@@ -1,6 +1,6 @@
-package io.artoo.lance.test.query.many;
+package lance.test.query.many;
 
-import io.artoo.lance.query.Many;
+import lance.query.Many;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -26,46 +26,46 @@ public class SettableTest {
   @Test
   @DisplayName("should distinct repeated records")
   public void shouldDistinctRecords() {
-    final var distinct = Many.from(new io.artoo.lance.test.query.Test.Pet("Pluto", 1), new io.artoo.lance.test.query.Test.Pet("Fuffy", 2), new io.artoo.lance.test.query.Test.Pet("Fuffy", 2)).distinct();
+    final var distinct = Many.from(new lance.test.query.Test.Pet("Pluto", 1), new lance.test.query.Test.Pet("Fuffy", 2), new lance.test.query.Test.Pet("Fuffy", 2)).distinct();
 
-    assertThat(distinct).containsExactly(new io.artoo.lance.test.query.Test.Pet("Pluto", 1), new io.artoo.lance.test.query.Test.Pet("Fuffy", 2));
+    assertThat(distinct).containsExactly(new lance.test.query.Test.Pet("Pluto", 1), new lance.test.query.Test.Pet("Fuffy", 2));
   }
 
   @Test
   @DisplayName("should distinct repeated records")
   public void shouldDistinctRecordss() {
-    final var distinct = Many.from(new io.artoo.lance.test.query.Test.Pet("Pluto", 1), new io.artoo.lance.test.query.Test.Pet("Fuffy", 2), new io.artoo.lance.test.query.Test.Pet("Fuffy", 2), new io.artoo.lance.test.query.Test.Pet("Toffy", 3)).distinct();
+    final var distinct = Many.from(new lance.test.query.Test.Pet("Pluto", 1), new lance.test.query.Test.Pet("Fuffy", 2), new lance.test.query.Test.Pet("Fuffy", 2), new lance.test.query.Test.Pet("Toffy", 3)).distinct();
 
-    assertThat(distinct).containsExactly(new io.artoo.lance.test.query.Test.Pet("Pluto", 1), new io.artoo.lance.test.query.Test.Pet("Fuffy", 2), new io.artoo.lance.test.query.Test.Pet("Toffy", 3));
+    assertThat(distinct).containsExactly(new lance.test.query.Test.Pet("Pluto", 1), new lance.test.query.Test.Pet("Fuffy", 2), new lance.test.query.Test.Pet("Toffy", 3));
   }
 
   @Test
   @DisplayName("should distinct repeated records with condition")
   public void shouldDistinctRecordsWithCondition() {
     final var distinct = Many.from(
-      new io.artoo.lance.test.query.Test.Pet("Pluto", 1),
-      new io.artoo.lance.test.query.Test.Pet("Goofy", 1),
-      new io.artoo.lance.test.query.Test.Pet("Pluto", 1),
-      new io.artoo.lance.test.query.Test.Pet("Fuffy", 2),
-      new io.artoo.lance.test.query.Test.Pet("Zeus", 2),
-      new io.artoo.lance.test.query.Test.Pet("Hermes", 2),
-      new io.artoo.lance.test.query.Test.Pet("Hermes", 2),
-      new io.artoo.lance.test.query.Test.Pet("Heracles", 2),
-      new io.artoo.lance.test.query.Test.Pet("Cerberos", 3),
-      new io.artoo.lance.test.query.Test.Pet("Bart", 4),
-      new io.artoo.lance.test.query.Test.Pet("Homer", 4)
+      new lance.test.query.Test.Pet("Pluto", 1),
+      new lance.test.query.Test.Pet("Goofy", 1),
+      new lance.test.query.Test.Pet("Pluto", 1),
+      new lance.test.query.Test.Pet("Fuffy", 2),
+      new lance.test.query.Test.Pet("Zeus", 2),
+      new lance.test.query.Test.Pet("Hermes", 2),
+      new lance.test.query.Test.Pet("Hermes", 2),
+      new lance.test.query.Test.Pet("Heracles", 2),
+      new lance.test.query.Test.Pet("Cerberos", 3),
+      new lance.test.query.Test.Pet("Bart", 4),
+      new lance.test.query.Test.Pet("Homer", 4)
     ).distinct(pet -> pet.age() < 3);
 
     assertThat(distinct).containsExactly(
-      new io.artoo.lance.test.query.Test.Pet("Pluto", 1),
-      new io.artoo.lance.test.query.Test.Pet("Goofy", 1),
-      new io.artoo.lance.test.query.Test.Pet("Fuffy", 2),
-      new io.artoo.lance.test.query.Test.Pet("Zeus", 2),
-      new io.artoo.lance.test.query.Test.Pet("Hermes", 2),
-      new io.artoo.lance.test.query.Test.Pet("Heracles", 2),
-      new io.artoo.lance.test.query.Test.Pet("Cerberos", 3),
-      new io.artoo.lance.test.query.Test.Pet("Bart", 4),
-      new io.artoo.lance.test.query.Test.Pet("Homer", 4)
+      new lance.test.query.Test.Pet("Pluto", 1),
+      new lance.test.query.Test.Pet("Goofy", 1),
+      new lance.test.query.Test.Pet("Fuffy", 2),
+      new lance.test.query.Test.Pet("Zeus", 2),
+      new lance.test.query.Test.Pet("Hermes", 2),
+      new lance.test.query.Test.Pet("Heracles", 2),
+      new lance.test.query.Test.Pet("Cerberos", 3),
+      new lance.test.query.Test.Pet("Bart", 4),
+      new lance.test.query.Test.Pet("Homer", 4)
     );
   }
 

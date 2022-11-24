@@ -12,11 +12,11 @@ public interface Partitionable<A, B> extends Queryable.OfTwo<A, B> {
     return skipWhile((index, first, second) -> index < until);
   }
 
-  default Many.OfTwo<A, B> skipWhile(final Pred.Bi<? super A, ? super B> where) {
+  default Many.OfTwo<A, B> skipWhile(final Pred.TryBiPredicate<? super A, ? super B> where) {
     return skipWhile((index, first, second) -> where.test(first, second));
   }
 
-  default Many.OfTwo<A, B> skipWhile(final Pred.Tri<? super Integer, ? super A, ? super B> where) {
+  default Many.OfTwo<A, B> skipWhile(final Pred.TryTriPredicate<? super Integer, ? super A, ? super B> where) {
     return () -> cursor().map(new Skip<Pair<A, B>, Pair<A, B>>((index, pair) -> where.tryTest(index, pair.first(), pair.second())));
   }
 
@@ -24,11 +24,11 @@ public interface Partitionable<A, B> extends Queryable.OfTwo<A, B> {
     return takeWhile((index, first, second) -> index < until);
   }
 
-  default Many.OfTwo<A, B> takeWhile(final Pred.Bi<? super A, ? super B> where) {
+  default Many.OfTwo<A, B> takeWhile(final Pred.TryBiPredicate<? super A, ? super B> where) {
     return takeWhile((index, first, second) -> where.test(first, second));
   }
 
-  default Many.OfTwo<A, B> takeWhile(final Pred.Tri<? super Integer, ? super A, ? super B> where) {
+  default Many.OfTwo<A, B> takeWhile(final Pred.TryTriPredicate<? super Integer, ? super A, ? super B> where) {
     return () -> cursor().map(new Take<Pair<A, B>, Pair<A, B>>((index, pair) -> where.tryTest(index, pair.first(), pair.second())));
   }
 }

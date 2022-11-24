@@ -23,21 +23,21 @@ public final class Maybe<T> {
     this.right = right;
   }
 
-  public <R> Maybe<R> map(Func.MaybeFunction<? super T, ? extends R> func) {
+  public <R> Maybe<R> map(Func.TryFunction<? super T, ? extends R> func) {
     return switch (right) {
       case null -> empty();
       default -> new Maybe<>(func.apply(right));
     };
   }
 
-  public <R> Maybe<R> flatMap(Func.MaybeFunction<? super T, ? extends Maybe<R>> func) {
+  public <R> Maybe<R> flatMap(Func.TryFunction<? super T, ? extends Maybe<R>> func) {
     return switch (right) {
       case null -> empty();
       default -> func.apply(right);
     };
   }
 
-  public Maybe<T> filter(Pred.MaybePredicate<? super T> pred) {
+  public Maybe<T> filter(Pred.TryPredicate<? super T> pred) {
     return switch (right) {
       case null -> this;
       default -> pred.verify(right).or(() -> false).otherwise("Can't be thrown", IllegalStateException::new)
@@ -46,12 +46,12 @@ public final class Maybe<T> {
     };
   }
 
-  public Maybe<T> peek(Cons.MaybeConsumer<? super T> cons) {
+  public Maybe<T> peek(Cons.TryConsumer<? super T> cons) {
     if (right != null) cons.accept(right);
     return this;
   }
 
-  public Maybe<T> exceptionally(Cons.MaybeConsumer<? super Throwable> cons) {
+  public Maybe<T> exceptionally(Cons.TryConsumer<? super Throwable> cons) {
     return switch (left) {
       case null -> this;
       default -> {
@@ -71,7 +71,7 @@ public final class Maybe<T> {
   public Optional<T> asOptional() { return Optional.ofNullable(right); }
   public One<T> asOne() { return right != null ? One.lone(right) : One.gone("Can't retrieve anything", message -> new ScopeException(message, left)); }
 
-  public T otherwise(String message, Func.MaybeBiFunction<? super String, ? super Throwable, ? extends RuntimeException> func) {
+  public T otherwise(String message, Func.TryBiFunction<? super String, ? super Throwable, ? extends RuntimeException> func) {
     return switch (left) {
       case null -> right;
       default -> throw func.apply(message, left);
@@ -92,7 +92,7 @@ public final class Maybe<T> {
     };
   }
 
-  public Maybe<T> or(String message, Func.MaybeFunction<? super String, ? extends RuntimeException> func) {
+  public Maybe<T> or(String message, Func.TryFunction<? super String, ? extends RuntimeException> func) {
     return switch (right) {
       case null -> new Maybe<>(func.apply(message));
       default -> this;

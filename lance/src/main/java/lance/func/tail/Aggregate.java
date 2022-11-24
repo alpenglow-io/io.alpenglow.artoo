@@ -1,18 +1,18 @@
 package lance.func.tail;
 
-import lance.func.Func.MaybeBiFunction;
-import lance.func.Func.MaybeFunction;
-import lance.func.Pred.MaybePredicate;
+import lance.func.Func.TryBiFunction;
+import lance.func.Func.TryFunction;
+import lance.func.Pred.TryPredicate;
 import lance.func.Recursive.Tailrec;
 
 @SuppressWarnings("unchecked")
 public final class Aggregate<T, A, R> extends Tailrec<T, A, Aggregate<T, A, R>> {
   private final A aggregated;
-  private final MaybePredicate<? super T> where;
-  private final MaybeFunction<? super T, ? extends R> select;
-  private final MaybeBiFunction<? super A, ? super R, ? extends A> aggregate;
+  private final TryPredicate<? super T> where;
+  private final TryFunction<? super T, ? extends R> select;
+  private final TryBiFunction<? super A, ? super R, ? extends A> aggregate;
 
-  private Aggregate(final A aggregated, final MaybePredicate<? super T> where, final MaybeFunction<? super T, ? extends R> select, final MaybeBiFunction<? super A, ? super R, ? extends A> aggregate) {
+  private Aggregate(final A aggregated, final TryPredicate<? super T> where, final TryFunction<? super T, ? extends R> select, final TryBiFunction<? super A, ? super R, ? extends A> aggregate) {
     this.aggregated = aggregated;
     this.where = where;
     this.select = select;
@@ -31,15 +31,15 @@ public final class Aggregate<T, A, R> extends Tailrec<T, A, Aggregate<T, A, R>> 
     }
   }
 
-  public static <T, A, R> Aggregate<T, A, R> with(A seed, MaybePredicate<? super T> where, MaybeFunction<? super T, ? extends R> select, MaybeBiFunction<? super A, ? super R, ? extends A> aggregate) {
+  public static <T, A, R> Aggregate<T, A, R> with(A seed, TryPredicate<? super T> where, TryFunction<? super T, ? extends R> select, TryBiFunction<? super A, ? super R, ? extends A> aggregate) {
     return new Aggregate<>(seed, where, select, aggregate);
   }
 
-  public static <T, A, R> Aggregate<T, A, R> with(A seed, MaybeBiFunction<? super A, ? super R, ? extends A> aggregate) {
+  public static <T, A, R> Aggregate<T, A, R> with(A seed, TryBiFunction<? super A, ? super R, ? extends A> aggregate) {
     return new Aggregate<>(seed, it -> true, it -> (R) it, aggregate);
   }
 
-  public static <T, A, R> Aggregate<T, A, R> with(A seed, MaybePredicate<? super T> where, MaybeBiFunction<? super A, ? super R, ? extends A> aggregate) {
+  public static <T, A, R> Aggregate<T, A, R> with(A seed, TryPredicate<? super T> where, TryBiFunction<? super A, ? super R, ? extends A> aggregate) {
     return new Aggregate<>(seed, it -> true, it -> (R) it, aggregate);
   }
 }

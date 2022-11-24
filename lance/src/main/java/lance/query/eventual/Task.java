@@ -66,7 +66,7 @@ final class Async<T> implements Task<T> {
   private final Threads threads;
   private final Suppl.MaybeSupplier<T> supplier;
 
-  private final Cons.MaybeConsumer<T> func;
+  private final Cons.TryConsumer<T> func;
 
   Async(final Suppl.MaybeSupplier<T> supplier) {
     this(Threads.ForkJoin, supplier);

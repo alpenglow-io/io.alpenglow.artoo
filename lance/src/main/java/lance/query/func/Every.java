@@ -1,13 +1,13 @@
 package lance.query.func;
 
 import lance.func.Func;
-import lance.func.Pred.MaybePredicate;
+import lance.func.Pred.TryPredicate;
 
-public final class Every<T> implements Func.MaybeFunction<T, Boolean> {
-  private final MaybePredicate<? super T> where;
+public final class Every<T> implements Func.TryFunction<T, Boolean> {
+  private final TryPredicate<? super T> where;
   private final AllOfThem allOfThem;
 
-  public Every(final MaybePredicate<? super T> where) {
+  public Every(final TryPredicate<? super T> where) {
     assert where != null;
     this.where = where;
     this.allOfThem = new AllOfThem();

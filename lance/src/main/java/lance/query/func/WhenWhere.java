@@ -4,11 +4,11 @@ import lance.func.Cons;
 import lance.func.Func;
 import lance.func.Pred;
 
-public final class WhenWhere<T> implements Func.MaybeFunction<T, T> {
-  private final Pred.MaybePredicate<? super T> where;
-  private final Cons.MaybeConsumer<? super T> cons;
+public final class WhenWhere<T> implements Func.TryFunction<T, T> {
+  private final Pred.TryPredicate<? super T> where;
+  private final Cons.TryConsumer<? super T> cons;
 
-  public WhenWhere(final Pred.MaybePredicate<? super T> where, final Cons.MaybeConsumer<? super T> cons) {
+  public WhenWhere(final Pred.TryPredicate<? super T> where, final Cons.TryConsumer<? super T> cons) {
     this.where = where;
     this.cons = cons;
   }

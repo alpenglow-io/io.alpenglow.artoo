@@ -3,13 +3,13 @@ package lance.query.func;
 import lance.func.Func;
 import lance.func.Pred;
 
-public final class Single<T> implements Func.MaybeFunction<T, T> {
+public final class Single<T> implements Func.TryFunction<T, T> {
   enum NoSingle {Found}
 
   private Object single = null;
-  private final Pred.MaybePredicate<? super T> where;
+  private final Pred.TryPredicate<? super T> where;
 
-  public Single(final Pred.MaybePredicate<? super T> where) {
+  public Single(final Pred.TryPredicate<? super T> where) {
     assert where != null;
     this.where = where;
   }

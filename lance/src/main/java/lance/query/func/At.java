@@ -2,7 +2,7 @@ package lance.query.func;
 
 import lance.func.Func;
 
-public final class At<T> implements Func.MaybeFunction<T, T> {
+public final class At<T> implements Func.TryFunction<T, T> {
   private final int at;
   private final Pointed pointed;
 

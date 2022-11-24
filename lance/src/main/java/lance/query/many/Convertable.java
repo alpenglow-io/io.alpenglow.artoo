@@ -13,7 +13,7 @@ import static lance.literator.cursor.routine.Routine.list;
 import static lance.scope.Nullability.nonNullable;
 
 public interface Convertable<T> extends Queryable<T> {
-  default <K, E> Map<? extends K, ? extends E> asMap(final Func.MaybeFunction<? super T, ? extends K> key, final Func.MaybeFunction<? super T, ? extends E> element) {
+  default <K, E> Map<? extends K, ? extends E> asMap(final Func.TryFunction<? super T, ? extends K> key, final Func.TryFunction<? super T, ? extends E> element) {
     nonNullable(key, "key");
     nonNullable(element, "element");
     final var map = new ConcurrentHashMap<K, E>();

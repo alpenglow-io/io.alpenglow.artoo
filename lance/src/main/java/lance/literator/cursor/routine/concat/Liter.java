@@ -12,17 +12,17 @@ public final class Liter<T> implements Concat<T> {
   Liter(final Literator<T> next) {this.next = next;}
 
   @Override
-  public final Func.MaybeFunction<T[], Cursor<T>> onArray() {
+  public final Func.TryFunction<T[], Cursor<T>> onArray() {
     return prev -> Cursor.link(Cursor.open(prev), next);
   }
 
   @Override
-  public Func.MaybeFunction<Literator<T>, Cursor<T>> onLiterator() {
+  public Func.TryFunction<Literator<T>, Cursor<T>> onLiterator() {
     return prev -> Cursor.link(prev, next);
   }
 
   @Override
-  public Func.MaybeFunction<Iterator<T>, Cursor<T>> onIterator() {
+  public Func.TryFunction<Iterator<T>, Cursor<T>> onIterator() {
     return prev -> Cursor.link(Cursor.iteration(prev), next);
   }
 }

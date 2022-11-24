@@ -13,9 +13,9 @@ import java.util.Iterator;
 @SuppressWarnings("unchecked")
 public final class Nested<R, T> implements Join<R, Cursor<Pair<T, R>>> {
   private final T[] ts;
-  private final Pred.Bi<? super T, ? super R> pred;
+  private final Pred.TryBiPredicate<? super T, ? super R> pred;
 
-  Nested(final T[] ts, final Pred.Bi<? super T, ? super R> pred) {
+  Nested(final T[] ts, final Pred.TryBiPredicate<? super T, ? super R> pred) {
     this.ts = ts;
     this.pred = pred;
   }
@@ -34,17 +34,17 @@ public final class Nested<R, T> implements Join<R, Cursor<Pair<T, R>>> {
   }
 
   @Override
-  public Func.MaybeFunction<R[], Cursor<Pair<T, R>>> onArray() {
+  public Func.TryFunction<R[], Cursor<Pair<T, R>>> onArray() {
     return this::joinArray;
   }
 
   @Override
-  public Func.MaybeFunction<Literator<R>, Cursor<Pair<T, R>>> onLiterator() {
+  public Func.TryFunction<Literator<R>, Cursor<Pair<T, R>>> onLiterator() {
     return null;
   }
 
   @Override
-  public Func.MaybeFunction<Iterator<R>, Cursor<Pair<T, R>>> onIterator() {
+  public Func.TryFunction<Iterator<R>, Cursor<Pair<T, R>>> onIterator() {
     return null;
   }
 }

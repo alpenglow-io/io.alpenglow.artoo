@@ -1,17 +1,16 @@
 package lance.query.func;
 
-import lance.func.Func;
-import lance.func.Func.MaybeFunction;
+import lance.func.Func.TryFunction;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
 @SuppressWarnings({"unchecked"})
-public final class Sum<T, N extends Number, V> implements Func.MaybeFunction<T, V> {
-  private final MaybeFunction<? super T, ? extends N> select;
+public final class Sum<T, N extends Number, V> implements TryFunction<T, V> {
+  private final TryFunction<? super T, ? extends N> select;
   private final Summed summed;
 
-  public Sum(final Func.MaybeFunction<? super T, ? extends N> select) {
+  public Sum(final TryFunction<? super T, ? extends N> select) {
     assert select != null;
     this.select = select;
     this.summed = new Summed();

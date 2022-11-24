@@ -9,7 +9,7 @@ import java.util.function.UnaryOperator;
 public sealed interface Func {
   enum Namespace implements Func {}
 
-  interface MaybeUnaryOperator<T> extends UnaryOperator<T> {
+  interface TryUnaryOperator<T> extends UnaryOperator<T> {
     T tryApply(T t) throws Throwable;
 
     default Maybe<T> maybeApply(T t) {
@@ -26,7 +26,7 @@ public sealed interface Func {
     }
   }
 
-  interface MaybeFunction<T, R> extends Function<T, R> {
+  interface TryFunction<T, R> extends Function<T, R> {
     R tryApply(T t) throws Throwable;
 
     default Maybe<R> maybeApply(T t) {
@@ -42,14 +42,14 @@ public sealed interface Func {
       return maybeApply(t).nullable();
     }
 
-    default <V> MaybeFunction<V, R> previous(MaybeFunction<? super V, ? extends T> func) {
+    default <V> TryFunction<V, R> previous(TryFunction<? super V, ? extends T> func) {
       return it -> {
         final var applied = func.tryApply(it);
         return applied == null ? null : tryApply(applied);
       };
     }
 
-    default <V> MaybeFunction<T, V> then(MaybeFunction<? super R, ? extends V> func) {
+    default <V> TryFunction<T, V> then(TryFunction<? super R, ? extends V> func) {
       return it -> {
         final var applied = tryApply(it);
         return applied == null ? null : func.tryApply(applied);
@@ -57,7 +57,7 @@ public sealed interface Func {
     }
   }
 
-  interface MaybeBiFunction<A, B, R> extends BiFunction<A, B, R> {
+  interface TryBiFunction<A, B, R> extends BiFunction<A, B, R> {
     R tryApply(A a, B b) throws Throwable;
 
     default Maybe<R> maybeApply(A a, B b) {
@@ -73,12 +73,12 @@ public sealed interface Func {
       return maybeApply(a, b).nullable();
     }
 
-    default MaybeBiFunction<? super A, ? super B, ? extends R> butNulls() {
+    default TryBiFunction<? super A, ? super B, ? extends R> butNulls() {
       return (a, b) -> a == null || b == null ? null : this.tryApply(a, b);
     }
   }
 
-  interface MaybeTriFunction<A, B, C, R> {
+  interface TryTriFunction<A, B, C, R> {
     R tryApply(A a, B b, C c) throws Throwable;
 
     default Maybe<R> maybeApply(A a, B b, C c) {
@@ -94,7 +94,7 @@ public sealed interface Func {
     }
   }
 
-  interface MaybeQuadFunction<A, B, C, D, R> {
+  interface TryQuadFunction<A, B, C, D, R> {
     R tryApply(A a, B b, C c, D d) throws Throwable;
 
     default Maybe<R> maybeApply(A a, B b, C c, D d) {
@@ -110,7 +110,7 @@ public sealed interface Func {
     }
   }
 
-  interface Quin<A, B, C, D, E, R> {
+  interface TryQuinFunction<A, B, C, D, E, R> {
     R tryApply(A a, B b, C c, D d, E e) throws Throwable;
 
     default Maybe<R> apply(A a, B b, C c, D d, E e) {
@@ -122,7 +122,7 @@ public sealed interface Func {
     }
   }
 
-  interface Sex<A, B, C, D, E, F, R> {
+  interface TrySexFunction<A, B, C, D, E, F, R> {
     R tryApply(A a, B b, C c, D d, E e, F f) throws Throwable;
 
     default Maybe<R> apply(A a, B b, C c, D d, E e, F f) {
@@ -134,7 +134,7 @@ public sealed interface Func {
     }
   }
 
-  interface Sect<A, B, C, D, E, F, G, R> {
+  interface TrySectFunction<A, B, C, D, E, F, G, R> {
     R tryApply(A a, B b, C c, D d, E e, F f, G g) throws Throwable;
 
     default Maybe<R> apply(A a, B b, C c, D d, E e, F f, G g) {

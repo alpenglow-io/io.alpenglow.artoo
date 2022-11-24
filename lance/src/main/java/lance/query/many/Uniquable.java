@@ -17,7 +17,7 @@ public interface Uniquable<T> extends Queryable<T> {
     return first(it -> true);
   }
 
-  default One<T> first(final Pred.MaybePredicate<? super T> where) {
+  default One<T> first(final Pred.TryPredicate<? super T> where) {
     return () -> cursor().map(new First<>(where)).skipNull();
   }
 
@@ -25,7 +25,7 @@ public interface Uniquable<T> extends Queryable<T> {
     return last(it -> true);
   }
 
-  default One<T> last(final Pred.MaybePredicate<? super T> where) {
+  default One<T> last(final Pred.TryPredicate<? super T> where) {
     return () -> cursor().map(new Last<>(where)).skipNull();
   }
 
@@ -33,7 +33,7 @@ public interface Uniquable<T> extends Queryable<T> {
     return single(it -> true);
   }
 
-  default One<T> single(final Pred.MaybePredicate<? super T> where) {
+  default One<T> single(final Pred.TryPredicate<? super T> where) {
     return () -> cursor().map(new Single<>(where)).keepNull();
   }
 }

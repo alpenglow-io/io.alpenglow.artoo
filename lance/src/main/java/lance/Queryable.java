@@ -22,7 +22,7 @@ public interface Queryable<T> extends Iterable<T> {
     }
   }
 
-  default void eventually(final Cons.MaybeConsumer<T> eventually) {
+  default void eventually(final Cons.TryConsumer<T> eventually) {
     for (final var value : this) {
       if (value != null) {
         eventually.accept(value);
@@ -41,7 +41,7 @@ public interface Queryable<T> extends Iterable<T> {
     return returning;
   }
 
-  default <R, F extends Tailrec<T, R, F> & Recursive<T, R, F>> Func.MaybeFunction<T, R> rec(final F tailrec) {
+  default <R, F extends Tailrec<T, R, F> & Recursive<T, R, F>> Func.TryFunction<T, R> rec(final F tailrec) {
     return element -> tailrec.on(element).result();
   }
 
@@ -58,7 +58,7 @@ public interface Queryable<T> extends Iterable<T> {
       }
     }
 
-    default void eventually(final Cons.MaybeBiConsumer<A, B> eventually) {
+    default void eventually(final Cons.TryBiConsumer<A, B> eventually) {
       for (final var tuple : this) {
         if (tuple != null) {
           tuple.peek(eventually);
@@ -73,7 +73,7 @@ public interface Queryable<T> extends Iterable<T> {
       }
     }
 
-    default <R, F extends Tailrec<Pair<A, B>, R, F> & Recursive<Pair<A, B>, R, F>> Func.MaybeFunction<Pair<A, B>, R> rec(final F tailrec) {
+    default <R, F extends Tailrec<Pair<A, B>, R, F> & Recursive<Pair<A, B>, R, F>> Func.TryFunction<Pair<A, B>, R> rec(final F tailrec) {
       return element -> tailrec.on(element).result();
     }
   }

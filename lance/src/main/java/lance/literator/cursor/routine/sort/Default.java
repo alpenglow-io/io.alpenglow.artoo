@@ -9,7 +9,7 @@ import java.util.Iterator;
 
 public final class Default<T> implements Sort<T> {
   @Override
-  public Func.MaybeFunction<T[], Cursor<T>> onArray() {
+  public Func.TryFunction<T[], Cursor<T>> onArray() {
     return elements -> {
       Arrays.sort(elements);
       return Cursor.open(elements);
@@ -17,12 +17,12 @@ public final class Default<T> implements Sort<T> {
   }
 
   @Override
-  public Func.MaybeFunction<Literator<T>, Cursor<T>> onLiterator() {
+  public Func.TryFunction<Literator<T>, Cursor<T>> onLiterator() {
     return this::asSorted;
   }
 
   @Override
-  public Func.MaybeFunction<Iterator<T>, Cursor<T>> onIterator() {
+  public Func.TryFunction<Iterator<T>, Cursor<T>> onIterator() {
     return this::asSorted;
   }
 

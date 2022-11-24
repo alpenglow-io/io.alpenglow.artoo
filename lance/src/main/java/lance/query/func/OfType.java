@@ -2,7 +2,7 @@ package lance.query.func;
 
 import lance.func.Func;
 
-public final class OfType<T, R> implements Func.MaybeFunction<T, R> {
+public final class OfType<T, R> implements Func.TryFunction<T, R> {
   private final Class<? extends R> type;
 
   public OfType(final Class<? extends R> type) {

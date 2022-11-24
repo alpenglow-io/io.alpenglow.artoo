@@ -17,7 +17,7 @@ public interface Otherwise<A, B> extends Queryable.OfTwo<A, B> {
     return () -> cursor().or(many::cursor);
   }
 
-  default <E extends RuntimeException> One.OfTwo<A, B> or(final String message, final Func.MaybeBiFunction<? super String, ? super Throwable, ? extends E> exception) {
+  default <E extends RuntimeException> One.OfTwo<A, B> or(final String message, final Func.TryBiFunction<? super String, ? super Throwable, ? extends E> exception) {
     return () -> cursor().or(message, exception);
   }
 

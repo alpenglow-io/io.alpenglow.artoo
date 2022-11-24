@@ -16,9 +16,9 @@ public final class Extreme<T, R extends Number, V> extends Tailrec<T, V, Extreme
 
   private final V extreme;
   private final Extreme.Type type;
-  private final Func.MaybeFunction<? super T, ? extends R> selector;
+  private final Func.TryFunction<? super T, ? extends R> selector;
 
-  private Extreme(final V extreme, final Type type, final Func.MaybeFunction<? super T, ? extends R> selector) {
+  private Extreme(final V extreme, final Type type, final Func.TryFunction<? super T, ? extends R> selector) {
     this.extreme = extreme;
     this.type = type;
     this.selector = selector;
@@ -58,7 +58,7 @@ public final class Extreme<T, R extends Number, V> extends Tailrec<T, V, Extreme
     return new Extreme<>(null, Type.Maximum, it -> (R) it);
   }
 
-  public static <T, R extends Number, V> Extreme<T, R, V> max(Func.MaybeFunction<? super T, ? extends R> selector) {
+  public static <T, R extends Number, V> Extreme<T, R, V> max(Func.TryFunction<? super T, ? extends R> selector) {
     return new Extreme<>(null, Type.Maximum, selector);
   }
 
@@ -66,7 +66,7 @@ public final class Extreme<T, R extends Number, V> extends Tailrec<T, V, Extreme
     return new Extreme<>(null, Type.Minimum, it -> (R) it);
   }
 
-  public static <T, R extends Number, V> Extreme<T, R, V> min(Func.MaybeFunction<? super T, ? extends R> selector) {
+  public static <T, R extends Number, V> Extreme<T, R, V> min(Func.TryFunction<? super T, ? extends R> selector) {
     return new Extreme<>(null, Type.Minimum, selector);
   }
 }

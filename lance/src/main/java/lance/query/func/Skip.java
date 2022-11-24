@@ -1,14 +1,14 @@
 package lance.query.func;
 
 import lance.func.Func;
-import lance.func.Pred.Bi;
+import lance.func.Pred.TryBiPredicate;
 
 @SuppressWarnings("unchecked")
-public final class Skip<T, R> implements Func.MaybeFunction<T, R> {
+public final class Skip<T, R> implements Func.TryFunction<T, R> {
   private final Skipped skipped = new Skipped();
-  private final Bi<? super Integer, ? super T> where;
+  private final TryBiPredicate<? super Integer, ? super T> where;
 
-  public Skip(final Bi<? super Integer, ? super T> where) {
+  public Skip(final TryBiPredicate<? super Integer, ? super T> where) {
     assert where != null;
     this.where = where;
   }

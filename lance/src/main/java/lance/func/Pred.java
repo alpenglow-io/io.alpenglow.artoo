@@ -6,15 +6,15 @@ import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 public sealed interface Pred {
-  static <A> MaybePredicate<A> not(final MaybePredicate<A> predicate) {
+  static <A> TryPredicate<A> not(final TryPredicate<A> predicate) {
     return it -> !predicate.tryTest(it);
   }
 
-  static <A, B> Pred.Bi<A, B> not(final Pred.Bi<A, B> predicate) {
+  static <A, B> TryBiPredicate<A, B> not(final TryBiPredicate<A, B> predicate) {
     return (a, b) -> !predicate.tryTest(a, b);
   }
 
-  static <A, B, C> Pred.Tri<A, B, C> not(final Pred.Tri<A, B, C> predicate) {
+  static <A, B, C> TryTriPredicate<A, B, C> not(final TryTriPredicate<A, B, C> predicate) {
     return (a, b, c) -> !predicate.tryTest(a, b, c);
   }
 
@@ -29,7 +29,7 @@ public sealed interface Pred {
   enum Namespace implements Pred {}
 
   @FunctionalInterface
-  interface MaybePredicate<A> extends Predicate<A> {
+  interface TryPredicate<A> extends Predicate<A> {
     boolean tryTest(A a) throws Throwable;
 
     default Maybe<Boolean> verify(A a) {
@@ -45,13 +45,13 @@ public sealed interface Pred {
       return verify(a).or(() -> false).nullable();
     }
 
-    default MaybePredicate<A> not() {
+    default TryPredicate<A> not() {
       return it -> !this.tryTest(it);
     }
   }
 
   @FunctionalInterface
-  interface Bi<A, B> extends BiPredicate<A, B>, Func.MaybeBiFunction<A, B, Boolean> {
+  interface TryBiPredicate<A, B> extends BiPredicate<A, B>, Func.TryBiFunction<A, B, Boolean> {
     boolean tryTest(A a, B b) throws Throwable;
 
     @Override
@@ -71,7 +71,7 @@ public sealed interface Pred {
   }
 
   @FunctionalInterface
-  interface Tri<A, B, C> extends Func.MaybeTriFunction<A, B, C, Boolean> {
+  interface TryTriPredicate<A, B, C> extends Func.TryTriFunction<A, B, C, Boolean> {
     boolean tryTest(A a, B b, C c) throws Throwable;
 
     @Override
@@ -81,7 +81,7 @@ public sealed interface Pred {
   }
 
   @FunctionalInterface
-  interface Quad<A, B, C, D> extends Func.MaybeQuadFunction<A, B, C, D, Boolean> {
+  interface Quad<A, B, C, D> extends Func.TryQuadFunction<A, B, C, D, Boolean> {
     boolean tryTest(A a, B b, C c, D d) throws Throwable;
 
     @Override
@@ -91,7 +91,7 @@ public sealed interface Pred {
   }
 
   @FunctionalInterface
-  interface Quin<A, B, C, D, E> extends Func.Quin<A, B, C, D, E, Boolean> {
+  interface Quin<A, B, C, D, E> extends Func.TryQuinFunction<A, B, C, D, E, Boolean> {
     boolean tryTest(A a, B b, C c, D d, E e) throws Throwable;
 
     @Override

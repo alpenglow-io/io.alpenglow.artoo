@@ -6,11 +6,11 @@ import lance.Queryable;
 import lance.query.func.Peek;
 
 public interface Peekable<T> extends Queryable<T> {
-  default One<T> peek(final Cons.MaybeConsumer<? super T> peek) {
+  default One<T> peek(final Cons.TryConsumer<? super T> peek) {
     return () -> cursor().map(new Peek<T, T>((i, it) -> peek.tryAccept(it)));
   }
 
-  default One<T> exceptionally(Cons.MaybeConsumer<? super Throwable> catch$) {
+  default One<T> exceptionally(Cons.TryConsumer<? super Throwable> catch$) {
     return () -> cursor().exceptionally(catch$);
   }
 }

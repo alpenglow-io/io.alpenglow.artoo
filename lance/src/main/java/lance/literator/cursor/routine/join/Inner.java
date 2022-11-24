@@ -11,7 +11,7 @@ import java.util.Objects;
 
 final class Inner<A, B> implements Join<A, Cursor<Pair<A, B>>> {
   private final Cursor<B> cursor;
-  private final Pred.Bi<? super A, ? super B> pred;
+  private final Pred.TryBiPredicate<? super A, ? super B> pred;
 
   Inner(final Cursor<B> cursor) {
     this(
@@ -19,22 +19,22 @@ final class Inner<A, B> implements Join<A, Cursor<Pair<A, B>>> {
       Objects::equals
     );
   }
-  Inner(final Cursor<B> cursor, final Pred.Bi<? super A, ? super B> pred) {this.cursor = cursor;
+  Inner(final Cursor<B> cursor, final Pred.TryBiPredicate<? super A, ? super B> pred) {this.cursor = cursor;
     this.pred = pred;
   }
 
   @Override
-  public Func.MaybeFunction<A[], Cursor<Pair<A, B>>> onArray() {
+  public Func.TryFunction<A[], Cursor<Pair<A, B>>> onArray() {
     return ts -> cursor.to(new Nested<>(ts, pred));
   }
 
   @Override
-  public Func.MaybeFunction<Literator<A>, Cursor<Pair<A, B>>> onLiterator() {
+  public Func.TryFunction<Literator<A>, Cursor<Pair<A, B>>> onLiterator() {
     return null;
   }
 
   @Override
-  public Func.MaybeFunction<Iterator<A>, Cursor<Pair<A, B>>> onIterator() {
+  public Func.TryFunction<Iterator<A>, Cursor<Pair<A, B>>> onIterator() {
     return null;
   }
 }

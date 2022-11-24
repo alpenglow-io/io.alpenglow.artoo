@@ -8,11 +8,11 @@ import lance.query.One;
 import lance.Queryable;
 
 public interface Projectable<T> extends Queryable<T> {
-  default <R> One<R> select(final Func.MaybeFunction<? super T, ? extends R> select) {
+  default <R> One<R> select(final Func.TryFunction<? super T, ? extends R> select) {
     return () -> cursor().map(rec(Select.with(select)));
   }
 
-  default <R, Q extends Queryable<R>> Many<R> selection(final Func.MaybeFunction<? super T, ? extends Q> selection) {
+  default <R, Q extends Queryable<R>> Many<R> selection(final Func.TryFunction<? super T, ? extends Q> selection) {
     return () -> cursor().map(rec(Select.with(selection))).flatMap(Queryable::cursor);
   }
 

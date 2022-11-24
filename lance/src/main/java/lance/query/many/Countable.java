@@ -11,7 +11,7 @@ public interface Countable<T> extends Queryable<T> {
     return count(it -> true);
   }
 
-  default One<Integer> count(final Pred.MaybePredicate<? super T> where) {
+  default One<Integer> count(final Pred.TryPredicate<? super T> where) {
     return () -> cursor().map(new Count<>(where)).or(() -> Cursor.open(0)).keepNull();
   }
 }

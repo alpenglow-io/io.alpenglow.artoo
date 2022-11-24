@@ -38,7 +38,7 @@ public interface Late<T> extends Let<T> {
     }
 
     @Override
-    public <R> R let(final Func.MaybeFunction<? super T, ? extends R> func) {
+    public <R> R let(final Func.TryFunction<? super T, ? extends R> func) {
       final var unsyncd = this.value;
       if (Nothing.notEquals(unsyncd)) {
         synchronized (this) {

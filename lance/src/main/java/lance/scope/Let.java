@@ -12,8 +12,8 @@ public interface Let<T> {
     return new Let.Lazy<>(supplier);
   }
 
-  <R> R let(final Func.MaybeFunction<? super T, ? extends R> func);
-  default Let<T> get(final Cons.MaybeConsumer<? super T> func) {
+  <R> R let(final Func.TryFunction<? super T, ? extends R> func);
+  default Let<T> get(final Cons.TryConsumer<? super T> func) {
     let(it -> {
       func.accept(it);
       return null;
@@ -41,7 +41,7 @@ public interface Let<T> {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <R> R let(final Func.MaybeFunction<? super T, ? extends R> func) {
+    public <R> R let(final Func.TryFunction<? super T, ? extends R> func) {
       final var unsyncd = value;
       if (Nothing.equals(unsyncd)) {
         synchronized (this) {

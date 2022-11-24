@@ -3,11 +3,11 @@ package lance.query.func;
 import lance.func.Func;
 import lance.func.Pred;
 
-public final class First<T> implements Func.MaybeFunction<T, T> {
-  private final Pred.MaybePredicate<? super T> where;
+public final class First<T> implements Func.TryFunction<T, T> {
+  private final Pred.TryPredicate<? super T> where;
   private final Found found;
 
-  public First(final Pred.MaybePredicate<? super T> where) {
+  public First(final Pred.TryPredicate<? super T> where) {
     assert where != null;
     this.where = where;
     this.found = new Found();

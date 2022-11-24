@@ -31,7 +31,7 @@ public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Else
     return new Sone<>(supply);
   }
 
-  static <T> One<T> gone(final String message, final Func.MaybeFunction<? super String, ? extends RuntimeException> error) {
+  static <T> One<T> gone(final String message, final Func.TryFunction<? super String, ? extends RuntimeException> error) {
     return new Gone<>(message, error);
   }
 
@@ -40,7 +40,7 @@ public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Else
     return (One<L>) None.Empty;
   }
 
-  static <A extends AutoCloseable, T, O extends One<T>> One<T> done(Suppl.MaybeSupplier<? extends A> going, Func.MaybeFunction<? super A, ? extends O> then) {
+  static <A extends AutoCloseable, T, O extends One<T>> One<T> done(Suppl.MaybeSupplier<? extends A> going, Func.TryFunction<? super A, ? extends O> then) {
     return new Done<>(going, then);
   }
 
@@ -81,9 +81,9 @@ final class Sone<T> implements One<T> {
 
 final class Gone<T> implements One<T> {
   private final String message;
-  private final Func.MaybeFunction<? super String, ? extends RuntimeException> error;
+  private final Func.TryFunction<? super String, ? extends RuntimeException> error;
 
-  Gone(final String message, final Func.MaybeFunction<? super String, ? extends RuntimeException> error) {
+  Gone(final String message, final Func.TryFunction<? super String, ? extends RuntimeException> error) {
     this.message = message;
     this.error = error;
   }
@@ -96,9 +96,9 @@ final class Gone<T> implements One<T> {
 
 final class Done<A extends AutoCloseable, T, O extends One<T>> implements One<T> {
   private final Suppl.MaybeSupplier<? extends A> doing;
-  private final Func.MaybeFunction<? super A, ? extends O> then;
+  private final Func.TryFunction<? super A, ? extends O> then;
 
-  Done(final Suppl.MaybeSupplier<? extends A> doing, final Func.MaybeFunction<? super A, ? extends O> then) {
+  Done(final Suppl.MaybeSupplier<? extends A> doing, final Func.TryFunction<? super A, ? extends O> then) {
     this.doing = doing;
     this.then = then;
   }

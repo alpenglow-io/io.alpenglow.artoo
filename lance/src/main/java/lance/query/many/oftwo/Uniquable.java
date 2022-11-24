@@ -17,7 +17,7 @@ public interface Uniquable<A, B> extends Queryable.OfTwo<A, B> {
     return first((first, second) -> true);
   }
 
-  default One.OfTwo<A, B> first(final Pred.Bi<? super A, ? super B> where) {
+  default One.OfTwo<A, B> first(final Pred.TryBiPredicate<? super A, ? super B> where) {
     return () -> cursor().map(new First<>(pair -> where.tryTest(pair.first(), pair.second()))).keepNull();
   }
 
@@ -25,7 +25,7 @@ public interface Uniquable<A, B> extends Queryable.OfTwo<A, B> {
     return last((first, second) -> true);
   }
 
-  default One.OfTwo<A, B> last(final Pred.Bi<? super A, ? super B> where) {
+  default One.OfTwo<A, B> last(final Pred.TryBiPredicate<? super A, ? super B> where) {
     return () -> cursor().map(new Last<>(pair -> where.tryTest(pair.first(), pair.second()))).keepNull();
   }
 
@@ -33,7 +33,7 @@ public interface Uniquable<A, B> extends Queryable.OfTwo<A, B> {
     return single((first, second) -> true);
   }
 
-  default One.OfTwo<A, B> single(final Pred.Bi<? super A, ? super B> where) {
+  default One.OfTwo<A, B> single(final Pred.TryBiPredicate<? super A, ? super B> where) {
     return () -> cursor().map(new Single<>(pair -> where.tryTest(pair.first(), pair.second()))).keepNull();
   }
 }

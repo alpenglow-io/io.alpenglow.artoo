@@ -16,7 +16,7 @@ public interface Elseable<T> extends Queryable<T> {
     return () -> cursor().or(many::cursor);
   }
 
-  default <E extends RuntimeException> Many<T> or(final String message, final Func.MaybeBiFunction<? super String, ? super Throwable, ? extends E> exception) {
+  default <E extends RuntimeException> Many<T> or(final String message, final Func.TryBiFunction<? super String, ? super Throwable, ? extends E> exception) {
     return () -> cursor().or(message, exception);
   }
 

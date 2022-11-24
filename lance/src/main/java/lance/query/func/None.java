@@ -1,13 +1,13 @@
 package lance.query.func;
 
 import lance.func.Func;
-import lance.func.Pred.MaybePredicate;
+import lance.func.Pred.TryPredicate;
 
-public final class None<T> implements Func.MaybeFunction<T, Boolean> {
-  private final MaybePredicate<? super T> where;
+public final class None<T> implements Func.TryFunction<T, Boolean> {
+  private final TryPredicate<? super T> where;
   private final NoneOfThem noneOfThem;
 
-  public None(final MaybePredicate<? super T> where) {
+  public None(final TryPredicate<? super T> where) {
     assert where != null;
     this.where = where;
     this.noneOfThem = new NoneOfThem();

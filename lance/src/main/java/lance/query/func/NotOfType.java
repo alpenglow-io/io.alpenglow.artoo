@@ -2,7 +2,7 @@ package lance.query.func;
 
 import lance.func.Func;
 
-public final class NotOfType<T, R> implements Func.MaybeFunction<T, T> {
+public final class NotOfType<T, R> implements Func.TryFunction<T, T> {
   private final Class<? extends R> type;
 
   public NotOfType(final Class<? extends R> type) {

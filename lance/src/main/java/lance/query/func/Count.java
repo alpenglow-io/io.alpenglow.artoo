@@ -3,13 +3,13 @@ package lance.query.func;
 import lance.func.Func;
 import lance.func.Pred;
 
-public final class Count<T> implements Func.MaybeFunction<T, Integer> {
+public final class Count<T> implements Func.TryFunction<T, Integer> {
   private static final class Counted { private int value = 0; }
 
   private final Counted counted;
-  private final Pred.MaybePredicate<? super T> where;
+  private final Pred.TryPredicate<? super T> where;
 
-  public Count(final Pred.MaybePredicate<? super T> where) {
+  public Count(final Pred.TryPredicate<? super T> where) {
     assert where != null;
     this.counted = new Counted();
     this.where = where;

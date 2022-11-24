@@ -10,11 +10,11 @@ public interface Extremable<T> extends Queryable<T> {
     return this.extreme(it -> it instanceof Number n ? n : null);
   }
 
-  private <N extends Number, V> One<V> extreme(final Func.MaybeFunction<? super T, ? extends N> select) {
+  private <N extends Number, V> One<V> extreme(final Func.TryFunction<? super T, ? extends N> select) {
     return () -> cursor().map(rec(Extreme.<T, N, V>max(select))).keepNull();
   }
 
-  default <N extends Number> One<N> max(final Func.MaybeFunction<? super T, ? extends N> select) {
+  default <N extends Number> One<N> max(final Func.TryFunction<? super T, ? extends N> select) {
     return () -> cursor().map(rec(Extreme.<T, N, N>max(select))).keepNull();
   }
 
@@ -22,7 +22,7 @@ public interface Extremable<T> extends Queryable<T> {
     return () -> cursor().map(rec(Extreme.<T, Number, T>max())).keepNull();
   }
 
-  default <N extends Number> One<N> min(final Func.MaybeFunction<? super T, ? extends N> select) {
+  default <N extends Number> One<N> min(final Func.TryFunction<? super T, ? extends N> select) {
     return () -> cursor().map(rec(Extreme.<T, N, N>min(select))).keepNull();
   }
 

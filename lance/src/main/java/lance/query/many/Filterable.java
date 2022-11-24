@@ -8,11 +8,11 @@ import lance.query.func.OfType;
 import lance.query.func.Where;
 
 public interface Filterable<T> extends Queryable<T> {
-  default Many<T> where(final Pred.MaybePredicate<? super T> where) {
+  default Many<T> where(final Pred.TryPredicate<? super T> where) {
     return where((index, param) -> where.tryTest(param));
   }
 
-  default Many<T> where(final Pred.Bi<? super Integer, ? super T> where) {
+  default Many<T> where(final Pred.TryBiPredicate<? super Integer, ? super T> where) {
     return () -> cursor().map(new Where<>(where));
   }
 

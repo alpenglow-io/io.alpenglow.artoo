@@ -6,7 +6,7 @@ import lance.Queryable;
 import lance.query.func.Sum;
 
 public interface Summable<T> extends Queryable<T> {
-  default <N extends Number> One<N> sum(final Func.MaybeFunction<? super T, ? extends N> select) {
+  default <N extends Number> One<N> sum(final Func.TryFunction<? super T, ? extends N> select) {
     return () -> cursor().map(new Sum<T, N, N>(select)).keepNull();
   }
 

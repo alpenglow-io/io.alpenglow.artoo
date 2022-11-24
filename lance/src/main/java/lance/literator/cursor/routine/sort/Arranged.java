@@ -16,7 +16,7 @@ public final class Arranged<T> implements Sort<T> {
   public Arranged(final By<T, Object>[] bys) {this.bys = bys;}
 
   @Override
-  public Func.MaybeFunction<T[], Cursor<T>> onArray() {
+  public Func.TryFunction<T[], Cursor<T>> onArray() {
     return ts -> {
       Arrays.sort(ts, matching());
       return Cursor.open(ts);
@@ -67,12 +67,12 @@ public final class Arranged<T> implements Sort<T> {
   }
 
   @Override
-  public Func.MaybeFunction<Literator<T>, Cursor<T>> onLiterator() {
+  public Func.TryFunction<Literator<T>, Cursor<T>> onLiterator() {
     return li -> onIterator().apply(li);
   }
 
   @Override
-  public Func.MaybeFunction<Iterator<T>, Cursor<T>> onIterator() {
+  public Func.TryFunction<Iterator<T>, Cursor<T>> onIterator() {
     return it -> {
       final var list = new SortedList<T>(matching());
       it.forEachRemaining(list::add);

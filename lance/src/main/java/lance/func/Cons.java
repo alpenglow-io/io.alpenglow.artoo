@@ -6,8 +6,8 @@ import java.util.function.Consumer;
 public sealed interface Cons {
   enum Namespace implements Cons {}
 
-  interface MaybeConsumer<A> extends Consumer<A> {
-    static <T> MaybeConsumer<T> nothing() {
+  interface TryConsumer<A> extends Consumer<A> {
+    static <T> TryConsumer<T> nothing() {
       return it -> {};
     }
 
@@ -23,7 +23,7 @@ public sealed interface Cons {
     }
   }
 
-  interface MaybeBiConsumer<A, B> extends BiConsumer<A, B> {
+  interface TryBiConsumer<A, B> extends BiConsumer<A, B> {
     void tryAccept(A a, B b) throws Throwable;
 
     @Override
@@ -36,7 +36,7 @@ public sealed interface Cons {
     }
   }
 
-  interface MaybeTriConsumer<A, B, C> {
+  interface TryTriConsumer<A, B, C> {
     void tryAccept(A a, B b, C c) throws Throwable;
 
     default void accept(A a, B b, C c) {
@@ -48,7 +48,7 @@ public sealed interface Cons {
     }
   }
 
-  interface Quad<A, B, C, D> {
+  interface TryQuadConsumer<A, B, C, D> {
     void tryAccept(A a, B b, C c, D d) throws Throwable;
 
     default void accept(A a, B b, C c, D d) {
@@ -60,7 +60,7 @@ public sealed interface Cons {
     }
   }
 
-  interface Quin<A, B, C, D, E> {
+  interface TryQuinConsumer<A, B, C, D, E> {
     void tryAccept(A a, B b, C c, D d, E e) throws Throwable;
 
     default void accept(A a, B b, C c, D d, E e) {

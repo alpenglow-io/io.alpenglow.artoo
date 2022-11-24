@@ -14,11 +14,11 @@ public interface Elseable<T> extends Queryable<T> {
     return () -> cursor().or(otherwise::cursor);
   }
 
-  default <E extends RuntimeException> One<T> or(final String message, final Func.MaybeBiFunction<? super Throwable, ? super String, ? extends E> exception) {
+  default <E extends RuntimeException> One<T> or(final String message, final Func.TryBiFunction<? super Throwable, ? super String, ? extends E> exception) {
     return () -> cursor().or(message, (m, c) -> exception.tryApply(c, m));
   }
 
-  default <E extends RuntimeException> One<T> or(final String message, final Func.MaybeFunction<? super String, ? extends E> exception) {
+  default <E extends RuntimeException> One<T> or(final String message, final Func.TryFunction<? super String, ? extends E> exception) {
     return () -> cursor().or(message, (msg, cause) -> exception.tryApply(msg));
   }
 
@@ -30,7 +30,7 @@ public interface Elseable<T> extends Queryable<T> {
     return or(other).iterator().next();
   }
 
-  default <E extends RuntimeException> T otherwise(final String message, final Func.MaybeBiFunction<? super Throwable, ? super String, ? extends E> exception) {
+  default <E extends RuntimeException> T otherwise(final String message, final Func.TryBiFunction<? super Throwable, ? super String, ? extends E> exception) {
     return or(message, exception).iterator().next();
   }
 

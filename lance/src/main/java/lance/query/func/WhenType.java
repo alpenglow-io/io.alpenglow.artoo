@@ -2,11 +2,11 @@ package lance.query.func;
 
 import lance.func.Func;
 
-public final class WhenType<T, R> implements Func.MaybeFunction<T, T> {
+public final class WhenType<T, R> implements Func.TryFunction<T, T> {
   private final Class<R> type;
-  private final Func.MaybeFunction<? super R, ? extends T> func;
+  private final Func.TryFunction<? super R, ? extends T> func;
 
-  public WhenType(final Class<R> type, final Func.MaybeFunction<? super R, ? extends T> func) {
+  public WhenType(final Class<R> type, final Func.TryFunction<? super R, ? extends T> func) {
     this.type = type;
     this.func = func;
   }

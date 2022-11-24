@@ -13,7 +13,7 @@ public interface Quantifiable<T> extends Queryable<T> {
     return every(type::isInstance);
   }
 
-  default One<Boolean> every(final Pred.MaybePredicate<? super T> where) {
+  default One<Boolean> every(final Pred.TryPredicate<? super T> where) {
     return () -> cursor().map(new Every<>(where)).keepNull();
   }
 
@@ -21,13 +21,13 @@ public interface Quantifiable<T> extends Queryable<T> {
     return none(type::isInstance);
   }
 
-  default One<Boolean> none(final Pred.MaybePredicate<? super T> where) {
+  default One<Boolean> none(final Pred.TryPredicate<? super T> where) {
     return () -> cursor().map(new None<>(where)).keepNull();
   }
 
   default One<Boolean> some() { return this.some(t -> true); }
 
-  default One<Boolean> some(final Pred.MaybePredicate<? super T> where) {
+  default One<Boolean> some(final Pred.TryPredicate<? super T> where) {
     return () -> cursor().map(new Some<>(where)).keepNull().or(() -> Cursor.open(false));
   }
 }

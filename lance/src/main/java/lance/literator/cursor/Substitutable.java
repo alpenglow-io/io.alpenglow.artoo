@@ -16,11 +16,11 @@ public interface Substitutable<T> extends Literator<T> {
     return new Or<>(this, Let.lazy(alternative));
   }
 
-  default <E extends RuntimeException> Cursor<T> or(final String message, final Func.MaybeBiFunction<? super String, ? super Throwable, ? extends E> exception) {
+  default <E extends RuntimeException> Cursor<T> or(final String message, final Func.TryBiFunction<? super String, ? super Throwable, ? extends E> exception) {
     return new Er<>(this, message, exception);
   }
 
-  default Cursor<T> exceptionally(Cons.MaybeConsumer<? super Throwable> catch$) {
+  default Cursor<T> exceptionally(Cons.TryConsumer<? super Throwable> catch$) {
     return new Catch<>(this, catch$);
   }
 }
@@ -63,9 +63,9 @@ final class Or<T, C extends Cursor<T>> extends As<T> implements Cursor<T> {
 
 final class Er<T, E extends RuntimeException> extends As<T> implements Cursor<T> {
   private final String message;
-  private final Func.MaybeBiFunction<? super String, ? super Throwable, ? extends E> exception;
+  private final Func.TryBiFunction<? super String, ? super Throwable, ? extends E> exception;
 
-  Er(final Literator<T> source, final String message, final Func.MaybeBiFunction<? super String, ? super Throwable, ? extends E> exception) {
+  Er(final Literator<T> source, final String message, final Func.TryBiFunction<? super String, ? super Throwable, ? extends E> exception) {
     super(source);
     this.message = message;
     this.exception = exception;
@@ -91,9 +91,9 @@ final class Er<T, E extends RuntimeException> extends As<T> implements Cursor<T>
 }
 
 final class Catch<T> extends As<T> implements Cursor<T> {
-  private final Cons.MaybeConsumer<? super Throwable> catch$;
+  private final Cons.TryConsumer<? super Throwable> catch$;
 
-  Catch(Literator<T> source, Cons.MaybeConsumer<? super Throwable> catch$) {
+  Catch(Literator<T> source, Cons.TryConsumer<? super Throwable> catch$) {
     super(source);
     this.catch$ = catch$;
   }

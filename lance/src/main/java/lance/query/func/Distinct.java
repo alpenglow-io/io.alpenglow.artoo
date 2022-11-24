@@ -6,11 +6,11 @@ import lance.func.Pred;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public final class Distinct<T> implements Func.MaybeFunction<T, T> {
-  private final Pred.MaybePredicate<? super T> where;
+public final class Distinct<T> implements Func.TryFunction<T, T> {
+  private final Pred.TryPredicate<? super T> where;
   private final Collection<T> collected;
 
-  public Distinct(final Pred.MaybePredicate<? super T> where) {
+  public Distinct(final Pred.TryPredicate<? super T> where) {
     assert where != null;
     this.where = where;
     this.collected = new ArrayList<>();

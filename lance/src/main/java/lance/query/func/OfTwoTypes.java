@@ -4,7 +4,7 @@ import lance.func.Func;
 import lance.tuple.Pair;
 import lance.tuple.Tuple;
 
-public final class OfTwoTypes<A, B, X, Y> implements Func.MaybeBiFunction<A, B, Pair<X, Y>> {
+public final class OfTwoTypes<A, B, X, Y> implements Func.TryBiFunction<A, B, Pair<X, Y>> {
   private final Class<? extends X> type1;
   private final Class<? extends Y> type2;
 

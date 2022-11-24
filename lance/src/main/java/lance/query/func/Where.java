@@ -3,15 +3,15 @@ package lance.query.func;
 import lance.func.Func;
 import lance.func.Pred;
 
-public final class Where<T> implements Func.MaybeFunction<T, T> {
+public final class Where<T> implements Func.TryFunction<T, T> {
   private final class Index {
     private int value = 0;
   }
 
-  private final Pred.Bi<? super Integer, ? super T> where;
+  private final Pred.TryBiPredicate<? super Integer, ? super T> where;
   private final Index index;
 
-  public Where(final Pred.Bi<? super Integer, ? super T> where) {
+  public Where(final Pred.TryBiPredicate<? super Integer, ? super T> where) {
     assert where != null;
     this.where = where;
     this.index = new Index();

@@ -19,7 +19,7 @@ public interface Action extends Runnable, Callable<Void> {
     try {
       tryExecute();
     } catch (Throwable throwable) {
-      throw new CallableException(throwable);
+      throw new LambdaException(throwable);
     }
     return null;
   }

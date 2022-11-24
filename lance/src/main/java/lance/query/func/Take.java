@@ -1,14 +1,14 @@
 package lance.query.func;
 
-import lance.func.Func.MaybeFunction;
-import lance.func.Pred.Bi;
+import lance.func.Func.TryFunction;
+import lance.func.Pred.TryBiPredicate;
 
 @SuppressWarnings("unchecked")
-public final class Take<T, R> implements MaybeFunction<T, R> {
+public final class Take<T, R> implements TryFunction<T, R> {
   private final Taken taken = new Taken();
-  private final Bi<? super Integer, ? super T> where;
+  private final TryBiPredicate<? super Integer, ? super T> where;
 
-  public Take(final Bi<? super Integer, ? super T> where) {
+  public Take(final TryBiPredicate<? super Integer, ? super T> where) {
     assert where != null;
     this.where = where;
   }

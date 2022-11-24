@@ -8,7 +8,7 @@ import lance.query.func.OfType;
 import lance.query.func.Where;
 
 public interface Filterable<T> extends Queryable<T> {
-  default One<T> where(final Pred.MaybePredicate<? super T> where) {
+  default One<T> where(final Pred.TryPredicate<? super T> where) {
     return () -> cursor().map(new Where<>((i, it) -> where.tryTest(it)));
   }
 

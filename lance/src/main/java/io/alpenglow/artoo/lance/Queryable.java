@@ -2,9 +2,9 @@ package io.alpenglow.artoo.lance;
 
 import io.alpenglow.artoo.lance.func.Recursive;
 import io.alpenglow.artoo.lance.func.Recursive.Tailrec;
-import io.alpenglow.artoo.lance.func.TryBiConsumer;
-import io.alpenglow.artoo.lance.func.TryConsumer;
-import io.alpenglow.artoo.lance.func.TryFunction;
+import io.alpenglow.artoo.lance.func.TryConsumer2;
+import io.alpenglow.artoo.lance.func.TryConsumer1;
+import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.literator.Cursor;
 import io.alpenglow.artoo.lance.tuple.Pair;
 
@@ -23,7 +23,7 @@ public interface Queryable<T> extends Iterable<T> {
     }
   }
 
-  default void eventually(final TryConsumer<T> eventually) {
+  default void eventually(final TryConsumer1<T> eventually) {
     for (final var value : this) {
       if (value != null) {
         eventually.accept(value);
@@ -42,7 +42,7 @@ public interface Queryable<T> extends Iterable<T> {
     return returning;
   }
 
-  default <R, F extends Tailrec<T, R, F> & Recursive<T, R, F>> TryFunction<T, R> rec(final F tailrec) {
+  default <R, F extends Tailrec<T, R, F> & Recursive<T, R, F>> TryFunction1<T, R> rec(final F tailrec) {
     return element -> tailrec.on(element).result();
   }
 
@@ -59,7 +59,7 @@ public interface Queryable<T> extends Iterable<T> {
       }
     }
 
-    default void eventually(final TryBiConsumer<A, B> eventually) {
+    default void eventually(final TryConsumer2<A, B> eventually) {
       for (final var tuple : this) {
         if (tuple != null) {
           tuple.peek(eventually);
@@ -74,7 +74,7 @@ public interface Queryable<T> extends Iterable<T> {
       }
     }
 
-    default <R, F extends Tailrec<Pair<A, B>, R, F> & Recursive<Pair<A, B>, R, F>> TryFunction<Pair<A, B>, R> rec(final F tailrec) {
+    default <R, F extends Tailrec<Pair<A, B>, R, F> & Recursive<Pair<A, B>, R, F>> TryFunction1<Pair<A, B>, R> rec(final F tailrec) {
       return element -> tailrec.on(element).result();
     }
   }

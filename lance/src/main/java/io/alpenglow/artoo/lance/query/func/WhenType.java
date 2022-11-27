@@ -1,12 +1,12 @@
 package io.alpenglow.artoo.lance.query.func;
 
-import io.alpenglow.artoo.lance.func.TryFunction;
+import io.alpenglow.artoo.lance.func.TryFunction1;
 
-public final class WhenType<T, R> implements TryFunction<T, T> {
+public final class WhenType<T, R> implements TryFunction1<T, T> {
   private final Class<R> type;
-  private final TryFunction<? super R, ? extends T> func;
+  private final TryFunction1<? super R, ? extends T> func;
 
-  public WhenType(final Class<R> type, final TryFunction<? super R, ? extends T> func) {
+  public WhenType(final Class<R> type, final TryFunction1<? super R, ? extends T> func) {
     this.type = type;
     this.func = func;
   }

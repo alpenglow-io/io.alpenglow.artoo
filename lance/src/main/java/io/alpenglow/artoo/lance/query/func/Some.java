@@ -1,12 +1,12 @@
 package io.alpenglow.artoo.lance.query.func;
 
-import io.alpenglow.artoo.lance.func.TryFunction;
-import io.alpenglow.artoo.lance.func.TryPredicate;
+import io.alpenglow.artoo.lance.func.TryFunction1;
+import io.alpenglow.artoo.lance.func.TryPredicate1;
 
-public final class Some<T> implements TryFunction<T, Boolean> {
-  private final TryPredicate<? super T> where;
+public final class Some<T> implements TryFunction1<T, Boolean> {
+  private final TryPredicate1<? super T> where;
 
-  public Some(final TryPredicate<? super T> where) {
+  public Some(final TryPredicate1<? super T> where) {
     assert where != null;
     this.where = where;
   }

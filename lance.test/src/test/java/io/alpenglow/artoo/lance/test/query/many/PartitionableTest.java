@@ -4,7 +4,7 @@ import io.alpenglow.artoo.lance.query.Many;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.alpenglow.artoo.lance.func.TryPredicate.not;
+import static io.alpenglow.artoo.lance.func.TryPredicate1.not;
 import static io.alpenglow.artoo.lance.query.Many.from;
 import static org.assertj.core.api.Assertions.assertThat;
 

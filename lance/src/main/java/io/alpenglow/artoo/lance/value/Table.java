@@ -1,6 +1,6 @@
 package io.alpenglow.artoo.lance.value;
 
-import io.alpenglow.artoo.lance.func.TryFunction;
+import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.literator.Cursor;
 import io.alpenglow.artoo.lance.query.Many;
 
@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public interface Table<ID, R extends Record> extends Many<R> {
-  static <ID, R extends Record> Table<ID, R> inMemory(final TryFunction<? super R, ? extends ID> id) {
+  static <ID, R extends Record> Table<ID, R> inMemory(final TryFunction1<? super R, ? extends ID> id) {
     return new InMemory<ID, R>(id);
   }
 
@@ -20,9 +20,9 @@ public interface Table<ID, R extends Record> extends Many<R> {
   final class InMemory<ID, R extends Record> implements Table<ID, R> {
     private final Map<ID, R> map = new ConcurrentHashMap<>();
 
-    private final TryFunction<? super R, ? extends ID> id;
+    private final TryFunction1<? super R, ? extends ID> id;
 
-    private InMemory(final TryFunction<? super R, ? extends ID> id) {this.id = id;}
+    private InMemory(final TryFunction1<? super R, ? extends ID> id) {this.id = id;}
 
     @Override
     public Cursor<R> cursor() {

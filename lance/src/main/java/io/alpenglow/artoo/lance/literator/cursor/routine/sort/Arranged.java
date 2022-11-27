@@ -1,6 +1,6 @@
 package io.alpenglow.artoo.lance.literator.cursor.routine.sort;
 
-import io.alpenglow.artoo.lance.func.TryFunction;
+import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.literator.Cursor;
 import io.alpenglow.artoo.lance.literator.Literator;
 
@@ -16,7 +16,7 @@ public final class Arranged<T> implements Sort<T> {
   public Arranged(final By<T, Object>[] bys) {this.bys = bys;}
 
   @Override
-  public TryFunction<T[], Cursor<T>> onArray() {
+  public TryFunction1<T[], Cursor<T>> onArray() {
     return ts -> {
       Arrays.sort(ts, matching());
       return Cursor.open(ts);
@@ -67,12 +67,12 @@ public final class Arranged<T> implements Sort<T> {
   }
 
   @Override
-  public TryFunction<Literator<T>, Cursor<T>> onLiterator() {
+  public TryFunction1<Literator<T>, Cursor<T>> onLiterator() {
     return li -> onIterator().apply(li);
   }
 
   @Override
-  public TryFunction<Iterator<T>, Cursor<T>> onIterator() {
+  public TryFunction1<Iterator<T>, Cursor<T>> onIterator() {
     return it -> {
       final var list = new SortedList<T>(matching());
       it.forEachRemaining(list::add);

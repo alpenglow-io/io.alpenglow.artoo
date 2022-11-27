@@ -1,16 +1,16 @@
 package io.alpenglow.artoo.lance.query.func;
 
-import io.alpenglow.artoo.lance.func.TryFunction;
+import io.alpenglow.artoo.lance.func.TryFunction1;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
 @SuppressWarnings({"unchecked"})
-public final class Sum<T, N extends Number, V> implements TryFunction<T, V> {
-  private final TryFunction<? super T, ? extends N> select;
+public final class Sum<T, N extends Number, V> implements TryFunction1<T, V> {
+  private final TryFunction1<? super T, ? extends N> select;
   private final Summed summed;
 
-  public Sum(final TryFunction<? super T, ? extends N> select) {
+  public Sum(final TryFunction1<? super T, ? extends N> select) {
     assert select != null;
     this.select = select;
     this.summed = new Summed();

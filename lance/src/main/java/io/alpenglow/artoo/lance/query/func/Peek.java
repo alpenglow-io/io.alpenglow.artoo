@@ -1,14 +1,14 @@
 package io.alpenglow.artoo.lance.query.func;
 
-import io.alpenglow.artoo.lance.func.TryBiConsumer;
-import io.alpenglow.artoo.lance.func.TryFunction;
+import io.alpenglow.artoo.lance.func.TryConsumer2;
+import io.alpenglow.artoo.lance.func.TryFunction1;
 
 @SuppressWarnings("unchecked")
-public final class Peek<T, R> implements TryFunction<T, R> {
+public final class Peek<T, R> implements TryFunction1<T, R> {
   private final Peeked peeked = new Peeked();
-  private final TryBiConsumer<? super Integer, ? super T> peek;
+  private final TryConsumer2<? super Integer, ? super T> peek;
 
-  public Peek(final TryBiConsumer<? super Integer, ? super T> peek) {
+  public Peek(final TryConsumer2<? super Integer, ? super T> peek) {
     assert peek != null;
     this.peek = peek;
   }

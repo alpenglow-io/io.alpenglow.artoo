@@ -1,18 +1,18 @@
 package io.alpenglow.artoo.lance.func.tail;
 
-import io.alpenglow.artoo.lance.func.TryBiFunction;
-import io.alpenglow.artoo.lance.func.TryFunction;
-import io.alpenglow.artoo.lance.func.TryPredicate;
+import io.alpenglow.artoo.lance.func.TryFunction2;
+import io.alpenglow.artoo.lance.func.TryFunction1;
+import io.alpenglow.artoo.lance.func.TryPredicate1;
 import io.alpenglow.artoo.lance.func.Recursive.Tailrec;
 
 @SuppressWarnings("unchecked")
 public final class Aggregate<T, A, R> extends Tailrec<T, A, Aggregate<T, A, R>> {
   private final A aggregated;
-  private final TryPredicate<? super T> where;
-  private final TryFunction<? super T, ? extends R> select;
-  private final TryBiFunction<? super A, ? super R, ? extends A> aggregate;
+  private final TryPredicate1<? super T> where;
+  private final TryFunction1<? super T, ? extends R> select;
+  private final TryFunction2<? super A, ? super R, ? extends A> aggregate;
 
-  private Aggregate(final A aggregated, final TryPredicate<? super T> where, final TryFunction<? super T, ? extends R> select, final TryBiFunction<? super A, ? super R, ? extends A> aggregate) {
+  private Aggregate(final A aggregated, final TryPredicate1<? super T> where, final TryFunction1<? super T, ? extends R> select, final TryFunction2<? super A, ? super R, ? extends A> aggregate) {
     this.aggregated = aggregated;
     this.where = where;
     this.select = select;
@@ -31,15 +31,15 @@ public final class Aggregate<T, A, R> extends Tailrec<T, A, Aggregate<T, A, R>> 
     }
   }
 
-  public static <T, A, R> Aggregate<T, A, R> with(A seed, TryPredicate<? super T> where, TryFunction<? super T, ? extends R> select, TryBiFunction<? super A, ? super R, ? extends A> aggregate) {
+  public static <T, A, R> Aggregate<T, A, R> with(A seed, TryPredicate1<? super T> where, TryFunction1<? super T, ? extends R> select, TryFunction2<? super A, ? super R, ? extends A> aggregate) {
     return new Aggregate<>(seed, where, select, aggregate);
   }
 
-  public static <T, A, R> Aggregate<T, A, R> with(A seed, TryBiFunction<? super A, ? super R, ? extends A> aggregate) {
+  public static <T, A, R> Aggregate<T, A, R> with(A seed, TryFunction2<? super A, ? super R, ? extends A> aggregate) {
     return new Aggregate<>(seed, it -> true, it -> (R) it, aggregate);
   }
 
-  public static <T, A, R> Aggregate<T, A, R> with(A seed, TryPredicate<? super T> where, TryBiFunction<? super A, ? super R, ? extends A> aggregate) {
+  public static <T, A, R> Aggregate<T, A, R> with(A seed, TryPredicate1<? super T> where, TryFunction2<? super A, ? super R, ? extends A> aggregate) {
     return new Aggregate<>(seed, it -> true, it -> (R) it, aggregate);
   }
 }

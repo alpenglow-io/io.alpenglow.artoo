@@ -1,25 +1,25 @@
 package io.alpenglow.artoo.lance.literator.cursor;
 
-import io.alpenglow.artoo.lance.func.TryFunction;
+import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.literator.Cursor;
 import io.alpenglow.artoo.lance.literator.Literator;
 import io.alpenglow.artoo.lance.literator.cursor.routine.Routine;
 
 public interface Mappable<T> extends Literator<T> {
-  default <R> Cursor<R> map(final TryFunction<? super T, ? extends R> map) {
+  default <R> Cursor<R> map(final TryFunction1<? super T, ? extends R> map) {
     return new Map<>(this, map);
   }
 
-  default <R, C extends Cursor<R>> Cursor<R> flatMap(final TryFunction<? super T, ? extends C> flatMap) {
+  default <R, C extends Cursor<R>> Cursor<R> flatMap(final TryFunction1<? super T, ? extends C> flatMap) {
     return new Flat<>(new Map<>(this, flatMap));
   }
 }
 
 final class Map<T, R> implements Cursor<R> {
   private final Literator<T> source;
-  private final TryFunction<? super T, ? extends R> map;
+  private final TryFunction1<? super T, ? extends R> map;
 
-  Map(final Literator<T> source, final TryFunction<? super T, ? extends R> map) {
+  Map(final Literator<T> source, final TryFunction1<? super T, ? extends R> map) {
     this.source = source;
     this.map = map;
   }
@@ -31,7 +31,7 @@ final class Map<T, R> implements Cursor<R> {
   }
 
   @Override
-  public <P> Cursor<P> map(final TryFunction<? super R, ? extends P> mapAgain) {
+  public <P> Cursor<P> map(final TryFunction1<? super R, ? extends P> mapAgain) {
     return new Map<>(source, map.then(mapAgain));
   }
 

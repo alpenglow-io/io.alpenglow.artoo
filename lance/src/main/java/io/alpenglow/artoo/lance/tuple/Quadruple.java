@@ -1,7 +1,7 @@
 package io.alpenglow.artoo.lance.tuple;
 
-import io.alpenglow.artoo.lance.func.TryQuadConsumer;
-import io.alpenglow.artoo.lance.func.TryQuadFunction;
+import io.alpenglow.artoo.lance.func.TryConsumer4;
+import io.alpenglow.artoo.lance.func.TryFunction4;
 
 import static io.alpenglow.artoo.lance.tuple.Type.firstOf;
 import static io.alpenglow.artoo.lance.tuple.Type.forthOf;
@@ -15,11 +15,11 @@ public interface Quadruple<A, B, C, D> extends Tuple {
   default C third() { return thirdOf(this); }
   default D forth() { return forthOf(this); }
 
-  default <N extends Record> N to(final TryQuadFunction<? super A, ? super B, ? super C, ? super D, ? extends N> to) {
+  default <N extends Record> N to(final TryFunction4<? super A, ? super B, ? super C, ? super D, ? extends N> to) {
     return to.apply(first(), second(), third(), forth());
   }
 
-  default <T> T as(final TryQuadFunction<? super A, ? super B, ? super C, ? super D, ? extends T> as) {
+  default <T> T as(final TryFunction4<? super A, ? super B, ? super C, ? super D, ? extends T> as) {
     return as.apply(first(), second(), third(), forth());
   }
 
@@ -27,15 +27,15 @@ public interface Quadruple<A, B, C, D> extends Tuple {
     return has(first(), value1) && has(second(), value2) && has(third(), value3) && has(forth(), value4);
   }
 
-  default <R extends Record & Quadruple<A, B, C, D>> R map(TryQuadFunction<? super A, ? super B, ? super C, ? super D, ? extends R> map) {
+  default <R extends Record & Quadruple<A, B, C, D>> R map(TryFunction4<? super A, ? super B, ? super C, ? super D, ? extends R> map) {
     return map.apply(first(), second(), third(), forth());
   }
 
-  default <R extends Record & Quadruple<A, B, C, D>, F extends Record & Single<R>> R flatMap(TryQuadFunction<? super A, ? super B, ? super C, ? super D, ? extends F> func) {
+  default <R extends Record & Quadruple<A, B, C, D>, F extends Record & Single<R>> R flatMap(TryFunction4<? super A, ? super B, ? super C, ? super D, ? extends F> func) {
     return func.apply(first(), second(), third(), forth()).first();
   }
 
-  default Quadruple<A, B, C, D> peek(TryQuadConsumer<? super A, ? super B, ? super C, ? super D> cons) {
+  default Quadruple<A, B, C, D> peek(TryConsumer4<? super A, ? super B, ? super C, ? super D> cons) {
     cons.accept(first(), second(), third(), forth());
     return this;
   }

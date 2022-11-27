@@ -1,7 +1,7 @@
 package io.alpenglow.artoo.lance.query.many;
 
-import io.alpenglow.artoo.lance.func.TryFunction;
-import io.alpenglow.artoo.lance.func.TryPredicate;
+import io.alpenglow.artoo.lance.func.TryFunction1;
+import io.alpenglow.artoo.lance.func.TryPredicate1;
 import io.alpenglow.artoo.lance.query.Many;
 import io.alpenglow.artoo.lance.Queryable;
 import io.alpenglow.artoo.lance.query.func.Distinct;
@@ -12,7 +12,7 @@ public interface Settable<T> extends Queryable<T> {
     return distinct(it -> true);
   }
 
-  default Many<T> distinct(final TryPredicate<? super T> where) {
+  default Many<T> distinct(final TryPredicate1<? super T> where) {
     return () -> cursor().map(new Distinct<>(where));
   }
 /*
@@ -34,7 +34,7 @@ public interface Settable<T> extends Queryable<T> {
 }
 
 @SuppressWarnings("StatementWithEmptyBody")
-final class Except<T> implements TryFunction<T, T> {
+final class Except<T> implements TryFunction1<T, T> {
   private final Queryable<T> queryable;
 
   Except(final Queryable<T> queryable) {this.queryable = queryable;}
@@ -49,7 +49,7 @@ final class Except<T> implements TryFunction<T, T> {
 }
 
 @SuppressWarnings("StatementWithEmptyBody")
-final class Intersect<T> implements TryFunction<T, T> {
+final class Intersect<T> implements TryFunction1<T, T> {
   private final Queryable<T> queryable;
 
   Intersect(final Queryable<T> queryable) {this.queryable = queryable;}

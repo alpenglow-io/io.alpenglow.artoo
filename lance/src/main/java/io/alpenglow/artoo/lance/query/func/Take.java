@@ -1,14 +1,14 @@
 package io.alpenglow.artoo.lance.query.func;
 
-import io.alpenglow.artoo.lance.func.TryFunction;
-import io.alpenglow.artoo.lance.func.TryBiPredicate;
+import io.alpenglow.artoo.lance.func.TryFunction1;
+import io.alpenglow.artoo.lance.func.TryPredicate2;
 
 @SuppressWarnings("unchecked")
-public final class Take<T, R> implements TryFunction<T, R> {
+public final class Take<T, R> implements TryFunction1<T, R> {
   private final Taken taken = new Taken();
-  private final TryBiPredicate<? super Integer, ? super T> where;
+  private final TryPredicate2<? super Integer, ? super T> where;
 
-  public Take(final TryBiPredicate<? super Integer, ? super T> where) {
+  public Take(final TryPredicate2<? super Integer, ? super T> where) {
     assert where != null;
     this.where = where;
   }

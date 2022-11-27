@@ -1,6 +1,6 @@
 package io.alpenglow.artoo.lance.scope.random;
 
-import io.alpenglow.artoo.lance.func.TryFunction;
+import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.scope.Random;
 
 @SuppressWarnings("unchecked")
@@ -23,7 +23,7 @@ public final class Int<T extends Number> implements Random<T> {
   }
 
   @Override
-  public <R> R let(final TryFunction<? super T, ? extends R> func) {
+  public <R> R let(final TryFunction1<? super T, ? extends R> func) {
     return bit.let(zahlen.bits, rnd -> func.apply((T) rnd));
   }
 }

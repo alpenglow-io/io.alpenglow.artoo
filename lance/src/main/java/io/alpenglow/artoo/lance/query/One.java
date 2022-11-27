@@ -1,8 +1,8 @@
 package io.alpenglow.artoo.lance.query;
 
 import io.alpenglow.artoo.lance.Queryable;
-import io.alpenglow.artoo.lance.func.TryFunction;
-import io.alpenglow.artoo.lance.func.TrySupplier;
+import io.alpenglow.artoo.lance.func.TryFunction1;
+import io.alpenglow.artoo.lance.func.TrySupplier1;
 import io.alpenglow.artoo.lance.literator.Cursor;
 import io.alpenglow.artoo.lance.query.one.Elseable;
 import io.alpenglow.artoo.lance.query.one.Filterable;
@@ -27,11 +27,11 @@ public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Else
     return new Lone<>(element);
   }
 
-  static <T> One<T> from(final TrySupplier<T> supply) {
+  static <T> One<T> from(final TrySupplier1<T> supply) {
     return new Sone<>(supply);
   }
 
-  static <T> One<T> gone(final String message, final TryFunction<? super String, ? extends RuntimeException> error) {
+  static <T> One<T> gone(final String message, final TryFunction1<? super String, ? extends RuntimeException> error) {
     return new Gone<>(message, error);
   }
 
@@ -40,7 +40,7 @@ public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Else
     return (One<L>) None.Empty;
   }
 
-  static <A extends AutoCloseable, T, O extends One<T>> One<T> done(TrySupplier<? extends A> going, TryFunction<? super A, ? extends O> then) {
+  static <A extends AutoCloseable, T, O extends One<T>> One<T> done(TrySupplier1<? extends A> going, TryFunction1<? super A, ? extends O> then) {
     return new Done<>(going, then);
   }
 
@@ -61,9 +61,9 @@ final class Lone<T> implements One<T> {
 }
 
 final class Sone<T> implements One<T> {
-  private final TrySupplier<T> suppl;
+  private final TrySupplier1<T> suppl;
 
-  public Sone(final TrySupplier<T> suppl) {
+  public Sone(final TrySupplier1<T> suppl) {
     this.suppl = suppl;
   }
 
@@ -81,9 +81,9 @@ final class Sone<T> implements One<T> {
 
 final class Gone<T> implements One<T> {
   private final String message;
-  private final TryFunction<? super String, ? extends RuntimeException> error;
+  private final TryFunction1<? super String, ? extends RuntimeException> error;
 
-  Gone(final String message, final TryFunction<? super String, ? extends RuntimeException> error) {
+  Gone(final String message, final TryFunction1<? super String, ? extends RuntimeException> error) {
     this.message = message;
     this.error = error;
   }
@@ -95,10 +95,10 @@ final class Gone<T> implements One<T> {
 }
 
 final class Done<A extends AutoCloseable, T, O extends One<T>> implements One<T> {
-  private final TrySupplier<? extends A> doing;
-  private final TryFunction<? super A, ? extends O> then;
+  private final TrySupplier1<? extends A> doing;
+  private final TryFunction1<? super A, ? extends O> then;
 
-  Done(final TrySupplier<? extends A> doing, final TryFunction<? super A, ? extends O> then) {
+  Done(final TrySupplier1<? extends A> doing, final TryFunction1<? super A, ? extends O> then) {
     this.doing = doing;
     this.then = then;
   }

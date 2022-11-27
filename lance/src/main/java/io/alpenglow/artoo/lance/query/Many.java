@@ -1,6 +1,6 @@
 package io.alpenglow.artoo.lance.query;
 
-import io.alpenglow.artoo.lance.func.TrySupplier;
+import io.alpenglow.artoo.lance.func.TrySupplier1;
 import io.alpenglow.artoo.lance.literator.Cursor;
 import io.alpenglow.artoo.lance.query.many.Aggregatable;
 import io.alpenglow.artoo.lance.query.many.Concatenatable;
@@ -37,7 +37,7 @@ public interface Many<T> extends
     return new Some<>(Cursor.open(items));
   }
 
-  static <R> Many<R> from(final TrySupplier<R[]> supply) {
+  static <R> Many<R> from(final TrySupplier1<R[]> supply) {
     return new Supplied<>(supply);
   }
 
@@ -87,9 +87,9 @@ final class Ints implements Many<Integer> {
 }
 
 final class Supplied<R> implements Many<R> {
-  private final TrySupplier<R[]> supply;
+  private final TrySupplier1<R[]> supply;
 
-  Supplied(final TrySupplier<R[]> supply) {this.supply = supply;}
+  Supplied(final TrySupplier1<R[]> supply) {this.supply = supply;}
 
   @Override
   public Cursor<R> cursor() {

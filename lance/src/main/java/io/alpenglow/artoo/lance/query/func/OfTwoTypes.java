@@ -1,10 +1,10 @@
 package io.alpenglow.artoo.lance.query.func;
 
-import io.alpenglow.artoo.lance.func.TryBiFunction;
+import io.alpenglow.artoo.lance.func.TryFunction2;
 import io.alpenglow.artoo.lance.tuple.Pair;
 import io.alpenglow.artoo.lance.tuple.Tuple;
 
-public final class OfTwoTypes<A, B, X, Y> implements TryBiFunction<A, B, Pair<X, Y>> {
+public final class OfTwoTypes<A, B, X, Y> implements TryFunction2<A, B, Pair<X, Y>> {
   private final Class<? extends X> type1;
   private final Class<? extends Y> type2;
 

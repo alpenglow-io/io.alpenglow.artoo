@@ -1,14 +1,14 @@
 package io.alpenglow.artoo.lance.query.func;
 
-import io.alpenglow.artoo.lance.func.TryConsumer;
-import io.alpenglow.artoo.lance.func.TryFunction;
-import io.alpenglow.artoo.lance.func.TryPredicate;
+import io.alpenglow.artoo.lance.func.TryConsumer1;
+import io.alpenglow.artoo.lance.func.TryFunction1;
+import io.alpenglow.artoo.lance.func.TryPredicate1;
 
-public final class WhenWhere<T> implements TryFunction<T, T> {
-  private final TryPredicate<? super T> where;
-  private final TryConsumer<? super T> cons;
+public final class WhenWhere<T> implements TryFunction1<T, T> {
+  private final TryPredicate1<? super T> where;
+  private final TryConsumer1<? super T> cons;
 
-  public WhenWhere(final TryPredicate<? super T> where, final TryConsumer<? super T> cons) {
+  public WhenWhere(final TryPredicate1<? super T> where, final TryConsumer1<? super T> cons) {
     this.where = where;
     this.cons = cons;
   }

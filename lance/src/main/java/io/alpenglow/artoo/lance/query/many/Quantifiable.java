@@ -1,6 +1,6 @@
 package io.alpenglow.artoo.lance.query.many;
 
-import io.alpenglow.artoo.lance.func.TryPredicate;
+import io.alpenglow.artoo.lance.func.TryPredicate1;
 import io.alpenglow.artoo.lance.literator.Cursor;
 import io.alpenglow.artoo.lance.query.One;
 import io.alpenglow.artoo.lance.Queryable;
@@ -13,7 +13,7 @@ public interface Quantifiable<T> extends Queryable<T> {
     return every(type::isInstance);
   }
 
-  default One<Boolean> every(final TryPredicate<? super T> where) {
+  default One<Boolean> every(final TryPredicate1<? super T> where) {
     return () -> cursor().map(new Every<>(where)).keepNull();
   }
 
@@ -21,13 +21,13 @@ public interface Quantifiable<T> extends Queryable<T> {
     return none(type::isInstance);
   }
 
-  default One<Boolean> none(final TryPredicate<? super T> where) {
+  default One<Boolean> none(final TryPredicate1<? super T> where) {
     return () -> cursor().map(new None<>(where)).keepNull();
   }
 
   default One<Boolean> some() { return this.some(t -> true); }
 
-  default One<Boolean> some(final TryPredicate<? super T> where) {
+  default One<Boolean> some(final TryPredicate1<? super T> where) {
     return () -> cursor().map(new Some<>(where)).keepNull().or(() -> Cursor.open(false));
   }
 }

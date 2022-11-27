@@ -1,6 +1,6 @@
 package io.alpenglow.artoo.lance.query.many.oftwo;
 
-import io.alpenglow.artoo.lance.func.TryBiFunction;
+import io.alpenglow.artoo.lance.func.TryFunction2;
 import io.alpenglow.artoo.lance.literator.Cursor;
 import io.alpenglow.artoo.lance.literator.cursor.routine.sort.Sort;
 import io.alpenglow.artoo.lance.query.Many;
@@ -15,11 +15,11 @@ import static io.alpenglow.artoo.lance.literator.cursor.routine.sort.Sort.byDefa
 import static io.alpenglow.artoo.lance.query.many.Ordering.Arrange.asc;
 
 public sealed interface Ordering<A, B> extends Many.OfTwo<A, B> {
-  default <R> Ordering<A, B> by(TryBiFunction<? super A, ? super B, ? extends R> field) {
+  default <R> Ordering<A, B> by(TryFunction2<? super A, ? super B, ? extends R> field) {
     return by(field, asc);
   }
 
-  default <R> Ordering<A, B> by(TryBiFunction<? super A, ? super B, ? extends R> field, Arrange arrange) {
+  default <R> Ordering<A, B> by(TryFunction2<? super A, ? super B, ? extends R> field, Arrange arrange) {
     return new OrderBy<>(this, By.with(pair -> field.tryApply(pair.first(), pair.second()), arrange));
   }
 }
@@ -35,7 +35,7 @@ final class Order<A, B> implements Ordering<A, B> {
   }
 
   @Override
-  public <R> Ordering<A, B> by(final TryBiFunction<? super A, ? super B, ? extends R> field, final Arrange arrange) {
+  public <R> Ordering<A, B> by(final TryFunction2<? super A, ? super B, ? extends R> field, final Arrange arrange) {
     return new OrderBy<>(queryable, By.with(pair -> field.tryApply(pair.first(), pair.second()), arrange));
   }
 }
@@ -56,7 +56,7 @@ final class OrderBy<A, B> implements Ordering<A, B> {
   }
 
   @Override
-  public <R> Ordering<A, B> by(final TryBiFunction<? super A, ? super B, ? extends R> field, final Arrange arrange) {
+  public <R> Ordering<A, B> by(final TryFunction2<? super A, ? super B, ? extends R> field, final Arrange arrange) {
     final var copied = Arrays.copyOf(bys, bys.length + 1);
     copied[bys.length] = By.with(pair -> field.tryApply(pair.first(), pair.second()), arrange);
     return new OrderBy<>(queryable, copied);

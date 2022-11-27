@@ -1,6 +1,6 @@
 package io.alpenglow.artoo.lance.query.many.oftwo;
 
-import io.alpenglow.artoo.lance.func.TryBiPredicate;
+import io.alpenglow.artoo.lance.func.TryPredicate2;
 import io.alpenglow.artoo.lance.query.One;
 import io.alpenglow.artoo.lance.Queryable;
 import io.alpenglow.artoo.lance.query.func.At;
@@ -17,7 +17,7 @@ public interface Uniquable<A, B> extends Queryable.OfTwo<A, B> {
     return first((first, second) -> true);
   }
 
-  default One.OfTwo<A, B> first(final TryBiPredicate<? super A, ? super B> where) {
+  default One.OfTwo<A, B> first(final TryPredicate2<? super A, ? super B> where) {
     return () -> cursor().map(new First<>(pair -> where.tryTest(pair.first(), pair.second()))).keepNull();
   }
 
@@ -25,7 +25,7 @@ public interface Uniquable<A, B> extends Queryable.OfTwo<A, B> {
     return last((first, second) -> true);
   }
 
-  default One.OfTwo<A, B> last(final TryBiPredicate<? super A, ? super B> where) {
+  default One.OfTwo<A, B> last(final TryPredicate2<? super A, ? super B> where) {
     return () -> cursor().map(new Last<>(pair -> where.tryTest(pair.first(), pair.second()))).keepNull();
   }
 
@@ -33,7 +33,7 @@ public interface Uniquable<A, B> extends Queryable.OfTwo<A, B> {
     return single((first, second) -> true);
   }
 
-  default One.OfTwo<A, B> single(final TryBiPredicate<? super A, ? super B> where) {
+  default One.OfTwo<A, B> single(final TryPredicate2<? super A, ? super B> where) {
     return () -> cursor().map(new Single<>(pair -> where.tryTest(pair.first(), pair.second()))).keepNull();
   }
 }

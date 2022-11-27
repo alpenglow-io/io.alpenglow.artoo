@@ -11,15 +11,16 @@ enum Type {
   static <T> T componentOf(final Object instance, final int index) {
     final var type = instance.getClass();
     try {
-      assert index >= 0 && type.isRecord() && type.getRecordComponents().length > index;
-
-      final var method = type
-        .getRecordComponents()[index]
-        .getAccessor();
-      if (!method.canAccess(instance)) method.setAccessible(true);
-      return (T) method.invoke(instance);
+      if (instance instanceof Record it) {
+        final var method = type
+          .getRecordComponents()[index]
+          .getAccessor();
+        if (!method.canAccess(it)) method.setAccessible(true);
+        return (T) method.invoke(it);
+      }
+      throw new NominalTupleException("Can't invoke component %d of nominal tuple %s, since .".formatted(index, type.getSimpleName()));
     } catch (IllegalAccessException | InvocationTargetException e) {
-      throw new NominalTupleException("Can't invoke nominal tuple %s component of index %d.".formatted(type.getSimpleName(), index), e);
+      throw new NominalTupleException("Can't invoke component %d of nominal tuple %s.".formatted(index, type.getSimpleName()), e);
     }
   }
 

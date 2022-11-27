@@ -1,7 +1,7 @@
 package io.alpenglow.artoo.lance.query.many;
 
-import io.alpenglow.artoo.lance.func.TryBiPredicate;
-import io.alpenglow.artoo.lance.func.TryPredicate;
+import io.alpenglow.artoo.lance.func.TryPredicate2;
+import io.alpenglow.artoo.lance.func.TryPredicate1;
 import io.alpenglow.artoo.lance.query.Many;
 import io.alpenglow.artoo.lance.Queryable;
 import io.alpenglow.artoo.lance.query.func.Skip;
@@ -12,11 +12,11 @@ public interface Partitionable<T> extends Queryable<T> {
     return skipWhile((index, it) -> index < until);
   }
 
-  default Many<T> skipWhile(final TryPredicate<? super T> where) {
+  default Many<T> skipWhile(final TryPredicate1<? super T> where) {
     return skipWhile((index, it) -> where.test(it));
   }
 
-  default Many<T> skipWhile(final TryBiPredicate<? super Integer, ? super T> where) {
+  default Many<T> skipWhile(final TryPredicate2<? super Integer, ? super T> where) {
     return () -> cursor().map(new Skip<T, T>(where));
   }
 
@@ -24,11 +24,11 @@ public interface Partitionable<T> extends Queryable<T> {
     return takeWhile((index, it) -> index < until);
   }
 
-  default Many<T> takeWhile(final TryPredicate<? super T> where) {
+  default Many<T> takeWhile(final TryPredicate1<? super T> where) {
     return takeWhile((index, param) -> where.test(param));
   }
 
-  default Many<T> takeWhile(final TryBiPredicate<? super Integer, ? super T> where) {
+  default Many<T> takeWhile(final TryPredicate2<? super Integer, ? super T> where) {
     return () -> cursor().map(new Take<T, T>(where));
   }
 }

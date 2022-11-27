@@ -1,7 +1,7 @@
 package io.alpenglow.artoo.lance.query.many.oftwo;
 
 import io.alpenglow.artoo.lance.Queryable;
-import io.alpenglow.artoo.lance.func.TryBiFunction;
+import io.alpenglow.artoo.lance.func.TryFunction2;
 import io.alpenglow.artoo.lance.tuple.Pair;
 
 import java.util.Collection;
@@ -13,7 +13,7 @@ import static io.alpenglow.artoo.lance.literator.cursor.routine.Routine.list;
 import static io.alpenglow.artoo.lance.scope.Nullability.nonNullable;
 
 public interface Convertable<A, B> extends Queryable.OfTwo<A, B> {
-  default <K, E> Map<? extends K, ? extends E> asMap(final TryBiFunction<? super A, ? super B, ? extends K> key, final TryBiFunction<? super A, ? super B, ? extends E> value) {
+  default <K, E> Map<? extends K, ? extends E> asMap(final TryFunction2<? super A, ? super B, ? extends K> key, final TryFunction2<? super A, ? super B, ? extends E> value) {
     nonNullable(key, "key");
     nonNullable(value, "element");
     final var map = new ConcurrentHashMap<K, E>();

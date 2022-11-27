@@ -1,7 +1,7 @@
 package io.alpenglow.artoo.lance.query.many.oftwo;
 
-import io.alpenglow.artoo.lance.func.TryBiFunction;
-import io.alpenglow.artoo.lance.func.TrySupplier;
+import io.alpenglow.artoo.lance.func.TryFunction2;
+import io.alpenglow.artoo.lance.func.TrySupplier1;
 import io.alpenglow.artoo.lance.literator.Cursor;
 import io.alpenglow.artoo.lance.query.Many;
 import io.alpenglow.artoo.lance.Queryable;
@@ -17,11 +17,11 @@ public interface Otherwise<A, B> extends Queryable.OfTwo<A, B> {
     return () -> cursor().or(many::cursor);
   }
 
-  default <E extends RuntimeException> Many.OfTwo<A, B> or(final String message, final TryBiFunction<? super String, ? super Throwable, ? extends E> exception) {
+  default <E extends RuntimeException> Many.OfTwo<A, B> or(final String message, final TryFunction2<? super String, ? super Throwable, ? extends E> exception) {
     return () -> cursor().or(message, exception);
   }
 
-  default <E extends RuntimeException> Many.OfTwo<A, B> or(final TrySupplier<? extends E> exception) {
+  default <E extends RuntimeException> Many.OfTwo<A, B> or(final TrySupplier1<? extends E> exception) {
     return () -> cursor().or(null, (it, throwable) -> exception.tryGet());
   }
 }

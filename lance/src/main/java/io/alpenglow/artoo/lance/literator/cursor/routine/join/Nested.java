@@ -1,7 +1,7 @@
 package io.alpenglow.artoo.lance.literator.cursor.routine.join;
 
-import io.alpenglow.artoo.lance.func.TryBiPredicate;
-import io.alpenglow.artoo.lance.func.TryFunction;
+import io.alpenglow.artoo.lance.func.TryPredicate2;
+import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.literator.Cursor;
 import io.alpenglow.artoo.lance.literator.Literator;
 import io.alpenglow.artoo.lance.tuple.Pair;
@@ -13,9 +13,9 @@ import java.util.Iterator;
 @SuppressWarnings("unchecked")
 public final class Nested<R, T> implements Join<R, Cursor<Pair<T, R>>> {
   private final T[] ts;
-  private final TryBiPredicate<? super T, ? super R> pred;
+  private final TryPredicate2<? super T, ? super R> pred;
 
-  Nested(final T[] ts, final TryBiPredicate<? super T, ? super R> pred) {
+  Nested(final T[] ts, final TryPredicate2<? super T, ? super R> pred) {
     this.ts = ts;
     this.pred = pred;
   }
@@ -34,17 +34,17 @@ public final class Nested<R, T> implements Join<R, Cursor<Pair<T, R>>> {
   }
 
   @Override
-  public TryFunction<R[], Cursor<Pair<T, R>>> onArray() {
+  public TryFunction1<R[], Cursor<Pair<T, R>>> onArray() {
     return this::joinArray;
   }
 
   @Override
-  public TryFunction<Literator<R>, Cursor<Pair<T, R>>> onLiterator() {
+  public TryFunction1<Literator<R>, Cursor<Pair<T, R>>> onLiterator() {
     return null;
   }
 
   @Override
-  public TryFunction<Iterator<R>, Cursor<Pair<T, R>>> onIterator() {
+  public TryFunction1<Iterator<R>, Cursor<Pair<T, R>>> onIterator() {
     return null;
   }
 }

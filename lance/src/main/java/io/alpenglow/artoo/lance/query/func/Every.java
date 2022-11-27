@@ -1,13 +1,13 @@
 package io.alpenglow.artoo.lance.query.func;
 
-import io.alpenglow.artoo.lance.func.TryPredicate;
-import io.alpenglow.artoo.lance.func.TryFunction;
+import io.alpenglow.artoo.lance.func.TryPredicate1;
+import io.alpenglow.artoo.lance.func.TryFunction1;
 
-public final class Every<T> implements TryFunction<T, Boolean> {
-  private final TryPredicate<? super T> where;
+public final class Every<T> implements TryFunction1<T, Boolean> {
+  private final TryPredicate1<? super T> where;
   private final AllOfThem allOfThem;
 
-  public Every(final TryPredicate<? super T> where) {
+  public Every(final TryPredicate1<? super T> where) {
     assert where != null;
     this.where = where;
     this.allOfThem = new AllOfThem();

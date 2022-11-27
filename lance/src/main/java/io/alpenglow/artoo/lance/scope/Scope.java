@@ -1,12 +1,12 @@
 package io.alpenglow.artoo.lance.scope;
 
-import io.alpenglow.artoo.lance.func.TryConsumer;
-import io.alpenglow.artoo.lance.func.TryFunction;
-import io.alpenglow.artoo.lance.func.TrySupplier;
+import io.alpenglow.artoo.lance.func.TryConsumer1;
+import io.alpenglow.artoo.lance.func.TryFunction1;
+import io.alpenglow.artoo.lance.func.TrySupplier1;
 import io.alpenglow.artoo.lance.literator.Cursor;
 import io.alpenglow.artoo.lance.query.One;
 
-public abstract class Scope<T, $this extends Scope<T, $this>> implements One<T>, TrySupplier<T> {
+public abstract class Scope<T, $this extends Scope<T, $this>> implements One<T>, TrySupplier1<T> {
   protected int value;
 
   @Override
@@ -14,12 +14,12 @@ public abstract class Scope<T, $this extends Scope<T, $this>> implements One<T>,
     return Cursor.maybe(get());
   }
 
-  public final <R, $new extends Scope<R, $new>> $new let(final TryFunction<? super T, ? extends $new> let) {
+  public final <R, $new extends Scope<R, $new>> $new let(final TryFunction1<? super T, ? extends $new> let) {
     return let.apply(get());
   }
 
   @SuppressWarnings("unchecked")
-  public $this apply(final TryConsumer<Scope<T, $this>> apply) {
+  public $this apply(final TryConsumer1<Scope<T, $this>> apply) {
     return ($this) new Scope<T, $this>() {
 
       {

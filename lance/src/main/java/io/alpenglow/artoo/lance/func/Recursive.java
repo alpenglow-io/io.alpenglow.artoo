@@ -5,11 +5,11 @@ import io.alpenglow.artoo.lance.scope.Maybe;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-public interface Recursive<PARAMETER, RESULT, FUNCTION extends Recursive<PARAMETER, RESULT, FUNCTION>> extends TryFunction<PARAMETER, Return<PARAMETER, RESULT, FUNCTION>> {
+public interface Recursive<PARAMETER, RESULT, FUNCTION extends Recursive<PARAMETER, RESULT, FUNCTION>> extends TryFunction1<PARAMETER, Return<PARAMETER, RESULT, FUNCTION>> {
 
 
-  record Return<T, R, F extends TryFunction<T, Return<T, R, F>>>(R result, F next) {
-    public static <T, R, F extends TryFunction<T, Return<T, R, F>>> Return<T, R, F> with(R result, F nextApply) {
+  record Return<T, R, F extends TryFunction1<T, Return<T, R, F>>>(R result, F next) {
+    public static <T, R, F extends TryFunction1<T, Return<T, R, F>>> Return<T, R, F> with(R result, F nextApply) {
       return new Return<>(result, nextApply);
     }
   }
@@ -18,7 +18,7 @@ public interface Recursive<PARAMETER, RESULT, FUNCTION extends Recursive<PARAMET
     private final AtomicReference<FUNCTION> reference = new AtomicReference<>();
 
     @SuppressWarnings("unchecked")
-    private <RESULT> Maybe<RESULT> let(final TryFunction<? super FUNCTION, ? extends RESULT> current, final TryFunction<? super RESULT, ? extends FUNCTION> update) {
+    private <RESULT> Maybe<RESULT> let(final TryFunction1<? super FUNCTION, ? extends RESULT> current, final TryFunction1<? super RESULT, ? extends FUNCTION> update) {
       reference.compareAndSet(null, (FUNCTION) this);
       FUNCTION prev = reference.get() , next = null;
       RESULT result = null;

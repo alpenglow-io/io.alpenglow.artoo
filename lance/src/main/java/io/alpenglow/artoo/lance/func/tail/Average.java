@@ -1,18 +1,18 @@
 package io.alpenglow.artoo.lance.func.tail;
 
-import io.alpenglow.artoo.lance.func.TryFunction;
+import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.func.Recursive;
 import io.alpenglow.artoo.lance.func.Recursive.Tailrec;
 
 public final class Average<T, N extends Number> extends Tailrec<T, Double, Average<T, N>> implements Recursive<T, Double, Average<T, N>> {
   private final Double accumulated;
   private final int counted;
-  private final TryFunction<? super T, ? extends N> select;
+  private final TryFunction1<? super T, ? extends N> select;
 
-  public Average(final TryFunction<? super T, ? extends N> select) {
+  public Average(final TryFunction1<? super T, ? extends N> select) {
     this(null, 0, select);
   }
-  private Average(final Double accumulated, final int counted, final TryFunction<? super T, ? extends N> select) {
+  private Average(final Double accumulated, final int counted, final TryFunction1<? super T, ? extends N> select) {
     this.accumulated = accumulated;
     this.counted = counted;
     this.select = select;

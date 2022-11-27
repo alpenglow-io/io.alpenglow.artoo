@@ -1,7 +1,7 @@
 package io.alpenglow.artoo.lance.scope;
 
-import io.alpenglow.artoo.lance.func.TryFunction;
-import io.alpenglow.artoo.lance.func.TrySupplier;
+import io.alpenglow.artoo.lance.func.TryFunction1;
+import io.alpenglow.artoo.lance.func.TrySupplier1;
 
 import static io.alpenglow.artoo.lance.scope.Default.Nothing;
 
@@ -10,7 +10,7 @@ public interface Late<T> extends Let<T> {
     return new Late.Init<>();
   }
 
-  Late<T> set(TrySupplier<? extends T> suppl);
+  Late<T> set(TrySupplier1<? extends T> suppl);
 
   sealed interface Writeonce<T> extends Late<T> permits Late.Init {}
 
@@ -23,7 +23,7 @@ public interface Late<T> extends Let<T> {
     }
 
     @Override
-    public Late<T> set(final TrySupplier<? extends T> suppl) {
+    public Late<T> set(final TrySupplier1<? extends T> suppl) {
       final var unsyncd = this.value;
       if (Nothing.equals(unsyncd)) {
         synchronized (this) {
@@ -38,7 +38,7 @@ public interface Late<T> extends Let<T> {
     }
 
     @Override
-    public <R> R let(final TryFunction<? super T, ? extends R> func) {
+    public <R> R let(final TryFunction1<? super T, ? extends R> func) {
       final var unsyncd = this.value;
       if (Nothing.notEquals(unsyncd)) {
         synchronized (this) {

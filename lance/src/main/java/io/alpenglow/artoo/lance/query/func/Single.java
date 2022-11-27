@@ -1,15 +1,15 @@
 package io.alpenglow.artoo.lance.query.func;
 
-import io.alpenglow.artoo.lance.func.TryFunction;
-import io.alpenglow.artoo.lance.func.TryPredicate;
+import io.alpenglow.artoo.lance.func.TryFunction1;
+import io.alpenglow.artoo.lance.func.TryPredicate1;
 
-public final class Single<T> implements TryFunction<T, T> {
+public final class Single<T> implements TryFunction1<T, T> {
   enum NoSingle {Found}
 
   private Object single = null;
-  private final TryPredicate<? super T> where;
+  private final TryPredicate1<? super T> where;
 
-  public Single(final TryPredicate<? super T> where) {
+  public Single(final TryPredicate1<? super T> where) {
     assert where != null;
     this.where = where;
   }

@@ -1,15 +1,15 @@
 package io.alpenglow.artoo.lance.scope.random;
 
-import io.alpenglow.artoo.lance.func.TryFunction;
+import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.scope.Random;
 
 public sealed interface Binary extends Random<Integer> permits Binary.Digit {
   @Override
-  default <R> R let(final TryFunction<? super Integer, ? extends R> func) {
+  default <R> R let(final TryFunction1<? super Integer, ? extends R> func) {
     return let(32, func);
   }
 
-  <R> R let(int bits, TryFunction<? super Integer, ? extends R> func);
+  <R> R let(int bits, TryFunction1<? super Integer, ? extends R> func);
 
   final class Digit implements Binary {
     private static final long addend = 0xBL;
@@ -19,7 +19,7 @@ public sealed interface Binary extends Random<Integer> permits Binary.Digit {
     public Digit(final Scramble scramble) {this.scramble = scramble;}
 
     @Override
-    public <R> R let(int bits, final TryFunction<? super Integer, ? extends R> func) {
+    public <R> R let(int bits, final TryFunction1<? super Integer, ? extends R> func) {
       return scramble.apply((atomic, multiplier, mask) -> {
         var random = Integer.MIN_VALUE;
 

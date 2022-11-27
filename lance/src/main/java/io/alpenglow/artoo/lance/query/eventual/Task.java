@@ -1,7 +1,7 @@
 package io.alpenglow.artoo.lance.query.eventual;
 
-import io.alpenglow.artoo.lance.func.TryConsumer;
-import io.alpenglow.artoo.lance.func.TrySupplier;
+import io.alpenglow.artoo.lance.func.TryConsumer1;
+import io.alpenglow.artoo.lance.func.TrySupplier1;
 import io.alpenglow.artoo.lance.query.eventual.task.Projectable;
 
 import java.util.concurrent.ExecutorService;
@@ -13,7 +13,7 @@ import static java.lang.System.out;
 import static java.util.stream.IntStream.range;
 
 public interface Task<T> extends Projectable<T> {
-  static <T> Task<T> async(TrySupplier<T> supplier) {
+  static <T> Task<T> async(TrySupplier1<T> supplier) {
     return new Async<>(supplier);
   }
 
@@ -64,15 +64,15 @@ enum Threads {
 
 final class Async<T> implements Task<T> {
   private final Threads threads;
-  private final TrySupplier<T> supplier;
+  private final TrySupplier1<T> supplier;
 
-  private final TryConsumer<T> func;
+  private final TryConsumer1<T> func;
 
-  Async(final TrySupplier<T> supplier) {
+  Async(final TrySupplier1<T> supplier) {
     this(Threads.ForkJoin, supplier);
   }
 
-  private Async(final Threads threads, final TrySupplier<T> supplier) {
+  private Async(final Threads threads, final TrySupplier1<T> supplier) {
     this.threads = threads;
     this.supplier = supplier;
     this.func = it -> {

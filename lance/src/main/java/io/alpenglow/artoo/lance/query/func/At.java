@@ -1,8 +1,8 @@
 package io.alpenglow.artoo.lance.query.func;
 
-import io.alpenglow.artoo.lance.func.TryFunction;
+import io.alpenglow.artoo.lance.func.TryFunction1;
 
-public final class At<T> implements TryFunction<T, T> {
+public final class At<T> implements TryFunction1<T, T> {
   private final int at;
   private final Pointed pointed;
 

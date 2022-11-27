@@ -1,6 +1,6 @@
 package io.alpenglow.artoo.lance.query.many;
 
-import io.alpenglow.artoo.lance.func.TryPredicate;
+import io.alpenglow.artoo.lance.func.TryPredicate1;
 import io.alpenglow.artoo.lance.query.One;
 import io.alpenglow.artoo.lance.Queryable;
 import io.alpenglow.artoo.lance.query.func.At;
@@ -17,7 +17,7 @@ public interface Uniquable<T> extends Queryable<T> {
     return first(it -> true);
   }
 
-  default One<T> first(final TryPredicate<? super T> where) {
+  default One<T> first(final TryPredicate1<? super T> where) {
     return () -> cursor().map(new First<>(where)).skipNull();
   }
 
@@ -25,7 +25,7 @@ public interface Uniquable<T> extends Queryable<T> {
     return last(it -> true);
   }
 
-  default One<T> last(final TryPredicate<? super T> where) {
+  default One<T> last(final TryPredicate1<? super T> where) {
     return () -> cursor().map(new Last<>(where)).skipNull();
   }
 
@@ -33,7 +33,7 @@ public interface Uniquable<T> extends Queryable<T> {
     return single(it -> true);
   }
 
-  default One<T> single(final TryPredicate<? super T> where) {
+  default One<T> single(final TryPredicate1<? super T> where) {
     return () -> cursor().map(new Single<>(where)).keepNull();
   }
 }

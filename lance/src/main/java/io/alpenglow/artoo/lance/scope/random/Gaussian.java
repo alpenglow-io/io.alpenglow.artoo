@@ -1,6 +1,6 @@
 package io.alpenglow.artoo.lance.scope.random;
 
-import io.alpenglow.artoo.lance.func.TryFunction;
+import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.scope.Random;
 
 import static io.alpenglow.artoo.lance.scope.Default.Nothing;
@@ -24,7 +24,7 @@ public final class Gaussian implements Random<Double> {
   }
 
   @Override
-  public <R> R let(final TryFunction<? super Double, ? extends R> func) {
+  public <R> R let(final TryFunction1<? super Double, ? extends R> func) {
     if (next.equals(Nothing)) {
       synchronized (this) {
         if (next.equals(Nothing)) {

@@ -1,7 +1,7 @@
 package io.alpenglow.artoo.lance.query.many;
 
 import io.alpenglow.artoo.lance.Queryable;
-import io.alpenglow.artoo.lance.func.TryFunction;
+import io.alpenglow.artoo.lance.func.TryFunction1;
 
 import java.util.Collection;
 import java.util.List;
@@ -13,7 +13,7 @@ import static io.alpenglow.artoo.lance.literator.cursor.routine.Routine.list;
 import static io.alpenglow.artoo.lance.scope.Nullability.nonNullable;
 
 public interface Convertable<T> extends Queryable<T> {
-  default <K, E> Map<? extends K, ? extends E> asMap(final TryFunction<? super T, ? extends K> key, final TryFunction<? super T, ? extends E> element) {
+  default <K, E> Map<? extends K, ? extends E> asMap(final TryFunction1<? super T, ? extends K> key, final TryFunction1<? super T, ? extends E> element) {
     nonNullable(key, "key");
     nonNullable(element, "element");
     final var map = new ConcurrentHashMap<K, E>();

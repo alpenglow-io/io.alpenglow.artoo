@@ -1,15 +1,15 @@
 package io.alpenglow.artoo.lance.query.func;
 
-import io.alpenglow.artoo.lance.func.TryFunction;
-import io.alpenglow.artoo.lance.func.TryPredicate;
+import io.alpenglow.artoo.lance.func.TryFunction1;
+import io.alpenglow.artoo.lance.func.TryPredicate1;
 
-public final class Count<T> implements TryFunction<T, Integer> {
+public final class Count<T> implements TryFunction1<T, Integer> {
   private static final class Counted { private int value = 0; }
 
   private final Counted counted;
-  private final TryPredicate<? super T> where;
+  private final TryPredicate1<? super T> where;
 
-  public Count(final TryPredicate<? super T> where) {
+  public Count(final TryPredicate1<? super T> where) {
     assert where != null;
     this.counted = new Counted();
     this.where = where;

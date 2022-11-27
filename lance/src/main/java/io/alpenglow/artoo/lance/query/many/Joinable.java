@@ -1,6 +1,6 @@
 package io.alpenglow.artoo.lance.query.many;
 
-import io.alpenglow.artoo.lance.func.TryBiPredicate;
+import io.alpenglow.artoo.lance.func.TryPredicate2;
 import io.alpenglow.artoo.lance.literator.Cursor;
 import io.alpenglow.artoo.lance.literator.cursor.routine.join.Join;
 import io.alpenglow.artoo.lance.query.Many;
@@ -17,7 +17,7 @@ public interface Joinable<T> extends Queryable<T> {
   }
 
   interface Joining<A, B> extends Many.OfTwo<A, B> {
-    Many.OfTwo<A, B> on(TryBiPredicate<? super A, ? super B> on);
+    Many.OfTwo<A, B> on(TryPredicate2<? super A, ? super B> on);
   }
 
   final class Default<A, B, Q extends Queryable<B>> implements Joining<A, B> {
@@ -35,7 +35,7 @@ public interface Joinable<T> extends Queryable<T> {
       return first.cursor().to(Join.natural(second.cursor()));
     }
     @Override
-    public Many.OfTwo<A, B> on(final TryBiPredicate<? super A, ? super B> on) {
+    public Many.OfTwo<A, B> on(final TryPredicate2<? super A, ? super B> on) {
       return () -> first.cursor().to(Join.inner(second.cursor(), on));
     }
 

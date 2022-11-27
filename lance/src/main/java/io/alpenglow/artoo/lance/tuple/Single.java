@@ -1,7 +1,7 @@
 package io.alpenglow.artoo.lance.tuple;
 
-import io.alpenglow.artoo.lance.func.TryConsumer;
-import io.alpenglow.artoo.lance.func.TryFunction;
+import io.alpenglow.artoo.lance.func.TryConsumer1;
+import io.alpenglow.artoo.lance.func.TryFunction1;
 
 import static io.alpenglow.artoo.lance.tuple.Type.firstOf;
 import static io.alpenglow.artoo.lance.tuple.Type.has;
@@ -9,11 +9,11 @@ import static io.alpenglow.artoo.lance.tuple.Type.has;
 public interface Single<A> extends Tuple {
   default A first() { return firstOf(this); }
 
-  default <T extends Record> T to(final TryFunction<? super A, ? extends T> to) {
+  default <T extends Record> T to(final TryFunction1<? super A, ? extends T> to) {
     return to.apply(first());
   }
 
-  default <T> T as(final TryFunction<? super A, ? extends T> as) {
+  default <T> T as(final TryFunction1<? super A, ? extends T> as) {
     return as.apply(first());
   }
 
@@ -21,15 +21,15 @@ public interface Single<A> extends Tuple {
     return has(first(), value);
   }
 
-  default <R extends Record & Single<A>> R map(TryFunction<? super A, ? extends R> map) {
+  default <R extends Record & Single<A>> R map(TryFunction1<? super A, ? extends R> map) {
     return map.apply(first());
   }
 
-  default <R extends Record & Single<A>, F extends Record & Single<R>> R flatMap(TryFunction<? super A, ? extends F> func) {
+  default <R extends Record & Single<A>, F extends Record & Single<R>> R flatMap(TryFunction1<? super A, ? extends F> func) {
     return func.apply(first()).first();
   }
 
-  default Single<A> peek(TryConsumer<? super A> cons) {
+  default Single<A> peek(TryConsumer1<? super A> cons) {
     cons.accept(first());
     return this;
   }

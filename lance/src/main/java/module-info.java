@@ -14,4 +14,5 @@ module io.alpenglow.artoo.lance {
   exports io.alpenglow.artoo.lance.query.func;
   exports io.alpenglow.artoo.lance.scope;
   exports io.alpenglow.artoo.lance;
+  exports io.alpenglow.artoo.lance.tuple.record;
 }

@@ -1,8 +1,8 @@
 package io.alpenglow.artoo.lance.literator.cursor;
 
-import io.alpenglow.artoo.lance.func.TryBiFunction;
-import io.alpenglow.artoo.lance.func.TryConsumer;
-import io.alpenglow.artoo.lance.func.TrySupplier;
+import io.alpenglow.artoo.lance.func.TryFunction2;
+import io.alpenglow.artoo.lance.func.TryConsumer1;
+import io.alpenglow.artoo.lance.func.TrySupplier1;
 import io.alpenglow.artoo.lance.literator.Cursor;
 import io.alpenglow.artoo.lance.literator.Literator;
 import io.alpenglow.artoo.lance.literator.cursor.routine.Routine;
@@ -12,15 +12,15 @@ import io.alpenglow.artoo.lance.scope.Let;
 import java.util.Iterator;
 
 public interface Substitutable<T> extends Literator<T> {
-  default <C extends Cursor<T>> Cursor<T> or(final TrySupplier<? extends C> alternative) {
+  default <C extends Cursor<T>> Cursor<T> or(final TrySupplier1<? extends C> alternative) {
     return new Or<>(this, Let.lazy(alternative));
   }
 
-  default <E extends RuntimeException> Cursor<T> or(final String message, final TryBiFunction<? super String, ? super Throwable, ? extends E> exception) {
+  default <E extends RuntimeException> Cursor<T> or(final String message, final TryFunction2<? super String, ? super Throwable, ? extends E> exception) {
     return new Er<>(this, message, exception);
   }
 
-  default Cursor<T> exceptionally(TryConsumer<? super Throwable> catch$) {
+  default Cursor<T> exceptionally(TryConsumer1<? super Throwable> catch$) {
     return new Catch<>(this, catch$);
   }
 }
@@ -63,9 +63,9 @@ final class Or<T, C extends Cursor<T>> extends As<T> implements Cursor<T> {
 
 final class Er<T, E extends RuntimeException> extends As<T> implements Cursor<T> {
   private final String message;
-  private final TryBiFunction<? super String, ? super Throwable, ? extends E> exception;
+  private final TryFunction2<? super String, ? super Throwable, ? extends E> exception;
 
-  Er(final Literator<T> source, final String message, final TryBiFunction<? super String, ? super Throwable, ? extends E> exception) {
+  Er(final Literator<T> source, final String message, final TryFunction2<? super String, ? super Throwable, ? extends E> exception) {
     super(source);
     this.message = message;
     this.exception = exception;
@@ -91,9 +91,9 @@ final class Er<T, E extends RuntimeException> extends As<T> implements Cursor<T>
 }
 
 final class Catch<T> extends As<T> implements Cursor<T> {
-  private final TryConsumer<? super Throwable> catch$;
+  private final TryConsumer1<? super Throwable> catch$;
 
-  Catch(Literator<T> source, TryConsumer<? super Throwable> catch$) {
+  Catch(Literator<T> source, TryConsumer1<? super Throwable> catch$) {
     super(source);
     this.catch$ = catch$;
   }

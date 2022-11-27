@@ -1,19 +1,19 @@
 package io.alpenglow.artoo.lance.scope;
 
-import io.alpenglow.artoo.lance.func.TryConsumer;
-import io.alpenglow.artoo.lance.func.TryFunction;
-import io.alpenglow.artoo.lance.func.TrySupplier;
+import io.alpenglow.artoo.lance.func.TryConsumer1;
+import io.alpenglow.artoo.lance.func.TryFunction1;
+import io.alpenglow.artoo.lance.func.TrySupplier1;
 
 
 import static io.alpenglow.artoo.lance.scope.Default.Nothing;
 
 public interface Let<T> {
-  static <T> Let<T> lazy(final TrySupplier<T> supplier) {
+  static <T> Let<T> lazy(final TrySupplier1<T> supplier) {
     return new Let.Lazy<>(supplier);
   }
 
-  <R> R let(final TryFunction<? super T, ? extends R> func);
-  default Let<T> get(final TryConsumer<? super T> func) {
+  <R> R let(final TryFunction1<? super T, ? extends R> func);
+  default Let<T> get(final TryConsumer1<? super T> func) {
     let(it -> {
       func.accept(it);
       return null;
@@ -24,24 +24,24 @@ public interface Let<T> {
   sealed interface Readonly<T> extends Let<T> permits Let.Lazy {}
 
   final class Lazy<T> implements Readonly<T> {
-    private final TrySupplier<? extends T> suppl;
+    private final TrySupplier1<? extends T> suppl;
     private volatile Object value;
 
-    private Lazy(final TrySupplier<T> suppl) {
+    private Lazy(final TrySupplier1<T> suppl) {
       this(
         suppl,
         Nothing
       );
     }
 
-    private Lazy(final TrySupplier<? extends T> suppl, final Object value) {
+    private Lazy(final TrySupplier1<? extends T> suppl, final Object value) {
       this.suppl = suppl;
       this.value = value;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <R> R let(final TryFunction<? super T, ? extends R> func) {
+    public <R> R let(final TryFunction1<? super T, ? extends R> func) {
       final var unsyncd = value;
       if (Nothing.equals(unsyncd)) {
         synchronized (this) {

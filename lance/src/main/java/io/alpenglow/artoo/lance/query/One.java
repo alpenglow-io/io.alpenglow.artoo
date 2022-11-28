@@ -20,10 +20,10 @@ enum None implements One<Object> {
 
 public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Elseable<T> {
   static <T> One<T> maybe(final T element) {
-    return element != null ? One.lone(element) : One.none();
+    return element != null ? One.of(element) : One.none();
   }
 
-  static <L> One<L> lone(final L element) {
+  static <L> One<L> of(final L element) {
     return new Lone<>(element);
   }
 

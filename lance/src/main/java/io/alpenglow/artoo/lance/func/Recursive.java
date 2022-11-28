@@ -1,7 +1,6 @@
 package io.alpenglow.artoo.lance.func;
 
 import io.alpenglow.artoo.lance.func.Recursive.Return;
-import io.alpenglow.artoo.lance.scope.Maybe;
 
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -18,7 +17,7 @@ public interface Recursive<PARAMETER, RESULT, FUNCTION extends Recursive<PARAMET
     private final AtomicReference<FUNCTION> reference = new AtomicReference<>();
 
     @SuppressWarnings("unchecked")
-    private <RESULT> Maybe<RESULT> let(final TryFunction1<? super FUNCTION, ? extends RESULT> current, final TryFunction1<? super RESULT, ? extends FUNCTION> update) {
+    private <RESULT> RESULT let(final TryFunction1<? super FUNCTION, ? extends RESULT> current, final TryFunction1<? super RESULT, ? extends FUNCTION> update) {
       reference.compareAndSet(null, (FUNCTION) this);
       FUNCTION prev = reference.get() , next = null;
       RESULT result = null;
@@ -28,13 +27,13 @@ public interface Recursive<PARAMETER, RESULT, FUNCTION extends Recursive<PARAMET
           next = update.apply(result);
         }
         if (reference.weakCompareAndSetVolatile(prev, next))
-          return Maybe.value(result);
+          return result;
         haveNext = (prev == (prev = reference.get()));
       }
     }
 
     public Return<PARAMETER, RETURN, FUNCTION> on(PARAMETER parameter) {
-      return let(it -> it.apply(parameter), Recursive.Return::next).otherwise("Can't reference function", IllegalStateException::new);
+      return let(it -> it.apply(parameter), Recursive.Return::next);
     }
   }
 }

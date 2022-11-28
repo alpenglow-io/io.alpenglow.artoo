@@ -20,7 +20,6 @@ public interface Filterable<T> extends Queryable<T> {
   default <R> Many<R> ofType(final Class<? extends R> type) {
     return () -> cursor().map(new OfType<>(type));
   }
-
   default <R> Many<T> notOfType(final Class<? extends R> type) {
     return () -> cursor().map(new NotOfType<>(type));
   }

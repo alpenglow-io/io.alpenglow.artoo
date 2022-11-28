@@ -1,44 +1,27 @@
 package io.alpenglow.artoo.lance.tuple;
 
-import io.alpenglow.artoo.lance.func.TryConsumer5;
-import io.alpenglow.artoo.lance.func.TryFunction5;
+import io.alpenglow.artoo.lance.func.*;
+import io.alpenglow.artoo.lance.tuple.record.OfFive;
+import io.alpenglow.artoo.lance.tuple.record.OfFour;
 
-import static io.alpenglow.artoo.lance.tuple.Type.fifthOf;
-import static io.alpenglow.artoo.lance.tuple.Type.firstOf;
-import static io.alpenglow.artoo.lance.tuple.Type.forthOf;
-import static io.alpenglow.artoo.lance.tuple.Type.has;
-import static io.alpenglow.artoo.lance.tuple.Type.secondOf;
-import static io.alpenglow.artoo.lance.tuple.Type.thirdOf;
+import static io.alpenglow.artoo.lance.tuple.Type.*;
 
 public interface Quintuple<A, B, C, D, E> extends Tuple {
-  default A first() { return firstOf(this); }
-  default B second() { return secondOf(this); }
-  default C third() { return thirdOf(this); }
-  default D forth() { return forthOf(this); }
-  default E fifth() { return fifthOf(this); }
-
-  default <N extends Record> N to(final TryFunction5<? super A, ? super B, ? super C, ? super D, ? super E, ? extends N> to) {
-    return to.apply(first(), second(), third(), forth(), fifth());
+  default A first() { return componentOf(this, 0);}
+  default B second() { return componentOf(this, 1); }
+  default C third() { return componentOf(this, 2); }
+  default D forth() { return componentOf(this, 3); }
+  default E fifth() { return componentOf(this, 4); }
+  default <T> T select(final TryFunction5<? super A, ? super B, ? super C, ? super D, ? super E, ? extends T> select) {
+    return select.apply(first(), second(), third(), forth(), fifth());
   }
-
-  default <T extends Record> T as(final TryFunction5<? super A, ? super B, ? super C, ? super D, ? super E, ? extends T> as) {
-    return as.apply(first(), second(), third(), forth(), fifth());
+  default Quintuple<E, A, B, C, D> shift() { return select((a, b, c, d, e) -> Tuple.of(e, a, b, c, d)); }
+  @SuppressWarnings("unchecked")
+  default Quintuple<A, B, C, D, E> where(TryPredicate5<? super A, ? super B, ? super C, ? super D, ? super E> predicate) {
+    return predicate.test(first(), second(), third(), forth(), fifth()) ? this : (Quintuple<A, B, C, D, E>) OfFive.Empty.Default;
   }
-
-  default boolean is(final A value1, final B value2, final C value3, final D value4, final E value5) {
-    return has(first(), value1) && has(second(), value2) && has(third(), value3) && has(forth(), value4) && has(fifth(), value5);
-  }
-
-  default <R extends Record & Quintuple<A, B, C, D, E>> R map(TryFunction5<? super A, ? super B, ? super C, ? super D, ? super E, ? extends R> map) {
-    return map.apply(first(), second(), third(), forth(), fifth());
-  }
-
-  default <R extends Record & Quintuple<A, B, C, D, E>, F extends Record & Single<R>> R flatMap(TryFunction5<? super A, ? super B, ? super C, ? super D, ? super E, ? extends F> func) {
-    return func.apply(first(), second(), third(), forth(), fifth()).first();
-  }
-
-  default Quintuple<A, B, C, D, E> peek(TryConsumer5<? super A, ? super B, ? super C, ? super D, ? super E> cons) {
-    cons.accept(first(), second(), third(), forth(), fifth());
+  default Quintuple<A, B, C, D, E> peek(TryConsumer5<? super A, ? super B, ? super C, ? super D, ? super E> consumer) {
+    consumer.accept(first(), second(), third(), forth(), fifth());
     return this;
   }
 }

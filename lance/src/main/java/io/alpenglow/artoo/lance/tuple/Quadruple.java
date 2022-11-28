@@ -1,38 +1,30 @@
 package io.alpenglow.artoo.lance.tuple;
 
-import io.alpenglow.artoo.lance.func.TryConsumer4;
-import io.alpenglow.artoo.lance.func.TryFunction4;
+import io.alpenglow.artoo.lance.func.*;
+import io.alpenglow.artoo.lance.tuple.record.OfFour;
+import io.alpenglow.artoo.lance.tuple.record.OfThree;
 
-import static io.alpenglow.artoo.lance.tuple.Type.firstOf;
-import static io.alpenglow.artoo.lance.tuple.Type.forthOf;
+import static io.alpenglow.artoo.lance.tuple.Type.*;
 import static io.alpenglow.artoo.lance.tuple.Type.has;
-import static io.alpenglow.artoo.lance.tuple.Type.secondOf;
-import static io.alpenglow.artoo.lance.tuple.Type.thirdOf;
 
 public interface Quadruple<A, B, C, D> extends Tuple {
-  default A first() { return firstOf(this); }
-  default B second() { return secondOf(this); }
-  default C third() { return thirdOf(this); }
-  default D forth() { return forthOf(this); }
-
-  default <N extends Record> N to(final TryFunction4<? super A, ? super B, ? super C, ? super D, ? extends N> to) {
-    return to.apply(first(), second(), third(), forth());
+  default A first() {
+    return componentOf(this, 0);
   }
-
-  default <T> T as(final TryFunction4<? super A, ? super B, ? super C, ? super D, ? extends T> as) {
-    return as.apply(first(), second(), third(), forth());
+  default B second() {
+    return componentOf(this, 1);
   }
-
-  default boolean is(final A value1, final B value2, final C value3, final D value4) {
-    return has(first(), value1) && has(second(), value2) && has(third(), value3) && has(forth(), value4);
+  default C third() {
+    return componentOf(this, 2);
   }
-
-  default <R extends Record & Quadruple<A, B, C, D>> R map(TryFunction4<? super A, ? super B, ? super C, ? super D, ? extends R> map) {
-    return map.apply(first(), second(), third(), forth());
+  default D forth() { return componentOf(this, 3); }
+  default <T> T select(final TryFunction4<? super A, ? super B, ? super C, ? super D, ? extends T> select) {
+    return select.apply(first(), second(), third(), forth());
   }
-
-  default <R extends Record & Quadruple<A, B, C, D>, F extends Record & Single<R>> R flatMap(TryFunction4<? super A, ? super B, ? super C, ? super D, ? extends F> func) {
-    return func.apply(first(), second(), third(), forth()).first();
+  default Quadruple<D, A, B, C> shift() { return select((a, b, c, d) -> Tuple.of(d, a, b, c)); }
+  @SuppressWarnings("unchecked")
+  default Quadruple<A, B, C, D> where(TryPredicate4<? super A, ? super B, ? super C, ? super D> predicate) {
+    return predicate.test(first(), second(), third(), forth()) ? this : (Quadruple<A, B, C, D>) OfFour.Empty.Default;
   }
 
   default Quadruple<A, B, C, D> peek(TryConsumer4<? super A, ? super B, ? super C, ? super D> cons) {

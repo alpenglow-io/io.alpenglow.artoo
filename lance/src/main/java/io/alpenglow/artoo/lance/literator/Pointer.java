@@ -2,7 +2,11 @@ package io.alpenglow.artoo.lance.literator;
 
 import java.util.Iterator;
 
-public interface Literator<T> extends Iterator<T> {
+/**
+ * Literator stands for Lambda Iterator
+ * @param <T>
+ */
+public interface Pointer<T> extends Iterator<T> {
   T fetch() throws Throwable;
 
   @Override

@@ -17,7 +17,7 @@ public interface Cursor<T> extends Mappable<T>, Substitutable<T>, Closable<T>, T
     return new Open<>(elements);
   }
 
-  static <T> Cursor<T> link(final Literator<T> prev, final Literator<T> next) {
+  static <T> Cursor<T> link(final Pointer<T> prev, final Pointer<T> next) {
     return new Link<>(prev, next);
   }
 
@@ -32,6 +32,24 @@ public interface Cursor<T> extends Mappable<T>, Substitutable<T>, Closable<T>, T
 
   static <T> Cursor<T> iteration(final Iterator<T> iterator) {
     return new Iteration<>(iterator);
+  }
+
+  final class Exception extends RuntimeException {
+    public Exception() {
+      super();
+    }
+
+    public Exception(String message) {
+      super(message);
+    }
+
+    public Exception(String message, Throwable cause) {
+      super(message, cause);
+    }
+
+    public Exception(Throwable cause) {
+      super(cause);
+    }
   }
 }
 

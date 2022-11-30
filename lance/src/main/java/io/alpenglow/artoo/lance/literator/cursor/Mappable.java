@@ -2,10 +2,10 @@ package io.alpenglow.artoo.lance.literator.cursor;
 
 import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.literator.Cursor;
-import io.alpenglow.artoo.lance.literator.Literator;
+import io.alpenglow.artoo.lance.literator.Pointer;
 import io.alpenglow.artoo.lance.literator.cursor.routine.Routine;
 
-public interface Mappable<T> extends Literator<T> {
+public interface Mappable<T> extends Pointer<T> {
   default <R> Cursor<R> map(final TryFunction1<? super T, ? extends R> map) {
     return new Map<>(this, map);
   }
@@ -16,16 +16,16 @@ public interface Mappable<T> extends Literator<T> {
 }
 
 final class Map<T, R> implements Cursor<R> {
-  private final Literator<T> source;
+  private final Pointer<T> source;
   private final TryFunction1<? super T, ? extends R> map;
 
-  Map(final Literator<T> source, final TryFunction1<? super T, ? extends R> map) {
+  Map(final Pointer<T> source, final TryFunction1<? super T, ? extends R> map) {
     this.source = source;
     this.map = map;
   }
 
   @Override
-  public final R fetch() throws Throwable {
+  public R fetch() throws Throwable {
     final var fetched = source.fetch();
     return fetched != null ? map.tryApply(fetched) : null;
   }
@@ -48,13 +48,13 @@ final class Map<T, R> implements Cursor<R> {
 
 final class Flat<T> implements Cursor<T> {
   private final Flatten<T> flatten = new Flatten<>();
-  private final Literator<Literator<T>> origin;
+  private final Pointer<Pointer<T>> origin;
 
-  Flat(final Literator<Literator<T>> origin) {this.origin = origin;}
+  Flat(final Pointer<Pointer<T>> origin) {this.origin = origin;}
 
   @SuppressWarnings("StatementWithEmptyBody")
   @Override
-  public final T fetch() throws Throwable {
+  public T fetch() throws Throwable {
     T element = null;
     while (hasNext() && (element = flatten.literator().fetch()) == null)
       ;
@@ -80,24 +80,24 @@ final class Flat<T> implements Cursor<T> {
 
 final class Flatten<T> {
   private boolean hasNext = true;
-  private Literator<T> literator;
-  private final Object lock = new Object() {};
+  private Pointer<T> pointer;
+  private final Object lock = new Object();
 
-  public final Flatten<T> hasNext(boolean hasNext) {
+  public Flatten<T> hasNext(boolean hasNext) {
     synchronized (lock) {
       this.hasNext = hasNext;
     }
     return this;
   }
 
-  public final boolean hasNext() { return hasNext; }
+  public boolean hasNext() { return hasNext; }
 
-  public final Flatten<T> literator(Literator<T> literator) {
+  public Flatten<T> literator(Pointer<T> pointer) {
     synchronized (lock) {
-      this.literator = literator;
+      this.pointer = pointer;
     }
     return this;
   }
 
-  public final Literator<T> literator() { return literator; }
+  public Pointer<T> literator() { return pointer; }
 }

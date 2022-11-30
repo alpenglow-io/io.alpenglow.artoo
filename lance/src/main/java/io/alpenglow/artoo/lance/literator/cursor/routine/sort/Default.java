@@ -2,7 +2,7 @@ package io.alpenglow.artoo.lance.literator.cursor.routine.sort;
 
 import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.literator.Cursor;
-import io.alpenglow.artoo.lance.literator.Literator;
+import io.alpenglow.artoo.lance.literator.Pointer;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -17,7 +17,7 @@ public final class Default<T> implements Sort<T> {
   }
 
   @Override
-  public TryFunction1<Literator<T>, Cursor<T>> onLiterator() {
+  public TryFunction1<Pointer<T>, Cursor<T>> onLiterator() {
     return this::asSorted;
   }
 

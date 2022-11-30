@@ -12,7 +12,7 @@ public final class Open<T> implements Cursor<T> {
   public Open(final T[] elements) {this.elements = elements;}
 
   @Override
-  public final T fetch() {
+  public T fetch() {
     try {
       return elements[index.value()];
     } finally {

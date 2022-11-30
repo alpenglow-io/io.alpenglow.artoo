@@ -1,10 +1,10 @@
 package io.alpenglow.artoo.lance.literator.cursor;
 
 import io.alpenglow.artoo.lance.literator.Cursor;
-import io.alpenglow.artoo.lance.literator.Literator;
+import io.alpenglow.artoo.lance.literator.Pointer;
 import io.alpenglow.artoo.lance.literator.cursor.routine.Routine;
 
-public interface Closable<T> extends Literator<T> {
+public interface Closable<T> extends Pointer<T> {
   default Cursor<T> close() {
     return new Close<>(this);
   }
@@ -31,9 +31,9 @@ public interface Closable<T> extends Literator<T> {
 
 final class Close<T> implements Cursor<T> {
   private T closed = null;
-  private final Literator<T> source;
+  private final Pointer<T> source;
 
-  Close(Literator<T> source) {
+  Close(Pointer<T> source) {
     this.source = source;
   }
 

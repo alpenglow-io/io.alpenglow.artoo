@@ -17,9 +17,8 @@ public interface Queryable<T> extends Iterable<T> {
   default Iterator<T> iterator() {
     try {
       return cursor().close();
-    } catch (Throwable cause) {
-      cause.printStackTrace();
-      return Cursor.nothing();
+    } catch (Throwable throwable) {
+      throw new Cursor.Exception("Can't run cursor, since %s".formatted(throwable.getMessage()), throwable);
     }
   }
 
@@ -53,9 +52,8 @@ public interface Queryable<T> extends Iterable<T> {
     default Iterator<Pair<A, B>> iterator() {
       try {
         return cursor().close();
-      } catch (Throwable cause) {
-        cause.printStackTrace();
-        return Cursor.nothing();
+      } catch (Throwable throwable) {
+        throw new Cursor.Exception("Can't run cursor, since %s".formatted(throwable.getMessage()), throwable);
       }
     }
 

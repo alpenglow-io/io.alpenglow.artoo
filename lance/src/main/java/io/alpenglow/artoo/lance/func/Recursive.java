@@ -3,10 +3,10 @@ package io.alpenglow.artoo.lance.func;
 import io.alpenglow.artoo.lance.func.Recursive.Return;
 
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 public interface Recursive<PARAMETER, RESULT, FUNCTION extends Recursive<PARAMETER, RESULT, FUNCTION>> extends TryFunction1<PARAMETER, Return<PARAMETER, RESULT, FUNCTION>> {
-
-
   record Return<T, R, F extends TryFunction1<T, Return<T, R, F>>>(R result, F next) {
     public static <T, R, F extends TryFunction1<T, Return<T, R, F>>> Return<T, R, F> with(R result, F nextApply) {
       return new Return<>(result, nextApply);
@@ -35,5 +35,10 @@ public interface Recursive<PARAMETER, RESULT, FUNCTION extends Recursive<PARAMET
     public Return<PARAMETER, RETURN, FUNCTION> on(PARAMETER parameter) {
       return let(it -> it.apply(parameter), Recursive.Return::next);
     }
+  }
+
+  static void main(String[] args) {
+    interface Int64 extends Supplier<Long> {}
+    interface Decimal64 extends Supplier<Double> {}
   }
 }

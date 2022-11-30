@@ -1,7 +1,7 @@
 package io.alpenglow.artoo.lance.literator.cursor.routine;
 
 import io.alpenglow.artoo.lance.func.TryFunction1;
-import io.alpenglow.artoo.lance.literator.Literator;
+import io.alpenglow.artoo.lance.literator.Pointer;
 import io.alpenglow.artoo.lance.literator.cursor.routine.concat.Concat;
 import io.alpenglow.artoo.lance.literator.cursor.routine.convert.Convert;
 import io.alpenglow.artoo.lance.literator.cursor.routine.join.Join;
@@ -19,7 +19,7 @@ public sealed interface Routine<T, R> permits Join, Concat, Convert, Sort {
   }
 
   TryFunction1<T[], R> onArray();
-  TryFunction1<Literator<T>, R> onLiterator();
+  TryFunction1<Pointer<T>, R> onLiterator();
   TryFunction1<Iterator<T>, R> onIterator();
 
   @SuppressWarnings("unchecked")

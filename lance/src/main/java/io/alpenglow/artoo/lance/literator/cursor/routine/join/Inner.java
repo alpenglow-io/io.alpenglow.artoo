@@ -3,7 +3,7 @@ package io.alpenglow.artoo.lance.literator.cursor.routine.join;
 import io.alpenglow.artoo.lance.func.TryPredicate2;
 import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.literator.Cursor;
-import io.alpenglow.artoo.lance.literator.Literator;
+import io.alpenglow.artoo.lance.literator.Pointer;
 import io.alpenglow.artoo.lance.tuple.Pair;
 
 import java.util.Iterator;
@@ -29,7 +29,7 @@ final class Inner<A, B> implements Join<A, Cursor<Pair<A, B>>> {
   }
 
   @Override
-  public TryFunction1<Literator<A>, Cursor<Pair<A, B>>> onLiterator() {
+  public TryFunction1<Pointer<A>, Cursor<Pair<A, B>>> onLiterator() {
     return null;
   }
 

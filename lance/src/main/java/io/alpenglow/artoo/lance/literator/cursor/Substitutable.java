@@ -4,14 +4,14 @@ import io.alpenglow.artoo.lance.func.TryFunction2;
 import io.alpenglow.artoo.lance.func.TryConsumer1;
 import io.alpenglow.artoo.lance.func.TrySupplier1;
 import io.alpenglow.artoo.lance.literator.Cursor;
-import io.alpenglow.artoo.lance.literator.Literator;
+import io.alpenglow.artoo.lance.literator.Pointer;
 import io.alpenglow.artoo.lance.literator.cursor.routine.Routine;
 import io.alpenglow.artoo.lance.scope.Late;
 import io.alpenglow.artoo.lance.scope.Let;
 
 import java.util.Iterator;
 
-public interface Substitutable<T> extends Literator<T> {
+public interface Substitutable<T> extends Pointer<T> {
   default <C extends Cursor<T>> Cursor<T> or(final TrySupplier1<? extends C> alternative) {
     return new Or<>(this, Let.lazy(alternative));
   }
@@ -26,9 +26,9 @@ public interface Substitutable<T> extends Literator<T> {
 }
 
 abstract class As<T> implements Transformable<T> {
-  protected final Literator<T> source;
+  protected final Pointer<T> source;
 
-  protected As(final Literator<T> source) {this.source = source;}
+  protected As(final Pointer<T> source) {this.source = source;}
 
   @Override
   public final <R> R as(final Routine<T, R> routine) {
@@ -40,17 +40,17 @@ abstract class As<T> implements Transformable<T> {
 }
 
 final class Or<T, C extends Cursor<T>> extends As<T> implements Cursor<T> {
-  private final Late<Literator<T>> reference = Late.init();
+  private final Late<Pointer<T>> reference = Late.init();
   private final Let<? extends C> other;
 
-  Or(final Literator<T> source, final Let<? extends C> other) {
+  Or(final Pointer<T> source, final Let<? extends C> other) {
     super(source);
     this.other = other;
   }
 
   @Override
   public T fetch() {
-    return hasNext() ? reference.let(Literator::fetch) : null;
+    return hasNext() ? reference.let(Pointer::fetch) : null;
   }
 
   @Override
@@ -65,7 +65,7 @@ final class Er<T, E extends RuntimeException> extends As<T> implements Cursor<T>
   private final String message;
   private final TryFunction2<? super String, ? super Throwable, ? extends E> exception;
 
-  Er(final Literator<T> source, final String message, final TryFunction2<? super String, ? super Throwable, ? extends E> exception) {
+  Er(final Pointer<T> source, final String message, final TryFunction2<? super String, ? super Throwable, ? extends E> exception) {
     super(source);
     this.message = message;
     this.exception = exception;
@@ -93,7 +93,7 @@ final class Er<T, E extends RuntimeException> extends As<T> implements Cursor<T>
 final class Catch<T> extends As<T> implements Cursor<T> {
   private final TryConsumer1<? super Throwable> catch$;
 
-  Catch(Literator<T> source, TryConsumer1<? super Throwable> catch$) {
+  Catch(Pointer<T> source, TryConsumer1<? super Throwable> catch$) {
     super(source);
     this.catch$ = catch$;
   }

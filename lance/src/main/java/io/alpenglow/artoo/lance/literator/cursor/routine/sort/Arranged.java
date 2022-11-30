@@ -2,7 +2,7 @@ package io.alpenglow.artoo.lance.literator.cursor.routine.sort;
 
 import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.literator.Cursor;
-import io.alpenglow.artoo.lance.literator.Literator;
+import io.alpenglow.artoo.lance.literator.Pointer;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -67,7 +67,7 @@ public final class Arranged<T> implements Sort<T> {
   }
 
   @Override
-  public TryFunction1<Literator<T>, Cursor<T>> onLiterator() {
+  public TryFunction1<Pointer<T>, Cursor<T>> onLiterator() {
     return li -> onIterator().apply(li);
   }
 

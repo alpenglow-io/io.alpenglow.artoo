@@ -1,16 +1,16 @@
 package io.alpenglow.artoo.lance.literator.cursor;
 
 import io.alpenglow.artoo.lance.literator.Cursor;
-import io.alpenglow.artoo.lance.literator.Literator;
+import io.alpenglow.artoo.lance.literator.Pointer;
 import io.alpenglow.artoo.lance.literator.cursor.routine.Routine;
 
 public final class Link<T> implements Cursor<T> {
-  private final Literator<T> prev;
-  private final Literator<T> next;
+  private final Pointer<T> prev;
+  private final Pointer<T> pointer;
 
-  public Link(final Literator<T> prev, final Literator<T> next) {
+  public Link(final Pointer<T> prev, final Pointer<T> pointer) {
     this.prev = prev;
-    this.next = next;
+    this.pointer = pointer;
   }
 
   @Override
@@ -20,11 +20,11 @@ public final class Link<T> implements Cursor<T> {
 
   @Override
   public T fetch() throws Throwable {
-    return prev.hasNext() ? prev.fetch() : next.fetch();
+    return prev.hasNext() ? prev.fetch() : pointer.fetch();
   }
 
   @Override
   public boolean hasNext() {
-    return prev.hasNext() || next.hasNext();
+    return prev.hasNext() || pointer.hasNext();
   }
 }

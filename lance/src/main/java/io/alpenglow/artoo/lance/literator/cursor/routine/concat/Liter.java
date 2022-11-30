@@ -2,14 +2,14 @@ package io.alpenglow.artoo.lance.literator.cursor.routine.concat;
 
 import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.literator.Cursor;
-import io.alpenglow.artoo.lance.literator.Literator;
+import io.alpenglow.artoo.lance.literator.Pointer;
 
 import java.util.Iterator;
 
 public final class Liter<T> implements Concat<T> {
-  private final Literator<T> next;
+  private final Pointer<T> next;
 
-  Liter(final Literator<T> next) {this.next = next;}
+  Liter(final Pointer<T> pointer) {this.next = pointer;}
 
   @Override
   public final TryFunction1<T[], Cursor<T>> onArray() {
@@ -17,7 +17,7 @@ public final class Liter<T> implements Concat<T> {
   }
 
   @Override
-  public TryFunction1<Literator<T>, Cursor<T>> onLiterator() {
+  public TryFunction1<Pointer<T>, Cursor<T>> onLiterator() {
     return prev -> Cursor.link(prev, next);
   }
 

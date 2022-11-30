@@ -3,7 +3,7 @@ package io.alpenglow.artoo.lance.literator.cursor.routine.join;
 import io.alpenglow.artoo.lance.func.TryPredicate2;
 import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.literator.Cursor;
-import io.alpenglow.artoo.lance.literator.Literator;
+import io.alpenglow.artoo.lance.literator.Pointer;
 import io.alpenglow.artoo.lance.tuple.Pair;
 import io.alpenglow.artoo.lance.tuple.Tuple;
 
@@ -39,7 +39,7 @@ public final class Nested<R, T> implements Join<R, Cursor<Pair<T, R>>> {
   }
 
   @Override
-  public TryFunction1<Literator<R>, Cursor<Pair<T, R>>> onLiterator() {
+  public TryFunction1<Pointer<R>, Cursor<Pair<T, R>>> onLiterator() {
     return null;
   }
 

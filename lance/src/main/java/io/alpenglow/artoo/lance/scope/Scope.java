@@ -3,7 +3,7 @@ package io.alpenglow.artoo.lance.scope;
 import io.alpenglow.artoo.lance.func.TryConsumer1;
 import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.func.TrySupplier1;
-import io.alpenglow.artoo.lance.literator.Cursor;
+import io.alpenglow.artoo.lance.query.Cursor;
 import io.alpenglow.artoo.lance.query.One;
 
 public abstract class Scope<T, $this extends Scope<T, $this>> implements One<T>, TrySupplier1<T> {

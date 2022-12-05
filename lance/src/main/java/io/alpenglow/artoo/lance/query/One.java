@@ -3,7 +3,6 @@ package io.alpenglow.artoo.lance.query;
 import io.alpenglow.artoo.lance.Queryable;
 import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.func.TrySupplier1;
-import io.alpenglow.artoo.lance.literator.Cursor;
 import io.alpenglow.artoo.lance.query.one.Elseable;
 import io.alpenglow.artoo.lance.query.one.Filterable;
 import io.alpenglow.artoo.lance.query.one.Peekable;

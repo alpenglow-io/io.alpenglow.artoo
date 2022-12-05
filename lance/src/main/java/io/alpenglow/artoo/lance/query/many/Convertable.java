@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static io.alpenglow.artoo.lance.literator.cursor.routine.Routine.array;
-import static io.alpenglow.artoo.lance.literator.cursor.routine.Routine.list;
+import static io.alpenglow.artoo.lance.query.cursor.routine.Routine.array;
+import static io.alpenglow.artoo.lance.query.cursor.routine.Routine.list;
 import static io.alpenglow.artoo.lance.scope.Nullability.nonNullable;
 
 public interface Convertable<T> extends Queryable<T> {

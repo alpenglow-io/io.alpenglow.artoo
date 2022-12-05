@@ -5,7 +5,7 @@ import io.alpenglow.artoo.lance.func.Recursive.Tailrec;
 import io.alpenglow.artoo.lance.func.TryConsumer2;
 import io.alpenglow.artoo.lance.func.TryConsumer1;
 import io.alpenglow.artoo.lance.func.TryFunction1;
-import io.alpenglow.artoo.lance.literator.Cursor;
+import io.alpenglow.artoo.lance.query.Cursor;
 import io.alpenglow.artoo.lance.tuple.Pair;
 
 import java.util.Iterator;

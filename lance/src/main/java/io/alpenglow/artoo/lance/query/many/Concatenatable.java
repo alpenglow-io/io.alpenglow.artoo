@@ -1,6 +1,6 @@
 package io.alpenglow.artoo.lance.query.many;
 
-import io.alpenglow.artoo.lance.literator.cursor.routine.concat.Concat;
+import io.alpenglow.artoo.lance.query.cursor.routine.concat.Concat;
 import io.alpenglow.artoo.lance.query.Many;
 import io.alpenglow.artoo.lance.Queryable;
 

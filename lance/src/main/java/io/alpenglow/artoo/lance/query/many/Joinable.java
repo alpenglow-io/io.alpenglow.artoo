@@ -1,8 +1,8 @@
 package io.alpenglow.artoo.lance.query.many;
 
 import io.alpenglow.artoo.lance.func.TryPredicate2;
-import io.alpenglow.artoo.lance.literator.Cursor;
-import io.alpenglow.artoo.lance.literator.cursor.routine.join.Join;
+import io.alpenglow.artoo.lance.query.Cursor;
+import io.alpenglow.artoo.lance.query.cursor.routine.join.Join;
 import io.alpenglow.artoo.lance.query.Many;
 import io.alpenglow.artoo.lance.Queryable;
 import io.alpenglow.artoo.lance.tuple.Pair;

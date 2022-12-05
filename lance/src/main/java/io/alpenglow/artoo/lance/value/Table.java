@@ -1,7 +1,7 @@
 package io.alpenglow.artoo.lance.value;
 
 import io.alpenglow.artoo.lance.func.TryFunction1;
-import io.alpenglow.artoo.lance.literator.Cursor;
+import io.alpenglow.artoo.lance.query.Cursor;
 import io.alpenglow.artoo.lance.query.Many;
 
 import java.util.Map;

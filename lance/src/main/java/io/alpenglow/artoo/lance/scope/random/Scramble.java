@@ -1,7 +1,7 @@
 package io.alpenglow.artoo.lance.scope.random;
 
 import io.alpenglow.artoo.lance.func.TryFunction3;
-import io.alpenglow.artoo.lance.literator.Cursor;
+import io.alpenglow.artoo.lance.query.Cursor;
 import io.alpenglow.artoo.lance.query.One;
 
 import java.util.concurrent.atomic.AtomicLong;

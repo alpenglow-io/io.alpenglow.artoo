@@ -1,7 +1,6 @@
 package io.alpenglow.artoo.lance.query;
 
 import io.alpenglow.artoo.lance.func.TrySupplier1;
-import io.alpenglow.artoo.lance.literator.Cursor;
 import io.alpenglow.artoo.lance.query.many.Aggregatable;
 import io.alpenglow.artoo.lance.query.many.Concatenatable;
 import io.alpenglow.artoo.lance.query.many.Convertable;

@@ -1,6 +1,6 @@
 package io.alpenglow.artoo.lance.test.query.one;
 
-import io.alpenglow.artoo.lance.literator.FetchException;
+import io.alpenglow.artoo.lance.query.FetchException;
 import io.alpenglow.artoo.lance.query.One;
 import org.junit.jupiter.api.Test;
 

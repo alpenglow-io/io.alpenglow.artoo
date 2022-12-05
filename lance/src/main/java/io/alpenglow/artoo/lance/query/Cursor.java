@@ -1,23 +1,16 @@
 package io.alpenglow.artoo.lance.query;
 
-import io.alpenglow.artoo.lance.query.cursor.Closable;
-import io.alpenglow.artoo.lance.query.cursor.Iteration;
-import io.alpenglow.artoo.lance.query.cursor.Link;
-import io.alpenglow.artoo.lance.query.cursor.Mappable;
-import io.alpenglow.artoo.lance.query.cursor.Nothing;
-import io.alpenglow.artoo.lance.query.cursor.Open;
-import io.alpenglow.artoo.lance.query.cursor.Substitutable;
-import io.alpenglow.artoo.lance.query.cursor.Transformable;
+import io.alpenglow.artoo.lance.query.cursor.*;
 
 import java.util.Iterator;
 
-public interface Cursor<T> extends Mappable<T>, Substitutable<T>, Closable<T>, Transformable<T> {
+public non-sealed interface Cursor<T> extends Mappable<T>, Substitutable<T>, Closable<T>, Transformable<T> {
   @SafeVarargs
   static <T> Cursor<T> open(final T... elements) {
     return new Open<>(elements);
   }
 
-  static <T> Cursor<T> link(final Repeatable<T> prev, final Repeatable<T> next) {
+  static <T> Cursor<T> link(final Source<T> prev, final Source<T> next) {
     return new Link<>(prev, next);
   }
 

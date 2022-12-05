@@ -2,7 +2,7 @@ package io.alpenglow.artoo.lance.query.cursor.routine.sort;
 
 import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.query.Cursor;
-import io.alpenglow.artoo.lance.query.Repeatable;
+import io.alpenglow.artoo.lance.query.cursor.Source;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -67,7 +67,7 @@ public final class Arranged<T> implements Sort<T> {
   }
 
   @Override
-  public TryFunction1<Repeatable<T>, Cursor<T>> onLiterator() {
+  public TryFunction1<Source<T>, Cursor<T>> onSource() {
     return li -> onIterator().apply(li);
   }
 

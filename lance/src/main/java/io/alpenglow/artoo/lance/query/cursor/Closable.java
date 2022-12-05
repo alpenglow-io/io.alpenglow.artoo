@@ -1,10 +1,9 @@
 package io.alpenglow.artoo.lance.query.cursor;
 
 import io.alpenglow.artoo.lance.query.Cursor;
-import io.alpenglow.artoo.lance.query.Repeatable;
 import io.alpenglow.artoo.lance.query.cursor.routine.Routine;
 
-public interface Closable<T> extends Repeatable<T> {
+public sealed interface Closable<T> extends Source<T> permits Cursor {
   default Cursor<T> close() {
     return new Close<>(this);
   }
@@ -31,9 +30,9 @@ public interface Closable<T> extends Repeatable<T> {
 
 final class Close<T> implements Cursor<T> {
   private T closed = null;
-  private final Repeatable<T> source;
+  private final Source<T> source;
 
-  Close(Repeatable<T> source) {
+  Close(Source<T> source) {
     this.source = source;
   }
 

@@ -11,10 +11,10 @@ sealed interface Index permits Incremental, NonIncremental {
 
 final class Incremental implements Index {
   private int value = 0;
-  private final Object lock = new Object() {};
+  private final Object lock = new Object();
 
   @Override
-  public final Index inc() {
+  public Index inc() {
     synchronized (lock) {
       value++;
     }
@@ -22,12 +22,12 @@ final class Incremental implements Index {
   }
 
   @Override
-  public final int value() {
+  public int value() {
     return value;
   }
 
   @Override
-  public final Index reset() {
+  public Index reset() {
     synchronized (lock) {
       value = 0;
     }

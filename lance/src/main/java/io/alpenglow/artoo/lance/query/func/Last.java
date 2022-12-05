@@ -2,6 +2,7 @@ package io.alpenglow.artoo.lance.query.func;
 
 import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.func.TryPredicate1;
+import io.alpenglow.artoo.lance.func.TrySupplier1;
 
 public final class Last<T> implements TryFunction1<T, T> {
   private final TryPredicate1<? super T> where;

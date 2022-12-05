@@ -1,7 +1,7 @@
 package io.alpenglow.artoo.lance.query.cursor.routine;
 
 import io.alpenglow.artoo.lance.func.TryFunction1;
-import io.alpenglow.artoo.lance.query.Repeatable;
+import io.alpenglow.artoo.lance.query.cursor.Source;
 import io.alpenglow.artoo.lance.query.cursor.routine.concat.Concat;
 import io.alpenglow.artoo.lance.query.cursor.routine.convert.Convert;
 import io.alpenglow.artoo.lance.query.cursor.routine.join.Join;
@@ -19,7 +19,7 @@ public sealed interface Routine<T, R> permits Join, Concat, Convert, Sort {
   }
 
   TryFunction1<T[], R> onArray();
-  TryFunction1<Repeatable<T>, R> onLiterator();
+  TryFunction1<Source<T>, R> onSource();
   TryFunction1<Iterator<T>, R> onIterator();
 
   @SuppressWarnings("unchecked")

@@ -1,7 +1,7 @@
 package io.alpenglow.artoo.lance.query.cursor.routine.convert;
 
 import io.alpenglow.artoo.lance.func.TryFunction1;
-import io.alpenglow.artoo.lance.query.Repeatable;
+import io.alpenglow.artoo.lance.query.cursor.Source;
 import io.alpenglow.artoo.lance.query.cursor.routine.Routine;
 
 import java.lang.reflect.Array;
@@ -19,7 +19,7 @@ public sealed interface Convert<T, R> extends Routine<T, R> permits Convert.List
     }
 
     @Override
-    public TryFunction1<Repeatable<T>, List<T>> onLiterator() {
+    public TryFunction1<Source<T>, List<T>> onSource() {
       return ft -> {
         final var list = new ArrayList<T>();
         ft.forEachRemaining(list::add);
@@ -51,7 +51,7 @@ public sealed interface Convert<T, R> extends Routine<T, R> permits Convert.List
     }
 
     @Override
-    public TryFunction1<Repeatable<T>, T[]> onLiterator() {
+    public TryFunction1<Source<T>, T[]> onSource() {
       return li -> onIterator().apply(li);
     }
 

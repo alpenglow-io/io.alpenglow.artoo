@@ -22,28 +22,28 @@ public class ExtremableTest {
 
   @Test
   public void shouldNotFindMaxByDefaultWithRecords() {
-    final var max = Many.from(new io.alpenglow.artoo.lance.test.query.Test.Pet("Pluto", 1), null, new io.alpenglow.artoo.lance.test.query.Test.Pet("Fuffy", 2), new io.alpenglow.artoo.lance.test.query.Test.Pet("Cerberos", 3)).max();
+    final var max = Many.from(new io.alpenglow.artoo.lance.test.Test.Pet("Pluto", 1), null, new io.alpenglow.artoo.lance.test.Test.Pet("Fuffy", 2), new io.alpenglow.artoo.lance.test.Test.Pet("Cerberos", 3)).max();
 
     assertThat(max).isEmpty();
   }
 
   @Test
   public void shouldNotFindMinByDefaultWithRecords() {
-    final var min = Many.from(new io.alpenglow.artoo.lance.test.query.Test.Pet("Pluto", 1), new io.alpenglow.artoo.lance.test.query.Test.Pet("Fuffy", 2), new io.alpenglow.artoo.lance.test.query.Test.Pet("Cerberos", 3)).min();
+    final var min = Many.from(new io.alpenglow.artoo.lance.test.Test.Pet("Pluto", 1), new io.alpenglow.artoo.lance.test.Test.Pet("Fuffy", 2), new io.alpenglow.artoo.lance.test.Test.Pet("Cerberos", 3)).min();
 
     assertThat(min).isEmpty();
   }
 
   @Test
   public void shouldFindMaxBySelecting() {
-    final var max = Many.from(new io.alpenglow.artoo.lance.test.query.Test.Pet("Pluto", 33), new io.alpenglow.artoo.lance.test.query.Test.Pet("Fuffy", 22), new io.alpenglow.artoo.lance.test.query.Test.Pet("Cerberos", 41)).max(io.alpenglow.artoo.lance.test.query.Test.Pet::age).otherwise(-1);
+    final var max = Many.from(new io.alpenglow.artoo.lance.test.Test.Pet("Pluto", 33), new io.alpenglow.artoo.lance.test.Test.Pet("Fuffy", 22), new io.alpenglow.artoo.lance.test.Test.Pet("Cerberos", 41)).max(io.alpenglow.artoo.lance.test.Test.Pet::age).otherwise(-1);
 
     assertThat(max).isEqualTo(41);
   }
 
   @Test
   public void shouldFindMinBySelecting() {
-    final var min = Many.from(new io.alpenglow.artoo.lance.test.query.Test.Pet("Pluto", 33), null, new io.alpenglow.artoo.lance.test.query.Test.Pet("Fuffy", 22), new io.alpenglow.artoo.lance.test.query.Test.Pet("Cerberos", 41)).min(io.alpenglow.artoo.lance.test.query.Test.Pet::age).otherwise(-1);
+    final var min = Many.from(new io.alpenglow.artoo.lance.test.Test.Pet("Pluto", 33), null, new io.alpenglow.artoo.lance.test.Test.Pet("Fuffy", 22), new io.alpenglow.artoo.lance.test.Test.Pet("Cerberos", 41)).min(io.alpenglow.artoo.lance.test.Test.Pet::age).otherwise(-1);
 
 
     assertThat(min).isEqualTo(22);

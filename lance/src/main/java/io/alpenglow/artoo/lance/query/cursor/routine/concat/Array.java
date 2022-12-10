@@ -2,7 +2,7 @@ package io.alpenglow.artoo.lance.query.cursor.routine.concat;
 
 import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.query.Cursor;
-import io.alpenglow.artoo.lance.query.cursor.Source;
+import io.alpenglow.artoo.lance.query.cursor.Fetcher;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -24,7 +24,7 @@ public final class Array<T> implements Concat<T> {
   }
 
   @Override
-  public TryFunction1<Source<T>, Cursor<T>> onSource() {
+  public TryFunction1<Fetcher<T>, Cursor<T>> onSource() {
     return prev -> Cursor.link(prev, Cursor.open(next));
   }
 

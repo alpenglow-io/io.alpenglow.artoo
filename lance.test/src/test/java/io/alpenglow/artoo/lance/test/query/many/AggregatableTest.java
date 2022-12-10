@@ -45,17 +45,17 @@ public class AggregatableTest {
   @DisplayName("should find the max and min by selector")
   public void shouldFindMaxAndMin() {
     final var maxes = from(
-      new io.alpenglow.artoo.lance.test.query.Test.Pet("Barley", 8),
-      new io.alpenglow.artoo.lance.test.query.Test.Pet("Boots", 4),
-      new io.alpenglow.artoo.lance.test.query.Test.Pet("Whiskers", 1)
+      new io.alpenglow.artoo.lance.test.Test.Pet("Barley", 8),
+      new io.alpenglow.artoo.lance.test.Test.Pet("Boots", 4),
+      new io.alpenglow.artoo.lance.test.Test.Pet("Whiskers", 1)
     );
 
     final var max = maxes.max(pet -> pet.name().length() + pet.age()).otherwise(-1);
 
     final var mins = from(
-      new io.alpenglow.artoo.lance.test.query.Test.Pet("Barley", 8),
-      new io.alpenglow.artoo.lance.test.query.Test.Pet("Boots", 4),
-      new io.alpenglow.artoo.lance.test.query.Test.Pet("Whiskers", 1)
+      new io.alpenglow.artoo.lance.test.Test.Pet("Barley", 8),
+      new io.alpenglow.artoo.lance.test.Test.Pet("Boots", 4),
+      new io.alpenglow.artoo.lance.test.Test.Pet("Whiskers", 1)
     );
 
     final var min = mins.min(pet -> pet.name().length()).otherwise(-1);

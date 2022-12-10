@@ -10,7 +10,7 @@ import io.alpenglow.artoo.lance.scope.Let;
 
 import java.util.Iterator;
 
-public interface Substitutable<T> extends Source<T> {
+public interface Replacer<T> extends Fetcher<T> {
   default <C extends Cursor<T>> Cursor<T> or(final TrySupplier1<? extends C> alternative) {
     return new Or<>(this, Let.lazy(alternative));
   }
@@ -24,37 +24,37 @@ public interface Substitutable<T> extends Source<T> {
   }
 }
 
-abstract non-sealed class As<T> implements Transformable<T> {
-  protected final Source<T> source;
+abstract non-sealed class As<T> implements Convertor<T> {
+  protected final Fetcher<T> fetcher;
 
-  protected As(final Source<T> source) {this.source = source;}
+  protected As(final Fetcher<T> fetcher) {this.fetcher = fetcher;}
 
   @Override
   public final <R> R as(final Routine<T, R> routine) {
-    return switch (source) {
+    return switch (fetcher) {
       case Cursor<T> cursor -> cursor.as(routine);
-      default -> Cursor.<T>nothing().as(routine);
+      default -> Cursor.<T>empty().as(routine);
     };
   }
 }
 
 final class Or<T, C extends Cursor<T>> extends As<T> implements Cursor<T> {
-  private final Late<Source<T>> reference = Late.init();
+  private final Late<Fetcher<T>> reference = Late.init();
   private final Let<? extends C> other;
 
-  Or(final Source<T> source, final Let<? extends C> other) {
-    super(source);
+  Or(final Fetcher<T> fetcher, final Let<? extends C> other) {
+    super(fetcher);
     this.other = other;
   }
 
   @Override
   public T fetch() {
-    return hasNext() ? reference.let(Source::fetch) : null;
+    return hasNext() ? reference.let(Fetcher::fetch) : null;
   }
 
   @Override
   public boolean hasNext() {
-    other.get(otherwise -> reference.set(() -> source.hasNext() ? source : otherwise));
+    other.get(otherwise -> reference.set(() -> fetcher.hasNext() ? fetcher : otherwise));
 
     return reference.let(Iterator::hasNext);
   }
@@ -64,8 +64,8 @@ final class Er<T, E extends RuntimeException> extends As<T> implements Cursor<T>
   private final String message;
   private final TryFunction2<? super String, ? super Throwable, ? extends E> exception;
 
-  Er(final Source<T> source, final String message, final TryFunction2<? super String, ? super Throwable, ? extends E> exception) {
-    super(source);
+  Er(final Fetcher<T> fetcher, final String message, final TryFunction2<? super String, ? super Throwable, ? extends E> exception) {
+    super(fetcher);
     this.message = message;
     this.exception = exception;
   }
@@ -74,7 +74,7 @@ final class Er<T, E extends RuntimeException> extends As<T> implements Cursor<T>
   public T fetch() {
     try {
       if (hasNext()) {
-        return source.fetch();
+        return fetcher.fetch();
       } else {
         throw exception.apply(message, null);
       }
@@ -85,22 +85,22 @@ final class Er<T, E extends RuntimeException> extends As<T> implements Cursor<T>
 
   @Override
   public boolean hasNext() {
-    return source.hasNext();
+    return fetcher.hasNext();
   }
 }
 
 final class Catch<T> extends As<T> implements Cursor<T> {
   private final TryConsumer1<? super Throwable> catch$;
 
-  Catch(Source<T> source, TryConsumer1<? super Throwable> catch$) {
-    super(source);
+  Catch(Fetcher<T> fetcher, TryConsumer1<? super Throwable> catch$) {
+    super(fetcher);
     this.catch$ = catch$;
   }
 
   @Override
   public T fetch() {
     try {
-      return source.fetch();
+      return fetcher.fetch();
     } catch (Throwable throwable) {
       catch$.accept(throwable);
       return null;
@@ -109,6 +109,6 @@ final class Catch<T> extends As<T> implements Cursor<T> {
 
   @Override
   public boolean hasNext() {
-    return source.hasNext();
+    return fetcher.hasNext();
   }
 }

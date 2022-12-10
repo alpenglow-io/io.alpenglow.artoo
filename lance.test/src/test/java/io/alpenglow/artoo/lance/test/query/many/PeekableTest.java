@@ -64,7 +64,7 @@ public class PeekableTest {
       .peek(it -> out.println("I'm " + it))
       .distinct()
       .peek(it -> out.println("Years " + it))
-      .select(it -> new io.alpenglow.artoo.lance.test.query.Test.Pet("No name", it))
+      .select(it -> new io.alpenglow.artoo.lance.test.Test.Pet("No name", it))
       .peek(pet -> out.println("Operating on Pet " + pet.age()))
       .eventually(pet -> out.println("Pet with " + pet.name() + " has " + pet.age() + " years"));
 
@@ -74,7 +74,7 @@ public class PeekableTest {
       .peek(it -> out.println("I'm " + it))
       .distinct()
       .peek(it -> out.println("Years " + it))
-      .map(it -> new io.alpenglow.artoo.lance.test.query.Test.Pet("No name", it))
+      .map(it -> new io.alpenglow.artoo.lance.test.Test.Pet("No name", it))
       .peek(pet -> out.println("Operating on Pet " + pet.age()))
       .forEach(pet -> out.println("Pet with " + pet.name() + " has " + pet.age() + " years"));
   }

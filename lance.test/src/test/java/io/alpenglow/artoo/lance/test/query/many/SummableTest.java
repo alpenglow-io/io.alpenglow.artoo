@@ -45,7 +45,7 @@ public class SummableTest {
   @Test
   @DisplayName("should sum all by selecting package-weight")
   public void shouldSumBySelecting() {
-    final var sum = Many.from(io.alpenglow.artoo.lance.test.query.Test.PACKAGES).sum(io.alpenglow.artoo.lance.test.query.Test.Package::weight).otherwise(-1F);
+    final var sum = Many.from(io.alpenglow.artoo.lance.test.Test.PACKAGES).sum(io.alpenglow.artoo.lance.test.Test.Package::weight).otherwise(-1F);
 
     assertThat(sum).isEqualTo(83.7F);
   }

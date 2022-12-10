@@ -2,14 +2,14 @@ package io.alpenglow.artoo.lance.query.cursor.routine.concat;
 
 import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.query.Cursor;
-import io.alpenglow.artoo.lance.query.cursor.Source;
+import io.alpenglow.artoo.lance.query.cursor.Fetcher;
 
 import java.util.Iterator;
 
 public final class Liter<T> implements Concat<T> {
-  private final Source<T> next;
+  private final Fetcher<T> next;
 
-  Liter(final Source<T> source) {this.next = source;}
+  Liter(final Fetcher<T> fetcher) {this.next = fetcher;}
 
   @Override
   public final TryFunction1<T[], Cursor<T>> onArray() {
@@ -17,7 +17,7 @@ public final class Liter<T> implements Concat<T> {
   }
 
   @Override
-  public TryFunction1<Source<T>, Cursor<T>> onSource() {
+  public TryFunction1<Fetcher<T>, Cursor<T>> onSource() {
     return prev -> Cursor.link(prev, next);
   }
 

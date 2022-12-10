@@ -10,14 +10,14 @@ public class FilterableTest {
   @Test
   @DisplayName("fuffy should be vaxed")
   public void shouldBeVaxed() {
-    final var fuffy = One.maybe(new io.alpenglow.artoo.lance.test.query.Test.Pet("Fuffy", true)).where(io.alpenglow.artoo.lance.test.query.Test.Pet::vaxed);
+    final var fuffy = One.of(new io.alpenglow.artoo.lance.test.Test.Pet("Fuffy", true)).where(io.alpenglow.artoo.lance.test.Test.Pet::vaxed);
 
     assertThat(fuffy).isNotEmpty();
   }
 
   @Test
   public void shouldNotBeOlderThan5() {
-    final var fuffy = One.maybe(new io.alpenglow.artoo.lance.test.query.Test.Pet("Fuffy", 7)).where(pet -> pet.age() <= 5);
+    final var fuffy = One.of(new io.alpenglow.artoo.lance.test.Test.Pet("Fuffy", 7)).where(pet -> pet.age() <= 5);
 
     assertThat(fuffy).isEmpty();
   }
@@ -25,8 +25,8 @@ public class FilterableTest {
   @Test
   @DisplayName("fuffy should be a pet-type")
   public void shouldBeAPet() {
-    final var fuffy = One.maybe((Record) new io.alpenglow.artoo.lance.test.query.Test.Pet("Fuffy", 5)).ofType(io.alpenglow.artoo.lance.test.query.Test.Pet.class);
+    final var fuffy = One.of((Record) new io.alpenglow.artoo.lance.test.Test.Pet("Fuffy", 5)).ofType(io.alpenglow.artoo.lance.test.Test.Pet.class);
 
-    assertThat(fuffy.iterator().next()).isExactlyInstanceOf(io.alpenglow.artoo.lance.test.query.Test.Pet.class);
+    assertThat(fuffy.iterator().next()).isExactlyInstanceOf(io.alpenglow.artoo.lance.test.Test.Pet.class);
   }
 }

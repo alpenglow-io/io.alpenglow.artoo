@@ -4,12 +4,12 @@ import io.alpenglow.artoo.lance.query.Cursor;
 import io.alpenglow.artoo.lance.query.cursor.routine.Routine;
 
 public final class Link<T> implements Cursor<T> {
-  private final Source<T> prev;
-  private final Source<T> source;
+  private final Fetcher<T> prev;
+  private final Fetcher<T> fetcher;
 
-  public Link(final Source<T> prev, final Source<T> source) {
+  public Link(final Fetcher<T> prev, final Fetcher<T> fetcher) {
     this.prev = prev;
-    this.source = source;
+    this.fetcher = fetcher;
   }
 
   @Override
@@ -19,11 +19,11 @@ public final class Link<T> implements Cursor<T> {
 
   @Override
   public T fetch() throws Throwable {
-    return prev.hasNext() ? prev.fetch() : source.fetch();
+    return prev.hasNext() ? prev.fetch() : fetcher.fetch();
   }
 
   @Override
   public boolean hasNext() {
-    return prev.hasNext() || source.hasNext();
+    return prev.hasNext() || fetcher.hasNext();
   }
 }

@@ -12,7 +12,7 @@ public class QuantifiableTest {
   @DisplayName("not all pets should start with letter B")
   public void shouldNotStartAllWithB() {
 
-    final var all = from(new io.alpenglow.artoo.lance.test.query.Test.Pet("Barley", 10), new io.alpenglow.artoo.lance.test.query.Test.Pet("Boots", 4), new io.alpenglow.artoo.lance.test.query.Test.Pet("Whiskers", 6))
+    final var all = from(new io.alpenglow.artoo.lance.test.Test.Pet("Barley", 10), new io.alpenglow.artoo.lance.test.Test.Pet("Boots", 4), new io.alpenglow.artoo.lance.test.Test.Pet("Whiskers", 6))
       .every(pet -> pet.name().startsWith("B"))
       .otherwise(true);
 
@@ -46,24 +46,24 @@ public class QuantifiableTest {
   @Test
   @DisplayName("should find 3 people with pets")
   public void shouldHaveThreePeople() {
-    final io.alpenglow.artoo.lance.test.query.Test.PetOwner[] owners = {
-      new io.alpenglow.artoo.lance.test.query.Test.PetOwner(
+    final io.alpenglow.artoo.lance.test.Test.PetOwner[] owners = {
+      new io.alpenglow.artoo.lance.test.Test.PetOwner(
         "Haas",
-        new io.alpenglow.artoo.lance.test.query.Test.Pet("Barley", 10),
-        new io.alpenglow.artoo.lance.test.query.Test.Pet("Boots", 14),
-        new io.alpenglow.artoo.lance.test.query.Test.Pet("Whiskers", 6)
+        new io.alpenglow.artoo.lance.test.Test.Pet("Barley", 10),
+        new io.alpenglow.artoo.lance.test.Test.Pet("Boots", 14),
+        new io.alpenglow.artoo.lance.test.Test.Pet("Whiskers", 6)
       ),
-      new io.alpenglow.artoo.lance.test.query.Test.PetOwner("Fakhouri", new io.alpenglow.artoo.lance.test.query.Test.Pet("Snowball", 1)),
-      new io.alpenglow.artoo.lance.test.query.Test.PetOwner("Antebi"),
-      new io.alpenglow.artoo.lance.test.query.Test.PetOwner("Philips",
-        new io.alpenglow.artoo.lance.test.query.Test.Pet("Sweetie", 2),
-        new io.alpenglow.artoo.lance.test.query.Test.Pet("Rover", 13)
+      new io.alpenglow.artoo.lance.test.Test.PetOwner("Fakhouri", new io.alpenglow.artoo.lance.test.Test.Pet("Snowball", 1)),
+      new io.alpenglow.artoo.lance.test.Test.PetOwner("Antebi"),
+      new io.alpenglow.artoo.lance.test.Test.PetOwner("Philips",
+        new io.alpenglow.artoo.lance.test.Test.Pet("Sweetie", 2),
+        new io.alpenglow.artoo.lance.test.Test.Pet("Rover", 13)
       )
     };
 
     final var selected = from(owners)
       .where(person -> from(person.pets()).some().otherwise(false))
-      .select(io.alpenglow.artoo.lance.test.query.Test.PetOwner::name);
+      .select(io.alpenglow.artoo.lance.test.Test.PetOwner::name);
 
     assertThat(selected).containsExactly(
       "Haas",

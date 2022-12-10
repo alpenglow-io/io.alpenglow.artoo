@@ -3,7 +3,9 @@ package io.alpenglow.artoo.lance.query.cursor;
 import io.alpenglow.artoo.lance.query.Cursor;
 import io.alpenglow.artoo.lance.query.cursor.routine.Routine;
 
-public sealed interface Closable<T> extends Source<T> permits Cursor {
+import java.util.Iterator;
+
+public interface Closer<T> extends Fetcher<T> {
   default Cursor<T> close() {
     return new Close<>(this);
   }
@@ -28,16 +30,16 @@ public sealed interface Closable<T> extends Source<T> permits Cursor {
   }
 }
 
-final class Close<T> implements Cursor<T> {
-  private T closed = null;
-  private final Source<T> source;
+final class Close<VALUE> implements Cursor<VALUE> {
+  private VALUE closed = null;
+  private final Iterator<VALUE> source;
 
-  Close(Source<T> source) {
+  Close(Iterator<VALUE> source) {
     this.source = source;
   }
 
   @Override
-  public T fetch() {
+  public VALUE fetch() {
     return next();
   }
 
@@ -52,7 +54,7 @@ final class Close<T> implements Cursor<T> {
   }
 
   @Override
-  public T next() {
+  public VALUE next() {
     try {
       return hasNext() ? closed : null;
     } finally {
@@ -61,8 +63,8 @@ final class Close<T> implements Cursor<T> {
   }
 
   @Override
-  public <R> R as(final Routine<T, R> routine) {
-    return source instanceof Cursor<T> cursor ? cursor.as(routine) : Cursor.<T>nothing().as(routine);
+  public <R> R as(final Routine<VALUE, R> routine) {
+    return source instanceof Cursor<VALUE> cursor ? cursor.as(routine) : Cursor.<VALUE>empty().as(routine);
   }
 }
 

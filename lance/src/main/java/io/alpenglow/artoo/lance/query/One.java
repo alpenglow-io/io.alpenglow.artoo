@@ -9,21 +9,17 @@ import io.alpenglow.artoo.lance.query.one.Peekable;
 import io.alpenglow.artoo.lance.query.one.Projectable;
 
 enum None implements One<Object> {
-  Empty;
+  Default;
 
   @Override
   public final Cursor<Object> cursor() {
-    return Cursor.nothing();
+    return Cursor.empty();
   }
 }
 
 public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Elseable<T> {
-  static <T> One<T> maybe(final T element) {
-    return element != null ? One.of(element) : One.none();
-  }
-
-  static <L> One<L> of(final L element) {
-    return new Lone<>(element);
+  static <T> One<T> of(final T element) {
+    return element != null ? new Lone<>(element) : One.none();
   }
 
   static <T> One<T> from(final TrySupplier1<T> supply) {
@@ -36,7 +32,7 @@ public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Else
 
   @SuppressWarnings("unchecked")
   static <L> One<L> none() {
-    return (One<L>) None.Empty;
+    return (One<L>) None.Default;
   }
 
   static <A extends AutoCloseable, T, O extends One<T>> One<T> done(TrySupplier1<? extends A> going, TryFunction1<? super A, ? extends O> then) {
@@ -46,15 +42,15 @@ public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Else
   interface OfTwo<A, B> extends Queryable.OfTwo<A, B> {}
 }
 
-final class Lone<T> implements One<T> {
-  private final T element;
+final class Lone<ELEMENT> implements One<ELEMENT> {
+  private final ELEMENT element;
 
-  public Lone(final T element) {
+  public Lone(final ELEMENT element) {
     this.element = element;
   }
 
   @Override
-  public Cursor<T> cursor() {
+  public Cursor<ELEMENT> cursor() {
     return Cursor.open(element);
   }
 }
@@ -107,7 +103,7 @@ final class Done<A extends AutoCloseable, T, O extends One<T>> implements One<T>
     try (final var auto = doing.tryGet()) {
       return then.tryApply(auto).cursor();
     } catch (Throwable e) {
-      return Cursor.nothing();
+      return Cursor.empty();
     }
   }
 }

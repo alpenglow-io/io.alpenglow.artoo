@@ -11,7 +11,7 @@ import static io.alpenglow.artoo.lance.query.many.Ordering.Arrange.desc;
 import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SortableTest implements io.alpenglow.artoo.lance.test.query.Test {
+public class SortableTest implements io.alpenglow.artoo.lance.test.Test {
   @Test
   @DisplayName("should order by hashcode")
   public void shouldOrderByHashcode() {

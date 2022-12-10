@@ -8,7 +8,7 @@ import java.util.Iterator;
  * Literator stands for Lambda Iterator
  * @param <T>
  */
-public sealed interface Source<T> extends Iterator<T> permits Closable, Mappable, Substitutable, Transformable {
+public interface Fetcher<T> extends Iterator<T> {
   T fetch() throws Throwable;
 
   @Override

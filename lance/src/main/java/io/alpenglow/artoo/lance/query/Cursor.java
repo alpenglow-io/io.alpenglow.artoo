@@ -4,29 +4,32 @@ import io.alpenglow.artoo.lance.query.cursor.*;
 
 import java.util.Iterator;
 
-public non-sealed interface Cursor<T> extends Mappable<T>, Substitutable<T>, Closable<T>, Transformable<T> {
+public non-sealed interface Cursor<T> extends Projector<T>, Replacer<T>, Closer<T>, Convertor<T> {
   @SafeVarargs
-  static <T> Cursor<T> open(final T... elements) {
-    return new Open<>(elements);
+  static <VALUE> Cursor<VALUE> open(final VALUE... values) {
+    return new Open<>(values);
   }
 
-  static <T> Cursor<T> link(final Source<T> prev, final Source<T> next) {
+  static <T> Cursor<T> link(final Fetcher<T> prev, final Fetcher<T> next) {
     return new Link<>(prev, next);
   }
 
   @SuppressWarnings("unchecked")
-  static <T> Cursor<T> nothing() {
-    return (Cursor<T>) Nothing.Default;
+  static <T> Cursor<T> empty() {
+    return (Cursor<T>) Empty.Default;
   }
 
-  static <T> Cursor<T> maybe(final T element) {
-    return element == null ? nothing() : open(element);
+  static <VALUE> Cursor<VALUE> maybe(final VALUE value) {
+    return value == null ? empty() : open(value);
   }
 
   static <T> Cursor<T> iteration(final Iterator<T> iterator) {
     return new Iteration<>(iterator);
   }
 
+  static Throwable exception(String message, Throwable cause) { return new Exception(message, cause); }
+  static Throwable exception(Throwable cause) { return new Exception(cause); }
+  static Throwable exception(String message) { return new Exception(message); }
   final class Exception extends RuntimeException {
     public Exception() {
       super();

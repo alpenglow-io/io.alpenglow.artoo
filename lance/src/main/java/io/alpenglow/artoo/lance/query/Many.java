@@ -45,7 +45,7 @@ public interface Many<T> extends
   }
 
   static <R> Many<R> empty() {
-    return Cursor::nothing;
+    return Cursor::empty;
   }
 
   static Many<Integer> ints(final int start, final int end) {
@@ -96,7 +96,7 @@ final class Supplied<R> implements Many<R> {
       return Cursor.open(supply.tryGet());
     } catch (Throwable cause) {
       cause.printStackTrace();
-      return Cursor.nothing();
+      return Cursor.empty();
     }
   }
 }

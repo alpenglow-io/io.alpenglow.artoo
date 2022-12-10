@@ -18,7 +18,7 @@
     <java.version>19</java.version>
     <java.release>19</java.release>
     <maven.min.version>3.6.0</maven.min.version>
-    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.fetcher>${java.version}</maven.compiler.fetcher>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
 
@@ -51,7 +51,7 @@
     <plugin-site.version>3.9.1</plugin-site.version>
     <plugin-surefire.version>3.0.0-M5</plugin-surefire.version>
     <plugin-versions.version>2.8.1</plugin-versions.version>
-    <plugin-source.version>3.2.1</plugin-source.version>
+    <plugin-fetcher.version>3.2.1</plugin-fetcher.version>
     <plugin-assembly.version>3.3.0</plugin-assembly.version>
     <plugin-exec.version>3.0.0</plugin-exec.version>
     <plugin-frontend.version>1.11.2</plugin-frontend.version>
@@ -207,8 +207,8 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-source-plugin</artifactId>
-          <version>${plugin-source.version}</version>
+          <artifactId>maven-fetcher-plugin</artifactId>
+          <version>${plugin-fetcher.version}</version>
           <executions>
             <execution>
               <id>attach-sources</id>

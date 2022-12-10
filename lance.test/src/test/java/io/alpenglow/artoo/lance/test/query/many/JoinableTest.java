@@ -7,7 +7,7 @@ import static io.alpenglow.artoo.lance.query.Many.from;
 import static io.alpenglow.artoo.lance.query.many.Ordering.Arrange.desc;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class JoinableTest implements io.alpenglow.artoo.lance.test.query.Test {
+public class JoinableTest implements io.alpenglow.artoo.lance.test.Test {
   @Test
   @DisplayName("should join two many naturally")
   public void shouldJoinNaturally() {

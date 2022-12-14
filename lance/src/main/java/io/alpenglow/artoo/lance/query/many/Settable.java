@@ -4,7 +4,7 @@ import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.func.TryPredicate1;
 import io.alpenglow.artoo.lance.query.Many;
 import io.alpenglow.artoo.lance.Queryable;
-import io.alpenglow.artoo.lance.query.func.Distinct;
+import io.alpenglow.artoo.lance.query.closure.Distinct;
 
 @SuppressWarnings("unchecked")
 public interface Settable<T> extends Queryable<T> {
@@ -40,7 +40,7 @@ final class Except<T> implements TryFunction1<T, T> {
   Except(final Queryable<T> queryable) {this.queryable = queryable;}
 
   @Override
-  public final T tryApply(final T origin) throws Throwable {
+  public final T invoke(final T origin) throws Throwable {
     final var cursor = queryable.cursor();
     T element = null;
     while (cursor.hasNext() && !(element = cursor.fetch()).equals(origin));
@@ -55,7 +55,7 @@ final class Intersect<T> implements TryFunction1<T, T> {
   Intersect(final Queryable<T> queryable) {this.queryable = queryable;}
 
   @Override
-  public T tryApply(final T origin) throws Throwable {
+  public T invoke(final T origin) throws Throwable {
     final var cursor = queryable.cursor();
     var element = cursor.fetch();
     for (; cursor.hasNext() && !element.equals(origin); element = cursor.fetch());

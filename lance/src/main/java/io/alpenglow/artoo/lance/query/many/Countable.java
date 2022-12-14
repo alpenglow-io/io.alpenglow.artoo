@@ -4,7 +4,7 @@ import io.alpenglow.artoo.lance.func.TryPredicate1;
 import io.alpenglow.artoo.lance.query.Cursor;
 import io.alpenglow.artoo.lance.query.One;
 import io.alpenglow.artoo.lance.Queryable;
-import io.alpenglow.artoo.lance.query.func.Count;
+import io.alpenglow.artoo.lance.query.closure.Count;
 
 public interface Countable<T> extends Queryable<T> {
   default One<Integer> count() {

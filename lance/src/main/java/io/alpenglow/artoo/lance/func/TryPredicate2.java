@@ -4,16 +4,16 @@ import java.util.function.BiPredicate;
 
 @FunctionalInterface
 public interface TryPredicate2<A, B> extends BiPredicate<A, B> {
-  boolean tryTest(A a, B b) throws Throwable;
+  boolean invoke(A a, B b) throws Throwable;
   @Override
   default boolean test(A a, B b) {
     try {
-      return tryTest(a, b);
+      return invoke(a, b);
     } catch (Throwable throwable) {
       throw new LambdaCallException(throwable);
     }
   }
   static <A, B> TryPredicate2<A, B> not(final TryPredicate2<A, B> predicate) {
-    return (a, b) -> !predicate.tryTest(a, b);
+    return (a, b) -> !predicate.invoke(a, b);
   }
 }

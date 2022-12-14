@@ -28,8 +28,8 @@ public abstract class Scope<T, $this extends Scope<T, $this>> implements One<T>,
 
 
       @Override
-      public T tryGet() throws Throwable {
-        return Scope.this.tryGet();
+      public T invoke() throws Throwable {
+        return Scope.this.invoke();
       }
     };
   }
@@ -37,7 +37,7 @@ public abstract class Scope<T, $this extends Scope<T, $this>> implements One<T>,
   public static void main(String[] args) {
     class Test extends Scope<Integer, Test> {
       @Override
-      public Integer tryGet() {
+      public Integer invoke() {
         return 12;
       }
     }

@@ -4,7 +4,7 @@ import io.alpenglow.artoo.lance.func.TryPredicate2;
 import io.alpenglow.artoo.lance.query.Cursor;
 import io.alpenglow.artoo.lance.query.One;
 import io.alpenglow.artoo.lance.Queryable;
-import io.alpenglow.artoo.lance.query.func.Count;
+import io.alpenglow.artoo.lance.query.closure.Count;
 
 public interface Countable<A, B> extends Queryable.OfTwo<A, B> {
   default One<Integer> count() {
@@ -13,7 +13,7 @@ public interface Countable<A, B> extends Queryable.OfTwo<A, B> {
 
   default One<Integer> count(final TryPredicate2<? super A, ? super B> where) {
     return () -> cursor()
-      .map(new Count<>(pair -> where.tryTest(pair.first(), pair.second())))
+      .map(new Count<>(pair -> where.invoke(pair.first(), pair.second())))
       .or(() -> Cursor.open(0))
       .keepNull();
   }

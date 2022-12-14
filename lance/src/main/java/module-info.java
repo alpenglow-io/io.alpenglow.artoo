@@ -10,7 +10,7 @@ module io.alpenglow.artoo.lance {
   exports io.alpenglow.artoo.lance.query.one;
   exports io.alpenglow.artoo.lance.tuple;
   exports io.alpenglow.artoo.lance.value;
-  exports io.alpenglow.artoo.lance.query.func;
+  exports io.alpenglow.artoo.lance.query.closure;
   exports io.alpenglow.artoo.lance.scope;
   exports io.alpenglow.artoo.lance;
   exports io.alpenglow.artoo.lance.tuple.record;

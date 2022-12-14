@@ -1,12 +1,13 @@
-package io.alpenglow.artoo.lance.query.func;
+package io.alpenglow.artoo.lance.query.closure;
 
-import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.func.TryPredicate2;
+import io.alpenglow.artoo.lance.query.Closure;
+import io.alpenglow.artoo.lance.query.Unit;
 import io.alpenglow.artoo.lance.scope.Expectation;
 
 import java.util.Objects;
 
-public final class Where<T> implements TryFunction1<T, T>, Expectation {
+public final class Where<T> implements Closure<Unit<T>, Unit<T>>, Expectation {
   private final TryPredicate2<? super Integer, ? super T> where;
   private int index;
 
@@ -16,7 +17,7 @@ public final class Where<T> implements TryFunction1<T, T>, Expectation {
   }
 
   @Override
-  public T tryApply(final T element) throws Throwable {
-    return where.tryTest(index++, element) ? element : null;
+  public Unit<T> tryApply(final Unit<T> element) throws Throwable {
+    return where.invoke(index++, element.invoke()) ? element : Unit.nothing();
   }
 }

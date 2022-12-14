@@ -1,8 +1,8 @@
-package io.alpenglow.artoo.lance.query.func;
+package io.alpenglow.artoo.lance.query.closure;
 
-import io.alpenglow.artoo.lance.func.TryFunction1;
+import io.alpenglow.artoo.lance.query.Closure;
 
-public final class NotOfType<T, R> implements TryFunction1<T, T> {
+public final class NotOfType<T, R> implements Closure<T, T> {
   private final Class<? extends R> type;
 
   public NotOfType(final Class<? extends R> type) {

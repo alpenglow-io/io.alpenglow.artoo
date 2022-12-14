@@ -12,7 +12,7 @@ public interface Projectable<T> extends Queryable<T> {
   }
 
   default <R> Many<R> select(TryFunction1<? super T, ? extends R> select) {
-    return select((index, value) -> select.tryApply(value));
+    return select((index, value) -> select.invoke(value));
   }
 
   default <R, Q extends Queryable<R>> Many<R> selection(TryFunction2<? super Integer, ? super T, ? extends Q> select) {
@@ -20,6 +20,6 @@ public interface Projectable<T> extends Queryable<T> {
   }
 
   default <R, Q extends Queryable<R>> Many<R> selection(TryFunction1<? super T, ? extends Q> select) {
-    return selection((i, it) -> select.tryApply(it));
+    return selection((i, it) -> select.invoke(it));
   }
 }

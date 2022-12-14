@@ -17,6 +17,6 @@ public interface Projectable<T> extends Queryable<T> {
   }
 
   default <R> One<R> select(final TrySupplier1<? extends R> select) {
-    return () -> cursor().map(rec(Select.with((i, it) -> select.tryGet())));
+    return () -> cursor().map(rec(Select.with((i, it) -> select.invoke())));
   }
 }

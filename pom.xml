@@ -18,7 +18,7 @@
     <java.version>19</java.version>
     <java.release>19</java.release>
     <maven.min.version>3.6.0</maven.min.version>
-    <maven.compiler.fetcher>${java.version}</maven.compiler.fetcher>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
 

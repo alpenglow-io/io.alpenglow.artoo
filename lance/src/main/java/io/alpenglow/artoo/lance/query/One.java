@@ -65,7 +65,7 @@ final class Sone<T> implements One<T> {
   @Override
   public Cursor<T> cursor() {
     try {
-      return Cursor.open(suppl.tryGet());
+      return Cursor.open(suppl.invoke());
     } catch (Throwable cause) {
       return One
         .<T>gone("Can't get returning", it -> new IllegalStateException(it, cause))
@@ -100,8 +100,8 @@ final class Done<A extends AutoCloseable, T, O extends One<T>> implements One<T>
 
   @Override
   public final Cursor<T> cursor() {
-    try (final var auto = doing.tryGet()) {
-      return then.tryApply(auto).cursor();
+    try (final var auto = doing.invoke()) {
+      return then.invoke(auto).cursor();
     } catch (Throwable e) {
       return Cursor.empty();
     }

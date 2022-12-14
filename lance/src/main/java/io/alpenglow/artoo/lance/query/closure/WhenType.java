@@ -1,8 +1,9 @@
-package io.alpenglow.artoo.lance.query.func;
+package io.alpenglow.artoo.lance.query.closure;
 
 import io.alpenglow.artoo.lance.func.TryFunction1;
+import io.alpenglow.artoo.lance.query.Closure;
 
-public final class WhenType<T, R> implements TryFunction1<T, T> {
+public final class WhenType<T, R> implements Closure<T, T> {
   private final Class<R> type;
   private final TryFunction1<? super R, ? extends T> func;
 
@@ -13,6 +14,6 @@ public final class WhenType<T, R> implements TryFunction1<T, T> {
 
   @Override
   public T tryApply(final T element) throws Throwable {
-    return type.isInstance(element) ? func.tryApply(type.cast(element)) : element;
+    return type.isInstance(element) ? func.invoke(type.cast(element)) : element;
   }
 }

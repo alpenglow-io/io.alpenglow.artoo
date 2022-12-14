@@ -21,12 +21,12 @@ public final class Aggregate<T, A, R> extends Tailrec<T, A, Aggregate<T, A, R>> 
 
   @SuppressWarnings("unchecked")
   @Override
-  public Return<T, A, Aggregate<T, A, R>> tryApply(final T it) throws Throwable {
-    if (!where.tryTest(it)) {
+  public Return<T, A, Aggregate<T, A, R>> invoke(final T it) throws Throwable {
+    if (!where.invoke(it)) {
       return new Return<>(aggregated, this);
     } else {
-      final var selected = select.tryApply(it);
-      final var newAggregated = aggregated != null ? aggregate.tryApply(aggregated, selected) : (A) selected;
+      final var selected = select.invoke(it);
+      final var newAggregated = aggregated != null ? aggregate.invoke(aggregated, selected) : (A) selected;
       return Return.with(newAggregated, new Aggregate<>(newAggregated, where, select, aggregate));
     }
   }

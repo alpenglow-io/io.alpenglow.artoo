@@ -1,9 +1,9 @@
-package io.alpenglow.artoo.lance.query.func;
+package io.alpenglow.artoo.lance.query.closure;
 
-import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.func.TryPredicate1;
+import io.alpenglow.artoo.lance.query.Closure;
 
-public final class Single<T> implements TryFunction1<T, T> {
+public final class Single<T> implements Closure<T, T> {
   enum NoSingle {Found}
 
   private Object single = null;
@@ -16,9 +16,9 @@ public final class Single<T> implements TryFunction1<T, T> {
 
   @Override
   public final T tryApply(final T element) throws Throwable {
-    if (where.tryTest(element) && single == null) {
+    if (where.invoke(element) && single == null) {
       single = element;
-    } else if (where.tryTest(element)) {
+    } else if (where.invoke(element)) {
       single = NoSingle.Found;
     }
 

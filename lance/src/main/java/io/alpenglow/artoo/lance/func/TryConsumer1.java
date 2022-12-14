@@ -8,11 +8,11 @@ public interface TryConsumer1<A> extends Consumer<A> {
     return it -> {
     };
   }
-  void tryAccept(A a) throws Throwable;
+  void invoke(A a) throws Throwable;
   @Override
   default void accept(A a) {
     try {
-      tryAccept(a);
+      invoke(a);
     } catch (Throwable throwable) {
       throw new LambdaCallException(throwable);
     }

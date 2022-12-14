@@ -1,12 +1,13 @@
-package io.alpenglow.artoo.lance.query.func;
+package io.alpenglow.artoo.lance.query.closure;
 
 import io.alpenglow.artoo.lance.func.TryFunction1;
+import io.alpenglow.artoo.lance.query.Closure;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
 @SuppressWarnings({"unchecked"})
-public final class Sum<T, N extends Number, V> implements TryFunction1<T, V> {
+public final class Sum<T, N extends Number, V> implements Closure<T, V> {
   private final TryFunction1<? super T, ? extends N> select;
   private final Summed summed;
 
@@ -18,7 +19,7 @@ public final class Sum<T, N extends Number, V> implements TryFunction1<T, V> {
 
   @Override
   public V tryApply(final T element) throws Throwable {
-    return (summed.value = sum(select.tryApply(element), (N) summed.value));
+    return (summed.value = sum(select.invoke(element), (N) summed.value));
   }
 
   private V sum(final N selected, final N number) {

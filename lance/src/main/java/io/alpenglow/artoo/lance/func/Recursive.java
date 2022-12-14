@@ -33,12 +33,7 @@ public interface Recursive<PARAMETER, RESULT, FUNCTION extends Recursive<PARAMET
     }
 
     public Return<PARAMETER, RETURN, FUNCTION> on(PARAMETER parameter) {
-      return let(it -> it.apply(parameter), Recursive.Return::next);
+      return let(function -> function.apply(parameter), Return::next);
     }
-  }
-
-  static void main(String[] args) {
-    interface Int64 extends Supplier<Long> {}
-    interface Decimal64 extends Supplier<Double> {}
   }
 }

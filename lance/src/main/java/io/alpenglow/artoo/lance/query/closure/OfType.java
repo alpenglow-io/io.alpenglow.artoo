@@ -1,8 +1,8 @@
-package io.alpenglow.artoo.lance.query.func;
+package io.alpenglow.artoo.lance.query.closure;
 
-import io.alpenglow.artoo.lance.func.TryFunction1;
+import io.alpenglow.artoo.lance.query.Closure;
 
-public final class OfType<T, R> implements TryFunction1<T, R> {
+public final class OfType<T, R> implements Closure<T, R> {
   private final Class<? extends R> type;
 
   public OfType(final Class<? extends R> type) {

@@ -1,10 +1,13 @@
-package io.alpenglow.artoo.lance.query.func;
+package io.alpenglow.artoo.lance.query.closure;
 
 import io.alpenglow.artoo.lance.func.Recursive.Tailrec;
 import io.alpenglow.artoo.lance.func.TryFunction1;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Objects;
+
+import static java.util.Objects.requireNonNull;
 
 @SuppressWarnings("unchecked")
 public final class Extreme<T, R extends Number, V> extends Tailrec<T, V, Extreme<T, R, V>> {
@@ -26,9 +29,9 @@ public final class Extreme<T, R extends Number, V> extends Tailrec<T, V, Extreme
 
   @SuppressWarnings("unchecked")
   @Override
-  public Return<T, V, Extreme<T, R, V>> tryApply(final T element) throws Throwable {
+  public Return<T, V, Extreme<T, R, V>> invoke(final T element) throws Throwable {
     if (element != null) {
-      final var selected = selector.tryApply(element);
+      final var selected = selector.invoke(element);
       if (compare((R) extreme, selected) == type.eval) {
         return Return.with((V) selected, new Extreme<>((V) selected, type, selector));
       }
@@ -40,15 +43,15 @@ public final class Extreme<T, R extends Number, V> extends Tailrec<T, V, Extreme
   private int compare(final R compared, final R selected) {
     if (compared == null && selected != null)
       return type.eval;
-    return switch (selected) {
-      case Byte b -> b > compared.byteValue() ? 1 : -1;
-      case Short s -> s > compared.shortValue() ? 1 : -1;
-      case Integer i -> i > compared.intValue() ? 1 : -1;
-      case Long l -> l > compared.longValue() ? 1 : -1;
-      case Float f -> f > compared.floatValue() ? 1 : -1;
-      case Double d -> d > compared.doubleValue() ? 1 : -1;
-      case BigInteger it -> it.longValue() > BigInteger.valueOf(compared.longValue()).longValue() ? 1 : -1;
-      case BigDecimal it -> it.doubleValue() > BigDecimal.valueOf(compared.doubleValue()).doubleValue() ? 1 : -1;
+    return switch (requireNonNull(selected)) {
+      case Byte b -> b > requireNonNull(compared).byteValue() ? 1 : -1;
+      case Short s -> s > requireNonNull(compared).shortValue() ? 1 : -1;
+      case Integer i -> i > requireNonNull(compared).intValue() ? 1 : -1;
+      case Long l -> l > requireNonNull(compared).longValue() ? 1 : -1;
+      case Float f -> f > requireNonNull(compared).floatValue() ? 1 : -1;
+      case Double d -> d > requireNonNull(compared).doubleValue() ? 1 : -1;
+      case BigInteger it -> it.longValue() > BigInteger.valueOf(requireNonNull(compared).longValue()).longValue() ? 1 : -1;
+      case BigDecimal it -> it.doubleValue() > BigDecimal.valueOf(requireNonNull(compared).doubleValue()).doubleValue() ? 1 : -1;
 
       default -> type.eval * -1;
     };

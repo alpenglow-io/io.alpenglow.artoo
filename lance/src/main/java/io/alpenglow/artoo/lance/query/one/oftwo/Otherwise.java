@@ -22,7 +22,7 @@ public interface Otherwise<A, B> extends Queryable.OfTwo<A, B> {
   }
 
   default <E extends RuntimeException> One.OfTwo<A, B> or(final TrySupplier1<? extends E> exception) {
-    return () -> cursor().or(null, (it, throwable) -> exception.tryGet());
+    return () -> cursor().or(null, (it, throwable) -> exception.invoke());
   }
 }
 

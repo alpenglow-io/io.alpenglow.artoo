@@ -4,12 +4,12 @@ import java.util.concurrent.Callable;
 
 @FunctionalInterface
 public interface TryRunnable extends Runnable, Callable<Void> {
-  void tryRun() throws Throwable;
+  void invoke() throws Throwable;
 
   @Override
   default void run() {
     try {
-      tryRun();
+      invoke();
     } catch (Throwable throwable) {
       throw new LambdaCallException(throwable);
     }

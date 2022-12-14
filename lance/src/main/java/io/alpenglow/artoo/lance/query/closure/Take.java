@@ -1,10 +1,10 @@
-package io.alpenglow.artoo.lance.query.func;
+package io.alpenglow.artoo.lance.query.closure;
 
-import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.func.TryPredicate2;
+import io.alpenglow.artoo.lance.query.Closure;
 
 @SuppressWarnings("unchecked")
-public final class Take<T, R> implements TryFunction1<T, R> {
+public final class Take<T, R> implements Closure<T, R> {
   private final Taken taken = new Taken();
   private final TryPredicate2<? super Integer, ? super T> where;
 
@@ -15,7 +15,7 @@ public final class Take<T, R> implements TryFunction1<T, R> {
 
   @Override
   public R tryApply(final T element) throws Throwable {
-    return (R) ((taken.keep = where.tryTest(taken.index++, element) && taken.keep) ? element : null);
+    return (R) ((taken.keep = where.invoke(taken.index++, element) && taken.keep) ? element : null);
   }
 
   private final class Taken {

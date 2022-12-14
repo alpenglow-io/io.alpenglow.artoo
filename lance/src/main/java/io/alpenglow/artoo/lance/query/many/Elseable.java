@@ -21,7 +21,7 @@ public interface Elseable<T> extends Queryable<T> {
   }
 
   default <E extends RuntimeException> Many<T> or(final TrySupplier1<? extends E> exception) {
-    return () -> cursor().or(null, (it, throwable) -> exception.tryGet());
+    return () -> cursor().or(null, (it, throwable) -> exception.invoke());
   }
 }
 

@@ -1,9 +1,9 @@
-package io.alpenglow.artoo.lance.query.func;
+package io.alpenglow.artoo.lance.query.closure;
 
 import io.alpenglow.artoo.lance.func.TryPredicate1;
-import io.alpenglow.artoo.lance.func.TryFunction1;
+import io.alpenglow.artoo.lance.query.Closure;
 
-public final class None<T> implements TryFunction1<T, Boolean> {
+public final class None<T> implements Closure<T, Boolean> {
   private final TryPredicate1<? super T> where;
   private final NoneOfThem noneOfThem;
 
@@ -15,7 +15,7 @@ public final class None<T> implements TryFunction1<T, Boolean> {
 
   @Override
   public Boolean tryApply(final T element) throws Throwable {
-    return (noneOfThem.value &= !where.tryTest(element));
+    return (noneOfThem.value &= !where.invoke(element));
   }
 
   private static final class NoneOfThem {

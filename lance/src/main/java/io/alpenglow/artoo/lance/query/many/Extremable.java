@@ -3,7 +3,7 @@ package io.alpenglow.artoo.lance.query.many;
 import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.query.One;
 import io.alpenglow.artoo.lance.Queryable;
-import io.alpenglow.artoo.lance.query.func.Extreme;
+import io.alpenglow.artoo.lance.query.closure.Extreme;
 
 public interface Extremable<T> extends Queryable<T> {
   private One<T> extreme() {

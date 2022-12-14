@@ -17,7 +17,7 @@ public final class Map<FROM, TO> implements Cursor<TO> {
   @Override
   public TO fetch() throws Throwable {
     final var fetched = fetcher.fetch();
-    return fetched != null ? map.tryApply(fetched) : null;
+    return fetched != null ? map.invoke(fetched) : null;
   }
 
   @Override

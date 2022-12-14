@@ -19,8 +19,8 @@ public final class Average<T, N extends Number> extends Tailrec<T, Double, Avera
   }
 
   @Override
-  public Return<T, Double, Average<T, N>> tryApply(final T it) throws Throwable {
-    final var selected = select.tryApply(it);
+  public Return<T, Double, Average<T, N>> invoke(final T it) throws Throwable {
+    final var selected = select.invoke(it);
 
     if (selected == null) return Return.with(accumulated, this);
 

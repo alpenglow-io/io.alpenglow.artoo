@@ -1,13 +1,13 @@
-package io.alpenglow.artoo.lance.query.func;
+package io.alpenglow.artoo.lance.query.closure;
 
-import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.func.TryPredicate1;
+import io.alpenglow.artoo.lance.query.Closure;
 
-public final class First<T> implements TryFunction1<T, T> {
+public final class Last<T> implements Closure<T, T> {
   private final TryPredicate1<? super T> where;
   private final Found found;
 
-  public First(final TryPredicate1<? super T> where) {
+  public Last(final TryPredicate1<? super T> where) {
     assert where != null;
     this.where = where;
     this.found = new Found();
@@ -15,10 +15,9 @@ public final class First<T> implements TryFunction1<T, T> {
 
   @Override
   public T tryApply(final T element) throws Throwable {
-    if (where.tryTest(element) && found.value == null) {
+    if (where.invoke(element)) {
       found.value = element;
     }
-
     return found.value;
   }
 

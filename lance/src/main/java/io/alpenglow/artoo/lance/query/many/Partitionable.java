@@ -4,8 +4,8 @@ import io.alpenglow.artoo.lance.func.TryPredicate2;
 import io.alpenglow.artoo.lance.func.TryPredicate1;
 import io.alpenglow.artoo.lance.query.Many;
 import io.alpenglow.artoo.lance.Queryable;
-import io.alpenglow.artoo.lance.query.func.Skip;
-import io.alpenglow.artoo.lance.query.func.Take;
+import io.alpenglow.artoo.lance.query.closure.Skip;
+import io.alpenglow.artoo.lance.query.closure.Take;
 
 public interface Partitionable<T> extends Queryable<T> {
   default Many<T> skip(final int until) {

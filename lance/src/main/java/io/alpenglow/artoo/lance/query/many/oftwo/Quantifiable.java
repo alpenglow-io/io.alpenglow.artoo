@@ -4,8 +4,8 @@ import io.alpenglow.artoo.lance.func.TryPredicate2;
 import io.alpenglow.artoo.lance.query.Cursor;
 import io.alpenglow.artoo.lance.query.One;
 import io.alpenglow.artoo.lance.Queryable;
-import io.alpenglow.artoo.lance.query.func.Every;
-import io.alpenglow.artoo.lance.query.func.Some;
+import io.alpenglow.artoo.lance.query.closure.Every;
+import io.alpenglow.artoo.lance.query.closure.Some;
 
 public interface Quantifiable<A, B> extends Queryable.OfTwo<A, B> {
   default <X, Y> One<Boolean> all(final Class<X> type1, final Class<Y> type2) {
@@ -13,13 +13,13 @@ public interface Quantifiable<A, B> extends Queryable.OfTwo<A, B> {
   }
 
   default One<Boolean> all(final TryPredicate2<? super A, ? super B> where) {
-    return () -> cursor().map(new Every<>(pair -> where.tryTest(pair.first(), pair.second()))).keepNull();
+    return () -> cursor().map(new Every<>(pair -> where.invoke(pair.first(), pair.second()))).keepNull();
   }
 
   default One<Boolean> any() { return this.any((first, second) -> true); }
 
   default One<Boolean> any(final TryPredicate2<? super A, ? super B> where) {
-    return () -> cursor().map(new Some<>(pair -> where.tryTest(pair.first(), pair.second()))).keepNull().or(() -> Cursor.open(false));
+    return () -> cursor().map(new Some<>(pair -> where.invoke(pair.first(), pair.second()))).keepNull().or(() -> Cursor.open(false));
   }
 }
 

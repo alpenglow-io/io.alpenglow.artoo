@@ -1,10 +1,10 @@
-package io.alpenglow.artoo.lance.query.func;
+package io.alpenglow.artoo.lance.query.closure;
 
 import io.alpenglow.artoo.lance.func.TryConsumer1;
-import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.func.TryPredicate1;
+import io.alpenglow.artoo.lance.query.Closure;
 
-public final class WhenWhere<T> implements TryFunction1<T, T> {
+public final class WhenWhere<T> implements Closure<T, T> {
   private final TryPredicate1<? super T> where;
   private final TryConsumer1<? super T> cons;
 
@@ -15,7 +15,7 @@ public final class WhenWhere<T> implements TryFunction1<T, T> {
 
   @Override
   public final T tryApply(final T element) throws Throwable {
-    if (where.tryTest(element)) cons.tryAccept(element);
+    if (where.invoke(element)) cons.invoke(element);
     return element;
   }
 }

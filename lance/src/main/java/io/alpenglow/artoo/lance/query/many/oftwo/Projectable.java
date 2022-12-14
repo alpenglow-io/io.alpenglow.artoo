@@ -13,23 +13,23 @@ public interface Projectable<A, B> extends Queryable.OfTwo<A, B> {
   }
 
   default <R> Many<R> select(TryFunction2<? super A, ? super B, ? extends R> select) {
-    return select((index, first, second) -> select.tryApply(first, second));
+    return select((index, first, second) -> select.invoke(first, second));
   }
 
   default <R, Q extends Queryable<R>> Many<R> selection(TryFunction3<? super Integer, ? super A, ? super B, ? extends Q> select) {
-    return () -> cursor().map(rec(Select.with(((i, pair) -> select.tryApply(i, pair.first(), pair.second()))))).flatMap(Queryable::cursor);
+    return () -> cursor().map(rec(Select.with(((i, pair) -> select.invoke(i, pair.first(), pair.second()))))).flatMap(Queryable::cursor);
   }
 
   default <R, Q extends Queryable<R>> Many<R> selection(TryFunction2<? super A, ? super B, ? extends Q> select) {
-    return selection((i, first, second) -> select.tryApply(first, second));
+    return selection((i, first, second) -> select.invoke(first, second));
   }
 
   default <P extends Pair<A, B>> Many.OfTwo<A, B> to(TryFunction2<? super A, ? super B, ? extends P> func) {
-    return () -> cursor().map(pair -> func.tryApply(pair.first(), pair.second()));
+    return () -> cursor().map(pair -> func.invoke(pair.first(), pair.second()));
   }
 
   default <Q extends Queryable.OfTwo<A, B>> Many.OfTwo<A, B> too(TryFunction2<? super A, ? super B, ? extends Q> func) {
-    return () -> cursor().flatMap(pair -> func.tryApply(pair.first(), pair.second()).cursor());
+    return () -> cursor().flatMap(pair -> func.invoke(pair.first(), pair.second()).cursor());
   }
 
 }

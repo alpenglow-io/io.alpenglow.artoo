@@ -93,7 +93,7 @@ final class Supplied<R> implements Many<R> {
   @Override
   public Cursor<R> cursor() {
     try {
-      return Cursor.open(supply.tryGet());
+      return Cursor.open(supply.invoke());
     } catch (Throwable cause) {
       cause.printStackTrace();
       return Cursor.empty();

@@ -1,4 +1,4 @@
-package io.alpenglow.artoo.lance.query.func;
+package io.alpenglow.artoo.lance.query.closure;
 
 import io.alpenglow.artoo.lance.func.TryFunction2;
 import io.alpenglow.artoo.lance.tuple.Pair;
@@ -15,7 +15,7 @@ public final class OfTwoTypes<A, B, X, Y> implements TryFunction2<A, B, Pair<X, 
   }
 
   @Override
-  public final Pair<X, Y> tryApply(final A first, final B second) {
+  public final Pair<X, Y> invoke(final A first, final B second) {
     return type1.isInstance(first) && type2.isInstance(second) ? Tuple.of(type1.cast(first), type2.cast(second)) : null;
   }
 }

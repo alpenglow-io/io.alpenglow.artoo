@@ -4,11 +4,11 @@ import java.util.function.BiConsumer;
 
 @FunctionalInterface
 public interface TryConsumer2<A, B> extends BiConsumer<A, B> {
-  void tryAccept(A a, B b) throws Throwable;
+  void invoke(A a, B b) throws Throwable;
   @Override
   default void accept(A a, B b) {
     try {
-      tryAccept(a, b);
+      invoke(a, b);
     } catch (Throwable throwable) {
       throw new LambdaCallException(throwable);
     }

@@ -16,15 +16,15 @@ public interface Elseable<ELEMENT> extends Queryable<ELEMENT> {
   }
 
   default <E extends RuntimeException> One<ELEMENT> or(final String message, final TryFunction2<? super Throwable, ? super String, ? extends E> exception) {
-    return () -> cursor().or(message, (m, c) -> exception.tryApply(c, m));
+    return () -> cursor().or(message, (m, c) -> exception.invoke(c, m));
   }
 
   default <E extends RuntimeException> One<ELEMENT> or(final String message, final TryFunction1<? super String, ? extends E> exception) {
-    return () -> cursor().or(message, (msg, cause) -> exception.tryApply(msg));
+    return () -> cursor().or(message, (msg, cause) -> exception.invoke(msg));
   }
 
   default <E extends RuntimeException> One<ELEMENT> or(final TrySupplier1<? extends E> exception) {
-    return or(null, (it, throwable) -> exception.tryGet());
+    return or(null, (it, throwable) -> exception.invoke());
   }
 
   default ELEMENT otherwise(final ELEMENT other) {

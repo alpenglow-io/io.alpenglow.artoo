@@ -19,12 +19,12 @@ public final class Select<T, R> extends Tailrec<T, R, Select<T, R>> {
   }
 
   @Override
-  public Return<T, R, Select<T, R>> tryApply(final T t) throws Throwable {
-    return Return.with(select.tryApply(index, t), new Select<>(index + 1, select));
+  public Return<T, R, Select<T, R>> invoke(final T t) throws Throwable {
+    return Return.with(select.invoke(index, t), new Select<>(index + 1, select));
   }
 
   public static <T, R> Select<T, R> with(TryFunction1<? super T, ? extends R> select) {
-    return new Select<>(0, (index, it) -> select.tryApply(it));
+    return new Select<>(0, (index, it) -> select.invoke(it));
   }
 
   public static <T, R> Select<T, R> with(TryFunction2<? super Integer, ? super T, ? extends R> select) {

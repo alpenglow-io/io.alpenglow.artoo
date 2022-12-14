@@ -6,14 +6,14 @@ import io.alpenglow.artoo.lance.func.TryConsumer1;
 import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.query.One;
 import io.alpenglow.artoo.lance.Queryable;
-import io.alpenglow.artoo.lance.query.func.WhenType;
-import io.alpenglow.artoo.lance.query.func.WhenWhere;
+import io.alpenglow.artoo.lance.query.closure.WhenType;
+import io.alpenglow.artoo.lance.query.closure.WhenWhere;
 import io.alpenglow.artoo.lance.tuple.Pair;
 
 @SuppressWarnings("unchecked")
 public interface Matchable<A, B> extends Queryable.OfTwo<A, B> {
   default One.OfTwo<A, B> when(final TryPredicate2<? super A, ? super B> pred, TryConsumer2<? super A, ? super B> cons) {
-    return () -> cursor().map(new WhenWhere<>(pair -> pred.tryTest(pair.first(), pair.second()), pair -> cons.tryAccept(pair.first(), pair.second())));
+    return () -> cursor().map(new WhenWhere<>(pair -> pred.invoke(pair.first(), pair.second()), pair -> cons.invoke(pair.first(), pair.second())));
   }
 
   default <R> One.OfTwo<A, B> when(final Class<R> type, TryConsumer1<? super R> cons) {
@@ -26,7 +26,7 @@ public interface Matchable<A, B> extends Queryable.OfTwo<A, B> {
 
   private <R> TryFunction1<R, Pair<A, B>> unary(final TryConsumer1<? super R> cons) {
     return it -> {
-      cons.tryAccept(it);
+      cons.invoke(it);
       return (Pair<A, B>) it;
     };
   }

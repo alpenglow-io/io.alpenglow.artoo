@@ -9,6 +9,7 @@ import static java.util.Objects.requireNonNull;
 
 @SuppressWarnings("unchecked")
 public sealed interface Unit<T> {
+  static <T> Unit<T> of(T value) { return value == null ? nullable() : value(value); }
   static <T> Unit<T> value(T value) { return new Value<>(value); }
   static <T> Unit<T> nullable() { return (Unit<T>) Null; }
   static <T> Unit<T> nothing() { return (Unit<T>) Nothing; }

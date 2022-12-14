@@ -1,15 +1,16 @@
 package io.alpenglow.artoo.lance.query.cursor.projector;
 
 import io.alpenglow.artoo.lance.query.Cursor;
+import io.alpenglow.artoo.lance.query.Unit;
 import io.alpenglow.artoo.lance.query.cursor.Fetcher;
 import io.alpenglow.artoo.lance.query.cursor.routine.Routine;
 
 @SuppressWarnings("SwitchStatementWithTooFewBranches")
-public final class Flat<VALUE> implements Cursor<VALUE> {
-  private final Fetcher<Fetcher<VALUE>> source;
-  private Fetcher<VALUE> current;
+public final class Flat<SOURCE> implements Cursor<SOURCE> {
+  private final Fetcher<Fetcher<SOURCE>> source;
+  private Fetcher<SOURCE> current;
 
-  public Flat(final Fetcher<Fetcher<VALUE>> source) {
+  public Flat(final Fetcher<Fetcher<SOURCE>> source) {
     this.source = source;
   }
 
@@ -31,20 +32,20 @@ public final class Flat<VALUE> implements Cursor<VALUE> {
   }
 
   @Override
-  public VALUE fetch() throws Throwable {
+  public Unit<SOURCE> fetch() throws Throwable {
     /*
      * if we don't have a current flatten fetcher,
      * then we check if we have one within (see above) and if so, we fetch a value from it,
      * otherwise we just fetch a value from it
      */
     return switch (current) {
-      case null -> hasNext() ? current.fetch() : null;
-      default -> current.hasNext() || hasNext() ? current.fetch() : null;
+      case null -> hasNext() ? current.fetch() : Unit.nothing();
+      default -> current.hasNext() || hasNext() ? current.fetch() : Unit.nothing();
     };
   }
 
   @Override
-  public <R> R as(final Routine<VALUE, R> routine) {
+  public <R> R as(final Routine<SOURCE, R> routine) {
     return routine.onSource().apply(this);
   }
 }

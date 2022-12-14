@@ -1,27 +1,28 @@
 package io.alpenglow.artoo.lance.query.cursor.projector;
 
-import io.alpenglow.artoo.lance.func.TryFunction1;
+import io.alpenglow.artoo.lance.query.Closure;
 import io.alpenglow.artoo.lance.query.Cursor;
+import io.alpenglow.artoo.lance.query.Unit;
 import io.alpenglow.artoo.lance.query.cursor.Fetcher;
 import io.alpenglow.artoo.lance.query.cursor.routine.Routine;
 
-public final class Map<FROM, TO> implements Cursor<TO> {
-  private final Fetcher<FROM> fetcher;
-  private final TryFunction1<? super FROM, ? extends TO> map;
+public final class Map<SOURCE, MIDDLE> implements Cursor<MIDDLE> {
+  private final Fetcher<SOURCE> fetcher;
+  private final Closure<SOURCE, MIDDLE> map;
 
-  public Map(final Fetcher<FROM> fetcher, final TryFunction1<? super FROM, ? extends TO> map) {
+  public Map(final Fetcher<SOURCE> fetcher, final Closure<SOURCE, MIDDLE> map) {
     this.fetcher = fetcher;
     this.map = map;
   }
 
   @Override
-  public TO fetch() throws Throwable {
-    final var fetched = fetcher.fetch();
-    return fetched != null ? map.invoke(fetched) : null;
+  public Unit<MIDDLE> fetch() throws Throwable {
+    Unit<SOURCE> fetch = fetcher.fetch();
+    return map.invoke(fetch);
   }
 
   @Override
-  public <P> Cursor<P> map(final TryFunction1<? super TO, ? extends P> mapAgain) {
+  public <TARGET> Cursor<TARGET> map(final Closure<MIDDLE, TARGET> mapAgain) {
     return new Map<>(fetcher, map.then(mapAgain));
   }
 
@@ -31,7 +32,7 @@ public final class Map<FROM, TO> implements Cursor<TO> {
   }
 
   @Override
-  public <R1> R1 as(final Routine<TO, R1> routine) {
+  public <R1> R1 as(final Routine<MIDDLE, R1> routine) {
     return routine.onSource().apply(this);
   }
 }

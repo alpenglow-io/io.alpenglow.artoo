@@ -1,24 +1,22 @@
 package io.alpenglow.artoo.lance.query.func;
 
-import io.alpenglow.artoo.lance.func.TryPredicate2;
 import io.alpenglow.artoo.lance.func.TryFunction1;
+import io.alpenglow.artoo.lance.func.TryPredicate2;
+import io.alpenglow.artoo.lance.scope.Expectation;
 
-public final class Where<T> implements TryFunction1<T, T> {
-  private final class Index {
-    private int value = 0;
-  }
+import java.util.Objects;
 
+public final class Where<T> implements TryFunction1<T, T>, Expectation {
   private final TryPredicate2<? super Integer, ? super T> where;
-  private final Index index;
+  private int index;
 
   public Where(final TryPredicate2<? super Integer, ? super T> where) {
-    assert where != null;
-    this.where = where;
-    this.index = new Index();
+    this.where = expect(where, Objects::nonNull);
+    this.index = 0;
   }
 
   @Override
   public T tryApply(final T element) throws Throwable {
-    return where.tryTest(index.value++, element) ? element : null;
+    return where.tryTest(index++, element) ? element : null;
   }
 }

@@ -9,7 +9,7 @@ import java.util.Collection;
 
 public final class Distinct<T> implements Closure<T, T> {
   private final TryPredicate1<? super T> where;
-  private final Collection<Unit<T>> collected;
+  private final Collection<T> collected;
 
   public Distinct(final TryPredicate1<? super T> where) {
     assert where != null;
@@ -18,14 +18,14 @@ public final class Distinct<T> implements Closure<T, T> {
   }
 
   @Override
-  public Unit<T> invoke(Unit<T> element) throws Throwable {
-    if (where.invoke(element.value()) && !collected.contains(element)) {
+  public T invoke(T element) throws Throwable {
+    final boolean expected = where.invoke(element);
+    if (expected && collected.contains(element)) {
+      return null;
+    } else if (expected && !collected.contains(element)) {
       collected.add(element);
-      return element;
-    } else if (where.invoke(element.value()) && collected.contains(element)) {
-      return Unit.nothing();
-    } else {
-      return element;
     }
+
+    return element;
   }
 }

@@ -1,5 +1,6 @@
 package io.alpenglow.artoo.lance.scope;
 
+import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.func.TryPredicate1;
 
 public interface Expectation {

@@ -5,19 +5,15 @@ import io.alpenglow.artoo.lance.query.Unit;
 
 public final class At<T> implements Closure<T, T> {
   private final int at;
-  private final Pointed pointed;
+  private int pointed;
 
   public At(final int at) {
     this.at = at;
-    this.pointed = new Pointed();
+    this.pointed = 0;
   }
 
   @Override
-  public Unit<T> invoke(Unit<T> element) throws Throwable {
-    return pointed.index++ == at ? element : Unit.nothing();
-  }
-
-  private static final class Pointed {
-    private int index = 0;
+  public T invoke(T element) throws Throwable {
+    return pointed++ == at ? element : null;
   }
 }

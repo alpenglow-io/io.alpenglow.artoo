@@ -14,7 +14,7 @@ public interface Peekable<A, B> extends Queryable.OfTwo<A, B> {
   }
 
   default Many.OfTwo<A, B> peek(TryConsumer3<? super Integer, ? super A, ? super B> peek) {
-    return () -> cursor().map(new Peek<Pair<A, B>, Pair<A, B>>((index, record) -> peek.invoke(index, record.first(), record.second())));
+    return () -> cursor().map(new Peek<>((index, record) -> peek.invoke(index, record.first(), record.second())));
   }
 
   default Many.OfTwo<A, B> exceptionally(TryConsumer1<? super Throwable> catch$) {

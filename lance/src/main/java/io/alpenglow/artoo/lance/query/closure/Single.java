@@ -4,27 +4,24 @@ import io.alpenglow.artoo.lance.func.TryPredicate1;
 import io.alpenglow.artoo.lance.query.Closure;
 
 public final class Single<T> implements Closure<T, T> {
-  enum NoSingle {Found}
+  private final TryPredicate1<? super T> predicate;
+  private T single;
+  private boolean moreThanOne;
 
-  private Object single = null;
-  private final TryPredicate1<? super T> where;
-
-  public Single(final TryPredicate1<? super T> where) {
-    assert where != null;
-    this.where = where;
+  public Single(final TryPredicate1<? super T> predicate) {
+    this.predicate = predicate;
+    this.single = null;
+    this.moreThanOne = false;
   }
 
   @Override
-  public final T tryApply(final T element) throws Throwable {
-    if (where.invoke(element) && single == null) {
+  public T invoke(final T element) throws Throwable {
+    if (predicate.invoke(element) && single == null && !moreThanOne) {
       single = element;
-    } else if (where.invoke(element)) {
-      single = NoSingle.Found;
+    } else if (predicate.invoke(element) && single != null && !moreThanOne) {
+      single = null;
+      moreThanOne = true;
     }
-
-    //noinspection unchecked
-    return NoSingle.Found.equals(single)
-      ? null
-      : (T) single;
+    return single;
   }
 }

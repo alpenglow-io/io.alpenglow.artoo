@@ -3,23 +3,19 @@ package io.alpenglow.artoo.lance.query.closure;
 import io.alpenglow.artoo.lance.func.TryPredicate2;
 import io.alpenglow.artoo.lance.query.Closure;
 
-@SuppressWarnings("unchecked")
-public final class Take<T, R> implements Closure<T, R> {
-  private final Taken taken = new Taken();
+public final class Take<T> implements Closure<T, T> {
   private final TryPredicate2<? super Integer, ? super T> where;
+  private int index;
+  private boolean keep;
 
-  public Take(final TryPredicate2<? super Integer, ? super T> where) {
-    assert where != null;
-    this.where = where;
+  public Take(final TryPredicate2<? super Integer, ? super T> predicate) {
+    this.where = predicate;
+    this.index = 0;
+    this.keep = true;
   }
 
   @Override
-  public R tryApply(final T element) throws Throwable {
-    return (R) ((taken.keep = where.invoke(taken.index++, element) && taken.keep) ? element : null);
-  }
-
-  private final class Taken {
-    private int index = 0;
-    private boolean keep = true;
+  public T invoke(final T element) throws Throwable {
+    return ((keep = where.invoke(index++, element)) && keep) ? element : null;
   }
 }

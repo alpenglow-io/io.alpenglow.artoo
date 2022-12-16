@@ -13,7 +13,7 @@ public final class WhenType<T, R> implements Closure<T, T> {
   }
 
   @Override
-  public T tryApply(final T element) throws Throwable {
+  public T invoke(final T element) throws Throwable {
     return type.isInstance(element) ? func.invoke(type.cast(element)) : element;
   }
 }

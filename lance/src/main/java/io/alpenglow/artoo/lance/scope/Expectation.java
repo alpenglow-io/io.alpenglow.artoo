@@ -1,6 +1,5 @@
 package io.alpenglow.artoo.lance.scope;
 
-import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.func.TryPredicate1;
 
 public interface Expectation {
@@ -9,5 +8,14 @@ public interface Expectation {
       throw new IllegalArgumentException("Can't accept value %s, it doesn't satisfy expectation".formatted(value));
     }
     return value;
+  }
+
+  default <T> T expect(T argument, boolean assertion, String message) {
+    if (assertion) return argument;
+    throw new IllegalArgumentException(message);
+  }
+
+  default <T> T expect(T argument, boolean assertion) {
+    return expect(argument, assertion, "Can't assert");
   }
 }

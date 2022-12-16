@@ -12,7 +12,7 @@ public interface Peekable<T> extends Queryable<T> {
   }
 
   default Many<T> peek(TryConsumer2<? super Integer, ? super T> peek) {
-    return () -> cursor().map(new Peek<T, T>(peek));
+    return () -> cursor().map(new Peek<>(peek));
   }
 
   default Many<T> exceptionally(TryConsumer1<? super Throwable> catch$) {

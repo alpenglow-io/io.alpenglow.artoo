@@ -1,7 +1,6 @@
 package io.alpenglow.artoo.lance.query.closure;
 
 import io.alpenglow.artoo.lance.query.Closure;
-import io.alpenglow.artoo.lance.query.Unit;
 
 public final class At<T> implements Closure<T, T> {
   private final int at;

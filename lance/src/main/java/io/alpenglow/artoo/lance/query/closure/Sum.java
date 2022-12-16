@@ -8,57 +8,34 @@ import java.math.BigInteger;
 
 @SuppressWarnings({"unchecked"})
 public final class Sum<T, N extends Number, V> implements Closure<T, V> {
-  private final TryFunction1<? super T, ? extends N> select;
-  private final Summed summed;
+  private final TryFunction1<? super T, ? extends N> function;
+  private V summed;
 
-  public Sum(final TryFunction1<? super T, ? extends N> select) {
-    assert select != null;
-    this.select = select;
-    this.summed = new Summed();
+  public Sum(final TryFunction1<? super T, ? extends N> function) {
+    this.function = function;
+    this.summed = null;
   }
 
   @Override
-  public V tryApply(final T element) throws Throwable {
-    return (summed.value = sum(select.invoke(element), (N) summed.value));
+  public V invoke(final T element) throws Throwable {
+    return (summed = sum(function.invoke(element), (N) summed));
   }
 
   private V sum(final N selected, final N number) {
-    if (selected == null) {
-      return (V) number;
-
-    } else if (number == null) {
-      return (V) selected;
-
-    } else if (selected instanceof Byte val) {
-      return (V) Byte.valueOf((byte) (number.byteValue() + val));
-
-    } else if (selected instanceof Short val) {
-      return (V) Short.valueOf((short) (number.shortValue() + val));
-
-    } else if (selected instanceof Integer val) {
-      return (V) Integer.valueOf(number.intValue() + val);
-
-    } else if (selected instanceof Long val) {
-      return (V) Long.valueOf(number.longValue() + val);
-
-    } else if (selected instanceof Float val) {
-      return (V) Float.valueOf(number.floatValue() + val);
-
-    } else if (selected instanceof Double val) {
-      return (V) Double.valueOf(number.doubleValue() + val);
-
-    } else if (selected instanceof BigInteger val) {
-      return (V) BigInteger.valueOf(number.longValue() + val.longValue());
-
-    } else if (selected instanceof BigDecimal val) {
-      return (V) BigDecimal.valueOf(number.doubleValue() + val.doubleValue());
-
-    }
-
-    throw new IllegalStateException("Can't cast to unknown number type: " + selected.getClass().getName());
+    return switch (selected) {
+      case null           -> (V) number;
+      case Byte val       -> (V) Byte.valueOf((byte) (number.byteValue() + val));
+      case Short val      -> (V) Short.valueOf((short) (number.shortValue() + val));
+      case Integer val    -> (V) Integer.valueOf(number.intValue() + val);
+      case Long val       -> (V) Long.valueOf(number.longValue() + val);
+      case Float val      -> (V) Float.valueOf(number.floatValue() + val);
+      case Double val     -> (V) Double.valueOf(number.doubleValue() + val);
+      case BigInteger val -> (V) BigInteger.valueOf(number.longValue() + val.longValue());
+      case BigDecimal val -> (V) BigDecimal.valueOf(number.doubleValue() + val.doubleValue());
+      default             -> number == null ? (V) selected : illegalState(selected);
+    };
   }
-
-  private final class Summed {
-    private V value;
+  private V illegalState(N selected) {
+    throw new IllegalStateException("Can't cast to unknown number type: " + selected.getClass().getName());
   }
 }

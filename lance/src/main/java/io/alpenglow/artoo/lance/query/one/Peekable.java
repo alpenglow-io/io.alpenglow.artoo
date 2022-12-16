@@ -7,7 +7,7 @@ import io.alpenglow.artoo.lance.query.closure.Peek;
 
 public interface Peekable<T> extends Queryable<T> {
   default One<T> peek(final TryConsumer1<? super T> peek) {
-    return () -> cursor().map(new Peek<T, T>((i, it) -> peek.invoke(it)));
+    return () -> cursor().map(new Peek<T>((i, it) -> peek.invoke(it)));
   }
 
   default One<T> exceptionally(TryConsumer1<? super Throwable> catch$) {

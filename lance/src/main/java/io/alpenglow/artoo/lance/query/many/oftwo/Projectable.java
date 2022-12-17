@@ -2,7 +2,7 @@ package io.alpenglow.artoo.lance.query.many.oftwo;
 
 import io.alpenglow.artoo.lance.func.TryFunction2;
 import io.alpenglow.artoo.lance.func.TryFunction3;
-import io.alpenglow.artoo.lance.func.tail.Select;
+import io.alpenglow.artoo.lance.query.closure.Select;
 import io.alpenglow.artoo.lance.query.Many;
 import io.alpenglow.artoo.lance.Queryable;
 import io.alpenglow.artoo.lance.tuple.Pair;

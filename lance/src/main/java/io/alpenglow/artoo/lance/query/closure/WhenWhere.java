@@ -14,7 +14,7 @@ public final class WhenWhere<T> implements Closure<T, T> {
   }
 
   @Override
-  public final T tryApply(final T element) throws Throwable {
+  public T invoke(final T element) throws Throwable {
     if (predicate.invoke(element)) consumer.invoke(element);
     return element;
   }

@@ -5,13 +5,13 @@ import io.alpenglow.artoo.lance.query.Cursor;
 import io.alpenglow.artoo.lance.query.cursor.projector.Flat;
 import io.alpenglow.artoo.lance.query.cursor.projector.Map;
 
-public sealed interface Projector<SOURCE> extends Fetcher<SOURCE> permits Cursor {
+public sealed interface Projector<T> extends Fetcher<T> permits Cursor {
 
-  default <TARGET> Cursor<TARGET> map(final Closure<SOURCE, TARGET> map) {
+  default <R> Cursor<R> map(final Closure<? super T, ? extends R> map) {
     return new Map<>(this, map);
   }
 
-  default <TARGET, CURSOR extends Cursor<TARGET>> Cursor<TARGET> flatMap(final Closure<SOURCE, ? extends CURSOR> flatMap) {
+  default <R, C extends Cursor<R>> Cursor<R> flatMap(final Closure<? super T, ? extends C> flatMap) {
     return new Flat<>(new Map<>(this, flatMap));
   }
 }

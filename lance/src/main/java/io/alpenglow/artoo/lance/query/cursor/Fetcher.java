@@ -6,12 +6,12 @@ import io.alpenglow.artoo.lance.query.Unit;
 import java.util.Iterator;
 
 public interface Fetcher<T> extends Iterator<T> {
-  Unit<T> fetch() throws Throwable;
+  T fetch() throws Throwable;
 
   @Override
   default T next() {
     try {
-      return fetch().value();
+      return fetch();
     } catch (Throwable throwable) {
       throw FetchException.of(throwable);
     }

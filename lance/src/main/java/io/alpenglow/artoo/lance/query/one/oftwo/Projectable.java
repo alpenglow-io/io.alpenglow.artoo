@@ -9,19 +9,19 @@ import io.alpenglow.artoo.lance.tuple.Pair;
 
 public interface Projectable<A, B> extends Queryable.OfTwo<A, B> {
   default <R> One<R> select(TryFunction3<? super Integer, ? super A, ? super B, ? extends R> select) {
-    return () -> cursor().map(rec(Select.with((index, record) -> select.apply(index, record.first(), record.second()))));
+    return () -> cursor().map(Select.indexed((index, record) -> select.apply(index, record.first(), record.second())));
   }
 
   default <R> One<R> select(TryFunction2<? super A, ? super B, ? extends R> select) {
-    return select((index, first, second) -> select.invoke(first, second));
+    return () -> cursor().map(pair -> select.invoke(pair.first(), pair.second()));
   }
 
   default <R, O extends One<R>> One<R> selection(TryFunction3<? super Integer, ? super A, ? super B, ? extends O> select) {
-    return () -> cursor().map(rec(Select.with((i, pair) -> select.invoke(i, pair.first(), pair.second())))).flatMap(Queryable::cursor);
+    return () -> cursor().map(Select.indexed((index, pair) -> select.invoke(index, pair.first(), pair.second()))).flatMap(Queryable::cursor);
   }
 
   default <R, O extends One<R>> One<R> selection(TryFunction2<? super A, ? super B, ? extends O> select) {
-    return selection((i, first, second) -> select.invoke(first, second));
+    return () -> cursor().map(pair -> select.invoke(pair.first(), pair.second())).flatMap(Queryable::cursor);
   }
 
   default <P extends Pair<A, B>> One.OfTwo<A, B> to(TryFunction2<? super A, ? super B, ? extends P> func) {

@@ -17,7 +17,7 @@ public interface Partitionable<T> extends Queryable<T> {
   }
 
   default Many<T> skipWhile(final TryPredicate2<? super Integer, ? super T> where) {
-    return () -> cursor().map(new Skip<T, T>(where));
+    return () -> cursor().map(new Skip<>(where));
   }
 
   default Many<T> take(final int until) {
@@ -29,6 +29,6 @@ public interface Partitionable<T> extends Queryable<T> {
   }
 
   default Many<T> takeWhile(final TryPredicate2<? super Integer, ? super T> where) {
-    return () -> cursor().map(new Take<T, T>(where));
+    return () -> cursor().map(new Take<>(where));
   }
 }

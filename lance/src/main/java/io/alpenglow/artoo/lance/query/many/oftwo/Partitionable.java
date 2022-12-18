@@ -18,7 +18,7 @@ public interface Partitionable<A, B> extends Queryable.OfTwo<A, B> {
   }
 
   default Many.OfTwo<A, B> skipWhile(final TryPredicate3<? super Integer, ? super A, ? super B> where) {
-    return () -> cursor().map(new Skip<Pair<A, B>, Pair<A, B>>((index, pair) -> where.invoke(index, pair.first(), pair.second())));
+    return () -> cursor().map(new Skip<>((index, pair) -> where.invoke(index, pair.first(), pair.second())));
   }
 
   default Many.OfTwo<A, B> take(final int until) {
@@ -30,6 +30,6 @@ public interface Partitionable<A, B> extends Queryable.OfTwo<A, B> {
   }
 
   default Many.OfTwo<A, B> takeWhile(final TryPredicate3<? super Integer, ? super A, ? super B> where) {
-    return () -> cursor().map(new Take<Pair<A, B>, Pair<A, B>>((index, pair) -> where.invoke(index, pair.first(), pair.second())));
+    return () -> cursor().map(new Take<>((index, pair) -> where.invoke(index, pair.first(), pair.second())));
   }
 }

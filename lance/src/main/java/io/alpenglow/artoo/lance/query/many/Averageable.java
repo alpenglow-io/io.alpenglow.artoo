@@ -7,7 +7,7 @@ import io.alpenglow.artoo.lance.Queryable;
 
 public interface Averageable<T> extends Queryable<T> {
   default <N extends Number> One<Double> average(final TryFunction1<? super T, ? extends N> select) {
-    return cursor().map(rec(new Average<>(select)))::keepNull;
+    return () -> cursor().map(new Average<>(select));
   }
 
   default One<Double> average() {

@@ -11,24 +11,23 @@ public interface Extremable<T> extends Queryable<T> {
   }
 
   private <N extends Number, V> One<V> extreme(final TryFunction1<? super T, ? extends N> select) {
-    return () -> cursor().map(rec(Extreme.<T, N, V>max(select))).keepNull();
+    return () -> cursor().map(Extreme.<T, N, V>max(select));
   }
 
   default <N extends Number> One<N> max(final TryFunction1<? super T, ? extends N> select) {
-    return () -> cursor().map(rec(Extreme.<T, N, N>max(select))).keepNull();
+    return () -> cursor().map(Extreme.<T, N, N>max(select));
   }
 
   default One<T> max() {
-    return () -> cursor().map(rec(Extreme.<T, Number, T>max())).keepNull();
+    return () -> cursor().map(Extreme.<T, Number, T>max());
   }
 
   default <N extends Number> One<N> min(final TryFunction1<? super T, ? extends N> select) {
-    return () -> cursor().map(rec(Extreme.<T, N, N>min(select))).keepNull();
+    return () -> cursor().map(Extreme.<T, N, N>min(select));
   }
 
   default One<T> min() {
-    return () -> cursor().map(rec(Extreme.<T, Number, T>min())).keepNull();
+    return () -> cursor().map(Extreme.<T, Number, T>min());
   }
-
 }
 

@@ -2,7 +2,7 @@ package io.alpenglow.artoo.lance.query.many.oftwo;
 
 import io.alpenglow.artoo.lance.Queryable;
 import io.alpenglow.artoo.lance.func.TryFunction2;
-import io.alpenglow.artoo.lance.func.tail.Average;
+import io.alpenglow.artoo.lance.query.closure.Average;
 import io.alpenglow.artoo.lance.query.One;
 
 public interface Averageable<A, B> extends Queryable.OfTwo<A, B> {

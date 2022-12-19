@@ -5,7 +5,7 @@ import io.alpenglow.artoo.lance.func.TryFunction2;
 import io.alpenglow.artoo.lance.func.TryPredicate2;
 import io.alpenglow.artoo.lance.tuple.record.OfTwo;
 
-import static io.alpenglow.artoo.lance.tuple.Type.*;
+import static io.alpenglow.artoo.lance.tuple.Type.componentOf;
 
 
 public interface Pair<A, B> extends Tuple {

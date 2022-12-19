@@ -1,11 +1,6 @@
 package io.alpenglow.artoo.lance.scope;
 
-import io.alpenglow.artoo.lance.scope.random.Binary;
-import io.alpenglow.artoo.lance.scope.random.Decimal32;
-import io.alpenglow.artoo.lance.scope.random.Decimal64;
-import io.alpenglow.artoo.lance.scope.random.Gaussian;
-import io.alpenglow.artoo.lance.scope.random.Int;
-import io.alpenglow.artoo.lance.scope.random.Scramble;
+import io.alpenglow.artoo.lance.scope.random.*;
 
 public sealed interface Random<N extends Number> extends Let<N> permits Binary, Decimal32, Decimal64, Gaussian, Int {
   static Random<Double> decimal64(final long seed) {

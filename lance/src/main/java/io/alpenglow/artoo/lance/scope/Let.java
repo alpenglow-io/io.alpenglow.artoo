@@ -4,7 +4,6 @@ import io.alpenglow.artoo.lance.func.TryConsumer1;
 import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.func.TrySupplier1;
 
-
 import static io.alpenglow.artoo.lance.scope.Default.Nothing;
 
 public interface Let<T> {

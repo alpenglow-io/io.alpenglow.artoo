@@ -1,10 +1,11 @@
 package io.alpenglow.artoo.lance.tuple;
 
-import io.alpenglow.artoo.lance.func.*;
+import io.alpenglow.artoo.lance.func.TryConsumer5;
+import io.alpenglow.artoo.lance.func.TryFunction5;
+import io.alpenglow.artoo.lance.func.TryPredicate5;
 import io.alpenglow.artoo.lance.tuple.record.OfFive;
-import io.alpenglow.artoo.lance.tuple.record.OfFour;
 
-import static io.alpenglow.artoo.lance.tuple.Type.*;
+import static io.alpenglow.artoo.lance.tuple.Type.componentOf;
 
 public interface Quintuple<A, B, C, D, E> extends Tuple {
   default A first() { return componentOf(this, 0);}

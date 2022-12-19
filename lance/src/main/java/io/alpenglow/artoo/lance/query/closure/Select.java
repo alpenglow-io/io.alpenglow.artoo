@@ -1,10 +1,8 @@
 package io.alpenglow.artoo.lance.query.closure;
 
-import io.alpenglow.artoo.lance.Queryable;
 import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.func.TryFunction2;
 import io.alpenglow.artoo.lance.query.Closure;
-import io.alpenglow.artoo.lance.query.Cursor;
 
 public sealed interface Select<T, R> extends Closure<T, R> {
   static <T, R> Select<T, R> indexed(TryFunction2<? super Integer, ? super T, ? extends R> function) {

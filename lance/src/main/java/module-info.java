@@ -2,7 +2,6 @@ module io.alpenglow.artoo.lance {
   requires static java.logging;
 
   exports io.alpenglow.artoo.lance.func;
-  exports io.alpenglow.artoo.lance.func.tail;
   exports io.alpenglow.artoo.lance.query.cursor;
   exports io.alpenglow.artoo.lance.query.cursor.routine;
   exports io.alpenglow.artoo.lance.query;

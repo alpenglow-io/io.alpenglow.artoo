@@ -13,7 +13,7 @@ public class SummableTest {
   @Test
   @DisplayName("should sum all float sequence")
   public void shouldSumFloatSequence() {
-    final var sum = from(43.68F, 1.25F, 583.7F, 6.5F).sum().otherwise(-1f);
+    final var sum = Many.from(43.68F, 1.25F, 583.7F, 6.5F).sum().otherwise(-1f);
 
     assertThat(sum).isEqualTo(635.13F);
   }

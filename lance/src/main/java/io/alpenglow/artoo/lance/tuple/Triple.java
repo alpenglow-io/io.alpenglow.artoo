@@ -1,10 +1,11 @@
 package io.alpenglow.artoo.lance.tuple;
 
-import io.alpenglow.artoo.lance.func.*;
+import io.alpenglow.artoo.lance.func.TryConsumer3;
+import io.alpenglow.artoo.lance.func.TryFunction3;
+import io.alpenglow.artoo.lance.func.TryPredicate3;
 import io.alpenglow.artoo.lance.tuple.record.OfThree;
-import io.alpenglow.artoo.lance.tuple.record.OfTwo;
 
-import static io.alpenglow.artoo.lance.tuple.Type.*;
+import static io.alpenglow.artoo.lance.tuple.Type.componentOf;
 
 public interface Triple<A, B, C> extends Tuple {
   default A first() {

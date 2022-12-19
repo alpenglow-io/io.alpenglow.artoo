@@ -2,8 +2,8 @@ package io.alpenglow.artoo.lance.query.many.oftwo;
 
 import io.alpenglow.artoo.lance.func.TryFunction2;
 import io.alpenglow.artoo.lance.func.TryPredicate2;
-import io.alpenglow.artoo.lance.query.closure.Aggregate;
 import io.alpenglow.artoo.lance.query.One;
+import io.alpenglow.artoo.lance.query.closure.Aggregate;
 import io.alpenglow.artoo.lance.tuple.Pair;
 
 public interface Aggregatable<A, B> extends Countable<A, B>, Summable<A, B>, Averageable<A, B>, Extremable<A, B> {

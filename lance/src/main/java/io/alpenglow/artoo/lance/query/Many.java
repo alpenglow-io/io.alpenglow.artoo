@@ -1,19 +1,7 @@
 package io.alpenglow.artoo.lance.query;
 
 import io.alpenglow.artoo.lance.func.TrySupplier1;
-import io.alpenglow.artoo.lance.query.many.Aggregatable;
-import io.alpenglow.artoo.lance.query.many.Concatenatable;
-import io.alpenglow.artoo.lance.query.many.Convertable;
-import io.alpenglow.artoo.lance.query.many.Elseable;
-import io.alpenglow.artoo.lance.query.many.Filterable;
-import io.alpenglow.artoo.lance.query.many.Joinable;
-import io.alpenglow.artoo.lance.query.many.Partitionable;
-import io.alpenglow.artoo.lance.query.many.Peekable;
-import io.alpenglow.artoo.lance.query.many.Projectable;
-import io.alpenglow.artoo.lance.query.many.Quantifiable;
-import io.alpenglow.artoo.lance.query.many.Settable;
-import io.alpenglow.artoo.lance.query.many.Sortable;
-import io.alpenglow.artoo.lance.query.many.Uniquable;
+import io.alpenglow.artoo.lance.query.many.*;
 import io.alpenglow.artoo.lance.query.many.oftwo.Pairable;
 
 public interface Many<T> extends

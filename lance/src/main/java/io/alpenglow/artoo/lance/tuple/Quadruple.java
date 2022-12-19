@@ -1,11 +1,11 @@
 package io.alpenglow.artoo.lance.tuple;
 
-import io.alpenglow.artoo.lance.func.*;
+import io.alpenglow.artoo.lance.func.TryConsumer4;
+import io.alpenglow.artoo.lance.func.TryFunction4;
+import io.alpenglow.artoo.lance.func.TryPredicate4;
 import io.alpenglow.artoo.lance.tuple.record.OfFour;
-import io.alpenglow.artoo.lance.tuple.record.OfThree;
 
-import static io.alpenglow.artoo.lance.tuple.Type.*;
-import static io.alpenglow.artoo.lance.tuple.Type.has;
+import static io.alpenglow.artoo.lance.tuple.Type.componentOf;
 
 public interface Quadruple<A, B, C, D> extends Tuple {
   default A first() {

@@ -1,9 +1,9 @@
 package io.alpenglow.artoo.lance.query.many;
 
-import io.alpenglow.artoo.lance.func.TryConsumer2;
-import io.alpenglow.artoo.lance.func.TryConsumer1;
-import io.alpenglow.artoo.lance.query.Many;
 import io.alpenglow.artoo.lance.Queryable;
+import io.alpenglow.artoo.lance.func.TryConsumer1;
+import io.alpenglow.artoo.lance.func.TryConsumer2;
+import io.alpenglow.artoo.lance.query.Many;
 import io.alpenglow.artoo.lance.query.closure.Peek;
 
 public interface Peekable<T> extends Queryable<T> {

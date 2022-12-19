@@ -30,16 +30,16 @@ public interface Closer<T> extends Fetcher<T> {
   }
 }
 
-final class Close<VALUE> implements Cursor<VALUE> {
-  private VALUE closed = null;
-  private final Iterator<VALUE> source;
+final class Close<T> implements Cursor<T> {
+  private T closed = null;
+  private final Iterator<T> source;
 
-  Close(Iterator<VALUE> source) {
+  Close(Iterator<T> source) {
     this.source = source;
   }
 
   @Override
-  public VALUE fetch() {
+  public T fetch() {
     return next();
   }
 
@@ -54,7 +54,7 @@ final class Close<VALUE> implements Cursor<VALUE> {
   }
 
   @Override
-  public VALUE next() {
+  public T next() {
     try {
       return hasNext() ? closed : null;
     } finally {
@@ -63,8 +63,8 @@ final class Close<VALUE> implements Cursor<VALUE> {
   }
 
   @Override
-  public <R> R as(final Routine<VALUE, R> routine) {
-    return source instanceof Cursor<VALUE> cursor ? cursor.as(routine) : Cursor.<VALUE>empty().as(routine);
+  public <R> R as(final Routine<T, R> routine) {
+    return source instanceof Cursor<T> cursor ? cursor.as(routine) : Cursor.<T>empty().as(routine);
   }
 }
 

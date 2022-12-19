@@ -1,9 +1,9 @@
 package io.alpenglow.artoo.lance.query.many;
 
-import io.alpenglow.artoo.lance.func.TryPredicate2;
-import io.alpenglow.artoo.lance.func.TryPredicate1;
-import io.alpenglow.artoo.lance.query.Many;
 import io.alpenglow.artoo.lance.Queryable;
+import io.alpenglow.artoo.lance.func.TryPredicate1;
+import io.alpenglow.artoo.lance.func.TryPredicate2;
+import io.alpenglow.artoo.lance.query.Many;
 import io.alpenglow.artoo.lance.query.closure.NotOfType;
 import io.alpenglow.artoo.lance.query.closure.OfType;
 import io.alpenglow.artoo.lance.query.closure.Where;

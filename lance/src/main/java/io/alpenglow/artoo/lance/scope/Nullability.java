@@ -4,9 +4,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
-import static java.util.Objects.requireNonNullElse;
+import static java.util.Objects.*;
 
 public interface Nullability {
   static <T> T nonNullable(final T any, final String argument) {

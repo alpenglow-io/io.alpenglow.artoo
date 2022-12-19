@@ -1,10 +1,7 @@
 package io.alpenglow.artoo.lance;
 
-import io.alpenglow.artoo.lance.func.Recursive;
-import io.alpenglow.artoo.lance.func.Recursive.Tailrec;
-import io.alpenglow.artoo.lance.func.TryConsumer2;
 import io.alpenglow.artoo.lance.func.TryConsumer1;
-import io.alpenglow.artoo.lance.func.TryFunction1;
+import io.alpenglow.artoo.lance.func.TryConsumer2;
 import io.alpenglow.artoo.lance.query.Cursor;
 import io.alpenglow.artoo.lance.tuple.Pair;
 
@@ -41,10 +38,6 @@ public interface Queryable<T> extends Iterable<T> {
     return returning;
   }
 
-  default <R, F extends Tailrec<T, R, F> & Recursive<T, R, F>> TryFunction1<T, R> rec(final F tailrec) {
-    return element -> tailrec.on(element).result();
-  }
-
   interface OfTwo<A, B> extends Iterable<Pair<A, B>> {
     Cursor<Pair<A, B>> cursor();
 
@@ -70,10 +63,6 @@ public interface Queryable<T> extends Iterable<T> {
       for (final var value : this) {
         continue;
       }
-    }
-
-    default <R, F extends Tailrec<Pair<A, B>, R, F> & Recursive<Pair<A, B>, R, F>> TryFunction1<Pair<A, B>, R> rec(final F tailrec) {
-      return element -> tailrec.on(element).result();
     }
   }
 }

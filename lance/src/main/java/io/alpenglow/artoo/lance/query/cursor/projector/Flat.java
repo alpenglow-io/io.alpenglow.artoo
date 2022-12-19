@@ -1,7 +1,6 @@
 package io.alpenglow.artoo.lance.query.cursor.projector;
 
 import io.alpenglow.artoo.lance.query.Cursor;
-import io.alpenglow.artoo.lance.query.Unit;
 import io.alpenglow.artoo.lance.query.cursor.Fetcher;
 import io.alpenglow.artoo.lance.query.cursor.routine.Routine;
 

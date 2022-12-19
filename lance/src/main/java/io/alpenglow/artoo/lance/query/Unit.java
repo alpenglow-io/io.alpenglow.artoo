@@ -1,10 +1,7 @@
 package io.alpenglow.artoo.lance.query;
 
-import io.alpenglow.artoo.lance.func.TrySupplier1;
-
-import java.util.Objects;
-
-import static io.alpenglow.artoo.lance.query.Unit.Undefined.*;
+import static io.alpenglow.artoo.lance.query.Unit.Undefined.Nothing;
+import static io.alpenglow.artoo.lance.query.Unit.Undefined.Null;
 import static java.util.Objects.requireNonNull;
 
 @SuppressWarnings("unchecked")

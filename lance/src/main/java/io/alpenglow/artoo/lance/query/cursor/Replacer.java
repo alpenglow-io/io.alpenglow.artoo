@@ -1,7 +1,7 @@
 package io.alpenglow.artoo.lance.query.cursor;
 
-import io.alpenglow.artoo.lance.func.TryFunction2;
 import io.alpenglow.artoo.lance.func.TryConsumer1;
+import io.alpenglow.artoo.lance.func.TryFunction2;
 import io.alpenglow.artoo.lance.func.TrySupplier1;
 import io.alpenglow.artoo.lance.query.Cursor;
 import io.alpenglow.artoo.lance.query.cursor.routine.Routine;

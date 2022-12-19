@@ -1,10 +1,10 @@
 package io.alpenglow.artoo.lance.query.many.oftwo;
 
+import io.alpenglow.artoo.lance.Queryable;
 import io.alpenglow.artoo.lance.func.TryFunction2;
 import io.alpenglow.artoo.lance.func.TrySupplier1;
 import io.alpenglow.artoo.lance.query.Cursor;
 import io.alpenglow.artoo.lance.query.Many;
-import io.alpenglow.artoo.lance.Queryable;
 import io.alpenglow.artoo.lance.tuple.Pair;
 
 public interface Otherwise<A, B> extends Queryable.OfTwo<A, B> {

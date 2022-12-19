@@ -1,10 +1,10 @@
 package io.alpenglow.artoo.lance.query.one.oftwo;
 
-import io.alpenglow.artoo.lance.func.TryFunction3;
-import io.alpenglow.artoo.lance.func.TryFunction2;
-import io.alpenglow.artoo.lance.query.closure.Select;
-import io.alpenglow.artoo.lance.query.One;
 import io.alpenglow.artoo.lance.Queryable;
+import io.alpenglow.artoo.lance.func.TryFunction2;
+import io.alpenglow.artoo.lance.func.TryFunction3;
+import io.alpenglow.artoo.lance.query.One;
+import io.alpenglow.artoo.lance.query.closure.Select;
 import io.alpenglow.artoo.lance.tuple.Pair;
 
 public interface Projectable<A, B> extends Queryable.OfTwo<A, B> {

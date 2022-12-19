@@ -1,12 +1,12 @@
 package io.alpenglow.artoo.lance.query.many;
 
+import io.alpenglow.artoo.lance.Queryable;
 import io.alpenglow.artoo.lance.func.TryPredicate1;
 import io.alpenglow.artoo.lance.query.Cursor;
 import io.alpenglow.artoo.lance.query.One;
-import io.alpenglow.artoo.lance.Queryable;
 import io.alpenglow.artoo.lance.query.closure.Every;
-import io.alpenglow.artoo.lance.query.closure.Some;
 import io.alpenglow.artoo.lance.query.closure.None;
+import io.alpenglow.artoo.lance.query.closure.Some;
 
 public interface Quantifiable<T> extends Queryable<T> {
   default <R> One<Boolean> every(final Class<R> type) {

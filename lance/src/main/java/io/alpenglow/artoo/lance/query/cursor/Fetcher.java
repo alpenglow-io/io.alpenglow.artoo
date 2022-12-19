@@ -1,7 +1,6 @@
 package io.alpenglow.artoo.lance.query.cursor;
 
 import io.alpenglow.artoo.lance.query.FetchException;
-import io.alpenglow.artoo.lance.query.Unit;
 
 import java.util.Iterator;
 

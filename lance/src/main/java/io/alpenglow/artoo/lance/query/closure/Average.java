@@ -1,8 +1,6 @@
-package io.alpenglow.artoo.lance.func.tail;
+package io.alpenglow.artoo.lance.query.closure;
 
 import io.alpenglow.artoo.lance.func.TryFunction1;
-import io.alpenglow.artoo.lance.func.Recursive;
-import io.alpenglow.artoo.lance.func.Recursive.Tailrec;
 import io.alpenglow.artoo.lance.query.Closure;
 
 public final class Average<T, N extends Number> implements Closure<T, Double> {

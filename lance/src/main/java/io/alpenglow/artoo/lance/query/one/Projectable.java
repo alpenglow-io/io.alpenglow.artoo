@@ -1,11 +1,11 @@
 package io.alpenglow.artoo.lance.query.one;
 
+import io.alpenglow.artoo.lance.Queryable;
 import io.alpenglow.artoo.lance.func.TryFunction1;
 import io.alpenglow.artoo.lance.func.TrySupplier1;
-import io.alpenglow.artoo.lance.query.closure.Select;
 import io.alpenglow.artoo.lance.query.Many;
 import io.alpenglow.artoo.lance.query.One;
-import io.alpenglow.artoo.lance.Queryable;
+import io.alpenglow.artoo.lance.query.closure.Select;
 
 public interface Projectable<T> extends Queryable<T> {
   default <R> One<R> select(final TryFunction1<? super T, ? extends R> function) {

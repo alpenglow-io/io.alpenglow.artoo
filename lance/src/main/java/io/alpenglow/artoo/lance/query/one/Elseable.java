@@ -1,10 +1,10 @@
 package io.alpenglow.artoo.lance.query.one;
 
-import io.alpenglow.artoo.lance.func.TryFunction2;
+import io.alpenglow.artoo.lance.Queryable;
 import io.alpenglow.artoo.lance.func.TryFunction1;
+import io.alpenglow.artoo.lance.func.TryFunction2;
 import io.alpenglow.artoo.lance.func.TrySupplier1;
 import io.alpenglow.artoo.lance.query.One;
-import io.alpenglow.artoo.lance.Queryable;
 
 public interface Elseable<ELEMENT> extends Queryable<ELEMENT> {
   default One<ELEMENT> or(final ELEMENT element) {

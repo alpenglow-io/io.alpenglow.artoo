@@ -1,10 +1,10 @@
 package io.alpenglow.artoo.lance.query.many;
 
-import io.alpenglow.artoo.lance.func.TryFunction2;
 import io.alpenglow.artoo.lance.func.TryFunction1;
+import io.alpenglow.artoo.lance.func.TryFunction2;
 import io.alpenglow.artoo.lance.func.TryPredicate1;
-import io.alpenglow.artoo.lance.query.closure.Aggregate;
 import io.alpenglow.artoo.lance.query.One;
+import io.alpenglow.artoo.lance.query.closure.Aggregate;
 
 public interface Aggregatable<T> extends Countable<T>, Summable<T>, Averageable<T>, Extremable<T> {
   default <A, R> One<A> aggregate(final A seed, final TryPredicate1<? super T> where, final TryFunction1<? super T, ? extends R> select, final TryFunction2<? super A, ? super R, ? extends A> aggregator) {

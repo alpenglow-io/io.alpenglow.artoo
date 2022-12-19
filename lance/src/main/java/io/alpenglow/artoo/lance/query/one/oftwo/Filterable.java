@@ -1,9 +1,9 @@
 package io.alpenglow.artoo.lance.query.one.oftwo;
 
+import io.alpenglow.artoo.lance.Queryable;
 import io.alpenglow.artoo.lance.func.TryPredicate2;
 import io.alpenglow.artoo.lance.func.TryPredicate3;
 import io.alpenglow.artoo.lance.query.One;
-import io.alpenglow.artoo.lance.Queryable;
 import io.alpenglow.artoo.lance.query.closure.OfTwoTypes;
 import io.alpenglow.artoo.lance.query.closure.Where;
 

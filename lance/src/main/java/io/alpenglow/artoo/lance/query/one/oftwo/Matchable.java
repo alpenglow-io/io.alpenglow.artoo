@@ -1,11 +1,11 @@
 package io.alpenglow.artoo.lance.query.one.oftwo;
 
-import io.alpenglow.artoo.lance.func.TryConsumer2;
-import io.alpenglow.artoo.lance.func.TryPredicate2;
-import io.alpenglow.artoo.lance.func.TryConsumer1;
-import io.alpenglow.artoo.lance.func.TryFunction1;
-import io.alpenglow.artoo.lance.query.One;
 import io.alpenglow.artoo.lance.Queryable;
+import io.alpenglow.artoo.lance.func.TryConsumer1;
+import io.alpenglow.artoo.lance.func.TryConsumer2;
+import io.alpenglow.artoo.lance.func.TryFunction1;
+import io.alpenglow.artoo.lance.func.TryPredicate2;
+import io.alpenglow.artoo.lance.query.One;
 import io.alpenglow.artoo.lance.query.closure.WhenType;
 import io.alpenglow.artoo.lance.query.closure.WhenWhere;
 import io.alpenglow.artoo.lance.tuple.Pair;

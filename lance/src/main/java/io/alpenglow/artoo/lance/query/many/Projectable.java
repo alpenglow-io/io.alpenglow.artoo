@@ -1,10 +1,10 @@
 package io.alpenglow.artoo.lance.query.many;
 
-import io.alpenglow.artoo.lance.func.TryFunction2;
-import io.alpenglow.artoo.lance.func.TryFunction1;
-import io.alpenglow.artoo.lance.query.closure.Select;
-import io.alpenglow.artoo.lance.query.Many;
 import io.alpenglow.artoo.lance.Queryable;
+import io.alpenglow.artoo.lance.func.TryFunction1;
+import io.alpenglow.artoo.lance.func.TryFunction2;
+import io.alpenglow.artoo.lance.query.Many;
+import io.alpenglow.artoo.lance.query.closure.Select;
 
 public interface Projectable<T> extends Queryable<T> {
   default <R> Many<R> select(TryFunction2<? super Integer, ? super T, ? extends R> select) {

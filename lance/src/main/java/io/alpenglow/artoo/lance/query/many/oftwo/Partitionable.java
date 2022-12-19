@@ -1,12 +1,11 @@
 package io.alpenglow.artoo.lance.query.many.oftwo;
 
+import io.alpenglow.artoo.lance.Queryable;
 import io.alpenglow.artoo.lance.func.TryPredicate2;
 import io.alpenglow.artoo.lance.func.TryPredicate3;
 import io.alpenglow.artoo.lance.query.Many;
-import io.alpenglow.artoo.lance.Queryable;
 import io.alpenglow.artoo.lance.query.closure.Skip;
 import io.alpenglow.artoo.lance.query.closure.Take;
-import io.alpenglow.artoo.lance.tuple.Pair;
 
 public interface Partitionable<A, B> extends Queryable.OfTwo<A, B> {
   default Many.OfTwo<A, B> skip(final int until) {

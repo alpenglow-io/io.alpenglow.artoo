@@ -25,11 +25,11 @@ public final class Array<T> implements Concat<T> {
 
   @Override
   public TryFunction1<Fetcher<T>, Cursor<T>> onSource() {
-    return prev -> Cursor.link(prev, Cursor.open(next));
+    return prev -> Cursor.chain(prev, Cursor.open(next));
   }
 
   @Override
   public TryFunction1<Iterator<T>, Cursor<T>> onIterator() {
-    return prev -> Cursor.link(Cursor.iteration(prev), Cursor.open(next));
+    return prev -> Cursor.chain(Cursor.iteration(prev), Cursor.open(next));
   }
 }

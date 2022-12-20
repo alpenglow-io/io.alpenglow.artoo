@@ -8,14 +8,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ExtremableTest {
   @Test
   public void shouldFindMaxByDefault() {
-    final var max = Many.from(1, 2, 3, 4, null).max().otherwise(-1);
+    final var max = Many.from(1, 2, 3, 4, null).max().iterator().next();
 
     assertThat(max).isEqualTo(4);
   }
 
   @Test
   public void shouldFindMinByDefault() {
-    final var min = Many.from(null, 1, 2, 3, 4).min().otherwise(-1);
+    final var min = Many.from(null, 1, 2, 3, 4).min().iterator().next();
 
     assertThat(min).isEqualTo(1);
   }

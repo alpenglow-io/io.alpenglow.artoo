@@ -1,4 +1,4 @@
-package io.alpenglow.artoo.lance.query.many.oftwo;
+package io.alpenglow.artoo.lance.query.many.pairs;
 
 public interface Pairable<A, B> extends
   Aggregatable<A, B>,

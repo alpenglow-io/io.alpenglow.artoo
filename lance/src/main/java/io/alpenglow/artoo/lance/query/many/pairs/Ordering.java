@@ -1,4 +1,4 @@
-package io.alpenglow.artoo.lance.query.many.oftwo;
+package io.alpenglow.artoo.lance.query.many.pairs;
 
 import io.alpenglow.artoo.lance.Queryable;
 import io.alpenglow.artoo.lance.func.TryFunction2;
@@ -14,7 +14,7 @@ import static io.alpenglow.artoo.lance.query.cursor.routine.sort.Sort.By;
 import static io.alpenglow.artoo.lance.query.cursor.routine.sort.Sort.byDefault;
 import static io.alpenglow.artoo.lance.query.many.Ordering.Arrange.asc;
 
-public sealed interface Ordering<A, B> extends Many.OfTwo<A, B> {
+public sealed interface Ordering<A, B> extends Many.Pairs<A, B> {
   default <R> Ordering<A, B> by(TryFunction2<? super A, ? super B, ? extends R> field) {
     return by(field, asc);
   }

@@ -13,16 +13,16 @@ public final class Liter<T> implements Concat<T> {
 
   @Override
   public final TryFunction1<T[], Cursor<T>> onArray() {
-    return prev -> Cursor.link(Cursor.open(prev), next);
+    return prev -> Cursor.chain(Cursor.open(prev), next);
   }
 
   @Override
   public TryFunction1<Fetcher<T>, Cursor<T>> onSource() {
-    return prev -> Cursor.link(prev, next);
+    return prev -> Cursor.chain(prev, next);
   }
 
   @Override
   public TryFunction1<Iterator<T>, Cursor<T>> onIterator() {
-    return prev -> Cursor.link(Cursor.iteration(prev), next);
+    return prev -> Cursor.chain(Cursor.iteration(prev), next);
   }
 }

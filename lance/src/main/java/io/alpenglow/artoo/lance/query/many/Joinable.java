@@ -16,8 +16,8 @@ public interface Joinable<T> extends Queryable<T> {
     return join(Many.from(items));
   }
 
-  interface Joining<A, B> extends Many.OfTwo<A, B> {
-    Many.OfTwo<A, B> on(TryPredicate2<? super A, ? super B> on);
+  interface Joining<A, B> extends Many.Pairs<A, B> {
+    Many.Pairs<A, B> on(TryPredicate2<? super A, ? super B> on);
   }
 
   final class Default<A, B, Q extends Queryable<B>> implements Joining<A, B> {
@@ -35,7 +35,7 @@ public interface Joinable<T> extends Queryable<T> {
       return first.cursor().to(Join.natural(second.cursor()));
     }
     @Override
-    public Many.OfTwo<A, B> on(final TryPredicate2<? super A, ? super B> on) {
+    public Many.Pairs<A, B> on(final TryPredicate2<? super A, ? super B> on) {
       return () -> first.cursor().to(Join.inner(second.cursor(), on));
     }
 

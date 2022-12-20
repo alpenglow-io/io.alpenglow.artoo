@@ -1,16 +1,19 @@
 package io.alpenglow.artoo.lance.test.query.many;
 
+import io.alpenglow.artoo.lance.query.Many;
+import io.alpenglow.artoo.lance.test.Test.Pet;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.alpenglow.artoo.lance.query.Many.from;
+import static java.lang.Integer.MAX_VALUE;
+import static java.lang.Integer.MIN_VALUE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AggregatableTest {
   @Test
   @DisplayName("should reduce to the longest name")
   public void shouldReduceLongestName() {
-    final var aggregate = from("apple", "mango", "orange", "passionfruit", "grape")
+    final var aggregate = Many.from("apple", "mango", "orange", "passionfruit", "grape")
       .aggregate("", String::toUpperCase, (longest, next) -> longest.length() > next.length() ? longest : next);
 
     String aggregated = null;
@@ -22,7 +25,7 @@ public class AggregatableTest {
   @Test
   @DisplayName("should reduce to the total for even numbers")
   public void shouldReduceTotalForEvens() {
-    final var aggregated = from(4, 8, 8, 3, 9, 0, 7, 8, 2)
+    final var aggregated = Many.from(4, 8, 8, 3, 9, 0, 7, 8, 2)
       .aggregate(0, (total, next) -> next % 2 == 0 ? ++total : total)
       .iterator()
       .next();
@@ -33,7 +36,7 @@ public class AggregatableTest {
   @Test
   @DisplayName("should reduce to reversed phrase")
   public void shouldReduceReversePhrase() {
-    final var aggregated = from("the quick brown fox jumps over the lazy dog".split(" "))
+    final var aggregated = Many.from("the quick brown fox jumps over the lazy dog".split(" "))
       .aggregate((reversed, next) -> next + " " + reversed)
       .iterator()
       .next();
@@ -42,26 +45,21 @@ public class AggregatableTest {
   }
 
   @Test
-  @DisplayName("should find the max and min by selector")
-  public void shouldFindMaxAndMin() {
-    final var maxes = from(
-      new io.alpenglow.artoo.lance.test.Test.Pet("Barley", 8),
-      new io.alpenglow.artoo.lance.test.Test.Pet("Boots", 4),
-      new io.alpenglow.artoo.lance.test.Test.Pet("Whiskers", 1)
-    );
+  @DisplayName("should find the oldest and the youngest pet")
+  public void shouldFindMaxAndMin() throws Throwable {
+    var pets = new Pet[]{
+      new Pet("Barley", 8),
+      new Pet("Boots", 4),
+      new Pet("Whiskers", 1)
+    };
 
-    final var max = maxes.max(pet -> pet.name().length() + pet.age()).otherwise(-1);
+    final var oldest = Many.from(pets).aggregate(MIN_VALUE, Pet::age, (max, current) -> current > max ? current : max).cursor().fetch();
 
-    final var mins = from(
-      new io.alpenglow.artoo.lance.test.Test.Pet("Barley", 8),
-      new io.alpenglow.artoo.lance.test.Test.Pet("Boots", 4),
-      new io.alpenglow.artoo.lance.test.Test.Pet("Whiskers", 1)
-    );
+    assertThat(oldest).isEqualTo(8);
 
-    final var min = mins.min(pet -> pet.name().length()).otherwise(-1);
+    final var youngest = Many.from(pets).aggregate(MAX_VALUE, Pet::age, (min, current) -> current < min ? current : min).cursor().fetch();
 
-    assertThat(max).isEqualTo(14);
-    assertThat(min).isEqualTo(5);
+    assertThat(youngest).isEqualTo(1);
   }
 }
 

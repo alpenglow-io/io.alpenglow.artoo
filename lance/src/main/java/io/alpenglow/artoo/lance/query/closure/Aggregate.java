@@ -22,8 +22,10 @@ public final class Aggregate<ELEMENT, AGGREGATED, SELECTED> implements Closure<E
   @SuppressWarnings("unchecked")
   @Override
   public AGGREGATED invoke(final ELEMENT element) throws Throwable {
-    return !where.invoke(element)
-      ? aggregated
-      : (aggregated = aggregated != null ? aggregate.invoke(aggregated, select.invoke(element)) : (AGGREGATED) select.invoke(element));
+    if (where.invoke(element)) {
+      if (aggregated != null) return aggregated = aggregate.invoke(aggregated, select.invoke(element));
+      return aggregated = (AGGREGATED) select.invoke(element);
+    }
+    return aggregated;
   }
 }

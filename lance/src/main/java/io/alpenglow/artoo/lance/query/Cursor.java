@@ -6,12 +6,12 @@ import java.util.Iterator;
 
 public non-sealed interface Cursor<T> extends Projector<T>, Replacer<T>, Closer<T>, Convertor<T> {
   @SafeVarargs
-  static <VALUE> Cursor<VALUE> open(final VALUE... values) {
-    return new Open<>(values);
+  static <T> Cursor<T> open(final T... elements) {
+    return new Open<>(elements);
   }
 
-  static <T> Cursor<T> link(final Fetcher<T> prev, final Fetcher<T> next) {
-    return new Link<>(prev, next);
+  static <T> Cursor<T> chain(final Fetcher<T> prev, final Fetcher<T> next) {
+    return new Chain<>(prev, next);
   }
 
   @SuppressWarnings("unchecked")

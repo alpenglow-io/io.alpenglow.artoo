@@ -2,7 +2,7 @@ package io.alpenglow.artoo.lance.query;
 
 import io.alpenglow.artoo.lance.func.TrySupplier1;
 import io.alpenglow.artoo.lance.query.many.*;
-import io.alpenglow.artoo.lance.query.many.oftwo.Pairable;
+import io.alpenglow.artoo.lance.query.many.pairs.Pairable;
 
 public interface Many<T> extends
   Aggregatable<T>,
@@ -21,15 +21,15 @@ public interface Many<T> extends
 
   @SafeVarargs
   static <R> Many<R> from(final R... items) {
-    return new Some<>(Cursor.open(items));
+    return () -> Cursor.open(items);
   }
 
   static <R> Many<R> from(final TrySupplier1<R[]> supply) {
-    return new Supplied<>(supply);
+    return () -> Cursor.open(supply.get());
   }
 
   static Many<Object> fromAny(Object... objects) {
-    return new Some<>(Cursor.open(objects));
+    return () -> Cursor.open(objects);
   }
 
   static <R> Many<R> empty() {
@@ -41,17 +41,15 @@ public interface Many<T> extends
   }
 
   static <R> Many<R> of(final Cursor<R> cursor) {
-    return new Some<>(cursor);
+    return () -> cursor;
   }
 
   static <R> Many<R> from(Iterable<R> iterable) {
-    return Many.of(Cursor.iteration(iterable.iterator()));
+    return () -> Cursor.iteration(iterable.iterator());
   }
 
-  interface OfTwo<A, B> extends Pairable<A, B> {}
+  interface Pairs<A, B> extends Pairable<A, B> {}
 }
-
-record Some<T>(Cursor<T> cursor) implements Many<T> {}
 
 final class Ints implements Many<Integer> {
   private final int start;
@@ -64,7 +62,7 @@ final class Ints implements Many<Integer> {
   }
 
   @Override
-  public final Cursor<Integer> cursor() {
+  public Cursor<Integer> cursor() {
     final var numbers = new Integer[end - start + 1];
     for (int number = start, index = 0; number <= end; number++, index++) {
       numbers[index] = number;

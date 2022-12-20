@@ -3,11 +3,11 @@ package io.alpenglow.artoo.lance.query.cursor;
 import io.alpenglow.artoo.lance.query.Cursor;
 import io.alpenglow.artoo.lance.query.cursor.routine.Routine;
 
-public final class Link<T> implements Cursor<T> {
+public final class Chain<T> implements Cursor<T> {
   private final Fetcher<T> prev;
   private final Fetcher<T> fetcher;
 
-  public Link(final Fetcher<T> prev, final Fetcher<T> fetcher) {
+  public Chain(final Fetcher<T> prev, final Fetcher<T> fetcher) {
     this.prev = prev;
     this.fetcher = fetcher;
   }

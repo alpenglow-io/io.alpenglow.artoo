@@ -124,12 +124,4 @@ public class SortableTest implements io.alpenglow.artoo.lance.test.Test {
       CUSTOMERS[17]
     );
   }
-
-  @Test
-  @Disabled
-  public void checker() {
-    for (final var customer : from(CUSTOMERS).concat(CUSTOMERS).concat(CUSTOMERS).order().by(Customer::id, desc)) {
-      System.out.println(customer);
-    }
-  }
 }

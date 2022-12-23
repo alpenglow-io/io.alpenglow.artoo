@@ -10,8 +10,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class AverageableTest {
   @Test
   @DisplayName("should average doubles")
-  public void shouldAverageDoubles() {
-    final var averaged = Many.from(78.0, 92.0, 100.0, 37.0, 81.0).average().otherwise(-1d);
+  public void shouldAverageDoubles() throws Throwable {
+    final var averaged = Many.from(78.0, 92.0, 100.0, 37.0, 81.0).average().cursor().fetch();
 
     final var expected = 77.6;
     assertThat(averaged).isEqualTo(expected);
@@ -44,10 +44,8 @@ public class AverageableTest {
 
   @Test
   @DisplayName("should be null since there's no numbers")
-  public void shouldBeNullSinceNoNumbers() {
-    for (final var ignored : Many.from("apple", "banana", "mango", "orange", "passionfruit", "grape").average()) {
-      System.out.println(ignored);
-      fail();
-    }
+  public void shouldBeNullSinceNoNumbers() throws Throwable {
+    final var expected = Many.from("apple", "banana", "mango", "orange", "passionfruit", "grape").average().cursor().fetch();
+    assertThat(expected).isNull();
   }
 }

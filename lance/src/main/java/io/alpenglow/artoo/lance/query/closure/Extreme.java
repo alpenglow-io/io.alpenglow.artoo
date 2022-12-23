@@ -7,56 +7,54 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 @SuppressWarnings("unchecked")
-public final class Extreme<T, R extends Number, V> implements Closure<T, V> {
-  private static final int Maximum = 1;
-  private static final int Minimum = -1;
+public final class Extreme<T, N> implements Closure<T, N> {
+  private static final int Greater = 1;
+  private static final int Lesser = -1;
   private final int type;
-  private final TryFunction1<? super T, ? extends R> select;
-  private V extreme;
+  private final TryFunction1<? super T, ? extends N> select;
+  private N extreme;
 
-  private Extreme(final V extreme, final int type, final TryFunction1<? super T, ? extends R> select) {
+  private Extreme(final N extreme, final int type, final TryFunction1<? super T, ? extends N> select) {
     this.extreme = extreme;
     this.type = type;
     this.select = select;
   }
 
-  public static <T, R extends Number, V> Extreme<T, R, V> max() {
-    return new Extreme<>(null, Extreme.Maximum, it -> (R) it);
+  public static <T> Extreme<T, T> max() {
+    return new Extreme<>(null, Extreme.Greater, it -> it);
   }
 
-  public static <T, R extends Number, V> Extreme<T, R, V> max(TryFunction1<? super T, ? extends R> selector) {
-    return new Extreme<>(null, Extreme.Maximum, selector);
+  public static <T, N extends Number> Extreme<T, N> max(TryFunction1<? super T, ? extends N> selector) {
+    return new Extreme<>(null, Extreme.Greater, selector);
   }
 
-  public static <T, R extends Number, V> Extreme<T, R, V> min() {
-    return new Extreme<>(null, Extreme.Minimum, it -> (R) it);
+  public static <T> Extreme<T, T> min() {
+    return new Extreme<>(null, Extreme.Lesser, it -> it);
   }
 
-  public static <T, R extends Number, V> Extreme<T, R, V> min(TryFunction1<? super T, ? extends R> selector) {
-    return new Extreme<>(null, Extreme.Minimum, selector);
+  public static <ELEMENT, NUMBER extends Number> Extreme<ELEMENT, NUMBER> min(TryFunction1<? super ELEMENT, ? extends NUMBER> selector) {
+    return new Extreme<>(null, Extreme.Lesser, selector);
   }
 
   @SuppressWarnings("unchecked")
   @Override
-  public V invoke(final T element) throws Throwable {
-    final var selected = select.invoke(element);
-    if (compareToCurrent(selected) == type) {
-      return (extreme = (V) selected);
-    }
-    return extreme;
+  public N invoke(final T element) throws Throwable {
+    return switch (select.invoke(element)) {
+      case Number number when (extreme instanceof Number current && compareBy(current, number) == type) || extreme == null -> (extreme = (N) number);
+      case null, default -> extreme;
+    };
   }
 
-  private int compareToCurrent(final R selected) {
-    final var current = (R) extreme;
+  private int compareBy(Number current, Number selected) {
     return switch (selected) {
-      case Byte it when current != null -> it > current.byteValue() ? 1 : -1;
-      case Short it when current != null -> it > current.shortValue() ? 1 : -1;
-      case Integer it when current != null -> it > current.intValue() ? 1 : -1;
-      case Long it when current != null -> it > current.longValue() ? 1 : -1;
-      case Float it when current != null -> it > current.floatValue() ? 1 : -1;
-      case Double it when current != null -> it > current.doubleValue() ? 1 : -1;
-      case BigInteger it when current != null -> it.longValue() > BigInteger.valueOf(current.longValue()).longValue() ? 1 : -1;
-      case BigDecimal it when current != null -> it.doubleValue() > BigDecimal.valueOf(current.doubleValue()).doubleValue() ? 1 : -1;
+      case Byte it -> it > current.byteValue() ? Greater : Lesser;
+      case Short it -> it > current.shortValue() ? Greater : Lesser;
+      case Integer it -> it > current.intValue() ? Greater : Lesser;
+      case Long it -> it > current.longValue() ? Greater : Lesser;
+      case Float it -> it > current.floatValue() ? Greater : Lesser;
+      case Double it -> it > current.doubleValue() ? Greater : Lesser;
+      case BigInteger it -> it.longValue() > BigInteger.valueOf(current.longValue()).longValue() ? Greater : Lesser;
+      case BigDecimal it -> it.doubleValue() > BigDecimal.valueOf(current.doubleValue()).doubleValue() ? Greater : Lesser;
       case null -> type * -1;
       default -> type;
     };

@@ -16,6 +16,6 @@ public final class Take<T> implements Closure<T, T> {
 
   @Override
   public T invoke(final T element) throws Throwable {
-    return ((keep = where.invoke(index++, element)) && keep) ? element : null;
+    return (keep &= where.invoke(index++, element)) ? element : null;
   }
 }

@@ -23,20 +23,16 @@ public final class Sum<T, N, V> implements Closure<T, V> {
 
   private V sum(final N selected, final Number sum) {
     return switch (selected) {
-      case null -> (V) sum;
-      case Byte val       when sum != null -> (V) Byte.valueOf((byte) (sum.byteValue() + val));
-      case Short val      when sum != null -> (V) Short.valueOf((short) (sum.shortValue() + val));
-      case Integer val    when sum != null -> (V) Integer.valueOf(sum.intValue() + val);
-      case Long val       when sum != null -> (V) Long.valueOf(sum.longValue() + val);
-      case Float val      when sum != null -> (V) Float.valueOf(sum.floatValue() + val);
-      case Double val     when sum != null -> (V) Double.valueOf(sum.doubleValue() + val);
-      case BigInteger val when sum != null -> (V) BigInteger.valueOf(sum.longValue() + val.longValue());
-      case BigDecimal val when sum != null -> (V) BigDecimal.valueOf(sum.doubleValue() + val.doubleValue());
-      default -> sum == null ? (V) selected : illegalState(selected);
+      case null, default -> (V) sum;
+      case Byte val       -> sum != null ? (V) Byte.valueOf((byte) (sum.byteValue() + val)) : (V) val;
+      case Short val      -> sum != null ? (V) Short.valueOf((short) (sum.shortValue() + val)) : (V) val;
+      case Integer val    -> sum != null ? (V) Integer.valueOf(sum.intValue() + val) : (V) val;
+      case Long val       -> sum != null ? (V) Long.valueOf(sum.longValue() + val) : (V) val;
+      case Float val      -> sum != null ? (V) Float.valueOf(sum.floatValue() + val) : (V) val;
+      case Double val     -> sum != null ? (V) Double.valueOf(sum.doubleValue() + val) : (V) val;
+      case BigInteger val -> sum != null ? (V) BigInteger.valueOf(sum.longValue() + val.longValue()) : (V) val;
+      case BigDecimal val -> sum != null ? (V) BigDecimal.valueOf(sum.doubleValue() + val.doubleValue()) : (V) val;
     };
   }
 
-  private V illegalState(N selected) {
-    throw new IllegalStateException("Can't cast to unknown number type: " + selected.getClass().getName());
-  }
 }

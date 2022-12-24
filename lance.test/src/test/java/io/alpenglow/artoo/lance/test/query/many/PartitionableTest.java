@@ -5,14 +5,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.alpenglow.artoo.lance.func.TryPredicate1.not;
-import static io.alpenglow.artoo.lance.query.Many.from;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PartitionableTest {
   @Test
   @DisplayName("should take first 3 rows")
   public void shouldTake3Rows() {
-    final var taken = from(59, 82, 70, 56, 92, 98, 85).take(3);
+    final var taken = Many.from(59, 82, 70, 56, 92, 98, 85).take(3);
 
     assertThat(taken).containsExactly(59, 82, 70);
   }
@@ -20,7 +19,7 @@ public class PartitionableTest {
   @Test
   @DisplayName("should take all fruits until orange is met")
   public void shouldTakeAllUntilOrange() {
-    final var taken = from("apple", "banana", "mango", "orange", "passionfruit", "grape").takeWhile(not(text -> text.equals("orange")));
+    final var taken = Many.from("apple", "banana", "mango", "orange", "passionfruit", "grape").takeWhile(not(text -> text.equals("orange")));
 
     assertThat(taken).containsExactly("apple", "banana", "mango");
   }
@@ -28,7 +27,7 @@ public class PartitionableTest {
   @Test
   @DisplayName("should take all fruits until fruit.length is greater than index")
   public void shouldTakeWithIndex() {
-    final var query = from("apple", "passionfruit", "banana", "mango", "orange", "blueberry", "grape", "strawberry").takeWhile((index, fruit) -> fruit.length() >= index);
+    final var query = Many.from("apple", "passionfruit", "banana", "mango", "orange", "blueberry", "grape", "strawberry").takeWhile((index, fruit) -> fruit.length() >= index);
 
     assertThat(query).containsExactly("apple", "passionfruit", "banana", "mango", "orange", "blueberry");
   }

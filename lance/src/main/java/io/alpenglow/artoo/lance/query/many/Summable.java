@@ -7,7 +7,7 @@ import io.alpenglow.artoo.lance.query.closure.Sum;
 
 public interface Summable<T> extends Queryable<T> {
   default <N extends Number> One<N> sum(final TryFunction1<? super T, ? extends N> select) {
-    return () -> cursor().map(new Sum<T, N, N>(select));
+    return () -> cursor().map(new Sum<T, N, N>(select)).keepNull();
   }
 
   default One<T> sum() {

@@ -4,8 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import re.artoo.lance.query.closure.At;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class AtTest {
   /**
@@ -20,14 +19,11 @@ class AtTest {
   @DisplayName("should retrieve element at defined index")
   void shouldIndexAt() throws Throwable {
     var at = new At<Integer>(2);
+    int[] ints = {1, 2, 3, 4};
 
-    for (final int element : new int[]{1, 2, 3, 4}) {
-      assertThat(at.invoke(element))
-    }
-
-    assertNull(at.invoke(new int[]{1, 2, 3, 4}[0]));
-    assertNull(at.invoke(new int[]{1, 2, 3, 4}[1]));
-    assertEquals(at.invoke(new int[]{1, 2, 3, 4}[2]), 3);
-    assertNull(at.invoke(new int[]{1, 2, 3, 4}[2]));
+    assertThat(at.invoke(ints[0])).isNull();
+    assertThat(at.invoke(ints[1])).isNull();
+    assertThat(at.invoke(ints[2])).isEqualTo(3);
+    assertThat(at.invoke(ints[2])).isNull();
   }
 }

@@ -4,7 +4,6 @@ import re.artoo.lance.Queryable;
 import re.artoo.lance.func.TryPredicate2;
 import re.artoo.lance.query.Closure;
 import re.artoo.lance.query.One;
-import re.artoo.lance.query.closure.At;
 import re.artoo.lance.query.closure.First;
 import re.artoo.lance.query.closure.Last;
 import re.artoo.lance.query.closure.Single;

@@ -11,7 +11,7 @@ public interface TryRunnable extends Runnable, Callable<Void> {
     try {
       invoke();
     } catch (Throwable throwable) {
-      throw new LambdaCallException(throwable);
+      throw new InvokeException(throwable);
     }
   }
 

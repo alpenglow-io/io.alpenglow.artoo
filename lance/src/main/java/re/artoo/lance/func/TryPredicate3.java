@@ -7,7 +7,7 @@ public interface TryPredicate3<A, B, C> {
     try {
       return invoke(a, b, c);
     } catch (Throwable throwable) {
-      throw new LambdaCallException(throwable);
+      throw new InvokeException(throwable);
     }
   }
 

@@ -10,7 +10,7 @@ public interface TryPredicate2<A, B> extends BiPredicate<A, B> {
     try {
       return invoke(a, b);
     } catch (Throwable throwable) {
-      throw new LambdaCallException(throwable);
+      throw new InvokeException(throwable);
     }
   }
   static <A, B> TryPredicate2<A, B> not(final TryPredicate2<A, B> predicate) {

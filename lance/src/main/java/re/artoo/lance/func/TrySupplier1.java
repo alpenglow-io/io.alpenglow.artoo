@@ -10,7 +10,7 @@ public interface TrySupplier1<A> extends Supplier<A> {
     try {
       return invoke();
     } catch (Throwable throwable) {
-      throw new LambdaCallException(throwable);
+      throw new InvokeException(throwable);
     }
   }
 }

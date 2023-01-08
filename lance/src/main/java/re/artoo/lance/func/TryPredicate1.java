@@ -11,7 +11,7 @@ public interface TryPredicate1<A> extends Predicate<A> {
     try {
       return invoke(a);
     } catch (Throwable throwable) {
-      throw new LambdaCallException(throwable);
+      throw new InvokeException(throwable);
     }
   }
 

@@ -10,7 +10,7 @@ public interface TryConsumer2<A, B> extends BiConsumer<A, B> {
     try {
       invoke(a, b);
     } catch (Throwable throwable) {
-      throw new LambdaCallException(throwable);
+      throw new InvokeException(throwable);
     }
   }
 }

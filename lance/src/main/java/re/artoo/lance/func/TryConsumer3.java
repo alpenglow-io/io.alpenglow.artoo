@@ -7,7 +7,7 @@ public interface TryConsumer3<A, B, C> {
     try {
       invoke(a, b, c);
     } catch (Throwable throwable) {
-      throw new LambdaCallException(throwable);
+      throw new InvokeException(throwable);
     }
   }
 }

@@ -14,7 +14,7 @@ public interface TryConsumer1<A> extends Consumer<A> {
     try {
       invoke(a);
     } catch (Throwable throwable) {
-      throw new LambdaCallException(throwable);
+      throw new InvokeException(throwable);
     }
   }
 }

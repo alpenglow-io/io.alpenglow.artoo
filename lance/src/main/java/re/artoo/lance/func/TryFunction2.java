@@ -11,7 +11,7 @@ public interface TryFunction2<A, B, R> extends BiFunction<A, B, R> {
     try {
       return invoke(a, b);
     } catch (Throwable throwable) {
-      throw new LambdaCallException(throwable);
+      throw new InvokeException(throwable);
     }
   }
 }

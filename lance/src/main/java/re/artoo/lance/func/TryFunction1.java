@@ -11,7 +11,7 @@ public interface TryFunction1<T, R> extends Function<T, R> {
     try {
       return invoke(t);
     } catch (Throwable throwable) {
-      throw new LambdaCallException(throwable);
+      throw new InvokeException(throwable);
     }
   }
 

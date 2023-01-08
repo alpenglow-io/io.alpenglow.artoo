@@ -10,7 +10,7 @@ public interface TryCallable<T> extends Callable<T> {
     try {
       return invoke();
     } catch (Throwable throwable) {
-      throw new LambdaCallException(throwable);
+      throw new InvokeException(throwable);
     }
   }
 }

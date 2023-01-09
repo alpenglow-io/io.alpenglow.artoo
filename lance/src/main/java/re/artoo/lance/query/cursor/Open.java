@@ -1,5 +1,6 @@
 package re.artoo.lance.query.cursor;
 
+import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.cursor.routine.Routine;
 
@@ -11,18 +12,15 @@ public final class Open<T> implements Cursor<T> {
   public Open(final T[] elements) {
     this.elements = elements;
   }
+
   @Override
-  public T fetch() {
-    return elements[index++];
+  public <R> R fetch(TryIntFunction1<? super T, ? extends R> detach) throws Throwable {
+    return detach.invoke(index, elements[index++]);
   }
 
   @Override
   public boolean hasNext() {
-    var hasNext = index < elements.length;
-    while (hasNext && elements[index] == null) {
-      hasNext = ++index < elements.length;
-    }
-    return hasNext;
+    return index < elements.length;
   }
 
   @Override

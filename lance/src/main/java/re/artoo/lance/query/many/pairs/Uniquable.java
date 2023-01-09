@@ -10,7 +10,7 @@ import re.artoo.lance.query.closure.Single;
 
 public interface Uniquable<A, B> extends Queryable.OfTwo<A, B> {
   default One.OfTwo<A, B> at(final int index) {
-    return () -> cursor().map(Closure.at(index)).keepNull();
+    return () -> cursor().map((idx, it) -> idx == index ? it : null).keepNull();
   }
 
   default One.OfTwo<A, B> first() {

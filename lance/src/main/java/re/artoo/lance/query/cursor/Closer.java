@@ -1,5 +1,6 @@
 package re.artoo.lance.query.cursor;
 
+import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.cursor.routine.Routine;
 
@@ -32,6 +33,7 @@ public interface Closer<T> extends Fetcher<T> {
 
 final class Close<T> implements Cursor<T> {
   private T closed = null;
+  private int index = 0;
   private final Iterator<T> source;
 
   Close(Iterator<T> source) {
@@ -39,8 +41,8 @@ final class Close<T> implements Cursor<T> {
   }
 
   @Override
-  public T fetch() {
-    return next();
+  public <R> R fetch(TryIntFunction1<? super T, ? extends R> detach) throws Throwable {
+    return detach.invoke(index++, next());
   }
 
   @Override

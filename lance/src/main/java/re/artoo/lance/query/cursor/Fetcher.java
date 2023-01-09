@@ -7,11 +7,11 @@ import java.util.Iterator;
 
 public interface Fetcher<T> extends Iterator<T> {
 
-  T fetch() throws Throwable;
-
-  default <R> R let(TryIntFunction1<? super T, ? extends R> function) throws Throwable {
-    return function.invoke(0, fetch());
+  default T fetch() throws Throwable {
+    return fetch((index, element) -> element);
   }
+
+  <R> R fetch(TryIntFunction1<? super T, ? extends R> detach) throws Throwable;
 
   @Override
   default T next() {

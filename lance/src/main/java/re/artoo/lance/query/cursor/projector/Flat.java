@@ -1,5 +1,6 @@
 package re.artoo.lance.query.cursor.projector;
 
+import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.cursor.Fetcher;
 import re.artoo.lance.query.cursor.routine.Routine;
@@ -8,6 +9,7 @@ import re.artoo.lance.query.cursor.routine.Routine;
 public final class Flat<T> implements Cursor<T> {
   private final Fetcher<Fetcher<T>> source;
   private Fetcher<T> current;
+  private int index = 0;
 
   public Flat(final Fetcher<Fetcher<T>> source) {
     this.source = source;
@@ -27,20 +29,18 @@ public final class Flat<T> implements Cursor<T> {
       current = source.next();
     }
     return hasNext;
-
   }
-
   @Override
-  public T fetch() throws Throwable {
+  public <R> R fetch(TryIntFunction1<? super T, ? extends R> detach) throws Throwable {
     /*
      * if we don't have a current flatten fetcher,
      * then we check if we have one within (see above) and if so, we fetch a value from it,
      * otherwise we just fetch a value from it
      */
-    return switch (current) {
+    return detach.invoke(index++, switch (current) {
       case null -> hasNext() ? current.fetch() : null;
       default -> current.hasNext() || hasNext() ? current.fetch() : null;
-    };
+    });
   }
 
   @Override

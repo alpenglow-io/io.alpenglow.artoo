@@ -2,6 +2,7 @@ package re.artoo.lance.query.cursor;
 
 import re.artoo.lance.func.TryConsumer1;
 import re.artoo.lance.func.TryFunction2;
+import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.func.TrySupplier1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.cursor.routine.Routine;
@@ -48,10 +49,9 @@ final class Or<T, C extends Cursor<T>> extends As<T> implements Cursor<T> {
   }
 
   @Override
-  public T fetch() {
-    return hasNext() ? reference.let(Fetcher::fetch) : null;
+  public <R> R fetch(TryIntFunction1<? super T, ? extends R> detach) {
+    return hasNext() ? reference.let(it -> it.fetch(detach)) : null;
   }
-
   @Override
   public boolean hasNext() {
     other.get(otherwise -> reference.set(() -> fetcher.hasNext() ? fetcher : otherwise));
@@ -69,12 +69,11 @@ final class Er<T, E extends RuntimeException> extends As<T> implements Cursor<T>
     this.message = message;
     this.exception = exception;
   }
-
   @Override
-  public T fetch() {
+  public <R> R fetch(TryIntFunction1<? super T, ? extends R> detach) throws Throwable {
     try {
       if (hasNext()) {
-        return fetcher.fetch();
+        return fetcher.fetch(detach);
       } else {
         throw exception.apply(message, null);
       }
@@ -82,7 +81,6 @@ final class Er<T, E extends RuntimeException> extends As<T> implements Cursor<T>
       throw exception.apply(message, throwable);
     }
   }
-
   @Override
   public boolean hasNext() {
     return fetcher.hasNext();
@@ -96,11 +94,10 @@ final class Catch<T> extends As<T> implements Cursor<T> {
     super(fetcher);
     this.catch$ = catch$;
   }
-
   @Override
-  public T fetch() {
+  public <R> R fetch(TryIntFunction1<? super T, ? extends R> detach) {
     try {
-      return fetcher.fetch();
+      return fetcher.fetch(detach);
     } catch (Throwable throwable) {
       catch$.accept(throwable);
       return null;

@@ -1,26 +1,27 @@
 package re.artoo.lance.query.cursor.projector;
 
-import re.artoo.lance.query.Closure;
+import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
+import re.artoo.lance.query.IntClosure;
 import re.artoo.lance.query.cursor.Fetcher;
 import re.artoo.lance.query.cursor.routine.Routine;
 
 public final class Map<S, T> implements Cursor<T> {
   private final Fetcher<S> fetcher;
-  private final Closure<? super S, ? extends T> map;
+  private final IntClosure<? super S, ? extends T> map;
 
-  public Map(final Fetcher<S> fetcher, final Closure<? super S, ? extends T> map) {
+  public Map(final Fetcher<S> fetcher, final IntClosure<? super S, ? extends T> map) {
     this.fetcher = fetcher;
     this.map = map;
   }
 
   @Override
-  public T fetch() throws Throwable {
-    return map.invoke(fetcher.fetch());
+  public <R> R fetch(TryIntFunction1<? super T, ? extends R> detach) throws Throwable {
+    return fetcher.fetch((index, element) -> detach.invoke(index, map.invoke(index, element)));
   }
 
   @Override
-  public <R> Cursor<R> map(final Closure<? super T, ? extends R> mapAgain) {
+  public <R> Cursor<R> map(final IntClosure<? super T, ? extends R> mapAgain) {
     return new Map<>(fetcher, map.then(mapAgain));
   }
 

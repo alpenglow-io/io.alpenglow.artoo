@@ -3,10 +3,10 @@ package re.artoo.lance.query.cursor;
 import re.artoo.lance.query.Closure;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.IntClosure;
-import re.artoo.lance.query.cursor.projector.Flat;
-import re.artoo.lance.query.cursor.projector.Map;
+import re.artoo.lance.query.cursor.mapper.Flat;
+import re.artoo.lance.query.cursor.mapper.Map;
 
-public sealed interface Projector<T> extends Fetcher<T> permits Cursor {
+public sealed interface Mapper<T> extends Fetcher<T> permits Cursor {
   default <R> Cursor<R> map(final Closure<? super T, ? extends R> map) {
     return new Map<>(this, (index, it) -> map.invoke(it));
   }

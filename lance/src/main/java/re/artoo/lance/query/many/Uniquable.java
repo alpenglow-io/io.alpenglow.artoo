@@ -9,7 +9,7 @@ import re.artoo.lance.query.closure.Single;
 
 public interface Uniquable<T> extends Queryable<T> {
   default One<T> at(final int index) {
-    return () -> cursor().map((idx, it) -> idx == index ? it : null).keepNull();
+    return () -> cursor().map((idx, it) -> index == idx ? it : null).keepNull();
   }
 
   default One<T> first() {

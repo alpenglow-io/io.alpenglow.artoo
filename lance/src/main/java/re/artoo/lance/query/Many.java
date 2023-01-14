@@ -4,6 +4,7 @@ import re.artoo.lance.func.TrySupplier1;
 import re.artoo.lance.query.many.*;
 import re.artoo.lance.query.many.pairs.Pairable;
 
+@FunctionalInterface
 public interface Many<T> extends
   Aggregatable<T>,
   Concatenatable<T>,

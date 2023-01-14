@@ -4,7 +4,7 @@ import re.artoo.lance.query.cursor.*;
 
 import java.util.Iterator;
 
-public non-sealed interface Cursor<T> extends Mapper<T>, Replacer<T>, Closer<T>, Convertor<T> {
+public non-sealed interface Cursor<T> extends Mapper<T>, Reducer<T>, Replacer<T>, Closer<T>, Convertor<T> {
   @SafeVarargs
   static <T> Cursor<T> open(final T... elements) {
     return new Open<>(elements);

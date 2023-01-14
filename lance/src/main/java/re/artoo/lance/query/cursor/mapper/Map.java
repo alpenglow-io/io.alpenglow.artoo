@@ -8,9 +8,9 @@ import re.artoo.lance.query.cursor.routine.Routine;
 
 public final class Map<S, T> implements Cursor<T> {
   private final Fetcher<S> fetcher;
-  private final IntClosure<? super S, ? extends T> map;
+  private final TryIntFunction1<? super S, ? extends T> map;
 
-  public Map(final Fetcher<S> fetcher, final IntClosure<? super S, ? extends T> map) {
+  public Map(final Fetcher<S> fetcher, final TryIntFunction1<? super S, ? extends T> map) {
     this.fetcher = fetcher;
     this.map = map;
   }
@@ -21,7 +21,7 @@ public final class Map<S, T> implements Cursor<T> {
   }
 
   @Override
-  public <R> Cursor<R> map(final IntClosure<? super T, ? extends R> mapAgain) {
+  public <R> Cursor<R> map(final TryIntFunction1<? super T, ? extends R> mapAgain) {
     return new Map<>(fetcher, map.then(mapAgain));
   }
 

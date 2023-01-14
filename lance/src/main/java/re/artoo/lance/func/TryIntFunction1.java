@@ -17,7 +17,7 @@ public interface TryIntFunction1<T, R> {
     return (integer, it) -> invoke(integer, before.invoke(integer, it));
   }
 
-  default <V> TryIntFunction1<T, V> after(TryIntFunction1<? super R, ? extends V> after) {
+  default <V> TryIntFunction1<T, V> then(TryIntFunction1<? super R, ? extends V> after) {
     // this is actually after, since before we invoke the current function and the next function afterwards
     return (integer, it) -> after.invoke(integer, invoke(integer, it));
   }

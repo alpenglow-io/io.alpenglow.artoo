@@ -1,5 +1,6 @@
 package re.artoo.lance.query;
 
+import re.artoo.lance.func.TrySupplier1;
 import re.artoo.lance.query.cursor.*;
 
 import java.util.Iterator;
@@ -8,6 +9,10 @@ public non-sealed interface Cursor<T> extends Mapper<T>, Reducer<T>, Replacer<T>
   @SafeVarargs
   static <T> Cursor<T> open(final T... elements) {
     return new Open<>(elements);
+  }
+
+  static <T> Cursor<T> lazy(TrySupplier1<T> element) {
+    return new Lazy<>(element);
   }
 
   static <T> Cursor<T> chain(final Fetcher<T> prev, final Fetcher<T> next) {

@@ -9,7 +9,7 @@ import re.artoo.lance.query.closure.Count;
 
 public interface Countable<T> extends Queryable<T> {
   default One<Integer> count() {
-    return count(it -> true);
+    return () -> cursor().reduce(() -> 0, (counted, element) -> element != null ? counted + 1 : counted);
   }
 
   default One<Integer> count(TryIntPredicate1<? super T> where) {

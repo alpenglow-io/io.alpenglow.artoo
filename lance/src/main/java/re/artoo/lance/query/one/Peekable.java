@@ -8,7 +8,7 @@ import re.artoo.lance.query.closure.Peek;
 @FunctionalInterface
 public interface Peekable<T> extends Queryable<T> {
   default One<T> peek(final TryConsumer1<? super T> peek) {
-    return () -> cursor().map((index, it) -> peek.invoke(it));
+    return () -> cursor().map((index, it) -> { peek.invoke(it); return it; });
   }
 
   default One<T> exceptionally(TryConsumer1<? super Throwable> catch$) {

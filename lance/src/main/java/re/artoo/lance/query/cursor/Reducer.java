@@ -7,8 +7,7 @@ import re.artoo.lance.func.TrySupplier1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.cursor.routine.Routine;
 
-@FunctionalInterface
-public interface Reducer<ELEMENT> extends Fetcher<ELEMENT> {
+public sealed interface Reducer<ELEMENT> extends Fetcher<ELEMENT> permits Cursor {
   default Cursor<String> reduce(String initial, TryFunction2<? super String, ? super ELEMENT, ? extends String> operation) {
     return reduce(() -> initial, operation);
   }

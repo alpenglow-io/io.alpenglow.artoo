@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 public interface Extremable<T> extends Queryable<T> {
-  private static <REDUCED> TryFunction2<REDUCED, ? extends REDUCED, REDUCED> maximise() {
+  private static <ELEMENT> TryFunction2<? super ELEMENT, ? super ELEMENT, ? extends ELEMENT> maximise() {
     return (max, selected) -> switch (max) {
       case null -> selected;
       case Float it when selected instanceof Float el -> it > el ? max : selected;
@@ -20,10 +20,11 @@ public interface Extremable<T> extends Queryable<T> {
       case Long it when selected instanceof Long el -> it > el ? max : selected;
       case BigDecimal it when selected instanceof BigDecimal el -> it.compareTo(el) < 0 ? max : selected;
       case BigInteger it when selected instanceof BigInteger el -> it.compareTo(el) < 0 ? max : selected;
+      case Character it when selected instanceof Character el -> it.compareTo(el) < 0 ? max : selected;
       default -> max;
     };
   }
-  private static <REDUCED> TryFunction2<REDUCED, ? extends REDUCED, REDUCED> minimise() {
+  private static <ELEMENT> TryFunction2<? super ELEMENT, ? super ELEMENT, ? extends ELEMENT> minimise() {
     return (min, selected) -> switch (min) {
       case null -> selected;
       case Float it when selected instanceof Float el -> it < el ? min : selected;
@@ -34,22 +35,23 @@ public interface Extremable<T> extends Queryable<T> {
       case Long it when selected instanceof Long el -> it < el ? min : selected;
       case BigDecimal it when selected instanceof BigDecimal el -> it.compareTo(el) > 0 ? min : selected;
       case BigInteger it when selected instanceof BigInteger el -> it.compareTo(el) > 0 ? min : selected;
+      case Character it when selected instanceof Character el -> it.compareTo(el) > 0 ? min : selected;
       default -> min;
     };
   }
   default <N extends Number> One<N> max(final TryFunction1<? super T, ? extends N> select) {
-    return () -> cursor().map(select).reduce(() -> null, maximise());
+    return () -> cursor().map(select).<N>reduce(() -> null, maximise());
   }
 
   default One<T> max() {
-    return () -> cursor().reduce(() -> null, maximise());
+    return () -> cursor().<T>reduce(() -> null, maximise());
   }
 
   default <N extends Number> One<N> min(final TryFunction1<? super T, ? extends N> select) {
-    return () -> cursor().map(select).reduce(() -> null, minimise());
+    return () -> cursor().map(select).<N>reduce(() -> null, minimise());
   }
 
   default One<T> min() {
-    return () -> cursor().reduce(() -> null, minimise());
+    return () -> cursor().<T>reduce(() -> null, minimise());
   }
 }

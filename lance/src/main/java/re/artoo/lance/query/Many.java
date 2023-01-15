@@ -2,7 +2,6 @@ package re.artoo.lance.query;
 
 import re.artoo.lance.func.TrySupplier1;
 import re.artoo.lance.query.many.*;
-import re.artoo.lance.query.many.pairs.Pairable;
 
 @FunctionalInterface
 public interface Many<T> extends
@@ -48,8 +47,6 @@ public interface Many<T> extends
   static <R> Many<R> from(Iterable<R> iterable) {
     return () -> Cursor.iteration(iterable.iterator());
   }
-
-  interface Pairs<A, B> extends Pairable<A, B> {}
 }
 
 final class Ints implements Many<Integer> {

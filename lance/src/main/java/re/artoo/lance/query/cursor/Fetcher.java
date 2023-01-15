@@ -6,13 +6,10 @@ import re.artoo.lance.query.FetchException;
 import java.util.Iterator;
 
 public interface Fetcher<T> extends Iterator<T> {
-
   default T fetch() throws Throwable {
     return fetch((index, element) -> element);
   }
-
   <R> R fetch(TryIntFunction1<? super T, ? extends R> detach) throws Throwable;
-
   @Override
   default T next() {
     try {

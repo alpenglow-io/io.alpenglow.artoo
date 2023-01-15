@@ -3,13 +3,12 @@ package re.artoo.lance.func;
 import java.util.function.Consumer;
 
 @FunctionalInterface
-public interface TryConsumer1<A> extends Consumer<A> {
-  void invoke(A a) throws Throwable;
+public interface TryIntConsumer1<A> {
+  void invoke(int integer, A a) throws Throwable;
 
-  @Override
-  default void accept(A a) {
+  default void accept(int integer, A a) {
     try {
-      invoke(a);
+      invoke(integer, a);
     } catch (Throwable throwable) {
       throw new InvokeException(throwable);
     }

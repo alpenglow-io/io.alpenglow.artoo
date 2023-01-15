@@ -2,6 +2,7 @@ package re.artoo.lance.query.many;
 
 import re.artoo.lance.Queryable;
 import re.artoo.lance.func.TryPredicate2;
+import re.artoo.lance.func.TryUnaryOperator;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.Many;
 import re.artoo.lance.query.cursor.routine.join.Join;

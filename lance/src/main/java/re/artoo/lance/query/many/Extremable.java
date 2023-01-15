@@ -3,14 +3,10 @@ package re.artoo.lance.query.many;
 import re.artoo.lance.Queryable;
 import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.func.TryFunction2;
-import re.artoo.lance.func.TrySupplier1;
-import re.artoo.lance.query.Many;
 import re.artoo.lance.query.One;
-import re.artoo.lance.query.closure.Extreme;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.security.Provider;
 
 public interface Extremable<T> extends Queryable<T> {
   private static <REDUCED> TryFunction2<REDUCED, ? extends REDUCED, REDUCED> maximise() {
@@ -27,7 +23,6 @@ public interface Extremable<T> extends Queryable<T> {
       default -> max;
     };
   }
-
   private static <REDUCED> TryFunction2<REDUCED, ? extends REDUCED, REDUCED> minimise() {
     return (min, selected) -> switch (min) {
       case null -> selected;
@@ -43,18 +38,18 @@ public interface Extremable<T> extends Queryable<T> {
     };
   }
   default <N extends Number> One<N> max(final TryFunction1<? super T, ? extends N> select) {
-    return () -> cursor().map(select).reduce(null, maximise());
+    return () -> cursor().map(select).reduce(() -> null, maximise());
   }
 
   default One<T> max() {
-    return () -> cursor().reduce(null, maximise());
+    return () -> cursor().reduce(() -> null, maximise());
   }
 
   default <N extends Number> One<N> min(final TryFunction1<? super T, ? extends N> select) {
-    return () -> cursor().map(select).reduce(null, minimise());
+    return () -> cursor().map(select).reduce(() -> null, minimise());
   }
 
   default One<T> min() {
-    return () -> cursor().reduce(null, minimise());
+    return () -> cursor().reduce(() -> null, minimise());
   }
 }

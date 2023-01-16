@@ -10,6 +10,7 @@ public interface Fetcher<T> extends Iterator<T> {
     return fetch((index, element) -> element);
   }
   <R> R fetch(TryIntFunction1<? super T, ? extends R> detach) throws Throwable;
+
   @Override
   default T next() {
     try {

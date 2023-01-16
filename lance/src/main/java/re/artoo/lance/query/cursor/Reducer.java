@@ -41,6 +41,7 @@ final class Reduce<ELEMENT, REDUCED> implements Cursor<REDUCED> {
     while (fetcher.hasNext()) {
       final var constant = reduced;
       reduced = fetcher.fetch((index, element) -> reducer.invoke(index, constant, element));
+      reduced = reduced == null ? constant : reduced;
     }
     return detach.invoke(0, reduced);
   }

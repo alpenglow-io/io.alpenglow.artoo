@@ -49,7 +49,7 @@ public class ExtremableTest {
 
   @Test
   public void shouldFindMinBySelecting() {
-    final var min = Many.from(new Pet("Pluto", 33), null, new Pet("Fuffy", 22), new Pet("Cerberos", 41)).min(Pet::age);
+    final var min = Many.from(new Pet("Pluto", 33), null, new Pet("Fuffy", 22), new Pet("Cerberos", 41), null).min(Pet::age);
 
 
     assertThat(min).contains(22);

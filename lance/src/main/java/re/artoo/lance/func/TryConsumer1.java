@@ -6,6 +6,11 @@ import java.util.function.Consumer;
 public interface TryConsumer1<A> extends Consumer<A> {
   void invoke(A a) throws Throwable;
 
+  default <SELF> SELF self(SELF self, A a) throws Throwable {
+    invoke(a);
+    return self;
+  }
+
   @Override
   default void accept(A a) {
     try {

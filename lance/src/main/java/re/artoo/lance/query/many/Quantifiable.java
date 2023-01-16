@@ -25,7 +25,7 @@ public interface Quantifiable<T> extends Queryable<T> {
     return none(Objects::isNull);
   }
   default <R> One<Boolean> none(Class<R> type) {
-    return none((index, it) -> !type.isInstance(it));
+    return none((index, it) -> type.isInstance(it));
   }
   default One<Boolean> none(TryPredicate1<? super T> where) {
     return none((index, it) -> where.invoke(it));
@@ -39,7 +39,7 @@ public interface Quantifiable<T> extends Queryable<T> {
     return some((index, it) -> where.invoke(it));
   }
   default One<Boolean> some(TryIntPredicate1<? super T> where) {
-    return () -> cursor().map(where::invoke).reduce(() -> true, (isIt, element) -> isIt || element);
+    return () -> cursor().map(where::invoke).reduce(() -> false, (isIt, element) -> isIt || element);
   }
 }
 

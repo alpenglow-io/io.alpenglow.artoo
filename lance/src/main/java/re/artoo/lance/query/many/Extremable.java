@@ -8,10 +8,11 @@ import re.artoo.lance.query.One;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+@SuppressWarnings("DuplicatedCode")
 public interface Extremable<T> extends Queryable<T> {
   private static <ELEMENT> TryFunction2<? super ELEMENT, ? super ELEMENT, ? extends ELEMENT> maximise() {
     return (max, selected) -> switch (max) {
-      case null -> selected;
+      case null -> selected instanceof Number || selected instanceof Character ? selected : null;
       case Float it when selected instanceof Float el -> it > el ? max : selected;
       case Double it when selected instanceof Double el -> it > el ? max : selected;
       case Byte it when selected instanceof Byte el -> it > el ? max : selected;
@@ -26,7 +27,7 @@ public interface Extremable<T> extends Queryable<T> {
   }
   private static <ELEMENT> TryFunction2<? super ELEMENT, ? super ELEMENT, ? extends ELEMENT> minimise() {
     return (min, selected) -> switch (min) {
-      case null -> selected;
+      case null -> selected instanceof Number || selected instanceof Character ? selected : null;
       case Float it when selected instanceof Float el -> it < el ? min : selected;
       case Double it when selected instanceof Double el -> it < el ? min : selected;
       case Byte it when selected instanceof Byte el -> it < el ? min : selected;

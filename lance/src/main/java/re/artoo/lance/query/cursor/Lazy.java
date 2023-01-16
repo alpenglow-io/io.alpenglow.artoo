@@ -10,26 +10,30 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class Lazy<T> implements Cursor<T> {
   private final TrySupplier1<T> element;
-  private final AtomicBoolean exausted;
+  private final AtomicBoolean fetched;
 
   public Lazy(TrySupplier1<T> element) { this(element, new AtomicBoolean(false)); }
-  private Lazy(TrySupplier1<T> element, AtomicBoolean exausted) {
+  private Lazy(TrySupplier1<T> element, AtomicBoolean fetched) {
     this.element = element;
-    this.exausted = exausted;
+    this.fetched = fetched;
   }
 
   @Override
   public <R> R fetch(TryIntFunction1<? super T, ? extends R> detach) throws Throwable {
-    return detach.invoke(index, elements[index++]);
+    try {
+      return detach.invoke(0, element.invoke());
+    } finally {
+      fetched.set(true);
+    }
   }
 
   @Override
   public boolean hasNext() {
-    return index < elements.length;
+    return !fetched.get();
   }
 
   @Override
   public <R> R as(final Routine<T, R> routine) {
-    return routine.onArray().apply(Arrays.copyOf(elements, elements.length));
+    return null;
   }
 }

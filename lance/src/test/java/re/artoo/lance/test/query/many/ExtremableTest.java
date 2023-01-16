@@ -1,5 +1,6 @@
 package re.artoo.lance.test.query.many;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import re.artoo.lance.query.Many;
 import re.artoo.lance.test.Test.Pet;
@@ -8,17 +9,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ExtremableTest {
   @Test
+  @DisplayName("should find max")
   public void shouldFindMaxByDefault() throws Throwable {
-    final var max = Many.from(1, 2, 3, 4, null).max().cursor().fetch();
+    final var max = Many.from(1, 2, 3, 4, null).max();
 
-    assertThat(max).isEqualTo(4);
+    assertThat(max).contains(4);
   }
 
   @Test
+  @DisplayName("should find min")
   public void shouldFindMinByDefault() {
-    final var min = Many.from(null, 1, 2, 3, 4).min().iterator().next();
+    final var min = Many.from(null, 1, 2, 3, 4).min();
 
-    assertThat(min).isEqualTo(1);
+    assertThat(min).contains(1);
   }
 
   @Test
@@ -46,9 +49,9 @@ public class ExtremableTest {
 
   @Test
   public void shouldFindMinBySelecting() {
-    final var min = Many.from(new Pet("Pluto", 33), null, new Pet("Fuffy", 22), new Pet("Cerberos", 41)).min(Pet::age).otherwise(-1);
+    final var min = Many.from(new Pet("Pluto", 33), null, new Pet("Fuffy", 22), new Pet("Cerberos", 41)).min(Pet::age);
 
 
-    assertThat(min).isEqualTo(22);
+    assertThat(min).contains(22);
   }
 }

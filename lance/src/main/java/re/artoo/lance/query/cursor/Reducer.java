@@ -15,16 +15,16 @@ public sealed interface Reducer<ELEMENT> extends Fetcher<ELEMENT> permits Cursor
     return reduce(initial, (index, reduced, element) -> operation.invoke(reduced, element));
   }
   default <REDUCED> Cursor<REDUCED> reduce(TrySupplier1<? extends REDUCED> initial, TryIntFunction2<? super REDUCED, ? super ELEMENT, ? extends REDUCED> operation) {
-    return new Reduce<>(this, initial, operation);
+    return new Reduce<>(this, Cursor.lazy(initial), operation);
   }
 }
 
 final class Reduce<ELEMENT, REDUCED> implements Cursor<REDUCED> {
-  private final Fetcher<ELEMENT> fetcher;
-  private final TrySupplier1<? extends REDUCED> initial;
+  private final Fetcher<? extends ELEMENT> fetcher;
+  private final Fetcher<? extends REDUCED> initial;
   private final TryIntFunction2<? super REDUCED, ? super ELEMENT, ? extends REDUCED> reducer;
 
-  Reduce(Fetcher<ELEMENT> fetcher, TrySupplier1<? extends REDUCED> initial, TryIntFunction2<? super REDUCED, ? super ELEMENT, ? extends REDUCED> reducer) {
+  Reduce(Fetcher<? extends ELEMENT> fetcher, Fetcher<? extends REDUCED> initial, TryIntFunction2<? super REDUCED, ? super ELEMENT, ? extends REDUCED> reducer) {
     this.fetcher = fetcher;
     this.initial = initial;
     this.reducer = reducer;
@@ -37,7 +37,7 @@ final class Reduce<ELEMENT, REDUCED> implements Cursor<REDUCED> {
 
   @Override
   public <R> R fetch(TryIntFunction1<? super REDUCED, ? extends R> detach) throws Throwable {
-    var reduced = initial.invoke();
+    var reduced = initial.fetch();
     while (fetcher.hasNext()) {
       final var constant = reduced;
       reduced = fetcher.fetch((index, element) -> reducer.invoke(index, constant, element));
@@ -47,6 +47,6 @@ final class Reduce<ELEMENT, REDUCED> implements Cursor<REDUCED> {
 
   @Override
   public boolean hasNext() {
-    return fetcher.hasNext();
+    return fetcher.hasNext() || initial.hasNext();
   }
 }

@@ -11,6 +11,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AggregatableTest {
   @Test
+  @DisplayName("should aggregate strings by joining spaces")
+  void shouldAggregateStringsByJoiningComma() throws Throwable {
+    final var joined = Many.from("hello", "my", "nice", "friend")
+      .aggregate("", (join, string) -> join + string + " ")
+      .cursor()
+      .fetch();
+
+    assertThat(joined).isEqualTo("hello my nice friend");
+  }
+
+  @Test
   @DisplayName("should reduce to the longest name")
   public void shouldReduceLongestName() {
     final var aggregate = Many.from("apple", "mango", "orange", "passionfruit", "grape")

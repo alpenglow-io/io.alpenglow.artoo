@@ -41,18 +41,18 @@ public interface Extremable<T> extends Queryable<T> {
     };
   }
   default <N extends Number> One<N> max(final TryFunction1<? super T, ? extends N> select) {
-    return () -> cursor().map(select).<N>reduce(() -> null, maximise());
+    return () -> cursor().map(select).<N>left(() -> null, maximise());
   }
 
   default One<T> max() {
-    return () -> cursor().<T>reduce(() -> null, maximise());
+    return () -> cursor().<T>left(() -> null, maximise());
   }
 
   default <N extends Number> One<N> min(final TryFunction1<? super T, ? extends N> select) {
-    return () -> cursor().map(select).<N>reduce(() -> null, minimise());
+    return () -> cursor().map(select).<N>left(() -> null, minimise());
   }
 
   default One<T> min() {
-    return () -> cursor().<T>reduce(() -> null, minimise());
+    return () -> cursor().<T>left(() -> null, minimise());
   }
 }

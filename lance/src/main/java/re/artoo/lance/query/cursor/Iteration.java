@@ -13,8 +13,8 @@ public final class Iteration<T> implements Cursor<T> {
   public Iteration(final Iterator<T> iterator) {this.iterator = iterator;}
 
   @Override
-  public <R> R fetch(TryIntFunction1<? super T, ? extends R> detach) throws Throwable {
-    return detach.invoke(index++, iterator.next());
+  public <R> R traverse(TryIntFunction1<? super T, ? extends R> fetch) throws Throwable {
+    return fetch.invoke(index++, iterator.next());
   }
 
   @Override

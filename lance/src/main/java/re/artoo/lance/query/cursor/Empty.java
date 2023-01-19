@@ -8,7 +8,7 @@ public enum Empty implements Cursor<Object> {
   Default;
 
   @Override
-  public <R> R fetch(TryIntFunction1<? super Object, ? extends R> detach) throws Throwable {
+  public <R> R traverse(TryIntFunction1<? super Object, ? extends R> fetch) throws Throwable {
     return null;
   }
 

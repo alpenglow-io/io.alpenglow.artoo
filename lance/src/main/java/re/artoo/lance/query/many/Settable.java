@@ -43,7 +43,7 @@ final class Except<T> implements TryFunction1<T, T> {
   public final T invoke(final T origin) throws Throwable {
     final var cursor = queryable.cursor();
     T element = null;
-    while (cursor.hasNext() && !(element = cursor.fetch()).equals(origin));
+    while (cursor.hasNext() && !(element = cursor.traverse()).equals(origin));
     return cursor.hasNext() || (element != null && element.equals(origin)) ? null : origin;
   }
 }
@@ -57,8 +57,8 @@ final class Intersect<T> implements TryFunction1<T, T> {
   @Override
   public T invoke(final T origin) throws Throwable {
     final var cursor = queryable.cursor();
-    var element = cursor.fetch();
-    for (; cursor.hasNext() && !element.equals(origin); element = cursor.fetch());
+    var element = cursor.traverse();
+    for (; cursor.hasNext() && !element.equals(origin); element = cursor.traverse());
     return (element != null && element.equals(origin)) || cursor.hasNext() ? origin : null;
   }
 }

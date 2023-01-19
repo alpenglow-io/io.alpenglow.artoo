@@ -42,7 +42,7 @@ public class ExtremableTest {
   public void shouldFindMaxBySelecting() throws Throwable {
     Pet[] pets = {new Pet("Pluto", 33), new Pet("Fuffy", 22), new Pet("Cerberos", 41)};
 
-    final var max = Many.from(pets).max(Pet::age).cursor().fetch();
+    final var max = Many.from(pets).max(Pet::age).cursor().traverse();
 
     assertThat(max).isEqualTo(41);
   }

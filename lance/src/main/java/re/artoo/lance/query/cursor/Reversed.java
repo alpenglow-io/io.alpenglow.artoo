@@ -6,32 +6,30 @@ import re.artoo.lance.query.cursor.routine.Routine;
 
 import java.util.Arrays;
 
-public final class Open<T> implements Cursor<T> {
+public final class Reversed<T> implements Cursor<T> {
   private final T[] elements;
-  private int traverse;
-  private int reverse;
-  public Open(T[] elements) {
-    this(0, elements.length, elements);
+  private int index;
+  public Reversed(T[] elements) {
+    this(elements.length, elements);
   }
-  private Open(int traverse, int reverse, T[] elements) {
-    this.traverse = traverse;
-    this.reverse = reverse;
+  private Reversed(int length, T[] elements) {
+    this.index = length;
     this.elements = elements;
   }
 
   @Override
   public <R> R traverse(TryIntFunction1<? super T, ? extends R> fetch) throws Throwable {
-    return fetch.invoke(traverse, elements[traverse++]);
+    return fetch.invoke(index, elements[index--]);
   }
 
   @Override
   public Inquiry<T> reversal() {
-    return new Reversed<>(elements);
+    return new Open<>(elements);
   }
 
   @Override
   public boolean hasNext() {
-    return traverse < elements.length;
+    return index >= 0;
   }
 
   @Override

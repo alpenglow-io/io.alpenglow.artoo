@@ -15,7 +15,7 @@ public non-sealed interface Cursor<T> extends Mapper<T>, Reducer<T>, Replacer<T>
     return new Lazy<>(element);
   }
 
-  static <T> Cursor<T> chain(final Fetcher<T> prev, final Fetcher<T> next) {
+  static <T> Cursor<T> chain(final Inquiry<T> prev, final Inquiry<T> next) {
     return new Chain<>(prev, next);
   }
 

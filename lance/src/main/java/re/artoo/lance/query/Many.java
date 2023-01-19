@@ -7,17 +7,22 @@ import re.artoo.lance.query.many.pairs.Pairable;
 @FunctionalInterface
 public interface Many<T> extends
   Aggregatable<T>,
+  Averageable<T>,
   Concatenatable<T>,
   Convertable<T>,
+  Countable<T>,
   Filterable<T>,
   Joinable<T>,
   Elseable<T>,
+  Extremable<T>,
+  Foldable<T>,
   Partitionable<T>,
   Peekable<T>,
   Projectable<T>,
   Quantifiable<T>,
   Settable<T>,
   Sortable<T>,
+  Summable<T>,
   Uniquable<T> {
 
   @SafeVarargs

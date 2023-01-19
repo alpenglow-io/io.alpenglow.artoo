@@ -3,67 +3,50 @@ package re.artoo.lance.query.cursor;
 import re.artoo.lance.func.TryFunction2;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.func.TryIntFunction2;
-import re.artoo.lance.func.TrySupplier1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.cursor.routine.Routine;
 
-public sealed interface Reducer<ELEMENT> extends Fetcher<ELEMENT> permits Cursor {
-  default Cursor<String> left(String initial, TryFunction2<? super String, ? super ELEMENT, ? extends String> operation) {
-    return left(() -> initial, operation);
+public sealed interface Reducer<ELEMENT> extends Inquiry<ELEMENT> permits Cursor {
+
+  default <REDUCED> Cursor<REDUCED> left(REDUCED initial, TryIntFunction2<? super REDUCED, ? super ELEMENT, ? extends REDUCED> fold) {
+    return new Reduce<>(this, Cursor.open(initial), fold);
   }
 
-  default <REDUCED> Cursor<REDUCED> left(TrySupplier1<? extends REDUCED> initial, TryFunction2<? super REDUCED, ? super ELEMENT, ? extends REDUCED> operation) {
-    return left(initial, (index, reduced, element) -> operation.invoke(reduced, element));
+  default <REDUCED> Cursor<REDUCED> left(REDUCED initial, TryFunction2<? super REDUCED, ? super ELEMENT, ? extends REDUCED> fold) {
+    return left(initial, (index, reduced, element) -> fold.invoke(reduced, element));
   }
 
-  default <REDUCED> Cursor<REDUCED> left(TrySupplier1<? extends REDUCED> initial, TryIntFunction2<? super REDUCED, ? super ELEMENT, ? extends REDUCED> operation) {
-    return new Left<>(this, Cursor.lazy(initial), operation);
+  default Cursor<ELEMENT> left(TryIntFunction2<? super ELEMENT, ? super ELEMENT, ? extends ELEMENT> reduce) {
+    return new Reduce<>(this, Cursor.empty(), reduce);
   }
 
-  default <REDUCED> Cursor<REDUCED> right(TryIntFunction1<? super ELEMENT, ? extends REDUCED> initial, TryIntFunction2<? super REDUCED, ? super ELEMENT, ? extends REDUCED> fold) {
-    return new Right<>(this, initial, fold);
-  }
-}
-
-final class Right<ELEMENT, REDUCED> implements Cursor<REDUCED> {
-  private final Fetcher<? extends ELEMENT> fetcher;
-  private final TryIntFunction1<? super ELEMENT, ? extends REDUCED> initial;
-  private final TryIntFunction2<? super REDUCED, ? super ELEMENT, ? extends REDUCED> fold;
-
-  Right(Fetcher<? extends ELEMENT> fetcher, TryIntFunction1<? super ELEMENT, ? extends REDUCED> initial, TryIntFunction2<? super REDUCED, ? super ELEMENT, ? extends REDUCED> fold) {
-    this.fetcher = fetcher;
-    this.initial = initial;
-    this.fold = fold;
+  default Cursor<ELEMENT> left(TryFunction2<? super ELEMENT, ? super ELEMENT, ? extends ELEMENT> reduce) {
+    return left((index, reduced, element) -> reduce.invoke(reduced, element));
   }
 
-  @Override
-  public <TO> TO as(Routine<REDUCED, TO> routine) {
-    return null;
+  default <REDUCED> Cursor<REDUCED> right(REDUCED initial, TryIntFunction2<? super REDUCED, ? super ELEMENT, ? extends REDUCED> fold) {
+    return new Reduce<>(this.reversal(), Cursor.open(initial), fold);
   }
 
-  @Override
-  public <R> R fetch(TryIntFunction1<? super REDUCED, ? extends R> detach) throws Throwable {
-    var reduced = fetcher.fetch(initial);
-    while (fetcher.hasNext()) {
-      final var constant = reduced;
-      reduced = (reduced = fetcher.fetch((index, element) -> fold.invoke(index, constant, element))) == null ? constant : reduced;
-    }
-    return detach.invoke(0, reduced);
+  default <REDUCED> Cursor<REDUCED> right(REDUCED initial, TryFunction2<? super REDUCED, ? super ELEMENT, ? extends REDUCED> fold) {
+    return left(initial, (index, reduced, element) -> fold.invoke(reduced, element));
   }
 
-  @Override
-  public boolean hasNext() {
-    return fetcher.hasNext();
+  default Cursor<ELEMENT> right(TryIntFunction2<? super ELEMENT, ? super ELEMENT, ? extends ELEMENT> reduce) {
+    return new Reduce<>(this.reversal(), Cursor.empty(), reduce);
+  }
+
+  default Cursor<ELEMENT> right(TryFunction2<? super ELEMENT, ? super ELEMENT, ? extends ELEMENT> reduce) {
+    return left((index, reduced, element) -> reduce.invoke(reduced, element));
   }
 }
-
-final class Left<ELEMENT, REDUCED> implements Cursor<REDUCED> {
-  private final Fetcher<? extends ELEMENT> fetcher;
-  private final Fetcher<? extends REDUCED> initial;
+final class Reduce<ELEMENT, REDUCED> implements Cursor<REDUCED> {
+  private final Inquiry<? extends ELEMENT> inquiry;
+  private final Inquiry<? extends REDUCED> initial;
   private final TryIntFunction2<? super REDUCED, ? super ELEMENT, ? extends REDUCED> fold;
 
-  Left(Fetcher<? extends ELEMENT> fetcher, Fetcher<? extends REDUCED> initial, TryIntFunction2<? super REDUCED, ? super ELEMENT, ? extends REDUCED> reducer) {
-    this.fetcher = fetcher;
+  Reduce(Inquiry<? extends ELEMENT> inquiry, Inquiry<? extends REDUCED> initial, TryIntFunction2<? super REDUCED, ? super ELEMENT, ? extends REDUCED> reducer) {
+    this.inquiry = inquiry;
     this.initial = initial;
     this.fold = reducer;
   }
@@ -74,17 +57,17 @@ final class Left<ELEMENT, REDUCED> implements Cursor<REDUCED> {
   }
 
   @Override
-  public <R> R fetch(TryIntFunction1<? super REDUCED, ? extends R> detach) throws Throwable {
-    var reduced = initial.fetch((index, it) -> it);
-    while (fetcher.hasNext()) {
+  public <R> R traverse(TryIntFunction1<? super REDUCED, ? extends R> fetch) throws Throwable {
+    var reduced = initial.traverse((index, it) -> it);
+    while (inquiry.hasNext()) {
       final var constant = reduced;
-      reduced = (reduced = fetcher.fetch((index, element) -> fold.invoke(index, constant, element))) == null ? constant : reduced;
+      reduced = (reduced = inquiry.traverse((index, element) -> fold.invoke(index, constant, element))) == null ? constant : reduced;
     }
-    return detach.invoke(0, reduced);
+    return fetch.invoke(0, reduced);
   }
 
   @Override
   public boolean hasNext() {
-    return fetcher.hasNext() || initial.hasNext();
+    return inquiry.hasNext() || initial.hasNext();
   }
 }

@@ -1,13 +1,11 @@
 package re.artoo.lance.query.cursor;
 
 import re.artoo.lance.func.*;
-import re.artoo.lance.query.Closure;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.IntClosure;
 import re.artoo.lance.query.cursor.mapper.Flat;
 import re.artoo.lance.query.cursor.mapper.Map;
 
-public sealed interface Mapper<T> extends Fetcher<T> permits Cursor {
+public sealed interface Mapper<T> extends Inquiry<T> permits Cursor {
   default Cursor<T> filter(TryIntPredicate1<? super T> filter) {
     return map((index, it) -> filter.invoke(index, it) ? it : null);
   }

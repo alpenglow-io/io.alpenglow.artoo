@@ -2,7 +2,7 @@ package re.artoo.lance.query.cursor.routine.concat;
 
 import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.cursor.Fetcher;
+import re.artoo.lance.query.cursor.Inquiry;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -24,7 +24,7 @@ public final class Array<T> implements Concat<T> {
   }
 
   @Override
-  public TryFunction1<Fetcher<T>, Cursor<T>> onSource() {
+  public TryFunction1<Inquiry<T>, Cursor<T>> onSource() {
     return prev -> Cursor.chain(prev, Cursor.open(next));
   }
 

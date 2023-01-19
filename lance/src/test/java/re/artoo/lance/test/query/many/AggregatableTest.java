@@ -16,7 +16,7 @@ public class AggregatableTest {
     final var joined = Many.from("hello", "my", "nice", "friend")
       .aggregate("", (join, string) -> join + string + " ")
       .cursor()
-      .fetch();
+      .traverse();
 
     assertThat(joined).isEqualTo("hello my nice friend");
   }
@@ -64,11 +64,11 @@ public class AggregatableTest {
       new Pet("Whiskers", 1)
     };
 
-    final var oldest = Many.from(pets).aggregate(MIN_VALUE, Pet::age, (max, current) -> current > max ? current : max).cursor().fetch();
+    final var oldest = Many.from(pets).aggregate(MIN_VALUE, Pet::age, (max, current) -> current > max ? current : max).cursor().traverse();
 
     assertThat(oldest).isEqualTo(8);
 
-    final var youngest = Many.from(pets).aggregate(MAX_VALUE, Pet::age, (min, current) -> current < min ? current : min).cursor().fetch();
+    final var youngest = Many.from(pets).aggregate(MAX_VALUE, Pet::age, (min, current) -> current < min ? current : min).cursor().traverse();
 
     assertThat(youngest).isEqualTo(1);
   }

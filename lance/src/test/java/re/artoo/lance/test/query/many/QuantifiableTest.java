@@ -6,7 +6,6 @@ import re.artoo.lance.query.Many;
 import re.artoo.lance.test.Test.Pet;
 import re.artoo.lance.test.Test.PetOwner;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 import static re.artoo.lance.query.Many.from;
 
@@ -17,7 +16,7 @@ public class QuantifiableTest {
     final var notEvery = Many.from(new Pet("Barley", 10), new Pet("Boots", 4), new Pet("Whiskers", 6))
       .every(pet -> pet.name().startsWith("B"))
       .cursor()
-      .fetch();
+      .traverse();
 
     assertThat(notEvery).isFalse();
   }
@@ -25,7 +24,7 @@ public class QuantifiableTest {
   @Test
   @DisplayName("should have some elements")
   public void shouldHaveAnyElement() throws Throwable {
-    final var some = Many.from(1, 2).some().cursor().fetch();
+    final var some = Many.from(1, 2).some().cursor().traverse();
 
     assertThat(some).isTrue();
   }
@@ -33,7 +32,7 @@ public class QuantifiableTest {
   @Test
   @DisplayName("should not have any elements")
   public void shouldNotHaveAnyElement() throws Throwable {
-    final var some = Many.from().some().cursor().fetch();
+    final var some = Many.from().some().cursor().traverse();
 
     assertThat(some).isFalse();
   }
@@ -41,7 +40,7 @@ public class QuantifiableTest {
   @Test
   @DisplayName("should have some even numbers")
   public void shouldHaveEvenNumber() throws Throwable {
-    final var some = Many.from(1, 2).some(number -> number % 2 == 0).cursor().fetch();
+    final var some = Many.from(1, 2).some(number -> number % 2 == 0).cursor().traverse();
 
     assertThat(some).isTrue();
   }
@@ -49,7 +48,7 @@ public class QuantifiableTest {
   @Test
   @DisplayName("should have some people with pets")
   public void shouldHaveThreePeople() throws Throwable {
-    final var some = Many.from(owners()).some(it -> it.pets().length > 0).cursor().fetch();
+    final var some = Many.from(owners()).some(it -> it.pets().length > 0).cursor().traverse();
 
     assertThat(some).isTrue();
   }
@@ -75,7 +74,7 @@ public class QuantifiableTest {
   @Test
   @DisplayName("should have none")
   void shouldHaveNone() throws Throwable {
-    final var none = Many.from().none().cursor().fetch();
+    final var none = Many.from().none().cursor().traverse();
 
     assertThat(none).isTrue();
   }
@@ -83,7 +82,7 @@ public class QuantifiableTest {
   @Test
   @DisplayName("should have none integer types")
   void shouldHaveNoneIntegerType() throws Throwable {
-    final var none = Many.from(true, null, 12.0F, 13.5D, 15L).none(Integer.class).cursor().fetch();
+    final var none = Many.from(true, null, 12.0F, 13.5D, 15L).none(Integer.class).cursor().traverse();
 
     assertThat(none).isTrue();
   }
@@ -91,7 +90,7 @@ public class QuantifiableTest {
   @Test
   @DisplayName("should have none owners with more than 5 pets")
   void shouldHaveNonePets() throws Throwable {
-    final var none = Many.from(owners()).none(owner -> owner.pets().length > 5).cursor().fetch();
+    final var none = Many.from(owners()).none(owner -> owner.pets().length > 5).cursor().traverse();
 
     assertThat(none).isTrue();
   }

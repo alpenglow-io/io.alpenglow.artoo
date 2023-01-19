@@ -2,16 +2,16 @@ package re.artoo.lance.query.cursor.mapper;
 
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.cursor.Fetcher;
+import re.artoo.lance.query.cursor.Inquiry;
 import re.artoo.lance.query.cursor.routine.Routine;
 
 @SuppressWarnings("SwitchStatementWithTooFewBranches")
 public final class Flat<T> implements Cursor<T> {
-  private final Fetcher<Fetcher<T>> source;
-  private Fetcher<T> current;
+  private final Inquiry<Inquiry<T>> source;
+  private Inquiry<T> current;
   private int index = 0;
 
-  public Flat(final Fetcher<Fetcher<T>> source) {
+  public Flat(final Inquiry<Inquiry<T>> source) {
     this.source = source;
   }
 
@@ -31,15 +31,15 @@ public final class Flat<T> implements Cursor<T> {
     return hasNext;
   }
   @Override
-  public <R> R fetch(TryIntFunction1<? super T, ? extends R> detach) throws Throwable {
+  public <R> R traverse(TryIntFunction1<? super T, ? extends R> fetch) throws Throwable {
     /*
      * if we don't have a current flatten fetcher,
      * then we check if we have one within (see above) and if so, we fetch a value from it,
      * otherwise we just fetch a value from it
      */
-    return detach.invoke(index++, switch (current) {
-      case null -> hasNext() ? current.fetch() : null;
-      default -> current.hasNext() || hasNext() ? current.fetch() : null;
+    return fetch.invoke(index++, switch (current) {
+      case null -> hasNext() ? current.traverse() : null;
+      default -> current.hasNext() || hasNext() ? current.traverse() : null;
     });
   }
 

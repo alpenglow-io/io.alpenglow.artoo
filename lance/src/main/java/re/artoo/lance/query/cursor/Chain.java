@@ -5,10 +5,10 @@ import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.cursor.routine.Routine;
 
 public final class Chain<T> implements Cursor<T> {
-  private final Fetcher<T> prev;
-  private final Fetcher<T> next;
+  private final Inquiry<T> prev;
+  private final Inquiry<T> next;
 
-  public Chain(final Fetcher<T> prev, final Fetcher<T> next) {
+  public Chain(final Inquiry<T> prev, final Inquiry<T> next) {
     this.prev = prev;
     this.next = next;
   }
@@ -19,8 +19,8 @@ public final class Chain<T> implements Cursor<T> {
   }
 
   @Override
-  public <R> R fetch(TryIntFunction1<? super T, ? extends R> detach) throws Throwable {
-    return prev.hasNext() ? prev.fetch(detach) : next.fetch(detach);
+  public <R> R traverse(TryIntFunction1<? super T, ? extends R> fetch) throws Throwable {
+    return prev.hasNext() ? prev.traverse(fetch) : next.traverse(fetch);
   }
 
   @Override

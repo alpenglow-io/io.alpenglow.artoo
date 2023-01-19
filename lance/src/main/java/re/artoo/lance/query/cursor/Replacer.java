@@ -11,7 +11,7 @@ import re.artoo.lance.scope.Let;
 
 import java.util.Iterator;
 
-public interface Replacer<T> extends Fetcher<T> {
+public interface Replacer<T> extends Inquiry<T> {
   default <C extends Cursor<T>> Cursor<T> or(final TrySupplier1<? extends C> alternative) {
     return new Or<>(this, Let.lazy(alternative));
   }
@@ -26,13 +26,13 @@ public interface Replacer<T> extends Fetcher<T> {
 }
 
 abstract non-sealed class As<T> implements Convertor<T> {
-  protected final Fetcher<T> fetcher;
+  protected final Inquiry<T> inquiry;
 
-  protected As(final Fetcher<T> fetcher) {this.fetcher = fetcher;}
+  protected As(final Inquiry<T> inquiry) {this.inquiry = inquiry;}
 
   @Override
   public final <R> R as(final Routine<T, R> routine) {
-    return switch (fetcher) {
+    return switch (inquiry) {
       case Cursor<T> cursor -> cursor.as(routine);
       default -> Cursor.<T>empty().as(routine);
     };
@@ -40,21 +40,21 @@ abstract non-sealed class As<T> implements Convertor<T> {
 }
 
 final class Or<T, C extends Cursor<T>> extends As<T> implements Cursor<T> {
-  private final Late<Fetcher<T>> reference = Late.init();
+  private final Late<Inquiry<T>> reference = Late.init();
   private final Let<? extends C> other;
 
-  Or(final Fetcher<T> fetcher, final Let<? extends C> other) {
-    super(fetcher);
+  Or(final Inquiry<T> inquiry, final Let<? extends C> other) {
+    super(inquiry);
     this.other = other;
   }
 
   @Override
-  public <R> R fetch(TryIntFunction1<? super T, ? extends R> detach) {
-    return hasNext() ? reference.let(it -> it.fetch(detach)) : null;
+  public <R> R traverse(TryIntFunction1<? super T, ? extends R> fetch) {
+    return hasNext() ? reference.let(it -> it.traverse(fetch)) : null;
   }
   @Override
   public boolean hasNext() {
-    other.get(otherwise -> reference.set(() -> fetcher.hasNext() ? fetcher : otherwise));
+    other.get(otherwise -> reference.set(() -> inquiry.hasNext() ? inquiry : otherwise));
 
     return reference.let(Iterator::hasNext);
   }
@@ -64,16 +64,16 @@ final class Er<T, E extends RuntimeException> extends As<T> implements Cursor<T>
   private final String message;
   private final TryFunction2<? super String, ? super Throwable, ? extends E> exception;
 
-  Er(final Fetcher<T> fetcher, final String message, final TryFunction2<? super String, ? super Throwable, ? extends E> exception) {
-    super(fetcher);
+  Er(final Inquiry<T> inquiry, final String message, final TryFunction2<? super String, ? super Throwable, ? extends E> exception) {
+    super(inquiry);
     this.message = message;
     this.exception = exception;
   }
   @Override
-  public <R> R fetch(TryIntFunction1<? super T, ? extends R> detach) throws Throwable {
+  public <R> R traverse(TryIntFunction1<? super T, ? extends R> fetch) throws Throwable {
     try {
       if (hasNext()) {
-        return fetcher.fetch(detach);
+        return inquiry.traverse(fetch);
       } else {
         throw exception.apply(message, null);
       }
@@ -83,21 +83,21 @@ final class Er<T, E extends RuntimeException> extends As<T> implements Cursor<T>
   }
   @Override
   public boolean hasNext() {
-    return fetcher.hasNext();
+    return inquiry.hasNext();
   }
 }
 
 final class Catch<T> extends As<T> implements Cursor<T> {
   private final TryConsumer1<? super Throwable> catch$;
 
-  Catch(Fetcher<T> fetcher, TryConsumer1<? super Throwable> catch$) {
-    super(fetcher);
+  Catch(Inquiry<T> inquiry, TryConsumer1<? super Throwable> catch$) {
+    super(inquiry);
     this.catch$ = catch$;
   }
   @Override
-  public <R> R fetch(TryIntFunction1<? super T, ? extends R> detach) {
+  public <R> R traverse(TryIntFunction1<? super T, ? extends R> fetch) {
     try {
-      return fetcher.fetch(detach);
+      return inquiry.traverse(fetch);
     } catch (Throwable throwable) {
       catch$.accept(throwable);
       return null;
@@ -106,6 +106,6 @@ final class Catch<T> extends As<T> implements Cursor<T> {
 
   @Override
   public boolean hasNext() {
-    return fetcher.hasNext();
+    return inquiry.hasNext();
   }
 }

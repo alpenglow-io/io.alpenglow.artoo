@@ -2,21 +2,21 @@ package re.artoo.lance.query.cursor.mapper;
 
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.cursor.Fetcher;
+import re.artoo.lance.query.cursor.Inquiry;
 import re.artoo.lance.query.cursor.routine.Routine;
 
 public final class Map<S, T> implements Cursor<T> {
-  private final Fetcher<S> fetcher;
+  private final Inquiry<S> inquiry;
   private final TryIntFunction1<? super S, ? extends T> map;
 
-  public Map(final Fetcher<S> fetcher, final TryIntFunction1<? super S, ? extends T> map) {
-    this.fetcher = fetcher;
+  public Map(final Inquiry<S> inquiry, final TryIntFunction1<? super S, ? extends T> map) {
+    this.inquiry = inquiry;
     this.map = map;
   }
 
   @Override
-  public <R> R fetch(TryIntFunction1<? super T, ? extends R> detach) throws Throwable {
-    return fetcher.fetch((index, element) -> coalesce(index, coalesce(index, element, map), detach));
+  public <R> R traverse(TryIntFunction1<? super T, ? extends R> fetch) throws Throwable {
+    return inquiry.traverse((index, element) -> coalesce(index, coalesce(index, element, map), fetch));
   }
 
   private static <Z, X> Z coalesce(int index, X value, TryIntFunction1<? super X, ? extends Z> func) throws Throwable {
@@ -25,12 +25,12 @@ public final class Map<S, T> implements Cursor<T> {
 
   @Override
   public <R> Cursor<R> map(final TryIntFunction1<? super T, ? extends R> mapAgain) {
-    return new Map<>(fetcher, (index, it) -> coalesce(index, coalesce(index, it, map), mapAgain));
+    return new Map<>(inquiry, (index, it) -> coalesce(index, coalesce(index, it, map), mapAgain));
   }
 
   @Override
   public boolean hasNext() {
-    return fetcher.hasNext();
+    return inquiry.hasNext();
   }
 
   @Override

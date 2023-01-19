@@ -3,7 +3,7 @@ package re.artoo.lance.query.cursor.routine.join;
 import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.func.TryPredicate2;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.cursor.Fetcher;
+import re.artoo.lance.query.cursor.Inquiry;
 import re.artoo.lance.tuple.Pair;
 
 import java.util.Iterator;
@@ -29,7 +29,7 @@ final class Inner<A, B> implements Join<A, Cursor<Pair<A, B>>> {
   }
 
   @Override
-  public TryFunction1<Fetcher<A>, Cursor<Pair<A, B>>> onSource() {
+  public TryFunction1<Inquiry<A>, Cursor<Pair<A, B>>> onSource() {
     return null;
   }
 

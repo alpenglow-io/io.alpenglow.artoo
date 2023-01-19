@@ -19,9 +19,9 @@ public final class Lazy<T> implements Cursor<T> {
   }
 
   @Override
-  public <R> R fetch(TryIntFunction1<? super T, ? extends R> detach) throws Throwable {
+  public <R> R traverse(TryIntFunction1<? super T, ? extends R> fetch) throws Throwable {
     try {
-      return detach.invoke(0, element.invoke());
+      return fetch.invoke(0, element.invoke());
     } finally {
       fetched.set(true);
     }

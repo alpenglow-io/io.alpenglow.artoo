@@ -6,7 +6,7 @@ import re.artoo.lance.query.cursor.routine.Routine;
 
 import java.util.Iterator;
 
-public interface Closer<T> extends Fetcher<T> {
+public interface Closer<T> extends Inquiry<T> {
   default Cursor<T> close() {
     return new Close<>(this);
   }
@@ -41,8 +41,8 @@ final class Close<T> implements Cursor<T> {
   }
 
   @Override
-  public <R> R fetch(TryIntFunction1<? super T, ? extends R> detach) throws Throwable {
-    return detach.invoke(index++, next());
+  public <R> R traverse(TryIntFunction1<? super T, ? extends R> fetch) throws Throwable {
+    return fetch.invoke(index++, next());
   }
 
   @Override

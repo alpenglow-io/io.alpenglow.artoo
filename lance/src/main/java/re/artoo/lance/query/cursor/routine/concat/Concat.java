@@ -1,7 +1,7 @@
 package re.artoo.lance.query.cursor.routine.concat;
 
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.cursor.Fetcher;
+import re.artoo.lance.query.cursor.Inquiry;
 import re.artoo.lance.query.cursor.routine.Routine;
 
 public sealed interface Concat<T> extends Routine<T, Cursor<T>> permits Array, Liter {
@@ -10,8 +10,8 @@ public sealed interface Concat<T> extends Routine<T, Cursor<T>> permits Array, L
     return new Array<>(elements);
   }
 
-  static <T> Concat<T> liter(Fetcher<T> fetcher) {
-    return new Liter<>(fetcher);
+  static <T> Concat<T> liter(Inquiry<T> inquiry) {
+    return new Liter<>(inquiry);
   }
 
 }

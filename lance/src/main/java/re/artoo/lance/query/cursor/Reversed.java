@@ -10,7 +10,7 @@ public final class Reversed<T> implements Cursor<T> {
   private final T[] elements;
   private int index;
   public Reversed(T[] elements) {
-    this(elements.length, elements);
+    this(elements.length - 1, elements);
   }
   private Reversed(int length, T[] elements) {
     this.index = length;
@@ -24,7 +24,7 @@ public final class Reversed<T> implements Cursor<T> {
 
   @Override
   public Inquiry<T> reversal() {
-    return new Open<>(elements);
+    return new Forth<>(elements);
   }
 
   @Override

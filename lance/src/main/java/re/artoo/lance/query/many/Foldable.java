@@ -7,27 +7,23 @@ import re.artoo.lance.func.TryPredicate1;
 import re.artoo.lance.query.One;
 
 public interface Foldable<T> extends Queryable<T> {
-  default <A, R> One<A> fold(A seed, TryPredicate1<? super T> where, TryFunction1<? super T, ? extends R> select, TryFunction2<? super A, ? super R, ? extends A> aggregator) {
+  default <FOLDED, R> One<FOLDED> fold(FOLDED right, TryPredicate1<? super T> where, TryFunction1<? super T, ? extends R> select, TryFunction2<? super FOLDED, ? super R, ? extends FOLDED> operation) {
     return () -> cursor()
       .filter(where)
       .map(select)
-      .right(seed, aggregator);
+      .foldRight(right, operation);
   }
 
-  default <A, R> One<A> fold(A seed, TryFunction1<? super T, ? extends R> select, TryFunction2<? super A, ? super R, ? extends A> aggregate) {
-    return fold(seed, it -> true, select, aggregate);
+  default <FOLDED, R> One<FOLDED> fold(FOLDED right, TryFunction1<? super T, ? extends R> select, TryFunction2<? super FOLDED, ? super R, ? extends FOLDED> operation) {
+    return () -> cursor().map(select).foldRight(right, operation);
   }
 
-  default <A, R> One<A> fold(TryFunction1<? super T, ? extends R> select, TryFunction2<? super A, ? super R, ? extends A> aggregate) {
-    return fold(null, it -> true, select, aggregate);
+  default <FOLDED> One<FOLDED> fold(FOLDED right, TryFunction2<? super FOLDED, ? super T, ? extends FOLDED> operation) {
+    return () -> cursor().foldRight(right, operation);
   }
 
-  default <A> One<A> fold(A left, TryFunction2<? super A, ? super T, ? extends A> aggregate) {
-    return fold(left, it -> true, it -> it, aggregate);
-  }
-
-  default One<T> fold(TryFunction2<? super T, ? super T, ? extends T> aggregate) {
-    return fold(null, it -> true, it -> it, aggregate);
+  default One<T> fold(TryFunction2<? super T, ? super T, ? extends T> operation) {
+    return () -> cursor().reduceRight(operation);
   }
 
 }

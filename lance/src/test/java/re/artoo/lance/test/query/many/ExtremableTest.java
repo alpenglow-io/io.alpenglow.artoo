@@ -7,10 +7,10 @@ import re.artoo.lance.test.Test.Pet;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ExtremableTest {
+class ExtremableTest {
   @Test
   @DisplayName("should find max")
-  public void shouldFindMaxByDefault() throws Throwable {
+  void shouldFindMaxByDefault() throws Throwable {
     final var max = Many.from(1, 2, 3, 4, null).max();
 
     assertThat(max).contains(4);
@@ -18,28 +18,29 @@ public class ExtremableTest {
 
   @Test
   @DisplayName("should find min")
-  public void shouldFindMinByDefault() {
+  void shouldFindMinByDefault() {
     final var min = Many.from(null, 1, 2, 3, 4).min();
 
     assertThat(min).contains(1);
   }
 
   @Test
-  public void shouldNotFindMaxByDefaultWithRecords() {
+  @DisplayName("should not find max by default with records")
+  void shouldNotFindMaxByDefaultWithRecords() {
     final var max = Many.from(new Pet("Pluto", 1), null, new Pet("Fuffy", 2), new Pet("Cerberos", 3)).max();
 
     assertThat(max).isEmpty();
   }
 
   @Test
-  public void shouldNotFindMinByDefaultWithRecords() {
+  void shouldNotFindMinByDefaultWithRecords() {
     final var min = Many.from(new Pet("Pluto", 1), new Pet("Fuffy", 2), new Pet("Cerberos", 3)).min();
 
     assertThat(min).isEmpty();
   }
 
   @Test
-  public void shouldFindMaxBySelecting() throws Throwable {
+  void shouldFindMaxBySelecting() throws Throwable {
     Pet[] pets = {new Pet("Pluto", 33), new Pet("Fuffy", 22), new Pet("Cerberos", 41)};
 
     final var max = Many.from(pets).max(Pet::age).cursor().traverse();
@@ -48,7 +49,7 @@ public class ExtremableTest {
   }
 
   @Test
-  public void shouldFindMinBySelecting() {
+  void shouldFindMinBySelecting() {
     final var min = Many.from(new Pet("Pluto", 33), null, new Pet("Fuffy", 22), new Pet("Cerberos", 41), null).min(Pet::age);
 
 

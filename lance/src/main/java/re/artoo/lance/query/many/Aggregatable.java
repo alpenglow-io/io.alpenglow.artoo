@@ -3,32 +3,40 @@ package re.artoo.lance.query.many;
 import re.artoo.lance.Queryable;
 import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.func.TryFunction2;
+import re.artoo.lance.func.TryIntFunction2;
 import re.artoo.lance.func.TryPredicate1;
 import re.artoo.lance.query.One;
 
-public interface Aggregatable<T> extends Queryable<T> {
-  default <A, R> One<A> aggregate(A seed, TryPredicate1<? super T> where, TryFunction1<? super T, ? extends R> select, TryFunction2<? super A, ? super R, ? extends A> aggregator) {
+public interface Aggregatable<LEFT> extends Queryable<LEFT> {
+  default <AGGREGATED, SELECTED> One<AGGREGATED> aggregate(AGGREGATED aggregated, TryPredicate1<? super LEFT> where, TryFunction1<? super LEFT, ? extends SELECTED> select, TryFunction2<? super AGGREGATED, ? super SELECTED, ? extends AGGREGATED> operation) {
     return () -> cursor()
       .filter(where)
       .map(select)
-      .left(seed, aggregator);
+      .foldLeft(aggregated, operation);
   }
-
-  default <A, R> One<A> aggregate(A seed, TryFunction1<? super T, ? extends R> select, TryFunction2<? super A, ? super R, ? extends A> aggregate) {
-    return aggregate(seed, it -> true, select, aggregate);
+  default <AGGREGATED, SELECTED> One<AGGREGATED> aggregate(AGGREGATED aggregated, TryPredicate1<? super LEFT> where, TryFunction1<? super LEFT, ? extends SELECTED> select, TryIntFunction2<? super AGGREGATED, ? super SELECTED, ? extends AGGREGATED> operation) {
+    return () -> cursor()
+      .filter(where)
+      .map(select)
+      .foldLeft(aggregated, operation);
   }
-
-  default <A, R> One<A> aggregate(TryFunction1<? super T, ? extends R> select, TryFunction2<? super A, ? super R, ? extends A> aggregate) {
-    return aggregate(null, it -> true, select, aggregate);
+  default <AGGREGATED, SELECTED> One<AGGREGATED> aggregate(AGGREGATED aggregated, TryFunction1<? super LEFT, ? extends SELECTED> select, TryFunction2<? super AGGREGATED, ? super SELECTED, ? extends AGGREGATED> operation) {
+    return () -> cursor().map(select).foldLeft(aggregated, operation);
   }
-
-  default <A> One<A> aggregate(A left, TryFunction2<? super A, ? super T, ? extends A> aggregate) {
-    return aggregate(left, it -> true, it -> it, aggregate);
+  default <AGGREGATED, SELECTED> One<AGGREGATED> aggregate(AGGREGATED aggregated, TryFunction1<? super LEFT, ? extends SELECTED> select, TryIntFunction2<? super AGGREGATED, ? super SELECTED, ? extends AGGREGATED> operation) {
+    return () -> cursor().map(select).foldLeft(aggregated, operation);
   }
-
-  default One<T> aggregate(TryFunction2<? super T, ? super T, ? extends T> aggregate) {
-    return aggregate(null, it -> true, it -> it, aggregate);
+  default <AGGREGATED> One<AGGREGATED> aggregate(AGGREGATED aggregated, TryFunction2<? super AGGREGATED, ? super LEFT, ? extends AGGREGATED> operation) {
+    return () -> cursor().foldLeft(aggregated, operation);
   }
-
+  default <AGGREGATED> One<AGGREGATED> aggregate(AGGREGATED aggregated, TryIntFunction2<? super AGGREGATED, ? super LEFT, ? extends AGGREGATED> operation) {
+    return () -> cursor().foldLeft(aggregated, operation);
+  }
+  default One<LEFT> aggregate(TryFunction2<? super LEFT, ? super LEFT, ? extends LEFT> operation) {
+    return () -> cursor().reduceLeft(operation);
+  }
+  default One<LEFT> aggregate(TryIntFunction2<? super LEFT, ? super LEFT, ? extends LEFT> operation) {
+    return () -> cursor().reduceLeft(operation);
+  }
 }
 

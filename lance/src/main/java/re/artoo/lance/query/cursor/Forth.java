@@ -6,14 +6,14 @@ import re.artoo.lance.query.cursor.routine.Routine;
 
 import java.util.Arrays;
 
-public final class Open<T> implements Cursor<T> {
+public final class Forth<T> implements Cursor<T> {
   private final T[] elements;
   private int traverse;
   private int reverse;
-  public Open(T[] elements) {
+  public Forth(T[] elements) {
     this(0, elements.length, elements);
   }
-  private Open(int traverse, int reverse, T[] elements) {
+  private Forth(int traverse, int reverse, T[] elements) {
     this.traverse = traverse;
     this.reverse = reverse;
     this.elements = elements;

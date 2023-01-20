@@ -23,7 +23,7 @@ public interface Uniquable<T> extends Queryable<T> {
   }
 
   default One<T> last(final TryPredicate1<? super T> where) {
-    return () -> cursor().filter(where).left(() -> null, (last, element) -> element != null ? element : last);
+    return () -> cursor().filter(where).reduceLeft((last, element) -> element != null ? element : last);
   }
 
   default One<T> single() {
@@ -35,8 +35,8 @@ public interface Uniquable<T> extends Queryable<T> {
     }
     return () -> cursor()
       .filter(where)
-      .<Single<T>>left(
-        () -> new Single<>(false, null),
+      .<Single<T>>foldLeft(
+        new Single<>(false, null),
         (single, element) -> single.found && element != null
           ? new Single<>(true, null)
           : !single.found && element == null

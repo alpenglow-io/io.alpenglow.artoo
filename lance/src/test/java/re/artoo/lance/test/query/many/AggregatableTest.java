@@ -13,22 +13,22 @@ public class AggregatableTest {
   @Test
   @DisplayName("should aggregate strings by joining spaces")
   void shouldAggregateStringsByJoiningComma() throws Throwable {
-    final var joined = Many.from("hello", "my", "nice", "friend")
-      .aggregate("", (join, string) -> join + string + " ")
+    final var aggregated = Many.from("hello", "my", "nice", "friend")
+      .aggregate((joined, element) -> "%s %s".formatted(joined, element))
       .cursor()
       .traverse();
 
-    assertThat(joined).isEqualTo("hello my nice friend");
+    assertThat(aggregated).isEqualTo("hello my nice friend");
   }
 
   @Test
   @DisplayName("should reduce to the longest name")
-  public void shouldReduceLongestName() {
-    final var aggregate = Many.from("apple", "mango", "orange", "passionfruit", "grape")
-      .aggregate("", String::toUpperCase, (longest, next) -> longest.length() > next.length() ? longest : next);
-
-    String aggregated = null;
-    for (final var result : aggregate) aggregated = result;
+  public void shouldReduceLongestName() throws Throwable {
+    final var aggregated = Many.from("apple", "mango", "orange", "passionfruit", "grape")
+      .select(it -> it.toUpperCase())
+      .aggregate((longest, next) -> longest.length() > next.length() ? longest : next)
+      .cursor()
+      .traverse();
 
     assertThat(aggregated).isEqualTo("PASSIONFRUIT");
   }
@@ -46,13 +46,16 @@ public class AggregatableTest {
 
   @Test
   @DisplayName("should reduce to reversed phrase")
-  public void shouldReduceReversePhrase() {
-    final var aggregated = Many.from("the quick brown fox jumps over the lazy dog".split(" "))
+  public void shouldReduceReversePhrase() throws Throwable {
+    String[] strings = "the quick brown fox jumps over the lazy dog".split(" ");
+    final var aggregated = Many.from(strings)
       .aggregate((reversed, next) -> next + " " + reversed)
       .iterator()
       .next();
 
-    assertThat(aggregated).isEqualTo("dog lazy the over jumps fox brown quick the");
+    final var folded = Many.from(strings).fold((joined, right) -> joined + " " + right).cursor().traverse();
+
+    assertThat(folded).isEqualTo("dog lazy the over jumps fox brown quick the");
   }
 
   @Test

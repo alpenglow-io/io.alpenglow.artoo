@@ -5,14 +5,10 @@ import re.artoo.lance.query.cursor.*;
 
 import java.util.Iterator;
 
-public non-sealed interface Cursor<T> extends Mapper<T>, Reducer<T>, Replacer<T>, Closer<T>, Convertor<T> {
+public non-sealed interface Cursor<T> extends Mapper<T>, Reducible<T>, Replacer<T>, Closer<T>, Convertor<T> {
   @SafeVarargs
   static <T> Cursor<T> open(final T... elements) {
-    return new Open<>(elements);
-  }
-
-  static <T> Cursor<T> lazy(TrySupplier1<T> element) {
-    return new Lazy<>(element);
+    return new Forth<>(elements);
   }
 
   static <T> Cursor<T> chain(final Inquiry<T> prev, final Inquiry<T> next) {

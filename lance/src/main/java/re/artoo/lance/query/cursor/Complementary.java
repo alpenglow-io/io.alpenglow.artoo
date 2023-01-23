@@ -11,7 +11,7 @@ import re.artoo.lance.scope.Let;
 
 import java.util.Iterator;
 
-public interface Replacer<T> extends Inquiry<T> {
+public interface Complementary<T> extends Inquiry<T> {
   default <C extends Cursor<T>> Cursor<T> or(final TrySupplier1<? extends C> alternative) {
     return new Or<>(this, Let.lazy(alternative));
   }

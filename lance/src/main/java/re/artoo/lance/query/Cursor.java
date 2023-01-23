@@ -1,11 +1,10 @@
 package re.artoo.lance.query;
 
-import re.artoo.lance.func.TrySupplier1;
 import re.artoo.lance.query.cursor.*;
 
 import java.util.Iterator;
 
-public non-sealed interface Cursor<T> extends Mapper<T>, Reducible<T>, Replacer<T>, Closer<T>, Convertor<T> {
+public non-sealed interface Cursor<T> extends Mappable<T>, Reducible<T>, Complementary<T>, Closer<T>, Convertor<T>, Returnable<T> {
   @SafeVarargs
   static <T> Cursor<T> open(final T... elements) {
     return new Forth<>(elements);

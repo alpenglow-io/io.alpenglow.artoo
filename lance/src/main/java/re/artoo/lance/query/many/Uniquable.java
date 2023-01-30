@@ -7,7 +7,7 @@ import re.artoo.lance.query.closure.First;
 
 public interface Uniquable<T> extends Queryable<T> {
   default One<T> at(final int index) {
-    return () -> cursor().map((idx, it) -> index == idx ? it : null).keepNull();
+    return () -> cursor().filter((idx, it) -> idx == index);
   }
 
   default One<T> first() {
@@ -15,7 +15,7 @@ public interface Uniquable<T> extends Queryable<T> {
   }
 
   default One<T> first(final TryPredicate1<? super T> where) {
-    return () -> cursor().map(new First<>(where)).skipNull();
+    return () -> cursor().filter(where).reduceRight((first, element) -> element != null ? element : first);
   }
 
   default One<T> last() {

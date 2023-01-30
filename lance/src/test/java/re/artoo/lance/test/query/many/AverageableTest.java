@@ -10,7 +10,7 @@ public class AverageableTest {
   @Test
   @DisplayName("should average doubles")
   public void shouldAverageDoubles() throws Throwable {
-    final var averaged = Many.from(78.0, 92.0, 100.0, 37.0, 81.0).average().cursor().traverse();
+    final var averaged = Many.from(78.0, 92.0, 100.0, 37.0, 81.0).average().cursor().tick();
 
     final var expected = 77.6;
     assertThat(averaged).isEqualTo(expected);
@@ -44,7 +44,7 @@ public class AverageableTest {
   @Test
   @DisplayName("should be null since there's no numbers")
   public void shouldBeNullSinceNoNumbers() throws Throwable {
-    final var expected = Many.from("apple", "banana", "mango", "orange", "passionfruit", "grape").average().cursor().traverse();
+    final var expected = Many.from("apple", "banana", "mango", "orange", "passionfruit", "grape").average().cursor().tick();
     assertThat(expected).isNull();
   }
 }

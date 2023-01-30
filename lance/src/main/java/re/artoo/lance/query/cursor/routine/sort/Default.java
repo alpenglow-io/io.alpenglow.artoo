@@ -2,7 +2,7 @@ package re.artoo.lance.query.cursor.routine.sort;
 
 import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.cursor.Inquiry;
+import re.artoo.lance.query.cursor.Probe;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -17,7 +17,7 @@ public final class Default<T> implements Sort<T> {
   }
 
   @Override
-  public TryFunction1<Inquiry<T>, Cursor<T>> onSource() {
+  public TryFunction1<Probe<T>, Cursor<T>> onSource() {
     return this::asSorted;
   }
 

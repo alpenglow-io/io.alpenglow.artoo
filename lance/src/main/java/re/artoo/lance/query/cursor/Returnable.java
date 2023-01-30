@@ -4,18 +4,18 @@ import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.cursor.routine.Routine;
 
-public sealed interface Returnable<ELEMENT> extends Inquiry<ELEMENT> permits Cursor {
-  default <RETURN> Cursor<RETURN> actually(TryIntFunction1<? super ELEMENT, ? extends RETURN> returns) {
+public sealed interface Returnable<ELEMENT> extends Probe<ELEMENT> permits Cursor {
+  default <RETURN> Cursor<RETURN> yield(TryIntFunction1<? super ELEMENT, ? extends RETURN> returns) {
     return null;
   }
 }
 
-final class Actually<ELEMENT, RETURN> implements Cursor<RETURN> {
-  private final Inquiry<? extends ELEMENT> inquiry;
+final class Yield<ELEMENT, RETURN> implements Cursor<RETURN> {
+  private final Probe<? extends ELEMENT> probe;
   private final TryIntFunction1<? super ELEMENT, ? extends RETURN> returns;
 
-  Actually(Inquiry<? extends ELEMENT> inquiry, TryIntFunction1<? super ELEMENT, ? extends RETURN> returns) {
-    this.inquiry = inquiry;
+  Yield(Probe<? extends ELEMENT> probe, TryIntFunction1<? super ELEMENT, ? extends RETURN> returns) {
+    this.probe = probe;
     this.returns = returns;
   }
 
@@ -25,8 +25,8 @@ final class Actually<ELEMENT, RETURN> implements Cursor<RETURN> {
   }
 
   @Override
-  public <R> R traverse(TryIntFunction1<? super RETURN, ? extends R> fetch) throws Throwable {
-    return inquiry.;
+  public <R> R tick(TryIntFunction1<? super RETURN, ? extends R> fetch) throws Throwable {
+    return probe.tick((index, it) -> fetch.invoke(index, returns.invoke(index, it)));
   }
 
   @Override

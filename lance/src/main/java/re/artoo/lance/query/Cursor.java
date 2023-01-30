@@ -4,13 +4,13 @@ import re.artoo.lance.query.cursor.*;
 
 import java.util.Iterator;
 
-public non-sealed interface Cursor<T> extends Mappable<T>, Reducible<T>, Complementary<T>, Closer<T>, Convertor<T>, Returnable<T> {
+public non-sealed interface Cursor<T> extends Mappable<T>, Reducible<T>, Complementable<T>, Collectable<T>, Returnable<T> {
   @SafeVarargs
-  static <T> Cursor<T> open(final T... elements) {
-    return new Forth<>(elements);
+  static <T> Cursor<T> open(T... elements) {
+    return new Forward<>(elements);
   }
 
-  static <T> Cursor<T> chain(final Inquiry<T> prev, final Inquiry<T> next) {
+  static <T> Cursor<T> chain(Probe<T> prev, Probe<T> next) {
     return new Chain<>(prev, next);
   }
 
@@ -19,11 +19,11 @@ public non-sealed interface Cursor<T> extends Mappable<T>, Reducible<T>, Complem
     return (Cursor<T>) Empty.Default;
   }
 
-  static <VALUE> Cursor<VALUE> maybe(final VALUE value) {
+  static <VALUE> Cursor<VALUE> maybe(VALUE value) {
     return value == null ? empty() : open(value);
   }
 
-  static <T> Cursor<T> iteration(final Iterator<T> iterator) {
+  static <T> Cursor<T> iteration(Iterator<T> iterator) {
     return new Iteration<>(iterator);
   }
 

@@ -6,7 +6,7 @@ import re.artoo.lance.func.TryIntFunction2;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.cursor.routine.Routine;
 
-public sealed interface Reducible<ELEMENT> extends Inquiry<ELEMENT> permits Cursor {
+public sealed interface Reducible<ELEMENT> extends Probe<ELEMENT> permits Cursor {
   default <REDUCED> Cursor<REDUCED> foldLeft(REDUCED initial, TryIntFunction2<? super REDUCED, ? super ELEMENT, ? extends REDUCED> fold) {
     return new Fold<>(this, Cursor.open(initial), fold);
   }
@@ -20,25 +20,25 @@ public sealed interface Reducible<ELEMENT> extends Inquiry<ELEMENT> permits Curs
     return reduceLeft((index, reduced, element) -> reduce.invoke(reduced, element));
   }
   default <REDUCED> Cursor<REDUCED> foldRight(REDUCED initial, TryIntFunction2<? super REDUCED, ? super ELEMENT, ? extends REDUCED> fold) {
-    return new Fold<>(this.reversal(), Cursor.open(initial), fold);
+    return new Fold<>(this.reverse(), Cursor.open(initial), fold);
   }
   default <REDUCED> Cursor<REDUCED> foldRight(REDUCED initial, TryFunction2<? super REDUCED, ? super ELEMENT, ? extends REDUCED> fold) {
     return foldLeft(initial, (index, reduced, element) -> fold.invoke(reduced, element));
   }
   default Cursor<ELEMENT> reduceRight(TryIntFunction2<? super ELEMENT, ? super ELEMENT, ? extends ELEMENT> reduce) {
-    return new Reduce<>(this.reversal(), reduce);
+    return new Reduce<>(this.reverse(), reduce);
   }
   default Cursor<ELEMENT> reduceRight(TryFunction2<? super ELEMENT, ? super ELEMENT, ? extends ELEMENT> reduce) {
     return reduceRight((index, reduced, element) -> reduce.invoke(reduced, element));
   }
 }
 final class Fold<ELEMENT, REDUCED> implements Cursor<REDUCED> {
-  private final Inquiry<? extends ELEMENT> inquiry;
-  private final Inquiry<? extends REDUCED> initial;
+  private final Probe<? extends ELEMENT> probe;
+  private final Probe<? extends REDUCED> initial;
   private final TryIntFunction2<? super REDUCED, ? super ELEMENT, ? extends REDUCED> fold;
 
-  Fold(Inquiry<? extends ELEMENT> inquiry, Inquiry<? extends REDUCED> initial, TryIntFunction2<? super REDUCED, ? super ELEMENT, ? extends REDUCED> reducer) {
-    this.inquiry = inquiry;
+  Fold(Probe<? extends ELEMENT> probe, Probe<? extends REDUCED> initial, TryIntFunction2<? super REDUCED, ? super ELEMENT, ? extends REDUCED> reducer) {
+    this.probe = probe;
     this.initial = initial;
     this.fold = reducer;
   }
@@ -49,27 +49,28 @@ final class Fold<ELEMENT, REDUCED> implements Cursor<REDUCED> {
   }
 
   @Override
-  public <R> R traverse(TryIntFunction1<? super REDUCED, ? extends R> fetch) throws Throwable {
-    var reduced = initial.traverse((index, it) -> it);
-    while (inquiry.hasNext()) {
+  public <R> R tick(TryIntFunction1<? super REDUCED, ? extends R> fetch) throws Throwable {
+    var reduced = initial.tick((index, it) -> it);
+    while (probe.hasNext()) {
       final var constant = reduced;
-      reduced = (reduced = inquiry.traverse((index, element) -> fold.invoke(index, constant, element))) == null ? constant : reduced;
+      reduced = probe.tick((index, element) -> fold.invoke(index, constant, element));
+      reduced = reduced == null ? constant : reduced;
     }
     return fetch.invoke(0, reduced);
   }
 
   @Override
   public boolean hasNext() {
-    return inquiry.hasNext() || initial.hasNext();
+    return probe.hasNext() || initial.hasNext();
   }
 }
 
 final class Reduce<ELEMENT> implements Cursor<ELEMENT> {
-  private final Inquiry<? extends ELEMENT> inquiry;
+  private final Probe<? extends ELEMENT> probe;
   private final TryIntFunction2<? super ELEMENT, ? super ELEMENT, ? extends ELEMENT> fold;
 
-  Reduce(Inquiry<? extends ELEMENT> inquiry, TryIntFunction2<? super ELEMENT, ? super ELEMENT, ? extends ELEMENT> reducer) {
-    this.inquiry = inquiry;
+  Reduce(Probe<? extends ELEMENT> probe, TryIntFunction2<? super ELEMENT, ? super ELEMENT, ? extends ELEMENT> reducer) {
+    this.probe = probe;
     this.fold = reducer;
   }
 
@@ -79,17 +80,18 @@ final class Reduce<ELEMENT> implements Cursor<ELEMENT> {
   }
 
   @Override
-  public <R> R traverse(TryIntFunction1<? super ELEMENT, ? extends R> fetch) throws Throwable {
-    var reduced = inquiry.traverse((index, it) -> it);
-    while (inquiry.hasNext()) {
+  public <R> R tick(TryIntFunction1<? super ELEMENT, ? extends R> fetch) throws Throwable {
+    var reduced = probe.tick((index, it) -> it);
+    while (probe.hasNext()) {
       final var constant = reduced;
-      reduced = (reduced = inquiry.traverse((index, element) -> fold.invoke(index, constant, element))) == null ? constant : reduced;
+      reduced = probe.tick((index, element) -> fold.invoke(index, constant, element));
+      reduced = reduced == null ? constant : reduced;
     }
     return fetch.invoke(0, reduced);
   }
 
   @Override
   public boolean hasNext() {
-    return inquiry.hasNext();
+    return probe.hasNext();
   }
 }

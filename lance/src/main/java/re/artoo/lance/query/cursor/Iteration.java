@@ -13,7 +13,7 @@ public final class Iteration<T> implements Cursor<T> {
   public Iteration(final Iterator<T> iterator) {this.iterator = iterator;}
 
   @Override
-  public <R> R traverse(TryIntFunction1<? super T, ? extends R> fetch) throws Throwable {
+  public <R> R tick(TryIntFunction1<? super T, ? extends R> fetch) throws Throwable {
     return fetch.invoke(index++, iterator.next());
   }
 

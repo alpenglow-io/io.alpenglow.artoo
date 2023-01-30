@@ -16,7 +16,7 @@ public class AggregatableTest {
     final var aggregated = Many.from("hello", "my", "nice", "friend")
       .aggregate((joined, element) -> "%s %s".formatted(joined, element))
       .cursor()
-      .traverse();
+      .tick();
 
     assertThat(aggregated).isEqualTo("hello my nice friend");
   }
@@ -28,7 +28,7 @@ public class AggregatableTest {
       .select(it -> it.toUpperCase())
       .aggregate((longest, next) -> longest.length() > next.length() ? longest : next)
       .cursor()
-      .traverse();
+      .tick();
 
     assertThat(aggregated).isEqualTo("PASSIONFRUIT");
   }
@@ -53,7 +53,7 @@ public class AggregatableTest {
       .iterator()
       .next();
 
-    final var folded = Many.from(strings).fold((joined, right) -> joined + " " + right).cursor().traverse();
+    final var folded = Many.from(strings).fold((joined, right) -> joined + " " + right).cursor().tick();
 
     assertThat(folded).isEqualTo("dog lazy the over jumps fox brown quick the");
   }
@@ -67,11 +67,11 @@ public class AggregatableTest {
       new Pet("Whiskers", 1)
     };
 
-    final var oldest = Many.from(pets).aggregate(MIN_VALUE, Pet::age, (max, current) -> current > max ? current : max).cursor().traverse();
+    final var oldest = Many.from(pets).aggregate(MIN_VALUE, Pet::age, (max, current) -> current > max ? current : max).cursor().tick();
 
     assertThat(oldest).isEqualTo(8);
 
-    final var youngest = Many.from(pets).aggregate(MAX_VALUE, Pet::age, (min, current) -> current < min ? current : min).cursor().traverse();
+    final var youngest = Many.from(pets).aggregate(MAX_VALUE, Pet::age, (min, current) -> current < min ? current : min).cursor().tick();
 
     assertThat(youngest).isEqualTo(1);
   }

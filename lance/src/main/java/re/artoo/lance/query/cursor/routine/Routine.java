@@ -1,7 +1,7 @@
 package re.artoo.lance.query.cursor.routine;
 
 import re.artoo.lance.func.TryFunction1;
-import re.artoo.lance.query.cursor.Inquiry;
+import re.artoo.lance.query.cursor.Probe;
 import re.artoo.lance.query.cursor.routine.concat.Concat;
 import re.artoo.lance.query.cursor.routine.convert.Convert;
 import re.artoo.lance.query.cursor.routine.join.Join;
@@ -19,7 +19,7 @@ public sealed interface Routine<T, R> permits Join, Concat, Convert, Sort {
   }
 
   TryFunction1<T[], R> onArray();
-  TryFunction1<Inquiry<T>, R> onSource();
+  TryFunction1<Probe<T>, R> onSource();
   TryFunction1<Iterator<T>, R> onIterator();
 
   @SuppressWarnings("unchecked")

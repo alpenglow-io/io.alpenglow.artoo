@@ -19,7 +19,7 @@ public final class Lazy<T> implements Cursor<T> {
   }
 
   @Override
-  public <R> R traverse(TryIntFunction1<? super T, ? extends R> fetch) throws Throwable {
+  public <R> R tick(TryIntFunction1<? super T, ? extends R> fetch) throws Throwable {
     try {
       return fetch.invoke(0, element.invoke());
     } finally {

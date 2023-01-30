@@ -13,7 +13,7 @@ public interface Queryable<T> extends Iterable<T> {
   @Override
   default Iterator<T> iterator() {
     try {
-      return cursor().close();
+      return cursor();
     } catch (Throwable throwable) {
       throw new Cursor.Exception("Can't run cursor, since %s".formatted(throwable.getMessage()), throwable);
     }
@@ -44,7 +44,7 @@ public interface Queryable<T> extends Iterable<T> {
     @Override
     default Iterator<Pair<A, B>> iterator() {
       try {
-        return cursor().close();
+        return cursor();
       } catch (Throwable throwable) {
         throw new Cursor.Exception("Can't run cursor, since %s".formatted(throwable.getMessage()), throwable);
       }

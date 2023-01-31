@@ -23,6 +23,6 @@ public final class Liter<T> implements Concat<T> {
 
   @Override
   public TryFunction1<Iterator<T>, Cursor<T>> onIterator() {
-    return prev -> Cursor.chain(Cursor.iteration(prev), next);
+    return prev -> Cursor.chain(Cursor.from(prev), next);
   }
 }

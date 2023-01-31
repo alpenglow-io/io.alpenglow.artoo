@@ -6,7 +6,7 @@ import re.artoo.lance.func.TrySupplier1;
 
 import static re.artoo.lance.scope.Default.Nothing;
 
-public interface Let<T> {
+public sealed interface Let<T> permits Late, Let.Readonly, Random {
   static <T> Let<T> lazy(final TrySupplier1<T> supplier) {
     return new Let.Lazy<>(supplier);
   }

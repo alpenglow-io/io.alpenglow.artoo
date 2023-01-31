@@ -25,7 +25,7 @@ public interface Complementable<T> extends Probe<T> {
   }
 }
 
-abstract non-sealed class As<T> implements Collectable<T> {
+abstract non-sealed class As<T> implements Appendable<T> {
   protected final Probe<T> probe;
 
   protected As(final Probe<T> probe) {this.probe = probe;}

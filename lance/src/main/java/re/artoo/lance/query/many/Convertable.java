@@ -2,10 +2,10 @@ package re.artoo.lance.query.many;
 
 import re.artoo.lance.Queryable;
 import re.artoo.lance.func.TryFunction1;
+import re.artoo.lance.func.TryIntFunction;
+import re.artoo.lance.query.Cursor;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static re.artoo.lance.query.cursor.routine.Routine.array;
@@ -21,9 +21,16 @@ public interface Convertable<T> extends Queryable<T> {
       map.put(key.apply(value), element.apply(value));
     return map;
   }
-
   default List<T> asList() {
-    return cursor().as(list());
+    return cursor()
+      .foldLeft(new ArrayList<T>(), (array, it) -> { array.add(it); return array; })
+      .map(List::copyOf)
+      .yield();
+  }
+  default List<T> asLinkedList() {
+    return cursor()
+      .foldLeft(new LinkedList<T>(), (linked, it) -> { linked.add(it); return linked; })
+      .yield();
   }
 
   default Collection<T> asCollection() {
@@ -34,7 +41,10 @@ public interface Convertable<T> extends Queryable<T> {
     return asCollection();
   }
 
-  default T[] asArrayOf(Class<T> type) {
-    return cursor().as(array(type));
+  default T[] asArray(TryIntFunction<? extends T[]> provider) {
+    return cursor()
+      .foldLeft(new ArrayList<T>(), (array, it) -> { array.add(it); return array; })
+      .map(array -> array.toArray(provider::apply))
+      .yield();
   }
 }

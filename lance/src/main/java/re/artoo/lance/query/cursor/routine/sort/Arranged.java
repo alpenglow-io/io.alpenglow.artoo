@@ -76,7 +76,7 @@ public final class Arranged<T> implements Sort<T> {
     return it -> {
       final var list = new SortedList<T>(matching());
       it.forEachRemaining(list::add);
-      return Cursor.iteration(list.iterator());
+      return Cursor.from(list.iterator());
     };
   }
 }

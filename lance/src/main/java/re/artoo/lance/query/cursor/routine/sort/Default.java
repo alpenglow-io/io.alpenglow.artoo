@@ -28,7 +28,7 @@ public final class Default<T> implements Sort<T> {
 
   private Cursor<T> asSorted(final Iterator<T> iterator) {
     return
-      Cursor.iteration(
+      Cursor.from(
         new SortedList<T>()
           .addAll(iterator)
           .iterator()

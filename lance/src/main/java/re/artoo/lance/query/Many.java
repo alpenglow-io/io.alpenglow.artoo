@@ -51,7 +51,7 @@ public interface Many<T> extends
   }
 
   static <R> Many<R> from(Iterable<R> iterable) {
-    return () -> Cursor.iteration(iterable.iterator());
+    return () -> Cursor.from(iterable.iterator());
   }
 
   interface Pairs<A, B> extends Pairable<A, B> {}

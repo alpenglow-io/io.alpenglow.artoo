@@ -3,8 +3,10 @@ package re.artoo.lance.query.many;
 import re.artoo.lance.Queryable;
 import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.func.TryPredicate1;
+import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.Many;
-import re.artoo.lance.query.closure.Distinct;
+
+import java.util.ArrayList;
 
 public interface Settable<T> extends Queryable<T> {
   default Many<T> distinct() {
@@ -12,7 +14,15 @@ public interface Settable<T> extends Queryable<T> {
   }
 
   default Many<T> distinct(final TryPredicate1<? super T> where) {
-    return () -> cursor().map(new Distinct<>(where));
+    return () -> cursor()
+      .filter(where)
+      .foldLeft(new ArrayList<T>(), (array, element) -> array.contains(element) ? array : addTo(array, element))
+      .flatMap(array -> Cursor.from(array.iterator()));
+  }
+
+  private ArrayList<T> addTo(ArrayList<T> array, T element) {
+    array.add(element);
+    return array;
   }
 /*
   default Many<T> union(final T... elements) {

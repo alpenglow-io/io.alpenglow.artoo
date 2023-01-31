@@ -1,10 +1,11 @@
 package re.artoo.lance.query;
 
 import re.artoo.lance.query.cursor.*;
+import re.artoo.lance.query.cursor.Appendable;
 
-import java.util.Iterator;
+import java.util.Collection;
 
-public non-sealed interface Cursor<T> extends Mappable<T>, Reducible<T>, Complementable<T>, Collectable<T>, Returnable<T> {
+public non-sealed interface Cursor<T> extends Mappable<T>, Reducible<T>, Complementable<T>, Appendable<T>, Returnable<T> {
   @SafeVarargs
   static <T> Cursor<T> open(T... elements) {
     return new Forward<>(elements);
@@ -23,8 +24,12 @@ public non-sealed interface Cursor<T> extends Mappable<T>, Reducible<T>, Complem
     return value == null ? empty() : open(value);
   }
 
-  static <T> Cursor<T> iteration(Iterator<T> iterator) {
-    return new Iteration<>(iterator);
+  static <T> Cursor<T> from(Collection<T> collection) {
+    return new Iteration<>(collection);
+  }
+
+  private static <T> Object[] asArray(Collection<T> collection) {
+    return collection.toArray();
   }
 
   static Throwable exception(String message, Throwable cause) { return new Exception(message, cause); }

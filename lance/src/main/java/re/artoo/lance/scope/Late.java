@@ -5,7 +5,7 @@ import re.artoo.lance.func.TrySupplier1;
 
 import static re.artoo.lance.scope.Default.Nothing;
 
-public interface Late<T> extends Let<T> {
+public non-sealed interface Late<T> extends Let<T> {
   static <T> Late<T> init() {
     return new Late.Init<>();
   }

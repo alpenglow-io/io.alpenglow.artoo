@@ -4,6 +4,8 @@ import re.artoo.lance.func.TrySupplier1;
 import re.artoo.lance.query.many.*;
 import re.artoo.lance.query.many.pairs.Pairable;
 
+import java.util.List;
+
 @FunctionalInterface
 public interface Many<T> extends
   Aggregatable<T>,
@@ -50,8 +52,8 @@ public interface Many<T> extends
     return () -> cursor;
   }
 
-  static <R> Many<R> from(Iterable<R> iterable) {
-    return () -> Cursor.from(iterable.iterator());
+  static <R> Many<R> from(List<R> list) {
+    return () -> Cursor.from(list);
   }
 
   interface Pairs<A, B> extends Pairable<A, B> {}

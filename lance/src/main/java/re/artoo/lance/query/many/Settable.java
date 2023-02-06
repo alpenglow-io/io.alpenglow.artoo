@@ -17,7 +17,7 @@ public interface Settable<T> extends Queryable<T> {
     return () -> cursor()
       .filter(where)
       .foldLeft(new ArrayList<T>(), (array, element) -> array.contains(element) ? array : addTo(array, element))
-      .flatMap(array -> Cursor.from(array.iterator()));
+      .flatMap(Cursor::from);
   }
 
   private ArrayList<T> addTo(ArrayList<T> array, T element) {

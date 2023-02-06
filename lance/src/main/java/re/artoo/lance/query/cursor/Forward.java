@@ -8,20 +8,19 @@ import java.util.Arrays;
 
 public final class Forward<T> implements Cursor<T> {
   private final T[] elements;
-  private int traverse;
-  private int reverse;
+  private int index;
+
   public Forward(T[] elements) {
-    this(0, elements.length, elements);
+    this(0, elements);
   }
-  private Forward(int traverse, int reverse, T[] elements) {
-    this.traverse = traverse;
-    this.reverse = reverse;
+  private Forward(int index, T[] elements) {
+    this.index = index;
     this.elements = elements;
   }
 
   @Override
   public <R> R tick(TryIntFunction1<? super T, ? extends R> fetch) throws Throwable {
-    return fetch.invoke(traverse, elements[traverse++]);
+    return fetch.invoke(index, elements[index++]);
   }
 
   @Override
@@ -31,7 +30,7 @@ public final class Forward<T> implements Cursor<T> {
 
   @Override
   public boolean hasNext() {
-    return traverse < elements.length;
+    return index < elements.length;
   }
 
   @Override

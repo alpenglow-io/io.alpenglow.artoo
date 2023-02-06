@@ -3,7 +3,6 @@ package re.artoo.lance.query.many;
 import re.artoo.lance.Queryable;
 import re.artoo.lance.func.TryPredicate1;
 import re.artoo.lance.query.One;
-import re.artoo.lance.query.closure.First;
 
 public interface Uniquable<T> extends Queryable<T> {
   default One<T> at(final int index) {
@@ -35,16 +34,16 @@ public interface Uniquable<T> extends Queryable<T> {
     }
     return () -> cursor()
       .filter(where)
-      .<Single<T>>foldLeft(
-        new Single<>(false, null),
-        (single, element) -> single.found && element != null
-          ? new Single<>(true, null)
-          : !single.found && element == null
+      .foldLeft(
+        null, // single
+        false, // single has been found?
+        (index, found, single, element) -> (element != null || found),
+        (index, found, single, element) -> found && element != null
+          ? null
+          : !found && element == null
           ? single
-          : new Single<>(true, element)
-      )
-      .filter(Single::found)
-      .map(Single::element);
+          : element
+      );
   }
 }
 

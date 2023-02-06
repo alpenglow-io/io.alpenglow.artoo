@@ -4,6 +4,7 @@ import re.artoo.lance.query.cursor.*;
 import re.artoo.lance.query.cursor.Appendable;
 
 import java.util.Collection;
+import java.util.List;
 
 public non-sealed interface Cursor<T> extends Mappable<T>, Reducible<T>, Complementable<T>, Appendable<T>, Returnable<T> {
   @SafeVarargs
@@ -24,12 +25,8 @@ public non-sealed interface Cursor<T> extends Mappable<T>, Reducible<T>, Complem
     return value == null ? empty() : open(value);
   }
 
-  static <T> Cursor<T> from(Collection<T> collection) {
+  static <T> Cursor<T> from(List<T> collection) {
     return new Iteration<>(collection);
-  }
-
-  private static <T> Object[] asArray(Collection<T> collection) {
-    return collection.toArray();
   }
 
   static Throwable exception(String message, Throwable cause) { return new Exception(message, cause); }

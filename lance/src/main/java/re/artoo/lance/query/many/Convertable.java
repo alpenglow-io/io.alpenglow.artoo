@@ -3,13 +3,10 @@ package re.artoo.lance.query.many;
 import re.artoo.lance.Queryable;
 import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.func.TryIntFunction;
-import re.artoo.lance.query.Cursor;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static re.artoo.lance.query.cursor.routine.Routine.array;
-import static re.artoo.lance.query.cursor.routine.Routine.list;
 import static re.artoo.lance.scope.Nullability.nonNullable;
 
 public interface Convertable<T> extends Queryable<T> {
@@ -25,12 +22,12 @@ public interface Convertable<T> extends Queryable<T> {
     return cursor()
       .foldLeft(new ArrayList<T>(), (array, it) -> { array.add(it); return array; })
       .map(List::copyOf)
-      .yield();
+      .submit();
   }
   default List<T> asLinkedList() {
     return cursor()
       .foldLeft(new LinkedList<T>(), (linked, it) -> { linked.add(it); return linked; })
-      .yield();
+      .submit();
   }
 
   default Collection<T> asCollection() {
@@ -45,6 +42,6 @@ public interface Convertable<T> extends Queryable<T> {
     return cursor()
       .foldLeft(new ArrayList<T>(), (array, it) -> { array.add(it); return array; })
       .map(array -> array.toArray(provider::apply))
-      .yield();
+      .submit();
   }
 }

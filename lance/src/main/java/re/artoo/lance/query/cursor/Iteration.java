@@ -13,7 +13,6 @@ public final class Iteration<T> implements Cursor<T> {
   private int index = 0;
 
   public Iteration(final List<T> list) {this.list = list;}
-
   @Override
   public <R> R tick(TryIntFunction1<? super T, ? extends R> fetch) throws Throwable {
     return fetch.invoke(index++, list.get(index));

@@ -2,7 +2,6 @@ package re.artoo.lance.query.cursor;
 
 import re.artoo.lance.func.*;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.cursor.routine.Routine;
 
 public sealed interface Reducible<ELEMENT> extends Probe<ELEMENT> permits Cursor {
   default <FOLDED> Cursor<FOLDED> foldLeft(FOLDED initial, TryIntFunction2<? super FOLDED, ? super ELEMENT, ? extends FOLDED> operation) {
@@ -61,11 +60,6 @@ final class Fold<ELEMENT, REDUCED> implements Cursor<REDUCED> {
     this.condition = condition;
   }
 
-  @Override
-  public <TO> TO as(Routine<REDUCED, TO> routine) {
-    return null;
-  }
-
   private static class Accept {
     private boolean value;
     static Accept value(boolean isTrue) {
@@ -106,11 +100,6 @@ final class Reduce<ELEMENT> implements Cursor<ELEMENT> {
   Reduce(Probe<? extends ELEMENT> probe, TryIntFunction2<? super ELEMENT, ? super ELEMENT, ? extends ELEMENT> reducer) {
     this.probe = probe;
     this.fold = reducer;
-  }
-
-  @Override
-  public <TO> TO as(Routine<ELEMENT, TO> routine) {
-    return null;
   }
 
   @Override

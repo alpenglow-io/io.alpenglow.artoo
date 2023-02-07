@@ -2,9 +2,6 @@ package re.artoo.lance.query.cursor;
 
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.cursor.routine.Routine;
-
-import java.util.Arrays;
 
 public final class Forward<T> implements Cursor<T> {
   private final T[] elements;
@@ -33,8 +30,4 @@ public final class Forward<T> implements Cursor<T> {
     return index < elements.length;
   }
 
-  @Override
-  public <R> R as(final Routine<T, R> routine) {
-    return routine.onArray().apply(Arrays.copyOf(elements, elements.length));
-  }
 }

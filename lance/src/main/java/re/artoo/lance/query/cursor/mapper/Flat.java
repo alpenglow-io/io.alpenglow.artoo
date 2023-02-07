@@ -3,7 +3,6 @@ package re.artoo.lance.query.cursor.mapper;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.cursor.Probe;
-import re.artoo.lance.query.cursor.routine.Routine;
 
 @SuppressWarnings("SwitchStatementWithTooFewBranches")
 public final class Flat<T> implements Cursor<T> {
@@ -43,8 +42,4 @@ public final class Flat<T> implements Cursor<T> {
     });
   }
 
-  @Override
-  public <R> R as(final Routine<T, R> routine) {
-    return routine.onSource().apply(this);
-  }
 }

@@ -2,7 +2,6 @@ package re.artoo.lance.query.cursor;
 
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.cursor.routine.Routine;
 
 public final class Chain<T> implements Cursor<T> {
   private final Probe<T> prev;
@@ -11,11 +10,6 @@ public final class Chain<T> implements Cursor<T> {
   public Chain(final Probe<T> prev, final Probe<T> next) {
     this.prev = prev;
     this.next = next;
-  }
-
-  @Override
-  public <R> R as(final Routine<T, R> routine) {
-    return routine.onSource().apply(this);
   }
 
   @Override

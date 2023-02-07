@@ -3,10 +3,10 @@ package re.artoo.lance.query;
 import re.artoo.lance.query.cursor.*;
 import re.artoo.lance.query.cursor.Appendable;
 
-import java.util.Collection;
 import java.util.List;
 
-public non-sealed interface Cursor<T> extends Mappable<T>, Reducible<T>, Complementable<T>, Appendable<T>, Returnable<T> {
+public non-sealed interface Cursor<ELEMENT>
+  extends Mappable<ELEMENT>, Reducible<ELEMENT>, Complementable<ELEMENT>, Appendable<ELEMENT>, Returnable<ELEMENT>, Unifiable<ELEMENT> {
   @SafeVarargs
   static <T> Cursor<T> open(T... elements) {
     return new Forward<>(elements);

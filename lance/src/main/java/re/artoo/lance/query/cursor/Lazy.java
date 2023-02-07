@@ -3,9 +3,7 @@ package re.artoo.lance.query.cursor;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.func.TrySupplier1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.cursor.routine.Routine;
 
-import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class Lazy<T> implements Cursor<T> {
@@ -32,8 +30,4 @@ public final class Lazy<T> implements Cursor<T> {
     return !fetched.get();
   }
 
-  @Override
-  public <R> R as(final Routine<T, R> routine) {
-    return null;
-  }
 }

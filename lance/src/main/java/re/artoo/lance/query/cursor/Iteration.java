@@ -2,10 +2,7 @@ package re.artoo.lance.query.cursor;
 
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.cursor.routine.Routine;
 
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 public final class Iteration<T> implements Cursor<T> {
@@ -16,11 +13,6 @@ public final class Iteration<T> implements Cursor<T> {
   @Override
   public <R> R tick(TryIntFunction1<? super T, ? extends R> fetch) throws Throwable {
     return fetch.invoke(index++, list.get(index));
-  }
-
-  @Override
-  public <R> R as(final Routine<T, R> routine) {
-    return routine.onIterator().apply(list.iterator());
   }
 
   @Override

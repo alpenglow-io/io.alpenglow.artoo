@@ -8,10 +8,6 @@ public sealed interface Appendable<ELEMENT> extends Probe<ELEMENT> permits Curso
   default Cursor<ELEMENT> append(Cursor<ELEMENT> cursor) {
     return new Append<>(this, cursor);
   }
-  default <TO, CURSOR extends Cursor<TO>> CURSOR to(Routine<ELEMENT, CURSOR> routine) {
-    return this.as(routine);
-  }
-  <TO> TO as(Routine<ELEMENT, TO> routine);
 }
 
 final class Append<ELEMENT> implements Cursor<ELEMENT> {
@@ -27,10 +23,7 @@ final class Append<ELEMENT> implements Cursor<ELEMENT> {
     this.tail = tail;
     this.index = index;
   }
-  @Override
-  public <TO> TO as(Routine<ELEMENT, TO> routine) {
-    return null;
-  }
+
   @Override
   public <R> R tick(TryIntFunction1<? super ELEMENT, ? extends R> fetch) throws Throwable {
     return head.hasNext()

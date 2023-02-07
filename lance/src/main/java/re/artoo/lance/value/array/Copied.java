@@ -3,20 +3,19 @@ package re.artoo.lance.value.array;
 import re.artoo.lance.value.Array;
 
 import java.util.Iterator;
-import java.util.Objects;
 
 import static re.artoo.lance.value.array.Namespace.Companion;
 
-public record Copy<ELEMENT>(ELEMENT[] elements) implements Array<ELEMENT>, Arrangement {
+public record Copied<ELEMENT>(ELEMENT[] elements) implements Array<ELEMENT> {
   @SafeVarargs
-  public Copy(ELEMENT[] head, ELEMENT... tail) {
-    this(Companion.merge(head, tail));
+  public Copied(ELEMENT[] head, ELEMENT... tail) {
+    this(Companion.concat(head, tail));
   }
   @SafeVarargs
-  public Copy(ELEMENT head, ELEMENT... tail) {
+  public Copied(ELEMENT head, ELEMENT... tail) {
     this(Companion.asArray(head), tail);
   }
-  public Copy(ELEMENT[] elements) {
+  public Copied(ELEMENT[] elements) {
     this.elements = elements;
   }
 

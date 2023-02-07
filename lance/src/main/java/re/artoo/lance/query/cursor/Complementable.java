@@ -5,7 +5,6 @@ import re.artoo.lance.func.TryFunction2;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.func.TrySupplier1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.cursor.routine.Routine;
 import re.artoo.lance.scope.Late;
 import re.artoo.lance.scope.Let;
 
@@ -30,13 +29,6 @@ abstract non-sealed class As<T> implements Appendable<T> {
 
   protected As(final Probe<T> probe) {this.probe = probe;}
 
-  @Override
-  public final <R> R as(final Routine<T, R> routine) {
-    return switch (probe) {
-      case Cursor<T> cursor -> cursor.as(routine);
-      default -> Cursor.<T>empty().as(routine);
-    };
-  }
 }
 
 final class Or<T, C extends Cursor<T>> extends As<T> implements Cursor<T> {

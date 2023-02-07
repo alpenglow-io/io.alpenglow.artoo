@@ -3,7 +3,6 @@ package re.artoo.lance.query.cursor.mapper;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.cursor.Probe;
-import re.artoo.lance.query.cursor.routine.Routine;
 
 public final class Map<S, T> implements Cursor<T> {
   private final Probe<S> probe;
@@ -33,8 +32,4 @@ public final class Map<S, T> implements Cursor<T> {
     return probe.hasNext();
   }
 
-  @Override
-  public <R1> R1 as(final Routine<T, R1> routine) {
-    return routine.onSource().apply(this);
-  }
 }

@@ -3,7 +3,7 @@ package re.artoo.lance.query.cursor.routine.join;
 import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.func.TryPredicate2;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.cursor.Probe;
+import re.artoo.lance.query.cursor.Head;
 import re.artoo.lance.tuple.Pair;
 import re.artoo.lance.tuple.Tuple;
 
@@ -39,7 +39,7 @@ public final class Nested<R, T> implements Join<R, Cursor<Pair<T, R>>> {
   }
 
   @Override
-  public TryFunction1<Probe<R>, Cursor<Pair<T, R>>> onSource() {
+  public TryFunction1<Head<R>, Cursor<Pair<T, R>>> onSource() {
     return null;
   }
 

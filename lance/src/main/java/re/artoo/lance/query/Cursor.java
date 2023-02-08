@@ -9,10 +9,10 @@ public non-sealed interface Cursor<ELEMENT>
   extends Mappable<ELEMENT>, Reducible<ELEMENT>, Complementable<ELEMENT>, Appendable<ELEMENT>, Returnable<ELEMENT>, Unifiable<ELEMENT> {
   @SafeVarargs
   static <T> Cursor<T> open(T... elements) {
-    return new Forward<>(elements);
+    return new Arranged<>(elements);
   }
 
-  static <T> Cursor<T> chain(Probe<T> prev, Probe<T> next) {
+  static <T> Cursor<T> chain(Head<T> prev, Head<T> next) {
     return new Chain<>(prev, next);
   }
 

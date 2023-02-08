@@ -2,14 +2,14 @@ package re.artoo.lance.query.cursor.routine.concat;
 
 import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.cursor.Probe;
+import re.artoo.lance.query.cursor.Head;
 
 import java.util.Iterator;
 
 public final class Liter<T> implements Concat<T> {
-  private final Probe<T> next;
+  private final Head<T> next;
 
-  Liter(final Probe<T> probe) {this.next = probe;}
+  Liter(final Head<T> head) {this.next = head;}
 
   @Override
   public final TryFunction1<T[], Cursor<T>> onArray() {
@@ -17,7 +17,7 @@ public final class Liter<T> implements Concat<T> {
   }
 
   @Override
-  public TryFunction1<Probe<T>, Cursor<T>> onSource() {
+  public TryFunction1<Head<T>, Cursor<T>> onSource() {
     return prev -> Cursor.chain(prev, next);
   }
 

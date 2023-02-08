@@ -5,7 +5,7 @@ import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.cursor.mapper.Flat;
 import re.artoo.lance.query.cursor.mapper.Map;
 
-public sealed interface Mappable<T> extends Probe<T> permits Cursor {
+public sealed interface Mappable<T> extends Head<T>, Tail<T> permits Cursor {
   default Cursor<T> filter(TryIntPredicate1<? super T> filter) {
     return map((index, it) -> filter.invoke(index, it) ? it : null);
   }

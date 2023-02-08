@@ -5,23 +5,21 @@ import re.artoo.lance.query.FetchException;
 
 import java.util.Iterator;
 
-public interface Probe<T> extends Iterator<T> {
-  default T tick() throws Throwable {
-    return tick((index, element) -> element);
+public interface Head<T> extends Iterator<T> {
+  default T scroll() throws Throwable {
+    return scroll((index, element) -> element);
   }
-  <R> R tick(TryIntFunction1<? super T, ? extends R> fetch) throws Throwable;
-
-  default Probe<T> reverse() {
-    return this;
-  }
+  <R> R scroll(TryIntFunction1<? super T, ? extends R> fetch) throws Throwable;
 
   @Override
   default T next() {
     try {
-      return tick();
+      return scroll();
     } catch (Throwable throwable) {
       throw FetchException.of(throwable);
     }
   }
+
+  Head<T> head();
 }
 

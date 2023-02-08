@@ -1,7 +1,7 @@
 package re.artoo.lance.query.cursor.routine.convert;
 
 import re.artoo.lance.func.TryFunction1;
-import re.artoo.lance.query.cursor.Probe;
+import re.artoo.lance.query.cursor.Head;
 import re.artoo.lance.query.cursor.routine.Routine;
 
 import java.lang.reflect.Array;
@@ -19,7 +19,7 @@ public sealed interface Convert<T, R> extends Routine<T, R> permits Convert.List
     }
 
     @Override
-    public TryFunction1<Probe<T>, List<T>> onSource() {
+    public TryFunction1<Head<T>, List<T>> onSource() {
       return ft -> {
         final var list = new ArrayList<T>();
         ft.forEachRemaining(list::add);
@@ -51,7 +51,7 @@ public sealed interface Convert<T, R> extends Routine<T, R> permits Convert.List
     }
 
     @Override
-    public TryFunction1<Probe<T>, T[]> onSource() {
+    public TryFunction1<Head<T>, T[]> onSource() {
       return li -> onIterator().apply(li);
     }
 

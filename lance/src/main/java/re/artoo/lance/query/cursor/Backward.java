@@ -15,13 +15,8 @@ public final class Backward<T> implements Cursor<T> {
   }
 
   @Override
-  public <R> R tick(TryIntFunction1<? super T, ? extends R> fetch) throws Throwable {
+  public <R> R scroll(TryIntFunction1<? super T, ? extends R> fetch) throws Throwable {
     return fetch.invoke(index, elements[index--]);
-  }
-
-  @Override
-  public Probe<T> reverse() {
-    return new Forward<>(elements);
   }
 
   @Override

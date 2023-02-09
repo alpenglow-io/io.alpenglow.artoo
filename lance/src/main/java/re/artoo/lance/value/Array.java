@@ -8,6 +8,8 @@ import java.util.Comparator;
 import java.util.NoSuchElementException;
 import java.util.RandomAccess;
 
+import static java.util.Arrays.*;
+
 public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess permits Empty, Copied {
   static <ELEMENT> Array<ELEMENT> of(ELEMENT[] elements) {
     return of(null, elements);
@@ -65,6 +67,17 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
       case Copied<ELEMENT> array when comparison != null -> new Copied<>(sort(array.elements(), comparison));
       default -> this;
     };
+  }
+
+  default boolean contains(ELEMENT element) {
+    return switch (this) {
+      case Copied<ELEMENT> array -> binarySearch(array.elements(), element) >= 0;
+      default -> false;
+    };
+  }
+
+  default boolean notContains(ELEMENT element) {
+    return !contains(element);
   }
 
   private ELEMENT[] sort(ELEMENT[] elements) {

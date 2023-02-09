@@ -6,7 +6,7 @@ import re.artoo.lance.query.cursor.Appendable;
 import java.util.List;
 
 public non-sealed interface Cursor<ELEMENT>
-  extends Mappable<ELEMENT>, Reducible<ELEMENT>, Complementable<ELEMENT>, Appendable<ELEMENT>, Returnable<ELEMENT>, Unifiable<ELEMENT> {
+  extends Mappable<ELEMENT>, Reducible<ELEMENT>, Complementable<ELEMENT>, Appendable<ELEMENT>, Returnable<ELEMENT>, Joinable<ELEMENT> {
   @SafeVarargs
   static <T> Cursor<T> open(T... elements) {
     return new Arranged<>(elements);

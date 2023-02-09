@@ -20,6 +20,6 @@ public interface Tail<T> extends BackIterator<T> {
     }
   }
 
-  Tail<T> tail();
+  default Tail<T> tail() { return this; }
 }
 

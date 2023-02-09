@@ -23,6 +23,11 @@ public final class Arranged<T> implements Cursor<T> {
   }
 
   @Override
+  public Head<T> head() {
+    return new Arranged<>(elements);
+  }
+
+  @Override
   public boolean hasNext() {
     return forward < elements.length;
   }
@@ -30,6 +35,11 @@ public final class Arranged<T> implements Cursor<T> {
   @Override
   public <R> R scrollback(TryIntFunction1<? super T, ? extends R> fetch) throws Throwable {
     return fetch.invoke(backward, elements[backward--]);
+  }
+
+  @Override
+  public Tail<T> tail() {
+    return new Arranged<>(elements);
   }
 
   @Override

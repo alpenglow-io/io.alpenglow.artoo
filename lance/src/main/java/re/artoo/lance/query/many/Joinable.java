@@ -6,6 +6,7 @@ import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.Many;
 import re.artoo.lance.query.cursor.routine.join.Join;
 import re.artoo.lance.tuple.Pair;
+import re.artoo.lance.value.Array;
 
 @SuppressWarnings({"unused", "unchecked"})
 public interface Joinable<ELEMENT> extends Queryable<ELEMENT> {
@@ -14,7 +15,11 @@ public interface Joinable<ELEMENT> extends Queryable<ELEMENT> {
   }
 
   default <ANOTHER> Joining<ELEMENT, ANOTHER> join(ANOTHER... items) {
-    return join(Many.from(items));
+    return () -> cursor()
+      .foldLeft(
+        Array.<Pair<ELEMENT, ANOTHER>>empty(),
+        (pairs, )
+        );
   }
 
   interface Joining<A, B> extends Many.Pairs<A, B> {

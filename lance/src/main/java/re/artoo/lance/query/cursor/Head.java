@@ -20,6 +20,6 @@ public interface Head<T> extends Iterator<T> {
     }
   }
 
-  Head<T> head();
+  default Head<T> head() { return this; }
 }
 

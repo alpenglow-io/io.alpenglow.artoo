@@ -33,7 +33,7 @@ public class JoinableTest implements re.artoo.lance.test.Test {
 
     final var customers =
       from(customers1)
-        .join(from(customers2))
+        .outerJoin(from(customers2))
         .select((customer, customer2) -> customer);
 
     assertThat(customers).containsExactly(
@@ -54,7 +54,7 @@ public class JoinableTest implements re.artoo.lance.test.Test {
 
     final var orderCustomers =
       from(ORDERS)
-        .join(customers)
+        .outerJoin(customers)
         .on((order, customer) -> order.customerId() == customer.id())
         .select((order, customer) -> new OrderCustomer(order.id(), customer.name()))
         .order().by(OrderCustomer::name).by(OrderCustomer::orderId, desc);

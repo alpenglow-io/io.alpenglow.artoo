@@ -4,45 +4,90 @@ import re.artoo.lance.Queryable;
 import re.artoo.lance.func.TryPredicate2;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.Many;
-import re.artoo.lance.query.cursor.routine.join.Join;
 import re.artoo.lance.tuple.Pair;
-import re.artoo.lance.value.Array;
 
 @SuppressWarnings({"unused", "unchecked"})
-public interface Joinable<ELEMENT> extends Queryable<ELEMENT> {
-  default <ANOTHER, QUERYABLE extends Queryable<ANOTHER>> Joining<ELEMENT, ANOTHER> join(QUERYABLE queryable) {
-    return new Default<>(this, queryable);
+public interface Joinable<FIRST> extends Queryable<FIRST> {
+  default <SECOND, QUERYABLE extends Queryable<SECOND>> Join<FIRST, SECOND> outerJoin(QUERYABLE queryable) {
+    return new OuterJoin<>(cursor(), queryable.cursor());
   }
 
-  default <ANOTHER> Joining<ELEMENT, ANOTHER> join(ANOTHER... items) {
-    return () -> cursor()
-      .foldLeft(
-        Array.<Pair<ELEMENT, ANOTHER>>empty(),
-        (pairs, )
-        );
+  default <SECOND> Join<FIRST, SECOND> outerJoin(SECOND... elements) {
+    return new OuterJoin<>(cursor(), Cursor.open(elements));
   }
 
-  interface Joining<A, B> extends Many.Pairs<A, B> {
-    Many.Pairs<A, B> on(TryPredicate2<? super A, ? super B> on);
+  default <SECOND, QUERYABLE extends Queryable<SECOND>> Join<FIRST, SECOND> leftJoin(QUERYABLE queryable) {
+    return new LeftJoin<>(cursor(), queryable.cursor());
   }
 
-  final class Default<FIRST, SECOND, QUERYABLE extends Queryable<SECOND>> implements Joining<FIRST, SECOND> {
-    private final Queryable<FIRST> first;
+  default <SECOND, QUERYABLE extends Queryable<SECOND>> Join<FIRST, SECOND> rightJoin(QUERYABLE queryable) {
+    return new RightJoin<>(cursor(), queryable.cursor());
+  }
 
-    private final QUERYABLE second;
+  interface Join<A, B> extends Many.Pairs<A, B> {
+    Many<Pair<A, B>> on(TryPredicate2<? super A, ? super B> on);
+  }
 
-    Default(final Queryable<FIRST> first, final QUERYABLE second) {
-      this.first = first;
-      this.second = second;
+  final class LeftJoin<FIRST, SECOND> implements Join<FIRST, SECOND> {
+    private final Cursor<FIRST> left;
+    private final Cursor<SECOND> right;
+
+    LeftJoin(Cursor<FIRST> left, Cursor<SECOND> right) {
+      this.left = left;
+      this.right = right;
+    }
+
+    private re.artoo.lance.query.cursor.Join<FIRST, SECOND> join() {
+      return left.leftJoin(right);
     }
 
     @Override
     public Cursor<Pair<FIRST, SECOND>> cursor() {
-      return first.cursor().to(Join.natural(second.cursor()));
+      return null;
+    }
+
+    @Override
+    public Many<Pair<FIRST, SECOND>> on(TryPredicate2<? super FIRST, ? super SECOND> on) {
+      return null;
+    }
+  }
+
+  final class RightJoin<FIRST, SECOND> implements Join<FIRST, SECOND> {
+    private final Cursor<FIRST>
+    private re.artoo.lance.query.cursor.Join<FIRST, SECOND> join() {
+      return left.leftJoin(right);
     }
     @Override
-    public Many.Pairs<FIRST, SECOND> on(final TryPredicate2<? super FIRST, ? super SECOND> on) {
-      return () -> first.cursor().to(Join.inner(second.cursor(), on));
+    public Cursor<Pair<FIRST, SECOND>> cursor() {
+      return null;
+    }
+
+    @Override
+    public Many<Pair<FIRST, SECOND>> on(TryPredicate2<? super FIRST, ? super SECOND> on) {
+      return null;
+    }
+  }
+
+  final class OuterJoin<FIRST, SECOND> implements Join<FIRST, SECOND> {
+    private final Cursor<FIRST> left;
+    private final Cursor<SECOND> right;
+
+    public OuterJoin(Cursor<FIRST> left, Cursor<SECOND> right) {
+      this.left = left;
+      this.right = right;
+    }
+
+    private re.artoo.lance.query.cursor.Join<FIRST, SECOND> outerJoin() {
+      return left.outerJoin(right);
+    }
+
+    @Override
+    public Cursor<Pair<FIRST, SECOND>> cursor() {
+      return outerJoin();
+    }
+    @Override
+    public Many<Pair<FIRST, SECOND>> on(final TryPredicate2<? super FIRST, ? super SECOND> condition) {
+      return () -> outerJoin().on(condition);
     }
 
   }

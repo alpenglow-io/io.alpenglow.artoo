@@ -2,7 +2,6 @@ package re.artoo.lance.query;
 
 import re.artoo.lance.func.TrySupplier1;
 import re.artoo.lance.query.many.*;
-import re.artoo.lance.query.many.pairs.Pairable;
 
 import java.util.List;
 
@@ -17,7 +16,6 @@ public interface Many<T> extends
   Joinable<T>,
   Elseable<T>,
   Extremable<T>,
-  Foldable<T>,
   Partitionable<T>,
   Peekable<T>,
   Projectable<T>,
@@ -56,7 +54,6 @@ public interface Many<T> extends
     return () -> Cursor.from(list);
   }
 
-  interface Pairs<A, B> extends Pairable<A, B> {}
 }
 
 final class Ints implements Many<Integer> {

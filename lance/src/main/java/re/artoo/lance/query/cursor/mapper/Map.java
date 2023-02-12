@@ -2,34 +2,21 @@ package re.artoo.lance.query.cursor.mapper;
 
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.cursor.Head;
+import re.artoo.lance.query.cursor.Probe;
 
-public final class Map<S, T> implements Cursor<T> {
-  private final Head<S> head;
-  private final TryIntFunction1<? super S, ? extends T> map;
-
-  public Map(final Head<S> head, final TryIntFunction1<? super S, ? extends T> map) {
-    this.head = head;
-    this.map = map;
+public record Map<ELEMENT, RETURN>(Probe<ELEMENT> probe, TryIntFunction1<? super ELEMENT, ? extends RETURN> map) implements Cursor<RETURN> {
+  @Override
+  public RETURN tick() throws Throwable {
+    return map.invoke(0, probe.tick());
   }
 
   @Override
-  public <R> R scroll(TryIntFunction1<? super T, ? extends R> fetch) throws Throwable {
-    return head.scroll((index, element) -> coalesce(index, coalesce(index, element, map), fetch));
-  }
-
-  private static <Z, X> Z coalesce(int index, X value, TryIntFunction1<? super X, ? extends Z> func) throws Throwable {
-    return value != null ? func.invoke(index, value) : null;
+  public <AGAIN> Cursor<AGAIN> map(final TryIntFunction1<? super RETURN, ? extends AGAIN> mapAgain) {
+    return new Map<>(new Coalesce<>(this), mapAgain);
   }
 
   @Override
-  public <R> Cursor<R> map(final TryIntFunction1<? super T, ? extends R> mapAgain) {
-    return new Map<>(head, (index, it) -> coalesce(index, coalesce(index, it, map), mapAgain));
+  public boolean isTickable() throws Throwable {
+    return probe.isTickable();
   }
-
-  @Override
-  public boolean hasNext() {
-    return head.hasNext();
-  }
-
 }

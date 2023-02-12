@@ -3,6 +3,8 @@ package re.artoo.lance.query.many;
 import re.artoo.lance.Queryable;
 import re.artoo.lance.func.TryPredicate1;
 import re.artoo.lance.query.One;
+import re.artoo.lance.tuple.Pair;
+import re.artoo.lance.tuple.Tuple;
 
 public interface Uniquable<T> extends Queryable<T> {
   default One<T> at(final int index) {
@@ -14,7 +16,9 @@ public interface Uniquable<T> extends Queryable<T> {
   }
 
   default One<T> first(final TryPredicate1<? super T> where) {
-    return () -> cursor().filter(where).reduceRight((first, element) -> element != null ? element : first);
+    return () -> cursor()
+      .filter(where)
+      .reduce((index, first, element) -> index == 0 && element != null ? element : null);
   }
 
   default One<T> last() {
@@ -22,7 +26,7 @@ public interface Uniquable<T> extends Queryable<T> {
   }
 
   default One<T> last(final TryPredicate1<? super T> where) {
-    return () -> cursor().filter(where).reduceLeft((last, element) -> element != null ? element : last);
+    return () -> cursor().filter(where).reduce((last, element) -> element != null ? element : last);
   }
 
   default One<T> single() {
@@ -30,20 +34,17 @@ public interface Uniquable<T> extends Queryable<T> {
   }
 
   default One<T> single(final TryPredicate1<? super T> where) {
-    record Single<T>(boolean found, T element) {
-    }
     return () -> cursor()
       .filter(where)
-      .foldLeft(
-        null, // single
-        false, // single has been found?
-        (index, found, single, element) -> (element != null || found),
-        (index, found, single, element) -> found && element != null
-          ? null
-          : !found && element == null
-          ? single
-          : element
-      );
+      .peek(System.out::println)
+      .<Pair<Boolean, T>>reduce(Tuple.of(false, null), (index, single, element) ->
+        !single.first() && element != null
+          ? single.both(true, element)
+          : single.first() && element != null
+          ? single.letSecond(null)
+          : single
+      )
+      .map(Pair::second);
   }
 }
 

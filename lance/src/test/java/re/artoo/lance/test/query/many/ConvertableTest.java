@@ -20,7 +20,7 @@ public class ConvertableTest {
   @Test
   @DisplayName("should convert a many from an array to an array")
   public void shouldConvertAnArrayManyAsArray() {
-    final var array = Many.from(1, 2, 3, 4).asArrayOf(Integer.class);
+    final var array = Many.from(1, 2, 3, 4).asArray();
 
     assertThat(array).containsExactly(1, 2, 3, 4);
   }
@@ -33,7 +33,7 @@ public class ConvertableTest {
       new Dog("Fuffy"), new Dog("Argos"), new Dog("Cerberos"), new Dog("Zeus")
     };
 
-    final var array = Many.from(List.of(dogs)).asArrayOf(Dog.class);
+    final var array = Many.from(List.of(dogs)).asArray();
 
     assertThat(array).containsExactly(dogs);
   }

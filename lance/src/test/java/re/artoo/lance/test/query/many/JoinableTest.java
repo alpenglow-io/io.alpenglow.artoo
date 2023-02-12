@@ -2,6 +2,7 @@ package re.artoo.lance.test.query.many;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import re.artoo.lance.tuple.Pair;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static re.artoo.lance.query.Many.from;
@@ -34,7 +35,7 @@ public class JoinableTest implements re.artoo.lance.test.Test {
     final var customers =
       from(customers1)
         .outerJoin(from(customers2))
-        .select((customer, customer2) -> customer);
+        .select(Pair::first);
 
     assertThat(customers).containsExactly(
       CUSTOMERS[2],
@@ -56,7 +57,7 @@ public class JoinableTest implements re.artoo.lance.test.Test {
       from(ORDERS)
         .outerJoin(customers)
         .on((order, customer) -> order.customerId() == customer.id())
-        .select((order, customer) -> new OrderCustomer(order.id(), customer.name()))
+        .select(joined -> joined.select((order, customer) -> new OrderCustomer(order.id(), customer.name())))
         .order().by(OrderCustomer::name).by(OrderCustomer::orderId, desc);
 
     assertThat(orderCustomers).first().isEqualTo(new OrderCustomer(10308, "Ana Trujillo Emparedados y helados"));

@@ -20,13 +20,13 @@ public class UniquableTest {
       "Ito, Shu"
     };
 
-    assertThat(Many.from(names).at(4).cursor().scroll()).isEqualTo("Ito, Shu");
+    assertThat(Many.from(names).at(4).cursor().tick()).isEqualTo("Ito, Shu");
   }
 
   @Test
   @DisplayName("should get first element")
   public void shouldGetFirst() throws Throwable {
-    final var first = from(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19).first().cursor().scroll();
+    final var first = from(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19).first().cursor().tick();
 
     assertThat(first).isEqualTo(9);
   }
@@ -87,11 +87,7 @@ public class UniquableTest {
   @Test
   @DisplayName("should be empty if there's more than single element on condition")
   public void shouldEmptyIfThereIsMoreThanSingleElementOnCondition() {
-    final var single = from(9, 65, 87, 435, 3, 83, 23, 87, 435, 67, 19)
-      .single(number -> number < 20);
-
-    for (var it : single)
-      out.println(it);
+    final var single = from(9, 65, 87, 435, 3, 83, 23, 87, 435, 67, 19).single(number -> number < 20);
 
     assertThat(single).isEmpty();
   }
@@ -103,7 +99,7 @@ public class UniquableTest {
       .select(it -> it.toUpperCase())
       .last()
       .cursor()
-      .scroll();
+      .tick();
 
     assertThat(first).isEqualTo("HI THERE");
   }

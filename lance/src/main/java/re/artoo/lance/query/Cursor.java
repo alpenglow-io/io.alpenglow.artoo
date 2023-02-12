@@ -2,18 +2,15 @@ package re.artoo.lance.query;
 
 import re.artoo.lance.query.cursor.*;
 import re.artoo.lance.query.cursor.Appendable;
+import re.artoo.lance.query.cursor.Iterable;
 
 import java.util.List;
 
 public non-sealed interface Cursor<ELEMENT>
-  extends Mappable<ELEMENT>, Reducible<ELEMENT>, Complementable<ELEMENT>, Appendable<ELEMENT>, Returnable<ELEMENT>, Joinable<ELEMENT> {
+  extends Mappable<ELEMENT>, Reducible<ELEMENT>, Complementable<ELEMENT>, Appendable<ELEMENT>, Committable<ELEMENT>, Joinable<ELEMENT>, Filterable<ELEMENT> {
   @SafeVarargs
   static <T> Cursor<T> open(T... elements) {
-    return new Arranged<>(elements);
-  }
-
-  static <T> Cursor<T> chain(Head<T> prev, Head<T> next) {
-    return new Chain<>(prev, next);
+    return new Head<>(elements);
   }
 
   @SuppressWarnings("unchecked")
@@ -26,7 +23,7 @@ public non-sealed interface Cursor<ELEMENT>
   }
 
   static <T> Cursor<T> from(List<T> collection) {
-    return new Iteration<>(collection);
+    return new Iterable<>(collection);
   }
 
   static Throwable exception(String message, Throwable cause) { return new Exception(message, cause); }

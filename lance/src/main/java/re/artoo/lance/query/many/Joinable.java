@@ -24,7 +24,7 @@ public interface Joinable<FIRST> extends Queryable<FIRST> {
     return new RightJoin<>(cursor(), queryable.cursor());
   }
 
-  interface Join<A, B> extends Many.Pairs<A, B> {
+  interface Join<A, B> extends Many<Pair<A, B>> {
     Many<Pair<A, B>> on(TryPredicate2<? super A, ? super B> on);
   }
 
@@ -53,18 +53,25 @@ public interface Joinable<FIRST> extends Queryable<FIRST> {
   }
 
   final class RightJoin<FIRST, SECOND> implements Join<FIRST, SECOND> {
-    private final Cursor<FIRST>
+    private final Cursor<FIRST> left;
+    private final Cursor<SECOND> right;
+
+    RightJoin(Cursor<FIRST> left, Cursor<SECOND> right) {
+      this.left = left;
+      this.right = right;
+    }
+
     private re.artoo.lance.query.cursor.Join<FIRST, SECOND> join() {
       return left.leftJoin(right);
     }
     @Override
     public Cursor<Pair<FIRST, SECOND>> cursor() {
-      return null;
+      return join();
     }
 
     @Override
-    public Many<Pair<FIRST, SECOND>> on(TryPredicate2<? super FIRST, ? super SECOND> on) {
-      return null;
+    public Many<Pair<FIRST, SECOND>> on(TryPredicate2<? super FIRST, ? super SECOND> condition) {
+      return () -> join().on(condition);
     }
   }
 

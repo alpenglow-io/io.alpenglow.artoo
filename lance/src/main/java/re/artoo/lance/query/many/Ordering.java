@@ -4,12 +4,9 @@ import re.artoo.lance.Queryable;
 import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.Many;
-import re.artoo.lance.query.cursor.routine.sort.Sort;
 
 import java.util.Arrays;
 
-import static re.artoo.lance.query.cursor.routine.sort.Sort.By;
-import static re.artoo.lance.query.cursor.routine.sort.Sort.byDefault;
 import static re.artoo.lance.query.many.Ordering.Arrange.asc;
 
 public sealed interface Ordering<T> extends Many<T> {
@@ -20,7 +17,7 @@ public sealed interface Ordering<T> extends Many<T> {
   }
 
   default <R> Ordering<T> by(TryFunction1<? super T, ? extends R> field, Arrange arrange) {
-    return new OrderBy<>(this, By.with(field, arrange));
+    return null;
   }
 }
 
@@ -31,35 +28,12 @@ final class Order<T> implements Ordering<T> {
 
   @Override
   public Cursor<T> cursor() {
-    return queryable.cursor().to(byDefault());
+    return queryable.cursor();
   }
 
   @Override
   public <R> Ordering<T> by(final TryFunction1<? super T, ? extends R> field, final Arrange arrange) {
-    return new OrderBy<>(queryable, By.with(field, arrange));
-  }
-}
-
-final class OrderBy<T> implements Ordering<T> {
-  private final Queryable<T> queryable;
-  private final By<T, Object>[] bys;
-
-  @SafeVarargs
-  OrderBy(final Queryable<T> queryable, final By<T, Object>... bys) {
-    this.queryable = queryable;
-    this.bys = bys;
-  }
-
-  @Override
-  public Cursor<T> cursor() {
-    return queryable.cursor().to(Sort.arranged(bys));
-  }
-
-  @Override
-  public <R> Ordering<T> by(final TryFunction1<? super T, ? extends R> field, final Arrange arrange) {
-    final var copied = Arrays.copyOf(bys, bys.length + 1);
-    copied[bys.length] = By.with(field, arrange);
-    return new OrderBy<>(queryable, copied);
+    return null;
   }
 }
 

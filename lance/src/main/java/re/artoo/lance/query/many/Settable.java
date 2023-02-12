@@ -16,7 +16,7 @@ public interface Settable<T> extends Queryable<T> {
   default Many<T> distinct(final TryPredicate1<? super T> where) {
     return () -> cursor()
       .filter(where)
-      .foldLeft(new ArrayList<T>(), (array, element) -> array.contains(element) ? array : addTo(array, element))
+      .reduce(new ArrayList<T>(), (array, element) -> array.contains(element) ? array : addTo(array, element))
       .flatMap(Cursor::from);
   }
 
@@ -52,7 +52,7 @@ final class Except<T> implements TryFunction1<T, T> {
   public final T invoke(final T origin) throws Throwable {
     final var cursor = queryable.cursor();
     T element = null;
-    while (cursor.hasNext() && !(element = cursor.scroll()).equals(origin));
+    while (cursor.hasNext() && !(element = cursor.tick()).equals(origin));
     return cursor.hasNext() || (element != null && element.equals(origin)) ? null : origin;
   }
 }
@@ -66,8 +66,8 @@ final class Intersect<T> implements TryFunction1<T, T> {
   @Override
   public T invoke(final T origin) throws Throwable {
     final var cursor = queryable.cursor();
-    var element = cursor.scroll();
-    for (; cursor.hasNext() && !element.equals(origin); element = cursor.scroll());
+    var element = cursor.tick();
+    for (; cursor.hasNext() && !element.equals(origin); element = cursor.tick());
     return (element != null && element.equals(origin)) || cursor.hasNext() ? origin : null;
   }
 }

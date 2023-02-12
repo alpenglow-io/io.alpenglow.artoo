@@ -10,7 +10,7 @@ import java.math.BigInteger;
 @SuppressWarnings("unchecked")
 public interface Summable<T> extends Queryable<T> {
   default <N extends Number> One<N> sum(final TryFunction1<? super T, ? extends N> select) {
-    return () -> cursor().<N>map(select).reduceLeft(this::sum);
+    return () -> cursor().<N>map(select).reduce(this::sum);
   }
 
   private <N> N sum(N sum, N element) {
@@ -28,7 +28,7 @@ public interface Summable<T> extends Queryable<T> {
   }
 
   default One<T> sum() {
-    return () -> cursor().reduceLeft(this::sum);
+    return () -> cursor().reduce(this::sum);
   }
 }
 

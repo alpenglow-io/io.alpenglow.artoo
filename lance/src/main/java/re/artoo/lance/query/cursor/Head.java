@@ -1,25 +1,31 @@
 package re.artoo.lance.query.cursor;
 
-import re.artoo.lance.func.TryIntFunction1;
-import re.artoo.lance.query.FetchException;
+import re.artoo.lance.query.Cursor;
 
-import java.util.Iterator;
+public final class Head<ELEMENT> implements Cursor<ELEMENT> {
+  private final ELEMENT[] elements;
+  private int index;
 
-public interface Head<T> extends Iterator<T> {
-  default T scroll() throws Throwable {
-    return scroll((index, element) -> element);
+  public Head(ELEMENT[] elements) {
+    this(0, elements);
   }
-  <R> R scroll(TryIntFunction1<? super T, ? extends R> fetch) throws Throwable;
+  private Head(int index, ELEMENT[] elements) {
+    this.index = index;
+    this.elements = elements;
+  }
 
   @Override
-  default T next() {
-    try {
-      return scroll();
-    } catch (Throwable throwable) {
-      throw FetchException.of(throwable);
-    }
+  public ELEMENT tick() throws Throwable {
+    return isTickable() ? elements[index++] : null;
   }
 
-  default Head<T> head() { return this; }
-}
+  @Override
+  public Probe<ELEMENT> rewind() {
+    return new Head<>(elements);
+  }
 
+  @Override
+  public boolean isTickable() {
+    return index < elements.length;
+  }
+}

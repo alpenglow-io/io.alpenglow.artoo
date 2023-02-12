@@ -4,6 +4,7 @@ import re.artoo.lance.func.TryConsumer1;
 import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.func.TrySupplier1;
 
+import static re.artoo.lance.scope.Default.Flushed;
 import static re.artoo.lance.scope.Default.Nothing;
 
 public sealed interface Let<T> permits Late, Let.Readonly, Random {
@@ -19,6 +20,8 @@ public sealed interface Let<T> permits Late, Let.Readonly, Random {
     });
     return this;
   }
+
+  default Let<T> flush() { return this; }
 
   sealed interface Readonly<T> extends Let<T> permits Let.Lazy {}
 
@@ -57,6 +60,20 @@ public sealed interface Let<T> permits Late, Let.Readonly, Random {
       } else {
         return func.apply((T) unsyncd);
       }
+    }
+
+    @Override
+    public Let<T> flush() {
+      final var unsyncd = value;
+      if (!Flushed.equals(unsyncd)) {
+        synchronized (this) {
+          final var syncd = value;
+          if (!Flushed.equals(syncd)) {
+            this.value = Flushed;
+          }
+        }
+      }
+      return this;
     }
   }
 }

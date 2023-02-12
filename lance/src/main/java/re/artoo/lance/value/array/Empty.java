@@ -8,6 +8,11 @@ import java.util.NoSuchElementException;
 public enum Empty implements Array<Object> {
   Default;
 
+  @SafeVarargs
+  public final <T> T[] elements(T... elements) {
+    return elements;
+  }
+
   @Override
   public Iterator<Object> iterator() {
     return Zero.Default;

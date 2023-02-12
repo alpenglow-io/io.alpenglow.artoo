@@ -16,7 +16,7 @@ public class AggregatableTest {
     final var aggregated = Many.from("hello", "my", "nice", "friend")
       .aggregate((joined, element) -> "%s %s".formatted(joined, element))
       .cursor()
-      .scroll();
+      .commit();
 
     assertThat(aggregated).isEqualTo("hello my nice friend");
   }
@@ -28,7 +28,7 @@ public class AggregatableTest {
       .select(it -> it.toUpperCase())
       .aggregate((longest, next) -> longest.length() > next.length() ? longest : next)
       .cursor()
-      .scroll();
+      .commit();
 
     assertThat(aggregated).isEqualTo("PASSIONFRUIT");
   }
@@ -48,14 +48,10 @@ public class AggregatableTest {
   @DisplayName("should reduce to reversed phrase")
   public void shouldReduceReversePhrase() throws Throwable {
     String[] strings = "the quick brown fox jumps over the lazy dog".split(" ");
-    final var aggregated = Many.from(strings)
-      .aggregate((reversed, next) -> next + " " + reversed)
-      .iterator()
-      .next();
 
-    final var folded = Many.from(strings).fold((joined, right) -> joined + " " + right).cursor().scroll();
+    final var aggregated = Many.from(strings).aggregate((joined, right) -> right + " " + joined).cursor().commit();
 
-    assertThat(folded).isEqualTo("dog lazy the over jumps fox brown quick the");
+    assertThat(aggregated).isEqualTo("dog lazy the over jumps fox brown quick the");
   }
 
   @Test
@@ -67,11 +63,11 @@ public class AggregatableTest {
       new Pet("Whiskers", 1)
     };
 
-    final var oldest = Many.from(pets).aggregate(MIN_VALUE, Pet::age, (max, current) -> current > max ? current : max).cursor().scroll();
+    final var oldest = Many.from(pets).aggregate(MIN_VALUE, Pet::age, (max, current) -> current > max ? current : max).cursor().tick();
 
     assertThat(oldest).isEqualTo(8);
 
-    final var youngest = Many.from(pets).aggregate(MAX_VALUE, Pet::age, (min, current) -> current < min ? current : min).cursor().scroll();
+    final var youngest = Many.from(pets).aggregate(MAX_VALUE, Pet::age, (min, current) -> current < min ? current : min).cursor().tick();
 
     assertThat(youngest).isEqualTo(1);
   }

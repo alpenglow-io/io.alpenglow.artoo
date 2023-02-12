@@ -69,15 +69,25 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
     };
   }
 
-  default boolean contains(ELEMENT element) {
+  default boolean includes(ELEMENT element) {
     return switch (this) {
       case Copied<ELEMENT> array -> binarySearch(array.elements(), element) >= 0;
       default -> false;
     };
   }
 
-  default boolean notContains(ELEMENT element) {
-    return !contains(element);
+  default ELEMENT findLast() {
+    return switch (this) {
+      case Copied<ELEMENT> array -> array.elements()[array.length() - 1];
+      default -> null;
+    };
+  }
+
+  default ELEMENT findFirst() {
+    return switch (this) {
+      case Copied<ELEMENT> array -> array.elements()[0];
+      default -> null;
+    };
   }
 
   private ELEMENT[] sort(ELEMENT[] elements) {

@@ -26,7 +26,7 @@ public interface Table<ID, R extends Record> extends Many<R> {
 
     @Override
     public Cursor<R> cursor() {
-      return Cursor.from(map.values().iterator());
+      return Cursor.empty();
     }
 
     @Override

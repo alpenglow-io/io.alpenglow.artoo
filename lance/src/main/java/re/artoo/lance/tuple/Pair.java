@@ -8,24 +8,37 @@ import re.artoo.lance.tuple.record.OfTwo;
 import static re.artoo.lance.tuple.Type.componentOf;
 
 
-public interface Pair<A, B> extends Tuple {
-  default A first() {
+public interface Pair<FIRST, SECOND> extends Tuple {
+  default FIRST first() {
     return componentOf(this, 0);
   }
-  default B second() {
+  default SECOND second() {
     return componentOf(this, 1);
   }
 
-  default <T> T select(final TryFunction2<? super A, ? super B, ? extends T> select) {
+  default <T> T select(final TryFunction2<? super FIRST, ? super SECOND, ? extends T> select) {
     return select.apply(first(), second());
   }
-  default Pair<B, A> shift() { return select((a, b) -> Tuple.of(b, a)); }
-  @SuppressWarnings("unchecked")
-  default Pair<A, B> where(TryPredicate2<? super A, ? super B> predicate) {
-    return predicate.test(first(), second()) ? this : (Pair<A, B>) OfTwo.Empty.Default;
+
+  default Pair<FIRST, SECOND> both(FIRST first, SECOND second) {
+    return Tuple.of(first, second);
   }
 
-  default Pair<A, B> peek(TryConsumer2<? super A, ? super B> cons) {
+  default Pair<FIRST, SECOND> letFirst(FIRST first) {
+    return Tuple.of(first, second());
+  }
+
+  default Pair<FIRST, SECOND> letSecond(SECOND second) {
+    return Tuple.of(first(), second);
+  }
+
+  default Pair<SECOND, FIRST> shift() { return select((first, second) -> Tuple.of(second, first)); }
+  @SuppressWarnings("unchecked")
+  default Pair<FIRST, SECOND> where(TryPredicate2<? super FIRST, ? super SECOND> predicate) {
+    return predicate.test(first(), second()) ? this : (Pair<FIRST, SECOND>) OfTwo.Empty.Default;
+  }
+
+  default Pair<FIRST, SECOND> peek(TryConsumer2<? super FIRST, ? super SECOND> cons) {
     cons.accept(first(), second());
     return this;
   }

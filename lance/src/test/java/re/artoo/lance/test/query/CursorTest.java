@@ -15,7 +15,7 @@ class CursorTest {
     var fetched = Cursor
       .open(new Old(314))
       .map(it -> new New("" + it.value))
-      .scroll();
+      .tick();
 
     assertThat(fetched).isEqualTo(new New("314"));
   }
@@ -28,7 +28,7 @@ class CursorTest {
     var fetched = Cursor
       .open(new Old(314))
       .map(it -> null)
-      .scroll();
+      .tick();
 
     assertThat(fetched).isNull();
   }

@@ -2,7 +2,9 @@ package re.artoo.lance.query.many;
 
 import re.artoo.lance.Queryable;
 import re.artoo.lance.func.TryFunction1;
-import re.artoo.lance.func.TryIntFunction;
+import re.artoo.lance.value.Array;
+import re.artoo.lance.value.array.Copied;
+import re.artoo.lance.value.array.Empty;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,14 +22,14 @@ public interface Convertable<T> extends Queryable<T> {
   }
   default List<T> asList() {
     return cursor()
-      .foldLeft(new ArrayList<T>(), (array, it) -> { array.add(it); return array; })
+      .reduce(new ArrayList<T>(), (array, it) -> { array.add(it); return array; })
       .map(List::copyOf)
-      .submit();
+      .commit();
   }
   default List<T> asLinkedList() {
     return cursor()
-      .foldLeft(new LinkedList<T>(), (linked, it) -> { linked.add(it); return linked; })
-      .submit();
+      .reduce(new LinkedList<T>(), (linked, it) -> { linked.add(it); return linked; })
+      .commit();
   }
 
   default Collection<T> asCollection() {
@@ -38,10 +40,13 @@ public interface Convertable<T> extends Queryable<T> {
     return asCollection();
   }
 
-  default T[] asArray(TryIntFunction<? extends T[]> provider) {
+  default T[] asArray() {
     return cursor()
-      .foldLeft(new ArrayList<T>(), (array, it) -> { array.add(it); return array; })
-      .map(array -> array.toArray(provider::apply))
-      .submit();
+      .reduce(Array.<T>empty(), Array::push)
+      .<T[]>map(array -> switch (array) {
+        case Copied<T> some -> some.elements();
+        case Empty none -> none.elements();
+      })
+      .commit();
   }
 }

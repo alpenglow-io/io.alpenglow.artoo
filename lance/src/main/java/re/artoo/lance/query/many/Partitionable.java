@@ -20,7 +20,7 @@ public interface Partitionable<T> extends Queryable<T> {
 
   default Many<T> skipWhile(final TryPredicate2<? super Integer, ? super T> where) {
     return () -> cursor()
-      .<Keep<T>>foldLeft(Keep.untilTrue(), (index, meanwhile, element) -> meanwhile.keep() && where.invoke(index, element)
+      .<Keep<T>>reduce(Keep.untilTrue(), (index, meanwhile, element) -> meanwhile.keep() && where.invoke(index, element)
         ? Keep.untilTrue()
         : Keep.untilFalse(element)
       )
@@ -37,7 +37,7 @@ public interface Partitionable<T> extends Queryable<T> {
 
   default Many<T> takeWhile(final TryIntPredicate1<? super T> where) {
     return () -> cursor()
-      .<Keep<T>>foldLeft(Keep.untilTrue(), (index, meanwhile, element) ->
+      .<Keep<T>>reduce(Keep.untilTrue(), (index, meanwhile, element) ->
         meanwhile.keep() && where.invoke(index, element)
           ? Keep.untilTrue(element)
           : Keep.untilFalse()

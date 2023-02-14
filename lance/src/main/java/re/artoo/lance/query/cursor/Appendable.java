@@ -5,7 +5,7 @@ import re.artoo.lance.query.cursor.mapper.Append;
 
 public sealed interface Appendable<ELEMENT> extends Probe<ELEMENT> permits Cursor {
   default Cursor<ELEMENT> append(Cursor<ELEMENT> cursor) {
-    return new Append<>(this, cursor);
+    return new Append<>(this, cursor).coalesce();
   }
 }
 

@@ -12,7 +12,7 @@ class FilterTest {
   @Test
   @DisplayName("should filter elements from cursor")
   void shouldFilterElements() {
-    Cursor<Integer> cursor = new Coalesce<>(Cursor.open(1, 2, 3, 4).filter(element -> element < 3));
+    Cursor<Integer> cursor = Cursor.open(1, 2, 3, 4).filter(element -> element < 3);
 
     assertThat(cursor.next()).isEqualTo(1);
     assertThat(cursor.next()).isEqualTo(2);

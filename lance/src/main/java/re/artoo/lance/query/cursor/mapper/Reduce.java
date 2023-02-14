@@ -13,7 +13,7 @@ public record Reduce<ELEMENT, FOLDED>(
   public FOLDED tick() throws Throwable {
     var reduced = initial.tick();
     while (probe.isTickable()) {
-      reduced = operation.invoke(0, reduced, probe.tick());;
+      reduced = operation.invoke(0, reduced, probe.tick());
     }
     return reduced;
   }

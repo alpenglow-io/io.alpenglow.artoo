@@ -10,6 +10,4 @@ final class Ticked<ELEMENT> {
     ticked.index = 0;
     return ticked;
   }
-
-
 }

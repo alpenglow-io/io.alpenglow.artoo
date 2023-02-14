@@ -1,5 +1,7 @@
 package re.artoo.lance.value;
 
+import re.artoo.lance.query.Cursor;
+import re.artoo.lance.query.Many;
 import re.artoo.lance.value.array.Copied;
 import re.artoo.lance.value.array.Empty;
 
@@ -10,7 +12,7 @@ import java.util.RandomAccess;
 
 import static java.util.Arrays.*;
 
-public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess permits Empty, Copied {
+public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, Many<ELEMENT>, RandomAccess permits Empty, Copied {
   static <ELEMENT> Array<ELEMENT> of(ELEMENT[] elements) {
     return of(null, elements);
   }
@@ -86,7 +88,15 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
   default ELEMENT findFirst() {
     return switch (this) {
       case Copied<ELEMENT> array -> array.elements()[0];
-      default -> null;
+      case Empty ignored -> null;
+    };
+  }
+
+  @Override
+  default Cursor<ELEMENT> cursor() {
+    return switch (this) {
+      case Copied<ELEMENT> array -> Cursor.open(array.elements());
+      case Empty ignored -> Cursor.empty();
     };
   }
 

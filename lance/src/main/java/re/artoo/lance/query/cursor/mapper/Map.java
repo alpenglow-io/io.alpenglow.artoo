@@ -11,8 +11,8 @@ public record Map<ELEMENT, RETURN>(Probe<ELEMENT> probe, TryIntFunction1<? super
   }
 
   @Override
-  public <AGAIN> Cursor<AGAIN> map(final TryIntFunction1<? super RETURN, ? extends AGAIN> mapAgain) {
-    return new Map<>(new Coalesce<>(this), mapAgain);
+  public <AGAIN> Cursor<AGAIN> map(TryIntFunction1<? super RETURN, ? extends AGAIN> mapAgain) {
+    return new Map<>(coalesce(), mapAgain);
   }
 
   @Override

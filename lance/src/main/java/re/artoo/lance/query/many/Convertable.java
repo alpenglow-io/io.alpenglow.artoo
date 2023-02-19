@@ -3,8 +3,6 @@ package re.artoo.lance.query.many;
 import re.artoo.lance.Queryable;
 import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.value.Array;
-import re.artoo.lance.value.array.Copied;
-import re.artoo.lance.value.array.Empty;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,7 +20,7 @@ public interface Convertable<T> extends Queryable<T> {
   }
   default List<T> asList() {
     return cursor()
-      .reduce(new ArrayList<T>(), (array, it) -> { array.add(it); return array; })
+      .reduce(Array.<T>none(), (sequence, it) -> sequence.push(it))
       .map(List::copyOf)
       .commit();
   }
@@ -42,11 +40,8 @@ public interface Convertable<T> extends Queryable<T> {
 
   default T[] asArray() {
     return cursor()
-      .reduce(Array.<T>empty(), Array::push)
-      .<T[]>map(array -> switch (array) {
-        case Copied<T> some -> some.elements();
-        case Empty none -> none.elements();
-      })
+      .reduce(Array.<T>none(), (sequence, element) -> sequence.push(element))
+      .map(Array::asArray)
       .commit();
   }
 }

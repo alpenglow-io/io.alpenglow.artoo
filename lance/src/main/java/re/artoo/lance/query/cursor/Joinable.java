@@ -1,6 +1,5 @@
 package re.artoo.lance.query.cursor;
 
-import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.func.TryPredicate2;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.tuple.Pair;
@@ -75,7 +74,7 @@ final class Right<FIRST, SECOND> implements Join<FIRST, SECOND> {
   private final Probe<FIRST> left;
   private final Probe<SECOND> right;
   private final TryPredicate2<? super FIRST, ? super SECOND> condition;
-  private Array<Pair<FIRST, SECOND>> scrolled = Array.empty();
+  private Array<Pair<FIRST, SECOND>> scrolled = Array.none();
 
   Right(Probe<FIRST> left, Probe<SECOND> right) {
     this(left, right, Objects::deepEquals);
@@ -127,7 +126,7 @@ final class Outer<FIRST, SECOND> implements Join<FIRST, SECOND> {
     this.right = right;
   }
 
-  private Array<Pair<FIRST, SECOND>> scrolled = Array.empty();
+  private Array<Pair<FIRST, SECOND>> scrolled = Array.none();
 
   @Override
   public Pair<FIRST, SECOND> tick() throws Throwable {

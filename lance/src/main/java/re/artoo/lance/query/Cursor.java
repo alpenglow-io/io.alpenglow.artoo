@@ -8,7 +8,8 @@ import java.util.List;
 
 public non-sealed interface Cursor<ELEMENT>
   extends Mappable<ELEMENT>, Reducible<ELEMENT>, Complementable<ELEMENT>, Appendable<ELEMENT>, Committable<ELEMENT>, Joinable<ELEMENT>, Filterable<ELEMENT> {
-  static <T> Cursor<T> open(T[] elements) {
+  @SafeVarargs
+  static <T> Cursor<T> open(T... elements) {
     return new Open<>(elements);
   }
 

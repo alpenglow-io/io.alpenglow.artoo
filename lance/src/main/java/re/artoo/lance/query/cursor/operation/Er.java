@@ -1,4 +1,4 @@
-package re.artoo.lance.query.cursor.mapper;
+package re.artoo.lance.query.cursor.operation;
 
 import re.artoo.lance.func.TryFunction2;
 import re.artoo.lance.query.Cursor;
@@ -6,10 +6,10 @@ import re.artoo.lance.query.cursor.Probe;
 
 public record Er<ELEMENT, EXCEPTION extends RuntimeException>(Probe<ELEMENT> probe, String message, TryFunction2<? super String, ? super Throwable, ? extends EXCEPTION> fallback) implements Cursor<ELEMENT> {
   @Override
-  public ELEMENT tick() {
+  public ELEMENT fetch() {
     try {
-      if (isTickable()) {
-        return probe.tick();
+      if (canFetch()) {
+        return probe.fetch();
       } else {
         throw fallback.apply(message, null);
       }
@@ -19,7 +19,7 @@ public record Er<ELEMENT, EXCEPTION extends RuntimeException>(Probe<ELEMENT> pro
   }
 
   @Override
-  public boolean isTickable() throws Throwable {
-    return probe.isTickable();
+  public boolean canFetch() throws Throwable {
+    return probe.canFetch();
   }
 }

@@ -4,10 +4,10 @@ import re.artoo.lance.func.TryConsumer1;
 import re.artoo.lance.func.TryFunction2;
 import re.artoo.lance.func.TrySupplier1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.cursor.mapper.Catch;
-import re.artoo.lance.query.cursor.mapper.Coalesce;
-import re.artoo.lance.query.cursor.mapper.Er;
-import re.artoo.lance.query.cursor.mapper.Or;
+import re.artoo.lance.query.cursor.operation.Catch;
+import re.artoo.lance.query.cursor.operation.Coalesce;
+import re.artoo.lance.query.cursor.operation.Er;
+import re.artoo.lance.query.cursor.operation.Or;
 import re.artoo.lance.scope.Let;
 
 public sealed interface Complementable<ELEMENT> extends Probe<ELEMENT> permits Cursor {

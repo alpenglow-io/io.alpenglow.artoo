@@ -11,12 +11,12 @@ public final class Iterable<T> implements Cursor<T> {
 
   public Iterable(final List<T> list) {this.list = list;}
   @Override
-  public T tick() throws Throwable {
+  public T fetch() throws Throwable {
     return list.get(index);
   }
 
   @Override
-  public boolean isTickable() {
+  public boolean canFetch() {
     return index < list.size();
   }
 

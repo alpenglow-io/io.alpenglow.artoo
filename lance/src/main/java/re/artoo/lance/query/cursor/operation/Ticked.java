@@ -1,4 +1,4 @@
-package re.artoo.lance.query.cursor.mapper;
+package re.artoo.lance.query.cursor.operation;
 
 final class Ticked<ELEMENT> {
   ELEMENT element;

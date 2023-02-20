@@ -6,7 +6,7 @@ import re.artoo.lance.query.Cursor;
 public sealed interface Committable<ELEMENT> extends Probe<ELEMENT> permits Cursor {
   default <RETURN> RETURN commit(TryIntFunction1<? super ELEMENT, ? extends RETURN> returns) {
     try {
-      return returns.invoke(0, tick());
+      return returns.invoke(0, fetch());
     } catch (Throwable e) {
       throw new RuntimeException(e);
     }

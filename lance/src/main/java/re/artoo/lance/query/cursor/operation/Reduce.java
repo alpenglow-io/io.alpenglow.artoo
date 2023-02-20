@@ -1,4 +1,4 @@
-package re.artoo.lance.query.cursor.mapper;
+package re.artoo.lance.query.cursor.operation;
 
 import re.artoo.lance.func.TryIntFunction2;
 import re.artoo.lance.query.Cursor;
@@ -10,16 +10,16 @@ public record Reduce<ELEMENT, FOLDED>(
   TryIntFunction2<? super FOLDED, ? super ELEMENT, ? extends FOLDED> operation
 ) implements Cursor<FOLDED> {
   @Override
-  public FOLDED tick() throws Throwable {
-    var reduced = initial.tick();
-    while (probe.isTickable()) {
-      reduced = operation.invoke(0, reduced, probe.tick());
+  public FOLDED fetch() throws Throwable {
+    var reduced = initial.fetch();
+    while (probe.canFetch()) {
+      reduced = operation.invoke(0, reduced, probe.fetch());
     }
     return reduced;
   }
 
   @Override
-  public boolean isTickable() throws Throwable {
-    return probe.isTickable() || (!probe.equals(initial) && initial.isTickable());
+  public boolean canFetch() throws Throwable {
+    return probe.canFetch() || (!probe.equals(initial) && initial.canFetch());
   }
 }

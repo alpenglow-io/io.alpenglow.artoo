@@ -6,12 +6,12 @@ public enum Empty implements Cursor<Object> {
   Default;
 
   @Override
-  public Object tick() {
+  public Object fetch() {
     return null;
   }
 
   @Override
-  public boolean isTickable() {
+  public boolean canFetch() {
     return false;
   }
 

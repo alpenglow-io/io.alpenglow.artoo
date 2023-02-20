@@ -63,11 +63,11 @@ public class AggregatableTest {
       new Pet("Whiskers", 1)
     };
 
-    final var oldest = Many.from(pets).aggregate(MIN_VALUE, Pet::age, (max, current) -> current > max ? current : max).cursor().tick();
+    final var oldest = Many.from(pets).aggregate(MIN_VALUE, Pet::age, (max, current) -> current > max ? current : max).cursor().fetch();
 
     assertThat(oldest).isEqualTo(8);
 
-    final var youngest = Many.from(pets).aggregate(MAX_VALUE, Pet::age, (min, current) -> current < min ? current : min).cursor().tick();
+    final var youngest = Many.from(pets).aggregate(MAX_VALUE, Pet::age, (min, current) -> current < min ? current : min).cursor().fetch();
 
     assertThat(youngest).isEqualTo(1);
   }

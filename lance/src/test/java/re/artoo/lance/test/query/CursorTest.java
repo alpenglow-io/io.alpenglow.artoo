@@ -7,7 +7,7 @@ import re.artoo.lance.query.Cursor;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 class CursorTest {
   @Test
-  @DisplayName("should map an old value to new one")
+  @DisplayName("should operation an old value to new one")
   void shouldMapAnOldValueToNewOne() throws Throwable {
     record Old(int value) {}
     record New(String value) {}
@@ -15,20 +15,20 @@ class CursorTest {
     var fetched = Cursor
       .open(new Old(314))
       .map(it -> new New("" + it.value))
-      .tick();
+      .fetch();
 
     assertThat(fetched).isEqualTo(new New("314"));
   }
 
   @Test
-  @DisplayName("should map an old value to new one")
+  @DisplayName("should operation an old value to new one")
   void shouldMapAnOldValueToNull() throws Throwable {
     record Old(int value) {}
 
     var fetched = Cursor
       .open(new Old(314))
       .map(it -> null)
-      .tick();
+      .fetch();
 
     assertThat(fetched).isNull();
   }

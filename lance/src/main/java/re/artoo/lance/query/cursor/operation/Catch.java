@@ -1,4 +1,4 @@
-package re.artoo.lance.query.cursor.mapper;
+package re.artoo.lance.query.cursor.operation;
 
 import re.artoo.lance.func.TryConsumer1;
 import re.artoo.lance.query.Cursor;
@@ -6,9 +6,9 @@ import re.artoo.lance.query.cursor.Probe;
 
 public record Catch<ELEMENT>(Probe<ELEMENT> probe, TryConsumer1<? super Throwable> fallback) implements Cursor<ELEMENT> {
   @Override
-  public ELEMENT tick() {
+  public ELEMENT fetch() {
     try {
-      return probe.tick();
+      return probe.fetch();
     } catch (Throwable throwable) {
       fallback.accept(throwable);
       return null;
@@ -16,9 +16,9 @@ public record Catch<ELEMENT>(Probe<ELEMENT> probe, TryConsumer1<? super Throwabl
   }
 
   @Override
-  public boolean isTickable() {
+  public boolean canFetch() {
     try {
-      return probe.isTickable();
+      return probe.canFetch();
     } catch (Throwable throwable) {
       fallback.accept(throwable);
       return false;

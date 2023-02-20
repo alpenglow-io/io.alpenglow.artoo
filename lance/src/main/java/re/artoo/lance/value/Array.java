@@ -52,13 +52,22 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
     };
   }
   @SuppressWarnings("unchecked")
-  default Array<ELEMENT> push(ELEMENT... elements) {
+  default Array<ELEMENT> pushAll(ELEMENT... elements) {
     return switch (this) {
       case None ignored when elements.length == 0 -> this;
       case None ignored when elements.length == 1 -> new Lone<>(elements[0]);
       case None ignored -> new Some<>(elements);
       case Some<ELEMENT> ignored when elements.length == 0 -> this;
       case Some<ELEMENT> some -> new Some<>(some.elements(), elements);
+      default -> this;
+    };
+  }
+
+  default Array<ELEMENT> push(ELEMENT element) {
+    return switch (this) {
+      case None ignored when element != null -> new Lone<>(element);
+      case Lone<ELEMENT> lone when element != null -> new Some<>(lone.element(), element);
+      case Some<ELEMENT> some when element != null -> new Some<>(some.elements(), element);
       default -> this;
     };
   }

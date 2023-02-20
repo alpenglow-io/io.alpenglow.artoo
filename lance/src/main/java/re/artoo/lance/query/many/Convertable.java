@@ -20,8 +20,8 @@ public interface Convertable<T> extends Queryable<T> {
   }
   default List<T> asList() {
     return cursor()
-      .reduce(Array.<T>none(), (sequence, it) -> sequence.push(it))
-      .map(List::copyOf)
+      .reduce(Array.<T>none(), Array::push)
+      .map(Array::asList)
       .commit();
   }
   default List<T> asLinkedList() {

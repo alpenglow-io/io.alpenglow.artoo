@@ -2,7 +2,7 @@ package re.artoo.lance.query.cursor;
 
 import re.artoo.lance.func.*;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.cursor.mapper.Reduce;
+import re.artoo.lance.query.cursor.operation.Reduce;
 
 public sealed interface Reducible<ELEMENT> extends Probe<ELEMENT> permits Cursor {
   default <FOLDED> Cursor<FOLDED> reduce(FOLDED initial, TryIntFunction2<? super FOLDED, ? super ELEMENT, ? extends FOLDED> operation) {

@@ -2,15 +2,15 @@ package re.artoo.lance.query.cursor;
 
 import re.artoo.lance.func.*;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.cursor.mapper.Flat;
-import re.artoo.lance.query.cursor.mapper.Map;
+import re.artoo.lance.query.cursor.operation.Flat;
+import re.artoo.lance.query.cursor.operation.Map;
 
 public sealed interface Mappable<ELEMENT> extends Probe<ELEMENT> permits Cursor {
   default <RETURN> Cursor<RETURN> map(TryFunction1<? super ELEMENT, ? extends RETURN> map) {
     return map((index, it) ->  map.invoke(it));
   }
   default <RETURN> Cursor<RETURN> map(TryIntFunction1<? super ELEMENT, ? extends RETURN> map) {
-    return new Map<ELEMENT, RETURN>(this, map).coalesce();
+    return new Map<ELEMENT, RETURN>(this, Pointer.alwaysMove(), map).coalesce();
   }
   default Cursor<ELEMENT> peek(TryConsumer1<? super ELEMENT> peek) {
     return map(it -> peek.self(it, it));

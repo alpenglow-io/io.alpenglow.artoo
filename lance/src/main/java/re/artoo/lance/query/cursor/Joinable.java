@@ -42,15 +42,15 @@ final class Left<FIRST, SECOND> implements Join<FIRST, SECOND> {
   private FIRST first;
 
   @Override
-  public Pair<FIRST, SECOND> tick() throws Throwable {
+  public Pair<FIRST, SECOND> fetch() throws Throwable {
     Pair<FIRST, SECOND> pair = null;
     if (left.hasNext()) {
       if (rightProbe == null || !rightProbe.hasNext()) {
-        first = left.tick();
+        first = left.fetch();
         rightProbe = right.rewind();
       }
       pair = Tuple.of(first, null);
-      for (var second = rightProbe.tick(); rightProbe.hasNext(); second = rightProbe.tick()) {
+      for (var second = rightProbe.fetch(); rightProbe.hasNext(); second = rightProbe.fetch()) {
         if (condition.invoke(first, second)) {
           pair = Tuple.of(first, second);
         }
@@ -60,8 +60,8 @@ final class Left<FIRST, SECOND> implements Join<FIRST, SECOND> {
   }
 
   @Override
-  public boolean isTickable() throws Throwable {
-    return left.isTickable();
+  public boolean canFetch() throws Throwable {
+    return left.canFetch();
   }
 
   @Override
@@ -89,20 +89,20 @@ final class Right<FIRST, SECOND> implements Join<FIRST, SECOND> {
   private SECOND second;
 
   @Override
-  public boolean isTickable() throws Throwable {
-    return right.isTickable();
+  public boolean canFetch() throws Throwable {
+    return right.canFetch();
   }
 
   @Override
-  public Pair<FIRST, SECOND> tick() throws Throwable {
+  public Pair<FIRST, SECOND> fetch() throws Throwable {
     Pair<FIRST, SECOND> pair = null;
     if (right.hasNext()) {
       if (leftProbe == null || !leftProbe.hasNext()) {
-        second = right.tick();
+        second = right.fetch();
         leftProbe = left.rewind();
       }
       pair = Tuple.of(null, second);
-      for (var first = leftProbe.tick(); leftProbe.hasNext(); first = leftProbe.tick()) {
+      for (var first = leftProbe.fetch(); leftProbe.hasNext(); first = leftProbe.fetch()) {
         if (condition.invoke(first, second)) {
           pair = Tuple.of(first, second);
         }
@@ -129,25 +129,25 @@ final class Outer<FIRST, SECOND> implements Join<FIRST, SECOND> {
   private Array<Pair<FIRST, SECOND>> scrolled = Array.none();
 
   @Override
-  public Pair<FIRST, SECOND> tick() throws Throwable {
+  public Pair<FIRST, SECOND> fetch() throws Throwable {
     return left.hasNext()
       ? traverseLeft()
       : traverseRight();
   }
 
   private Pair<FIRST, SECOND> traverseRight() throws Throwable {
-    Pair<FIRST, SECOND> joined = right.tick();
-    while (scrolled.includes(joined)) joined = right.tick();
+    Pair<FIRST, SECOND> joined = right.fetch();
+    while (scrolled.includes(joined)) joined = right.fetch();
     return joined;
   }
 
   private Pair<FIRST, SECOND> traverseLeft() throws Throwable {
-    return (scrolled = scrolled.push(left.tick())).findLast();
+    return (scrolled = scrolled.push(left.fetch())).findLast().orElseThrow();
   }
 
   @Override
-  public boolean isTickable() throws Throwable {
-    return left.isTickable() || right.isTickable();
+  public boolean canFetch() throws Throwable {
+    return left.canFetch() || right.canFetch();
   }
 
   @Override
@@ -164,13 +164,13 @@ final class Inner<FIRST, SECOND> implements Join<FIRST, SECOND> {
   }
 
   @Override
-  public boolean isTickable() throws Throwable {
-    return outer.isTickable();
+  public boolean canFetch() throws Throwable {
+    return outer.canFetch();
   }
 
   @Override
-  public Pair<FIRST, SECOND> tick() throws Throwable {
-    return outer.filter(pair -> pair.first() != null && pair.second() != null).tick();
+  public Pair<FIRST, SECOND> fetch() throws Throwable {
+    return outer.filter(pair -> pair.first() != null && pair.second() != null).fetch();
   }
 
   @Override

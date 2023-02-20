@@ -1,18 +1,17 @@
 package re.artoo.lance.query.cursor;
 
-import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.FetchException;
 
 import java.util.Iterator;
 
 public interface Probe<ELEMENT> extends Iterator<ELEMENT> {
-  boolean isTickable() throws Throwable;
-  ELEMENT tick() throws Throwable;
+  boolean canFetch() throws Throwable;
+  ELEMENT fetch() throws Throwable;
 
   @Override
   default ELEMENT next() {
     try {
-      return tick();
+      return fetch();
     } catch (Throwable throwable) {
       throw FetchException.of(throwable);
     }
@@ -21,7 +20,7 @@ public interface Probe<ELEMENT> extends Iterator<ELEMENT> {
   @Override
   default boolean hasNext() {
     try {
-      return isTickable();
+      return canFetch();
     } catch (Throwable throwable) {
       throw FetchException.of(throwable);
     }

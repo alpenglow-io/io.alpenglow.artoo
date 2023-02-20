@@ -10,10 +10,10 @@ import java.time.LocalTime;
 import static org.assertj.core.api.Assertions.assertThat;
 import static re.artoo.lance.query.Many.from;
 
-public class FilterableTest {
+class FilterableTest {
   @Test
   @DisplayName("should filter words with length 3")
-  public void shouldFilterWordsWithLength3() {
+  void shouldFilterWordsWithLength3() {
     final var where = from("the", "quick", "brown", "fox", "jumps", null).where(word -> word.length() == 3);
 
     assertThat(where).containsOnly("the", "fox");
@@ -21,7 +21,7 @@ public class FilterableTest {
 
   @Test
   @DisplayName("should filter words with length less than 6")
-  public void shouldFilterWordsWithLengthLessThan6() {
+  void shouldFilterWordsWithLengthLessThan6() {
 
     final var where = from("apple", "passionfruit", "banana", "mango", "orange", "blueberry", "grape", "strawberry").where(fruit -> fruit.length() < 6);
 
@@ -30,7 +30,7 @@ public class FilterableTest {
 
   @Test
   @DisplayName("should get all numbers that are less than or equal to index by 10")
-  public void shouldGetNumbersLessOrEqualThanIndexBy10() {
+  void shouldGetNumbersLessOrEqualThanIndexBy10() {
 
     final var where = Many.from(0, 30, 20, 15, 90, 85, 40, 75).where((index, number) -> number <= index * 10);
 
@@ -39,7 +39,7 @@ public class FilterableTest {
 
   @Test
   @DisplayName("should get all strings pseudo a generic array")
-  public void shouldGetAllStrings() {
+  void shouldGetAllStrings() {
     final Object[] objects = {"apple", "passionfruit", 10.2F, 12L, "banana", LocalTime.now(), LocalDateTime.now(), 2};
 
     final var texts = Many.fromAny(objects).ofType(String.class);
@@ -48,7 +48,7 @@ public class FilterableTest {
   }
 
   @Test
-  public void shouldConsumeWhenIsType() {
+  void shouldConsumeWhenIsType() {
 /*    final Object[] objects = {"apple", "passionfruit", 10.2F, 12L, "banana", LocalTime.now(), LocalDateTime.now(), 2};
 
     for (

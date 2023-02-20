@@ -2,21 +2,18 @@ package re.artoo.lance.query.cursor;
 
 import re.artoo.lance.query.Cursor;
 
-public final class Open<ELEMENT> implements Cursor<ELEMENT> {
-  private final ELEMENT[] elements;
-  private int index;
+import static re.artoo.lance.query.cursor.Pointer.alwaysMove;
+import static re.artoo.lance.query.cursor.Pointer.neverMove;
 
-  public Open(ELEMENT[] elements) {
-    this(-1, elements);
-  }
-  private Open(int index, ELEMENT[] elements) {
-    this.index = index;
-    this.elements = elements;
+public record Open<ELEMENT>(ELEMENT[] elements, Pointer pointer) implements Cursor<ELEMENT> {
+  @SafeVarargs
+  public Open(ELEMENT... elements) {
+    this(elements, elements.length == 0 ? neverMove() : alwaysMove());
   }
 
   @Override
-  public ELEMENT tick() throws Throwable {
-    return isTickable() ? elements[index] : null;
+  public ELEMENT fetch() throws Throwable {
+    return canFetch() ? elements[pointer.indexNext()] : null;
   }
 
   @Override
@@ -25,9 +22,12 @@ public final class Open<ELEMENT> implements Cursor<ELEMENT> {
   }
 
   @Override
-  public boolean isTickable() {
-    boolean tickable = elements.length > 0 && elements[index + 1] != null;
-    while (index < elements.length && !tickable) ++index;
+  public boolean canFetch() {
+    boolean tickable = pointer.index() < elements.length && elements[pointer.index()] != null;
+    while (pointer.index() < elements.length && !tickable) {
+      pointer.next();
+      tickable = elements[pointer.index()] != null;
+    }
     return tickable;
   }
 }

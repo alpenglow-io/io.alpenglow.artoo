@@ -1,13 +1,12 @@
 package re.artoo.lance.query;
 
-import re.artoo.lance.query.cursor.*;
 import re.artoo.lance.query.cursor.Appendable;
 import re.artoo.lance.query.cursor.Iterable;
+import re.artoo.lance.query.cursor.*;
 
 import java.util.List;
 
-public non-sealed interface Cursor<ELEMENT>
-  extends Mappable<ELEMENT>, Reducible<ELEMENT>, Complementable<ELEMENT>, Appendable<ELEMENT>, Committable<ELEMENT>, Joinable<ELEMENT>, Filterable<ELEMENT> {
+public non-sealed interface Cursor<ELEMENT> extends Mappable<ELEMENT>, Reducible<ELEMENT>, Complementable<ELEMENT>, Appendable<ELEMENT>, Committable<ELEMENT>, Joinable<ELEMENT>, Filterable<ELEMENT> {
   @SafeVarargs
   static <T> Cursor<T> open(T... elements) {
     return new Open<>(elements);
@@ -26,9 +25,18 @@ public non-sealed interface Cursor<ELEMENT>
     return new Iterable<>(collection);
   }
 
-  static Throwable exception(String message, Throwable cause) { return new Exception(message, cause); }
-  static Throwable exception(Throwable cause) { return new Exception(cause); }
-  static Throwable exception(String message) { return new Exception(message); }
+  static Throwable exception(String message, Throwable cause) {
+    return new Exception(message, cause);
+  }
+
+  static Throwable exception(Throwable cause) {
+    return new Exception(cause);
+  }
+
+  static Throwable exception(String message) {
+    return new Exception(message);
+  }
+
   final class Exception extends RuntimeException {
     public Exception() {
       super();

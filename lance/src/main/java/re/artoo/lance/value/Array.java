@@ -8,7 +8,6 @@ import java.util.*;
 
 import static java.util.Arrays.binarySearch;
 
-@SuppressWarnings("SwitchStatementWithTooFewBranches")
 public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess permits Lone, None, Some {
   static <ELEMENT> Array<ELEMENT> of(ELEMENT[] elements) {
     return elements == null || elements.length == 0

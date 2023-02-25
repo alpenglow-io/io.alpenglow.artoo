@@ -1,19 +1,25 @@
 package re.artoo.lance.query.cursor;
 
 import re.artoo.lance.query.Cursor;
+import re.artoo.lance.query.FetchException;
 
-import static re.artoo.lance.query.cursor.Pointer.alwaysMove;
-import static re.artoo.lance.query.cursor.Pointer.neverMove;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
-public record Open<ELEMENT>(ELEMENT[] elements, Pointer pointer) implements Cursor<ELEMENT> {
+public record Open<ELEMENT>(ELEMENT[] elements, AtomicInteger index, AtomicReference<ELEMENT> reference, AtomicBoolean fetched) implements Cursor<ELEMENT> {
   @SafeVarargs
   public Open(ELEMENT... elements) {
-    this(elements, elements.length == 0 ? neverMove() : alwaysMove());
+    this(elements, new AtomicInteger(0), new AtomicReference<>(), new AtomicBoolean(true));
   }
 
   @Override
   public ELEMENT fetch() throws Throwable {
-    return canFetch() ? elements[pointer.indexNext()] : null;
+    try {
+      return canFetch() ? reference.get() : FetchException.byThrowing("Can't fetch next element in open cursor (no more elements?)");
+    } finally {
+      fetched.set(true);
+    }
   }
 
   @Override
@@ -23,11 +29,13 @@ public record Open<ELEMENT>(ELEMENT[] elements, Pointer pointer) implements Curs
 
   @Override
   public boolean canFetch() {
-    boolean tickable = pointer.index() < elements.length && elements[pointer.index()] != null;
-    while (pointer.index() < elements.length && !tickable) {
-      pointer.next();
-      tickable = elements[pointer.index()] != null;
-    }
-    return tickable;
+    if (!fetched.get()) return true;
+    if (index.get() >= elements.length) return false;
+
+    int index = this.index.getAndIncrement();
+    reference.set(elements[index]);
+    fetched.set(false);
+
+    return true;
   }
 }

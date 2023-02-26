@@ -1,6 +1,8 @@
 package re.artoo.lance.value;
 
-import re.artoo.lance.value.array.Lone;
+import re.artoo.lance.func.TryFunction1;
+import re.artoo.lance.func.TryFunction2;
+import re.artoo.lance.func.TryPredicate1;
 import re.artoo.lance.value.array.None;
 import re.artoo.lance.value.array.Some;
 
@@ -8,26 +10,19 @@ import java.util.*;
 
 import static java.util.Arrays.binarySearch;
 
-public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess permits Lone, None, Some {
-  static <ELEMENT> Array<ELEMENT> of(ELEMENT[] elements) {
-    return elements == null || elements.length == 0
+public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess permits None, Some {
+
+  @SuppressWarnings("unchecked")
+  static <ELEMENT> Array<ELEMENT> of(ELEMENT... elements) {
+    return elements != null && elements.length == 0
       ? none()
-      : elements.length == 1
-      ? new Lone<>(elements[0])
       : new Some<>(elements);
   }
 
-  @SuppressWarnings("unchecked")
-  static <ELEMENT> Array<ELEMENT> of(ELEMENT element, ELEMENT... elements) {
-    return element == null && elements != null && elements.length == 0
+  static <ELEMENT> Array<ELEMENT> ofArray(ELEMENT[] elements) {
+    return elements != null && elements.length == 0
       ? none()
-      : element == null
-      ? new Some<>(null, elements)
-      : new Some<>(element, elements);
-  }
-
-  static <ELEMENT> Array<ELEMENT> of(ELEMENT element) {
-    return element != null ? new Lone<>(element) : none();
+      : new Some<>(elements);
   }
 
   @SuppressWarnings("unchecked")
@@ -35,38 +30,18 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
     return (Array<ELEMENT>) None.Companion;
   }
 
-  @SuppressWarnings("unchecked")
-  default Array<ELEMENT> concat(ELEMENT... elements) {
-    return Array.of(elements);
-  }
   default Array<ELEMENT> concat(Array<ELEMENT> array) {
     return switch (this) {
-      case Some<ELEMENT> head when array instanceof Some<ELEMENT> tail -> new Some<>(head.elements(), tail.elements());
-      case Some<ELEMENT> head when array instanceof Lone<ELEMENT> tail -> new Some<>(head.elements(), tail.element());
-      case Lone<ELEMENT> head when array instanceof Some<ELEMENT> tail -> new Some<>(head.element(), tail.elements());
-      case Lone<ELEMENT> head when array instanceof Lone<ELEMENT> tail -> new Some<>(head.element(), tail.element());
       case None ignored when array instanceof Some<ELEMENT> tail -> tail;
-      case None ignored when array instanceof Lone<ELEMENT> tail -> tail;
+      case Some<ELEMENT> head when array instanceof Some<ELEMENT> tail -> new Some<>(head.elements(), tail.elements());
       default -> this;
     };
   }
   @SuppressWarnings("unchecked")
-  default Array<ELEMENT> pushAll(ELEMENT... elements) {
+  default Array<ELEMENT> push(ELEMENT... elements) {
     return switch (this) {
-      case None ignored when elements.length == 0 -> this;
-      case None ignored when elements.length == 1 -> new Lone<>(elements[0]);
-      case None ignored -> new Some<>(elements);
-      case Some<ELEMENT> ignored when elements.length == 0 -> this;
-      case Some<ELEMENT> some -> new Some<>(some.elements(), elements);
-      default -> this;
-    };
-  }
-
-  default Array<ELEMENT> push(ELEMENT element) {
-    return switch (this) {
-      case None ignored when element != null -> new Lone<>(element);
-      case Lone<ELEMENT> lone when element != null -> new Some<>(lone.element(), element);
-      case Some<ELEMENT> some when element != null -> new Some<>(some.elements(), element);
+      case None ignored when elements != null -> new Some<>(elements);
+      case Some<ELEMENT> some when elements != null -> new Some<>(some.elements(), elements);
       default -> this;
     };
   }
@@ -74,7 +49,6 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
   default Optional<ELEMENT> at(int index) {
     return switch (this) {
       case Some<ELEMENT> some when index >= 0 && some.elements().length > index -> Optional.of(some.elements()[index]);
-      case Lone<ELEMENT> lone when index == 0 -> Optional.of(lone.element());
       default -> Optional.empty();
     };
   }
@@ -82,7 +56,6 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
   default Array<ELEMENT> sort() {
     return switch (this) {
       case Some<ELEMENT> some -> new Some<>(sort(some.elements()));
-      case Lone<ELEMENT> lone -> lone;
       case None ignored -> this;
     };
   }
@@ -104,8 +77,7 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
   default Optional<ELEMENT> findLast() {
     return switch (this) {
       case Some<ELEMENT> some -> Optional.of(some.elements()[some.elements().length - 1]);
-      case Lone<ELEMENT> lone -> Optional.of(lone.element());
-      case None none -> Optional.empty();
+      case None ignored -> Optional.empty();
     };
   }
 
@@ -113,25 +85,20 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
     return switch (this) {
       case Some<ELEMENT> some -> Optional.of(some.elements()[0]);
       case None ignored -> Optional.empty();
-      case Lone<ELEMENT> lone -> Optional.of(lone.element());
     };
   }
 
   default Array<ELEMENT> head() {
     return switch (this) {
-      case Some<ELEMENT> some when some.elements().length >= 1 -> new Lone<>(some.elements()[0]);
-      case Some<ELEMENT> ignored -> Array.none();
-      case Lone<ELEMENT> lone -> lone;
+      case Some<ELEMENT> some -> new Some<>(some.elements()[0]);
       case None ignored -> this;
     };
   }
 
-  @SuppressWarnings("DuplicateBranchesInSwitch")
   default Array<ELEMENT> tail() {
     return switch (this) {
       case Some<ELEMENT> some when some.elements().length > 1 -> new Some<>(1, some.elements());
       case Some<ELEMENT> ignored -> Array.none();
-      case Lone<ELEMENT> ignored -> Array.none();
       case None ignored -> this;
     };
   }
@@ -149,15 +116,102 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
   default int length() {
     return switch (this) {
       case Some<ELEMENT> some -> some.elements().length;
-      case Lone<ELEMENT> ignored -> 1;
       case None ignored -> 0;
     };
   }
 
+  @SuppressWarnings("unchecked")
+  default <TARGET> Array<TARGET> map(TryFunction1<? super ELEMENT, ? extends TARGET> operation) {
+    return switch (this) {
+      case Some<ELEMENT> some when some.head() instanceof Some<ELEMENT> head -> Array.<TARGET>of(operation.apply(head.element())).concat(some.tail().map(operation));
+      default -> Array.none();
+    };
+  }
+
+  default <TARGET, ARRAY extends Array<TARGET>> Array<TARGET> flatMap(TryFunction1<? super ELEMENT, ? extends ARRAY> operation) {
+    return switch (this) {
+      case Some<ELEMENT> some when some.head() instanceof Some<ELEMENT> head -> operation.apply(head.element()).concat(some.tail().flatMap(operation));
+      default -> Array.none();
+    };
+  }
+
+  default Array<ELEMENT> filter(TryPredicate1<? super ELEMENT> condition) {
+    return switch (this) {
+      case Some<ELEMENT> some when some.head() instanceof Some<ELEMENT> head && condition.test(head.element()) -> Array.of(head.element()).concat(some.tail().filter(condition));
+      default -> Array.none();
+    };
+  }
+
+  default <TARGET> TARGET fold(TARGET initial, TryFunction2<? super TARGET, ? super ELEMENT, ? extends TARGET> operation) {
+    return switch (this) {
+      case Some<ELEMENT> some when some.head() instanceof Some<ELEMENT> head -> some.tail().fold(operation.apply(initial, head.element()), operation);
+      default -> initial;
+    };
+  }
+
+  default Optional<ELEMENT> reduce(TryFunction2<? super ELEMENT, ? super ELEMENT, ? extends ELEMENT> operation) {
+    return switch (this) {
+      case Some<ELEMENT> some when some.head() instanceof Some<ELEMENT> head -> Optional.of(some.tail().fold(head.element(), operation));
+      default -> Optional.empty();
+    };
+  }
+
+  default Optional<ELEMENT> find(TryPredicate1<? super ELEMENT> condition) {
+    return switch (this) {
+      case Some<ELEMENT> some when some.head() instanceof Some<ELEMENT> head && condition.test(head.element()) -> Optional.of(head.element());
+      case Some<ELEMENT> some when some.head() instanceof Some<ELEMENT> head && !condition.test(head.element()) -> some.tail().find(condition);
+      default -> Optional.empty();
+    };
+  }
+
+  default boolean every(TryPredicate1<? super ELEMENT> condition) {
+    return switch (this) {
+      case Some<ELEMENT> some when some.head() instanceof Some<ELEMENT> head -> condition.test(head.element()) && some.tail().every(condition);
+      default -> true;
+    };
+  }
+
+  default int indexOf(ELEMENT element) {
+    return switch (this) {
+      case Some<ELEMENT> some when some.head() instanceof Some<ELEMENT> head && head.element().equals(element) -> 0;
+      case Some<ELEMENT> some when some.head() instanceof Some<ELEMENT> head && !head.element().equals(element) -> some.tail().indexOf(1, element);
+      default -> -1;
+    };
+  }
+
+  private int indexOf(int index, ELEMENT element) {
+    return switch (this) {
+      case Some<ELEMENT> some when some.head() instanceof Some<ELEMENT> head && head.element().equals(element) -> index;
+      case Some<ELEMENT> some when some.head() instanceof Some<ELEMENT> head && !head.element().equals(element) -> some.tail().indexOf(++index, element);
+      default -> -1;
+    };
+  }
+
+  default String join() {
+    return join(',');
+  }
+
+  default String join(char separator) {
+    return switch (this) {
+      case Some<ELEMENT> some when some.head() instanceof Some<ELEMENT> head ->
+        some.tail().fold(new StringBuilder(head.element().toString()), (builder, element) -> builder.append("%c%s".formatted(separator, element))).toString();
+      default -> "";
+    };
+  }
+
+  default String join(String separator) {
+    return switch (this) {
+      case Some<ELEMENT> some when some.head() instanceof Some<ELEMENT> head ->
+        some.tail().fold(new StringBuilder(head.element().toString()), (builder, element) -> builder.append("%s%s".formatted(separator, element))).toString();
+      default -> "";
+    };
+  }
+
+
+
   default ELEMENT[] asArray() {
     return switch (this) {
       case Some<ELEMENT> some -> some.elements();
-      case Lone<ELEMENT> lone -> lone.elements();
       case None none -> none.elements();
     };
   }
@@ -165,8 +219,7 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
   default List<ELEMENT> asList() {
     return switch (this) {
       case Some<ELEMENT> some -> List.of(some.elements());
-      case Lone<ELEMENT> lone -> List.of(lone.element());
-      case None none -> List.of();
+      case None ignored -> List.of();
     };
   }
 }

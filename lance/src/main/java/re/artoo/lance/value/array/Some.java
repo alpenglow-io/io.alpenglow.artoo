@@ -27,6 +27,8 @@ public record Some<ELEMENT>(ELEMENT[] elements) implements Array<ELEMENT> {
     this(head, Companion.asArray(tail));
   }
 
+  public ELEMENT element() { return elements[0]; }
+
   @Override
   public Iterator<ELEMENT> iterator() {
     return new N();

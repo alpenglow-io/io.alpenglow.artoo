@@ -2,6 +2,7 @@ package re.artoo.lance.query.many;
 
 import re.artoo.lance.Queryable;
 import re.artoo.lance.func.TryFunction1;
+import re.artoo.lance.func.TryFunction2;
 import re.artoo.lance.value.Array;
 
 import java.util.*;
@@ -18,9 +19,10 @@ public interface Convertable<T> extends Queryable<T> {
       map.put(key.apply(value), element.apply(value));
     return map;
   }
+  @SuppressWarnings("unchecked")
   default List<T> asList() {
     return cursor()
-      .reduce(Array.<T>none(), Array::push)
+      .reduce(Array.<T>none(), (array, element) -> array.push(element))
       .map(Array::asList)
       .commit();
   }

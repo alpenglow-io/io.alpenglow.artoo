@@ -72,4 +72,24 @@ class FilterTest {
     assertThat(filter.fetch()).isEqualTo(null);
     assertThat(filter.canFetch()).isFalse();
   }
+
+  @Test
+  @DisplayName("should filter numbers less than operation with index and exclude nulls in the end")
+  void shouldFilterNumberLessThanOperationButNulls() throws Throwable {
+    var filter =
+      new PresenceOnly<>(
+        new Filter<>(
+          new PresenceOnly<>(
+            new Open<>(0, null, 30, null, 20, null, 15, 90, 85, 40, 75)
+          ),
+          (index, number) -> number <= index * 10
+        )
+      );
+
+    assertThat(filter.fetch()).isEqualTo(0);
+    assertThat(filter.fetch()).isEqualTo(20);
+    assertThat(filter.fetch()).isEqualTo(15);
+    assertThat(filter.fetch()).isEqualTo(40);
+    assertThat(filter.canFetch()).isFalse();
+  }
 }

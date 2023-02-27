@@ -3,15 +3,18 @@ package re.artoo.lance.query.cursor.operation;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.cursor.Probe;
 
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-public record Flat<ELEMENT>(Probe<Probe<ELEMENT>> probe, AtomicReference<Probe<ELEMENT>> reference) implements Cursor<ELEMENT> {
+public record Flat<ELEMENT>(Probe<Probe<ELEMENT>> probe, AtomicReference<Probe<ELEMENT>> reference, AtomicBoolean fetched) implements Cursor<ELEMENT> {
   public Flat(Probe<Probe<ELEMENT>> probe) {
-    this(probe, new AtomicReference<>());
+    this(probe, new AtomicReference<>(), new AtomicBoolean(false));
   }
 
   @Override
   public boolean canFetch() throws Throwable {
+    if (!fetched.get()) return true;
+    if ()
     /*
      * this is a bit tricky to catch it at first glance:
      * at the very beginning, we need to check if the fetcher has a fetcher within,

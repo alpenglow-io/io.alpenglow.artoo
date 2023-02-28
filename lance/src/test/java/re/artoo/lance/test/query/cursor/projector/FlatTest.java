@@ -3,6 +3,8 @@ package re.artoo.lance.test.query.cursor.projector;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import re.artoo.lance.query.Cursor;
+import re.artoo.lance.query.cursor.Open;
+import re.artoo.lance.query.cursor.operation.Flat;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -10,10 +12,17 @@ class FlatTest {
   @Test
   @DisplayName("should flat cursors with one value")
   void shouldFlatCursorWithOneValue() throws Throwable {
-    var cursor = Cursor.open(Cursor.open(1), Cursor.open(2), Cursor.<Integer>empty(), Cursor.open(3)).flatMap(it -> it);
+    var cursor =
+      new Flat<>(
+        new Open<>(
+          new Open<>(1),
+          new Open<>(),
+          new Open<>(3)
+        )
+      );
 
-    final var actual = new Integer[]{cursor.fetch(), cursor.fetch(), cursor.fetch(), cursor.fetch()};
-    final var expected = new Integer[]{1, 2, 3, null};
+    final var actual = new Integer[]{cursor.fetch(), cursor.fetch(), cursor.fetch()};
+    final var expected = new Integer[]{1, null, 3};
 
     assertThat(actual).isEqualTo(expected);
     assertThat(cursor.canFetch()).isFalse();

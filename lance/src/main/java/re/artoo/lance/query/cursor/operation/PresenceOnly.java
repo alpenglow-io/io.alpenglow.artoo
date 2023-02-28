@@ -4,28 +4,27 @@ import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Probe;
 
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
-
-public record PresenceOnly<ELEMENT>(Probe<ELEMENT> probe, AtomicReference<ELEMENT> reference) implements Cursor<ELEMENT> {
+@SuppressWarnings("StatementWithEmptyBody")
+public record PresenceOnly<ELEMENT>(Probe<ELEMENT> probe, Reference<ELEMENT> reference) implements Cursor<ELEMENT> {
   public PresenceOnly(Probe<ELEMENT> probe) {
-    this(probe, new AtomicReference<>());
+    this(probe, Reference.iterative());
   }
 
   @Override
   public boolean canFetch() throws Throwable {
-    if (reference.get() != null) return true;
+    if (reference.isNotFetched()) return true;
 
-    while (probe.canFetch() && reference.get() == null) {
-      ELEMENT element = probe.fetch();
-      reference.set(element);
-    }
+    for (
+      ;
+      probe.canFetch() && reference.element() == null;
+      reference.element(probe.fetch())
+    );
 
-    return reference.get() != null;
+    return reference.element() != null;
   }
 
   @Override
   public ELEMENT fetch() throws Throwable {
-    return canFetch() ? reference.getAndSet(null) : FetchException.byThrowing("Can't fetch next element on coalesce operation");
+    return canFetch() ? reference.element() : FetchException.byThrowing("Can't fetch next element on coalesce operation");
   }
 }

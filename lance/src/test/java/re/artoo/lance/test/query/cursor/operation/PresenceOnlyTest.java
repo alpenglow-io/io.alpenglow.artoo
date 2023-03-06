@@ -2,8 +2,7 @@ package re.artoo.lance.test.query.cursor.operation;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.cursor.Open;
+import re.artoo.lance.query.cursor.operation.Open;
 import re.artoo.lance.query.cursor.operation.PresenceOnly;
 
 import static org.assertj.core.api.Assertions.assertThat;

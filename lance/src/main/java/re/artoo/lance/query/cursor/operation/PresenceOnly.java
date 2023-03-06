@@ -5,26 +5,26 @@ import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Probe;
 
 @SuppressWarnings("StatementWithEmptyBody")
-public record PresenceOnly<ELEMENT>(Probe<ELEMENT> probe, Reference<ELEMENT> reference) implements Cursor<ELEMENT> {
+public record PresenceOnly<ELEMENT>(Probe<ELEMENT> probe, Atom<ELEMENT> atom) implements Cursor<ELEMENT> {
   public PresenceOnly(Probe<ELEMENT> probe) {
-    this(probe, Reference.iterative());
+    this(probe, Atom.reference());
   }
 
   @Override
   public boolean canFetch() throws Throwable {
-    if (reference.isNotFetched()) return true;
+    if (atom.isNotFetched()) return true;
 
     for (
       ;
-      probe.canFetch() && reference.element() == null;
-      reference.element(probe.fetch())
+      probe.canFetch() && atom.element() == null;
+      atom.element(probe.fetch())
     );
 
-    return reference.element() != null;
+    return atom.element() != null;
   }
 
   @Override
   public ELEMENT fetch() throws Throwable {
-    return canFetch() ? reference.element() : FetchException.byThrowing("Can't fetch next element on coalesce operation");
+    return canFetch() ? atom.elementThenFetched() : FetchException.byThrowing("Can't fetch next element on presence-only operation (no more present elements?)");
   }
 }

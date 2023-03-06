@@ -3,6 +3,7 @@ package re.artoo.lance.query;
 import re.artoo.lance.query.cursor.Appendable;
 import re.artoo.lance.query.cursor.Iterable;
 import re.artoo.lance.query.cursor.*;
+import re.artoo.lance.query.cursor.operation.Open;
 
 import java.util.List;
 

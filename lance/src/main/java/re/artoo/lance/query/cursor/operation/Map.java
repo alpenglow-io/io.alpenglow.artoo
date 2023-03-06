@@ -5,21 +5,21 @@ import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Probe;
 
-public record Map<ELEMENT, RETURN>(Probe<ELEMENT> probe, Reference<RETURN> reference, TryIntFunction1<? super ELEMENT, ? extends RETURN> operation) implements Cursor<RETURN> {
+public record Map<ELEMENT, RETURN>(Probe<ELEMENT> probe, Atom<RETURN> atom, TryIntFunction1<? super ELEMENT, ? extends RETURN> operation) implements Cursor<RETURN> {
   public Map(Probe<ELEMENT> probe, TryIntFunction1<? super ELEMENT, ? extends RETURN> operation) {
-    this(probe, Reference.iterative(), operation);
+    this(probe, Atom.reference(), operation);
   }
   @Override
   public RETURN fetch() throws Throwable {
-    return canFetch() ? reference.element() : FetchException.byThrowing("Can't fetch next element from cursor (no more mappable elements?)");
+    return canFetch() ? atom.elementThenFetched() : FetchException.byThrowing("Can't fetch next element from cursor (no more mappable elements?)");
   }
 
   @Override
   public boolean canFetch() throws Throwable {
-    if (reference.isNotFetched()) return true;
+    if (atom.isNotFetched()) return true;
     if (!probe.canFetch()) return false;
 
-    reference.element(operation.invoke(reference.indexPlusPlus(), probe.fetch()));
+    atom.element(operation.invoke(atom.indexThenInc(), probe.fetch()));
 
     return true;
   }

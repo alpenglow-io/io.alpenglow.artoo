@@ -4,43 +4,57 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-sealed interface Reference<ELEMENT> {
-  static <ELEMENT> Reference<ELEMENT> iterative() {
-    return new Iterative<>();
+sealed interface Atom<ELEMENT> {
+  static <ELEMENT> Atom<ELEMENT> reference() {
+    return new Reference<>();
   }
-  int indexPlusPlus();
-  int plusPlusIndex();
+  int indexThenInc();
+  int incThenIndex();
+  int index();
 
   ELEMENT element();
-  Reference<ELEMENT> element(ELEMENT element);
+  ELEMENT elementThenFetched();
+  Atom<ELEMENT> element(ELEMENT element);
   boolean isFetched();
   default boolean isNotFetched() { return !isFetched(); }
 
-  final class Iterative<ELEMENT> implements Reference<ELEMENT> {
+  final class Reference<ELEMENT> implements Atom<ELEMENT> {
     private final AtomicInteger index;
     private final AtomicReference<ELEMENT> reference;
     private final AtomicBoolean fetched;
-    private Iterative() {
+    private Reference() {
       this.index = new AtomicInteger(0);
       this.reference = new AtomicReference<>();
-      this.fetched = new AtomicBoolean(false);
+      this.fetched = new AtomicBoolean(true);
     }
     @Override
-    public int indexPlusPlus() {
+    public int indexThenInc() {
       return index.getAndIncrement();
     }
     @Override
-    public int plusPlusIndex() {
+    public int incThenIndex() {
       return index.incrementAndGet();
     }
+
+    @Override
+    public int index() {
+      return index.get();
+    }
+
     @Override
     public ELEMENT element() {
-      var element = reference.getAndSet(null);
+      return reference.get();
+    }
+
+    @Override
+    public ELEMENT elementThenFetched() {
+      ELEMENT element = reference.getAndSet(null);
       fetched.set(true);
       return element;
     }
+
     @Override
-    public Reference<ELEMENT> element(ELEMENT element) {
+    public Atom<ELEMENT> element(ELEMENT element) {
       reference.set(element);
       fetched.set(false);
       return this;

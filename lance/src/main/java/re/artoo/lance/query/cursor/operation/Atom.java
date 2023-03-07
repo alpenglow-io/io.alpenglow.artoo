@@ -13,12 +13,15 @@ sealed interface Atom<ELEMENT> {
   static <ELEMENT> Atom<ELEMENT> reference(ELEMENT element) {
     return new Reference<>(element);
   }
+  static <ELEMENT> Atom<ELEMENT> lazy(TrySupplier1<? extends ELEMENT> supplier) {
+    return new Lazy<>(new Reference<>(), new AtomicBoolean(false), supplier);
+  }
   int indexThenInc();
   int incThenIndex();
   int index();
 
-  ELEMENT element();
-  ELEMENT elementThenFetched();
+  ELEMENT element() throws Throwable;
+  ELEMENT elementThenFetched() throws Throwable;
   Atom<ELEMENT> element(ELEMENT element);
   boolean isFetched();
   default boolean isNotFetched() { return !isFetched(); }
@@ -76,9 +79,11 @@ sealed interface Atom<ELEMENT> {
 
   final class Lazy<ELEMENT> implements Atom<ELEMENT> {
     private final Atom<ELEMENT> atom;
+    private final AtomicBoolean initialized;
     private final TrySupplier1<? extends ELEMENT> lazy;
-    private Lazy(Atom<ELEMENT> atom, TrySupplier1<? extends ELEMENT> lazy) {
+    private Lazy(Atom<ELEMENT> atom, AtomicBoolean initialized, TrySupplier1<? extends ELEMENT> lazy) {
       this.atom = atom;
+      this.initialized = initialized;
       this.lazy = lazy;
     }
 
@@ -98,23 +103,27 @@ sealed interface Atom<ELEMENT> {
     }
 
     @Override
-    public ELEMENT element() {
-      return atom.element();
+    public ELEMENT element() throws Throwable {
+      return initialized.getAndSet(true)
+        ? atom.element()
+        : atom.element(lazy.invoke()).element();
     }
 
     @Override
-    public ELEMENT elementThenFetched() {
-      return atom.elementThenFetched();
+    public ELEMENT elementThenFetched() throws Throwable {
+      return initialized.get()
+        ? atom.elementThenFetched()
+        : atom.element(element()).elementThenFetched();
     }
 
     @Override
     public Atom<ELEMENT> element(ELEMENT element) {
-      return atom.element();
+      return atom.element(element);
     }
 
     @Override
     public boolean isFetched() {
-      return false;
+      return atom.isFetched();
     }
   }
 }

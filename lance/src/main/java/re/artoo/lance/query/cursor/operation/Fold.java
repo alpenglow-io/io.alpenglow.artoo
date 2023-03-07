@@ -19,9 +19,7 @@ public record Fold<ELEMENT, FOLDED>(Probe<? extends ELEMENT> probe, Atom<FOLDED>
     if (atom.isNotFetched()) return true;
     if (!probe.canFetch()) return false;
 
-    FOLDED folded = atom.element();
-    ELEMENT element = probe.fetch();
-    atom.element(operation.invoke(atom.indexThenInc(), folded, element));
+    atom.element(operation.invoke(atom.indexThenInc(), atom.element(), probe.fetch()));
 
     return true;
   }

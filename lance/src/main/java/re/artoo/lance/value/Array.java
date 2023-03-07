@@ -128,6 +128,16 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
     };
   }
 
+  /**
+   * In order to make it stable, flat-map needs more than such trivial recursive operation, it's not possible for the platform to handle all that sequential concatenations applied
+   * on the fly: this involves a continuous computation and reallocation of the final array heap size; what flat-map needs to make it work better, it is to compute from the
+   * beginning the necessary capacity for the final array and then to copy all flatten elements.
+   *
+   * @param operation
+   * @return
+   * @param <TARGET>
+   * @param <ARRAY>
+   */
   default <TARGET, ARRAY extends Array<TARGET>> Array<TARGET> flatMap(TryFunction1<? super ELEMENT, ? extends ARRAY> operation) {
     return switch (this) {
       case Some<ELEMENT> some when some.head() instanceof Some<ELEMENT> head -> operation.apply(head.element()).concat(some.tail().flatMap(operation));

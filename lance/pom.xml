@@ -5,7 +5,6 @@
     <groupId>re.artoo</groupId>
     <artifactId>artoo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
   </parent>
 
   <artifactId>lance</artifactId>

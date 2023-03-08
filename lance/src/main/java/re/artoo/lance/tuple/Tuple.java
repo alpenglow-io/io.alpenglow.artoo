@@ -10,7 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 
 @SuppressWarnings("unchecked")
 public interface Tuple {
-  static <A, B> Pair<A, B> ofTwoEmpty() { return (Pair<A, B>) OfTwo.Empty.Default; }
+  static <A, B> Pair<A, B> emptyPair() { return (Pair<A, B>) OfTwo.Empty.Default; }
   static <A, B> Pair<A, B> of(final A first, final B second) {
     return new OfTwo<>(first, second);
   }

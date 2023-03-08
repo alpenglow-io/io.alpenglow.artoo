@@ -10,7 +10,7 @@ import java.math.BigInteger;
 
 @SuppressWarnings("DuplicatedCode")
 public interface Extremable<ELEMENT> extends Queryable<ELEMENT> {
-  private static <ELEMENT> TryFunction2<? super ELEMENT, ? super ELEMENT, ? extends ELEMENT> maximise() {
+  private static <ELEMENT> TryFunction2<? super ELEMENT, ? super ELEMENT, ? extends ELEMENT> maximising() {
     return (max, selected) -> switch (max) {
       case null -> selected instanceof Number || selected instanceof Character ? selected : null;
       case Float it when selected instanceof Float el -> it > el ? max : selected;
@@ -25,7 +25,7 @@ public interface Extremable<ELEMENT> extends Queryable<ELEMENT> {
       default -> max instanceof Number || selected instanceof Character ? max : null;
     };
   }
-  private static <ELEMENT> TryFunction2<? super ELEMENT, ? super ELEMENT, ? extends ELEMENT> minimise() {
+  private static <ELEMENT> TryFunction2<? super ELEMENT, ? super ELEMENT, ? extends ELEMENT> minimising() {
     return (min, selected) -> switch (min) {
       case null -> selected instanceof Number || selected instanceof Character ? selected : null;
       case Float it when selected instanceof Float el -> it < el ? min : selected;
@@ -41,18 +41,18 @@ public interface Extremable<ELEMENT> extends Queryable<ELEMENT> {
     };
   }
   default <N extends Number> One<N> max(final TryFunction1<? super ELEMENT, ? extends N> select) {
-    return () -> cursor().<N>map(select).<N>reduce(null, maximise());
+    return () -> cursor().<N>map(select).reduce(maximising());
   }
 
   default One<ELEMENT> max() {
-    return () -> cursor().<ELEMENT>reduce(null, maximise());
+    return () -> cursor().reduce(maximising());
   }
 
   default <N extends Number> One<N> min(final TryFunction1<? super ELEMENT, ? extends N> select) {
-    return () -> cursor().<N>map(select).<N>reduce(null, minimise());
+    return () -> cursor().<N>map(select).reduce(minimising());
   }
 
   default One<ELEMENT> min() {
-    return () -> cursor().<ELEMENT>reduce(null, minimise());
+    return () -> cursor().reduce(minimising());
   }
 }

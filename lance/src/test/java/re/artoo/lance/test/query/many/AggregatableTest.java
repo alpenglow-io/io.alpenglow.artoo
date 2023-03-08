@@ -14,11 +14,9 @@ public class AggregatableTest {
   @DisplayName("should aggregate strings by joining spaces")
   void shouldAggregateStringsByJoiningComma() throws Throwable {
     final var aggregated = Many.from("hello", "my", "nice", "friend")
-      .aggregate((joined, element) -> "%s %s".formatted(joined, element))
-      .cursor()
-      .commit();
+      .aggregate((joined, element) -> "%s %s".formatted(joined, element));
 
-    assertThat(aggregated).isEqualTo("hello my nice friend");
+    assertThat(aggregated).containsExactly("hello my nice friend");
   }
 
   @Test
@@ -26,22 +24,18 @@ public class AggregatableTest {
   public void shouldReduceLongestName() throws Throwable {
     final var aggregated = Many.from("apple", "mango", "orange", "passionfruit", "grape")
       .select(it -> it.toUpperCase())
-      .aggregate((longest, next) -> longest.length() > next.length() ? longest : next)
-      .cursor()
-      .commit();
+      .aggregate((longest, next) -> longest.length() > next.length() ? longest : next);
 
-    assertThat(aggregated).isEqualTo("PASSIONFRUIT");
+    assertThat(aggregated).containsExactly("PASSIONFRUIT");
   }
 
   @Test
   @DisplayName("should reduce to the total for even numbers")
   public void shouldReduceTotalForEvens() {
     final var aggregated = Many.from(4, 8, 8, 3, 9, 0, 7, 8, 2)
-      .aggregate(0, (total, next) -> next % 2 == 0 ? ++total : total)
-      .iterator()
-      .next();
+      .aggregate(0, (total, next) -> next % 2 == 0 ? ++total : total);
 
-    assertThat(aggregated).isEqualTo(6);
+    assertThat(aggregated).containsExactly(6);
   }
 
   @Test
@@ -49,9 +43,9 @@ public class AggregatableTest {
   public void shouldReduceReversePhrase() throws Throwable {
     String[] strings = "the quick brown fox jumps over the lazy dog".split(" ");
 
-    final var aggregated = Many.from(strings).aggregate((joined, right) -> right + " " + joined).cursor().commit();
+    final var aggregated = Many.from(strings).aggregate((joined, right) -> right + " " + joined);
 
-    assertThat(aggregated).isEqualTo("dog lazy the over jumps fox brown quick the");
+    assertThat(aggregated).containsExactly("dog lazy the over jumps fox brown quick the");
   }
 
   @Test
@@ -63,13 +57,13 @@ public class AggregatableTest {
       new Pet("Whiskers", 1)
     };
 
-    final var oldest = Many.from(pets).aggregate(MIN_VALUE, Pet::age, (max, current) -> current > max ? current : max).cursor().fetch();
+    final var oldest = Many.from(pets).aggregate(MIN_VALUE, Pet::age, (max, current) -> current > max ? current : max);
 
-    assertThat(oldest).isEqualTo(8);
+    assertThat(oldest).containsExactly(8);
 
-    final var youngest = Many.from(pets).aggregate(MAX_VALUE, Pet::age, (min, current) -> current < min ? current : min).cursor().fetch();
+    final var youngest = Many.from(pets).aggregate(MAX_VALUE, Pet::age, (min, current) -> current < min ? current : min);
 
-    assertThat(youngest).isEqualTo(1);
+    assertThat(youngest).containsExactly(1);
   }
 }
 

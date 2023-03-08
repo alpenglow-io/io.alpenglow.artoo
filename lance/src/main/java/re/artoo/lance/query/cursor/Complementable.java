@@ -15,6 +15,10 @@ public sealed interface Complementable<ELEMENT> extends Probe<ELEMENT> permits C
     return new Or<>(new PresenceOnly<>(this), Let.lazy(alternative));
   }
 
+  default Cursor<ELEMENT> or(ELEMENT alternative) {
+    return new Or<>(this, alternative);
+  }
+
   default <E extends RuntimeException> Cursor<ELEMENT> or(final String message, final TryFunction2<? super String, ? super Throwable, ? extends E> exception) {
     return new Er<>(this, message, exception);
   }

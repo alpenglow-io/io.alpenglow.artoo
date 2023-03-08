@@ -42,7 +42,7 @@ class FilterableTest {
   void shouldGetAllStrings() {
     final Object[] objects = {"apple", "passionfruit", 10.2F, 12L, "banana", LocalTime.now(), LocalDateTime.now(), 2};
 
-    final var texts = Many.fromAny(objects).ofType(String.class);
+    final var texts = Many.fromAny(objects).<String>ofType();
 
     assertThat(texts).containsExactly("apple", "passionfruit", "banana");
   }

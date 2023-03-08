@@ -3,11 +3,8 @@ package re.artoo.lance.query.many;
 import re.artoo.lance.Queryable;
 import re.artoo.lance.func.TryIntPredicate1;
 import re.artoo.lance.func.TryPredicate1;
-import re.artoo.lance.func.TryPredicate2;
 import re.artoo.lance.query.Many;
 import re.artoo.lance.query.closure.NotOfType;
-import re.artoo.lance.query.closure.OfType;
-import re.artoo.lance.query.closure.Where;
 
 public interface Filterable<T> extends Queryable<T> {
   default Many<T> where(final TryPredicate1<? super T> where) {
@@ -18,11 +15,20 @@ public interface Filterable<T> extends Queryable<T> {
     return () -> cursor().filter(where);
   }
 
-  default <R> Many<R> ofType(final Class<? extends R> type) {
-    return () -> cursor().filter(type::isInstance).map(it -> type.cast(it));
+  @SuppressWarnings("unchecked")
+  default <R> Many<R> ofType() {
+    return ofComponentType();
+  }
+
+  @SuppressWarnings("unchecked")
+  private <R> Many<R> ofComponentType(R... type) {
+    return () -> cursor()
+      .filter(it -> type.getClass().componentType().isInstance(it))
+      .map(it -> (R) type.getClass().componentType().cast(it));
   }
   default <R> Many<T> notOfType(final Class<? extends R> type) {
     return () -> cursor().map(new NotOfType<>(type));
   }
+  default Many<T> coalesce() { return () -> cursor().onPresenceOnly(); }
 }
 

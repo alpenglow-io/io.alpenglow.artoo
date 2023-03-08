@@ -7,7 +7,7 @@ import re.artoo.lance.query.cursor.operation.Open;
 
 import java.util.List;
 
-public non-sealed interface Cursor<ELEMENT> extends Mappable<ELEMENT>, Reducible<ELEMENT>, Complementable<ELEMENT>, Appendable<ELEMENT>, Committable<ELEMENT>, Joinable<ELEMENT>, Filterable<ELEMENT> {
+public non-sealed interface Cursor<ELEMENT> extends Mappable<ELEMENT>, Foldable<ELEMENT>, Reducible<ELEMENT>, Complementable<ELEMENT>, Appendable<ELEMENT>, Collectable<ELEMENT>, Joinable<ELEMENT>, Filterable<ELEMENT> {
   @SafeVarargs
   static <T> Cursor<T> open(T... elements) {
     return new Open<>(elements);

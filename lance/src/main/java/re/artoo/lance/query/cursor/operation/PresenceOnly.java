@@ -4,7 +4,6 @@ import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Probe;
 
-@SuppressWarnings("StatementWithEmptyBody")
 public record PresenceOnly<ELEMENT>(Probe<ELEMENT> probe, Atom<ELEMENT> atom) implements Cursor<ELEMENT> {
   public PresenceOnly(Probe<ELEMENT> probe) {
     this(probe, Atom.reference());
@@ -13,12 +12,12 @@ public record PresenceOnly<ELEMENT>(Probe<ELEMENT> probe, Atom<ELEMENT> atom) im
   @Override
   public boolean canFetch() throws Throwable {
     if (atom.isNotFetched()) return true;
+    if (!probe.canFetch()) return false;
 
-    for (
-      ;
-      probe.canFetch() && atom.element() == null;
-      atom.element(probe.fetch())
-    );
+    while (probe.canFetch() && (atom.isFetched() || atom.element() == null)) {
+      atom.element(probe.fetch());
+    }
+    if (atom.element() == null) atom.unfetch();
 
     return atom.element() != null;
   }

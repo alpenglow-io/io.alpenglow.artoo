@@ -5,6 +5,7 @@ import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.func.TryPredicate1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.Many;
+import re.artoo.lance.value.Array;
 
 import java.util.ArrayList;
 
@@ -13,11 +14,12 @@ public interface Settable<T> extends Queryable<T> {
     return distinct(it -> true);
   }
 
+  @SuppressWarnings("unchecked")
   default Many<T> distinct(final TryPredicate1<? super T> where) {
     return () -> cursor()
       .filter(where)
-      .reduce(new ArrayList<T>(), (array, element) -> array.contains(element) ? array : addTo(array, element))
-      .flatMap(Cursor::from);
+      .fold(Array.<T>none(), (array, element) -> array.includes(element) ? array : array.push(element))
+      .flatMap(Array::cursor);
   }
 
   private ArrayList<T> addTo(ArrayList<T> array, T element) {

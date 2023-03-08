@@ -2,12 +2,15 @@ package re.artoo.lance.value;
 
 import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.func.TryFunction2;
+import re.artoo.lance.func.TryIntFunction;
 import re.artoo.lance.func.TryPredicate1;
+import re.artoo.lance.query.Cursor;
 import re.artoo.lance.value.array.None;
 import re.artoo.lance.value.array.Some;
 
 import java.util.*;
 
+import static java.lang.System.arraycopy;
 import static java.util.Arrays.binarySearch;
 
 public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess permits None, Some {
@@ -37,11 +40,11 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
       default -> this;
     };
   }
-  @SuppressWarnings("unchecked")
-  default Array<ELEMENT> push(ELEMENT... elements) {
+
+  default Array<ELEMENT> push(ELEMENT element) {
     return switch (this) {
-      case None ignored when elements != null -> new Some<>(elements);
-      case Some<ELEMENT> some when elements != null -> new Some<>(some.elements(), elements);
+      case None ignored -> new Some<>(element);
+      case Some<ELEMENT> some -> new Some<>(some.elements(), element);
       default -> this;
     };
   }
@@ -217,16 +220,25 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
     };
   }
 
-
-
-  default ELEMENT[] asArray() {
+  default Cursor<ELEMENT> cursor() {
     return switch (this) {
-      case Some<ELEMENT> some -> some.elements();
+      case Some<ELEMENT> some -> Cursor.open(some.elements());
+      default -> Cursor.empty();
+    };
+  }
+
+  default ELEMENT[] copyTo(TryIntFunction<ELEMENT[]> array) {
+    return switch (this) {
+      case Some<ELEMENT> some -> {
+        ELEMENT[] dest = array.apply(some.elements().length);
+        arraycopy(some.elements(), 0, dest, 0, some.elements().length);
+        yield dest;
+      }
       case None none -> none.elements();
     };
   }
 
-  default List<ELEMENT> asList() {
+  default List<ELEMENT> toList() {
     return switch (this) {
       case Some<ELEMENT> some -> List.of(some.elements());
       case None ignored -> List.of();

@@ -2,7 +2,7 @@ package re.artoo.lance.query.many;
 
 import re.artoo.lance.Queryable;
 import re.artoo.lance.func.TryFunction1;
-import re.artoo.lance.func.TryFunction2;
+import re.artoo.lance.func.TryIntFunction;
 import re.artoo.lance.value.Array;
 
 import java.util.*;
@@ -19,17 +19,10 @@ public interface Convertable<T> extends Queryable<T> {
       map.put(key.apply(value), element.apply(value));
     return map;
   }
-  @SuppressWarnings("unchecked")
   default List<T> asList() {
     return cursor()
-      .reduce(Array.<T>none(), (array, element) -> array.push(element))
-      .map(Array::asList)
-      .commit();
-  }
-  default List<T> asLinkedList() {
-    return cursor()
-      .reduce(new LinkedList<T>(), (linked, it) -> { linked.add(it); return linked; })
-      .commit();
+      .fold(Array.<T>none(), Array::push)
+      .collect(Array::toList);
   }
 
   default Collection<T> asCollection() {
@@ -40,10 +33,9 @@ public interface Convertable<T> extends Queryable<T> {
     return asCollection();
   }
 
-  default T[] asArray() {
+  default T[] asArray(TryIntFunction<T[]> array) {
     return cursor()
-      .reduce(Array.<T>none(), (sequence, element) -> sequence.push(element))
-      .map(Array::asArray)
-      .commit();
+      .fold(Array.<T>none(), Array::push)
+      .collect(folded -> folded.copyTo(array));
   }
 }

@@ -20,11 +20,13 @@ public record Reduce<ELEMENT>(Probe<? extends ELEMENT> probe, Atom<ELEMENT> atom
     if (atom.isNotFetched()) return true;
     if (!probe.canFetch()) return false;
 
-    ELEMENT element = atom.element();
-    if (probe.canFetch())
-      atom.element(operation.invoke(atom.indexThenInc(), element, probe.fetch()));
-    else
-      atom.element(element);
+    while (probe.canFetch()) {
+      ELEMENT element = atom.element();
+      if (probe.canFetch())
+        atom.element(operation.invoke(atom.indexThenInc(), element, probe.fetch()));
+      else
+        atom.element(element);
+    }
     return true;
   }
 }

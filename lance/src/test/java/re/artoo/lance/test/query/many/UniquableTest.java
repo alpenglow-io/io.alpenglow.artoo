@@ -95,7 +95,7 @@ public class UniquableTest {
   @Test
   public void shouldBeFirst() throws Throwable {
     final var first = from(1, 23.4, 'A', "Hi there", 5)
-      .ofType(String.class)
+      .<String>ofType()
       .select(it -> it.toUpperCase())
       .last()
       .cursor()

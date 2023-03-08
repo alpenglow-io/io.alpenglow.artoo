@@ -20,13 +20,13 @@ public class TupleTest {
   void shouldBeAllValidOperationsOnPair() {
     var pair = Tuple.of("Value", 12);
 
-    for (final var o : pair.select((a, b) -> Tuple.of(a, b, true)).where((a, b, c) -> c).asQueryable())
+    for (final var o : pair.let((a, b) -> Tuple.of(a, b, true)).where((a, b, c) -> c).asQueryable())
       out.println("o = " + o);
 
     assertThat(pair.shift()).isEqualTo(Tuple.of(12, "Value"));
-    assertThat(pair.<String>select("%s: %d"::formatted)).isEqualTo("Value: 12");
-    assertThat(pair.<Tuple>select((a, b) -> Tuple.of(a, b + 1))).isEqualTo(Tuple.of("Value", 13));
-    assertThat(pair.where((a, b) -> a.equals("Nothing"))).isEqualTo(Tuple.ofTwoEmpty());
+    assertThat(pair.<String>let("%s: %d"::formatted)).isEqualTo("Value: 12");
+    assertThat(pair.<Tuple>let((a, b) -> Tuple.of(a, b + 1))).isEqualTo(Tuple.of("Value", 13));
+    assertThat(pair.takeIf((a, b) -> a.equals("Nothing"))).isEqualTo(Tuple.emptyPair());
   }
 
   @Test
@@ -41,7 +41,7 @@ public class TupleTest {
   public void shouldBeQueryableAndSummable() {
     final var summed = new Five2(1, 23.4, 'A', "ABC", 5)
       .asQueryable()
-      .ofType(Integer.class)
+      .<Integer>ofType()
       .sum()
       .otherwise(-1);
 
@@ -52,7 +52,7 @@ public class TupleTest {
   public void shouldBeQueryableAndUpperCased() {
     final var upperCased = new Five2(1, 23.4, 'A', "Hi there", 5)
       .asQueryable()
-      .ofType(String.class)
+      .<String>ofType()
       .select(it -> it.toUpperCase())
       .first()
       .otherwise("");

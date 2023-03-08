@@ -8,12 +8,12 @@ import re.artoo.lance.query.cursor.operation.Filter;
 
 public sealed interface Filterable<ELEMENT> extends Probe<ELEMENT> permits Cursor {
   default Cursor<ELEMENT> filter(TryIntPredicate1<? super ELEMENT> filter) {
-    return new Filter<>(this, filter).coalesce();
+    return new Filter<>(this, filter);
   }
   default Cursor<ELEMENT> filter(TryPredicate1<? super ELEMENT> filter) {
     return filter((index, element) -> filter.invoke(element));
   }
-  default Cursor<ELEMENT> coalesce() {
+  default Cursor<ELEMENT> onPresenceOnly() {
     return new PresenceOnly<>(this);
   }
 }

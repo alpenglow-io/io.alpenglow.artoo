@@ -37,7 +37,7 @@ public interface Uniquable<T> extends Queryable<T> {
     return () -> cursor()
       .filter(where)
       .peek(System.out::println)
-      .<Pair<Boolean, T>>reduce(Tuple.of(false, null), (index, single, element) ->
+      .<Pair<Boolean, T>>fold(Tuple.of(false, null), (index, single, element) ->
         !single.first() && element != null
           ? single.both(true, element)
           : single.first() && element != null

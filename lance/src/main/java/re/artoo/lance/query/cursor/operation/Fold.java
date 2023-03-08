@@ -17,9 +17,10 @@ public record Fold<ELEMENT, FOLDED>(Probe<? extends ELEMENT> probe, Atom<FOLDED>
   @Override
   public boolean canFetch() throws Throwable {
     if (atom.isNotFetched()) return true;
-    if (!probe.canFetch()) return false;
 
-    atom.element(operation.invoke(atom.indexThenInc(), atom.element(), probe.fetch()));
+    while (probe.canFetch()) {
+      atom.element(operation.invoke(atom.indexThenInc(), atom.element(), probe.fetch()));
+    }
 
     return true;
   }

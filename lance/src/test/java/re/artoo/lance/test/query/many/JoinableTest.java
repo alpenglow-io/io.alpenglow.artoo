@@ -57,7 +57,7 @@ public class JoinableTest implements re.artoo.lance.test.Test {
       from(ORDERS)
         .outerJoin(customers)
         .on((order, customer) -> order.customerId() == customer.id())
-        .select(joined -> joined.select((order, customer) -> new OrderCustomer(order.id(), customer.name())))
+        .select(joined -> joined.let((order, customer) -> new OrderCustomer(order.id(), customer.name())))
         .order().by(OrderCustomer::name).by(OrderCustomer::orderId, desc);
 
     assertThat(orderCustomers).first().isEqualTo(new OrderCustomer(10308, "Ana Trujillo Emparedados y helados"));

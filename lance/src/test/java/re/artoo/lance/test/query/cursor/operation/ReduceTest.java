@@ -18,8 +18,6 @@ class ReduceTest {
         (index, acc, element) -> acc + element
       );
 
-    assertThat(cursor.fetch()).isEqualTo(3);
-    assertThat(cursor.fetch()).isEqualTo(6);
     assertThat(cursor.fetch()).isEqualTo(10);
     assertThat(cursor.canFetch()).isFalse();
   }

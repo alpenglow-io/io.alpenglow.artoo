@@ -14,14 +14,11 @@ class FoldTest {
     var cursor =
       new Fold<>(
         new Open<>(1, 2, 3, 4),
-        0,
+        1,
         (index, acc, element) -> acc + element
       );
 
-    assertThat(cursor.fetch()).isEqualTo(1);
-    assertThat(cursor.fetch()).isEqualTo(3);
-    assertThat(cursor.fetch()).isEqualTo(6);
-    assertThat(cursor.fetch()).isEqualTo(10);
+    assertThat(cursor.fetch()).isEqualTo(11);
     assertThat(cursor.canFetch()).isFalse();
   }
 }

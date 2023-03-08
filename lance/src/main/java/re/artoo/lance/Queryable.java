@@ -53,7 +53,7 @@ public interface Queryable<T> extends Iterable<T> {
     default void eventually(final TryConsumer2<A, B> eventually) {
       for (final var tuple : this) {
         if (tuple != null) {
-          tuple.peek(eventually);
+          tuple.also(eventually);
         }
       }
     }

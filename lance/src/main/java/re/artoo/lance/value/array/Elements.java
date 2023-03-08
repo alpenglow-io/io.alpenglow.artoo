@@ -1,8 +1,10 @@
 package re.artoo.lance.value.array;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 
 import static java.lang.System.arraycopy;
+import static java.lang.System.in;
 
 enum Elements {
   Companion;
@@ -14,9 +16,12 @@ enum Elements {
     return copied;
   }
 
+  @SuppressWarnings("unchecked")
   @SafeVarargs
   final <ELEMENT> ELEMENT[] asArray(ELEMENT... elements) {
-    return elements;
+    ELEMENT[] array = (ELEMENT[]) Array.newInstance(elements.getClass().getComponentType(), elements.length);
+    if (elements.length > 0) arraycopy(elements, 0, array, 0, elements.length);
+    return array;
   }
 
   @SafeVarargs

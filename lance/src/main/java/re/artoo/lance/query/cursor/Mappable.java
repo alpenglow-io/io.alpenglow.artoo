@@ -10,7 +10,7 @@ public sealed interface Mappable<ELEMENT> extends Probe<ELEMENT> permits Cursor 
     return map((index, it) ->  map.invoke(it));
   }
   default <RETURN> Cursor<RETURN> map(TryIntFunction1<? super ELEMENT, ? extends RETURN> map) {
-    return new Map<ELEMENT, RETURN>(this, map).coalesce();
+    return new Map<ELEMENT, RETURN>(this, map);
   }
   default Cursor<ELEMENT> peek(TryConsumer1<? super ELEMENT> peek) {
     return map(it -> peek.self(it, it));
@@ -19,7 +19,7 @@ public sealed interface Mappable<ELEMENT> extends Probe<ELEMENT> permits Cursor 
     return map((index, it) -> peek.self(it, index, it));
   }
   default <RETURN, CURSOR extends Cursor<RETURN>> Cursor<RETURN> flatMap(final TryIntFunction1<? super ELEMENT, ? extends CURSOR> flatMap) {
-    return new Flat<>(new Map<>(this, flatMap)).coalesce();
+    return new Flat<>(new Map<>(this, flatMap));
   }
   default <RETURN, CURSOR extends Cursor<RETURN>> Cursor<RETURN> flatMap(final TryFunction1<? super ELEMENT, ? extends CURSOR> flatMap) {
     return flatMap((index, element) -> flatMap.invoke(element));

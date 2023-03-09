@@ -10,7 +10,7 @@ public interface Averageable<T> extends Queryable<T> {
   default <N extends Number> One<Double> average(final TryFunction1<? super T, ? extends N> select) {
     return () -> cursor()
       .map(select)
-      .onPresenceOnly()
+      .nonNull()
       .fold(
         Tuple.of(0.0, 0),
         (acc, element) -> acc.let((folded, count) -> Tuple.of(folded + element.doubleValue(), count + 1)))

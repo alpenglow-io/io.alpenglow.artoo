@@ -1,4 +1,4 @@
-package re.artoo.lance.query.cursor;
+package re.artoo.lance.query.cursor.operation;
 
 import re.artoo.lance.query.Cursor;
 

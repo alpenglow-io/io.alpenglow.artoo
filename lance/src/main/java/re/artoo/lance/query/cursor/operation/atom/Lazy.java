@@ -9,8 +9,10 @@ public final class Lazy<ELEMENT> implements Atom<ELEMENT> {
   private final Atom<ELEMENT> atom;
   private final AtomicBoolean initialized;
   private final TrySupplier1<? extends ELEMENT> lazy;
-
-  public Lazy(Atom<ELEMENT> atom, AtomicBoolean initialized, TrySupplier1<? extends ELEMENT> lazy) {
+  public Lazy(Atom<ELEMENT> atom, TrySupplier1<? extends ELEMENT> lazy) {
+    this(atom, new AtomicBoolean(false), lazy);
+  }
+  private Lazy(Atom<ELEMENT> atom, AtomicBoolean initialized, TrySupplier1<? extends ELEMENT> lazy) {
     this.atom = atom;
     this.initialized = initialized;
     this.lazy = lazy;

@@ -14,19 +14,13 @@ public interface Settable<T> extends Queryable<T> {
     return distinct(it -> true);
   }
 
-  @SuppressWarnings("unchecked")
   default Many<T> distinct(final TryPredicate1<? super T> where) {
     return () -> cursor()
-      .filter(where)
-      .fold(Array.<T>none(), (array, element) -> array.includes(element) ? array : array.push(element))
+      .fold(Array.<T>none(), (array, element) -> array.includes(element) && where.invoke(element) ? array : array.push(element))
       .flatMap(Array::cursor);
   }
 
-  private ArrayList<T> addTo(ArrayList<T> array, T element) {
-    array.add(element);
-    return array;
-  }
-/*
+  /*
   default Many<T> union(final T... elements) {
     return union(Many.pseudo(elements));
   }

@@ -72,7 +72,10 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
 
   default boolean includes(ELEMENT element) {
     return switch (this) {
-      case Some<ELEMENT> some -> binarySearch(some.elements(), element) >= 0;
+      case Some<ELEMENT> some -> switch (element) {
+        case Number ignored -> binarySearch(some.elements(), element) >= 0;
+        default -> binarySearch(some.elements(), element, (source, target) -> source.hashCode() == target.hashCode() ? 0 : source.hashCode() > element.hashCode() ? 1 : -1) >= 0;
+      };
       default -> false;
     };
   }
@@ -137,9 +140,9 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
    * beginning the necessary capacity for the final array and then to copy all flatten elements.
    *
    * @param operation
-   * @return
    * @param <TARGET>
    * @param <ARRAY>
+   * @return
    */
   default <TARGET, ARRAY extends Array<TARGET>> Array<TARGET> flatMap(TryFunction1<? super ELEMENT, ? extends ARRAY> operation) {
     return switch (this) {

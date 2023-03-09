@@ -41,7 +41,7 @@ public class TupleTest {
   public void shouldBeQueryableAndSummable() {
     final var summed = new Five2(1, 23.4, 'A', "ABC", 5)
       .asQueryable()
-      .<Integer>ofType()
+      .ofType(Integer.class)
       .sum()
       .otherwise(-1);
 
@@ -52,7 +52,7 @@ public class TupleTest {
   public void shouldBeQueryableAndUpperCased() {
     final var upperCased = new Five2(1, 23.4, 'A', "Hi there", 5)
       .asQueryable()
-      .<String>ofType()
+      .ofType(String.class)
       .select(it -> it.toUpperCase())
       .first()
       .otherwise("");

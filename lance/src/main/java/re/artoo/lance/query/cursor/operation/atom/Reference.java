@@ -6,19 +6,24 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-public final class Eager<ELEMENT> implements Atom<ELEMENT> {
+public final class Reference<ELEMENT> implements Atom<ELEMENT> {
   private final AtomicInteger index;
   private final AtomicReference<ELEMENT> reference;
   private final AtomicBoolean fetched;
 
-  public Eager() {
+  public Reference() {
     this(null);
   }
-
-  public Eager(ELEMENT element) {
+  public Reference(boolean fetched) {
+    this(null, fetched);
+  }
+  public Reference(ELEMENT element) {
+    this(element, true);
+  }
+  public Reference(ELEMENT element, boolean fetched) {
     this.index = new AtomicInteger(0);
     this.reference = new AtomicReference<>(element);
-    this.fetched = new AtomicBoolean(true);
+    this.fetched = new AtomicBoolean(fetched);
   }
 
   @Override

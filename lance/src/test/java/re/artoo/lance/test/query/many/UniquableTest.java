@@ -2,10 +2,14 @@ package re.artoo.lance.test.query.many;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.Many;
+
+import java.util.Optional;
 
 import static java.lang.System.out;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static re.artoo.lance.query.Many.from;
 
 public class UniquableTest {
@@ -20,23 +24,23 @@ public class UniquableTest {
       "Ito, Shu"
     };
 
-    assertThat(Many.from(names).at(4).cursor().fetch()).isEqualTo("Ito, Shu");
+    assertThat(Many.from(names).at(4)).containsExactly("Ito, Shu");
   }
 
   @Test
   @DisplayName("should get first element")
   public void shouldGetFirst() throws Throwable {
-    final var first = from(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19).first().cursor().fetch();
+    final var first = from(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19).first();
 
-    assertThat(first).isEqualTo(9);
+    assertThat(first).containsOnly(9);
   }
 
   @Test
   @DisplayName("should get first even number")
   public void shouldGetFirstEvenNumber() {
-    final var first = from(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19).first(number -> number % 2 == 0).otherwise(-1);
+    final var first = from(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19).first(number -> number % 2 == 0);
 
-    assertThat(first).isEqualTo(34);
+    assertThat(first).containsOnly(34);
   }
 
   @Test
@@ -67,40 +71,32 @@ public class UniquableTest {
   @Test
   @DisplayName("should find a single element according to condition")
   public void shouldFindSingleByCondition() {
-    final var singleEven = from(9, 34, 65, 87, 435, 3, 83, 23).single(number -> number % 2 == 0).otherwise(-1);
+    final var singleEven = from(9, 34, 65, 87, 435, 3, 83, 23).single(number -> number % 2 == 0);
 
-    assertThat(singleEven).isEqualTo(34);
+    assertThat(singleEven).containsOnly(34);
   }
 
   @Test
-  @DisplayName("should be empty if there's more than single element")
-  public void shouldEmptyIfThereIsMoreThanSingleElement() {
-    final var single = from(9, 65, 87, 435, 3, 83, 23, 87, 435, 67, 19)
-      .single()
-      .peek(out::println);
+  @DisplayName("should throw fetch-exception on more than one single element has been found")
+  public void shouldThrowIfThereIsMoreThanSingleElementOnCondition() {
+    assertThrows(
+      FetchException.class,
+      () -> from(9, 65, 87, 435, 3, 83, 23, 87, 435, 67, 19).single(number -> number < 20).cursor().fetch()
+    );
 
-    assertThat(single).isEmpty();
-
-    //assertThat(many.single(number -> number < 20)).isEmpty();
-  }
-
-  @Test
-  @DisplayName("should be empty if there's more than single element on condition")
-  public void shouldEmptyIfThereIsMoreThanSingleElementOnCondition() {
-    final var single = from(9, 65, 87, 435, 3, 83, 23, 87, 435, 67, 19).single(number -> number < 20);
-
-    assertThat(single).isEmpty();
+    assertThrows(
+      FetchException.class,
+      () -> from(9, 65, 87, 435, 3, 83, 23, 87, 435, 67, 19).single().cursor().fetch()
+    );
   }
 
   @Test
   public void shouldBeFirst() throws Throwable {
     final var first = from(1, 23.4, 'A', "Hi there", 5)
-      .<String>ofType()
+      .ofType(String.class)
       .select(it -> it.toUpperCase())
-      .last()
-      .cursor()
-      .fetch();
+      .last();
 
-    assertThat(first).isEqualTo("HI THERE");
+    assertThat(first).containsOnly("HI THERE");
   }
 }

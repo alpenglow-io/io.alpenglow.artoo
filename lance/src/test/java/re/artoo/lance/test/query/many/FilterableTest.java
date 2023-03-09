@@ -14,9 +14,11 @@ class FilterableTest {
   @Test
   @DisplayName("should filter words with length 3")
   void shouldFilterWordsWithLength3() {
-    final var where = from("the", "quick", "brown", "fox", "jumps", null).where(word -> word.length() == 3);
+    final var where = from("the", "quick", "brown", "fox", "jumps", null)
+      .coalesce()
+      .where(word -> word.length() == 3);
 
-    assertThat(where).containsOnly("the", "fox");
+    assertThat(where).containsExactly("the", "fox");
   }
 
   @Test
@@ -25,7 +27,7 @@ class FilterableTest {
 
     final var where = from("apple", "passionfruit", "banana", "mango", "orange", "blueberry", "grape", "strawberry").where(fruit -> fruit.length() < 6);
 
-    assertThat(where).contains("apple", "mango", "grape");
+    assertThat(where).containsExactly("apple", "mango", "grape");
   }
 
   @Test
@@ -34,7 +36,7 @@ class FilterableTest {
 
     final var where = Many.from(0, 30, 20, 15, 90, 85, 40, 75).where((index, number) -> number <= index * 10);
 
-    assertThat(where).contains(0, 20, 15, 40);
+    assertThat(where).containsExactly(0, 20, 15, 40);
   }
 
   @Test
@@ -42,23 +44,9 @@ class FilterableTest {
   void shouldGetAllStrings() {
     final Object[] objects = {"apple", "passionfruit", 10.2F, 12L, "banana", LocalTime.now(), LocalDateTime.now(), 2};
 
-    final var texts = Many.fromAny(objects).<String>ofType();
+    final var texts = Many.fromAny(objects).ofType(String.class);
 
     assertThat(texts).containsExactly("apple", "passionfruit", "banana");
   }
 
-  @Test
-  void shouldConsumeWhenIsType() {
-/*    final Object[] objects = {"apple", "passionfruit", 10.2F, 12L, "banana", LocalTime.now(), LocalDateTime.now(), 2};
-
-    for (
-      final var returning :
-      Many.fromAny(objects)
-        .when(String.class, it -> assertThat(it).isIn("apple", "passionfruit", "banana"))
-        .<Long>when(it -> it.equals(12L), it -> assertThat(it).isEqualTo(12L))
-        .<Float>when(it -> it.equals(10.2F), it -> assertThat(it).isEqualTo(10.2F))
-    ) {
-      assertThat(returning).isNotNull();
-    }*/
-  }
 }

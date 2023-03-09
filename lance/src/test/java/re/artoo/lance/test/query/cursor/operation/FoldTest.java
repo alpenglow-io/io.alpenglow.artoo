@@ -21,4 +21,18 @@ class FoldTest {
     assertThat(cursor.fetch()).isEqualTo(11);
     assertThat(cursor.canFetch()).isFalse();
   }
+
+  @Test
+  @DisplayName("should reduce empty elements to initial value anyway")
+  void shouldReduceAnywayWithInitial() throws Throwable {
+    var cursor =
+      new Fold<>(
+        new Open<Integer>(),
+        1,
+        (index, acc, element) -> acc + element
+      );
+
+    assertThat(cursor.fetch()).isEqualTo(1);
+    assertThat(cursor.canFetch()).isFalse();
+  }
 }

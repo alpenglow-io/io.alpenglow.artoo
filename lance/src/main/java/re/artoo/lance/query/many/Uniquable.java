@@ -2,13 +2,14 @@ package re.artoo.lance.query.many;
 
 import re.artoo.lance.Queryable;
 import re.artoo.lance.func.TryPredicate1;
+import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.One;
-import re.artoo.lance.tuple.Pair;
-import re.artoo.lance.tuple.Tuple;
+
+import java.util.Optional;
 
 public interface Uniquable<T> extends Queryable<T> {
-  default One<T> at(final int index) {
-    return () -> cursor().filter((idx, it) -> idx == index);
+  default One<T> at(final int at) {
+    return () -> cursor().fold(null, (index, acc, element) -> at == index ? element : acc);
   }
 
   default One<T> first() {
@@ -18,7 +19,7 @@ public interface Uniquable<T> extends Queryable<T> {
   default One<T> first(final TryPredicate1<? super T> where) {
     return () -> cursor()
       .filter(where)
-      .reduce((index, first, element) -> index == 0 && element != null ? element : null);
+      .reduce((index, first, element) -> first);
   }
 
   default One<T> last() {
@@ -26,7 +27,7 @@ public interface Uniquable<T> extends Queryable<T> {
   }
 
   default One<T> last(final TryPredicate1<? super T> where) {
-    return () -> cursor().filter(where).reduce((last, element) -> element != null ? element : last);
+    return () -> cursor().filter(where).reduce((last, element) -> element);
   }
 
   default One<T> single() {
@@ -36,15 +37,7 @@ public interface Uniquable<T> extends Queryable<T> {
   default One<T> single(final TryPredicate1<? super T> where) {
     return () -> cursor()
       .filter(where)
-      .peek(System.out::println)
-      .<Pair<Boolean, T>>fold(Tuple.of(false, null), (index, single, element) ->
-        !single.first() && element != null
-          ? single.both(true, element)
-          : single.first() && element != null
-          ? single.letSecond(null)
-          : single
-      )
-      .map(Pair::second);
+      .reduce((index, single, element) -> FetchException.byThrowing("Can't fetch next single element, more than one single element has been found"));
   }
 }
 

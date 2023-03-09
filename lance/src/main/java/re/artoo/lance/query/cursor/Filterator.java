@@ -6,14 +6,14 @@ import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.cursor.operation.PresenceOnly;
 import re.artoo.lance.query.cursor.operation.Filter;
 
-public sealed interface Filterable<ELEMENT> extends Probe<ELEMENT> permits Cursor {
+public sealed interface Filterator<ELEMENT> extends Probe<ELEMENT> permits Cursor {
   default Cursor<ELEMENT> filter(TryIntPredicate1<? super ELEMENT> filter) {
     return new Filter<>(this, filter);
   }
   default Cursor<ELEMENT> filter(TryPredicate1<? super ELEMENT> filter) {
     return filter((index, element) -> filter.invoke(element));
   }
-  default Cursor<ELEMENT> onPresenceOnly() {
-    return new PresenceOnly<>(this);
+  default Cursor<ELEMENT> nonNull() {
+    return filter(Filter.presenceOnly());
   }
 }

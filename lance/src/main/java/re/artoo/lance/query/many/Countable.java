@@ -8,7 +8,7 @@ import re.artoo.lance.scope.random.Int;
 
 public interface Countable<T> extends Queryable<T> {
   default One<Integer> count() {
-    return () -> cursor().fold(0, (counted, element) -> counted + 1).<Integer>or(() -> 0);
+    return () -> cursor().fold(0, (counted, element) -> counted + 1);
   }
 
   default One<Integer> count(TryIntPredicate1<? super T> where) {

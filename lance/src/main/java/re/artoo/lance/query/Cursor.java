@@ -3,11 +3,12 @@ package re.artoo.lance.query;
 import re.artoo.lance.query.cursor.Appendable;
 import re.artoo.lance.query.cursor.Iterable;
 import re.artoo.lance.query.cursor.*;
+import re.artoo.lance.query.cursor.operation.Empty;
 import re.artoo.lance.query.cursor.operation.Open;
 
 import java.util.List;
 
-public non-sealed interface Cursor<ELEMENT> extends Mappable<ELEMENT>, Foldable<ELEMENT>, Reducible<ELEMENT>, Complementable<ELEMENT>, Appendable<ELEMENT>, Collectable<ELEMENT>, Joinable<ELEMENT>, Filterable<ELEMENT> {
+public non-sealed interface Cursor<ELEMENT> extends Mappator<ELEMENT>, Folderator<ELEMENT>, Reduciator<ELEMENT>, Alternator<ELEMENT>, Appendable<ELEMENT>, Collectable<ELEMENT>, Joinable<ELEMENT>, Filterator<ELEMENT> {
   @SafeVarargs
   static <T> Cursor<T> open(T... elements) {
     return new Open<>(elements);

@@ -5,7 +5,7 @@ import re.artoo.lance.func.TryIntFunction2;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.cursor.operation.Fold;
 
-public sealed interface Foldable<ELEMENT> extends Probe<ELEMENT> permits Cursor {
+public sealed interface Folderator<ELEMENT> extends Probe<ELEMENT> permits Cursor {
   default <FOLDED> Cursor<FOLDED> fold(FOLDED initial, TryIntFunction2<? super FOLDED, ? super ELEMENT, ? extends FOLDED> operation) {
     return new Fold<>(this, initial, operation);
   }

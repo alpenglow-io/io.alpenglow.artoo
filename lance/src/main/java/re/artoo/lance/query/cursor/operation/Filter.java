@@ -5,10 +5,9 @@ import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Probe;
 
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
-
 public record Filter<ELEMENT>(Probe<ELEMENT> probe, Atom<ELEMENT> atom, TryIntPredicate1<? super ELEMENT> condition) implements Cursor<ELEMENT> {
+  public static <ELEMENT> TryIntPredicate1<? super ELEMENT> presenceOnly() { return (index, element) -> element != null; }
+  public static <ELEMENT> TryIntPredicate1<? super ELEMENT> absenceOnly() { return (index, element) -> element == null; }
   public Filter(Probe<ELEMENT> probe, TryIntPredicate1<? super ELEMENT> condition) {
     this(probe, Atom.reference(), condition);
   }
@@ -22,9 +21,13 @@ public record Filter<ELEMENT>(Probe<ELEMENT> probe, Atom<ELEMENT> atom, TryIntPr
     if (atom.isNotFetched()) return true;
     if (!probe.canFetch()) return false;
 
-    ELEMENT element = probe.fetch();
-    if (condition.invoke(atom.indexThenInc(), element)) atom.element(element);
+    while (probe.canFetch() && atom.isFetched()) {
+      var element = probe.fetch();
+      if (condition.invoke(atom.indexThenInc(), element)) {
+        atom.element(element);
+      }
+    }
 
-    return true;
+    return atom.isNotFetched();
   }
 }

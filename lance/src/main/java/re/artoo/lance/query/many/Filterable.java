@@ -16,19 +16,15 @@ public interface Filterable<T> extends Queryable<T> {
   }
 
   @SuppressWarnings("unchecked")
-  default <R> Many<R> ofType() {
-    return ofComponentType();
+  default <R> Many<R> ofType(Class<R> type) {
+    return () -> cursor()
+      .filter(type::isInstance)
+      .map(it -> (R) it);
   }
 
-  @SuppressWarnings("unchecked")
-  private <R> Many<R> ofComponentType(R... type) {
-    return () -> cursor()
-      .filter(it -> type.getClass().componentType().isInstance(it))
-      .map(it -> (R) type.getClass().componentType().cast(it));
-  }
   default <R> Many<T> notOfType(final Class<? extends R> type) {
     return () -> cursor().map(new NotOfType<>(type));
   }
-  default Many<T> coalesce() { return () -> cursor().onPresenceOnly(); }
+  default Many<T> coalesce() { return () -> cursor().nonNull(); }
 }
 

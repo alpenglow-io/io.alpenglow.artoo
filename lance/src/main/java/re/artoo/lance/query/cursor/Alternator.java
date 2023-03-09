@@ -10,14 +10,11 @@ import re.artoo.lance.query.cursor.operation.Er;
 import re.artoo.lance.query.cursor.operation.Or;
 import re.artoo.lance.scope.Let;
 
-public sealed interface Complementable<ELEMENT> extends Probe<ELEMENT> permits Cursor {
+public sealed interface Alternator<ELEMENT> extends Probe<ELEMENT> permits Cursor {
   default <C extends Cursor<ELEMENT>> Cursor<ELEMENT> or(final TrySupplier1<? extends C> alternative) {
     return new Or<>(new PresenceOnly<>(this), Let.lazy(alternative));
   }
 
-  default Cursor<ELEMENT> or(ELEMENT alternative) {
-    return new Or<>(this, alternative);
-  }
 
   default <E extends RuntimeException> Cursor<ELEMENT> or(final String message, final TryFunction2<? super String, ? super Throwable, ? extends E> exception) {
     return new Er<>(this, message, exception);

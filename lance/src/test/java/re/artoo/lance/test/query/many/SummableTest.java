@@ -14,15 +14,15 @@ public class SummableTest {
   @Test
   @DisplayName("should sum all float sequence")
   public void shouldSumFloatSequence() throws Throwable {
-    final var sum = Many.from(43.68F, 1.25F, 583.7F, 6.5F).sum().cursor().fetch();
+    final var sum = Many.from(43.68F, 1.25F, 583.7F, 6.5F).sum();
 
-    assertThat(sum).isEqualTo(635.13F);
+    assertThat(sum).containsExactly(635.13F);
   }
 
   @Test
   @DisplayName("should sum all nullable any sequence ignoring null-ones")
   public void shouldSumNullableFloatSequence() throws Throwable {
-    final var sum = Many.fromAny(null, "0", 92.83F, null, 100.0F, 37.46F, 81.1F).sum().cursor().fetch();
+    final var sum = Many.fromAny(null, "0", 92.83F, null, 100.0F, 37.46F, 81.1F).sum();
 
     assertThat(sum).isEqualTo(311.39F);
   }
@@ -54,24 +54,24 @@ public class SummableTest {
   @Test
   @DisplayName("should sum by declaring the generic type")
   public void shouldSumWithGenericSpecified() throws Throwable {
-    final var sum = Many.fromAny(25.2f, "Coho Vineyard", "Lucerne Publishing", BigInteger.valueOf(12)).sum().cursor().fetch();
+    final var sum = Many.fromAny(25.2f, "Coho Vineyard", "Lucerne Publishing", BigInteger.valueOf(12)).sum();
 
-    assertThat(sum).isEqualTo(BigInteger.valueOf(37));
+    assertThat(sum).containsExactly(BigInteger.valueOf(37));
   }
 
   @Test
   @DisplayName("should sum by ignoring the null element")
   public void shouldSumIgnoringNull() throws Throwable {
-    final var sum = Many.fromAny(null, "Coho Vineyard", "Lucerne Publishing", 12L).sum().cursor().fetch();
+    final var sum = Many.fromAny(null, "Coho Vineyard", "Lucerne Publishing", 12L).sum();
 
-    assertThat(sum).isEqualTo(12L);
+    assertThat(sum).containsExactly(12L);
   }
 
   @Test
   @DisplayName("should fail if there are no numbers")
   public void shouldFailIfNoNumbers() throws Throwable {
-    final var sum = Many.from("Coho Vineyard", "Wingtip Toys", "Adventure Works").sum().cursor().fetch();
+    final var sum = Many.from("Coho Vineyard", "Wingtip Toys", "Adventure Works").sum();
 
-    assertThat(sum).isNull();
+    assertThat(sum).isEmpty();
   }
 }

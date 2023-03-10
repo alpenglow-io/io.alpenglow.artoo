@@ -14,17 +14,13 @@ public interface Summable<T> extends Queryable<T> {
   }
 
   private <N> N sum(N sum, N element) {
-    return (N) switch (sum) {
-      case BigDecimal it when element instanceof BigDecimal e -> it.add(e);
-      case BigInteger it when element instanceof BigInteger e -> it.add(e);
-      case Byte it when element instanceof Byte e -> it + e;
-      case Short it when element instanceof Short e -> it + e;
-      case Integer it when element instanceof Integer e -> it + e;
-      case Long it when element instanceof Long e -> it + e;
-      case Float it when element instanceof Float e -> it + e;
-      case Double it when element instanceof Double e -> it + e;
-      default -> element;
-    };
+    return sum != null ?
+      (N) switch (sum) {
+        case Number it when element instanceof Number e -> it.doubleValue() + e.doubleValue();
+        case Number it -> it;
+        default -> element instanceof Number it ? it : null;
+      }
+      : (N) (element instanceof Number it ? it : null);
   }
 
   default One<T> sum() {

@@ -8,22 +8,27 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 @SuppressWarnings("unchecked")
-public interface Summable<T> extends Queryable<T> {
-  default <N extends Number> One<N> sum(final TryFunction1<? super T, ? extends N> select) {
+public interface Summable<ELEMENT> extends Queryable<ELEMENT> {
+  default <N extends Number> One<N> sum(final TryFunction1<? super ELEMENT, ? extends N> select) {
     return () -> cursor().<N>map(select).reduce(this::sum);
   }
 
-  private <N> N sum(N sum, N element) {
-    return sum != null ?
-      (N) switch (sum) {
-        case Number it when element instanceof Number e -> it.doubleValue() + e.doubleValue();
-        case Number it -> it;
-        default -> element instanceof Number it ? it : null;
-      }
-      : (N) (element instanceof Number it ? it : null);
+  private <NUMBER> NUMBER sum(NUMBER sum, NUMBER element) {
+    return (NUMBER) switch (sum) {
+      case Number it when element instanceof BigInteger e -> BigInteger.valueOf(it.longValue() + e.longValue());
+      case Number it when element instanceof BigDecimal e -> BigDecimal.valueOf(it.doubleValue() + e.doubleValue());
+      case Number it when element instanceof Double e -> it.doubleValue() + e;
+      case Number it when element instanceof Float e -> it.floatValue() + e;
+      case Number it when element instanceof Long e -> it.longValue() + e;
+      case Number it when element instanceof Integer e -> it.intValue() + e;
+      case Number it when element instanceof Short e -> it.shortValue() + e;
+      case Number it when element instanceof Byte e -> it.byteValue() + e;
+      case Number it -> it;
+      case null, default -> element instanceof Number it ? it : null;
+    };
   }
 
-  default One<T> sum() {
+  default One<ELEMENT> sum() {
     return () -> cursor().reduce(this::sum);
   }
 }

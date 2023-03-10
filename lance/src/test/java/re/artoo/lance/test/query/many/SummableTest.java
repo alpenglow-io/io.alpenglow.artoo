@@ -24,15 +24,15 @@ public class SummableTest {
   public void shouldSumNullableFloatSequence() throws Throwable {
     final var sum = Many.fromAny(null, "0", 92.83F, null, 100.0F, 37.46F, 81.1F).sum();
 
-    assertThat(sum).isEqualTo(311.39F);
+    assertThat(sum).containsExactly(311.39F);
   }
 
   @Test
   @DisplayName("should sum all double sequence")
   public void shouldSumDoubleSequence() throws Throwable {
-    final var sum = from(43.68D, 1.25D, 583.7D, 6.5D).sum().cursor().fetch();
+    final var sum = from(43.68D, 1.25D, 583.7D, 6.5D).sum();
 
-    assertThat(sum).isEqualTo(635.13D);
+    assertThat(sum).containsExactly(635.13D);
   }
 
   @Test

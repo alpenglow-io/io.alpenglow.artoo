@@ -31,6 +31,6 @@ public record Reduce<ELEMENT>(Probe<? extends ELEMENT> probe, Atom<ELEMENT> atom
       );
     }
 
-    return atom.isNotFetched();
+    return atom.element() != null && atom.isNotFetched();
   }
 }

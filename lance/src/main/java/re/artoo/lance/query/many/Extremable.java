@@ -41,7 +41,7 @@ public interface Extremable<ELEMENT> extends Queryable<ELEMENT> {
     };
   }
   default <N extends Number> One<N> max(final TryFunction1<? super ELEMENT, ? extends N> select) {
-    return () -> cursor().<N>map(select).reduce(maximising());
+    return () -> cursor().nonNull().<N>map(select).reduce(maximising());
   }
 
   default One<ELEMENT> max() {
@@ -49,7 +49,7 @@ public interface Extremable<ELEMENT> extends Queryable<ELEMENT> {
   }
 
   default <N extends Number> One<N> min(final TryFunction1<? super ELEMENT, ? extends N> select) {
-    return () -> cursor().<N>map(select).reduce(minimising());
+    return () -> cursor().nonNull().<N>map(select).reduce(minimising());
   }
 
   default One<ELEMENT> min() {

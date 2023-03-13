@@ -15,11 +15,10 @@ public interface Filterable<T> extends Queryable<T> {
     return () -> cursor().filter(where);
   }
 
-  @SuppressWarnings("unchecked")
   default <R> Many<R> ofType(Class<R> type) {
     return () -> cursor()
       .filter(type::isInstance)
-      .map(it -> (R) it);
+      .map(type::cast);
   }
 
   default <R> Many<T> notOfType(final Class<? extends R> type) {

@@ -58,23 +58,24 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
 
   default Array<ELEMENT> sort() {
     return switch (this) {
-      case Some<ELEMENT> some -> new Some<>(sort(some.elements()));
+      case Some<ELEMENT> some -> new Some<>(selfSort(some.elements()));
       case None ignored -> this;
     };
   }
 
   default Array<ELEMENT> sortBy(Comparator<? super ELEMENT> comparison) {
     return switch (this) {
-      case Some<ELEMENT> some when comparison != null -> new Some<>(sort(some.elements(), comparison));
+      case Some<ELEMENT> some when comparison != null -> new Some<>(selfSort(some.elements(), comparison));
       default -> this;
     };
   }
 
   default boolean includes(ELEMENT element) {
+    System.out.printf("Array: %s%n", this);
     return switch (this) {
       case Some<ELEMENT> some -> switch (element) {
-        case Number ignored -> binarySearch(some.elements(), element) >= 0;
-        default -> binarySearch(some.elements(), element, (source, target) -> source.hashCode() == target.hashCode() ? 0 : source.hashCode() > element.hashCode() ? 1 : -1) >= 0;
+        case Number ignored -> binarySearch(some.elements(), element) == 0;
+        default -> binarySearch(some.elements(), element, (source, target) -> source.equals(target) ? 0 : -1) > 0;
       };
       default -> false;
     };
@@ -109,12 +110,12 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
     };
   }
 
-  private ELEMENT[] sort(ELEMENT[] elements) {
+  private ELEMENT[] selfSort(ELEMENT[] elements) {
     Arrays.sort(elements);
     return elements;
   }
 
-  private ELEMENT[] sort(ELEMENT[] elements, Comparator<? super ELEMENT> comparison) {
+  private ELEMENT[] selfSort(ELEMENT[] elements, Comparator<? super ELEMENT> comparison) {
     Arrays.sort(elements, comparison);
     return elements;
   }

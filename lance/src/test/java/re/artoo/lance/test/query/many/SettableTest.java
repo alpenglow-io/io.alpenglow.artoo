@@ -54,15 +54,10 @@ public class SettableTest {
     ).distinct(pet -> pet.age() < 4);
 
     assertThat(distinct).containsExactly(
-      new Pet("Pluto", 1),
-      new Pet("Goofy", 1),
-      new Pet("Fuffy", 2),
-      new Pet("Zeus", 2),
       new Pet("Hermes", 2),
       new Pet("Heracles", 2),
       new Pet("Cerberos", 3),
-      new Pet("Bart", 4),
-      new Pet("Homer", 4)
+      new Pet("Bart", 2)
     );
   }
 

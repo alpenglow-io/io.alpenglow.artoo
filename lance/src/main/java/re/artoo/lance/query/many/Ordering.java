@@ -4,6 +4,7 @@ import re.artoo.lance.Queryable;
 import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.Many;
+import re.artoo.lance.value.Array;
 
 import java.util.Arrays;
 
@@ -28,7 +29,10 @@ final class Order<T> implements Ordering<T> {
 
   @Override
   public Cursor<T> cursor() {
-    return queryable.cursor();
+    return queryable.cursor()
+      .fold(Array.<T>none(), Array::push)
+      .map(Array::sort)
+      .flatMap(Array::cursor);
   }
 
   @Override

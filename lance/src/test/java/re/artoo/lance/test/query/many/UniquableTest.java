@@ -5,9 +5,6 @@ import org.junit.jupiter.api.Test;
 import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.Many;
 
-import java.util.Optional;
-
-import static java.lang.System.out;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static re.artoo.lance.query.Many.from;
@@ -91,7 +88,7 @@ public class UniquableTest {
   }
 
   @Test
-  public void shouldBeFirst() throws Throwable {
+  public void shouldBeLast() throws Throwable {
     final var first = from(1, 23.4, 'A', "Hi there", 5)
       .ofType(String.class)
       .select(it -> it.toUpperCase())

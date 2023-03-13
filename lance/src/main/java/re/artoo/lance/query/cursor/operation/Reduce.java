@@ -21,15 +21,15 @@ public record Reduce<ELEMENT>(Probe<? extends ELEMENT> probe, Atom<ELEMENT> atom
     if (atom.isNotFetched()) return true;
     if (!probe.canFetch()) return false;
 
-    for (var fetched = probe.fetch(); probe.canFetch();) {
+    var fetched = probe.fetch();
+    do {
       if (atom.isFetched()) atom.element(fetched);
-
-      atom.element(
-        probe.canFetch()
-          ? operation.invoke(atom.indexThenInc(), atom.element(), probe.fetch())
-          : atom.element()
-      );
-    }
+      if (probe.canFetch()) {
+        atom.element(
+          operation.invoke(atom.indexThenInc(), atom.element(), probe.fetch())
+        );
+      }
+    } while (probe.canFetch());
 
     return atom.element() != null && atom.isNotFetched();
   }

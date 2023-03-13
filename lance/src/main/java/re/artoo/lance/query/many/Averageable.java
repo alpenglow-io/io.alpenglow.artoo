@@ -6,14 +6,15 @@ import re.artoo.lance.query.One;
 import re.artoo.lance.tuple.Tuple;
 
 
-public interface Averageable<T> extends Queryable<T> {
-  default <N extends Number> One<Double> average(final TryFunction1<? super T, ? extends N> select) {
+public interface Averageable<ELEMENT> extends Queryable<ELEMENT> {
+  default <NUMBER extends Number> One<Double> average(final TryFunction1<? super ELEMENT, ? extends NUMBER> select) {
     return () -> cursor()
       .map(select)
       .nonNull()
       .fold(
         Tuple.of(0.0, 0),
         (acc, element) -> acc.let((folded, count) -> Tuple.of(folded + element.doubleValue(), count + 1)))
+      .filter(acc -> acc.second() > 0)
       .map(acc -> acc.first() / acc.second());
   }
 

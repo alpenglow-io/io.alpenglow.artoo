@@ -2,6 +2,7 @@ package re.artoo.lance.value.array;
 
 import re.artoo.lance.value.Array;
 
+import java.util.Arrays;
 import java.util.Iterator;
 
 import static re.artoo.lance.value.array.Elements.Companion;
@@ -28,6 +29,13 @@ public record Some<ELEMENT>(ELEMENT[] elements) implements Array<ELEMENT> {
   }
 
   public ELEMENT element() { return elements[0]; }
+
+  @Override
+  public String toString() {
+    return "Some{" +
+      "elements=" + Arrays.toString(elements) +
+      '}';
+  }
 
   @Override
   public Iterator<ELEMENT> iterator() {

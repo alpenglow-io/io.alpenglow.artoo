@@ -18,6 +18,11 @@ public enum None implements Array<Object> {
     return Zero.Companion;
   }
 
+  @Override
+  public String toString() {
+    return "None{}";
+  }
+
   private enum Zero implements Iterator<Object> {
     Companion;
 

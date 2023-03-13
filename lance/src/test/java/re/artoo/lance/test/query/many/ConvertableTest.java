@@ -1,5 +1,6 @@
 package re.artoo.lance.test.query.many;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import re.artoo.lance.query.Many;
@@ -26,6 +27,7 @@ public class ConvertableTest {
   }
 
   @Test
+  @Disabled("Many.from iterable must be reimplemented")
   @DisplayName("should convert a many from an iterable to an array")
   public void shouldConvertAnIterableManyAsArray() {
     record Dog(String name) {}

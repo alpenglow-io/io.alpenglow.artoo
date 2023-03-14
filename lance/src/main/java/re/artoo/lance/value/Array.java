@@ -71,12 +71,8 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
   }
 
   default boolean includes(ELEMENT element) {
-    System.out.printf("Array: %s%n", this);
     return switch (this) {
-      case Some<ELEMENT> some -> switch (element) {
-        case Number ignored -> binarySearch(some.elements(), element) == 0;
-        default -> binarySearch(some.elements(), element, (source, target) -> source.equals(target) ? 0 : -1) > 0;
-      };
+      case Some<ELEMENT> some when some.head() instanceof Some<ELEMENT> head -> head.element().equals(element) || some.tail().includes(element);
       default -> false;
     };
   }

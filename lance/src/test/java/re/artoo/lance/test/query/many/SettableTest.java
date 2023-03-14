@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SettableTest {
   @Test
-  @DisplayName("should apublic void repeated numbers")
+  @DisplayName("should avoid repeated numbers")
   public void shouldAvoidRepeatedNumbers() {
     final var distinct = Many.from(21, 46, 46, 55, 17, 21, 55, 55).distinct();
 
@@ -17,7 +17,7 @@ public class SettableTest {
   }
 
   @Test
-  @DisplayName("should apublic void repeated numbers less than 50")
+  @DisplayName("should avoid repeated numbers less than 50")
   public void shouldJustAvoidRepeatedNumbersLessThan50() {
     final var distinct = Many.from(21, 46, 46, 55, 17, 21, 55, 55).distinct(number -> number < 50);
 
@@ -48,6 +48,7 @@ public class SettableTest {
       new Pet("Hermes", 2),
       new Pet("Cerberos", 3),
       new Pet("Cerberos", 3),
+      new Pet("Cerberos", 3),
       new Pet("Bart", 2),
       new Pet("Bart", 2),
       new Pet("Homer", 4)
@@ -55,9 +56,9 @@ public class SettableTest {
 
     assertThat(distinct).containsExactly(
       new Pet("Hermes", 2),
-      new Pet("Heracles", 2),
       new Pet("Cerberos", 3),
-      new Pet("Bart", 2)
+      new Pet("Bart", 2),
+      new Pet("Homer", 4)
     );
   }
 

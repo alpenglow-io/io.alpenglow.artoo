@@ -16,7 +16,7 @@ public interface Settable<T> extends Queryable<T> {
 
   default Many<T> distinct(final TryPredicate1<? super T> where) {
     return () -> cursor()
-      .fold(Array.<T>none(), (array, element) -> array.includes(element) && where.invoke(element) ? array : array.push(element))
+      .fold(Array.<T>none(), (array, element) -> (where.invoke(element) && !array.includes(element)) || !where.invoke(element) ? array.push(element) : array)
       .flatMap(Array::cursor);
   }
 

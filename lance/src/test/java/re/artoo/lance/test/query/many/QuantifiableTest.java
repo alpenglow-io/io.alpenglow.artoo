@@ -48,7 +48,7 @@ public class QuantifiableTest {
   @Test
   @DisplayName("should have some people with pets")
   public void shouldHaveThreePeople() throws Throwable {
-    final var some = Many.from(owners()).some(it -> it.pets().length > 0).cursor().fetch();
+    final var some = Many.from(owners()).coalesce().some(it -> it.pets().length > 0).cursor().fetch();
 
     assertThat(some).isTrue();
   }
@@ -90,7 +90,7 @@ public class QuantifiableTest {
   @Test
   @DisplayName("should have none owners with more than 5 pets")
   void shouldHaveNonePets() throws Throwable {
-    final var none = Many.from(owners()).none(owner -> owner.pets().length > 5).cursor().fetch();
+    final var none = Many.from(owners()).coalesce().none(owner -> owner.pets().length > 5).cursor().fetch();
 
     assertThat(none).isTrue();
   }

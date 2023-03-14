@@ -33,7 +33,7 @@ public interface Queryable<T> extends Iterable<T> {
       ;
   }
 
-  default <Z> Z eventually(Z returning) {
+  default <RETURN> RETURN eventually(RETURN returning) {
     eventually();
     return returning;
   }

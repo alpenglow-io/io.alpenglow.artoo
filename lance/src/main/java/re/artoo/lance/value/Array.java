@@ -11,7 +11,6 @@ import re.artoo.lance.value.array.Some;
 import java.util.*;
 
 import static java.lang.System.arraycopy;
-import static java.util.Arrays.binarySearch;
 
 public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess permits None, Some {
 
@@ -43,8 +42,8 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
 
   default Array<ELEMENT> push(ELEMENT element) {
     return switch (this) {
-      case None ignored -> new Some<>(element);
-      case Some<ELEMENT> some -> new Some<>(some.elements(), element);
+      case None ignored when element != null -> new Some<>(element);
+      case Some<ELEMENT> some when element != null -> new Some<>(some.elements(), element);
       default -> this;
     };
   }
@@ -132,14 +131,14 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
   }
 
   /**
-   * In order to make it stable, flat-map needs more than such trivial recursive operation, it's not possible for the platform to handle all that sequential concatenations applied
+   * In order to make it stable, flat-map needs more than such trivial recursive condition, it's not possible for the platform to handle all that sequential concatenations applied
    * on the fly: this involves a continuous computation and reallocation of the final array heap size; what flat-map needs to make it work better, it is to compute from the
    * beginning the necessary capacity for the final array and then to copy all flatten elements.
    *
-   * @param operation
-   * @param <TARGET>
-   * @param <ARRAY>
-   * @return
+   * @param operation the condition map that we need to apply
+   * @param <TARGET>  the condition target element
+   * @param <ARRAY>   the condition target array of elements
+   * @return the array
    */
   default <TARGET, ARRAY extends Array<TARGET>> Array<TARGET> flatMap(TryFunction1<? super ELEMENT, ? extends ARRAY> operation) {
     return switch (this) {

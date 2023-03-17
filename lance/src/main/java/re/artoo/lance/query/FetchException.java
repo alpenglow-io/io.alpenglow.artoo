@@ -1,8 +1,11 @@
 package re.artoo.lance.query;
 
 public final class FetchException extends RuntimeException {
-  public static FetchException of(Throwable throwable) {
+  public static FetchException with(Throwable throwable) {
     return new FetchException(throwable);
+  }
+  public static FetchException withMessage(String message) {
+    return new FetchException(message);
   }
 
   public static FetchException of(String message, Throwable throwable) {

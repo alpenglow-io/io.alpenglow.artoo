@@ -4,6 +4,7 @@ import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Probe;
+import re.artoo.lance.query.cursor.operation.atom.Atom;
 
 public record Map<ELEMENT, RETURN>(Probe<ELEMENT> probe, Atom<RETURN> atom, TryIntFunction1<? super ELEMENT, ? extends RETURN> operation) implements Cursor<RETURN> {
   public Map(Probe<ELEMENT> probe, TryIntFunction1<? super ELEMENT, ? extends RETURN> operation) {
@@ -21,6 +22,6 @@ public record Map<ELEMENT, RETURN>(Probe<ELEMENT> probe, Atom<RETURN> atom, TryI
 
     atom.element(operation.invoke(atom.indexThenInc(), probe.fetch()));
 
-    return true;
+    return atom.isNotFetched();
   }
 }

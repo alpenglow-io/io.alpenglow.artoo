@@ -45,7 +45,7 @@ class FilterTest {
   }
 
   @Test
-  @DisplayName("should filter numbers less than operation with index")
+  @DisplayName("should filter numbers less than condition with index")
   void shouldFilterNumberLessThanOperation() throws Throwable {
     var filter =
       new Filter<>(
@@ -64,7 +64,7 @@ class FilterTest {
   }
 
   @Test
-  @DisplayName("should filter numbers less than operation with index and exclude nulls in the end")
+  @DisplayName("should filter numbers less than condition with index and exclude nulls in the end")
   void shouldFilterNumberLessThanOperationButNulls() throws Throwable {
     var filter =
       new Filter<>(

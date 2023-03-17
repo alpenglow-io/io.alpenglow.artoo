@@ -3,6 +3,7 @@ package re.artoo.lance.query.cursor.operation;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Probe;
+import re.artoo.lance.query.cursor.operation.atom.Atom;
 
 public record PresenceOnly<ELEMENT>(Probe<ELEMENT> probe, Atom<ELEMENT> atom) implements Cursor<ELEMENT> {
   public PresenceOnly(Probe<ELEMENT> probe) {
@@ -24,6 +25,6 @@ public record PresenceOnly<ELEMENT>(Probe<ELEMENT> probe, Atom<ELEMENT> atom) im
 
   @Override
   public ELEMENT fetch() throws Throwable {
-    return canFetch() ? atom.elementThenFetched() : FetchException.byThrowing("Can't fetch next element on presence-only operation (no more present elements?)");
+    return canFetch() ? atom.elementThenFetched() : FetchException.byThrowing("Can't fetch next element on presence-only condition (no more present elements?)");
   }
 }

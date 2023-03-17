@@ -4,6 +4,7 @@ import re.artoo.lance.func.TryIntFunction2;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Probe;
+import re.artoo.lance.query.cursor.operation.atom.Atom;
 
 public record Fold<ELEMENT, FOLDED>(Probe<? extends ELEMENT> probe, Atom<FOLDED> atom, TryIntFunction2<? super FOLDED, ? super ELEMENT, ? extends FOLDED> operation) implements Cursor<FOLDED> {
   public Fold(Probe<? extends ELEMENT> probe, FOLDED initial, TryIntFunction2<? super FOLDED, ? super ELEMENT, ? extends FOLDED> operation) {

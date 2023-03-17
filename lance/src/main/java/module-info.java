@@ -12,5 +12,4 @@ module re.artoo.lance {
   exports re.artoo.lance;
   exports re.artoo.lance.tuple.record;
   exports re.artoo.lance.query.cursor.operation;
-
 }

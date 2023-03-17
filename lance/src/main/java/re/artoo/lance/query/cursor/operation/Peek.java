@@ -1,12 +1,10 @@
 package re.artoo.lance.query.cursor.operation;
 
-import re.artoo.lance.func.TryConsumer1;
-import re.artoo.lance.func.TryConsumer2;
 import re.artoo.lance.func.TryIntConsumer1;
-import re.artoo.lance.query.Closure;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Probe;
+import re.artoo.lance.query.cursor.operation.atom.Atom;
 
 public record Peek<ELEMENT>(Probe<ELEMENT> probe, Atom<ELEMENT> atom, TryIntConsumer1<? super ELEMENT> peek) implements Cursor<ELEMENT> {
   public Peek(Probe<ELEMENT> probe, TryIntConsumer1<? super ELEMENT> peek) {

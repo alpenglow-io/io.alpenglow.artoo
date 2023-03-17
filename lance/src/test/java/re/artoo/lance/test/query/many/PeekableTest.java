@@ -48,6 +48,27 @@ public class PeekableTest {
   public void shouldPeekOrdered() {
     Many.from(1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4)
       .peek(it -> out.println("I'm " + it))
+      .distinct(it -> {
+        out.println("Hello: " + it);
+        return true;
+      })
+      .select(it -> new Pet("No name", it))
+      .peek(pet -> out.println("Operating on Pet " + pet.age()))
+      .eventually(pet -> out.println("Pet with " + pet.name() + " has " + pet.age() + " years"));
+
+    out.println("\n========\n");
+
+    Stream.of(1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4)
+      .peek(it -> out.println("I'm " + it))
+      .distinct()
+      .map(it -> new Pet("No name", it))
+      .peek(pet -> out.println("Operating on Pet " + pet.age()))
+      .forEach(pet -> out.println("Pet with " + pet.name() + " has " + pet.age() + " years"));
+
+    out.println("\n========\n");
+/*
+    Many.from(1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4)
+      .peek(it -> out.println("I'm " + it))
       .distinct()
       .peek(it -> out.println("Years " + it))
       .select(it -> new Pet("No name", it))
@@ -62,6 +83,6 @@ public class PeekableTest {
       .peek(it -> out.println("Years " + it))
       .map(it -> new Pet("No name", it))
       .peek(pet -> out.println("Operating on Pet " + pet.age()))
-      .forEach(pet -> out.println("Pet with " + pet.name() + " has " + pet.age() + " years"));
+      .forEach(pet -> out.println("Pet with " + pet.name() + " has " + pet.age() + " years"));*/
   }
 }

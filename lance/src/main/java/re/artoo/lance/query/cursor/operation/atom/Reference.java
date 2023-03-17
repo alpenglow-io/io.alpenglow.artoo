@@ -1,12 +1,10 @@
 package re.artoo.lance.query.cursor.operation.atom;
 
-import re.artoo.lance.query.cursor.operation.Atom;
-
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-public final class Reference<ELEMENT> implements Atom<ELEMENT> {
+final class Reference<ELEMENT> implements Atom<ELEMENT> {
   private final AtomicInteger index;
   private final AtomicReference<ELEMENT> reference;
   private final AtomicBoolean fetched;

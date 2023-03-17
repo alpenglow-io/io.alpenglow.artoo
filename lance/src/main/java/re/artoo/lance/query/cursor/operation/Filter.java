@@ -4,6 +4,7 @@ import re.artoo.lance.func.TryIntPredicate1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Probe;
+import re.artoo.lance.query.cursor.operation.atom.Atom;
 
 public record Filter<ELEMENT>(Probe<ELEMENT> probe, Atom<ELEMENT> atom, TryIntPredicate1<? super ELEMENT> condition) implements Cursor<ELEMENT> {
   public static <ELEMENT> TryIntPredicate1<? super ELEMENT> presenceOnly() { return (index, element) -> element != null; }

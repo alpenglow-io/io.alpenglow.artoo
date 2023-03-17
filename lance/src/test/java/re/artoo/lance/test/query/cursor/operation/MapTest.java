@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class MapTest {
   @Test
-  @DisplayName("should operation elements")
+  @DisplayName("should condition elements")
   void shouldMapElements() throws Throwable {
     var cursor =
       new Map<>(
@@ -26,7 +26,7 @@ class MapTest {
   }
 
   @Test
-  @DisplayName("should not operation nulls")
+  @DisplayName("should not condition nulls")
   void shouldNotMapNulls() throws Throwable {
     var cursor =
       new Map<>(

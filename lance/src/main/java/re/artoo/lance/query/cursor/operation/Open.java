@@ -3,6 +3,7 @@ package re.artoo.lance.query.cursor.operation;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Probe;
+import re.artoo.lance.query.cursor.operation.atom.Atom;
 
 public record Open<ELEMENT>(ELEMENT[] elements, Atom<ELEMENT> atom) implements Cursor<ELEMENT> {
   @SafeVarargs

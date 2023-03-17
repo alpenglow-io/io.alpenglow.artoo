@@ -4,6 +4,7 @@ import re.artoo.lance.func.TryConsumer1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Probe;
+import re.artoo.lance.query.cursor.operation.atom.Atom;
 
 public record Catch<ELEMENT>(Probe<ELEMENT> probe, Atom<ELEMENT> atom, TryConsumer1<? super Throwable> fallback) implements Cursor<ELEMENT> {
   public Catch(Probe<ELEMENT> probe, TryConsumer1<? super Throwable> fallback) {

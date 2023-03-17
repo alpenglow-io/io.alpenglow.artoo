@@ -4,6 +4,7 @@ import re.artoo.lance.func.TryIntFunction2;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Probe;
+import re.artoo.lance.query.cursor.operation.atom.Atom;
 
 public record Reduce<ELEMENT>(Probe<? extends ELEMENT> probe, Atom<ELEMENT> atom,
                               TryIntFunction2<? super ELEMENT, ? super ELEMENT, ? extends ELEMENT> operation) implements Cursor<ELEMENT> {

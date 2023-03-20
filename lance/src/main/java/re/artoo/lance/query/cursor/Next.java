@@ -1,4 +1,6 @@
-package re.artoo.lance.query.cursor.operation;
+package re.artoo.lance.query.cursor;
+
+import re.artoo.lance.query.FetchException;
 
 public sealed interface Next<ELEMENT> {
   static <ELEMENT> Next<ELEMENT> success(ELEMENT element) {
@@ -9,12 +11,10 @@ public sealed interface Next<ELEMENT> {
     return (Next<ELEMENT>) Nothing.Companion;
   }
   static <ELEMENT> Next<ELEMENT> failure(Throwable exception) {
-    return new Failure<>(exception);
+    return new Failure<>(FetchException.with(exception));
   }
-
-  default ELEMENT element() { return null; }
 }
 
 record Success<ELEMENT>(ELEMENT element) implements Next<ELEMENT> {}
 enum Nothing implements Next<Object> {Companion}
-record Failure<ELEMENT>(Throwable exception) implements Next<ELEMENT> {}
+record Failure<ELEMENT>(FetchException exception) implements Next<ELEMENT> {}

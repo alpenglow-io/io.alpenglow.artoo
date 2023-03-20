@@ -6,8 +6,13 @@ import java.util.function.Consumer;
 public interface TryConsumer1<A> extends Consumer<A> {
   void invoke(A a) throws Throwable;
 
-  default <SELF> SELF self(SELF self, A a) throws Throwable {
+  default <SELF> SELF selfInvoke(SELF self, A a) throws Throwable {
     invoke(a);
+    return self;
+  }
+
+  default <SELF> SELF selfAccept(SELF self, A a) {
+    accept(a);
     return self;
   }
 

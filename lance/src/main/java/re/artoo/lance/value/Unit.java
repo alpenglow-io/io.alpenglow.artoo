@@ -4,8 +4,10 @@ import re.artoo.lance.func.TryConsumer1;
 import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.func.TryPredicate1;
 import re.artoo.lance.func.TrySupplier1;
+import re.artoo.lance.value.unit.None;
+import re.artoo.lance.value.unit.Some;
 
-public sealed interface Unit<ELEMENT> {
+public sealed interface Unit<ELEMENT> permits Some, None {
   static <ELEMENT> Unit<ELEMENT> of(ELEMENT element) {
     return new Some<>(element);
   }
@@ -22,12 +24,12 @@ public sealed interface Unit<ELEMENT> {
     };
   }
 
-  default <TARGET> Unit<TARGET> flatMap(TryFunction1<? super ELEMENT, ? extends Unit<TARGET>> operation) {
+  default <TARGET> Unit<? extends TARGET> flatMap(TryFunction1<? super ELEMENT, ? extends Unit<? extends TARGET>> operation) {
     return switch (this) {
-      case Some<ELEMENT> some -> switch (operation.apply(some.element())) {
-        case Some<TARGET> target -> target;
-        case None ignored -> none();
-      };
+      case Some<ELEMENT> some -> {
+        var applied = operation.apply(some.element());
+        yield applied instanceof Some<?> ignored ? applied : none();
+      }
       case None ignored -> none();
     };
   }
@@ -75,5 +77,3 @@ public sealed interface Unit<ELEMENT> {
   }
 }
 
-enum None implements Unit<Object> {Companion}
-record Some<ELEMENT>(ELEMENT element) implements Unit<ELEMENT> {}

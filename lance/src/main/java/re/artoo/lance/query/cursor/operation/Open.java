@@ -13,7 +13,7 @@ public record Open<ELEMENT>(ELEMENT[] elements, Atom<ELEMENT> atom) implements C
 
   @Override
   public ELEMENT fetch() throws Throwable {
-    return canFetch() ? atom.elementThenFetched() : FetchException.byThrowing("Can't fetch next element in open cursor (no more elements?)");
+    return canFetch() ? atom.elementThenFetched() : FetchException.byThrowing("Can't fetch next element in open cursor (no more steps?)");
   }
 
   @Override

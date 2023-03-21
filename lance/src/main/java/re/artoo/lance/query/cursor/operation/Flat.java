@@ -24,7 +24,7 @@ public record Flat<ELEMENT>(Probe<Probe<ELEMENT>> probe, Atom<Probe<ELEMENT>> ma
   }
   @Override
   public ELEMENT fetch() throws Throwable {
-    return canFetch() ? flatten.elementThenFetched() : FetchException.byThrowing("Can't fetch next element from cursor (no more flattable elements?)");
+    return canFetch() ? flatten.elementThenFetched() : FetchException.byThrowing("Can't fetch next element from cursor (no more flattable steps?)");
   }
 
 }

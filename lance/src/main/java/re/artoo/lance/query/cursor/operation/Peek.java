@@ -12,7 +12,7 @@ public record Peek<ELEMENT>(Probe<ELEMENT> probe, Atom<ELEMENT> atom, TryIntCons
   }
   @Override
   public ELEMENT fetch() throws Throwable {
-    return canFetch() ? atom.elementThenFetched() : FetchException.byThrowing("Can't fetch next element from peek cursor (no more peekable elements?)");
+    return canFetch() ? atom.elementThenFetched() : FetchException.byThrowing("Can't fetch next element from peek cursor (no more peekable steps?)");
   }
 
   @Override

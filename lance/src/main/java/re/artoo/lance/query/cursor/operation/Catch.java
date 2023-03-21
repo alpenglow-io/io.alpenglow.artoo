@@ -13,7 +13,7 @@ public record Catch<ELEMENT>(Probe<ELEMENT> probe, Atom<ELEMENT> atom, TryConsum
 
   @Override
   public ELEMENT fetch() throws Throwable {
-      return canFetch() ? atom.elementThenFetched() : FetchException.byThrowing("Can't fetch next element from catch cursor (no more catchable elements?)");
+      return canFetch() ? atom.elementThenFetched() : FetchException.byThrowing("Can't fetch next element from catch cursor (no more catchable steps?)");
   }
 
   @Override

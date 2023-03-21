@@ -24,7 +24,7 @@ public interface Probe<ELEMENT> extends Iterator<ELEMENT> {
     return switch (next) {
       case Success<ELEMENT> success -> success.element();
       case Failure<ELEMENT> failure -> throw failure.exception();
-      case Nothing ignored -> FetchException.byThrowing("Can't fetch next element from iterator (no more elements?)");
+      case Nothing ignored -> FetchException.byThrowing("Can't fetch next element from iterator (no more steps?)");
     };
   }
 

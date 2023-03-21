@@ -13,7 +13,7 @@ public record Fold<ELEMENT, FOLDED>(Probe<? extends ELEMENT> probe, Atom<FOLDED>
 
   @Override
   public FOLDED fetch() throws Throwable {
-    return canFetch() ? atom.elementThenFetched() : FetchException.byThrowing("Can't fetch next element on reduce cursor (no more reducible elements?)");
+    return canFetch() ? atom.elementThenFetched() : FetchException.byThrowing("Can't fetch next element on reduce cursor (no more reducible steps?)");
   }
 
   @Override

@@ -15,7 +15,7 @@ public record Map<ELEMENT, RETURN>(Probe<ELEMENT> probe, Atom<ELEMENT> current, 
   @Override
   public Next<RETURN> nextElement() {
     try {
-      return hasNext() ? Next.success(operation.invoke(current.indexThenInc(), current.elementThenFetched())) : Next.failure(FetchException.byThrowing("Can't fetch next element from cursor (no more mappable elements?)"));
+      return hasNext() ? Next.success(operation.invoke(current.indexThenInc(), current.elementThenFetched())) : Next.failure(FetchException.byThrowing("Can't fetch next element from cursor (no more mappable steps?)"));
     } catch (Throwable throwable) {
       return Next.failure(throwable);
     }

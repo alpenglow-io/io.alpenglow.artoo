@@ -1,39 +1,40 @@
-package re.artoo.lance.value.array;
+package re.artoo.lance.value.steam;
 
-import re.artoo.lance.value.Array;
+import re.artoo.lance.value.Steam;
+import re.artoo.lance.value.Puff;
 
 import java.util.Arrays;
 import java.util.Iterator;
 
-import static re.artoo.lance.value.array.Elements.Companion;
+import static re.artoo.lance.value.steam.Elements.Companion;
 
-public record Some<ELEMENT>(ELEMENT[] elements) implements Array<ELEMENT> {
+public record Some<ELEMENT>(Puff<ELEMENT>[] puffs) implements Steam<ELEMENT> {
   @SafeVarargs
-  public Some(ELEMENT[] head, ELEMENT... tail) {
+  public Some(Puff<ELEMENT>[] head, Puff<ELEMENT>... tail) {
     this(Companion.concat(head, tail));
   }
   @SafeVarargs
-  public Some(ELEMENT head, ELEMENT... tail) {
+  public Some(Puff<ELEMENT> head, Puff<ELEMENT>... tail) {
     this(Companion.asArray(head), tail);
   }
   @SafeVarargs
-  public Some(ELEMENT[] head, ELEMENT body, ELEMENT... tail) {
+  public Some(Puff<ELEMENT>[] head, Puff<ELEMENT> body, Puff<ELEMENT>... tail) {
     this(Companion.concat(head, Companion.concat(Companion.asArray(body), tail)));
   }
   @SafeVarargs
-  public Some(int from, ELEMENT... elements) {
+  public Some(int from, Puff<ELEMENT>... elements) {
     this(Companion.copy(from, elements));
   }
-  public Some(ELEMENT[] head, ELEMENT tail) {
+  public Some(Puff<ELEMENT>[] head, Puff<ELEMENT> tail) {
     this(head, Companion.asArray(tail));
   }
 
-  public ELEMENT element() { return elements[0]; }
+  public Puff<ELEMENT> step() { return puffs[0]; }
 
   @Override
   public String toString() {
     return "Some{" +
-      "steps=" + Arrays.toString(elements) +
+      "steps=" + Arrays.toString(puffs) +
       '}';
   }
 
@@ -47,12 +48,12 @@ public record Some<ELEMENT>(ELEMENT[] elements) implements Array<ELEMENT> {
 
     @Override
     public boolean hasNext() {
-      return index < elements.length;
+      return index < puffs.length;
     }
 
     @Override
     public ELEMENT next() {
-      return elements[index++];
+      return puffs[index++].apply();
     }
   }
 }

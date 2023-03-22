@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
-public class ValueTest {
+public class LocalTest {
   @Test
   @Disabled
   public void shouldGetValue() throws InterruptedException {

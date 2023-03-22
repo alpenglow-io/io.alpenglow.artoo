@@ -4,40 +4,37 @@ import re.artoo.lance.func.TryConsumer1;
 import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.func.TryPredicate1;
 import re.artoo.lance.func.TrySupplier1;
-import re.artoo.lance.value.unit.Empty;
+import re.artoo.lance.value.unit.Clear;
 import re.artoo.lance.value.unit.Value;
 
-public sealed interface Scope<ELEMENT> permits Value, Empty {
+public sealed interface Scope<ELEMENT> permits Value, Clear {
   static <ELEMENT> Scope<ELEMENT> of(ELEMENT element) {
     return new Value<>(element);
   }
 
   @SuppressWarnings("unchecked")
-  private static <ELEMENT> Scope<ELEMENT> empty() {
-    return (Scope<ELEMENT>) Empty.Companion;
+  private static <ELEMENT> Scope<ELEMENT> clear() {
+    return (Scope<ELEMENT>) Clear.Companion;
   }
 
   default <TARGET> Scope<? extends TARGET> map(TryFunction1<? super ELEMENT, ? extends TARGET> operation) {
     return switch (this) {
       case Value<ELEMENT> value -> Scope.of(operation.apply(value.element()));
-      case Empty ignored -> empty();
+      case Clear ignored -> clear();
     };
   }
 
-  default <TARGET> Scope<? extends TARGET> flatMap(TryFunction1<? super ELEMENT, ? extends Scope<? extends TARGET>> operation) {
+  default <TARGET, T extends TARGET> Scope<? extends TARGET> flatMap(TryFunction1<? super ELEMENT, ? extends Scope<T>> operation) {
     return switch (this) {
-      case Value<ELEMENT> value -> {
-        var applied = operation.apply(value.element());
-        yield applied instanceof Value<?> ignored ? applied : empty();
-      }
-      case Empty ignored -> empty();
+      case Value<ELEMENT> value -> operation.apply(value.element()) instanceof Value<T> val ? val : clear();
+      case Clear ignored -> clear();
     };
   }
 
   default Scope<ELEMENT> filter(TryPredicate1<? super ELEMENT> condition) {
     return switch (this) {
-      case Value<ELEMENT> value -> condition.test(value.element()) ? value : empty();
-      case Empty ignored -> empty();
+      case Value<ELEMENT> value -> condition.test(value.element()) ? value : clear();
+      case Clear ignored -> clear();
     };
   }
 
@@ -50,14 +47,14 @@ public sealed interface Scope<ELEMENT> permits Value, Empty {
 
   default Scope<ELEMENT> or(ELEMENT element) {
     return switch (this) {
-      case Empty ignored -> new Value<>(element);
+      case Clear ignored -> new Value<>(element);
       default -> this;
     };
   }
 
   default <EXCEPTION extends RuntimeException> Scope<ELEMENT> or(TrySupplier1<EXCEPTION> exception) {
     return switch (this) {
-      case Empty ignored -> throw exception.get();
+      case Clear ignored -> throw exception.get();
       default -> this;
     };
   }

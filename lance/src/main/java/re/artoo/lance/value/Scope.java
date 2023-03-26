@@ -4,71 +4,71 @@ import re.artoo.lance.func.TryConsumer1;
 import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.func.TryPredicate1;
 import re.artoo.lance.func.TrySupplier1;
-import re.artoo.lance.value.unit.Clean;
-import re.artoo.lance.value.unit.Local;
+import re.artoo.lance.value.scope.Clean;
+import re.artoo.lance.value.scope.Local;
 
-public sealed interface Scope<ELEMENT> permits Local, Clean {
-  static <ELEMENT> Scope<ELEMENT> of(ELEMENT element) {
-    return new Local<>(element);
+public sealed interface Scope<SOURCE> permits Local, Clean {
+  static <SOURCE> Scope<SOURCE> of(SOURCE source) {
+    return new Local<>(source);
   }
 
   @SuppressWarnings("unchecked")
-  private static <ELEMENT> Scope<ELEMENT> clean() {
-    return (Scope<ELEMENT>) Clean.Companion;
+  private static <SOURCE> Scope<SOURCE> clean() {
+    return (Scope<SOURCE>) Clean.Companion;
   }
 
-  default <TARGET> Scope<? extends TARGET> map(TryFunction1<? super ELEMENT, ? extends TARGET> operation) {
+  default <TARGET> Scope<? extends TARGET> map(TryFunction1<? super SOURCE, ? extends TARGET> operation) {
     return switch (this) {
-      case Local<ELEMENT> local -> Scope.of(operation.apply(local.element()));
+      case Local<SOURCE> local -> Scope.of(operation.apply(local.element()));
       case Clean ignored -> clean();
     };
   }
 
-  default <TARGET, T extends TARGET> Scope<? extends TARGET> flatMap(TryFunction1<? super ELEMENT, ? extends Scope<T>> operation) {
+  default <TARGET, T extends TARGET> Scope<? extends TARGET> flatMap(TryFunction1<? super SOURCE, ? extends Scope<T>> operation) {
     return switch (this) {
-      case Local<ELEMENT> local -> operation.apply(local.element()) instanceof Local<T> val ? val : clean();
+      case Local<SOURCE> local -> operation.apply(local.element()) instanceof Local<T> val ? val : clean();
       case Clean ignored -> clean();
     };
   }
 
-  default Scope<ELEMENT> filter(TryPredicate1<? super ELEMENT> condition) {
+  default Scope<SOURCE> filter(TryPredicate1<? super SOURCE> condition) {
     return switch (this) {
-      case Local<ELEMENT> local -> condition.test(local.element()) ? local : clean();
+      case Local<SOURCE> local -> condition.test(local.element()) ? local : clean();
       case Clean ignored -> clean();
     };
   }
 
-  default Scope<ELEMENT> peek(TryConsumer1<? super ELEMENT> operation) {
+  default Scope<SOURCE> peek(TryConsumer1<? super SOURCE> operation) {
     return switch (this) {
-      case Local<ELEMENT> local -> operation.selfAccept(this, local.element());
+      case Local<SOURCE> local -> operation.selfAccept(this, local.element());
       default -> this;
     };
   }
 
-  default Scope<ELEMENT> or(ELEMENT element) {
+  default Scope<SOURCE> or(SOURCE source) {
     return switch (this) {
-      case Clean ignored -> new Local<>(element);
+      case Clean ignored -> new Local<>(source);
       default -> this;
     };
   }
 
-  default <EXCEPTION extends RuntimeException> Scope<ELEMENT> or(TrySupplier1<EXCEPTION> exception) {
+  default <EXCEPTION extends RuntimeException> Scope<SOURCE> or(TrySupplier1<EXCEPTION> exception) {
     return switch (this) {
       case Clean ignored -> throw exception.get();
       default -> this;
     };
   }
 
-  default ELEMENT otherwise(ELEMENT element) {
+  default SOURCE otherwise(SOURCE source) {
     return switch (this) {
-      case Local<ELEMENT> local -> local.element();
-      default -> element;
+      case Local<SOURCE> local -> local.element();
+      default -> source;
     };
   }
 
-  default <EXCEPTION extends RuntimeException> ELEMENT otherwise(TrySupplier1<? extends EXCEPTION> operation) {
+  default <EXCEPTION extends RuntimeException> SOURCE otherwise(TrySupplier1<EXCEPTION> operation) {
     return switch (this) {
-      case Local<ELEMENT> local -> local.element();
+      case Local<SOURCE> local -> local.element();
       default -> throw operation.get();
     };
   }

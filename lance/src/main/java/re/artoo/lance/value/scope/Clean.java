@@ -1,4 +1,4 @@
-package re.artoo.lance.value.unit;
+package re.artoo.lance.value.scope;
 
 import re.artoo.lance.value.Scope;
 

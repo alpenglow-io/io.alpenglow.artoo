@@ -11,6 +11,7 @@ import re.artoo.lance.value.array.Some;
 import java.util.*;
 
 import static java.lang.System.arraycopy;
+import static jdk.internal.logger.BootstrapLogger.BootstrapExecutors.tail;
 
 public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess permits None, Some {
 
@@ -34,23 +35,21 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
 
   default Array<ELEMENT> concat(Array<ELEMENT> array) {
     return switch (this) {
-      case None ignored when array instanceof Some<ELEMENT> tail -> tail;
-      case Some<ELEMENT> head when array instanceof Some<ELEMENT> tail -> new Some<>(head.elements(), tail.elements());
-      default -> this;
+      case Some<ELEMENT>(var head, var ign1) when array instanceof Some<ELEMENT>(var tail, var ign2) -> new Some<>(head, tail);
+      default -> array;
     };
   }
 
   default Array<ELEMENT> push(ELEMENT element) {
     return switch (this) {
-      case None ignored when element != null -> new Some<>(element);
-      case Some<ELEMENT> some when element != null -> new Some<>(some.elements(), element);
-      default -> this;
+      case Some<ELEMENT> some -> new Some<>(some.elements(), element);
+      case None ignored -> new Some<>(element);
     };
   }
 
   default Optional<ELEMENT> at(int index) {
     return switch (this) {
-      case Some<ELEMENT> some when index >= 0 && some.elements().length > index -> Optional.of(some.elements()[index]);
+      case Some<ELEMENT>(var elements, var start) when index >= 0 && elements.length > index + start -> Optional.of(elements[index]);
       default -> Optional.empty();
     };
   }
@@ -71,7 +70,7 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
 
   default boolean includes(ELEMENT element) {
     return switch (this) {
-      case Some<ELEMENT> some when some.head() instanceof Some<ELEMENT> head -> head.element().equals(element) || some.tail().includes(element);
+      case Some<ELEMENT>(var elements, var ignored) when elements.length > 0 -> elements[0].equals(element) || tail().includes(element);
       default -> false;
     };
   }
@@ -92,14 +91,15 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
 
   default Array<ELEMENT> head() {
     return switch (this) {
-      case Some<ELEMENT> some -> new Some<>(some.elements()[0]);
+      case Some<ELEMENT>(var elements, var __) when elements.length > 0 -> Array.of(elements[0]);
+      case Some<ELEMENT> ignored -> Array.none();
       case None ignored -> this;
     };
   }
 
   default Array<ELEMENT> tail() {
     return switch (this) {
-      case Some<ELEMENT> some when some.elements().length > 1 -> new Some<>(1, some.elements());
+      case Some<ELEMENT>(var elements) when elements.length > 1 -> new Some<>(1, elements);
       case Some<ELEMENT> ignored -> Array.none();
       case None ignored -> this;
     };
@@ -117,7 +117,7 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
 
   default int length() {
     return switch (this) {
-      case Some<ELEMENT> some -> some.elements().length;
+      case Some<ELEMENT>(var elements) -> elements.length;
       case None ignored -> 0;
     };
   }
@@ -125,7 +125,7 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
   @SuppressWarnings("unchecked")
   default <TARGET> Array<TARGET> map(TryFunction1<? super ELEMENT, ? extends TARGET> operation) {
     return switch (this) {
-      case Some<ELEMENT> some when some.head() instanceof Some<ELEMENT> head -> Array.<TARGET>of(operation.apply(head.element())).concat(some.tail().map(operation));
+      case Some<ELEMENT> some when some.head() instanceof Some<ELEMENT>(var head) -> Array.<TARGET>of(operation.apply(head[0])).concat(some.tail().map(operation));
       default -> Array.none();
     };
   }
@@ -142,7 +142,7 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
    */
   default <TARGET, ARRAY extends Array<TARGET>> Array<TARGET> flatMap(TryFunction1<? super ELEMENT, ? extends ARRAY> operation) {
     return switch (this) {
-      case Some<ELEMENT> some when some.head() instanceof Some<ELEMENT> head -> operation.apply(head.element()).concat(some.tail().flatMap(operation));
+      case Some<ELEMENT> some when some.head() instanceof Some<ELEMENT>(var head) -> operation.apply(head[0]).concat(some.tail().flatMap(operation));
       default -> Array.none();
     };
   }

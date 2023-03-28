@@ -15,8 +15,8 @@
 
   <properties>
     <encoding>UTF-8</encoding>
-    <java.version>19</java.version>
-    <java.release>19</java.release>
+    <java.version>20</java.version>
+    <java.release>20</java.release>
     <maven.min.version>3.6.0</maven.min.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>

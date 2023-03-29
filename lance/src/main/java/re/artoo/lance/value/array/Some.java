@@ -7,10 +7,10 @@ import java.util.Iterator;
 
 import static re.artoo.lance.value.array.Elements.Companion;
 
-public record Some<ELEMENT>(ELEMENT[] elements, int from) implements Array<ELEMENT> {
-  public Some(ELEMENT[] elements) {
-    this(elements, 0);
-  }
+public record Some<ELEMENT>(ELEMENT... elements) implements Array<ELEMENT> {
+  @SafeVarargs
+  public Some {}
+
   @SafeVarargs
   public Some(ELEMENT[] head, ELEMENT... tail) {
     this(Companion.concat(head, tail));
@@ -23,21 +23,16 @@ public record Some<ELEMENT>(ELEMENT[] elements, int from) implements Array<ELEME
   public Some(ELEMENT[] head, ELEMENT body, ELEMENT... tail) {
     this(Companion.concat(head, Companion.concat(Companion.asArray(body), tail)));
   }
-  @SafeVarargs
-  public Some(int from, ELEMENT... elements) {
-    this(Companion.copy(from, elements));
-  }
+
   public Some(ELEMENT[] head, ELEMENT tail) {
     this(head, Companion.asArray(tail));
   }
 
-  public ELEMENT element() { return elements[0]; }
+  public ELEMENT element() { return elements[from]; }
 
   @Override
   public String toString() {
-    return "Some{" +
-      "steps=" + Arrays.toString(elements) +
-      '}';
+    return Arrays.toString(elements);
   }
 
   @Override

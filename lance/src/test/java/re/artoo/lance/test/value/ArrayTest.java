@@ -9,6 +9,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ArrayTest {
   @Test
+  void shouldConcatElements() {
+    var array = Array.of(1, 2, 3);
+
+    assertThat(array.concat(4, 5, 6)).containsExactly(1, 2, 3, 4, 5, 6);
+  }
+
+  @Test
   void shouldMakeSomeArrayOperations() {
     var array = Array.of(1, 2, 3, 4);
 

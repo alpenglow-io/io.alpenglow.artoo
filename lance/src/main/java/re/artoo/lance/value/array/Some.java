@@ -7,10 +7,7 @@ import java.util.Iterator;
 
 import static re.artoo.lance.value.array.Elements.Companion;
 
-public record Some<ELEMENT>(ELEMENT... elements) implements Array<ELEMENT> {
-  @SafeVarargs
-  public Some {}
-
+public record Some<ELEMENT>(ELEMENT[] elements) implements Array<ELEMENT> {
   @SafeVarargs
   public Some(ELEMENT[] head, ELEMENT... tail) {
     this(Companion.concat(head, tail));
@@ -27,8 +24,6 @@ public record Some<ELEMENT>(ELEMENT... elements) implements Array<ELEMENT> {
   public Some(ELEMENT[] head, ELEMENT tail) {
     this(head, Companion.asArray(tail));
   }
-
-  public ELEMENT element() { return elements[from]; }
 
   @Override
   public String toString() {

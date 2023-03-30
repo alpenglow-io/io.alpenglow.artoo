@@ -2,17 +2,30 @@ package re.artoo.lance.test.value;
 
 import org.junit.jupiter.api.Test;
 import re.artoo.lance.value.Array;
+import re.artoo.lance.value.Steam;
 
+import java.util.ArrayList;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ArrayTest {
   @Test
   void shouldConcatElements() {
-    var array = Array.of(1, 2, 3);
+    var list1 = new ArrayList<Integer>();
+    for (int index = 0; index < 200_000; index++) {
+      list1.add(index);
+    }
+    var list2 = new ArrayList<Integer>();
+    for (int index = 200_000; index < 400_000; index++) {
+      list2.add(index);
+    }
+    var array = Array.of(list1.toArray(Integer[]::new));
 
-    assertThat(array.concat(4, 5, 6)).containsExactly(1, 2, 3, 4, 5, 6);
+    var concated = array.concat(list2.toArray(Integer[]::new));
+    assertThat(concated).endsWith(399_999);
+    assertThat(concated.map(it -> it * 2)).endsWith(399_999 * 2);
   }
 
   @Test

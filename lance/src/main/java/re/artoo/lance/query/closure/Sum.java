@@ -23,7 +23,6 @@ public final class Sum<T, N, V> implements Closure<T, V> {
 
   private V sum(final N selected, final Number sum) {
     return switch (selected) {
-      case null, default -> (V) sum;
       case Byte val       -> sum != null ? (V) Byte.valueOf((byte) (sum.byteValue() + val)) : (V) val;
       case Short val      -> sum != null ? (V) Short.valueOf((short) (sum.shortValue() + val)) : (V) val;
       case Integer val    -> sum != null ? (V) Integer.valueOf(sum.intValue() + val) : (V) val;
@@ -32,6 +31,7 @@ public final class Sum<T, N, V> implements Closure<T, V> {
       case Double val     -> sum != null ? (V) Double.valueOf(sum.doubleValue() + val) : (V) val;
       case BigInteger val -> sum != null ? (V) BigInteger.valueOf(sum.longValue() + val.longValue()) : (V) val;
       case BigDecimal val -> sum != null ? (V) BigDecimal.valueOf(sum.doubleValue() + val.doubleValue()) : (V) val;
+      case null, default -> (V) sum;
     };
   }
 

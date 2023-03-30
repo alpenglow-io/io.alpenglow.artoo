@@ -142,10 +142,14 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
     };
   }
 
-  @SuppressWarnings("unchecked")
   default <TARGET> Array<TARGET> map(TryFunction1<? super ELEMENT, ? extends TARGET> operation) {
+    return map(0, operation);
+  }
+
+  private <TARGET> Array<TARGET> map(final int index, TryFunction1<? super ELEMENT, ? extends TARGET> operation) {
+    System.out.println(index);
     return switch (this) {
-      case Some<ELEMENT> some when some.head() instanceof Some<ELEMENT>(var head, var ignored) -> Array.<TARGET>of(operation.apply(head[0])).concat(tail().map(operation));
+      case Some<ELEMENT>(var some) when index < some.length -> new Some<TARGET>(operation.apply(some[index])).concat(map(index + 1, operation));
       default -> Array.none();
     };
   }
@@ -213,8 +217,8 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
 
   private int indexOf(int index, ELEMENT element) {
     return switch (this) {
-      case Some<ELEMENT> some when some.head() instanceof Some<ELEMENT> head && head.element().equals(element) -> index;
-      case Some<ELEMENT> some when some.head() instanceof Some<ELEMENT> head && !head.element().equals(element) -> some.tail().indexOf(++index, element);
+      case Some<ELEMENT>(var some) when some[0].equals(element) -> index;
+      case Some<ELEMENT>(var some) when !some[0].equals(element) -> tail().indexOf(++index, element);
       default -> -1;
     };
   }
@@ -225,16 +229,18 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
 
   default String join(char separator) {
     return switch (this) {
-      case Some<ELEMENT> some when some.head() instanceof Some<ELEMENT> head ->
-        some.tail().fold(new StringBuilder(head.element().toString()), (builder, element) -> builder.append("%c%s".formatted(separator, element))).toString();
+      case Some<ELEMENT>(var some) -> tail()
+        .fold(new StringBuilder(some[0].toString()), (builder, element) -> builder.append("%c%s".formatted(separator, element)))
+        .toString();
       default -> "";
     };
   }
 
   default String join(String separator) {
     return switch (this) {
-      case Some<ELEMENT> some when some.head() instanceof Some<ELEMENT> head ->
-        some.tail().fold(new StringBuilder(head.element().toString()), (builder, element) -> builder.append("%s%s".formatted(separator, element))).toString();
+      case Some<ELEMENT>(var some) -> tail()
+        .fold(new StringBuilder(some[0].toString()), (builder, element) -> builder.append("%s%s".formatted(separator, element)))
+        .toString();
       default -> "";
     };
   }
@@ -248,9 +254,9 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
 
   default ELEMENT[] copyTo(TryIntFunction<ELEMENT[]> array) {
     return switch (this) {
-      case Some<ELEMENT> some -> {
-        ELEMENT[] dest = array.apply(some.elements().length);
-        arraycopy(some.elements(), 0, dest, 0, some.elements().length);
+      case Some<ELEMENT>(var some) -> {
+        var dest = array.apply(some.length);
+        arraycopy(some, 0, dest, 0, some.length);
         yield dest;
       }
       case None none -> none.elements();
@@ -259,7 +265,7 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
 
   default List<ELEMENT> toList() {
     return switch (this) {
-      case Some<ELEMENT> some -> List.of(some.elements());
+      case Some<ELEMENT>(var some) -> List.of(some);
       case None ignored -> List.of();
     };
   }

@@ -3,12 +3,12 @@ package re.artoo.lance.query.cursor.operation;
 import re.artoo.lance.func.TryIntFunction2;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
-import re.artoo.lance.query.cursor.Probe;
+import re.artoo.lance.query.cursor.Fetch;
 import re.artoo.lance.query.cursor.operation.atom.Atom;
 
-public record Reduce<ELEMENT>(Probe<? extends ELEMENT> probe, Atom<ELEMENT> atom,
+public record Reduce<ELEMENT>(Fetch<? extends ELEMENT> probe, Atom<ELEMENT> atom,
                               TryIntFunction2<? super ELEMENT, ? super ELEMENT, ? extends ELEMENT> operation) implements Cursor<ELEMENT> {
-  public Reduce(Probe<? extends ELEMENT> probe, TryIntFunction2<? super ELEMENT, ? super ELEMENT, ? extends ELEMENT> operation) {
+  public Reduce(Fetch<? extends ELEMENT> probe, TryIntFunction2<? super ELEMENT, ? super ELEMENT, ? extends ELEMENT> operation) {
     this(probe, Atom.reference(), operation);
   }
 

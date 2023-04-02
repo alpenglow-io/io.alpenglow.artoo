@@ -12,7 +12,7 @@ import re.artoo.lance.query.cursor.operation.Peek;
 
 import static re.artoo.lance.query.cursor.operation.Filter.presenceOnly;
 
-public sealed interface Mappator<ELEMENT> extends Probe<ELEMENT> permits Cursor {
+public sealed interface Mappator<ELEMENT> extends Fetch<ELEMENT> permits Cursor {
   default Cursor<ELEMENT> peek(TryConsumer1<? super ELEMENT> peek) {
     return peek((index, element) -> peek.invoke(element));
   }

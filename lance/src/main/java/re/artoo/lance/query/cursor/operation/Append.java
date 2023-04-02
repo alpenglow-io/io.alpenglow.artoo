@@ -1,10 +1,10 @@
 package re.artoo.lance.query.cursor.operation;
 
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.cursor.Next;
-import re.artoo.lance.query.cursor.Probe;
+import re.artoo.lance.query.FetchException;
+import re.artoo.lance.query.cursor.Fetch;
 
-public record Append<ELEMENT>(Probe<ELEMENT> head, Probe<ELEMENT> tail) implements Cursor<ELEMENT> {
+public record Append<ELEMENT>(Fetch<ELEMENT> head, Fetch<ELEMENT> tail) implements Cursor<ELEMENT> {
   @Override
   public boolean hasNext() {
     return head.hasNext() || tail.hasNext();
@@ -12,6 +12,10 @@ public record Append<ELEMENT>(Probe<ELEMENT> head, Probe<ELEMENT> tail) implemen
 
   @Override
   public Next<ELEMENT> next() {
-    return head.hasNext() ? head.next() : tail.hasNext() ? tail.next() : Next.failure("append", "appendable");
+    return head.hasNext()
+      ? head.next()
+      : tail.hasNext()
+      ? tail.next()
+      : FetchException.byThrowingCantFetchNextElement("append", "appendable");
   }
 }

@@ -8,7 +8,7 @@ import re.artoo.lance.value.Array;
 
 import java.util.Objects;
 
-public sealed interface Joinable<FIRST> extends Probe<FIRST> permits Cursor {
+public sealed interface Joinable<FIRST> extends Fetch<FIRST> permits Cursor {
   default <SECOND> Join<FIRST, SECOND> outerJoin(Cursor<SECOND> right) {
     return new Outer<>(new Left<>(this, right), new Right<>(this, right));
   }
@@ -24,21 +24,21 @@ public sealed interface Joinable<FIRST> extends Probe<FIRST> permits Cursor {
 }
 
 final class Left<FIRST, SECOND> implements Join<FIRST, SECOND> {
-  private final Probe<FIRST> left;
-  private final Probe<SECOND> right;
+  private final Fetch<FIRST> left;
+  private final Fetch<SECOND> right;
   private final TryPredicate2<? super FIRST, ? super SECOND> condition;
 
-  Left(Probe<FIRST> left, Probe<SECOND> right) {
+  Left(Fetch<FIRST> left, Fetch<SECOND> right) {
     this(left, right, Objects::deepEquals);
   }
 
-  private Left(Probe<FIRST> left, Probe<SECOND> right, TryPredicate2<? super FIRST, ? super SECOND> condition) {
+  private Left(Fetch<FIRST> left, Fetch<SECOND> right, TryPredicate2<? super FIRST, ? super SECOND> condition) {
     this.left = left;
     this.right = right;
     this.condition = condition;
   }
 
-  private Probe<SECOND> rightProbe;
+  private Fetch<SECOND> rightProbe;
   private FIRST first;
 
   @Override
@@ -71,21 +71,21 @@ final class Left<FIRST, SECOND> implements Join<FIRST, SECOND> {
 }
 
 final class Right<FIRST, SECOND> implements Join<FIRST, SECOND> {
-  private final Probe<FIRST> left;
-  private final Probe<SECOND> right;
+  private final Fetch<FIRST> left;
+  private final Fetch<SECOND> right;
   private final TryPredicate2<? super FIRST, ? super SECOND> condition;
   private Array<Pair<FIRST, SECOND>> scrolled = Array.none();
 
-  Right(Probe<FIRST> left, Probe<SECOND> right) {
+  Right(Fetch<FIRST> left, Fetch<SECOND> right) {
     this(left, right, Objects::deepEquals);
   }
-  Right(Probe<FIRST> left, Probe<SECOND> right, TryPredicate2<? super FIRST, ? super SECOND> condition) {
+  Right(Fetch<FIRST> left, Fetch<SECOND> right, TryPredicate2<? super FIRST, ? super SECOND> condition) {
     this.left = left;
     this.right = right;
     this.condition = condition;
   }
 
-  private Probe<FIRST> leftProbe;
+  private Fetch<FIRST> leftProbe;
   private SECOND second;
 
   @Override

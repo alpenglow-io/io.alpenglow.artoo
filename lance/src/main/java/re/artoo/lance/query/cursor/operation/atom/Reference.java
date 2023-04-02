@@ -1,9 +1,9 @@
 package re.artoo.lance.query.cursor.operation.atom;
 
-import re.artoo.lance.query.cursor.Next;
+import re.artoo.lance.query.cursor.Fetch;
+import re.artoo.lance.query.cursor.Fetch.Next;
 
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 final class Reference<ELEMENT> implements Atom<ELEMENT> {

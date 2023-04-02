@@ -20,7 +20,7 @@ public class SortableTest implements re.artoo.lance.test.Test {
   }
 
   @Test
-  @DisplayName("should order by hashcode on big pseudo data set")
+  @DisplayName("should order by hashcode on big pseudo data elements")
   public void shouldOrderByHashcodeOnBigSet() {
     final var ints = range(0, 1_000).map(it -> 999 - it).boxed().toArray(Integer[]::new);
     final var expected = range(0, 1_000).boxed().toArray(Integer[]::new);

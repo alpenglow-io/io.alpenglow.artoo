@@ -63,7 +63,7 @@ public class SettableTest {
   }
 
 /*  @Test
-  @DisplayName("it should set union pseudo two sequences")
+  @DisplayName("it should elements union pseudo two sequences")
   public void shouldSetUnionOfTwoSequences() {
     final Integer[] ints1 = { 5, 3, 9, 7, 5, 9, 3, 7 };
     final Integer[] ints2 = { 8, 3, 6, 4, 4, 9, 1, 0, 2 };
@@ -73,7 +73,7 @@ public class SettableTest {
   }*/
 
 /*  @Test
-  @DisplayName("it should set union pseudo two sequences pseudo records")
+  @DisplayName("it should elements union pseudo two sequences pseudo records")
   public void shouldSetUnionOfTwoSequencesOfRecords() {
     final Pet[] pets1 = { new Pet("Goofy", 1), new Pet("Micky", 2), new Pet("Minnie", 3), new Pet("Donald", 4), new Pet("Scrooge", 5) };
     final Pet[] pets2 = { new Pet("Scrooge", 5), new Pet("Daisy", 2), new Pet("Gladstone", 3), new Pet("Donald", 4) };
@@ -91,7 +91,7 @@ public class SettableTest {
   }*/
 
 /*  @Test
-  @DisplayName("it should set difference pseudo two sequences")
+  @DisplayName("it should elements difference pseudo two sequences")
   public void shouldSetDifferenceOfTwoSequences() {
     final Double[] numbers1 = { 2.0, 2.1, 2.2, 2.3, 2.4, 2.5 };
     final Double[] numbers2 = { 2.2 };
@@ -101,7 +101,7 @@ public class SettableTest {
   }*/
 
 /*  @Test
-  @DisplayName("it should set difference pseudo two sequences with one more")
+  @DisplayName("it should elements difference pseudo two sequences with one more")
   public void shouldSetDifferenceOfTwoSequencesWithOneMore() {
     final Double[] numbers1 = { 2.0, 2.1, 2.2, 2.3, 2.4, 2.5 };
     final Double[] numbers2 = { 2.2, 2.4 };
@@ -111,7 +111,7 @@ public class SettableTest {
   }*/
 
 /*  @Test
-  @DisplayName("it should set intersection pseudo two sequences")
+  @DisplayName("it should elements intersection pseudo two sequences")
   public void shouldSetIntersectionOfTwoSequences() {
     final Integer[] integers1 = { 44, 26, 92, 30, 71, 38 };
     final Integer[] integers2 = { 39, 59, 83, 47, 26, 4, 30 };

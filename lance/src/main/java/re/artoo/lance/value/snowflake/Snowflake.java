@@ -10,7 +10,7 @@ public final class Snowflake {
    */
   private final Object lock = new Object();
 
-  // Stuff which is set in the constructor
+  // Stuff which is elements in the constructor
   private final long generatorId;
   private final TimeSource timeSource;
   private final Structure structure;

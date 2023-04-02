@@ -3,11 +3,11 @@ package re.artoo.lance.query.cursor.operation;
 import re.artoo.lance.func.TryIntConsumer1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
-import re.artoo.lance.query.cursor.Probe;
+import re.artoo.lance.query.cursor.Fetch;
 import re.artoo.lance.query.cursor.operation.atom.Atom;
 
-public record Peek<ELEMENT>(Probe<ELEMENT> probe, Atom<ELEMENT> atom, TryIntConsumer1<? super ELEMENT> peek) implements Cursor<ELEMENT> {
-  public Peek(Probe<ELEMENT> probe, TryIntConsumer1<? super ELEMENT> peek) {
+public record Peek<ELEMENT>(Fetch<ELEMENT> probe, Atom<ELEMENT> atom, TryIntConsumer1<? super ELEMENT> peek) implements Cursor<ELEMENT> {
+  public Peek(Fetch<ELEMENT> probe, TryIntConsumer1<? super ELEMENT> peek) {
     this(probe, Atom.reference(), peek);
   }
   @Override

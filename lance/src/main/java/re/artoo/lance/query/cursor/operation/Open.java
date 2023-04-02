@@ -2,7 +2,7 @@ package re.artoo.lance.query.cursor.operation;
 
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
-import re.artoo.lance.query.cursor.Probe;
+import re.artoo.lance.query.cursor.Fetch;
 import re.artoo.lance.query.cursor.operation.atom.Atom;
 
 public record Open<ELEMENT>(ELEMENT[] elements, Atom<ELEMENT> atom) implements Cursor<ELEMENT> {
@@ -17,7 +17,7 @@ public record Open<ELEMENT>(ELEMENT[] elements, Atom<ELEMENT> atom) implements C
   }
 
   @Override
-  public Probe<ELEMENT> rewind() {
+  public Fetch<ELEMENT> rewind() {
     return new Open<>(elements);
   }
 

@@ -1,6 +1,6 @@
 package re.artoo.lance.query.cursor.operation.atom;
 
-import re.artoo.lance.query.cursor.Next;
+import re.artoo.lance.query.cursor.Fetch.Next;
 
 public sealed interface Atom<ELEMENT> permits Reference {
   static <ELEMENT> Atom<ELEMENT> reference() {

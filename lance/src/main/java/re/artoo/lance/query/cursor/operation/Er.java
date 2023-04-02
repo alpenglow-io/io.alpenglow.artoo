@@ -2,28 +2,21 @@ package re.artoo.lance.query.cursor.operation;
 
 import re.artoo.lance.func.TryFunction2;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.cursor.Next;
-import re.artoo.lance.query.cursor.Probe;
+import re.artoo.lance.query.FetchException;
+import re.artoo.lance.query.cursor.Fetch;
 
-public record Er<ELEMENT, EXCEPTION extends RuntimeException>(Probe<ELEMENT> probe, String message, TryFunction2<? super String, ? super Throwable, ? extends EXCEPTION> fallback) implements Cursor<ELEMENT> {
+public record Er<ELEMENT, EXCEPTION extends RuntimeException>(Fetch<ELEMENT> probe, String message, TryFunction2<? super String, ? super Throwable, EXCEPTION> fallback) implements Cursor<ELEMENT> {
   @Override
   public boolean hasNext() {
     return probe.hasNext();
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public Next<ELEMENT> next() {
     try {
-      return hasNext() ?
-        switch (probe.next()) {
-          case Next.Failure<ELEMENT> it -> throw fallback.invoke(message, it.exception());
-          case Next.Success<ELEMENT> it -> it;
-          case Next.Nothing it -> (Next<ELEMENT>) it;
-        }
-        : Next.failure("er", "erratic");
+      return hasNext() ? probe.next() : FetchException.byThrowingCantFetchNextElement("er", "erratic");
     } catch (Throwable throwable) {
-      return Next.failure(throwable);
+      throw fallback.apply(message, throwable);
     }
   }
 }

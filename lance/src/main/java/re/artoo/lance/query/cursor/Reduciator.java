@@ -4,7 +4,7 @@ import re.artoo.lance.func.*;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.cursor.operation.Reduce;
 
-public sealed interface Reduciator<ELEMENT> extends Probe<ELEMENT> permits Cursor {
+public sealed interface Reduciator<ELEMENT> extends Fetch<ELEMENT> permits Cursor {
   default Cursor<ELEMENT> reduce(TryIntFunction2<? super ELEMENT, ? super ELEMENT, ? extends ELEMENT> operation) {
     return new Reduce<>(this, operation);
   }

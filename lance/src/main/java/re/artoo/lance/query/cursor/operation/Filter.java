@@ -4,6 +4,7 @@ import re.artoo.lance.func.TryIntPredicate1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Next;
+import re.artoo.lance.query.cursor.Next.Success;
 import re.artoo.lance.query.cursor.Probe;
 import re.artoo.lance.query.cursor.operation.atom.Atom;
 
@@ -14,40 +15,25 @@ public record Filter<ELEMENT>(Probe<ELEMENT> probe, Atom<ELEMENT> atom, TryIntPr
     this(probe, Atom.reference(), condition);
   }
   @Override
-  public ELEMENT fetch() throws Throwable {
-    return canFetch() ? atom.elementThenFetched() : FetchException.byThrowing("Can't fetch next element on filter cursor (no more condition-met steps?)");
-  }
-
-  @Override
   public boolean hasNext() {
     try {
       if (atom.isNotFetched()) return true;
       if (!probe.hasNext()) return false;
 
-      var element = probe.next();
-      while (!condition.invoke(atom.index(), element) && probe.hasNext()) {
-        element = probe.next();
-        atom.element(element);
+      var next = probe.next();
+      while (!(next instanceof Success<ELEMENT>(var index, var element) && condition.invoke(index, element)) && probe.hasNext()) {
+        next = probe.next();
+        atom.element(next);
       }
-
-      return probe.hasNext() && atom.isNotFetched();
     } catch (Throwable throwable) {
-      throw FetchException.with(throwable);
-    }
-  }
-
-  @Override
-  public boolean canFetch() throws Throwable {
-    if (atom.isNotFetched()) return true;
-    if (!probe.canFetch()) return false;
-
-    while (probe.canFetch() && atom.isFetched()) {
-      var element = probe.fetch();
-      if (condition.invoke(atom.indexThenInc(), element)) {
-        atom.element(element);
-      }
+      atom.element(Next.failure(throwable));
     }
 
     return atom.isNotFetched();
+  }
+
+  @Override
+  public Next<ELEMENT> next() {
+    return hasNext() ? atom.elementThenFetched() : Next.failure("filter", "filterable");
   }
 }

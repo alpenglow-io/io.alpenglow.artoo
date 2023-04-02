@@ -1,14 +1,13 @@
 package re.artoo.lance.value;
 
-import re.artoo.lance.func.TryFunction1;
-import re.artoo.lance.func.TryFunction2;
-import re.artoo.lance.func.TryIntFunction;
-import re.artoo.lance.func.TryPredicate1;
+import re.artoo.lance.func.*;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.value.array.None;
 import re.artoo.lance.value.array.Some;
 
 import java.util.*;
+import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 import static java.lang.System.arraycopy;
 import static java.lang.reflect.Array.*;
@@ -26,6 +25,11 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
     return elements != null && elements.length == 0
       ? none()
       : new Some<>(elements);
+  }
+
+  @SafeVarargs
+  static <ELEMENT> Array<ELEMENT> of(UnaryOperator<Array<ELEMENT>> then, ELEMENT... elements) {
+    return then.apply(Array.of(elements));
   }
 
   @SuppressWarnings("unchecked")
@@ -147,9 +151,8 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
   }
 
   private <TARGET> Array<TARGET> map(final int index, TryFunction1<? super ELEMENT, ? extends TARGET> operation) {
-    System.out.println(index);
     return switch (this) {
-      case Some<ELEMENT>(var some) when index < some.length -> new Some<TARGET>(operation.apply(some[index])).concat(map(index + 1, operation));
+      case Some<ELEMENT>(var some) when index < some.length -> Array.of(it -> it.concat(map(index + 1, operation)), operation.apply(some[index]));
       default -> Array.none();
     };
   }

@@ -1,25 +1,21 @@
 package re.artoo.lance.query.cursor.operation.atom;
 
+import re.artoo.lance.query.cursor.Next;
+
 public sealed interface Atom<ELEMENT> permits Reference {
   static <ELEMENT> Atom<ELEMENT> reference() {
     return new Reference<>();
   }
 
-  static <ELEMENT> Atom<ELEMENT> notFetched(ELEMENT element) {
+  static <ELEMENT> Atom<ELEMENT> notFetched(Next<ELEMENT> element) {
     return new Reference<>(element, false);
   }
 
-  int indexThenInc();
+  Next<ELEMENT> element();
 
-  int incThenIndex();
+  Next<ELEMENT> elementThenFetched();
 
-  int index();
-
-  ELEMENT element();
-
-  ELEMENT elementThenFetched();
-
-  Atom<ELEMENT> element(ELEMENT element);
+  Atom<ELEMENT> element(Next<ELEMENT> element);
 
   boolean isFetched();
 

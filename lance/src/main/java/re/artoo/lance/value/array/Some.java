@@ -1,5 +1,6 @@
 package re.artoo.lance.value.array;
 
+import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.value.Array;
 
 import java.util.Arrays;

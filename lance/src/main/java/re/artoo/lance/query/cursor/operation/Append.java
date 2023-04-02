@@ -1,20 +1,17 @@
 package re.artoo.lance.query.cursor.operation;
 
 import re.artoo.lance.query.Cursor;
+import re.artoo.lance.query.cursor.Next;
 import re.artoo.lance.query.cursor.Probe;
 
-public record Append<ELEMENT>(Probe<? extends ELEMENT> head, Probe<? extends ELEMENT> tail) implements Cursor<ELEMENT> {
+public record Append<ELEMENT>(Probe<ELEMENT> head, Probe<ELEMENT> tail) implements Cursor<ELEMENT> {
   @Override
-  public ELEMENT fetch() throws Throwable {
-    return head.canFetch()
-      ? head.fetch()
-      : tail.canFetch()
-      ? tail.fetch()
-      : null;
+  public boolean hasNext() {
+    return head.hasNext() || tail.hasNext();
   }
 
   @Override
-  public boolean canFetch() throws Throwable {
-    return head.canFetch() || tail.canFetch();
+  public Next<ELEMENT> next() {
+    return head.hasNext() ? head.next() : tail.hasNext() ? tail.next() : Next.failure("append", "appendable");
   }
 }

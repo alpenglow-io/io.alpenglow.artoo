@@ -1,7 +1,5 @@
 package re.artoo.lance.func;
 
-import java.util.function.IntFunction;
-
 @FunctionalInterface
 public interface TryIntPredicate1<A> {
   boolean invoke(int value, A a) throws Throwable;

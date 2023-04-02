@@ -1,58 +1,41 @@
 package re.artoo.lance.query.cursor.operation.atom;
 
+import re.artoo.lance.query.cursor.Next;
+
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 final class Reference<ELEMENT> implements Atom<ELEMENT> {
-  private final AtomicInteger index;
-  private final AtomicReference<ELEMENT> reference;
+  private final AtomicReference<Next<ELEMENT>> reference;
   private final AtomicBoolean fetched;
 
   public Reference() {
     this(null);
   }
-  public Reference(boolean fetched) {
-    this(null, fetched);
-  }
-  public Reference(ELEMENT element) {
+
+  public Reference(Next<ELEMENT> element) {
     this(element, true);
   }
-  public Reference(ELEMENT element, boolean fetched) {
-    this.index = new AtomicInteger(0);
+  public Reference(Next<ELEMENT> element, boolean fetched) {
     this.reference = new AtomicReference<>(element);
     this.fetched = new AtomicBoolean(fetched);
   }
 
   @Override
-  public int indexThenInc() {
-    return index.getAndIncrement();
-  }
-
-  @Override
-  public int incThenIndex() {
-    return index.incrementAndGet();
-  }
-
-  @Override
-  public int index() {
-    return index.get();
-  }
-
-  @Override
-  public ELEMENT element() {
+  public Next<ELEMENT> element() {
     return reference.get();
   }
 
   @Override
-  public ELEMENT elementThenFetched() {
-    ELEMENT element = reference.get();
+  public Next<ELEMENT> elementThenFetched() {
+    var element = reference.get();
     fetched.set(true);
     return element;
   }
 
   @Override
-  public Atom<ELEMENT> element(ELEMENT element) {
+  public Atom<ELEMENT> element(Next<ELEMENT> element) {
     reference.set(element);
     fetched.set(false);
     return this;

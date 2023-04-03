@@ -18,7 +18,7 @@ class FoldTest {
         (index, acc, element) -> acc + element
       );
 
-    assertThat(cursor.fetch()).isEqualTo(11);
+    assertThat(cursor.probe()).isEqualTo(11);
     assertThat(cursor.canFetch()).isFalse();
   }
 
@@ -32,7 +32,7 @@ class FoldTest {
         (index, acc, element) -> acc + element
       );
 
-    assertThat(cursor.fetch()).isEqualTo(1);
+    assertThat(cursor.probe()).isEqualTo(1);
     assertThat(cursor.canFetch()).isFalse();
   }
 }

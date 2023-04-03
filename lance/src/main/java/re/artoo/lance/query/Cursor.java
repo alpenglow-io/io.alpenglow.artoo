@@ -1,9 +1,8 @@
 package re.artoo.lance.query;
 
-import re.artoo.lance.query.cursor.Appendor;
-import re.artoo.lance.query.cursor.Iterable;
 import re.artoo.lance.query.cursor.*;
 import re.artoo.lance.query.cursor.operation.Empty;
+import re.artoo.lance.query.cursor.operation.Iterable;
 import re.artoo.lance.query.cursor.operation.Open;
 
 import java.util.List;

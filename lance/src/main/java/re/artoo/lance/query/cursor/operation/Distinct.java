@@ -3,36 +3,39 @@ package re.artoo.lance.query.cursor.operation;
 import re.artoo.lance.func.TryIntPredicate1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
-import re.artoo.lance.query.cursor.Fetch;
-import re.artoo.lance.query.cursor.Fetch.Next.Indexed;
-import re.artoo.lance.query.cursor.operation.atom.Atom;
+import re.artoo.lance.query.cursor.Probe;
+import re.artoo.lance.query.cursor.Probe.Next.Indexed;
+import re.artoo.lance.query.cursor.Probe.Next.Just;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public record Distinct<ELEMENT>(Fetch<ELEMENT> probe, Atom<ELEMENT> atom, Set<ELEMENT> elements, TryIntPredicate1<? super ELEMENT> condition) implements Cursor<ELEMENT> {
-  public Distinct(Fetch<ELEMENT> probe, TryIntPredicate1<? super ELEMENT> condition) {
-    this(probe, Atom.reference(), new HashSet<>(), condition);
+public record Distinct<ELEMENT>(Probe<ELEMENT> probe, Set<ELEMENT> elements, TryIntPredicate1<? super ELEMENT> condition) implements Cursor<ELEMENT> {
+  public Distinct(Probe<ELEMENT> probe, TryIntPredicate1<? super ELEMENT> condition) {
+    this(probe, new HashSet<>(), condition);
   }
 
   @Override
   public boolean hasNext() {
-    if (atom.isNotFetched()) return true;
-    if (!probe.hasNext()) return false;
+    return probe.hasNext();
+  }
 
-    while (probe.hasNext() && atom.isFetched()) {
-      var next = probe.next();
-      if (next instanceof Indexed<ELEMENT>(var index, var element) && (!condition.test(index, element) || !elements.contains(element))) {
-        atom.element(next);
-        elements.add(element);
+  @SuppressWarnings("UnnecessaryBreak")
+  @Override
+  public Next<ELEMENT> fetch() {
+    again: if (hasNext()) {
+      switch (probe.fetch()) {
+        case Indexed<ELEMENT> it when !condition.test(it.index(), it.element()) || !elements.contains(it.element()):
+          elements.add(it.element());
+          return it;
+        case Just<ELEMENT> it when !condition.test(-1, it.element()) || !elements.contains(it.element()):
+          elements.add(it.element());
+          return it;
+        default:
+          break again;
       }
     }
 
-    return atom.isNotFetched();
-  }
-
-  @Override
-  public Next<ELEMENT> next() {
-    return hasNext() ? atom.elementThenFetched() : FetchException.byThrowingCantFetchNextElement("distinct", "distinctable");
+    return FetchException.byThrowingCantFetchNextElement("distinct", "distinctable");
   }
 }

@@ -18,7 +18,7 @@ public class PeekableTest {
   }
 
   @Test
-  @DisplayName("should peek every element in many")
+  @DisplayName("should operation every element in many")
   public void shouldPeekElements() {
     final var touched = new AtomicInteger(0);
 
@@ -30,7 +30,7 @@ public class PeekableTest {
   }
 
   @Test
-  @DisplayName("should exceptionally peek throwable")
+  @DisplayName("should exceptionally operation throwable")
   public void shouldExceptionallyPeekThrowable() {
     final var reference = new AtomicReference<>("");
 
@@ -68,21 +68,21 @@ public class PeekableTest {
     out.println("\n========\n");
 /*
     Many.from(1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4)
-      .peek(it -> out.println("I'm " + it))
+      .operation(it -> out.println("I'm " + it))
       .distinct()
-      .peek(it -> out.println("Years " + it))
+      .operation(it -> out.println("Years " + it))
       .select(it -> new Pet("No name", it))
-      .peek(pet -> out.println("Operating on Pet " + pet.age()))
+      .operation(pet -> out.println("Operating on Pet " + pet.age()))
       .eventually(pet -> out.println("Pet with " + pet.name() + " has " + pet.age() + " years"));
 
     out.println("\n========\n");
 
     Stream.of(1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4)
-      .peek(it -> out.println("I'm " + it))
+      .operation(it -> out.println("I'm " + it))
       .distinct()
-      .peek(it -> out.println("Years " + it))
+      .operation(it -> out.println("Years " + it))
       .map(it -> new Pet("No name", it))
-      .peek(pet -> out.println("Operating on Pet " + pet.age()))
+      .operation(pet -> out.println("Operating on Pet " + pet.age()))
       .forEach(pet -> out.println("Pet with " + pet.name() + " has " + pet.age() + " years"));*/
   }
 }

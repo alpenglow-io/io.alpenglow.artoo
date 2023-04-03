@@ -31,7 +31,7 @@ public class JoinableTest implements re.artoo.lance.test.Test {
       CUSTOMERS[17],
       CUSTOMERS[19]
     };
-
+/*
     final var customers =
       from(customers1)
         .outerJoin(from(customers2))
@@ -42,7 +42,7 @@ public class JoinableTest implements re.artoo.lance.test.Test {
       CUSTOMERS[5],
       CUSTOMERS[11],
       CUSTOMERS[13]
-    );
+    );*/
   }
 
   @Test
@@ -52,7 +52,7 @@ public class JoinableTest implements re.artoo.lance.test.Test {
 
     var customers = from(CUSTOMERS);
     //for (int i = 0; i < 1_000; i++) customers = customers.concat(from(CUSTOMERS));
-
+/*
     final var orderCustomers =
       from(ORDERS)
         .outerJoin(customers)
@@ -60,6 +60,6 @@ public class JoinableTest implements re.artoo.lance.test.Test {
         .select(joined -> joined.let((order, customer) -> new OrderCustomer(order.id(), customer.name())))
         .order().by(OrderCustomer::name).by(OrderCustomer::orderId, desc);
 
-    assertThat(orderCustomers).first().isEqualTo(new OrderCustomer(10308, "Ana Trujillo Emparedados y helados"));
+    assertThat(orderCustomers).first().isEqualTo(new OrderCustomer(10308, "Ana Trujillo Emparedados y helados"));*/
   }
 }

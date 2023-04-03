@@ -1,14 +1,9 @@
 package re.artoo.lance.query.cursor;
 
-import re.artoo.lance.func.TryPredicate2;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.tuple.Pair;
-import re.artoo.lance.tuple.Tuple;
-import re.artoo.lance.value.Array;
 
-import java.util.Objects;
-
-public sealed interface Joinable<FIRST> extends Fetch<FIRST> permits Cursor {
+public sealed interface Joinable<FIRST> extends Probe<FIRST> permits Cursor {
+  /*
   default <SECOND> Join<FIRST, SECOND> outerJoin(Cursor<SECOND> right) {
     return new Outer<>(new Left<>(this, right), new Right<>(this, right));
   }
@@ -20,8 +15,9 @@ public sealed interface Joinable<FIRST> extends Fetch<FIRST> permits Cursor {
   }
   default <SECOND> Join<FIRST, SECOND> innerJoin(Cursor<SECOND> right) {
     return outerJoin(right);
-  }
+  }*/
 }
+/*
 
 final class Left<FIRST, SECOND> implements Join<FIRST, SECOND> {
   private final Fetch<FIRST> left;
@@ -178,3 +174,4 @@ final class Inner<FIRST, SECOND> implements Join<FIRST, SECOND> {
     return new Inner<>((Join<FIRST, SECOND>) outer.on(condition));
   }
 }
+*/

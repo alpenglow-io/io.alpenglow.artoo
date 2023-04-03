@@ -2,29 +2,25 @@ package re.artoo.lance.query.cursor.operation;
 
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
-import re.artoo.lance.query.cursor.Fetch;
-import re.artoo.lance.query.cursor.operation.atom.Atom;
+import re.artoo.lance.query.cursor.Probe;
 
-public record PresenceOnly<ELEMENT>(Fetch<ELEMENT> probe, Atom<ELEMENT> atom) implements Cursor<ELEMENT> {
-  public PresenceOnly(Fetch<ELEMENT> probe) {
-    this(probe, Atom.reference());
+public record PresenceOnly<ELEMENT>(Probe<ELEMENT> probe) implements Cursor<ELEMENT> {
+  @Override
+  public boolean hasNext() {
+    return probe.hasNext();
   }
 
+  @SuppressWarnings("UnnecessaryBreak")
   @Override
-  public boolean canFetch() throws Throwable {
-    if (atom.isNotFetched()) return true;
-    if (!probe.canFetch()) return false;
-
-    while (probe.canFetch() && (atom.isFetched() || atom.element() == null)) {
-      atom.element(probe.fetch());
+  public Next<ELEMENT> fetch() {
+    again: if (hasNext()) {
+      switch (probe.fetch()) {
+        case Next<ELEMENT> it when it.element() != null:
+          return it;
+        default:
+          break again;
+      }
     }
-    if (atom.element() == null) atom.unfetch();
-
-    return atom.element() != null;
-  }
-
-  @Override
-  public ELEMENT fetch() throws Throwable {
-    return canFetch() ? atom.elementThenFetched() : FetchException.byThrowing("Can't fetch next element on presence-only condition (no more present steps?)");
+    return FetchException.byThrowingCantFetchNextElement("presence-only", "present-only");
   }
 }

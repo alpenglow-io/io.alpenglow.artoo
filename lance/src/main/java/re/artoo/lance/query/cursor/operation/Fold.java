@@ -2,29 +2,26 @@ package re.artoo.lance.query.cursor.operation;
 
 import re.artoo.lance.func.TryIntFunction2;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.FetchException;
-import re.artoo.lance.query.cursor.Fetch;
-import re.artoo.lance.query.cursor.operation.atom.Atom;
+import re.artoo.lance.query.cursor.Probe;
+import re.artoo.lance.query.cursor.Probe.Next.Indexed;
 
-public record Fold<ELEMENT, FOLDED>(Fetch<? extends ELEMENT> probe, Atom<FOLDED> atom, TryIntFunction2<? super FOLDED, ? super ELEMENT, ? extends FOLDED> operation) implements Cursor<FOLDED> {
-  public Fold(Fetch<? extends ELEMENT> probe, FOLDED initial, TryIntFunction2<? super FOLDED, ? super ELEMENT, ? extends FOLDED> operation) {
-    this(probe, Atom.notFetched(initial), operation);
+public record Fold<ELEMENT, FOLDED>(Probe<ELEMENT> probe, FOLDED initial, TryIntFunction2<? super FOLDED, ? super ELEMENT, ? extends FOLDED> operation) implements Cursor<FOLDED> {
+  @Override
+  public boolean hasNext() {
+    return probe.hasNext();
   }
 
+  @SuppressWarnings("UnnecessaryBreak")
   @Override
-  public FOLDED fetch() throws Throwable {
-    return canFetch() ? atom.elementThenFetched() : FetchException.byThrowing("Can't fetch next element on reduce cursor (no more reducible steps?)");
-  }
-
-  @Override
-  public boolean canFetch() throws Throwable {
-    if (atom.isNotFetched() && !probe.canFetch()) return true;
-    if (atom.isFetched() && !probe.canFetch()) return false;
-
-    while (probe.canFetch()) {
-      atom.element(operation.invoke(atom.indexThenInc(), atom.element(), probe.fetch()));
+  public Next<FOLDED> fetch() {
+    FOLDED folded = initial;
+    again: if (hasNext()) {
+      folded = switch (probe.fetch()) {
+        case Next<ELEMENT> it when it instanceof Indexed<ELEMENT>(var index, var element) -> operation.apply(index, folded, element);
+        case Next<ELEMENT> it -> operation.apply(-1, folded, it.element());
+      };
+      break again;
     }
-
-    return true;
+    return Next.of(folded);
   }
 }

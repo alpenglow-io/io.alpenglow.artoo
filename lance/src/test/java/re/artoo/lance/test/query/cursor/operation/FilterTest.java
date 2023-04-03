@@ -4,7 +4,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import re.artoo.lance.query.cursor.operation.Filter;
 import re.artoo.lance.query.cursor.operation.Open;
-import re.artoo.lance.query.cursor.operation.PresenceOnly;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static re.artoo.lance.query.cursor.operation.Filter.presenceOnly;
@@ -20,10 +19,10 @@ class FilterTest {
         (index, element) -> element != null && element.length() == 4
       );
 
-    assertThat(filter.fetch()).isEqualTo("Luke");
-    assertThat(filter.fetch()).isEqualTo("your");
-    assertThat(filter.fetch()).isEqualTo("fool");
-    assertThat(filter.canFetch()).isFalse();
+    assertThat(filter.fetch().element()).isEqualTo("Luke");
+    assertThat(filter.fetch().element()).isEqualTo("your");
+    assertThat(filter.fetch().element()).isEqualTo("fool");
+    assertThat(filter.hasNext()).isFalse();
   }
 
   @Test
@@ -38,9 +37,9 @@ class FilterTest {
         (index, element) -> element.length() == 4
       );
 
-    assertThat(filter.fetch()).isEqualTo("Luke");
-    assertThat(filter.fetch()).isEqualTo("your");
-    assertThat(filter.fetch()).isEqualTo("fool");
+    assertThat(filter.probe()).isEqualTo("Luke");
+    assertThat(filter.probe()).isEqualTo("your");
+    assertThat(filter.probe()).isEqualTo("fool");
     assertThat(filter.canFetch()).isFalse();
   }
 
@@ -56,10 +55,10 @@ class FilterTest {
         (index, number) -> number <= index * 10
       );
 
-    assertThat(filter.fetch()).isEqualTo(0);
-    assertThat(filter.fetch()).isEqualTo(20);
-    assertThat(filter.fetch()).isEqualTo(15);
-    assertThat(filter.fetch()).isEqualTo(40);
+    assertThat(filter.probe()).isEqualTo(0);
+    assertThat(filter.probe()).isEqualTo(20);
+    assertThat(filter.probe()).isEqualTo(15);
+    assertThat(filter.probe()).isEqualTo(40);
     assertThat(filter.canFetch()).isFalse();
   }
 
@@ -72,10 +71,10 @@ class FilterTest {
         (index, number) -> number <= index * 10
       );
 
-    assertThat(filter.fetch()).isEqualTo(0);
-    assertThat(filter.fetch()).isEqualTo(20);
-    assertThat(filter.fetch()).isEqualTo(15);
-    assertThat(filter.fetch()).isEqualTo(40);
+    assertThat(filter.probe()).isEqualTo(0);
+    assertThat(filter.probe()).isEqualTo(20);
+    assertThat(filter.probe()).isEqualTo(15);
+    assertThat(filter.probe()).isEqualTo(40);
     assertThat(filter.canFetch()).isFalse();
   }
 
@@ -84,10 +83,10 @@ class FilterTest {
   void shouldCoalesceCursor() throws Throwable {
     var presenceOnly = new Filter<>(new Open<>(1, null, 2, null, 3, null, 4), presenceOnly());
 
-    assertThat(presenceOnly.fetch()).isEqualTo(1);
-    assertThat(presenceOnly.fetch()).isEqualTo(2);
-    assertThat(presenceOnly.fetch()).isEqualTo(3);
-    assertThat(presenceOnly.fetch()).isEqualTo(4);
+    assertThat(presenceOnly.probe()).isEqualTo(1);
+    assertThat(presenceOnly.probe()).isEqualTo(2);
+    assertThat(presenceOnly.probe()).isEqualTo(3);
+    assertThat(presenceOnly.probe()).isEqualTo(4);
     assertThat(presenceOnly.hasNext()).isFalse();
   }
 }

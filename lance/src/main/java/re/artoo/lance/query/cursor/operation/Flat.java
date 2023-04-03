@@ -2,29 +2,31 @@ package re.artoo.lance.query.cursor.operation;
 
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
-import re.artoo.lance.query.cursor.Fetch;
-import re.artoo.lance.query.cursor.operation.atom.Atom;
+import re.artoo.lance.query.cursor.Probe;
 
-public record Flat<ELEMENT>(Fetch<Fetch<ELEMENT>> probe, Atom<Fetch<ELEMENT>> mapped, Atom<ELEMENT> flatten) implements Cursor<ELEMENT> {
-  public Flat(Fetch<Fetch<ELEMENT>> probe) {
-    this(probe, Atom.reference(), Atom.reference());
+public record Flat<ELEMENT>(Probe<Probe<ELEMENT>> probe, Flatten<ELEMENT> flatten) implements Cursor<ELEMENT> {
+  public Flat(Probe<Probe<ELEMENT>> probe) {
+    this(probe, new Flatten<>());
   }
 
   @Override
   public boolean hasNext() {
-    if (flatten.isNotFetched()) return true;
+    flatten.hasNext = probe.hasNext() || (flatten.probe != null && flatten.probe.hasNext());
 
-    while ((mapped.element() == null || !(mapped.element() instanceof Next.Success<Fetch<ELEMENT>>(var index, var element) && element.hasNext()) && probe.hasNext())) {
-      mapped.element(probe.next());
+    if (flatten.hasNext && !flatten.probe.hasNext()) {
+      flatten.probe = probe.fetch().element();
     }
 
-    if (mapped.element() instanceof Success<Fetch<ELEMENT>>(var index, var elementProbe) && elementProbe.hasNext()) flatten.element(elementProbe.next());
-
-    return flatten.isNotFetched() || (mapped.element() != null && mapped.element().canFetch());
+    return flatten.hasNext;
   }
+
   @Override
-  public ELEMENT fetch() throws Throwable {
-    return canFetch() ? flatten.elementThenFetched() : FetchException.byThrowing("Can't fetch next element from cursor (no more flattable steps?)");
+  public Next<ELEMENT> fetch() {
+    return hasNext() ? flatten.probe.fetch() : FetchException.byThrowingCantFetchNextElement("flat-map", "flattable");
   }
 
+  private static final class Flatten<NEXT> {
+    private boolean hasNext = true;
+    private Probe<NEXT> probe;
+  }
 }

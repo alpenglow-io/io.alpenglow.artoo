@@ -1,10 +1,16 @@
 package re.artoo.lance.query.cursor;
 
-import re.artoo.lance.query.cursor.Fetch.Next;
-
 import java.util.Iterator;
 
-public interface Fetch<ELEMENT> extends Iterator<Next<ELEMENT>> {
+public interface Probe<ELEMENT> extends Iterator<ELEMENT> {
+
+  Next<ELEMENT> fetch();
+
+  @Override
+  default ELEMENT next() {
+    return fetch().element();
+  }
+
   sealed interface Next<ELEMENT> {
     static <ELEMENT> Next<ELEMENT> of(ELEMENT element) {
       return new Just<>(element);

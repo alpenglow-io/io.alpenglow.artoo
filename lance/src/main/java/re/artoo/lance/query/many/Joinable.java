@@ -8,6 +8,7 @@ import re.artoo.lance.tuple.Pair;
 
 @SuppressWarnings({"unused", "unchecked"})
 public interface Joinable<FIRST> extends Queryable<FIRST> {
+  /*
   default <SECOND, QUERYABLE extends Queryable<SECOND>> Join<FIRST, SECOND> outerJoin(QUERYABLE queryable) {
     return new OuterJoin<>(cursor(), queryable.cursor());
   }
@@ -97,5 +98,5 @@ public interface Joinable<FIRST> extends Queryable<FIRST> {
       return () -> outerJoin().on(condition);
     }
 
-  }
+  }*/
 }

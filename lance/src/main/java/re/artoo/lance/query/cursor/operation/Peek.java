@@ -3,27 +3,21 @@ package re.artoo.lance.query.cursor.operation;
 import re.artoo.lance.func.TryIntConsumer1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
-import re.artoo.lance.query.cursor.Fetch;
-import re.artoo.lance.query.cursor.operation.atom.Atom;
+import re.artoo.lance.query.cursor.Probe;
 
-public record Peek<ELEMENT>(Fetch<ELEMENT> probe, Atom<ELEMENT> atom, TryIntConsumer1<? super ELEMENT> peek) implements Cursor<ELEMENT> {
-  public Peek(Fetch<ELEMENT> probe, TryIntConsumer1<? super ELEMENT> peek) {
-    this(probe, Atom.reference(), peek);
-  }
+public record Peek<ELEMENT>(Probe<ELEMENT> probe, TryIntConsumer1<? super ELEMENT> operation) implements Cursor<ELEMENT> {
   @Override
-  public ELEMENT fetch() throws Throwable {
-    return canFetch() ? atom.elementThenFetched() : FetchException.byThrowing("Can't fetch next element from peek cursor (no more peekable steps?)");
+  public boolean hasNext() {
+    return probe.hasNext();
   }
 
   @Override
-  public boolean canFetch() throws Throwable {
-    if (atom.isNotFetched()) return true;
-    if (!probe.canFetch()) return false;
-
-    var fetch = probe.fetch();
-    peek.invoke(atom.indexThenInc(), fetch);
-    atom.element(fetch);
-
-    return atom.isNotFetched();
+  public Next<ELEMENT> fetch() {
+    return hasNext() ?
+      switch (probe.fetch()) {
+        case Next<ELEMENT> it when it instanceof Next.Indexed<ELEMENT>(var index, var element) -> operation.selfAccept(it, index, element);
+        case Next<ELEMENT> it -> operation.selfAccept(it, -1, it.element());
+      }
+      : FetchException.byThrowingCantFetchNextElement("peek", "peekable");
   }
 }

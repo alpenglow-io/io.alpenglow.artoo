@@ -3,6 +3,7 @@ package re.artoo.lance;
 import re.artoo.lance.func.TryConsumer1;
 import re.artoo.lance.func.TryConsumer2;
 import re.artoo.lance.query.Cursor;
+import re.artoo.lance.query.cursor.Probe.Next;
 import re.artoo.lance.tuple.Pair;
 
 import java.util.Iterator;
@@ -20,10 +21,8 @@ public interface Queryable<T> extends Iterable<T> {
   }
 
   default void eventually(final TryConsumer1<T> eventually) {
-    for (final var value : this) {
-      if (value != null) {
-        eventually.accept(value);
-      }
+    for (var pair : this) {
+      eventually.accept(pair);
     }
   }
 
@@ -51,10 +50,8 @@ public interface Queryable<T> extends Iterable<T> {
     }
 
     default void eventually(final TryConsumer2<A, B> eventually) {
-      for (final var tuple : this) {
-        if (tuple != null) {
-          tuple.also(eventually);
-        }
+      for (var pair : this) {
+        pair.also(eventually);
       }
     }
 

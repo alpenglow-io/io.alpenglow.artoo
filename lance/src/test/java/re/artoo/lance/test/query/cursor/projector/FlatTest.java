@@ -21,7 +21,7 @@ class FlatTest {
         )
       );
 
-    final var actual = new Integer[]{cursor.fetch(), cursor.fetch(), cursor.fetch()};
+    final var actual = new Integer[]{cursor.probe(), cursor.probe(), cursor.probe()};
     final var expected = new Integer[]{1, null, 3};
 
     assertThat(actual).isEqualTo(expected);

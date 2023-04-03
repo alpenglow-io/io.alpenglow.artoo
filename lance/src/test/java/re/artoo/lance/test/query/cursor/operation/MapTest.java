@@ -18,10 +18,10 @@ class MapTest {
         (index, it) -> it * 2
       );
 
-    assertThat(cursor.fetch()).isEqualTo(2);
-    assertThat(cursor.fetch()).isEqualTo(4);
-    assertThat(cursor.fetch()).isEqualTo(6);
-    assertThat(cursor.fetch()).isEqualTo(8);
+    assertThat(cursor.probe()).isEqualTo(2);
+    assertThat(cursor.probe()).isEqualTo(4);
+    assertThat(cursor.probe()).isEqualTo(6);
+    assertThat(cursor.probe()).isEqualTo(8);
     assertThat(cursor.canFetch()).isFalse();
   }
 
@@ -34,10 +34,10 @@ class MapTest {
         (index, it) -> it != null ? it * 2 : null
       );
 
-    assertThat(cursor.fetch()).isEqualTo(2);
-    assertThat(cursor.fetch()).isEqualTo(null);
-    assertThat(cursor.fetch()).isEqualTo(6);
-    assertThat(cursor.fetch()).isEqualTo(null);
+    assertThat(cursor.probe()).isEqualTo(2);
+    assertThat(cursor.probe()).isEqualTo(null);
+    assertThat(cursor.probe()).isEqualTo(6);
+    assertThat(cursor.probe()).isEqualTo(null);
     assertThat(cursor.canFetch()).isFalse();
   }
 
@@ -51,8 +51,8 @@ class MapTest {
         (index, it) -> it * 2
       );
 
-    assertThat(cursor.fetch()).isEqualTo(2);
-    assertThat(cursor.fetch()).isEqualTo(6);
+    assertThat(cursor.probe()).isEqualTo(2);
+    assertThat(cursor.probe()).isEqualTo(6);
     assertThat(cursor.canFetch()).isFalse();
   }
 }

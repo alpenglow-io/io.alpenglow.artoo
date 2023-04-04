@@ -1,41 +1,36 @@
 package re.artoo.lance.query.cursor.operation;
 
+import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.func.TryIntPredicate1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
-import re.artoo.lance.query.cursor.Probe;
-import re.artoo.lance.query.cursor.Probe.Next.Indexed;
-import re.artoo.lance.query.cursor.Probe.Next.Just;
+import re.artoo.lance.query.cursor.Fetch;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public record Distinct<ELEMENT>(Probe<ELEMENT> probe, Set<ELEMENT> elements, TryIntPredicate1<? super ELEMENT> condition) implements Cursor<ELEMENT> {
-  public Distinct(Probe<ELEMENT> probe, TryIntPredicate1<? super ELEMENT> condition) {
-    this(probe, new HashSet<>(), condition);
+@SuppressWarnings("UnnecessaryBreak")
+public record Distinct<ELEMENT>(Fetch<ELEMENT> fetch, Set<ELEMENT> elements, TryIntPredicate1<? super ELEMENT> condition) implements Cursor<ELEMENT> {
+  public Distinct(Fetch<ELEMENT> fetch, TryIntPredicate1<? super ELEMENT> condition) {
+    this(fetch, new HashSet<>(), condition);
   }
 
   @Override
   public boolean hasNext() {
-    return probe.hasNext();
+    return fetch.hasNext();
   }
 
-  @SuppressWarnings("UnnecessaryBreak")
   @Override
-  public Next<ELEMENT> fetch() {
-    again: if (hasNext()) {
-      switch (probe.fetch()) {
-        case Indexed<ELEMENT> it when !condition.test(it.index(), it.element()) || !elements.contains(it.element()):
-          elements.add(it.element());
-          return it;
-        case Just<ELEMENT> it when !condition.test(-1, it.element()) || !elements.contains(it.element()):
-          elements.add(it.element());
-          return it;
-        default:
-          break again;
-      }
+  public <NEXT> NEXT next(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) {
+    final Value<NEXT> value = new Value<>();
+    again:
+    if (hasNext() && fetch.next((index, element) -> condition.test(index, element) && elements.add(element) && value.set(then.apply(index, element)))) {
+      return value.element;
+    } else if (hasNext()) {
+      break again;
     }
 
     return FetchException.byThrowingCantFetchNextElement("distinct", "distinctable");
   }
+
 }

@@ -56,8 +56,8 @@ final class Intersect<T> implements TryFunction1<T, T> {
   @Override
   public T invoke(final T origin) throws Throwable {
     final var cursor = queryable.cursor();
-    var element = cursor.fetch().element();
-    for (; cursor.hasNext() && !element.equals(origin); element = cursor.fetch().element());
+    var element = cursor.next().element();
+    for (; cursor.hasNext() && !element.equals(origin); element = cursor.next().element());
     return (element != null && element.equals(origin)) || cursor.hasNext() ? origin : null;
   }
 }

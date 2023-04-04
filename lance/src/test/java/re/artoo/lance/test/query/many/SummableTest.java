@@ -38,7 +38,7 @@ public class SummableTest {
   @Test
   @DisplayName("should sum all nullable double sequence ignoring null-ones")
   public void shouldSumNullableDoubleSequence() throws Throwable {
-    final var sum = Many.fromAny(null, 0, 92.83D, null, 100.0D, 37.46D, 81.1D).sum().cursor().fetch();
+    final var sum = Many.fromAny(null, 0, 92.83D, null, 100.0D, 37.46D, 81.1D).sum().cursor().next();
 
     assertThat(sum).isEqualTo(311.39D);
   }
@@ -46,7 +46,7 @@ public class SummableTest {
   @Test
   @DisplayName("should sum all by selecting package-weight")
   public void shouldSumBySelecting() throws Throwable {
-    final var sum = Many.from(PACKAGES).sum(re.artoo.lance.test.Test.Package::weight).cursor().fetch();
+    final var sum = Many.from(PACKAGES).sum(re.artoo.lance.test.Test.Package::weight).cursor().next();
 
     assertThat(sum).isEqualTo(83.7F);
   }

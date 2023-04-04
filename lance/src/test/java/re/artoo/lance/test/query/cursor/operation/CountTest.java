@@ -21,7 +21,7 @@ class CountTest {
         (index, count, element) -> count + 1
       );
 
-    assertThat(cursor.probe()).isEqualTo(4);
+    assertThat(cursor.fetch()).isEqualTo(4);
     assertThat(cursor.canFetch()).isFalse();
   }
 }

@@ -1,14 +1,16 @@
 package re.artoo.lance.query.cursor;
 
+import re.artoo.lance.func.TryIntFunction1;
+
 import java.util.Iterator;
 
-public interface Probe<ELEMENT> extends Iterator<ELEMENT> {
+public interface Fetch<ELEMENT> extends Iterator<ELEMENT> {
 
-  Next<ELEMENT> fetch();
+  <NEXT> NEXT next(TryIntFunction1<? super ELEMENT, ? extends NEXT> then);
 
   @Override
   default ELEMENT next() {
-    return fetch().element();
+    return next((index, element) -> element);
   }
 
   sealed interface Next<ELEMENT> {

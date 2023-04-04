@@ -9,7 +9,7 @@ import re.artoo.lance.query.cursor.operation.PresenceOnly;
 import re.artoo.lance.query.cursor.operation.Er;
 import re.artoo.lance.query.cursor.operation.Or;
 
-public sealed interface Alternator<ELEMENT> extends Probe<ELEMENT> permits Cursor {
+public sealed interface Alternator<ELEMENT> extends Fetch<ELEMENT> permits Cursor {
   default <C extends Cursor<ELEMENT>> Cursor<ELEMENT> or(final TrySupplier1<? extends C> alternative) {
     return new Or<>(new PresenceOnly<>(this), null);
   }

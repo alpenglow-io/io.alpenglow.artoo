@@ -2,7 +2,7 @@ package re.artoo.lance.query.cursor;
 
 import re.artoo.lance.query.Cursor;
 
-public sealed interface Joinable<FIRST> extends Probe<FIRST> permits Cursor {
+public sealed interface Joinable<FIRST> extends Fetch<FIRST> permits Cursor {
   /*
   default <SECOND> Join<FIRST, SECOND> outerJoin(Cursor<SECOND> right) {
     return new Outer<>(new Left<>(this, right), new Right<>(this, right));

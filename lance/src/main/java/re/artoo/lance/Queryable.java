@@ -3,7 +3,6 @@ package re.artoo.lance;
 import re.artoo.lance.func.TryConsumer1;
 import re.artoo.lance.func.TryConsumer2;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.cursor.Probe.Next;
 import re.artoo.lance.tuple.Pair;
 
 import java.util.Iterator;

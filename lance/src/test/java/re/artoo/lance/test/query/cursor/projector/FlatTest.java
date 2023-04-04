@@ -21,7 +21,7 @@ class FlatTest {
         )
       );
 
-    final var actual = new Integer[]{cursor.probe(), cursor.probe(), cursor.probe()};
+    final var actual = new Integer[]{cursor.fetch(), cursor.fetch(), cursor.fetch()};
     final var expected = new Integer[]{1, null, 3};
 
     assertThat(actual).isEqualTo(expected);
@@ -34,12 +34,12 @@ class FlatTest {
     var cursor = Cursor.open(Cursor.open(1, 2), Cursor.<Integer>empty(), Cursor.open(3, 4, 5), Cursor.<Integer>empty()).flatMap(it -> it);
 
     final var actual = new Integer[]{
-      cursor.fetch(),
-      cursor.fetch(),
-      cursor.fetch(),
-      cursor.fetch(),
-      cursor.fetch(),
-      cursor.fetch(),
+      cursor.next(),
+      cursor.next(),
+      cursor.next(),
+      cursor.next(),
+      cursor.next(),
+      cursor.next(),
     };
     final var expected = new Integer[]{1, 2, 3, 4, 5, null};
 

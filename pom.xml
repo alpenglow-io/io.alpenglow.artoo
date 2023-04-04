@@ -39,7 +39,7 @@
     <maven-deploy-plugin.version>3.0.0</maven-deploy-plugin.version>
     <maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
     <maven-exec-plugin.version>3.0.0</maven-exec-plugin.version>
-    <maven-probe-plugin.version>3.2.1</maven-probe-plugin.version>
+    <maven-fetch-plugin.version>3.2.1</maven-fetch-plugin.version>
     <maven-install-plugin.version>3.0.1</maven-install-plugin.version>
     <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
     <maven-pmd-plugin.version>3.13.0</maven-pmd-plugin.version>
@@ -173,8 +173,8 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-probe-plugin</artifactId>
-          <version>${maven-probe-plugin.version}</version>
+          <artifactId>maven-fetch-plugin</artifactId>
+          <version>${maven-fetch-plugin.version}</version>
           <executions>
             <execution>
               <id>attach-sources</id>

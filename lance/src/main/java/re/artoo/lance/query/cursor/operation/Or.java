@@ -2,21 +2,21 @@ package re.artoo.lance.query.cursor.operation;
 
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
-import re.artoo.lance.query.cursor.Probe;
+import re.artoo.lance.query.cursor.Fetch;
 
-public record Or<ELEMENT>(Probe<ELEMENT> probe, Probe<ELEMENT> otherwise) implements Cursor<ELEMENT> {
+public record Or<ELEMENT>(Fetch<ELEMENT> fetch, Fetch<ELEMENT> otherwise) implements Cursor<ELEMENT> {
   @Override
   public boolean hasNext() {
-    return probe.hasNext() || otherwise.hasNext();
+    return fetch.hasNext() || otherwise.hasNext();
   }
 
   @Override
   public Next<ELEMENT> fetch() {
     try {
-      return probe.hasNext()
-        ? probe.fetch()
+      return fetch.hasNext()
+        ? fetch.next()
         : otherwise.hasNext()
-        ? otherwise.fetch()
+        ? otherwise.next()
         : FetchException.byThrowingCantFetchNextElement("or", "");
     } finally {
       // TODO: if (otherwise.hasNext()) otherwise.close();

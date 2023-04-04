@@ -1,21 +1,22 @@
 package re.artoo.lance.query.cursor.operation;
 
+import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
-import re.artoo.lance.query.cursor.Probe;
+import re.artoo.lance.query.cursor.Fetch;
 
-public record Append<ELEMENT>(Probe<ELEMENT> head, Probe<ELEMENT> tail) implements Cursor<ELEMENT> {
+public record Append<ELEMENT>(Fetch<ELEMENT> head, Fetch<ELEMENT> tail) implements Cursor<ELEMENT> {
   @Override
   public boolean hasNext() {
     return head.hasNext() || tail.hasNext();
   }
 
   @Override
-  public Next<ELEMENT> fetch() {
+  public <NEXT> NEXT next(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) {
     return head.hasNext()
-      ? head.fetch()
+      ? head.next(then)
       : tail.hasNext()
-      ? tail.fetch()
+      ? tail.next(then)
       : FetchException.byThrowingCantFetchNextElement("append", "appendable");
   }
 }

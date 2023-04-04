@@ -78,12 +78,12 @@ public class UniquableTest {
   public void shouldThrowIfThereIsMoreThanSingleElementOnCondition() {
     assertThrows(
       FetchException.class,
-      () -> from(9, 65, 87, 435, 3, 83, 23, 87, 435, 67, 19).single(number -> number < 20).cursor().fetch()
+      () -> from(9, 65, 87, 435, 3, 83, 23, 87, 435, 67, 19).single(number -> number < 20).cursor().next()
     );
 
     assertThrows(
       FetchException.class,
-      () -> from(9, 65, 87, 435, 3, 83, 23, 87, 435, 67, 19).single().cursor().fetch()
+      () -> from(9, 65, 87, 435, 3, 83, 23, 87, 435, 67, 19).single().cursor().next()
     );
   }
 

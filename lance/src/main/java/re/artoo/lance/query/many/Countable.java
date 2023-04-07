@@ -4,7 +4,6 @@ import re.artoo.lance.Queryable;
 import re.artoo.lance.func.TryIntPredicate1;
 import re.artoo.lance.func.TryPredicate1;
 import re.artoo.lance.query.One;
-import re.artoo.lance.scope.random.Int;
 
 public interface Countable<T> extends Queryable<T> {
   default One<Integer> count() {

@@ -12,7 +12,7 @@ public interface Elseable<ELEMENT> extends Queryable<ELEMENT> {
   }
 
   default <OTHER extends One<ELEMENT>> One<ELEMENT> or(final OTHER otherwise) {
-    return () -> cursor().or(otherwise::cursor);
+    return () -> cursor().or(otherwise.cursor());
   }
 
   default <E extends RuntimeException> One<ELEMENT> or(final String message, final TryFunction2<? super Throwable, ? super String, ? extends E> exception) {

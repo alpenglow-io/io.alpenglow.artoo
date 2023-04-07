@@ -1,6 +1,7 @@
 package re.artoo.lance.query.cursor;
 
-import re.artoo.lance.func.*;
+import re.artoo.lance.func.TryFunction2;
+import re.artoo.lance.func.TryIntFunction2;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.cursor.operation.Reduce;
 

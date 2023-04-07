@@ -4,7 +4,6 @@ import java.lang.reflect.Array;
 import java.util.Arrays;
 
 import static java.lang.System.arraycopy;
-import static java.lang.System.in;
 
 enum Elements {
   Companion;

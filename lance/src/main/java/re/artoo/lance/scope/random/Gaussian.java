@@ -3,9 +3,9 @@ package re.artoo.lance.scope.random;
 import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.scope.Random;
 
-import static re.artoo.lance.scope.Default.Nothing;
 import static java.lang.StrictMath.log;
 import static java.lang.StrictMath.sqrt;
+import static re.artoo.lance.scope.Default.Nothing;
 
 public final class Gaussian implements Random<Double> {
   private final Random<Double> decimal;

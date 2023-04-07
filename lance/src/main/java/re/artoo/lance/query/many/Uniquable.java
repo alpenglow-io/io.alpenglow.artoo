@@ -5,8 +5,6 @@ import re.artoo.lance.func.TryPredicate1;
 import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.One;
 
-import java.util.Optional;
-
 public interface Uniquable<T> extends Queryable<T> {
   default One<T> at(final int at) {
     return () -> cursor().fold(null, (index, acc, element) -> at == index ? element : acc);

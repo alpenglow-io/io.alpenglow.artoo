@@ -32,7 +32,7 @@ public record Flat<ELEMENT>(Fetch<Fetch<ELEMENT>> fetch, Flatten<ELEMENT> flatte
   }
 
   @Override
-  public Next<ELEMENT> next() {
+  public ELEMENT next() {
     return hasNext() ? flatten.fetch.element.next() : FetchException.byThrowingCantFetchNextElement("flat-map", "flattable");
   }
 

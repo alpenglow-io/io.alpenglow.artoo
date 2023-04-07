@@ -9,11 +9,11 @@ import re.artoo.lance.query.Many;
 @SuppressWarnings("unchecked")
 public interface Elseable<T> extends Queryable<T> {
   default Many<T> or(final T... values) {
-    return () -> cursor().or(() -> Cursor.open(values));
+    return () -> cursor().or(Cursor.open(values));
   }
 
   default Many<T> or(final Many<T> many) {
-    return () -> cursor().or(many::cursor);
+    return () -> cursor().or(many.cursor());
   }
 
   default <E extends RuntimeException> Many<T> or(final String message, final TryFunction2<? super String, ? super Throwable, ? extends E> exception) {

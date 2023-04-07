@@ -1,5 +1,6 @@
 package re.artoo.lance.query.cursor.operation;
 
+import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Fetch;
@@ -11,13 +12,9 @@ public record Or<ELEMENT>(Fetch<ELEMENT> fetch, Fetch<ELEMENT> otherwise) implem
   }
 
   @Override
-  public Next<ELEMENT> fetch() {
+  public <NEXT> NEXT next(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) {
     try {
-      return fetch.hasNext()
-        ? fetch.next()
-        : otherwise.hasNext()
-        ? otherwise.next()
-        : FetchException.byThrowingCantFetchNextElement("or", "");
+      return hasNext() ? fetch.next(then) : otherwise.hasNext() ? otherwise.next(then) : FetchException.byThrowingCantFetchNextElement("or", "elseable");
     } finally {
       // TODO: if (otherwise.hasNext()) otherwise.close();
     }

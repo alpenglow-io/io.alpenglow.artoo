@@ -5,13 +5,14 @@ import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.func.TryIntFunction;
 import re.artoo.lance.value.Array;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static re.artoo.lance.scope.Nullability.nonNullable;
 
 public interface Convertable<T> extends Queryable<T> {
-  /*
   default <K, E> Map<? extends K, ? extends E> asMap(final TryFunction1<? super T, ? extends K> key, final TryFunction1<? super T, ? extends E> element) {
     nonNullable(key, "key");
     nonNullable(element, "element");
@@ -39,5 +40,4 @@ public interface Convertable<T> extends Queryable<T> {
       .fold(Array.<T>none(), Array::push)
       .collect(folded -> folded.copyTo(array));
   }
-   */
 }

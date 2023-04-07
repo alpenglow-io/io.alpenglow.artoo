@@ -1,16 +1,18 @@
 package re.artoo.lance.value;
 
-import re.artoo.lance.func.*;
+import re.artoo.lance.func.TryFunction1;
+import re.artoo.lance.func.TryFunction2;
+import re.artoo.lance.func.TryIntFunction;
+import re.artoo.lance.func.TryPredicate1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.value.array.None;
 import re.artoo.lance.value.array.Some;
 
 import java.util.*;
-import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 import static java.lang.System.arraycopy;
-import static java.lang.reflect.Array.*;
+import static java.lang.reflect.Array.newInstance;
 
 public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess permits None, Some {
 

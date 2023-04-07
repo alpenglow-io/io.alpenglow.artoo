@@ -3,7 +3,6 @@ package re.artoo.lance.test.query.many;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import re.artoo.lance.query.Many;
-import re.artoo.lance.query.One;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

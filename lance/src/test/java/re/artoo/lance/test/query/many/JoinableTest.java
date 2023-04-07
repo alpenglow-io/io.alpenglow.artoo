@@ -2,11 +2,8 @@ package re.artoo.lance.test.query.many;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import re.artoo.lance.tuple.Pair;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static re.artoo.lance.query.Many.from;
-import static re.artoo.lance.query.many.Ordering.Arrange.desc;
 
 public class JoinableTest implements re.artoo.lance.test.Test {
   @Test

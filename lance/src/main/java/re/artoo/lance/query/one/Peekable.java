@@ -3,7 +3,6 @@ package re.artoo.lance.query.one;
 import re.artoo.lance.Queryable;
 import re.artoo.lance.func.TryConsumer1;
 import re.artoo.lance.query.One;
-import re.artoo.lance.query.closure.Peek;
 
 @FunctionalInterface
 public interface Peekable<T> extends Queryable<T> {

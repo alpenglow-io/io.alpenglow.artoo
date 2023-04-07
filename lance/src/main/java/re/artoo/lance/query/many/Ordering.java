@@ -6,8 +6,6 @@ import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.Many;
 import re.artoo.lance.value.Array;
 
-import java.util.Arrays;
-
 import static re.artoo.lance.query.many.Ordering.Arrange.asc;
 
 public sealed interface Ordering<T> extends Many<T> {

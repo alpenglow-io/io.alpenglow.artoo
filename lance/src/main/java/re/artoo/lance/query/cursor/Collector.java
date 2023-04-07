@@ -13,7 +13,7 @@ public sealed interface Collector<ELEMENT> extends Fetch<ELEMENT> permits Cursor
 
   default <RETURN> RETURN collect(TryIntFunction1<? super ELEMENT, ? extends RETURN> returns) {
     try {
-      return returns.invoke(0, this.next().element());
+      return returns.invoke(0, this.next());
     } catch (Throwable e) {
       throw new RuntimeException(e);
     }
@@ -21,7 +21,7 @@ public sealed interface Collector<ELEMENT> extends Fetch<ELEMENT> permits Cursor
 
   default <RETURN> RETURN collect(TryFunction1<? super ELEMENT, ? extends RETURN> returns) {
     try {
-      return returns.invoke(this.next().element());
+      return returns.invoke(this.next());
     } catch (Throwable e) {
       throw new RuntimeException(e);
     }

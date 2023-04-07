@@ -2,8 +2,8 @@ package re.artoo.lance.test.query.cursor.operation;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import re.artoo.lance.query.cursor.operation.Open;
 import re.artoo.lance.query.cursor.operation.Fold;
+import re.artoo.lance.query.cursor.operation.Open;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,8 +18,8 @@ class FoldTest {
         (index, acc, element) -> acc + element
       );
 
-    assertThat(cursor.fetch()).isEqualTo(11);
-    assertThat(cursor.canFetch()).isFalse();
+    assertThat(cursor.next()).isEqualTo(11);
+    assertThat(cursor.hasNext()).isFalse();
   }
 
   @Test
@@ -32,7 +32,7 @@ class FoldTest {
         (index, acc, element) -> acc + element
       );
 
-    assertThat(cursor.fetch()).isEqualTo(1);
-    assertThat(cursor.canFetch()).isFalse();
+    assertThat(cursor.next()).isEqualTo(1);
+    assertThat(cursor.hasNext()).isFalse();
   }
 }

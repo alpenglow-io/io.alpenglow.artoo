@@ -1,7 +1,7 @@
 package re.artoo.lance.value.steam;
 
-import re.artoo.lance.value.Steam;
 import re.artoo.lance.value.Puff;
+import re.artoo.lance.value.Steam;
 
 import java.util.Arrays;
 import java.util.Iterator;

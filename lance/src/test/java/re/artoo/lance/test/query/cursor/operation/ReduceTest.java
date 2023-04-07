@@ -17,7 +17,7 @@ class ReduceTest {
         (index, acc, element) -> acc + element
       );
 
-    assertThat(cursor.fetch()).isEqualTo(10);
-    assertThat(cursor.canFetch()).isFalse();
+    assertThat(cursor.next()).isEqualTo(10);
+    assertThat(cursor.hasNext()).isFalse();
   }
 }

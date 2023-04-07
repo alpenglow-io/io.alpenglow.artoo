@@ -2,11 +2,9 @@ package re.artoo.lance.test.value;
 
 import org.junit.jupiter.api.Test;
 import re.artoo.lance.value.Array;
-import re.artoo.lance.value.Steam;
 
 import java.util.ArrayList;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

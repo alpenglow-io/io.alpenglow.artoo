@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ReduceTest {
   @Test
   @DisplayName("should reduce all the elements")
-  void shouldReduce() throws Throwable {
+  void shouldReduce() {
     var cursor =
       new Reduce<>(
         new Open<>(1, 2, 3, 4),

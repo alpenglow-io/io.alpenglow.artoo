@@ -22,18 +22,25 @@ public record Filter<ELEMENT>(Fetch<ELEMENT> fetch, Value<ELEMENT> value, TryInt
 
   @Override
   public boolean hasNext() {
-    again:
-    if (fetch.hasNext())
-      if (fetch.next((index, element) -> condition.test(index, element) && value.set(index, element)))
+    if (!value.fetched) return true;
+    while (fetch.hasNext()) {
+      if (isTested())
         return true;
-      else
-        break again;
+    }
 
     return false;
   }
 
+  private Boolean isTested() {
+    return fetch.next((index, element) -> condition.test(index, element) && value.set(index, element));
+  }
+
   @Override
   public <NEXT> NEXT next(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) {
-    return hasNext() ? value.then(then) : FetchException.byThrowingCantFetchNextElement("filter", "filterable");
+    try {
+      return hasNext() ? value.get(then) : FetchException.byThrowingCantFetchNextElement("filter", "filterable");
+    } finally {
+      value.fetched = true;
+    }
   }
 }

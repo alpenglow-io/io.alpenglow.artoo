@@ -12,7 +12,7 @@ import static re.artoo.lance.query.cursor.operation.Filter.presenceOnly;
 class FilterTest {
   @Test
   @DisplayName("should filter elements")
-  void shouldFilterElements() throws Throwable {
+  void shouldFilterElements() {
     var filter =
       new Filter<>(
         new Open<>("Luke", null, "I'm", "your", null, "father", null, null, null, "fool"),
@@ -27,7 +27,7 @@ class FilterTest {
 
   @Test
   @DisplayName("should filter with present-only elements")
-  void shouldFilterWithPresentOnlyElements() throws Throwable {
+  void shouldFilterWithPresentOnlyElements() {
     var filter =
       new Filter<>(
         new Filter<>(
@@ -45,17 +45,18 @@ class FilterTest {
 
   @Test
   @DisplayName("should filter numbers less than condition with index")
-  void shouldFilterNumberLessThanOperation() throws Throwable {
+  void shouldFilterNumberLessThanOperation() {
     var filter =
       new Filter<>(
         new Filter<>(
           new Open<>(0, null, 30, null, 20, null, 15, 90, 85, 40, 75, null),
           presenceOnly()
         ),
-        (index, number) -> number <= index * 10
+        (index, number) -> number <= 40
       );
 
     assertThat(filter.next()).isEqualTo(0);
+    assertThat(filter.next()).isEqualTo(30);
     assertThat(filter.next()).isEqualTo(20);
     assertThat(filter.next()).isEqualTo(15);
     assertThat(filter.next()).isEqualTo(40);
@@ -64,7 +65,7 @@ class FilterTest {
 
   @Test
   @DisplayName("should filter numbers less than condition with index and exclude nulls in the end")
-  void shouldFilterNumberLessThanOperationButNulls() throws Throwable {
+  void shouldFilterNumberLessThanOperationButNulls() {
     var filter =
       new Filter<>(
         new Open<>(0, 30, 20, 15, 90, 85, 40, 75),
@@ -80,7 +81,7 @@ class FilterTest {
 
   @Test
   @DisplayName("should coalesce cursor")
-  void shouldCoalesceCursor() throws Throwable {
+  void shouldCoalesceCursor() {
     var presenceOnly = new Filter<>(new Open<>(1, null, 2, null, 3, null, 4), presenceOnly());
 
     assertThat(presenceOnly.next()).isEqualTo(1);

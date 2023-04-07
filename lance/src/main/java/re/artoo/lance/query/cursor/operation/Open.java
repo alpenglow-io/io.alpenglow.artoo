@@ -11,7 +11,7 @@ public record Open<ELEMENT>(ELEMENT[] elements, Index index) implements Cursor<E
   }
   @Override
   public boolean hasNext() {
-    return index.value <= elements.length;
+    return index.value < elements.length;
   }
   @Override
   public <NEXT> NEXT next(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) {

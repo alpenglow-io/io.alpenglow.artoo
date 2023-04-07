@@ -1,6 +1,7 @@
 package re.artoo.lance.query.cursor;
 
 import re.artoo.lance.func.TryIntFunction1;
+import re.artoo.lance.query.FetchException;
 
 import java.util.Iterator;
 
@@ -10,7 +11,7 @@ public interface Fetch<ELEMENT> extends Iterator<ELEMENT> {
 
   @Override
   default ELEMENT next() {
-    return next((index, element) -> element);
+    return hasNext() ? next((index, element) -> element) : FetchException.byThrowingCantFetchNextElement("fetch", "fetchable");
   }
 
   sealed interface Next<ELEMENT> {

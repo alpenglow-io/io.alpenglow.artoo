@@ -6,7 +6,6 @@ import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Fetch;
 
-@SuppressWarnings("UnnecessaryBreak")
 public record Reduce<ELEMENT>(Fetch<ELEMENT> fetch, TryIntFunction2<? super ELEMENT, ? super ELEMENT, ? extends ELEMENT> operation) implements Cursor<ELEMENT> {
   @Override
   public boolean hasNext() {
@@ -18,9 +17,8 @@ public record Reduce<ELEMENT>(Fetch<ELEMENT> fetch, TryIntFunction2<? super ELEM
     if (hasNext()) {
       class Reduced { ELEMENT value = fetch.next(); }
       final var reduced = new Reduced();
-      again: if (hasNext()) {
+      while (hasNext()) {
         reduced.value = fetch.next((index, element) -> operation.apply(index, reduced.value, element));
-        break again;
       }
 
       return then.apply(-1, reduced.value);

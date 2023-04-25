@@ -8,12 +8,18 @@ import re.artoo.lance.query.cursor.Fetch;
 
 public record Peek<ELEMENT>(Fetch<ELEMENT> fetch, TryIntConsumer1<? super ELEMENT> operation) implements Cursor<ELEMENT> {
   @Override
-  public boolean hasNext() {
-    return fetch.hasNext();
+  public boolean hasElement() throws Throwable {
+    return fetch.hasElement();
   }
 
   @Override
-  public <NEXT> NEXT next(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) {
-    return hasNext() ? fetch.next((index, element) -> then.apply(index, operation.selfAccept(element, index, element))) : FetchException.byThrowingCantFetchNextElement("peek", "peekable");
+  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
+    return hasElement()
+      ? fetch
+      .element((index, element) -> {
+        operation.invoke(index, element);
+        return then.invoke(index, element);
+      })
+      : FetchException.byThrowingCantFetchNextElement("peek", "peekable");
   }
 }

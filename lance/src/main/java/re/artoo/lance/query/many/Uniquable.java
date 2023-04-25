@@ -35,7 +35,9 @@ public interface Uniquable<T> extends Queryable<T> {
   default One<T> single(final TryPredicate1<? super T> where) {
     return () -> cursor()
       .filter(where)
-      .reduce((index, single, element) -> FetchException.byThrowing("Can't fetch next single element, more than one single element has been found"));
+      .reduce((single, element) -> FetchException.byThrowing("Can't fetch single element, since more than one element has been found"));
   }
 }
+
+
 

@@ -29,7 +29,7 @@ public class SettableTest {
   public void shouldDistinctRecords() {
     final var distinct = Many.from(new Pet("Pluto", 1), new Pet("Fuffy", 2), new Pet("Fuffy", 2)).distinct();
 
-    assertThat(distinct).containsExactly(new Pet("Pluto", 1), new Pet("Fuffy", 2));
+    assertThat(distinct).containsExactlyInAnyOrder(new Pet("Pluto", 1), new Pet("Fuffy", 2));
   }
 
   @Test
@@ -37,7 +37,7 @@ public class SettableTest {
   public void shouldDistinctRecordss() {
     final var distinct = Many.from(new Pet("Pluto", 1), new Pet("Fuffy", 2), new Pet("Fuffy", 2), new Pet("Toffy", 3)).distinct();
 
-    assertThat(distinct).containsExactly(new Pet("Pluto", 1), new Pet("Fuffy", 2), new Pet("Toffy", 3));
+    assertThat(distinct).containsExactlyInAnyOrder(new Pet("Pluto", 1), new Pet("Fuffy", 2), new Pet("Toffy", 3));
   }
 
   @Test

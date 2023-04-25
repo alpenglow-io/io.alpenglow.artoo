@@ -1,15 +1,11 @@
 package re.artoo.lance.func;
 
 @FunctionalInterface
-public interface TryBooleanPredicate2<A, B> {
+public interface TryBooleanPredicate2<A, B> extends Invocable {
   boolean invoke(boolean truth, A a, B b) throws Throwable;
 
   default boolean test(boolean truth, A a, B b) {
-    try {
-      return invoke(truth, a, b);
-    } catch (Throwable throwable) {
-      throw new InvokeException(throwable);
-    }
+    return attempt(() -> invoke(truth, a, b));
   }
 
   static <A, B> TryBooleanPredicate2<A, B> not(final TryBooleanPredicate2<A, B> predicate) {

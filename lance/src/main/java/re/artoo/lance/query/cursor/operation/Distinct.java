@@ -16,17 +16,17 @@ public record Distinct<ELEMENT>(Fetch<ELEMENT> fetch, Set<ELEMENT> elements, Try
   }
 
   @Override
-  public boolean hasNext() {
-    return fetch.hasNext();
+  public boolean hasElement() throws Throwable {
+    return fetch.hasElement();
   }
 
   @Override
-  public <NEXT> NEXT next(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) {
+  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
     final Value<NEXT> value = new Value<>();
     again:
-    if (hasNext() && fetch.next((index, element) -> condition.test(index, element) && elements.add(element) && value.set(then.apply(index, element)))) {
+    if (hasElement() && fetch.element((index, element) -> condition.invoke(index, element) && elements.add(element) && value.set(then.invoke(index, element)))) {
       return value.element;
-    } else if (hasNext()) {
+    } else if (hasElement()) {
       break again;
     }
 

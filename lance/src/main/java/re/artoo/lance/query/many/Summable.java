@@ -6,6 +6,7 @@ import re.artoo.lance.query.One;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Objects;
 
 @SuppressWarnings("unchecked")
 public interface Summable<ELEMENT> extends Queryable<ELEMENT> {
@@ -29,7 +30,7 @@ public interface Summable<ELEMENT> extends Queryable<ELEMENT> {
   }
 
   default One<ELEMENT> sum() {
-    return () -> cursor().reduce(this::sum);
+    return () -> cursor().reduce(this::sum).filter(Objects::nonNull);
   }
 }
 

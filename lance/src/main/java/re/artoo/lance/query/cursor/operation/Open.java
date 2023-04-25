@@ -10,12 +10,12 @@ public record Open<ELEMENT>(ELEMENT[] elements, Index index) implements Cursor<E
     this(elements, new Index());
   }
   @Override
-  public boolean hasNext() {
+  public boolean hasElement() {
     return index.value < elements.length;
   }
   @Override
-  public <NEXT> NEXT next(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) {
-    return hasNext() ? then.apply(index.value, elements[index.value++]) : FetchException.byThrowingCantFetchNextElement("open", "fetchable");
+  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
+    return hasElement() ? then.invoke(index.value, elements[index.value++]) : FetchException.byThrowingCantFetchNextElement("open", "fetchable");
   }
 
   private static class Index {

@@ -9,7 +9,7 @@ import re.artoo.lance.query.closure.Where;
 
 public interface Filterable<T> extends Queryable<T> {
   default One<T> where(final TryPredicate1<? super T> where) {
-    return () -> cursor().map(new Where<>((i, it) -> where.invoke(it)));
+    return () -> cursor().filter(where);
   }
 
   default <R> One<R> ofType(final Class<? extends R> type) {

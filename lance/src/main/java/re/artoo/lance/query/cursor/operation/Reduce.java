@@ -8,20 +8,20 @@ import re.artoo.lance.query.cursor.Fetch;
 
 public record Reduce<ELEMENT>(Fetch<ELEMENT> fetch, TryIntFunction2<? super ELEMENT, ? super ELEMENT, ? extends ELEMENT> operation) implements Cursor<ELEMENT> {
   @Override
-  public boolean hasNext() {
-    return fetch.hasNext();
+  public boolean hasElement() throws Throwable {
+    return fetch.hasElement();
   }
 
   @Override
-  public <NEXT> NEXT next(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) {
-    if (hasNext()) {
+  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
+    if (hasElement()) {
       class Reduced { ELEMENT value = fetch.next(); }
       final var reduced = new Reduced();
-      while (hasNext()) {
-        reduced.value = fetch.next((index, element) -> operation.apply(index, reduced.value, element));
+      while (hasElement()) {
+        reduced.value = fetch.element((index, element) -> operation.invoke(index, reduced.value, element));
       }
 
-      return then.apply(-1, reduced.value);
+      return then.invoke(-1, reduced.value);
     }
     return FetchException.byThrowingCantFetchNextElement("reduce", "reducible");
   }

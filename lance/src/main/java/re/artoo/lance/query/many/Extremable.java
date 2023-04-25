@@ -7,6 +7,7 @@ import re.artoo.lance.query.One;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Objects;
 
 @SuppressWarnings("DuplicatedCode")
 public interface Extremable<ELEMENT> extends Queryable<ELEMENT> {
@@ -45,7 +46,7 @@ public interface Extremable<ELEMENT> extends Queryable<ELEMENT> {
   }
 
   default One<ELEMENT> max() {
-    return () -> cursor().reduce(maximising());
+    return () -> cursor().reduce(maximising()).filter(Objects::nonNull);
   }
 
   default <N extends Number> One<N> min(final TryFunction1<? super ELEMENT, ? extends N> select) {
@@ -53,6 +54,6 @@ public interface Extremable<ELEMENT> extends Queryable<ELEMENT> {
   }
 
   default One<ELEMENT> min() {
-    return () -> cursor().reduce(minimising());
+    return () -> cursor().reduce(minimising()).filter(Objects::nonNull);
   }
 }

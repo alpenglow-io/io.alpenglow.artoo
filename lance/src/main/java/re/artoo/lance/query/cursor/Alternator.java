@@ -11,8 +11,8 @@ import re.artoo.lance.query.cursor.operation.Or;
 import static re.artoo.lance.query.cursor.operation.Filter.presenceOnly;
 
 public sealed interface Alternator<ELEMENT> extends Fetch<ELEMENT> permits Cursor {
-  default <F extends Fetch<ELEMENT>> Cursor<ELEMENT> or(final F alternative) {
-    return new Or<>(new Filter<>(this, presenceOnly()), alternative);
+  default <FETCH extends Fetch<ELEMENT>> Cursor<ELEMENT> or(FETCH otherwise) {
+    return new Or<>(this, otherwise);
   }
 
 

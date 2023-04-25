@@ -3,16 +3,12 @@ package re.artoo.lance.func;
 import java.util.function.Function;
 
 @FunctionalInterface
-public interface TryFunction1<T, R> extends Function<T, R> {
+public interface TryFunction1<T, R> extends Function<T, R>, Invocable {
   R invoke(T t) throws Throwable;
 
   @Override
   default R apply(T t) {
-    try {
-      return invoke(t);
-    } catch (Throwable throwable) {
-      throw new InvokeException(throwable);
-    }
+    return attempt(() -> invoke(t));
   }
 
   default <V> TryFunction1<V, R> before(TryFunction1<? super V, ? extends T> before) {

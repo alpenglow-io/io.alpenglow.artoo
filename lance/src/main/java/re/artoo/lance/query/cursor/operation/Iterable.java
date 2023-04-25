@@ -4,21 +4,24 @@ import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
-public record Iterable<ELEMENT>(List<ELEMENT> elements, Index index) implements Cursor<ELEMENT> {
-  public Iterable(List<ELEMENT> elements) {
+public record Iterable<ELEMENT>(Iterator<ELEMENT> elements, Index index) implements Cursor<ELEMENT> {
+  public Iterable(Iterator<ELEMENT> elements) {
     this(elements, new Index());
   }
 
   @Override
-  public boolean hasNext() {
-    return index.value <= elements.size();
+  public boolean hasElement() {
+    return elements.hasNext();
   }
 
   @Override
-  public <NEXT> NEXT next(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) {
-    return hasNext() ? then.apply(index.value, elements.get(index.value++)) : FetchException.byThrowingCantFetchNextElement("iterable", "fetchable");
+  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
+    return hasElement() ? then.invoke(index.value++, elements.next()) : FetchException.byThrowingCantFetchNextElement("iterable", "fetchable");
   }
 
   private static class Index {

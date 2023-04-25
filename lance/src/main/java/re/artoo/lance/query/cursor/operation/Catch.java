@@ -6,23 +6,30 @@ import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Fetch;
 
-@SuppressWarnings("UnnecessaryBreak")
-public record Catch<ELEMENT>(Fetch<ELEMENT> fetch, TryConsumer1<? super Throwable> fallback) implements Cursor<ELEMENT> {
-  @Override
-  public boolean hasNext() {
-    return fetch.hasNext();
+public record Catch<ELEMENT>(Fetch<ELEMENT> fetch, TryConsumer1<? super Throwable> feedback, Next<ELEMENT> near) implements Cursor<ELEMENT> {
+  public Catch(Fetch<ELEMENT> fetch, TryConsumer1<? super Throwable> feedback) {
+    this(fetch, feedback, new Next<>());
   }
 
   @Override
-  public <NEXT> NEXT next(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) {
-    again:
-    try {
-      return hasNext() ? fetch.next(then) : FetchException.byThrowingCantFetchNextElement("catch", "catchable");
-    } catch (Throwable throwable) {
-      fallback.accept(throwable);
-      break again;
+  public boolean hasElement() throws Throwable {
+    var caught = true;
+    while (caught) {
+      try {
+        near.hasElement = fetch.hasElement();
+        if (near.hasElement) {
+          fetch.element(near::set);
+        }
+        caught = false;
+      } catch (Throwable throwable) {
+        feedback.invoke(throwable);
+      }
     }
+    return near.hasElement;
+  }
 
-    return FetchException.byThrowingCantFetchNextElement("catch", "catchable");
+  @Override
+  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
+    return near.hasElement ? near.let(then) : FetchException.byThrowingCantFetchNextElement("catch", "catchable");
   }
 }

@@ -11,15 +11,15 @@ public record Fold<ELEMENT, FOLDED>(Fetch<ELEMENT> fetch, Value<FOLDED> folded, 
     this(fetch, new Value<>() {{ element = initial; fetched = false; }}, operation);
   }
   @Override
-  public boolean hasNext() {
-    while (fetch.hasNext()) {
-      folded.set(fetch.next((index, element) -> operation.apply(index, folded.element, element)));
+  public boolean hasElement() throws Throwable {
+    while (fetch.hasElement()) {
+      folded.set(fetch.element((index, element) -> operation.invoke(index, folded.element, element)));
     }
     return !folded.fetched;
   }
 
   @Override
-  public <NEXT> NEXT next(TryIntFunction1<? super FOLDED, ? extends NEXT> then) {
-    return hasNext() ? folded.get(then) : FetchException.byThrowingCantFetchNextElement("fold", "foldable");
+  public <NEXT> NEXT element(TryIntFunction1<? super FOLDED, ? extends NEXT> then) throws Throwable {
+    return hasElement() ? folded.get(then) : FetchException.byThrowingCantFetchNextElement("fold", "foldable");
   }
 }

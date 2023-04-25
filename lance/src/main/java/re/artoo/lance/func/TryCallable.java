@@ -3,14 +3,10 @@ package re.artoo.lance.func;
 import java.util.concurrent.Callable;
 
 @FunctionalInterface
-public interface TryCallable<T> extends Callable<T> {
+public interface TryCallable<T> extends Callable<T>, Invocable {
   T invoke() throws Throwable;
   @Override
   default T call() {
-    try {
-      return invoke();
-    } catch (Throwable throwable) {
-      throw new InvokeException(throwable);
-    }
+    return attempt(this::invoke);
   }
 }

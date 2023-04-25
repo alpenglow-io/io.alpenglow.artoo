@@ -6,24 +6,26 @@ import re.artoo.lance.query.FetchException;
 import java.util.Iterator;
 
 public interface Fetch<ELEMENT> extends Iterator<ELEMENT> {
+  boolean hasElement() throws Throwable;
 
-  <NEXT> NEXT next(TryIntFunction1<? super ELEMENT, ? extends NEXT> then);
+  <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable;
+
+  @Override
+  default boolean hasNext() {
+    try {
+      return hasElement();
+    } catch (Throwable throwable) {
+      return FetchException.byThrowing("Can't check for next element, since exception occurred", throwable);
+    }
+  }
 
   @Override
   default ELEMENT next() {
-    return hasNext() ? next((index, element) -> element) : FetchException.byThrowingCantFetchNextElement("fetch", "fetchable");
-  }
-
-  sealed interface Next<ELEMENT> {
-    static <ELEMENT> Next<ELEMENT> of(ELEMENT element) {
-      return new Just<>(element);
+    try {
+      return hasNext() ? element((index, element) -> element) : FetchException.byThrowingCantFetchNextElement("fetch", "fetchable");
+    } catch (Throwable throwable) {
+      return FetchException.byThrowing("Can't fetch next element, since exception occurred", throwable);
     }
-    static <ELEMENT> Next<ELEMENT> of(int index, ELEMENT element) {
-      return new Indexed<>(index, element);
-    }
-    ELEMENT element();
-    record Indexed<ELEMENT>(int index, ELEMENT element) implements Next<ELEMENT> {}
-    record Just<ELEMENT>(ELEMENT element) implements Next<ELEMENT> {}
   }
 }
 

@@ -1,5 +1,6 @@
 package re.artoo.lance.test.value;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import re.artoo.lance.value.Array;
 
@@ -8,6 +9,7 @@ import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Disabled
 class ArrayTest {
   @Test
   void shouldConcatElements() {

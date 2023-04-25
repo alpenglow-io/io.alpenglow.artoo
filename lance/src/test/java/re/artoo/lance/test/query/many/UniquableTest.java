@@ -60,9 +60,9 @@ public class UniquableTest {
   @Test
   @DisplayName("should find a single element only")
   public void shouldFindASingleElementOnly() {
-    final var singled = from(9).single().otherwise(-1);
+    final var singled = from(9).single();
 
-    assertThat(singled).isEqualTo(9);
+    assertThat(singled).containsOnly(9);
   }
 
   @Test

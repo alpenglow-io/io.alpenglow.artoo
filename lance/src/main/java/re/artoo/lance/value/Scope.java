@@ -40,7 +40,10 @@ public sealed interface Scope<ELEMENT> permits Local, Clean {
 
   default Scope<ELEMENT> peek(TryConsumer1<? super ELEMENT> operation) {
     return switch (this) {
-      case Local<ELEMENT>(var it) -> operation.selfAccept(this, it);
+      case Local<ELEMENT>(var it) -> {
+        operation.accept(it);
+        yield this;
+      }
       default -> this;
     };
   }

@@ -7,11 +7,11 @@ import re.artoo.lance.query.FetchException;
 public enum Empty implements Cursor<Object> {
   Default;
   @Override
-  public boolean hasNext() {
+  public boolean hasElement() {
     return false;
   }
   @Override
-  public <NEXT> NEXT next(TryIntFunction1<? super Object, ? extends NEXT> then) {
+  public <NEXT> NEXT element(TryIntFunction1<? super Object, ? extends NEXT> then) {
     return FetchException.byThrowingCantFetchNextElement("empty", "");
   }
 }

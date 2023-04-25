@@ -5,7 +5,9 @@ import re.artoo.lance.query.cursor.operation.Empty;
 import re.artoo.lance.query.cursor.operation.Iterable;
 import re.artoo.lance.query.cursor.operation.Open;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 public non-sealed interface Cursor<ELEMENT> extends Mappator<ELEMENT>, Folderator<ELEMENT>, Reduciator<ELEMENT>, Alternator<ELEMENT>, Appendor<ELEMENT>, Collector<ELEMENT>, Joinable<ELEMENT>, Filterator<ELEMENT> {
   @SafeVarargs
@@ -22,8 +24,8 @@ public non-sealed interface Cursor<ELEMENT> extends Mappator<ELEMENT>, Folderato
     return value == null ? empty() : open(value);
   }
 
-  static <T> Cursor<T> from(List<T> collection) {
-    return new Iterable<>(collection);
+  static <T> Cursor<T> from(java.lang.Iterable<T> elements) {
+    return new Iterable<>(elements.iterator());
   }
 
   static Throwable exception(String message, Throwable cause) {

@@ -11,33 +11,21 @@ public record Flat<ELEMENT>(Fetch<Fetch<ELEMENT>> fetch, Flatten<ELEMENT> flatte
   }
 
   @Override
-  public boolean hasNext() {
-    flatten.hasNext = fetch.hasNext() || (flatten.fetch != null && flatten.fetch.element.hasNext());
-
-    if (flatten.hasNext && !flatten.fetch.element.hasNext()) {
-      flatten.fetch = fetch.next((i, e) -> new Value<>() {
-        {
-          index = i;
-          element = e;
-        }
-      });
+  public boolean hasElement() throws Throwable {
+    flatten.fetch = flatten.fetch == null && fetch.hasElement() ? fetch.next() : flatten.fetch;
+    while (flatten.fetch != null && !flatten.fetch.hasElement()) {
+      flatten.fetch = fetch.hasElement() ? fetch.next() : null;
     }
 
-    return flatten.hasNext;
+    return flatten.fetch != null;
   }
 
   @Override
-  public <NEXT> NEXT next(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) {
-    return null;
-  }
-
-  @Override
-  public ELEMENT next() {
-    return hasNext() ? flatten.fetch.element.next() : FetchException.byThrowingCantFetchNextElement("flat-map", "flattable");
+  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
+    return hasElement() ? flatten.fetch.element(then) : FetchException.byThrowingCantFetchNextElement("flat-map", "flattable");
   }
 
   private static final class Flatten<NEXT> {
-    private boolean hasNext = true;
-    private Value<Fetch<NEXT>> fetch;
+    private Fetch<NEXT> fetch;
   }
 }

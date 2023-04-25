@@ -1,4 +1,4 @@
-package re.artoo.lance.test.query.cursor.projector;
+package re.artoo.lance.test.query.cursor.operation;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ class FlatTest {
       new Flat<>(
         new Open<>(
           new Open<>(1),
-          new Open<>(),
+          new Open<>((Integer) null),
           new Open<>(3)
         )
       );
@@ -39,9 +39,8 @@ class FlatTest {
       cursor.next(),
       cursor.next(),
       cursor.next(),
-      cursor.next(),
     };
-    final var expected = new Integer[]{1, 2, 3, 4, 5, null};
+    final var expected = new Integer[]{1, 2, 3, 4, 5};
 
     assertThat(actual).isEqualTo(expected);
     assertThat(cursor.hasNext()).isFalse();

@@ -34,14 +34,16 @@ public class PeekableTest {
   public void shouldExceptionallyPeekThrowable() {
     final var reference = new AtomicReference<>("");
 
-    Many.from(1, 2, 3, 4)
+    Many.from(1, 2, 3)
       .peek(it -> {
-        throw new IllegalStateException("%d".formatted(it));
+        if (it < 3) throw new IllegalStateException("%d".formatted(it));
       })
       .exceptionally(throwable -> reference.set(reference.get() + throwable.getMessage()))
-      .eventually();
+      .or(4, 5, 6)
+      .peek(x -> out.println(x))
+      .eventually(it -> out.println(it));
 
-    assertThat(reference.get()).isEqualTo("1234");
+    assertThat(reference.get()).isEqualTo("12");
   }
 
   @Test

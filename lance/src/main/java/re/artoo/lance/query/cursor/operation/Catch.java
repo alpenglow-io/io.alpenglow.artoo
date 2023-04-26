@@ -35,7 +35,7 @@ public final class Catch<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEMEN
         return let.invoke(index, element);
       } else if (hasElement) {
         feedback.invoke(throwable);
-        return null;
+        throw throwable;
       }
 
       return OperationException.byThrowingCantFetchNextElement("catch", "catchable");

@@ -1,5 +1,6 @@
 package re.artoo.lance.query.cursor;
 
+import re.artoo.lance.func.TryIntFunction;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.OperationException;
 
@@ -9,6 +10,9 @@ public interface Fetch<ELEMENT> extends Iterator<ELEMENT> {
   boolean hasElement() throws Throwable;
 
   <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable;
+  default <NEXT> NEXT thrownAt(TryIntFunction<? extends NEXT> then) throws Throwable {
+    return null;
+  }
 
   @Override
   default boolean hasNext() {

@@ -3,23 +3,33 @@ package re.artoo.lance.query.cursor.operation;
 import re.artoo.lance.func.TryIntConsumer1;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Fetch;
 
-public record Peek<ELEMENT>(Fetch<ELEMENT> fetch, TryIntConsumer1<? super ELEMENT> operation) implements Cursor<ELEMENT> {
+public final class Peek<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEMENT> {
+  private final Fetch<ELEMENT> fetch;
+  private final TryIntConsumer1<? super ELEMENT> operation;
+
+  public Peek(Fetch<ELEMENT> fetch, TryIntConsumer1<? super ELEMENT> operation) {
+    super("peek", "peekable");
+    this.fetch = fetch;
+    this.operation = operation;
+  }
+
   @Override
   public boolean hasElement() throws Throwable {
-    return fetch.hasElement();
+    if (!hasElement && (hasElement = fetch.hasElement())) {
+      fetch.element(this::set);
+    }
+    return hasElement;
   }
 
   @Override
   public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
-    return hasElement()
-      ? fetch
-      .element((index, element) -> {
-        operation.invoke(index, element);
-        return then.invoke(index, element);
-      })
-      : FetchException.byThrowingCantFetchNextElement("peek", "peekable");
+    try {
+      if (hasElement) operation.invoke(index, element);
+      return super.element(then);
+    } finally {
+      hasElement = false;
+    }
   }
 }

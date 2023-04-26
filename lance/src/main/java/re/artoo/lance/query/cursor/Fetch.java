@@ -1,7 +1,7 @@
 package re.artoo.lance.query.cursor;
 
 import re.artoo.lance.func.TryIntFunction1;
-import re.artoo.lance.query.FetchException;
+import re.artoo.lance.query.OperationException;
 
 import java.util.Iterator;
 
@@ -15,16 +15,16 @@ public interface Fetch<ELEMENT> extends Iterator<ELEMENT> {
     try {
       return hasElement();
     } catch (Throwable throwable) {
-      return FetchException.byThrowing("Can't check for next element, since exception occurred", throwable);
+      return OperationException.byThrowing("Can't check for next element, since exception occurred", throwable);
     }
   }
 
   @Override
   default ELEMENT next() {
     try {
-      return hasNext() ? element((index, element) -> element) : FetchException.byThrowingCantFetchNextElement("fetch", "fetchable");
+      return hasNext() ? element((index, element) -> element) : OperationException.byThrowingCantFetchNextElement("fetch", "fetchable");
     } catch (Throwable throwable) {
-      return FetchException.byThrowing("Can't fetch next element, since exception occurred", throwable);
+      return OperationException.byThrowing("Can't fetch next element, since exception occurred", throwable);
     }
   }
 }

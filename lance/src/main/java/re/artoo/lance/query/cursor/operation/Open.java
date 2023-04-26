@@ -2,23 +2,21 @@ package re.artoo.lance.query.cursor.operation;
 
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.FetchException;
 
-public record Open<ELEMENT>(ELEMENT[] elements, Index index) implements Cursor<ELEMENT> {
+public final class Open<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEMENT> {
+  private final ELEMENT[] elements;
   @SafeVarargs
   public Open(ELEMENT... elements) {
-    this(elements, new Index());
-  }
-  @Override
-  public boolean hasElement() {
-    return index.value < elements.length;
-  }
-  @Override
-  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
-    return hasElement() ? then.invoke(index.value, elements[index.value++]) : FetchException.byThrowingCantFetchNextElement("open", "fetchable");
+    super("open", "openable");
+    this.elements = elements;
   }
 
-  private static class Index {
-    private int value = 0;
+  @Override
+  public boolean hasElement() {
+    if (!hasElement) {
+      hasElement = ++index < elements.length;
+      if (hasElement) set(index, elements[index]);
+    }
+    return hasElement;
   }
 }

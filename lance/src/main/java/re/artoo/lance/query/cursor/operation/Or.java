@@ -1,33 +1,37 @@
 package re.artoo.lance.query.cursor.operation;
 
-import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Fetch;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-public record Or<ELEMENT>(Fetch<ELEMENT> fetch, AtomicReference<Fetch<ELEMENT>> otherwise, Next<ELEMENT> near) implements Cursor<ELEMENT> {
+public final class Or<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEMENT> {
+  private final Fetch<ELEMENT> fetch;
+  private final AtomicReference<Fetch<ELEMENT>> otherwise;
+
   public Or(Fetch<ELEMENT> fetch, Fetch<ELEMENT> otherwise) {
-    this(fetch, new AtomicReference<>(otherwise), new Next<>());
+    this(fetch, new AtomicReference<>(otherwise));
   }
-  @Override
-  public boolean hasElement() throws Throwable {
-    if (fetch.hasElement()) {
-      otherwise.set(null);
-      near.hasElement = true;
-      fetch.element(near::set);
-    } else if (otherwise.get() != null && otherwise.get().hasElement()) {
-      near.hasElement = true;
-      otherwise.get().element(near::set);
-    } else {
-      near.hasElement = false;
-    }
-    return near.hasElement;
+  private Or(Fetch<ELEMENT> fetch, AtomicReference<Fetch<ELEMENT>> otherwise) {
+    super("or", "elseable");
+    this.fetch = fetch;
+    this.otherwise = otherwise;
   }
 
   @Override
-  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
-    return hasElement() ? near.let(then) : FetchException.byThrowingCantFetchNextElement("or", "elseable");
+  public boolean hasElement() throws Throwable {
+    if (!hasElement) {
+      if (fetch.hasElement()) {
+        otherwise.set(null);
+        hasElement = true;
+        fetch.element(this::set);
+      } else if (otherwise.get() != null && otherwise.get().hasElement()) {
+        hasElement = true;
+        otherwise.get().element(this::set);
+      } else {
+        hasElement = false;
+      }
+    }
+    return hasElement;
   }
 }

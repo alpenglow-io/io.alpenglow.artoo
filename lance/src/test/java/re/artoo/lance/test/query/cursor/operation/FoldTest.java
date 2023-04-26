@@ -2,6 +2,7 @@ package re.artoo.lance.test.query.cursor.operation;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.cursor.operation.Fold;
 import re.artoo.lance.query.cursor.operation.Open;
 
@@ -24,10 +25,10 @@ class FoldTest {
 
   @Test
   @DisplayName("should reduce empty elements to initial value anyway")
-  void shouldReduceAnywayWithInitial() throws Throwable {
+  void shouldReduceAnywayWithInitial() {
     var cursor =
       new Fold<>(
-        new Open<Integer>(),
+        Cursor.<Integer>empty(),
         1,
         (index, acc, element) -> acc + element
       );

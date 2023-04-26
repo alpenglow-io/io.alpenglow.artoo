@@ -1,14 +1,17 @@
 package re.artoo.lance.query.cursor.operation;
 
-import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.func.TryIntPredicate1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Fetch;
 
-public record Filter<ELEMENT>(Fetch<ELEMENT> fetch, TryIntPredicate1<? super ELEMENT> condition, Next<ELEMENT> near) implements Cursor<ELEMENT> {
+public final class Filter<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEMENT> {
+  private final Fetch<ELEMENT> fetch;
+  private final TryIntPredicate1<? super ELEMENT> condition;
+
   public Filter(Fetch<ELEMENT> fetch, TryIntPredicate1<? super ELEMENT> condition) {
-    this(fetch, condition, new Next<>());
+    super("filter", "filterable");
+    this.fetch = fetch;
+    this.condition = condition;
   }
 
   public static <ELEMENT> TryIntPredicate1<? super ELEMENT> presenceOnly() {
@@ -21,18 +24,12 @@ public record Filter<ELEMENT>(Fetch<ELEMENT> fetch, TryIntPredicate1<? super ELE
 
   @Override
   public boolean hasElement() throws Throwable {
-    do {
-      near.hasElement = fetch.hasElement();
-      if (near.hasElement) {
-        fetch.element(near::set);
-        if (condition.invoke(near.index, near.element)) break;
-      }
-    } while (fetch.hasElement());
-    return near.hasElement;
-  }
-
-  @Override
-  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
-      return near.hasElement ? near.let(then) : FetchException.byThrowingCantFetchNextElement("filter", "filterable");
+    if (!hasElement) {
+      do {
+        hasElement = fetch.hasElement();
+        if (hasElement) fetch.element(this::set);
+      } while (hasElement && !condition.invoke(index, element));
+    }
+    return hasElement;
   }
 }

@@ -26,9 +26,9 @@ public final class Filter<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEME
   public boolean hasElement() throws Throwable {
     if (!hasElement) {
       do {
-        hasElement = fetch.hasElement();
-        if (hasElement) fetch.element(this::set);
-      } while (hasElement && !condition.invoke(index, element));
+        //noinspection AssignmentUsedAsCondition
+        if (hasElement = fetch.hasElement()) fetch.element(this::set);
+      } while (!condition.invoke(index, element));
     }
     return hasElement;
   }

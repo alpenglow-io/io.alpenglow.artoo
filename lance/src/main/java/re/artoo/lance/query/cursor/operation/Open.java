@@ -14,8 +14,8 @@ public final class Open<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEMENT
   @Override
   public boolean hasElement() {
     if (!hasElement) {
-      hasElement = ++index < elements.length;
-      if (hasElement) set(index, elements[index]);
+      //noinspection AssignmentUsedAsCondition
+      if (hasElement = ++index < elements.length) set(index, elements[index]);
     }
     return hasElement;
   }

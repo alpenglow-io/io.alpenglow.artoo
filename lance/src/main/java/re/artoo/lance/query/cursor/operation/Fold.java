@@ -13,11 +13,11 @@ public final class Fold<ELEMENT, FOLDED> extends Head<FOLDED> implements Cursor<
     this.operation = operation;
     this.set(0, initial);
   }
-  @SuppressWarnings("AssignmentUsedAsCondition")
   @Override
   public boolean hasElement() throws Throwable {
     if (!hasElement) {
-      while (hasElement = fetch.hasElement()) {
+      hasElement = true;
+      while (fetch.hasElement()) {
         this.element = fetch.element((index, element) -> operation.invoke(index, this.element, element));
       }
     }

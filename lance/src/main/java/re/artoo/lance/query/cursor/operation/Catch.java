@@ -1,9 +1,7 @@
 package re.artoo.lance.query.cursor.operation;
 
 import re.artoo.lance.func.TryConsumer1;
-import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.OperationException;
 import re.artoo.lance.query.cursor.Fetch;
 
 public final class Catch<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEMENT> {
@@ -18,29 +16,17 @@ public final class Catch<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEMEN
 
   @Override
   public boolean hasElement() throws Throwable {
-    if (!hasElement && (hasElement = fetch.hasElement())) {
-      try {
-        fetch.element(this::set);
-      } catch (Throwable throwable) {
-        this.throwable = throwable;
+    if (!hasElement) {
+      var caught = true;
+      while (caught && (hasElement = fetch.hasElement())) {
+        try {
+          fetch.element(this::set);
+          caught = false;
+        } catch (Throwable throwable) {
+          feedback.invoke(throwable);
+        }
       }
     }
     return hasElement;
-  }
-
-  @Override
-  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> let) throws Throwable {
-    try {
-      if (hasElement && throwable == null) {
-        return let.invoke(index, element);
-      } else if (hasElement) {
-        feedback.invoke(throwable);
-        throw throwable;
-      }
-
-      return OperationException.byThrowingCantFetchNextElement("catch", "catchable");
-    } finally {
-      hasElement = false;
-    }
   }
 }

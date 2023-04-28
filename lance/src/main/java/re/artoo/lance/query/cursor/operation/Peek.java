@@ -3,6 +3,7 @@ package re.artoo.lance.query.cursor.operation;
 import re.artoo.lance.func.TryIntConsumer1;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
+import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Fetch;
 
 public final class Peek<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEMENT> {
@@ -17,19 +18,14 @@ public final class Peek<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEMENT
 
   @Override
   public boolean hasElement() throws Throwable {
-    if (!hasElement && (hasElement = fetch.hasElement())) {
-      fetch.element(this::set);
+    hasElement = hasElement || fetch.hasElement();
+    if (hasElement) {
+      fetch.element((index, element) -> {
+        set(index, element);
+        operation.invoke(index, element);
+        return element;
+      });
     }
     return hasElement;
-  }
-
-  @Override
-  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
-    try {
-      if (hasElement) operation.invoke(index, element);
-      return super.element(then);
-    } finally {
-      hasElement = false;
-    }
   }
 }

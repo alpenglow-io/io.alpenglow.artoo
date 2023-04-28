@@ -3,7 +3,7 @@ package re.artoo.lance.query.cursor.operation;
 import re.artoo.lance.func.TryFunction2;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.OperationException;
+import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Fetch;
 
 public final class Rethrow<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEMENT> {
@@ -19,18 +19,18 @@ public final class Rethrow<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEM
   }
 
   public Rethrow(Fetch<ELEMENT> fetch) {
-    this(fetch, null, (ignored, throwable) -> throwable instanceof RuntimeException it ? it : OperationException.with(throwable));
+    this(fetch, null, (ignored, throwable) -> throwable instanceof RuntimeException it ? it : FetchException.with(throwable));
   }
 
   @Override
   public boolean hasElement() throws Throwable {
-    return !hasElement && (hasElement = fetch.hasElement());
+    return hasElement || (hasElement = fetch.hasElement());
   }
 
   @Override
   public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
     try {
-      return hasElement ? fetch.element(then) : OperationException.byThrowingCantFetchNextElement("rethrow", "rethrowable");
+      return hasElement ? fetch.element(then) : FetchException.byThrowingCantFetchNextElement("rethrow", "rethrowable");
     } catch (Throwable throwable) {
       throw fallback.invoke(message, throwable);
     } finally {

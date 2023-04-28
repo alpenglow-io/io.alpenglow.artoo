@@ -2,7 +2,7 @@ package re.artoo.lance.query.cursor.operation;
 
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.OperationException;
+import re.artoo.lance.query.FetchException;
 
 public enum Empty implements Cursor<Object> {
   Default;
@@ -12,6 +12,11 @@ public enum Empty implements Cursor<Object> {
   }
   @Override
   public <NEXT> NEXT element(TryIntFunction1<? super Object, ? extends NEXT> then) {
-    return OperationException.byThrowingCantFetchNextElement("empty", "");
+    return FetchException.byThrowingCantFetchNextElement("empty", "");
+  }
+
+  @Override
+  public <NEXT> NEXT thrownAt(TryIntFunction1<? super Object, ? extends NEXT> then) {
+    return null;
   }
 }

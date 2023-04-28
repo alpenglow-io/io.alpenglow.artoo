@@ -18,13 +18,9 @@ public final class Peek<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEMENT
 
   @Override
   public boolean hasElement() throws Throwable {
-    hasElement = hasElement || fetch.hasElement();
-    if (hasElement) {
-      fetch.element((index, element) -> {
-        set(index, element);
-        operation.invoke(index, element);
-        return element;
-      });
+    if (!hasElement && (hasElement = fetch.hasElement())) {
+      fetch.element(this::set);
+      operation.invoke(index, element);
     }
     return hasElement;
   }

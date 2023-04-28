@@ -22,11 +22,11 @@ public final class Recover<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEM
   }
 
   @Override
-  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
+  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> apply) throws Throwable {
     try {
-      return hasElement ? fetch.element(then) : FetchException.byThrowingCantFetchNextElement("er", "erratic");
+      return hasElement ? fetch.element(apply) : FetchException.byThrowingCantFetchNextElement("er", "erratic");
     } catch (Throwable throwable) {
-      return fetch.thrownAt((index, element) -> then.invoke(index, fallback.invoke(index, element, throwable)));
+      return fetch.thrownAt((index, element) -> apply.invoke(index, fallback.invoke(index, element, throwable)));
     } finally {
       hasElement = false;
     }

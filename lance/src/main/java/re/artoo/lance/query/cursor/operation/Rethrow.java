@@ -9,13 +9,13 @@ import re.artoo.lance.query.cursor.Fetch;
 public final class Rethrow<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEMENT> {
   private final Fetch<ELEMENT> fetch;
   private final String message;
-  private final TryFunction2<? super String, ? super Throwable, ? extends RuntimeException> fallback;
+  private final TryFunction2<? super String, ? super Throwable, ? extends RuntimeException> feedback;
 
-  public Rethrow(Fetch<ELEMENT> fetch, String message, TryFunction2<? super String, ? super Throwable, ? extends RuntimeException> fallback) {
+  public Rethrow(Fetch<ELEMENT> fetch, String message, TryFunction2<? super String, ? super Throwable, ? extends RuntimeException> feedback) {
     super("rethrow", "rethrowable");
     this.fetch = fetch;
     this.message = message;
-    this.fallback = fallback;
+    this.feedback = feedback;
   }
 
   public Rethrow(Fetch<ELEMENT> fetch) {
@@ -24,17 +24,13 @@ public final class Rethrow<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEM
 
   @Override
   public boolean hasElement() throws Throwable {
-    return hasElement || (hasElement = fetch.hasElement());
-  }
-
-  @Override
-  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
-    try {
-      return hasElement ? fetch.element(then) : FetchException.byThrowingCantFetchNextElement("rethrow", "rethrowable");
-    } catch (Throwable throwable) {
-      throw fallback.invoke(message, throwable);
-    } finally {
-      hasElement = false;
+    if (!hasElement || (hasElement = fetch.hasElement())) {
+      try {
+        fetch.element(set);
+      } catch (Throwable throwable) {
+        this.throwable = feedback.invoke(message, throwable);
+      }
     }
+    return hasElement;
   }
 }

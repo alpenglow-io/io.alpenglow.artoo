@@ -1,6 +1,5 @@
 package re.artoo.lance.query.cursor.operation;
 
-import re.artoo.lance.func.TryIntFunction;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Fetch;
@@ -18,6 +17,12 @@ abstract sealed class Head<ELEMENT> implements Fetch<ELEMENT> permits Append, Ca
     this.adjective = adjective;
   }
 
+  protected TryIntFunction1<? super ELEMENT, ? extends Void> set = (index, element) -> {
+    this.index = index;
+    this.element = element;
+    return null;
+  };
+
   protected Head<ELEMENT> set(int index, ELEMENT element) {
     this.index = index;
     this.element = element;
@@ -30,9 +35,15 @@ abstract sealed class Head<ELEMENT> implements Fetch<ELEMENT> permits Append, Ca
   }
 
   @Override
-  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> let) throws Throwable {
+  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> apply) throws Throwable {
     try {
-      return hasElement ? let.invoke(index, element) : FetchException.byThrowingCantFetchNextElement(name, adjective);
+      if (hasElement() && throwable == null) {
+        return apply.invoke(index, element);
+      } else if (hasElement()) {
+        throw throwable;
+      } else {
+        return FetchException.byThrowingCantFetchNextElement(name, adjective);
+      }
     } finally {
       hasElement = false;
     }

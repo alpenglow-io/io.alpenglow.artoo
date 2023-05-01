@@ -16,14 +16,11 @@ public final class Reduce<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEME
 
   @Override
   public boolean hasElement() throws Throwable {
-    if (!hasElement && fetch.hasElement()) {
-      hasElement = true;
-      class Reduced { ELEMENT value = fetch.next(); }
-      final var reduced = new Reduced();
+    if (!hasElement && (hasElement = fetch.hasElement())) {
+      fetch.element(this::set);
       while (fetch.hasElement()) {
-        reduced.value = fetch.element((index, element) -> operation.invoke(index, reduced.value, element));
+        this.element = fetch.element((index, element) -> operation.invoke(index, this.element, element));
       }
-      element = reduced.value;
     }
     return hasElement;
   }

@@ -1,8 +1,8 @@
 package re.artoo.lance.test.query.cursor.operation;
 
 import org.junit.jupiter.api.Test;
+import re.artoo.lance.query.cursor.operation.Map;
 import re.artoo.lance.query.cursor.operation.Open;
-import re.artoo.lance.query.cursor.operation.Peek;
 import re.artoo.lance.query.cursor.operation.Recover;
 
 class RecoverTest {
@@ -10,16 +10,14 @@ class RecoverTest {
   void shouldRecover() {
     var cursor =
       new Recover<>(
-        new Peek<>(
+        new Map<>(
           new Open<>(1, 2, 3),
-          (index, element) -> {
-            if (element < 3) throw new IllegalArgumentException(element + "");
+          (index, element) -> switch (element) {
+            case Integer it when it < 3 -> throw new IllegalArgumentException(String.valueOf(it + index));
+            default -> element;
           }
         ),
-        (index, element, throwable) -> switch (throwable) {
-          case IllegalArgumentException ignored -> element + index;
-          default -> throw new IllegalStateException("yak!");
-        }
+        throwable -> Integer.valueOf(throwable.getMessage())
       );
 
     while (cursor.hasNext()) System.out.println(cursor.next());

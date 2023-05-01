@@ -18,17 +18,12 @@ public final class Filter<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEME
     return (index, element) -> element != null;
   }
 
-  public static <ELEMENT> TryIntPredicate1<? super ELEMENT> absenceOnly() {
-    return (index, element) -> element == null;
-  }
-
   @Override
   public boolean hasElement() throws Throwable {
-    if (!hasElement) {
+    if (!hasElement && (hasElement = fetch.hasElement())) {
       do {
-        //noinspection AssignmentUsedAsCondition
-        if (hasElement = fetch.hasElement()) fetch.element(this::set);
-      } while (!condition.invoke(index, element));
+        fetch.element(this::set);
+      } while (!condition.invoke(index, element) && (hasElement = fetch.hasElement()));
     }
     return hasElement;
   }

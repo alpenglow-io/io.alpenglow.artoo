@@ -8,7 +8,7 @@ public interface TryIntFunction1<T, R> extends Invocable {
     return attempt(() -> invoke(integer, t));
   }
 
-  default <V> TryIntFunction1<V, R> invokeAfter(TryIntFunction1<? super V, ? extends T> func) {
+  default <V> TryIntFunction1<V, R> invokeAfterwards(TryIntFunction1<? super V, ? extends T> func) {
     // invoke TryIntFunction1.this after TryIntFunction1.func
     return (integer, it) -> invoke(integer, func.invoke(integer, it));
   }

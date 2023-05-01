@@ -15,8 +15,4 @@ public enum Empty implements Cursor<Object> {
     return FetchException.byThrowingCantFetchNextElement("empty", "");
   }
 
-  @Override
-  public <NEXT> NEXT thrownAt(TryIntFunction1<? super Object, ? extends NEXT> then) {
-    return null;
-  }
 }

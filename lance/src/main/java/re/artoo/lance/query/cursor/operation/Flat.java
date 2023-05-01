@@ -20,8 +20,12 @@ public final class Flat<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEMENT
   public boolean hasElement() throws Throwable {
     if (!hasElement) {
       do {
-        flatten = (flatten == null && fetch.hasElement()) || (flatten != null && !flatten.hasElement()) ? fetch.next() : flatten;
-        if (flatten != null && (hasElement = flatten.hasElement())) flatten.element(this::set);
+        if (flatten == null && fetch.hasElement() || (flatten != null && !flatten.hasElement()))
+          flatten = fetch.next();
+        else
+          index++;
+
+        if (flatten != null && (hasElement = flatten.hasElement())) flatten.element((ith, element) -> set(index, element));
       } while (!hasElement && fetch.hasElement());
     }
     return hasElement;

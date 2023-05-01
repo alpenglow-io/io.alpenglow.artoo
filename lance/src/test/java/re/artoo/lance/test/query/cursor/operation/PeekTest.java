@@ -13,17 +13,16 @@ class PeekTest {
       new Peek<>(
         new Map<>(
           new Peek<>(
-            new Or<>(
+            new Recover<>(
               new Catch<>(
                 new Peek<>(
                   new Open<>(1, 2, 3),
                   (index, element) -> {
-                    if (element <= 3) throw new IllegalArgumentException(index + " " + element);
-                  }
-                ),
+                    if (element < 3) throw new IllegalArgumentException(index + " " + element);
+                  }),
                 throwable -> System.err.println(throwable.getMessage())
               ),
-              new Open<>(4, 5, 6)
+              throwable -> 9
             ),
             (index, element) -> System.out.println(index + " " + element)
           ),
@@ -31,7 +30,7 @@ class PeekTest {
         ),
         (index, element) -> System.out.println(index + " " + element)
       )
-    ).toIterable().containsExactlyInAnyOrder(5, 6, 7);
+    ).toIterable().containsExactlyInAnyOrder(5, 6, 10);
   }
 
   @Test

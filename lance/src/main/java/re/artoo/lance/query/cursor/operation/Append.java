@@ -13,15 +13,12 @@ public final class Append<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEME
     this.tail = tail;
   }
 
-  @SuppressWarnings("AssignmentUsedAsCondition")
   @Override
   public boolean hasElement() throws Throwable {
-    if (!hasElement) {
-      if (hasElement = head.hasElement())
+    if (!hasElement && (hasElement = head.hasElement()))
         head.element(this::set);
-      else if (hasElement = tail.hasElement())
+    else if (!hasElement && (hasElement = tail.hasElement()))
         tail.element(this::set);
-    }
     return hasElement;
   }
 }

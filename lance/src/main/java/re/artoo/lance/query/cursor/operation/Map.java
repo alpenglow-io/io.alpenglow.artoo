@@ -2,7 +2,6 @@ package re.artoo.lance.query.cursor.operation;
 
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Fetch;
 
 public final class Map<ELEMENT, RETURN> extends Head<RETURN> implements Cursor<RETURN> {
@@ -17,9 +16,8 @@ public final class Map<ELEMENT, RETURN> extends Head<RETURN> implements Cursor<R
 
   @Override
   public boolean hasElement() throws Throwable {
-    if (!hasElement) {
-      //noinspection AssignmentUsedAsCondition
-      if (hasElement = fetch.hasElement()) fetch.element((index, element) -> set(index, operation.invoke(index, element)));
+    if (!hasElement && (hasElement = fetch.hasElement())) {
+      fetch.element((index, element) -> set(index, operation.invoke(index, element)));
     }
     return hasElement;
   }

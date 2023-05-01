@@ -19,14 +19,14 @@ public final class Rethrow<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEM
   }
 
   public Rethrow(Fetch<ELEMENT> fetch) {
-    this(fetch, null, (ignored, throwable) -> throwable instanceof RuntimeException it ? it : FetchException.with(throwable));
+    this(fetch, null, (ignored, throwable) -> throwable instanceof RuntimeException exception ? exception : FetchException.with(throwable));
   }
 
   @Override
   public boolean hasElement() throws Throwable {
     if (!hasElement || (hasElement = fetch.hasElement())) {
       try {
-        fetch.element(set);
+        fetch.element(this::set);
       } catch (Throwable throwable) {
         this.throwable = feedback.invoke(message, throwable);
       }

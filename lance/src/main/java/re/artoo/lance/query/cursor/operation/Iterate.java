@@ -4,10 +4,10 @@ import re.artoo.lance.query.Cursor;
 
 import java.util.Iterator;
 
-public final class Iterable<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEMENT> {
+public final class Iterate<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEMENT> {
   private final Iterator<ELEMENT> elements;
 
-  public Iterable(Iterator<ELEMENT> elements) {
+  public Iterate(Iterator<ELEMENT> elements) {
     super("iterable", "openable");
     this.elements = elements;
   }

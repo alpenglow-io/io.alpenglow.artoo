@@ -5,12 +5,12 @@ import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.cursor.Fetch;
 
-public final class Peek<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEMENT> {
+public final class Peek<ELEMENT> extends Current<ELEMENT> implements Cursor<ELEMENT> {
   private final Fetch<ELEMENT> fetch;
   private final TryIntConsumer1<? super ELEMENT> operation;
 
   public Peek(Fetch<ELEMENT> fetch, TryIntConsumer1<? super ELEMENT> operation) {
-    super("peek", "peekable");
+    super(fetch, "peek", "peekable");
     this.fetch = fetch;
     this.operation = operation;
   }

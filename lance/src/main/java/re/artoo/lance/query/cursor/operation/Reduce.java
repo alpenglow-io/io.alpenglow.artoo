@@ -4,12 +4,12 @@ import re.artoo.lance.func.TryIntFunction2;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.cursor.Fetch;
 
-public final class Reduce<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEMENT> {
+public final class Reduce<ELEMENT> extends Current<ELEMENT> implements Cursor<ELEMENT> {
   private final Fetch<ELEMENT> fetch;
   private final TryIntFunction2<? super ELEMENT, ? super ELEMENT, ? extends ELEMENT> operation;
 
   public Reduce(Fetch<ELEMENT> fetch, TryIntFunction2<? super ELEMENT, ? super ELEMENT, ? extends ELEMENT> operation) {
-    super("reduce", "reducible");
+    super(fetch, "reduce", "reducible");
     this.fetch = fetch;
     this.operation = operation;
   }

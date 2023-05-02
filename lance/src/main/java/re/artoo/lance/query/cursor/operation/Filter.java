@@ -4,12 +4,12 @@ import re.artoo.lance.func.TryIntPredicate1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.cursor.Fetch;
 
-public final class Filter<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEMENT> {
+public final class Filter<ELEMENT> extends Current<ELEMENT> implements Cursor<ELEMENT> {
   private final Fetch<ELEMENT> fetch;
   private final TryIntPredicate1<? super ELEMENT> condition;
 
   public Filter(Fetch<ELEMENT> fetch, TryIntPredicate1<? super ELEMENT> condition) {
-    super("filter", "filterable");
+    super(fetch, "filter", "filterable");
     this.fetch = fetch;
     this.condition = condition;
   }

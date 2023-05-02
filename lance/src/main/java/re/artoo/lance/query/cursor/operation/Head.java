@@ -1,39 +1,42 @@
 package re.artoo.lance.query.cursor.operation;
 
 import re.artoo.lance.func.TryIntFunction1;
+import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Fetch;
 
-abstract sealed class Head<ELEMENT> implements Fetch<ELEMENT> permits Append, Catch, Recover, Filter, Flat, Fold, Iterate, Map, Open, Or, Peek, Reduce, Rethrow {
-  protected final String name;
-  protected final String adjective;
-  protected int index = 0;
-  protected ELEMENT element;
-  protected Throwable throwable;
-  protected boolean hasElement = false;
+public final class Head<ELEMENT> implements Cursor<ELEMENT> {
+  private final Fetch<ELEMENT> fetch;
+  private int index;
+  private ELEMENT element;
+  private boolean hasElement;
 
-  protected Head(String name, String adjective) {
-    this.name = name;
-    this.adjective = adjective;
+  public Head(Fetch<ELEMENT> fetch) {
+    this(fetch, 0, null, false);
   }
-
-  protected Head<ELEMENT> set(int index, ELEMENT element) {
+  private Head(Fetch<ELEMENT> fetch, int index, ELEMENT element, boolean hasElement) {
+    this.fetch = fetch;
     this.index = index;
     this.element = element;
-    return this;
+    this.hasElement = hasElement;
   }
 
   @Override
-  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> apply) throws Throwable {
+  public boolean hasElement() throws Throwable {
+    if (!hasElement && (hasElement = fetch.hasElement())) {
+      element = fetch.element((index, element) -> {
+        this.index = index;
+        return element;
+      });
+    }
+    return hasElement;
+  }
+
+  @Override
+  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
     try {
-      boolean hasElem = hasElement();
-      if (hasElem && throwable == null) {
-        return apply.invoke(index, element);
-      } else if (hasElem) {
-        throw throwable;
-      } else {
-        return FetchException.byThrowingCantFetchNextElement(name, adjective);
-      }
+      hasElement = hasElement || hasElement();
+      return hasElement ? then.invoke(index, element) : FetchException.byThrowingCantFetchNextElement("head", "head");
     } finally {
       hasElement = false;
     }

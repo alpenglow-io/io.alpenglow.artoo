@@ -3,19 +3,22 @@ package re.artoo.lance.query.cursor.operation;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
 
-public final class Open<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEMENT> {
+public final class Open<ELEMENT> implements Cursor<ELEMENT> {
   private final ELEMENT[] elements;
+  private int index;
+
   @SafeVarargs
   public Open(ELEMENT... elements) {
-    super("open", "openable");
-    this.elements = elements;
+    this(elements, 0);
   }
+  private Open(ELEMENT[] elements, int index) {
+    this.elements = elements;
+    this.index = index;
+  }
+
   @Override
   public boolean hasElement() {
-    if (!hasElement && (hasElement = index < elements.length)) {
-      element = elements[index];
-    }
-    return hasElement;
+    return index < elements.length;
   }
 
   @Override

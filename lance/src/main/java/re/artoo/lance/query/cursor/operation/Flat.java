@@ -3,7 +3,7 @@ package re.artoo.lance.query.cursor.operation;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.cursor.Fetch;
 
-public final class Flat<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEMENT> {
+public final class Flat<ELEMENT> extends Current<ELEMENT> implements Cursor<ELEMENT> {
   private final Fetch<Fetch<ELEMENT>> fetch;
   private Fetch<ELEMENT> flatten;
 
@@ -11,7 +11,7 @@ public final class Flat<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEMENT
     this(fetch, null);
   }
   private Flat(Fetch<Fetch<ELEMENT>> fetch, Fetch<ELEMENT> flatten) {
-    super("flat", "flattable");
+    super(flatten, "flat", "flattable");
     this.fetch = fetch;
     this.flatten = flatten;
   }

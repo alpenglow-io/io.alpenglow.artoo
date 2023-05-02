@@ -4,12 +4,12 @@ import re.artoo.lance.func.TryConsumer1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.cursor.Fetch;
 
-public final class Catch<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEMENT> {
+public final class Catch<ELEMENT> extends Current<ELEMENT> implements Cursor<ELEMENT> {
   private final Fetch<ELEMENT> fetch;
   private final TryConsumer1<? super Throwable> feedback;
 
   public Catch(Fetch<ELEMENT> fetch, TryConsumer1<? super Throwable> feedback) {
-    super("catch", "catchable");
+    super(fetch, "catch", "catchable");
     this.fetch = fetch;
     this.feedback = feedback;
   }

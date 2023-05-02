@@ -5,7 +5,7 @@ import re.artoo.lance.query.cursor.Fetch;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-public final class Or<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEMENT> {
+public final class Or<ELEMENT> extends Current<ELEMENT> implements Cursor<ELEMENT> {
   private final Fetch<ELEMENT> fetch;
   private final AtomicReference<Fetch<ELEMENT>> otherwise;
 
@@ -13,7 +13,7 @@ public final class Or<ELEMENT> extends Head<ELEMENT> implements Cursor<ELEMENT> 
     this(fetch, new AtomicReference<>(otherwise));
   }
   private Or(Fetch<ELEMENT> fetch, AtomicReference<Fetch<ELEMENT>> otherwise) {
-    super("or", "elseable");
+    super(fetch, "or", "elseable");
     this.fetch = fetch;
     this.otherwise = otherwise;
   }

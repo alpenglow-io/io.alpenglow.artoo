@@ -1,6 +1,5 @@
 package re.artoo.lance.query.cursor;
 
-import re.artoo.lance.func.TryIntConsumer1;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.FetchException;
 
@@ -22,10 +21,14 @@ public interface Fetch<ELEMENT> extends Iterator<ELEMENT> {
   @Override
   default ELEMENT next() {
     try {
-      return hasNext() ? element((index, element) -> element) : FetchException.byThrowingCantFetchNextElement("fetch", "fetchable");
+      return hasNext() ? element((index, element) -> element) : FetchException.of("fetch", "fetchable");
     } catch (Throwable throwable) {
       throw throwable instanceof RuntimeException exception ? exception : FetchException.of("Can't fetch next element, since exception occurred: %s".formatted(throwable.getMessage()), throwable);
     }
+  }
+
+  final class Exception extends RuntimeException {
+
   }
 }
 

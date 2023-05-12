@@ -12,7 +12,7 @@ public enum Empty implements Cursor<Object> {
   }
   @Override
   public <NEXT> NEXT element(TryIntFunction1<? super Object, ? extends NEXT> then) {
-    return FetchException.byThrowingCantFetchNextElement("empty", "");
+    return FetchException.of("empty", "");
   }
 
 }

@@ -1,15 +1,20 @@
 package re.artoo.lance.query.cursor.operation;
 
+import com.java.lang.Exceptionable;
+import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.func.TryIntPredicate1;
 import re.artoo.lance.query.Cursor;
+import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Fetch;
 
-public final class Filter<ELEMENT> extends Current<ELEMENT> implements Cursor<ELEMENT> {
+public final class Filter<ELEMENT> implements Cursor<ELEMENT>, Exceptionable {
   private final Fetch<ELEMENT> fetch;
   private final TryIntPredicate1<? super ELEMENT> condition;
+  private int index;
+  private ELEMENT element;
+  private boolean hasElement;
 
   public Filter(Fetch<ELEMENT> fetch, TryIntPredicate1<? super ELEMENT> condition) {
-    super(fetch, "filter", "filterable");
     this.fetch = fetch;
     this.condition = condition;
   }
@@ -22,9 +27,21 @@ public final class Filter<ELEMENT> extends Current<ELEMENT> implements Cursor<EL
   public boolean hasElement() throws Throwable {
     if (!hasElement && (hasElement = fetch.hasElement())) {
       do {
-        fetch.element(this::set);
+        element = fetch.element((index, element) -> {
+          this.index = index;
+          return element;
+        });
       } while (!condition.invoke(index, element) && (hasElement = fetch.hasElement()));
     }
     return hasElement;
+  }
+
+  @Override
+  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
+    try {
+      return hasElement || hasElement() ? then.invoke(index, element) : raise(() -> FetchException.of("filter", "filterable"));
+    } finally {
+      hasElement = false;
+    }
   }
 }

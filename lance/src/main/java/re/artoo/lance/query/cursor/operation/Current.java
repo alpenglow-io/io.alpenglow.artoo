@@ -4,7 +4,7 @@ import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Fetch;
 
-abstract sealed class Current<ELEMENT> implements Fetch<ELEMENT> permits Append, Catch, Recover, Filter, Flat, Fold, Iterate, Map, Open, Or, Peek, Reduce, Rethrow {
+abstract sealed class Current<ELEMENT> implements Fetch<ELEMENT> permits Recover, Flat, Fold, Iterate, Or, Peek, Reduce, Rethrow {
   protected final Fetch<ELEMENT> fetch;
   protected final String name;
   protected final String adjective;
@@ -47,7 +47,7 @@ abstract sealed class Current<ELEMENT> implements Fetch<ELEMENT> permits Append,
       } else if (hasElement) {
         throw throwable;
       } else {
-        return FetchException.byThrowingCantFetchNextElement(name, adjective);
+        return FetchException.of(name, adjective);
       }
     } finally {
       hasElement = false;

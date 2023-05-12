@@ -24,7 +24,7 @@ public final class FetchException extends RuntimeException {
     throw new FetchException(message);
   }
 
-  public static <RETURN> RETURN byThrowingCantFetchNextElement(String operation, String adjective) {
+  public static <RETURN> RETURN of(String operation, String adjective) {
     throw new FetchException("Can't fetch next element for %s cursor (no more %s elements?)".formatted(operation, adjective));
   }
 

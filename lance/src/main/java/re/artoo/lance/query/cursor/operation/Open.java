@@ -24,7 +24,7 @@ public final class Open<ELEMENT> implements Cursor<ELEMENT> {
   @Override
   public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> apply) throws Throwable {
     try {
-      return super.element(apply);
+      return apply.invoke(index, elements[index]);          
     } finally {
       index++;
     }

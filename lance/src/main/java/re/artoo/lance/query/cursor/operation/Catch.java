@@ -1,15 +1,20 @@
 package re.artoo.lance.query.cursor.operation;
 
+import com.java.lang.Exceptionable;
 import re.artoo.lance.func.TryConsumer1;
+import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
+import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Fetch;
 
-public final class Catch<ELEMENT> extends Current<ELEMENT> implements Cursor<ELEMENT> {
+public final class Catch<ELEMENT> implements Cursor<ELEMENT>, Exceptionable {
   private final Fetch<ELEMENT> fetch;
   private final TryConsumer1<? super Throwable> feedback;
+  private int index;
+  private ELEMENT element;
+  private boolean hasElement;
 
   public Catch(Fetch<ELEMENT> fetch, TryConsumer1<? super Throwable> feedback) {
-    super(fetch, "catch", "catchable");
     this.fetch = fetch;
     this.feedback = feedback;
   }
@@ -18,9 +23,11 @@ public final class Catch<ELEMENT> extends Current<ELEMENT> implements Cursor<ELE
   public boolean hasElement() throws Throwable {
     if (!hasElement) {
       var caught = true;
-      while (caught && (hasElement = fetch.hasElement())) {
+      while (caught) {
         try {
-          fetch.element(this::set);
+          index++;
+          hasElement = fetch.hasElement();
+          if (hasElement) element = fetch.element((index, element) -> element);
           caught = false;
         } catch (Throwable throwable) {
           feedback.invoke(throwable);
@@ -28,5 +35,14 @@ public final class Catch<ELEMENT> extends Current<ELEMENT> implements Cursor<ELE
       }
     }
     return hasElement;
+  }
+
+  @Override
+  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
+    try {
+      return hasElement() ? then.invoke(index, element) : raise(() -> FetchException.of("catch", "catchable"));
+    } finally {
+      hasElement = false;
+    }
   }
 }

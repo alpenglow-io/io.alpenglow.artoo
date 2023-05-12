@@ -28,7 +28,7 @@ class FoldTest {
   void shouldReduceAnywayWithInitial() {
     var cursor =
       new Fold<>(
-        Cursor.<Integer>empty(),
+        new Open<Integer>(),
         1,
         (index, acc, element) -> acc + element
       );

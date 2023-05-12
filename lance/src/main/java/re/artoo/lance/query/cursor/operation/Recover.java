@@ -1,29 +1,43 @@
 package re.artoo.lance.query.cursor.operation;
 
-import re.artoo.lance.func.TryFunction1;
+import com.java.lang.Exceptionable;
+import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
+import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Fetch;
 
-public final class Recover<ELEMENT> extends Current<ELEMENT> implements Cursor<ELEMENT> {
+public final class Recover<ELEMENT> implements Cursor<ELEMENT>, Exceptionable {
   private final Fetch<ELEMENT> fetch;
-  private final TryFunction1<? super Throwable, ? extends ELEMENT> fallback;
+  private final TryIntFunction1<? super Throwable, ? extends ELEMENT> fallback;
+  private int index;
+  private ELEMENT element;
+  private boolean hasElement;
 
-  public Recover(Fetch<ELEMENT> fetch, TryFunction1<? super Throwable, ? extends ELEMENT> fallback) {
-    super(fetch, "recover", "recoverable");
+  public Recover(Fetch<ELEMENT> fetch, TryIntFunction1<? super Throwable, ? extends ELEMENT> fallback) {
     this.fetch = fetch;
     this.fallback = fallback;
   }
 
   @Override
   public boolean hasElement() throws Throwable {
-    try {
-      if (!hasElement && (hasElement = fetch.hasElement())) {
-        fetch.element(this::set);
+    if (!hasElement) {
+      try {
+        hasElement = fetch.hasElement();
+        if (hasElement) element = fetch.element((__, element) -> element);
+      } catch (Throwable throwable) {
+        element = fallback.invoke(index, throwable);
       }
-    } catch (Throwable throwable) {
-      element = fallback.invoke(throwable);
-      hasElement = true;
     }
     return hasElement;
+  }
+
+  @Override
+  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
+    try {
+      return hasElement || hasElement() ? then.invoke(index, element) : raise(() -> FetchException.of("recover", "recoverable"));
+    } finally {
+      index++;
+      hasElement = false;
+    }
   }
 }

@@ -16,7 +16,7 @@ class CatchTest implements Exceptionable {
   void shouldFetch() {
     var cursor = new Catch<>(
       new Open<>(1, 2, 3),
-      err::println
+      (ith, it) -> it.printStackTrace()
     );
 
     assertThat(cursor).toIterable().containsExactly(1, 2, 3);
@@ -30,7 +30,7 @@ class CatchTest implements Exceptionable {
         new Open<>(1, 2, 3, 4),
         (i, it) -> it % 2 == 0 ? raise(() -> new IllegalStateException("Hello there!")) : it
       ),
-      it -> err.printf("Caught exception with message: %s%n", it.getMessage())
+      (ith, it)  -> err.printf("Caught exception with message: %s%n", it.getMessage())
     );
 
     assertThat(cursor).toIterable().containsExactly(1, 3);

@@ -6,7 +6,8 @@ import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.cursor.operation.Flat;
 import re.artoo.lance.query.cursor.operation.Open;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 class FlatTest {
   @Test
@@ -21,11 +22,7 @@ class FlatTest {
         )
       );
 
-    final var actual = new Integer[]{cursor.next(), cursor.next(), cursor.next()};
-    final var expected = new Integer[]{1, null, 3};
-
-    assertThat(actual).isEqualTo(expected);
-    assertThat(cursor.hasNext()).isFalse();
+    assertThat(cursor).toIterable().containsExactly(1, null, 3);
   }
 
   @Test

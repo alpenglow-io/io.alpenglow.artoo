@@ -20,9 +20,9 @@ class PeekTest {
                   (index, element) -> {
                     if (element < 3) throw new IllegalArgumentException(index + " " + element);
                   }),
-                throwable -> System.err.println(throwable.getMessage())
+                (index, throwable) -> System.err.println(throwable.getMessage())
               ),
-              throwable -> 9
+              (index, throwable) -> 9
             ),
             (index, element) -> System.out.println(index + " " + element)
           ),
@@ -43,7 +43,7 @@ class PeekTest {
             if (element < 3) throw new IllegalArgumentException(element.toString());
           }
         ),
-        throwable -> System.err.println(throwable.getMessage())
+        (index, throwable) -> System.err.println(throwable.getMessage())
       );
 
     while (cursor.hasNext()) cursor.next();

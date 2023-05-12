@@ -1,9 +1,9 @@
 package com.java.lang;
 
-import java.util.function.Supplier;
+import re.artoo.lance.func.TrySupplier1;
 
 public interface Exceptionable {
-  default <T> T raise(Supplier<? extends Throwable> exception) throws Throwable {
-    throw exception.get();
+  default <T> T raise(TrySupplier1<? extends Throwable> exception) throws Throwable {
+    throw exception.invoke();
   }
 }

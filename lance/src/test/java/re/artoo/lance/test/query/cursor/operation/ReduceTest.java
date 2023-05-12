@@ -17,7 +17,6 @@ class ReduceTest {
         (index, acc, element) -> acc + element
       );
 
-    assertThat(cursor.next()).isEqualTo(10);
-    assertThat(cursor.hasNext()).isFalse();
+    assertThat(cursor).toIterable().containsExactly(10);
   }
 }

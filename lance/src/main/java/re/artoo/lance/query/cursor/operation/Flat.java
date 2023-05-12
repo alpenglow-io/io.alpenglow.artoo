@@ -1,17 +1,22 @@
 package re.artoo.lance.query.cursor.operation;
 
+import com.java.lang.Exceptionable;
+import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
+import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Fetch;
 
-public final class Flat<ELEMENT> extends Current<ELEMENT> implements Cursor<ELEMENT> {
+public final class Flat<ELEMENT> implements Cursor<ELEMENT>, Exceptionable {
   private final Fetch<Fetch<ELEMENT>> fetch;
   private Fetch<ELEMENT> flatten;
+  private int index;
+  private ELEMENT element;
+  private boolean hasElement;
 
   public Flat(Fetch<Fetch<ELEMENT>> fetch) {
     this(fetch, null);
   }
   private Flat(Fetch<Fetch<ELEMENT>> fetch, Fetch<ELEMENT> flatten) {
-    super(flatten, "flat", "flattable");
     this.fetch = fetch;
     this.flatten = flatten;
   }
@@ -21,13 +26,22 @@ public final class Flat<ELEMENT> extends Current<ELEMENT> implements Cursor<ELEM
     if (!hasElement) {
       do {
         if (flatten == null && fetch.hasElement() || (flatten != null && !flatten.hasElement()))
-          flatten = fetch.next();
-        else
-          index++;
+          flatten = fetch.hasElement() ? fetch.element((__, element) -> element) : null;
 
-        if (flatten != null && (hasElement = flatten.hasElement())) flatten.element((ith, element) -> set(index, element));
+        if (flatten != null && (hasElement = flatten.hasElement()))
+          element = flatten.element((__, element) -> element);
       } while (!hasElement && fetch.hasElement());
     }
     return hasElement;
+  }
+
+  @Override
+  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
+    try {
+      return hasElement || hasElement() ? then.invoke(index, element) : raise(() -> FetchException.of("flat", "flattable"));
+    } finally {
+      index++;
+      hasElement = false;
+    }
   }
 }

@@ -1,35 +1,48 @@
 package re.artoo.lance.query.cursor.operation;
 
+import com.java.lang.Exceptionable;
 import re.artoo.lance.func.TryFunction2;
+import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Fetch;
 
-public final class Rethrow<ELEMENT> extends Current<ELEMENT> implements Cursor<ELEMENT> {
+public final class Rethrow<ELEMENT> implements Cursor<ELEMENT>, Exceptionable {
   private final Fetch<ELEMENT> fetch;
-  private final String message;
-  private final TryFunction2<? super String, ? super Throwable, ? extends RuntimeException> feedback;
+  private final TryIntFunction1<? super Throwable, ? extends Throwable> feedback;
+  private int index;
+  private ELEMENT element;
+  private Throwable throwable;
+  private boolean hasElement;
 
-  public Rethrow(Fetch<ELEMENT> fetch, String message, TryFunction2<? super String, ? super Throwable, ? extends RuntimeException> feedback) {
-    super(fetch, "rethrow", "rethrowable");
+  public Rethrow(Fetch<ELEMENT> fetch, TryIntFunction1<? super Throwable, ? extends Throwable> feedback) {
     this.fetch = fetch;
-    this.message = message;
     this.feedback = feedback;
-  }
-
-  public Rethrow(Fetch<ELEMENT> fetch) {
-    this(fetch, null, (ignored, throwable) -> throwable instanceof RuntimeException exception ? exception : FetchException.with(throwable));
   }
 
   @Override
   public boolean hasElement() throws Throwable {
     if (!hasElement || (hasElement = fetch.hasElement())) {
       try {
-        fetch.element(this::set);
+        element = fetch.element((__, element) -> element);
       } catch (Throwable throwable) {
-        this.throwable = feedback.invoke(message, throwable);
+        this.throwable = feedback.invoke(index, throwable);
       }
     }
     return hasElement;
+  }
+
+  @Override
+  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
+    try {
+      return hasElement || hasElement()
+        ? throwable == null
+        ? then.invoke(index, element)
+        : raise(() -> throwable)
+        : raise(() -> FetchException.of("rethrow", "rethrowable"));
+    } finally {
+      index++;
+      hasElement = false;
+    }
   }
 }

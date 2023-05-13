@@ -23,7 +23,10 @@ public final class Recover<ELEMENT> implements Cursor<ELEMENT>, Exceptionable {
     if (!hasElement) {
       try {
         hasElement = fetch.hasElement();
-        if (hasElement) element = fetch.element((__, element) -> element);
+        if (hasElement) element = fetch.element((index, element) -> {
+          this.index = index;
+          return element;
+        });
       } catch (Throwable throwable) {
         element = fallback.invoke(index, throwable);
       }

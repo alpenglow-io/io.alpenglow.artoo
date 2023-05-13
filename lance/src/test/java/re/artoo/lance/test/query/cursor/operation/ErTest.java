@@ -9,8 +9,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ErTest {
   @Test
-  @DisplayName("should fetch elements with an error")
-  void shouldFetchWithError() {
+  @DisplayName("should throw an error on fetching elements")
+  void shouldThrowAnError() {
     var cursor = new Er<>(new Open<>(), "No elements found", IllegalStateException::new);
 
     assertThatThrownBy(cursor::next)

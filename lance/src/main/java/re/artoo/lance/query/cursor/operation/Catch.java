@@ -27,7 +27,10 @@ public final class Catch<ELEMENT> implements Cursor<ELEMENT>, Exceptionable {
       while (caught) {
         try {
           hasElement = fetch.hasElement();
-          if (hasElement) element = fetch.element((index, element) -> element);
+          if (hasElement) element = fetch.element((index, element) -> {
+            this.index = index;
+            return element;
+          });
           caught = false;
         } catch (Throwable throwable) {
           feedback.invoke(index, throwable);
@@ -40,7 +43,7 @@ public final class Catch<ELEMENT> implements Cursor<ELEMENT>, Exceptionable {
   @Override
   public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
     try {
-      return hasElement() ? then.invoke(index, element) : raise(() -> FetchException.of("catch", "catchable"));
+      return hasElement || hasElement() ? then.invoke(index, element) : raise(() -> FetchException.of("catch", "catchable"));
     } finally {
       index++;
       hasElement = false;

@@ -1,12 +1,14 @@
 package re.artoo.lance.test.query.cursor.operation;
 
+import com.java.lang.Exceptionable;
 import org.junit.jupiter.api.Test;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.cursor.operation.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.in;
 
-class PeekTest {
+class PeekTest implements Exceptionable {
   @Test
   void shouldPeek() {
     assertThat(
@@ -14,15 +16,13 @@ class PeekTest {
         new Map<>(
           new Peek<>(
             new Recover<>(
-              new Catch<>(
-                new Peek<>(
-                  new Open<>(1, 2, 3),
-                  (index, element) -> {
-                    if (element < 3) throw new IllegalArgumentException(index + " " + element);
-                  }),
-                (index, throwable) -> System.err.println(throwable.getMessage())
-              ),
-              (index, throwable) -> 9
+              new Map<>(
+                new Open<>(1, 2, 3),
+                (index, element) -> index < 2 ? raise(IllegalArgumentException::new) : element),
+              (index, throwable) -> {
+                System.err.printf("Error on index %d%n", index);
+                return 9;
+              }
             ),
             (index, element) -> System.out.println(index + " " + element)
           ),
@@ -30,7 +30,7 @@ class PeekTest {
         ),
         (index, element) -> System.out.println(index + " " + element)
       )
-    ).toIterable().containsExactlyInAnyOrder(5, 6, 10);
+    ).toIterable().containsExactlyInAnyOrder(10, 10, 4);
   }
 
   @Test
@@ -40,10 +40,10 @@ class PeekTest {
         new Peek<>(
           new Open<>(1, 2, 3),
           (index, element) -> {
-            if (element < 3) throw new IllegalArgumentException(element.toString());
+            if (element < 3) throw new IllegalArgumentException();
           }
         ),
-        (index, throwable) -> System.err.println(throwable.getMessage())
+        (index, throwable) -> System.err.printf("Error on index %d%n", index)
       );
 
     while (cursor.hasNext()) cursor.next();

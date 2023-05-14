@@ -1,12 +1,12 @@
 package re.artoo.lance.query.cursor.operation;
 
-import com.java.lang.Exceptionable;
+import com.java.lang.Raiseable;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Fetch;
 
-public final class Map<ELEMENT, RETURN> implements Cursor<RETURN>, Exceptionable {
+public final class Map<ELEMENT, RETURN> implements Cursor<RETURN>, Raiseable {
   private final Fetch<ELEMENT> fetch;
   private final TryIntFunction1<? super ELEMENT, ? extends RETURN> operation;
 

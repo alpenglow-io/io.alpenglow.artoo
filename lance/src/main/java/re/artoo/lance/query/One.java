@@ -3,10 +3,7 @@ package re.artoo.lance.query;
 import re.artoo.lance.Queryable;
 import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.func.TrySupplier1;
-import re.artoo.lance.query.one.Elseable;
-import re.artoo.lance.query.one.Filterable;
-import re.artoo.lance.query.one.Peekable;
-import re.artoo.lance.query.one.Projectable;
+import re.artoo.lance.query.one.*;
 
 enum None implements One<Object> {
   Default;
@@ -17,13 +14,13 @@ enum None implements One<Object> {
   }
 }
 
-public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Elseable<T> {
+public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Exceptionable<T>, Elseable<T> {
   static <T> One<T> of(final T element) {
     return element != null ? new Lone<>(element) : One.none();
   }
 
   static <T> One<T> from(final TrySupplier1<T> supply) {
-    return new Sone<>(supply);
+    return new Zone<>(supply);
   }
 
   static <T> One<T> gone(final String message, final TryFunction1<? super String, ? extends RuntimeException> error) {
@@ -55,10 +52,10 @@ final class Lone<ELEMENT> implements One<ELEMENT> {
   }
 }
 
-final class Sone<T> implements One<T> {
+final class Zone<T> implements One<T> {
   private final TrySupplier1<T> suppl;
 
-  public Sone(final TrySupplier1<T> suppl) {
+  public Zone(final TrySupplier1<T> suppl) {
     this.suppl = suppl;
   }
 

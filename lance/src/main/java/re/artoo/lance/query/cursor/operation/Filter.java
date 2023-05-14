@@ -1,13 +1,13 @@
 package re.artoo.lance.query.cursor.operation;
 
-import com.java.lang.Exceptionable;
+import com.java.lang.Raiseable;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.func.TryIntPredicate1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Fetch;
 
-public final class Filter<ELEMENT> implements Cursor<ELEMENT>, Exceptionable {
+public final class Filter<ELEMENT> implements Cursor<ELEMENT>, Raiseable {
   private final Fetch<ELEMENT> fetch;
   private final TryIntPredicate1<? super ELEMENT> condition;
   private int index;

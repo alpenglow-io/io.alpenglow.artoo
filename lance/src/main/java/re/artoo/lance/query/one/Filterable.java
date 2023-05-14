@@ -3,9 +3,8 @@ package re.artoo.lance.query.one;
 import re.artoo.lance.Queryable;
 import re.artoo.lance.func.TryPredicate1;
 import re.artoo.lance.query.One;
-import re.artoo.lance.query.closure.NotOfType;
-import re.artoo.lance.query.closure.OfType;
-import re.artoo.lance.query.closure.Where;
+
+import static re.artoo.lance.func.TryPredicate1.not;
 
 public interface Filterable<T> extends Queryable<T> {
   default One<T> where(final TryPredicate1<? super T> where) {
@@ -13,10 +12,10 @@ public interface Filterable<T> extends Queryable<T> {
   }
 
   default <R> One<R> ofType(final Class<? extends R> type) {
-    return () -> cursor().map(new OfType<>(type));
+    return () -> cursor().filter(type::isInstance).map(type::cast);
   }
 
   default <R> One<T> notOfType(final Class<? extends R> type) {
-    return () -> cursor().map(new NotOfType<>(type));
+    return () -> cursor().filter(not(type::isInstance));
   }
 }

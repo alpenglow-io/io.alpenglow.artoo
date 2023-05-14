@@ -1,6 +1,6 @@
 package re.artoo.lance.test.query.cursor.operation;
 
-import com.java.lang.Exceptionable;
+import com.java.lang.Raiseable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import re.artoo.lance.query.cursor.operation.Catch;
@@ -10,7 +10,7 @@ import re.artoo.lance.query.cursor.operation.Open;
 import static java.lang.System.err;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class CatchTest implements Exceptionable {
+class CatchTest implements Raiseable {
   @Test
   @DisplayName("should fetch with no error prints")
   void shouldFetch() {

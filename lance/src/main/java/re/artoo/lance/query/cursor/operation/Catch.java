@@ -1,14 +1,13 @@
 package re.artoo.lance.query.cursor.operation;
 
-import com.java.lang.Exceptionable;
-import re.artoo.lance.func.TryConsumer1;
+import com.java.lang.Raiseable;
 import re.artoo.lance.func.TryIntConsumer1;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Fetch;
 
-public final class Catch<ELEMENT> implements Cursor<ELEMENT>, Exceptionable {
+public final class Catch<ELEMENT> implements Cursor<ELEMENT>, Raiseable {
   private final Fetch<ELEMENT> fetch;
   private final TryIntConsumer1<? super Throwable> feedback;
   private int index;

@@ -1,13 +1,13 @@
 package re.artoo.lance.query.cursor.operation;
 
-import com.java.lang.Exceptionable;
+import com.java.lang.Raiseable;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
 
 import java.util.Iterator;
 
-public final class Iterate<ELEMENT> implements Cursor<ELEMENT>, Exceptionable {
+public final class Iterate<ELEMENT> implements Cursor<ELEMENT>, Raiseable {
   private final Iterator<ELEMENT> elements;
   private int index;
 

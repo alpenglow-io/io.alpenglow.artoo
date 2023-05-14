@@ -15,27 +15,23 @@ public interface Elseable<ELEMENT> extends Queryable<ELEMENT> {
     return () -> cursor().or(otherwise.cursor());
   }
 
-  default <E extends RuntimeException> One<ELEMENT> or(final String message, final TryFunction2<? super Throwable, ? super String, ? extends E> exception) {
-    return () -> cursor().or(message, (m, c) -> exception.invoke(c, m));
+  default One<ELEMENT> or(final String message, final TryFunction1<? super String, ? extends Throwable> exception) {
+    return () -> cursor().or(message, exception);
   }
 
-  default <E extends RuntimeException> One<ELEMENT> or(final String message, final TryFunction1<? super String, ? extends E> exception) {
-    return () -> cursor().or(message, (msg, cause) -> exception.invoke(msg));
-  }
-
-  default <E extends RuntimeException> One<ELEMENT> or(final TrySupplier1<? extends E> exception) {
-    return or(null, (it, throwable) -> exception.invoke());
+  default One<ELEMENT> or(final TrySupplier1<? extends Throwable> exception) {
+    return or(null, __ -> exception.invoke());
   }
 
   default ELEMENT otherwise(final ELEMENT other) {
     return or(other).iterator().next();
   }
 
-  default <E extends RuntimeException> ELEMENT otherwise(final String message, final TryFunction2<? super Throwable, ? super String, ? extends E> exception) {
+  default ELEMENT otherwise(final String message, final TryFunction1<? super String, ? extends Throwable> exception) {
     return or(message, exception).iterator().next();
   }
 
-  default <E extends RuntimeException> ELEMENT otherwise(final TrySupplier1<? extends E> exception) {
+  default ELEMENT otherwise(final TrySupplier1<? extends Throwable> exception) {
     return or(exception).iterator().next();
   }
 }

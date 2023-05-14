@@ -1,6 +1,6 @@
 package re.artoo.lance.query.cursor.operation;
 
-import com.java.lang.Exceptionable;
+import com.java.lang.Raiseable;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.FetchException;
@@ -8,7 +8,7 @@ import re.artoo.lance.query.cursor.Fetch;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-public final class Or<ELEMENT> implements Cursor<ELEMENT>, Exceptionable {
+public final class Or<ELEMENT> implements Cursor<ELEMENT>, Raiseable {
   private final Fetch<ELEMENT> fetch;
   private final AtomicReference<Fetch<ELEMENT>> otherwise;
 

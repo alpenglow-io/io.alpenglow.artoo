@@ -4,7 +4,6 @@ import com.java.lang.Raiseable;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.func.TryIntFunction2;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Fetch;
 
 public final class Reduce<ELEMENT> implements Cursor<ELEMENT>, Raiseable {
@@ -32,7 +31,7 @@ public final class Reduce<ELEMENT> implements Cursor<ELEMENT>, Raiseable {
   @Override
   public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
     try {
-      return hasElement || hasElement() ? then.invoke(0, element) : raise(() -> FetchException.of("reduce", "reducible"));
+      return hasElement || hasElement() ? then.invoke(0, element) : raise(() -> Fetch.Exception.of("reduce", "reducible"));
     } finally {
       hasElement = false;
     }

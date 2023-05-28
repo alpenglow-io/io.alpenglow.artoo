@@ -1,13 +1,14 @@
 package re.artoo.lance.scope;
 
 import java.util.Arrays;
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public sealed interface Values<T> permits Lockeds {
+public sealed interface Values<T> permits ReentrantLocked {
   @SafeVarargs
   static <T> Values<T> lock(T... values) {
-    return new Lockeds<>(values);
+    return new ReentrantLocked<>(values);
   }
 
   static <T> Values<T> empty() {
@@ -18,40 +19,51 @@ public sealed interface Values<T> permits Lockeds {
   T pop();
 }
 
-final class Lockeds<T> implements Values<T> {
-  private final ReadWriteLock lock = new ReentrantReadWriteLock();
+final class ReentrantLocked<T> implements Values<T> {
+  private final ReadWriteLock reentrant = new ReentrantReadWriteLock();
 
   private T[] values;
 
-  Lockeds(T[] values) {
+  ReentrantLocked(T[] values) {
     this.values = values;
   }
 
   @Override
   public final Values<T> push(final T value) {
-    final var write = this.lock.writeLock();
-    try {
-      write.lock();
+    try (final var ignored = new WriteLock(reentrant)) {
       values = Arrays.copyOf(values, values.length + 1);
       values[values.length - 1] = value;
-    } finally {
-      write.unlock();
+      return this;
     }
-    return this;
   }
 
   @Override
-  public final T pop() {
-    if (values.length == 0) return null;
-
-    final var read = this.lock.readLock();
-    try {
-      read.lock();
+  public T pop() {
+    try (final var ignored = new ReadLock(reentrant)) {
+      if (values.length == 0) return null;
       final var value = values[values.length - 1];
       values = Arrays.copyOf(this.values, this.values.length - 1);
       return value;
-    } finally {
-      read.unlock();
+    }
+  }
+
+  interface AutoUnlock extends AutoCloseable {
+    Lock lock();
+
+    @Override
+    default void close() {
+      lock().unlock();
+    }
+  }
+
+  record WriteLock(Lock lock) implements AutoUnlock {
+    WriteLock(ReadWriteLock readWrite) {
+      this(readWrite.writeLock());
+    }
+  }
+  record ReadLock(Lock lock) implements AutoUnlock {
+    ReadLock(ReadWriteLock readWrite) {
+      this(readWrite.readLock());
     }
   }
 }

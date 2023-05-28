@@ -14,6 +14,7 @@ enum None implements One<Object> {
   }
 }
 
+@FunctionalInterface
 public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Exceptionable<T>, Elseable<T> {
   static <T> One<T> of(final T element) {
     return element != null ? new Lone<>(element) : One.none();
@@ -36,7 +37,6 @@ public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Exce
     return new Done<>(going, then);
   }
 
-  interface OfTwo<A, B> extends Queryable.OfTwo<A, B> {}
 }
 
 final class Lone<ELEMENT> implements One<ELEMENT> {
@@ -96,11 +96,11 @@ final class Done<A extends AutoCloseable, T, O extends One<T>> implements One<T>
   }
 
   @Override
-  public final Cursor<T> cursor() {
+  public Cursor<T> cursor() {
     try (final var auto = doing.invoke()) {
       return then.invoke(auto).cursor();
     } catch (Throwable e) {
-      return Cursor.empty();
+      throw new RuntimeException(e);
     }
   }
 }

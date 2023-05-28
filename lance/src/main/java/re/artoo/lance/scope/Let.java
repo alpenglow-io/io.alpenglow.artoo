@@ -3,11 +3,13 @@ package re.artoo.lance.scope;
 import re.artoo.lance.func.TryConsumer1;
 import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.func.TrySupplier1;
+import re.artoo.lance.query.Cursor;
+import re.artoo.lance.query.One;
 
 import static re.artoo.lance.scope.Default.Flushed;
 import static re.artoo.lance.scope.Default.Nothing;
 
-public sealed interface Let<T> permits Late, Let.Readonly, Random {
+public sealed interface Let<T> permits Late, Let.ReadOnly, Random {
   static <T> Let<T> lazy(final TrySupplier1<T> supplier) {
     return new Let.Lazy<>(supplier);
   }
@@ -23,9 +25,9 @@ public sealed interface Let<T> permits Late, Let.Readonly, Random {
 
   default Let<T> flush() { return this; }
 
-  sealed interface Readonly<T> extends Let<T> permits Let.Lazy {}
+  sealed interface ReadOnly<T> extends Let<T> permits Let.Lazy {}
 
-  final class Lazy<T> implements Readonly<T> {
+  final class Lazy<T> implements ReadOnly<T> {
     private final TrySupplier1<? extends T> suppl;
     private volatile Object value;
 

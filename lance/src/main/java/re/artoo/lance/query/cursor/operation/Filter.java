@@ -4,7 +4,6 @@ import com.java.lang.Raiseable;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.func.TryIntPredicate1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Fetch;
 
 public final class Filter<ELEMENT> implements Cursor<ELEMENT>, Raiseable {
@@ -39,7 +38,7 @@ public final class Filter<ELEMENT> implements Cursor<ELEMENT>, Raiseable {
   @Override
   public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
     try {
-      return hasElement || hasElement() ? then.invoke(index, element) : raise(() -> FetchException.of("filter", "filterable"));
+      return hasElement || hasElement() ? then.invoke(index, element) : raise(() -> Fetch.Exception.of("filter", "filterable"));
     } finally {
       hasElement = false;
     }

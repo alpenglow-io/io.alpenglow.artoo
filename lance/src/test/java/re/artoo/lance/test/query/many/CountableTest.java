@@ -34,9 +34,7 @@ public class CountableTest {
   @Test
   @DisplayName("should count non nullable elements only")
   public void shouldCountNonNullableOnly() {
-    final var count = Many.from(1, 2, null, "hi there", true, null)
-      .coalesce()
-      .count();
+    final var count = Many.from(1, 2, null, "hi there", true, null).count();
 
     assertThat(count).containsExactly(4);
   }

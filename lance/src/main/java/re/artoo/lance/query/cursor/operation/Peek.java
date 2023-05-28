@@ -4,7 +4,6 @@ import com.java.lang.Raiseable;
 import re.artoo.lance.func.TryIntConsumer1;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Fetch;
 
 public final class Peek<ELEMENT> implements Cursor<ELEMENT>, Raiseable {
@@ -29,6 +28,6 @@ public final class Peek<ELEMENT> implements Cursor<ELEMENT>, Raiseable {
         operation.invoke(index, element);
         return then.invoke(index, element);
       })
-      : raise(() -> FetchException.of("peek", "peekable"));
+      : raise(() -> Fetch.Exception.of("peek", "peekable"));
   }
 }

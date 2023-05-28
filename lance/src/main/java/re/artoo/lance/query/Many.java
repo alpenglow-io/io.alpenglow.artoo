@@ -13,8 +13,7 @@ public interface Many<T> extends
   Convertable<T>,
   Countable<T>,
   Filterable<T>,
-  Joinable<T>,
-  Elseable<T>,
+  Coalesceable<T>,
   Extremable<T>,
   Partitionable<T>,
   Peekable<T>,
@@ -23,7 +22,8 @@ public interface Many<T> extends
   Settable<T>,
   Sortable<T>,
   Summable<T>,
-  Uniquable<T> {
+  Uniquable<T>, re.artoo.lance.Queryable<T> {
+
 
   @SafeVarargs
   static <R> Many<R> from(final R... items) {

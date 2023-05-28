@@ -4,7 +4,6 @@ import com.java.lang.Raiseable;
 import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Fetch;
 
 public final class Er<ELEMENT> implements Cursor<ELEMENT>, Raiseable {
@@ -27,7 +26,7 @@ public final class Er<ELEMENT> implements Cursor<ELEMENT>, Raiseable {
   @Override
   public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
     try {
-      return hasElement() ? fetch.element((__, element) -> then.invoke(index, element)) : raise(() -> FetchException.of("er", "errable"));
+      return hasElement() ? fetch.element((__, element) -> then.invoke(index, element)) : raise(() -> Fetch.Exception.of("er", "errable"));
     } finally {
       index++;
     }

@@ -39,7 +39,7 @@ public class PeekableTest {
         if (it < 3) throw new IllegalStateException("%d".formatted(it));
       })
       .exceptionally(throwable -> reference.set(reference.get() + throwable.getMessage()))
-      .or(4, 5, 6)
+      .coalesce(4, 5, 6)
       .peek(x -> out.println(x))
       .eventually(it -> out.println(it));
 

@@ -2,8 +2,8 @@ package re.artoo.lance.test.query.many;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.Many;
+import re.artoo.lance.query.cursor.Fetch;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -77,12 +77,12 @@ public class UniquableTest {
   @DisplayName("should throw fetch-exception on more than one single element has been found")
   public void shouldThrowIfThereIsMoreThanSingleElementOnCondition() {
     assertThrows(
-      FetchException.class,
+      Fetch.Exception.class,
       () -> from(9, 65, 87, 435, 3, 83, 23, 87, 435, 67, 19).single(number -> number < 20).cursor().next()
     );
 
     assertThrows(
-      FetchException.class,
+      Fetch.Exception.class,
       () -> from(9, 65, 87, 435, 3, 83, 23, 87, 435, 67, 19).single().cursor().next()
     );
   }

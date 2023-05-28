@@ -4,7 +4,8 @@ import re.artoo.lance.Queryable;
 import re.artoo.lance.func.TryIntPredicate1;
 import re.artoo.lance.func.TryPredicate1;
 import re.artoo.lance.query.Many;
-import re.artoo.lance.query.closure.NotOfType;
+
+import static re.artoo.lance.func.TryPredicate1.not;
 
 public interface Filterable<T> extends Queryable<T> {
   default Many<T> where(final TryPredicate1<? super T> where) {
@@ -22,7 +23,7 @@ public interface Filterable<T> extends Queryable<T> {
   }
 
   default <R> Many<T> notOfType(final Class<? extends R> type) {
-    return () -> cursor().map(new NotOfType<>(type));
+    return () -> cursor().filter(not(type::isInstance));
   }
   default Many<T> coalesce() { return () -> cursor().nonNull(); }
 }

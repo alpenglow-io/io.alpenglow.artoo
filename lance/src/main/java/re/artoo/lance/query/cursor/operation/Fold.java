@@ -4,7 +4,6 @@ import com.java.lang.Raiseable;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.func.TryIntFunction2;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Fetch;
 
 public final class Fold<ELEMENT, FOLDED> implements Cursor<FOLDED>, Raiseable {
@@ -31,7 +30,7 @@ public final class Fold<ELEMENT, FOLDED> implements Cursor<FOLDED>, Raiseable {
   @Override
   public <NEXT> NEXT element(TryIntFunction1<? super FOLDED, ? extends NEXT> then) throws Throwable {
     try {
-      return hasFolded || hasElement() ? then.invoke(0, folded) : raise(() -> FetchException.of("fold", "foldable"));
+      return hasFolded || hasElement() ? then.invoke(0, folded) : raise(() -> Fetch.Exception.of("fold", "foldable"));
     } finally {
       hasFolded = false;
     }

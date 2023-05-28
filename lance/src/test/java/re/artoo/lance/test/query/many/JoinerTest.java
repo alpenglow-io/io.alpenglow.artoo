@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static re.artoo.lance.query.Many.from;
 
-public class JoinableTest implements re.artoo.lance.test.Test {
+public class JoinerTest implements re.artoo.lance.test.Test {
   @Test
   @DisplayName("should join two many naturally")
   public void shouldJoinNaturally() {

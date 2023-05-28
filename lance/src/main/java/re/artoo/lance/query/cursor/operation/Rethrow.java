@@ -3,7 +3,6 @@ package re.artoo.lance.query.cursor.operation;
 import com.java.lang.Raiseable;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.FetchException;
 import re.artoo.lance.query.cursor.Fetch;
 
 public final class Rethrow<ELEMENT> implements Cursor<ELEMENT>, Raiseable {
@@ -41,7 +40,7 @@ public final class Rethrow<ELEMENT> implements Cursor<ELEMENT>, Raiseable {
         if (throwable == null) return then.invoke(index, element);
         throw throwable;
       }
-      return FetchException.of("rethrow", "rethrowable");
+      return Fetch.Exception.of("rethrow", "rethrowable");
     } finally {
       index++;
       hasElement = false;

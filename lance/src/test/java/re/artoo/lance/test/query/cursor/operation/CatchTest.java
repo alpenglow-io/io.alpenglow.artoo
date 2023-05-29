@@ -30,7 +30,7 @@ class CatchTest implements Raiseable {
         new Open<>(1, 2, 3, 4),
         (i, it) -> it % 2 == 0 ? raise(() -> new IllegalStateException("Hello there!")) : it
       ),
-      (ith, it)  -> err.printf("Caught exception on index %d with message: %s%n", ith, it.getMessage())
+      (ith, it) -> err.printf("Caught exception on index %d with message: %s%n", ith, it.getMessage())
     );
 
     assertThat(cursor).toIterable().containsExactly(1, 3);

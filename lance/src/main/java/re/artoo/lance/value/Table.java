@@ -13,8 +13,11 @@ public interface Table<ID, R extends Record> extends Many<R> {
   }
 
   Table<ID, R> insert(R record);
+
   Table<ID, R> update(R record);
+
   Table<ID, R> delete(ID id);
+
   Table<ID, R> delete(R record);
 
   final class InMemory<ID, R extends Record> implements Table<ID, R> {
@@ -22,7 +25,9 @@ public interface Table<ID, R extends Record> extends Many<R> {
 
     private final TryFunction1<? super R, ? extends ID> id;
 
-    private InMemory(final TryFunction1<? super R, ? extends ID> id) {this.id = id;}
+    private InMemory(final TryFunction1<? super R, ? extends ID> id) {
+      this.id = id;
+    }
 
     @Override
     public Cursor<R> cursor() {

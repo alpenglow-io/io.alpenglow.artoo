@@ -12,10 +12,12 @@ public record Some<ELEMENT>(ELEMENT[] elements) implements Array<ELEMENT> {
   public Some(ELEMENT[] head, ELEMENT... tail) {
     this(Companion.concat(head, tail));
   }
+
   @SafeVarargs
   public Some(ELEMENT head, ELEMENT... tail) {
     this(Companion.asArray(head), tail);
   }
+
   @SafeVarargs
   public Some(ELEMENT[] head, ELEMENT body, ELEMENT... tail) {
     this(Companion.concat(head, Companion.concat(Companion.asArray(body), tail)));

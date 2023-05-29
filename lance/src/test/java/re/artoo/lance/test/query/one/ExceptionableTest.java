@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Test;
 import re.artoo.lance.query.One;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ExceptionableTest implements Raiseable {
   @Test

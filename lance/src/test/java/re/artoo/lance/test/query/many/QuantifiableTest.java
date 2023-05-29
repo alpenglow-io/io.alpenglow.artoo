@@ -9,6 +9,24 @@ import re.artoo.lance.test.Test.PetOwner;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class QuantifiableTest {
+  private static PetOwner[] owners() {
+    return new PetOwner[]{
+      new PetOwner(
+        "Haas",
+        new Pet("Barley", 10),
+        new Pet("Boots", 14),
+        new Pet("Whiskers", 6)
+      ),
+      null,
+      new PetOwner("Fakhouri", new Pet("Snowball", 1)),
+      new PetOwner("Antebi"),
+      new PetOwner("Philips",
+        new Pet("Sweetie", 2),
+        new Pet("Rover", 13)
+      )
+    };
+  }
+
   @Test
   @DisplayName("should not every pet name start with B")
   public void shouldNotStartAllWithB() throws Throwable {
@@ -50,24 +68,6 @@ public class QuantifiableTest {
     final var some = Many.from(owners()).coalesce().some(it -> it.pets().length > 0).cursor().next();
 
     assertThat(some).isTrue();
-  }
-
-  private static PetOwner[] owners() {
-    return new PetOwner[] {
-      new PetOwner(
-        "Haas",
-        new Pet("Barley", 10),
-        new Pet("Boots", 14),
-        new Pet("Whiskers", 6)
-      ),
-      null,
-      new PetOwner("Fakhouri", new Pet("Snowball", 1)),
-      new PetOwner("Antebi"),
-      new PetOwner("Philips",
-        new Pet("Sweetie", 2),
-        new Pet("Rover", 13)
-      )
-    };
   }
 
   @Test

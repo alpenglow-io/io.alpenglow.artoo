@@ -8,7 +8,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class LetTest {
   @Test
   public void shouldBeLazySet() {
-    enum Dummy { $; int value = 0; }
+    enum Dummy {
+      $;
+      int value = 0;
+    }
 
     final var dummy = Dummy.$;
 

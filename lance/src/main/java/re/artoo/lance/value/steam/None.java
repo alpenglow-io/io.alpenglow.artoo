@@ -4,7 +4,8 @@ import re.artoo.lance.value.Steam;
 
 import java.util.Iterator;
 
-public enum None implements Steam<Object> {Companion;
+public enum None implements Steam<Object> {
+  Companion;
 
   @Override
   public Iterator<Object> iterator() {

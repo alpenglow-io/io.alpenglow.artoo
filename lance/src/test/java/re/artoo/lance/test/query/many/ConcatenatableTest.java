@@ -13,6 +13,7 @@ public class ConcatenatableTest {
   public void shouldInsertAValue() {
     assertThat(Many.from(1, 2, 3).concat(4, 5, 6)).containsExactly(1, 2, 3, 4, 5, 6);
   }
+
   @Test
   public void shouldInsertAnyQueryable() {
     assertThat(Many.from(1, 2, 3).concat(One.value(4))).containsExactly(1, 2, 3, 4);

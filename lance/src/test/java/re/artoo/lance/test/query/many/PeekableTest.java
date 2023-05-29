@@ -13,10 +13,6 @@ import static java.lang.System.out;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PeekableTest {
-  static public class Touched {
-    int value = 0;
-  }
-
   @Test
   @DisplayName("should operation every element in many")
   public void shouldPeekElements() {
@@ -86,5 +82,9 @@ public class PeekableTest {
       .map(it -> new Pet("No name", it))
       .operation(pet -> out.println("Operating on Pet " + pet.age()))
       .forEach(pet -> out.println("Pet with " + pet.name() + " has " + pet.age() + " years"));*/
+  }
+
+  static public class Touched {
+    int value = 0;
   }
 }

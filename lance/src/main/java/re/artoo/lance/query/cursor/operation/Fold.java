@@ -17,6 +17,7 @@ public final class Fold<ELEMENT, FOLDED> implements Cursor<FOLDED>, Raiseable {
     this.operation = operation;
     this.folded = initial;
   }
+
   @Override
   public boolean hasElement() throws Throwable {
     if (hasFolded) {

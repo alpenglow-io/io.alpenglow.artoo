@@ -7,8 +7,8 @@ import re.artoo.lance.query.Many;
 import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
 import static re.artoo.lance.query.Many.from;
-import static re.artoo.lance.query.many.Ordering.Arrange.asc;
-import static re.artoo.lance.query.many.Ordering.Arrange.desc;
+import static re.artoo.lance.query.many.Ordering.Arrange.ascending;
+import static re.artoo.lance.query.many.Ordering.Arrange.descending;
 
 public class SortableTest implements re.artoo.lance.test.Test {
   @Test
@@ -44,7 +44,7 @@ public class SortableTest implements re.artoo.lance.test.Test {
       CUSTOMERS[64],
     };
 
-    final var names = from(customers).order().by(Customer::country).by(Customer::id, desc);
+    final var names = from(customers).order().by(Customer::country).by(Customer::id, descending);
 
     assertThat(names).containsExactly(
       CUSTOMERS[64],
@@ -74,9 +74,9 @@ public class SortableTest implements re.artoo.lance.test.Test {
     final var countries =
       from(customers)
         .order()
-        .by(Customer::country, asc)
-        .by(Customer::name, desc)
-        .by(Customer::id, desc);
+        .by(Customer::country, ascending)
+        .by(Customer::name, descending)
+        .by(Customer::id, descending);
 
     assertThat(countries).containsExactly(
       CUSTOMERS[64], // 64  	Rancho grande  	Sergio Gutiérrez  	Av. del Libertador 900  	Buenos Aires  	1010  	Argentina
@@ -106,11 +106,11 @@ public class SortableTest implements re.artoo.lance.test.Test {
     final var ordered =
       from(customers)
         .order()
-        .by(Customer::contact, desc)
-        .by(Customer::city, asc)
-        .by(Customer::postalCode, desc)
-        .by(Customer::country, asc)
-        .by(Customer::id, desc);
+        .by(Customer::contact, descending)
+        .by(Customer::city, ascending)
+        .by(Customer::postalCode, descending)
+        .by(Customer::country, ascending)
+        .by(Customer::id, descending);
 
     assertThat(ordered).containsExactly(
       CUSTOMERS[91],

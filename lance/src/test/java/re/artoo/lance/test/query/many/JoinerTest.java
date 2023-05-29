@@ -45,7 +45,8 @@ public class JoinerTest implements re.artoo.lance.test.Test {
   @Test
   @DisplayName("should join two many")
   public void shouldJoinManies() {
-    record OrderCustomer(long orderId, String name) {}
+    record OrderCustomer(long orderId, String name) {
+    }
 
     var customers = from(CUSTOMERS);
     //for (int i = 0; i < 1_000; i++) customers = customers.concat(from(CUSTOMERS));

@@ -13,23 +13,29 @@ public record Some<ELEMENT>(Puff<ELEMENT>[] puffs) implements Steam<ELEMENT> {
   public Some(Puff<ELEMENT>[] head, Puff<ELEMENT>... tail) {
     this(Companion.concat(head, tail));
   }
+
   @SafeVarargs
   public Some(Puff<ELEMENT> head, Puff<ELEMENT>... tail) {
     this(Companion.asArray(head), tail);
   }
+
   @SafeVarargs
   public Some(Puff<ELEMENT>[] head, Puff<ELEMENT> body, Puff<ELEMENT>... tail) {
     this(Companion.concat(head, Companion.concat(Companion.asArray(body), tail)));
   }
+
   @SafeVarargs
   public Some(int from, Puff<ELEMENT>... elements) {
     this(Companion.copy(from, elements));
   }
+
   public Some(Puff<ELEMENT>[] head, Puff<ELEMENT> tail) {
     this(head, Companion.asArray(tail));
   }
 
-  public Puff<ELEMENT> step() { return puffs[0]; }
+  public Puff<ELEMENT> step() {
+    return puffs[0];
+  }
 
   @Override
   public String toString() {

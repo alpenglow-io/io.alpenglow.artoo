@@ -3,8 +3,6 @@ package re.artoo.lance.scope;
 import re.artoo.lance.func.TryConsumer1;
 import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.func.TrySupplier1;
-import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.One;
 
 import static re.artoo.lance.scope.Default.Flushed;
 import static re.artoo.lance.scope.Default.Nothing;
@@ -15,6 +13,7 @@ public sealed interface Let<T> permits Late, Let.ReadOnly, Random {
   }
 
   <R> R let(final TryFunction1<? super T, ? extends R> func);
+
   default Let<T> get(final TryConsumer1<? super T> func) {
     let(it -> {
       func.accept(it);
@@ -23,9 +22,12 @@ public sealed interface Let<T> permits Late, Let.ReadOnly, Random {
     return this;
   }
 
-  default Let<T> flush() { return this; }
+  default Let<T> flush() {
+    return this;
+  }
 
-  sealed interface ReadOnly<T> extends Let<T> permits Let.Lazy {}
+  sealed interface ReadOnly<T> extends Let<T> permits Let.Lazy {
+  }
 
   final class Lazy<T> implements ReadOnly<T> {
     private final TrySupplier1<? extends T> suppl;

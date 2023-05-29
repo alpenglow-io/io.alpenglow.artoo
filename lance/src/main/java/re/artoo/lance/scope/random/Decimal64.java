@@ -6,7 +6,9 @@ import re.artoo.lance.scope.Random;
 public final class Decimal64 implements Random<Double> {
   private final Binary bit;
 
-  public Decimal64(final Binary bit) {this.bit = bit;}
+  public Decimal64(final Binary bit) {
+    this.bit = bit;
+  }
 
   @Override
   public <R> R let(final TryFunction1<? super Double, ? extends R> func) {

@@ -21,6 +21,7 @@ public interface Convertable<T> extends Queryable<T> {
       map.put(key.apply(value), element.apply(value));
     return map;
   }
+
   default List<T> asList() {
     return cursor()
       .fold(Array.<T>none(), Array::push)

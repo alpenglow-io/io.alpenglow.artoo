@@ -6,7 +6,9 @@ import re.artoo.lance.scope.Random;
 public final class Decimal32 implements Random<Float> {
   private final Binary bit;
 
-  public Decimal32(final Binary bit) {this.bit = bit;}
+  public Decimal32(final Binary bit) {
+    this.bit = bit;
+  }
 
   @Override
   public <R> R let(final TryFunction1<? super Float, ? extends R> func) {

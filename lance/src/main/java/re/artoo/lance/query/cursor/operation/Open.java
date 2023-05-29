@@ -11,6 +11,7 @@ public final class Open<ELEMENT> implements Cursor<ELEMENT> {
   public Open(ELEMENT... elements) {
     this(elements, 0);
   }
+
   private Open(ELEMENT[] elements, int index) {
     this.elements = elements;
     this.index = index;
@@ -24,7 +25,7 @@ public final class Open<ELEMENT> implements Cursor<ELEMENT> {
   @Override
   public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> apply) throws Throwable {
     try {
-      return apply.invoke(index, elements[index]);          
+      return apply.invoke(index, elements[index]);
     } finally {
       index++;
     }

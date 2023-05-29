@@ -2,7 +2,6 @@ package re.artoo.lance.query.cursor;
 
 import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.func.TryIntFunction1;
-import re.artoo.lance.func.TryIntPredicate1;
 import re.artoo.lance.query.Cursor;
 
 public sealed interface Collector<ELEMENT> extends Fetch<ELEMENT> permits Cursor {

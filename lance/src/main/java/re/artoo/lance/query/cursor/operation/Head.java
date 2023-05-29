@@ -14,6 +14,7 @@ public final class Head<ELEMENT> implements Cursor<ELEMENT>, Raiseable {
   public Head(Fetch<ELEMENT> fetch) {
     this(fetch, 0, null, false);
   }
+
   private Head(Fetch<ELEMENT> fetch, int index, ELEMENT element, boolean hasElement) {
     this.fetch = fetch;
     this.index = index;

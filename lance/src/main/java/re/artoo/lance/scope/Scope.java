@@ -9,6 +9,15 @@ import re.artoo.lance.query.One;
 public abstract class Scope<T, $this extends Scope<T, $this>> implements One<T>, TrySupplier1<T> {
   protected int value;
 
+  public static void main(String[] args) {
+    class Test extends Scope<Integer, Test> {
+      @Override
+      public Integer invoke() {
+        return 12;
+      }
+    }
+  }
+
   @Override
   public final Cursor<T> cursor() {
     return Cursor.maybe(get());
@@ -32,14 +41,5 @@ public abstract class Scope<T, $this extends Scope<T, $this>> implements One<T>,
         return Scope.this.invoke();
       }
     };
-  }
-
-  public static void main(String[] args) {
-    class Test extends Scope<Integer, Test> {
-      @Override
-      public Integer invoke() {
-        return 12;
-      }
-    }
   }
 }

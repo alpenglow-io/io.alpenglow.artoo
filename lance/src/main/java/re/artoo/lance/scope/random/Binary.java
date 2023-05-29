@@ -16,7 +16,9 @@ public sealed interface Binary extends Random<Integer> permits Binary.Digit {
 
     private final Scramble scramble;
 
-    public Digit(final Scramble scramble) {this.scramble = scramble;}
+    public Digit(final Scramble scramble) {
+      this.scramble = scramble;
+    }
 
     @Override
     public <R> R let(int bits, final TryFunction1<? super Integer, ? extends R> func) {

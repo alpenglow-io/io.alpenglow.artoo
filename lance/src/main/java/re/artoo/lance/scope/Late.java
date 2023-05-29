@@ -12,7 +12,8 @@ public non-sealed interface Late<T> extends Let<T> {
 
   Late<T> set(TrySupplier1<? extends T> suppl);
 
-  sealed interface WriteOnce<T> extends Late<T> permits Late.Init {}
+  sealed interface WriteOnce<T> extends Late<T> permits Late.Init {
+  }
 
   @SuppressWarnings("unchecked")
   final class Init<T> implements WriteOnce<T> {

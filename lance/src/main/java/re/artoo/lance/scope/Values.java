@@ -16,6 +16,7 @@ public sealed interface Values<T> permits ReentrantLocked {
   }
 
   Values<T> push(T value);
+
   T pop();
 }
 
@@ -61,6 +62,7 @@ final class ReentrantLocked<T> implements Values<T> {
       this(readWrite.writeLock());
     }
   }
+
   record ReadLock(Lock lock) implements AutoUnlock {
     ReadLock(ReadWriteLock readWrite) {
       this(readWrite.readLock());

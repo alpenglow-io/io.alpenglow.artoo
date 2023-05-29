@@ -13,6 +13,7 @@ public interface Countable<T> extends Queryable<T> {
   default One<Integer> count(TryIntPredicate1<? super T> where) {
     return () -> cursor().filter(where).fold(0, (counted, element) -> counted + 1);
   }
+
   default One<Integer> count(final TryPredicate1<? super T> where) {
     return count((index, it) -> where.invoke(it));
   }

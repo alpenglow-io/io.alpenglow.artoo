@@ -18,7 +18,9 @@ public record TimeSource(long start, long offset, Instant epoch) {
     return new TimeSource(Instant.ofEpochMilli(1577836800000L));
   }
 
-  public long ticks() { return offset + elapsed(); }
+  public long ticks() {
+    return offset + elapsed();
+  }
 
   public Duration tickDuration() {
     return Duration.ofMillis(1);

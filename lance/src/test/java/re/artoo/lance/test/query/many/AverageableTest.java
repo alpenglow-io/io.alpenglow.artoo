@@ -43,7 +43,7 @@ public class AverageableTest {
 
   @Test
   @DisplayName("should be null since there's no numbers")
-  public void shouldBeNullSinceNoNumbers() throws Throwable {
+  public void shouldBeNullSinceNoNumbers() {
     final var expected = Many.from("apple", "banana", "mango", "orange", "passionfruit", "grape").average();
     assertThat(expected).isEmpty();
   }

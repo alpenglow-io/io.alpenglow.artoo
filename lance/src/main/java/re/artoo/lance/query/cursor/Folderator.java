@@ -9,6 +9,7 @@ public sealed interface Folderator<ELEMENT> extends Fetch<ELEMENT> permits Curso
   default <FOLDED> Cursor<FOLDED> fold(FOLDED initial, TryIntFunction2<? super FOLDED, ? super ELEMENT, ? extends FOLDED> operation) {
     return new Fold<>(this, initial, operation);
   }
+
   default <FOLDED> Cursor<FOLDED> fold(FOLDED initial, TryFunction2<? super FOLDED, ? super ELEMENT, ? extends FOLDED> operation) {
     return fold(initial, (index, reduced, element) -> operation.invoke(reduced, element));
   }

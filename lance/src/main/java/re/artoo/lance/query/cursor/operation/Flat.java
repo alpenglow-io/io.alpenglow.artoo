@@ -15,6 +15,7 @@ public final class Flat<ELEMENT> implements Cursor<ELEMENT>, Raiseable {
   public Flat(Fetch<Fetch<ELEMENT>> fetch) {
     this(fetch, null);
   }
+
   private Flat(Fetch<Fetch<ELEMENT>> fetch, Fetch<ELEMENT> flatten) {
     this.fetch = fetch;
     this.flatten = flatten;

@@ -1,7 +1,6 @@
 package re.artoo.lance;
 
 import re.artoo.lance.func.TryConsumer1;
-import re.artoo.lance.func.TryConsumer2;
 import re.artoo.lance.query.Cursor;
 
 import java.util.Iterator;

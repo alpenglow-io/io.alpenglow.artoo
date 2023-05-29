@@ -11,12 +11,15 @@ public sealed interface Filterator<ELEMENT> extends Fetch<ELEMENT> permits Curso
   default Cursor<ELEMENT> filter(TryIntPredicate1<? super ELEMENT> filter) {
     return new Filter<>(this, filter);
   }
+
   default Cursor<ELEMENT> filter(TryPredicate1<? super ELEMENT> filter) {
     return filter((index, element) -> filter.invoke(element));
   }
+
   default Cursor<ELEMENT> evaluable() {
     return filter(Objects::nonNull);
   }
+
   default Cursor<ELEMENT> nullable() {
     return filter(Objects::isNull);
   }

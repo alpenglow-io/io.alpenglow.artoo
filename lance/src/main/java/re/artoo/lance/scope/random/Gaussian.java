@@ -29,8 +29,7 @@ public final class Gaussian implements Random<Double> {
       synchronized (this) {
         if (next.equals(Nothing)) {
           double v1, v2, s;
-          do
-          {
+          do {
             v1 = decimal.let(it -> 2 * it - 1);
             v2 = decimal.let(it -> 2 * it - 1);
             s = v1 * v1 + v2 * v2;

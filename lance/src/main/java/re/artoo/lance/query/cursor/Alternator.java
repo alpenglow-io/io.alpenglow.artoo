@@ -29,14 +29,15 @@ public sealed interface Alternator<ELEMENT> extends Fetch<ELEMENT> permits Curso
     return new Rethrow<>(this, (__, throwable) -> rethrow.invoke(throwable));
   }
 
-  interface TryFunc1<T, R> extends TryFunction1<T, R> {}
-
   default Cursor<ELEMENT> exceptionally(TryFunc1<? super Throwable, ? extends ELEMENT> recover) {
     return new Recover<>(this, (__, throwable) -> recover.invoke(throwable));
   }
 
   default Cursor<ELEMENT> exceptionally(TryIntConsumer1<? super Throwable> catch$) {
     return new Catch<>(this, catch$);
+  }
+
+  interface TryFunc1<T, R> extends TryFunction1<T, R> {
   }
 }
 

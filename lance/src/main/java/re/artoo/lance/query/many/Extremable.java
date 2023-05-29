@@ -26,6 +26,7 @@ public interface Extremable<ELEMENT> extends Queryable<ELEMENT> {
       default -> max instanceof Number || selected instanceof Character ? max : null;
     };
   }
+
   private static <ELEMENT> TryFunction2<? super ELEMENT, ? super ELEMENT, ? extends ELEMENT> minimising() {
     return (min, selected) -> switch (min) {
       case null -> selected instanceof Number || selected instanceof Character ? selected : null;
@@ -41,6 +42,7 @@ public interface Extremable<ELEMENT> extends Queryable<ELEMENT> {
       default -> min instanceof Number || selected instanceof Character ? min : null;
     };
   }
+
   default <N extends Number> One<N> max(final TryFunction1<? super ELEMENT, ? extends N> select) {
     return () -> cursor().evaluable().<N>map(select).reduce(maximising());
   }

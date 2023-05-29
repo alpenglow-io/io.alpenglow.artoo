@@ -5,12 +5,15 @@ import org.junit.jupiter.api.Test;
 import re.artoo.lance.query.Cursor;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 class CursorTest {
   @Test
   @DisplayName("should condition an old value to new one")
   void shouldMapAnOldValueToNewOne() throws Throwable {
-    record Old(int value) {}
-    record New(String value) {}
+    record Old(int value) {
+    }
+    record New(String value) {
+    }
 
     var fetched = Cursor
       .open(new Old(314))
@@ -23,7 +26,8 @@ class CursorTest {
   @Test
   @DisplayName("should condition an old value to new one")
   void shouldMapAnOldValueToNull() throws Throwable {
-    record Old(int value) {}
+    record Old(int value) {
+    }
 
     var fetched = Cursor
       .open(new Old(314))

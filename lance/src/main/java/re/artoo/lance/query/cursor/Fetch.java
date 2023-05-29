@@ -6,6 +6,7 @@ import java.util.Iterator;
 
 public interface Fetch<ELEMENT> extends Iterator<ELEMENT> {
   boolean hasElement() throws Throwable;
+
   <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable;
 
   @Override
@@ -27,9 +28,22 @@ public interface Fetch<ELEMENT> extends Iterator<ELEMENT> {
   }
 
   final class Exception extends RuntimeException {
+    private Exception(final Throwable throwable) {
+      super(throwable);
+    }
+
+    private Exception(final String s, final Throwable object) {
+      super(s, object);
+    }
+
+    private Exception(String message) {
+      super(message);
+    }
+
     public static Exception with(Throwable throwable) {
       return new Exception(throwable);
     }
+
     public static Exception withMessage(String message) {
       return new Exception(message);
     }
@@ -53,16 +67,6 @@ public interface Fetch<ELEMENT> extends Iterator<ELEMENT> {
     public static <RETURN> RETURN of(String operation, String adjective) {
       throw new Exception("Can't fetch next element for %s cursor (no more %s elements?)".formatted(operation, adjective));
     }
-
-    private Exception(final Throwable throwable) {
-      super(throwable);
-    }
-
-    private Exception(final String s, final Throwable object) {
-      super(s, object);
-    }
-
-    private Exception(String message) { super(message); }
   }
 }
 

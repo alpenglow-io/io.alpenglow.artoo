@@ -9,10 +9,6 @@ public interface Puff<ELEMENT> {
     return new Sync<>(Scope.of(element), scope -> scope);
   }
 
-  <TARGET> Puff<TARGET> then(TryFunction1<? super Scope<? extends ELEMENT>, ? extends Scope<? extends TARGET>> operation) throws Throwable;
-
-  ELEMENT apply();
-
   public static void main(String[] args) throws Throwable {
     var steps = Puff.initial(12)
       .then(scope -> scope.map(it -> it * 2))
@@ -20,9 +16,14 @@ public interface Puff<ELEMENT> {
     out.println("Hellooo!");
     steps.apply();
   }
+
+  <TARGET> Puff<TARGET> then(TryFunction1<? super Scope<? extends ELEMENT>, ? extends Scope<? extends TARGET>> operation) throws Throwable;
+
+  ELEMENT apply();
 }
 
-record Sync<SOURCE, THEN>(Scope<SOURCE> initial, TryFunction1<? super Scope<? extends SOURCE>, ? extends Scope<? extends THEN>> operation) implements Puff<THEN> {
+record Sync<SOURCE, THEN>(Scope<SOURCE> initial,
+                          TryFunction1<? super Scope<? extends SOURCE>, ? extends Scope<? extends THEN>> operation) implements Puff<THEN> {
   @Override
   public <TARGET> Puff<TARGET> then(TryFunction1<? super Scope<? extends THEN>, ? extends Scope<? extends TARGET>> anotherOperation) {
     return new Sync<>(initial, this.operation.then(anotherOperation));

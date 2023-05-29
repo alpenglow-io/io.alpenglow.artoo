@@ -79,7 +79,9 @@ final class Ints implements Many<Integer> {
 final class Supplied<R> implements Many<R> {
   private final TrySupplier1<R[]> supply;
 
-  Supplied(final TrySupplier1<R[]> supply) {this.supply = supply;}
+  Supplied(final TrySupplier1<R[]> supply) {
+    this.supply = supply;
+  }
 
   @Override
   public Cursor<R> cursor() {

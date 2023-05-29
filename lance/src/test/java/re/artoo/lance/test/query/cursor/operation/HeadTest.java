@@ -6,7 +6,6 @@ import re.artoo.lance.query.cursor.operation.Head;
 import re.artoo.lance.query.cursor.operation.Open;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class HeadTest {
   @Test

@@ -30,8 +30,9 @@ public class ConvertableTest {
   @Disabled("Many.from iterable must be reimplemented")
   @DisplayName("should convert a many from an iterable to an array")
   public void shouldConvertAnIterableManyAsArray() {
-    record Dog(String name) {}
-    final var dogs = new Dog[] {
+    record Dog(String name) {
+    }
+    final var dogs = new Dog[]{
       new Dog("Fuffy"), new Dog("Argos"), new Dog("Cerberos"), new Dog("Zeus")
     };
 

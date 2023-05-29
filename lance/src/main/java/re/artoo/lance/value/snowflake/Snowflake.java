@@ -67,6 +67,19 @@ public final class Snowflake {
     return new Snowflake(generatorId, TimeSource.createDefault(), Structure.create(), SequenceOverflowStrategy.SpinWait);
   }
 
+  public static void main(String[] args) {
+    final var snowflake = Snowflake.createDefault(512);
+    var now = Instant.now();
+    long next = 0;
+    for (int i = 0; i < 100_000_000; i++) next = snowflake.next();
+    System.out.println(Instant.now().toEpochMilli() - now.toEpochMilli());
+
+    now = Instant.now();
+    UUID random = null;
+    for (int i = 0; i < 100_000_000; i++) random = UUID.randomUUID();
+    System.out.println(Instant.now().toEpochMilli() - now.toEpochMilli());
+  }
+
   /**
    * Generates the next id.
    *
@@ -108,8 +121,7 @@ public final class Snowflake {
 
   private void spinWaitForNextTick(long lastTimestamp) {
     long timestamp;
-    do
-    {
+    do {
       Thread.onSpinWait();
       timestamp = timeSource.ticks() & maskTime;
     } while (timestamp == lastTimestamp);
@@ -117,18 +129,5 @@ public final class Snowflake {
 
   private long calculateMask(int bits) {
     return (1L << bits) - 1;
-  }
-
-  public static void main(String[] args) {
-    final var snowflake = Snowflake.createDefault(512);
-    var now = Instant.now();
-    long next = 0;
-    for (int i = 0; i < 100_000_000; i++) next = snowflake.next();
-    System.out.println(Instant.now().toEpochMilli() - now.toEpochMilli());
-
-    now = Instant.now();
-    UUID random = null;
-    for (int i = 0; i < 100_000_000; i++) random = UUID.randomUUID();
-    System.out.println(Instant.now().toEpochMilli() - now.toEpochMilli());
   }
 }

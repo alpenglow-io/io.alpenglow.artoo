@@ -154,7 +154,8 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
 
   private <TARGET> Array<TARGET> map(final int index, TryFunction1<? super ELEMENT, ? extends TARGET> operation) {
     return switch (this) {
-      case Some<ELEMENT>(var some) when index < some.length -> Array.of(it -> it.concat(map(index + 1, operation)), operation.apply(some[index]));
+      case Some<ELEMENT>(var some) when index < some.length ->
+        Array.of(it -> it.concat(map(index + 1, operation)), operation.apply(some[index]));
       default -> Array.none();
     };
   }
@@ -275,5 +276,3 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
     };
   }
 }
-
-

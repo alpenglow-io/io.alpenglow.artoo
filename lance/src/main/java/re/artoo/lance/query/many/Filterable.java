@@ -25,6 +25,6 @@ public interface Filterable<T> extends Queryable<T> {
   default <R> Many<T> notOfType(final Class<? extends R> type) {
     return () -> cursor().filter(not(type::isInstance));
   }
-  default Many<T> coalesce() { return () -> cursor().nonNull(); }
+  default Many<T> coalesce() { return () -> cursor().evaluable(); }
 }
 

@@ -2,13 +2,12 @@ package re.artoo.lance.query.one;
 
 import re.artoo.lance.Queryable;
 import re.artoo.lance.func.TryFunction1;
-import re.artoo.lance.func.TryFunction2;
 import re.artoo.lance.func.TrySupplier1;
 import re.artoo.lance.query.One;
 
 public interface Elseable<ELEMENT> extends Queryable<ELEMENT> {
   default One<ELEMENT> or(final ELEMENT element) {
-    return or(One.of(element));
+    return or(One.value(element));
   }
 
   default <OTHER extends One<ELEMENT>> One<ELEMENT> or(final OTHER otherwise) {

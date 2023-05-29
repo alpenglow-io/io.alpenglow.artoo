@@ -10,7 +10,7 @@ public class ProjectableTest {
   @Test
   public void shouldFailWhenSelectThrowsException() {
     assertThrows(Fetch.Exception.class,
-      () -> One.of(1).select(it -> { throw new IllegalStateException("Damn!"); }).eventually(),
+      () -> One.value(1).select(it -> { throw new IllegalStateException("Damn!"); }).eventually(),
       "Damn!"
     );
   }

@@ -1,6 +1,5 @@
 package re.artoo.lance.query;
 
-import re.artoo.lance.Queryable;
 import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.func.TrySupplier1;
 import re.artoo.lance.query.one.*;
@@ -16,25 +15,25 @@ enum None implements One<Object> {
 
 @FunctionalInterface
 public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Exceptionable<T>, Elseable<T> {
-  static <T> One<T> of(final T element) {
+  static <ELEMENT> One<ELEMENT> value(final ELEMENT element) {
     return element != null ? new Lone<>(element) : One.none();
   }
 
-  static <T> One<T> from(final TrySupplier1<T> supply) {
+  static <ELEMENT> One<ELEMENT> from(final TrySupplier1<ELEMENT> supply) {
     return new Zone<>(supply);
   }
 
-  static <T> One<T> gone(final String message, final TryFunction1<? super String, ? extends RuntimeException> error) {
+  static <ELEMENT> One<ELEMENT> gone(final String message, final TryFunction1<? super String, ? extends RuntimeException> error) {
     return new Gone<>(message, error);
   }
 
   @SuppressWarnings("unchecked")
-  static <L> One<L> none() {
-    return (One<L>) None.Default;
+  static <ELEMENT> One<ELEMENT> none() {
+    return (One<ELEMENT>) None.Default;
   }
 
-  static <A extends AutoCloseable, T, O extends One<T>> One<T> done(TrySupplier1<? extends A> going, TryFunction1<? super A, ? extends O> then) {
-    return new Done<>(going, then);
+  static <AUTO extends AutoCloseable, ELEMENT> One<ELEMENT> done(TrySupplier1<? extends AUTO> closeable, TryFunction1<? super AUTO, ? extends One<ELEMENT>> then) {
+    return new Done<>(closeable, then);
   }
 
 }

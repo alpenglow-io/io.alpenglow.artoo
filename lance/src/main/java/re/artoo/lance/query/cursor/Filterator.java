@@ -5,6 +5,8 @@ import re.artoo.lance.func.TryPredicate1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.cursor.operation.Filter;
 
+import java.util.Objects;
+
 public sealed interface Filterator<ELEMENT> extends Fetch<ELEMENT> permits Cursor {
   default Cursor<ELEMENT> filter(TryIntPredicate1<? super ELEMENT> filter) {
     return new Filter<>(this, filter);
@@ -12,7 +14,10 @@ public sealed interface Filterator<ELEMENT> extends Fetch<ELEMENT> permits Curso
   default Cursor<ELEMENT> filter(TryPredicate1<? super ELEMENT> filter) {
     return filter((index, element) -> filter.invoke(element));
   }
-  default Cursor<ELEMENT> nonNull() {
-    return filter(Filter.presenceOnly());
+  default Cursor<ELEMENT> evaluable() {
+    return filter(Objects::nonNull);
+  }
+  default Cursor<ELEMENT> nullable() {
+    return filter(Objects::isNull);
   }
 }

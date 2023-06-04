@@ -10,6 +10,9 @@
   <modules>
     <module>lance</module>
     <module>merlin</module>
+    <module>tintagel</module>
+    <module>fxcalibur</module>
+    <module>anacleto</module>
   </modules>
 
   <name>Artoo</name>

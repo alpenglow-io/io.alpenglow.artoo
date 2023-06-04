@@ -1,6 +1,7 @@
 package re.artoo.lance.query;
 
 import re.artoo.lance.query.cursor.*;
+import re.artoo.lance.query.cursor.operation.Cause;
 import re.artoo.lance.query.cursor.operation.Empty;
 import re.artoo.lance.query.cursor.operation.Iterate;
 import re.artoo.lance.query.cursor.operation.Open;
@@ -23,6 +24,8 @@ public non-sealed interface Cursor<ELEMENT> extends Mappator<ELEMENT>, Folderato
   static <T> Cursor<T> from(java.lang.Iterable<T> elements) {
     return new Iterate<>(elements.iterator());
   }
+
+  static <ELEMENT> Cursor<ELEMENT> cause(Throwable throwable) { return new Cause<>(throwable); }
 
   static Throwable exception(String message, Throwable cause) {
     return new Exception(message, cause);

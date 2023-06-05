@@ -6,19 +6,12 @@ import javafx.scene.Node;
 import javafx.scene.layout.*;
 import re.artoo.lance.value.Array;
 
-public sealed interface Grid extends Element permits Grid.Pane {
+public sealed interface Grid extends Element<Node> {
   static Grid grid() {
     return new Pane();
   }
 
-  static RowConstraints autoRow(VPos pos) {
-    final RowConstraints constraints = new RowConstraints();
-    constraints.setFillHeight(true);
-    constraints.setVgrow(Priority.NEVER);
-    constraints.setValignment(pos);
 
-    return constraints;
-  }
 
   static ColumnConstraints byPercent(final double percent, HPos pos) {
     final ColumnConstraints constraints = new ColumnConstraints(
@@ -42,27 +35,6 @@ public sealed interface Grid extends Element permits Grid.Pane {
     return constraints;
   }
 
-  static RowConstraints byPercent(final double percent, VPos pos) {
-    final RowConstraints constraints = new RowConstraints(
-      ConstraintsBase.CONSTRAIN_TO_PREF,
-      ConstraintsBase.CONSTRAIN_TO_PREF,
-      ConstraintsBase.CONSTRAIN_TO_PREF,
-      Priority.NEVER, pos, true
-    );
-    constraints.setPercentHeight(percent);
-    return constraints;
-  }
-
-  static RowConstraints byPixel(final int height, VPos pos) {
-    final RowConstraints constraints = new RowConstraints(
-      ConstraintsBase.CONSTRAIN_TO_PREF,
-      ConstraintsBase.CONSTRAIN_TO_PREF,
-      ConstraintsBase.CONSTRAIN_TO_PREF,
-      Priority.NEVER, pos, true
-    );
-    constraints.setPrefHeight(height);
-    return constraints;
-  }
 
   Grid columns(ColumnConstraints... columns);
 

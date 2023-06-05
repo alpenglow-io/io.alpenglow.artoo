@@ -6,7 +6,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import re.artoo.lance.func.TryConsumer1;
 
-public sealed interface Input extends Element permits Component {
+public sealed interface Input extends Element<Node> permits Component {
   enum Inputs { Defaults;
     public Node text(String text, TryConsumer1<TextField> apply) {
       return apply.autoAccept(new TextField(text));

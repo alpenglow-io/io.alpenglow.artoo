@@ -1,21 +1,23 @@
 package re.artoo.anacleto.view;
 
 import javafx.geometry.HPos;
-import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import re.artoo.anacleto.control.FloatingButton;
 import re.artoo.fxcalibur.Component;
-import re.artoo.fxcalibur.Require;
+import re.artoo.fxcalibur.Asset;
 
+import static re.artoo.anacleto.control.FloatingButton.Toggle.NotToggled;
+import static re.artoo.anacleto.control.FloatingButton.Toggle.Toggled;
 import static re.artoo.fxcalibur.Grid.*;
-import static re.artoo.fxcalibur.Require.image;
+import static re.artoo.fxcalibur.Asset.image;
 
 public final class View implements Component {
-  private final Require logo = image(View.class.getModule(), "logo.png");
-  private final Component whiteButton = new WhiteButton();
-  private final Component greenButton = new GreenButton("#");
+  private final Asset logo = image(View.class.getModule(), "logo.png");
+  private final Component whiteButton = new FloatingButton("#", Toggled);
+  private final Component greenButton = new FloatingButton("#", NotToggled);
 
   @Override
   public Node render() {
@@ -26,13 +28,13 @@ public final class View implements Component {
         null,
         null,
         grid()
-          .columns(byPixel(84, HPos.CENTER))
+          .columns(grid.column(84, HPos.CENTER))
           .rows(
-            byPercent(45, VPos.CENTER),
-            byPercent(45, VPos.BOTTOM)
+            grid.row(50.0, VPos.CENTER),
+            grid.row(50.0, VPos.CENTER)
           )
           .cell(0, 0, () ->
-            vertical(this::bottomSide,
+            vertical(this::topSide,
               whiteButton.render(),
               greenButton.render(),
               greenButton.render(),
@@ -40,14 +42,14 @@ public final class View implements Component {
               greenButton.render()
             )
           )
-          .cell(0, 1, greenButton)
+          .cell(0, 1, () -> vertical(this::bottomSide, greenButton.render()))
           .render()
       );
   }
 
   private void root(BorderPane pane) {
     pane.setStyle("""
-      -fx-background-size: 1200 800;
+      -fx-background-size: 1440 900;
       -fx-background-radius: 36 36 36 36;
       -fx-border-radius: 36 36 36 36;
       -fx-background-color: #55C596;
@@ -64,15 +66,19 @@ public final class View implements Component {
 
   private void topSide(VBox box) {
     box.setStyle("""
-      -fx-pref-height: 50%;
-      -fx-min-width: 84px;
-      -fx-padding: 10px;
+        -fx-alignment: center;
+        -fx-spacing: 24;
+        -fx-padding: 132 0 0 0;
+        -fx-pref-height: 100%;
       """);
-    box.setAlignment(Pos.CENTER);
   }
 
   private void bottomSide(VBox box) {
-    box.setSpacing(18);
-    box.setAlignment(Pos.CENTER);
+    box.setStyle("""
+        -fx-alignment: bottom_center;
+        -fx-spacing: 24;
+        -fx-padding: 0 0 72 0;
+        -fx-pref-height: 100%;
+      """);
   }
 }

@@ -5,7 +5,7 @@ import re.artoo.lance.func.TryConsumer1;
 
 import static atlantafx.base.theme.Styles.*;
 
-public interface Button extends Element {
+public interface Button extends Element<Node> {
   Buttons button = Buttons.Default;
 
   default Node button(String text, TryConsumer1<javafx.scene.control.Button> apply) {

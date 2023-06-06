@@ -1,17 +1,13 @@
 package re.artoo.anacleto.view;
 
 import javafx.geometry.HPos;
+import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import re.artoo.anacleto.control.FloatingButton;
+import javafx.scene.shape.Rectangle;
 import re.artoo.fxcalibur.Component;
-
-import static re.artoo.anacleto.control.FloatingButton.Toggle.NotToggled;
-import static re.artoo.anacleto.control.FloatingButton.Toggle.Toggled;
 
 
 public final class RightPanel extends VBox implements Component {
@@ -30,7 +26,10 @@ public final class RightPanel extends VBox implements Component {
         ),
         grid.cell(
           0, 0,
-          () -> pane.vertical(this::side)
+          () ->
+            pane.stack(this::topLeft,
+              () -> pane.vertical(this::side)
+            )
         )
       );
   }
@@ -60,9 +59,30 @@ public final class RightPanel extends VBox implements Component {
       """);
   }
 
+  private void topLeft(StackPane pane) {
+    Rectangle rectangle = new Rectangle();
+    rectangle.setFill(Color.web("F3F6F9"));
+    pane.setStyle("""
+      -fx-alignment: top-left;
+      """);
+    rectangle.widthProperty().bind(pane.widthProperty().divide(2));
+    rectangle.heightProperty().bind(pane.heightProperty());
+    pane.getChildren().add(0, rectangle);
+  }
+
+  private void under(VBox box) {
+    box.setStyle("""
+        -fx-pref-height: 100%;
+        -fx-max-width: 50%;
+        -fx-alignment: center;
+        /*-fx-background-color: #F3F6F9;*/
+        -fx-background-color: red;
+      """);
+  }
+
   private void bottom(VBox box) {
     box.setStyle("""
-        -fx-alignment: bottom_center;
+        -fx-alignment: bottom-center;
         -fx-spacing: 24;
         -fx-padding: 0 0 72 0;
         -fx-pref-height: 100%;

@@ -8,6 +8,7 @@ import re.artoo.fxcalibur.Layout.Grids.Cell;
 import re.artoo.lance.func.TryConsumer1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.Many;
+import re.artoo.lance.value.Array;
 
 import java.util.function.Supplier;
 
@@ -121,6 +122,14 @@ public interface Layout extends Element<Node> {
 
     public Node horizontal(TryConsumer1<HBox> customize, Component... components) {
       return pane(HBox::new, customize, components);
+    }
+
+    public Node stack(TryConsumer1<StackPane> customize, Component... components) {
+      return customize.autoAccept(new StackPane(Many.from(components).select(Element::render).asArray(Node[]::new)));
+    }
+
+    public Node stack(Component... components) {
+      return new StackPane(Many.from(components).select(Element::render).asArray(Node[]::new));
     }
 
     public Node anchor(TryConsumer1<AnchorPane> customize, Component... components) {

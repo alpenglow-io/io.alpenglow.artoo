@@ -21,8 +21,8 @@ public final class View implements Component {
 
   @Override
   public Node render() {
-    return
-      border(this::root,
+    return null;
+/*      border(this::root,
         border(this::center),
         null,
         null,
@@ -44,7 +44,7 @@ public final class View implements Component {
           )
           .cell(0, 1, () -> vertical(this::bottomSide, greenButton.render()))
           .render()
-      );
+      );*/
   }
 
   private void root(BorderPane pane) {

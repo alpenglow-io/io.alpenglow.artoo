@@ -37,7 +37,6 @@ public final class TopMenu implements Component {
 
   interface Customization {
     TryConsumer1<VBox> style = box -> box.setStyle("""
-      -fx-alignment: center;
       -fx-spacing: 16;
       """);
   }

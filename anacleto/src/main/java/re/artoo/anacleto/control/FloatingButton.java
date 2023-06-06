@@ -15,10 +15,21 @@ import static javafx.scene.paint.Color.GRAY;
 import static javafx.scene.paint.Color.TRANSPARENT;
 import static javafx.util.Duration.ZERO;
 
-public final class FloatingButton extends Button implements Component {
+public final class FloatingButton implements Component {
   private static final Duration ANIMATION_DURATION = Duration.millis(200);
 
-  public enum Toggle {Toggled, NotToggled}
+  public enum Toggle {
+    Toggled("#FFFFFF", "#55C596"),
+    NotToggled("#55C596", "#FFFFFF");
+
+    private final String background;
+    private final String text;
+
+    Toggle(String background, String text) {
+      this.background = background;
+      this.text = text;
+    }
+  }
 
   private final String text;
   private final Toggle toggle;
@@ -30,23 +41,22 @@ public final class FloatingButton extends Button implements Component {
 
   @Override
   public Node render() {
-    setText(text);
+    Button button = new Button();
+    button.setText(text);
     // Create a button and set its style
-    setStyle("""
+    button.setStyle("""
         -fx-border-width: 0;
         -fx-max-width: 48;
         -fx-min-width: 48;
         -fx-max-height: 48;
         -fx-min-height: 48;
-        -fx-background-color: #FFFFFF;
         -fx-padding: 5;
         -fx-border-radius: 12;
         -fx-background-radius: 12;
-        -fx-text-fill: #55C596;
         -fx-font-size: 24;
-        -fx-font-weight: bold;
-      """);
-    setToggle();
+        -fx-background-color: %s;
+        -fx-text-fill: %s;
+      """.formatted(toggle.background, toggle.text));
 
     // Create a drop shadow effect
     var shadow = new DropShadow();
@@ -56,7 +66,7 @@ public final class FloatingButton extends Button implements Component {
     shadow.setRadius(5);
 
     // Apply the drop shadow effect to the button
-    setEffect(shadow);
+    button.setEffect(shadow);
 
     // Create an animation for the shadow effect on mouse over
     var shadowAnimation = new Timeline(
@@ -70,19 +80,8 @@ public final class FloatingButton extends Button implements Component {
     );
 
     // Add the animation to the button's mouse over event
-    setOnMouseEntered(event -> shadowAnimation.play());
-    setOnMouseExited(event -> backShadowAnimation.play());
-    return this;
-  }
-
-  private void setToggle() {
-    switch (toggle) {
-      case Toggled:
-        setBackground(Background.fill(Color.web("FFFFFF")));
-        setTextFill(Color.web("55C596"));
-      case NotToggled:
-        setBackground(Background.fill(Color.web("FFFFFF")));
-        setTextFill(Color.web("55C596"));
-    }
+    button.setOnMouseEntered(event -> shadowAnimation.play());
+    button.setOnMouseExited(event -> backShadowAnimation.play());
+    return button;
   }
 }

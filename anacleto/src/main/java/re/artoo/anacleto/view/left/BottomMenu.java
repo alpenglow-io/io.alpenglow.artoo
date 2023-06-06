@@ -21,8 +21,8 @@ public final class BottomMenu implements Component {
 
   interface Customization {
     TryConsumer1<VBox> style = box -> box.setStyle("""
-      -fx-alignment: bottom_center;
       -fx-spacing: 16;
+      -fx-background-color: red;
       """);
   }
 }

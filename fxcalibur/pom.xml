@@ -10,7 +10,7 @@
   </parent>
 
   <artifactId>fxcalibur</artifactId>
-  <name>🗡️ Fxcalibur</name>
+  <name>Fxcalibur 🗡️</name>
 
   <properties>
     <javafx.version>20</javafx.version>

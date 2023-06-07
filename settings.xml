@@ -4,13 +4,13 @@
   <interactiveMode/>
   <offline/>
   <pluginGroups/>
-  <servers>
+  <!--<servers>
     <server>
       <id>github</id>
       <username>lucaguada</username>
       <password>${github.artoo.token}</password>
     </server>
-  </servers>
+  </servers>-->
   <mirrors/>
   <proxies/>
   <profiles/>

@@ -70,25 +70,4 @@ public final class RightPanel extends VBox implements Component {
     pane.getChildren().add(0, rectangle);
   }
 
-  private void under(VBox box) {
-    box.setStyle("""
-        -fx-pref-height: 100%;
-        -fx-max-width: 50%;
-        -fx-alignment: center;
-        /*-fx-background-color: #F3F6F9;*/
-        -fx-background-color: red;
-      """);
-  }
-
-  private void bottom(VBox box) {
-    box.setStyle("""
-        -fx-alignment: bottom-center;
-        -fx-spacing: 24;
-        -fx-padding: 0 0 72 0;
-        -fx-pref-height: 100%;
-        -fx-background-color: #55C596;
-        -fx-background-radius: 0 0 0 36;
-        -fx-border-radius: 0 0 0 36;
-      """);
-  }
 }

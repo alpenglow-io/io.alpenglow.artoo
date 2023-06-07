@@ -1,21 +1,17 @@
 package re.artoo.anacleto.view;
 
-import javafx.geometry.HPos;
-import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import re.artoo.anacleto.control.FloatingButton;
-import re.artoo.fxcalibur.Component;
 import re.artoo.fxcalibur.Asset;
+import re.artoo.fxcalibur.Component;
 
 import static re.artoo.anacleto.control.FloatingButton.Toggle.NotToggled;
 import static re.artoo.anacleto.control.FloatingButton.Toggle.Toggled;
-import static re.artoo.fxcalibur.Grid.*;
-import static re.artoo.fxcalibur.Asset.image;
 
 public final class View implements Component {
-  private final Asset logo = image(View.class.getModule(), "logo.png");
+  private final Asset logo = Asset.image("logo.png");
   private final Component whiteButton = new FloatingButton("#", Toggled);
   private final Component greenButton = new FloatingButton("#", NotToggled);
 

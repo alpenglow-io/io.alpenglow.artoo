@@ -10,7 +10,7 @@
   </parent>
 
   <artifactId>merlin</artifactId>
-  <name>🧙‍♂️ Merlin</name>
+  <name>Merlin 🧙‍♂️</name>
 
   <dependencies>
     <dependency>

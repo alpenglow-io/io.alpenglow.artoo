@@ -6,7 +6,7 @@ import re.artoo.lance.func.TryConsumer1;
 import static atlantafx.base.theme.Styles.*;
 
 public interface Button extends Element<Node> {
-  Buttons button = Buttons.Default;
+  Buttons button = Buttons.Companion;
 
   default Node button(String text, TryConsumer1<javafx.scene.control.Button> apply) {
     return apply.autoAccept(new javafx.scene.control.Button(text));
@@ -21,7 +21,7 @@ public interface Button extends Element<Node> {
   }
 
   enum Buttons {
-    Default;
+    Companion;
 
     public Node primary(String text, TryConsumer1<javafx.scene.control.Button> apply) {
       return button(new javafx.scene.control.Button(text), apply.before(it -> it.setDefaultButton(true)));

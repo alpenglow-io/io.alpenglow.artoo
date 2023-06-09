@@ -1,23 +1,11 @@
-.root {
-  -fx-font-family: "Fira Sans";
+
+.button:hover {
+  -fx-cursor: hand;
 }
 
 .button {
-  -fx-background-color: rgb(79, 70, 229);
-  -fx-background-radius: 6px;
-  -fx-border-radius: 6px;
+  -fx-background-color: transparent;
   -fx-text-fill: rgb(255, 255, 255);
-  -fx-font-size: 14px;
-  -fx-font-weight: 500;
-  -fx-padding: 10 11, 10, 11;
-  -fx-border-color: white;
-  -fx-border-width: 0;
-  -fx-border-style: solid;
-}
-
-.button:hover {
-  -fx-background-color: rgb(99, 102, 241);
-  -fx-cursor: hand;
 }
 
 .button.mini {
@@ -35,13 +23,16 @@
   -fx-font-size: 12px;
 }
 
+.button:default {
+  -fx-padding: 10 11, 10, 11;
+  -fx-font-size: 14px;
+  -fx-pref-width: 192;
+  -fx-pref-height: 40;
+}
+
 .button.large {
   -fx-padding: 11 12 11 12;
   -fx-font-size: 16px;
-}
-
-.button.primary {
-
 }
 
 .button.secondary {

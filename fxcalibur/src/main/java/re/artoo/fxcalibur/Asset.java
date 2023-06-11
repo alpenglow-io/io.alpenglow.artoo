@@ -13,7 +13,7 @@ public interface Asset extends One<Asset> {
   }
 
   static Asset css(String file) {
-    return new Resource(Asset.class, "/asset/css/%s".formatted(file));
+    return new Resource(Asset.class, "/asset/css/%s.css".formatted(file));
   }
 
   static Asset font(String file) {

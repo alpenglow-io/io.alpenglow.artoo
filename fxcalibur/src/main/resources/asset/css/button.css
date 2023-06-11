@@ -3,11 +3,6 @@
   -fx-cursor: hand;
 }
 
-.button {
-  -fx-background-color: transparent;
-  -fx-text-fill: rgb(255, 255, 255);
-}
-
 .button.mini {
   -fx-padding: 7 9 7 9;
   -fx-font-size: 8px;
@@ -23,12 +18,12 @@
   -fx-font-size: 12px;
 }
 
-.button:default {
+/*.button:default {
   -fx-padding: 10 11, 10, 11;
   -fx-font-size: 14px;
-  -fx-pref-width: 192;
-  -fx-pref-height: 40;
-}
+!*  -fx-pref-width: 192;
+  -fx-pref-height: 40;*!
+}*/
 
 .button.large {
   -fx-padding: 11 12 11 12;

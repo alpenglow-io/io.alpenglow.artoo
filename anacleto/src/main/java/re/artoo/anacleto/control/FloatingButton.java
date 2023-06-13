@@ -40,7 +40,7 @@ public final class FloatingButton implements Component {
   }
 
   @Override
-  public Node render() {
+  public Node get() {
     Button button = new Button();
     button.setText(text);
     // Create a button and set its style

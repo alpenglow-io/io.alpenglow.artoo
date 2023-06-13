@@ -6,9 +6,11 @@ import re.artoo.fxcalibur.ui.component.button;
 import re.artoo.fxcalibur.ui.component.button.value;
 import re.artoo.lance.func.TryConsumer1;
 
+import java.util.function.Supplier;
+
 import static atlantafx.base.theme.Styles.*;
 
-public interface Button extends Element {
+public interface Button extends Supplier<Node> {
   button button = new button() {};
 
   default Node button(String text) {

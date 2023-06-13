@@ -16,7 +16,7 @@ public final class MainLayout implements Component {
   }
 
   @Override
-  public Node render() {
+  public Node get() {
     return pane.border(this::customize,
       centerSection,
       null,

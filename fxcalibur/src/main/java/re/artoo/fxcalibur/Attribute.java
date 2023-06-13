@@ -2,7 +2,7 @@ package re.artoo.fxcalibur;
 
 import javafx.beans.property.Property;
 
-public sealed interface ttribute {
+public sealed interface Attribute {
   static Attribute text(String value) { return new Text(value); }
   static Attribute $text(Property<String> value) { return new $Text(value); }
   static Attribute empty() { return Default.Empty; }

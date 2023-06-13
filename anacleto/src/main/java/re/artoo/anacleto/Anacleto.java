@@ -26,7 +26,7 @@ public final class Anacleto extends Application {
     stage.initStyle(TRANSPARENT);
     stage.setWidth(1440);
     stage.setHeight(900);
-    var scene = new Scene((Parent) Main.View.render());
+    var scene = new Scene((Parent) Main.View.get());
     scene.setFill(Color.TRANSPARENT);
     /*scene.getStylesheets().addAll(WEBFONTS);
     scene.getStylesheets().add("""

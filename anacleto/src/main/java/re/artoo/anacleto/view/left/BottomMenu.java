@@ -15,7 +15,7 @@ public final class BottomMenu implements Component {
   }
 
   @Override
-  public Node render() {
+  public Node get() {
     return pane.vertical(style, exitButton);
   }
 

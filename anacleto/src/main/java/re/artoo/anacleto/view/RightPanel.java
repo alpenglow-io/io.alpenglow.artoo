@@ -12,7 +12,7 @@ import re.artoo.fxcalibur.Component;
 
 public final class RightPanel extends VBox implements Component {
   @Override
-  public Node render() {
+  public Node get() {
     return
       pane.grid(this::set,
         grid.columns(

@@ -20,7 +20,7 @@ public interface button {
   default Button cancel(Attribute... attributes) { return new Default(type.cancel, attributes); }
   default Button flat(Attribute... attributes) { return new Default(type.flat, attributes); }
 
-  sealed interface Attribute extends re.artoo.fxcalibur.ui.Attribute<button.Default> permits background, size, type, value {}
+  sealed interface Attribute extends re.artoo.fxcalibur.ui.Attribute<button.Default> permits color, size, type, value {}
 
   final class Default extends Button implements button {
     {
@@ -59,32 +59,22 @@ public interface button {
   }
 
 
-  enum background implements button.Attribute {
-    gradient(new LinearGradient(0, 0, 1, 1, true, null,
-      new Stop(0, Color.rgb(255, 78, 205)),
-      new Stop(0.4, Color.rgb(0, 114, 245)))),
-
-    primary(Color.rgb(0, 114, 245)),
-
-    secondary(Color.rgb(151, 80, 221)),
-
-    success(Color.rgb(23, 201, 100)),
-
-    warning(Color.rgb(245, 165, 36)),
-
-    failure(Color.rgb(243, 18, 96));
-
-    private final Paint paint;
-
-    background(Paint paint) {this.paint = paint;}
+  enum color implements button.Attribute {
+    gradient, //linear-gradient(from 15% 15% to 55% 55%, rgb(255, 78, 205), rgb(0, 114, 245)
+    accent,
+    success,
+    warning,
+    danger,
+    olive,
+    yellow,
+    orange,
+    teal,
+    violet,
+    purple;
 
     @Override
     public void apply(button.Default button) {
-      button.setBackground(fill(paint));
-
-      button.setStyle("""
-      -fx-background-color: linear-gradient(from 15% 15% to 55% 55%, rgb(255, 78, 205), rgb(0, 114, 245));
-      """);
+      button.getStyleClass().add(name());
     }
   }
 

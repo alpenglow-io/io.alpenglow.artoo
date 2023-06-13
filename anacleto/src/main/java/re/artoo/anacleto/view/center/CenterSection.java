@@ -6,7 +6,7 @@ import re.artoo.fxcalibur.Component;
 
 public final class CenterSection implements Component {
   @Override
-  public Node render() {
+  public Node get() {
     return pane.border(this::set);
   }
 

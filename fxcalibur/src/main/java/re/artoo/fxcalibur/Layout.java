@@ -12,7 +12,7 @@ import re.artoo.lance.value.Array;
 
 import java.util.function.Supplier;
 
-public interface Layout extends Element<Node> {
+public interface Layout extends Supplier<Node> {
   enum Grids {
     Companion;
 
@@ -102,7 +102,7 @@ public interface Layout extends Element<Node> {
       pane.getRowConstraints().addAll(rows.asArray(RowConstraints[]::new));
       for (Cell(int column, int row, Component[] components) : cells) {
         for (var component : components) {
-          pane.add(component.render(), column, row);
+          pane.add(component.get(), column, row);
         }
       }
       return pane;
@@ -125,17 +125,17 @@ public interface Layout extends Element<Node> {
     }
 
     public Node stack(TryConsumer1<StackPane> customize, Component... components) {
-      return customize.autoAccept(new StackPane(Many.from(components).select(Element::render).asArray(Node[]::new)));
+      return customize.autoAccept(new StackPane(Many.from(components).select(Supplier::get).asArray(Node[]::new)));
     }
 
     public Node stack(Component... components) {
-      return new StackPane(Many.from(components).select(Element::render).asArray(Node[]::new));
+      return new StackPane(Many.from(components).select(Supplier::get).asArray(Node[]::new));
     }
 
     public Node anchor(TryConsumer1<AnchorPane> customize, Component... components) {
       return Many.from(components)
         .coalesce()
-        .select(Element::render)
+        .select(Supplier::get)
         .keep(new AnchorPane(), (index, pane, node) -> pane.getChildren().add(index, node))
         .peek(customize)
         .otherwise(IllegalStateException::new);
@@ -148,7 +148,7 @@ public interface Layout extends Element<Node> {
     public Node border(TryConsumer1<BorderPane> customize, Component... components) {
       return Many.from(components)
         .coalesce()
-        .select(Element::render)
+        .select(Supplier::get)
         .keep(new BorderPane(), (index, pane, node) -> {
           switch (index) {
             case 0 -> pane.setCenter(node);
@@ -165,7 +165,7 @@ public interface Layout extends Element<Node> {
     private <PANE extends Pane> Node pane(Supplier<PANE> pane, TryConsumer1<PANE> customize, Component... components) {
       return Many.from(components)
         .coalesce()
-        .select(Element::render)
+        .select(Supplier::get)
         .keep(pane.get(), (box, node) -> box.getChildren().add(node))
         .peek(customize)
         .otherwise(IllegalStateException::new);

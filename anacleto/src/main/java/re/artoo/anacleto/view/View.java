@@ -16,7 +16,7 @@ public final class View implements Component {
   private final Component greenButton = new FloatingButton("#", NotToggled);
 
   @Override
-  public Node render() {
+  public Node get() {
     return null;
 /*      border(this::root,
         border(this::center),

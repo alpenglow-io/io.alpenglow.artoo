@@ -14,7 +14,7 @@ import static re.artoo.anacleto.control.FloatingButton.Toggle.Toggled;
 
 public final class LeftPanel extends VBox implements Component {
   @Override
-  public Node render() {
+  public Node get() {
     return
       pane.grid(this::set,
         grid.columns(

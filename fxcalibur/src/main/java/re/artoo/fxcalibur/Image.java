@@ -3,7 +3,9 @@ package re.artoo.fxcalibur;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 
-public interface Image extends Element<Node> {
+import java.util.function.Supplier;
+
+public interface Image extends Supplier<Node> {
   default Node img(Asset image) {
     return
       new ImageView(

@@ -25,7 +25,7 @@ public final class TopMenu implements Component {
   }
 
   @Override
-  public Node render() {
+  public Node get() {
     return pane.vertical(style,
       homeButton,
       usrsButton,

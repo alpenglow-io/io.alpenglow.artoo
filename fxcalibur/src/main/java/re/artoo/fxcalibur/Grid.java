@@ -6,7 +6,9 @@ import javafx.scene.Node;
 import javafx.scene.layout.*;
 import re.artoo.lance.value.Array;
 
-public sealed interface Grid extends Element<Node> {
+import java.util.function.Supplier;
+
+public sealed interface Grid extends Supplier<Node> {
   static Grid grid() {
     return new Pane();
   }
@@ -49,13 +51,13 @@ public sealed interface Grid extends Element<Node> {
     private record Cell(int column, int row, Component... components) {}
 
     @Override
-    public Node render() {
+    public Node get() {
       var pane = new GridPane();
       for (ColumnConstraints column : columns) pane.getColumnConstraints().add(column);
       for (RowConstraints row : rows) pane.getRowConstraints().add(row);
       for (Cell(int column, int row, Component[] components) : cells) {
         for (Component component : components) {
-          pane.add(component.render(), column, row);
+          pane.add(component.get(), column, row);
         }
       }
       return pane;

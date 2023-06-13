@@ -1,6 +1,5 @@
 package re.artoo.fxcalibur;
 
-import atlantafx.base.theme.PrimerLight;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -10,9 +9,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import re.artoo.fxcalibur.ui.component.button;
-import re.artoo.fxcalibur.ui.component.button.background;
+import re.artoo.fxcalibur.ui.component.button.color;
 import re.artoo.fxcalibur.ui.component.button.type;
+
+import static re.artoo.fxcalibur.ui.Theme.*;
+import static re.artoo.fxcalibur.ui.component.button.Default;
+import static re.artoo.fxcalibur.ui.component.button.value;
 
 public class Sample extends Application {
   private static final Asset buttonCss = Asset.css("button");
@@ -23,21 +25,16 @@ public class Sample extends Application {
 
   @Override
   public void start(Stage stage) throws Exception {
-    setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet());
+    setUserAgentStylesheet(FxcaliburLight.getUserAgentStylesheet());
     Font.loadFont(Asset.font("DMSans-Medium.tff").load(), 14);
     VBox box = new VBox(16,
-      new javafx.scene.control.Button("Hello") {{
-        setDefaultButton(true);
-        setStyle("""
-          -fx-background-color: red;
-          """);
-      }},
-      new button.Default(type.submit, value.text("Submit")),
-      new button.Default(type.submit, background.secondary, value.text("Secondary")),
-      new button.Default(type.submit, background.success, value.text("success")),
-      new button.Default(type.submit, background.warning, value.text("warning")),
-      new button.Default(type.submit, background.failure, value.text("failure")),
-      new button.Default(type.submit, background.gradient, value.text("gradient"))
+      new Default(type.basic, color.olive, value.text("Olive")),
+      new Default(type.submit, color.yellow, value.text("Yellow")),
+      new Default(type.submit, color.orange, value.text("Orange")),
+      new Default(type.submit, color.teal, value.text("Teal")),
+      new Default(type.submit, color.violet, value.text("Violet")),
+      new Default(type.submit, color.purple, value.text("Purple")),
+      new Default(type.submit, color.gradient, value.text("Gradient"))
     );
     box.setPadding(new Insets(16));
     var scene = new Scene(box, 800, 600);

@@ -12,7 +12,7 @@ import javafx.stage.StageStyle;
 import re.artoo.fxcalibur.element.component.button.color;
 import re.artoo.fxcalibur.element.component.button.type;
 
-import static re.artoo.fxcalibur.element.Theme.*;
+import static re.artoo.fxcalibur.element.Theme.Dragon;
 import static re.artoo.fxcalibur.element.component.button.Default;
 import static re.artoo.fxcalibur.element.component.button.value;
 
@@ -25,7 +25,7 @@ public class Sample extends Application {
 
   @Override
   public void start(Stage stage) throws Exception {
-    setUserAgentStylesheet(SemolaLight.getUserAgentStylesheet());
+    setUserAgentStylesheet(Dragon.Blue.getUserAgentStylesheet());
     Font.loadFont(Asset.font("DMSans-Medium.tff").load(), 14);
     VBox box = new VBox(16,
       new Default(type.basic, color.olive, value.text("Olive")),

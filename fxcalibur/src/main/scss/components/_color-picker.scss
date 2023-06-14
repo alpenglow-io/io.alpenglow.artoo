@@ -3,6 +3,8 @@
 @use "../settings/config" as cfg;
 @use "../settings/effects";
 
+$border_width: cfg.$border-width;
+
 // combo box
 .color-picker {
 
@@ -124,7 +126,7 @@
   >.controls-pane {
     >.current-new-color-grid {
       >.label {
-        -fx-padding: 0 0 0 calc(cfg.$border-width * 2);
+        -fx-padding: 0 0 0 calc($border_width * 2);
       }
 
       >#current-new-color-border {
@@ -161,7 +163,7 @@
 
       >.customcolor-controls-background {
         -fx-background-color: -color-border-default, -color-bg-default;
-        -fx-background-insets: calc(14px - cfg.$border-width) 0 calc(6px - cfg.$border-width) 0,
+        -fx-background-insets: calc(14px - $border_width) 0 calc(6px - $border_width) 0,
                                14px cfg.$border-width 6px cfg.$border-width;
         -fx-background-radius: cfg.$border-radius, cfg.$inner-border-radius;
       }
@@ -203,6 +205,7 @@
       }
 
       // keeps the text right-aligned when in RTL mode
+      //noinspection CssInvalidPseudoSelector
       >.webcolor-field:dir(rtl)>.text-field:dir(ltr) {
         -fx-alignment: BASELINE_RIGHT;
       }

@@ -22,6 +22,8 @@ $color-bg-pressed:             -color-bg-subtle !default;
 $color-fg-pressed:             -color-button-fg !default;
 $color-border-pressed:         transparent      !default;
 
+
+
 // accent
 $color-accent-bg:              -color-accent-emphasis !default;
 $color-accent-fg:              -color-fg-emphasis     !default;
@@ -38,6 +40,40 @@ $color-accent-border-focused:  -color-accent-emphasis !default;
 $color-accent-bg-pressed:      -color-accent-emphasis !default;
 $color-accent-fg-pressed:      -color-fg-emphasis     !default;
 $color-accent-border-pressed:  transparent            !default;
+
+// primary
+$color-primary-bg:              -color-primary-emphasis !default;
+$color-primary-fg:              -color-fg-emphasis     !default;
+$color-primary-border:          -color-primary-emphasis !default;
+
+$color-primary-bg-hover:        -color-primary-emphasis !default;
+$color-primary-fg-hover:        -color-fg-emphasis     !default;
+$color-primary-border-hover:    -color-primary-emphasis !default;
+
+$color-primary-bg-focused:      -color-primary-6        !default;
+$color-primary-fg-focused:      -color-fg-emphasis     !default;
+$color-primary-border-focused:  -color-primary-emphasis !default;
+
+$color-primary-bg-pressed:      -color-primary-emphasis !default;
+$color-primary-fg-pressed:      -color-fg-emphasis     !default;
+$color-primary-border-pressed:  transparent            !default;
+
+// secondary
+$color-secondary-bg:              -color-secondary-emphasis !default;
+$color-secondary-fg:              -color-fg-emphasis     !default;
+$color-secondary-border:          -color-secondary-emphasis !default;
+
+$color-secondary-bg-hover:        -color-secondary-emphasis !default;
+$color-secondary-fg-hover:        -color-fg-emphasis     !default;
+$color-secondary-border-hover:    -color-secondary-emphasis !default;
+
+$color-secondary-bg-focused:      -color-secondary-6        !default;
+$color-secondary-fg-focused:      -color-fg-emphasis     !default;
+$color-secondary-border-focused:  -color-secondary-emphasis !default;
+
+$color-secondary-bg-pressed:      -color-secondary-emphasis !default;
+$color-secondary-fg-pressed:      -color-fg-emphasis     !default;
+$color-secondary-border-pressed:  transparent            !default;
 
 // success
 $color-success-bg:             -color-success-emphasis !default;
@@ -56,6 +92,23 @@ $color-success-bg-pressed:     -color-success-emphasis !default;
 $color-success-fg-pressed:     -color-fg-emphasis      !default;
 $color-success-border-pressed: transparent             !default;
 
+// warning
+$color-warning-bg:             -color-warning-emphasis !default;
+$color-warning-fg:             -color-fg-emphasis      !default;
+$color-warning-border:         -color-warning-emphasis !default;
+
+$color-warning-bg-hover:       -color-warning-emphasis !default;
+$color-warning-fg-hover:       -color-fg-emphasis      !default;
+$color-warning-border-hover:   -color-warning-emphasis !default;
+
+$color-warning-bg-focused:     if(cfg.$darkMode, -color-warning-6, -color-warning-5) !default;
+$color-warning-fg-focused:     -color-fg-emphasis      !default;
+$color-warning-border-focused: -color-warning-emphasis !default;
+
+$color-warning-bg-pressed:     -color-warning-emphasis !default;
+$color-warning-fg-pressed:     -color-fg-emphasis      !default;
+$color-warning-border-pressed: transparent             !default;
+
 // danger
 $color-danger-bg:              -color-danger-emphasis !default;
 $color-danger-fg:              -color-fg-emphasis     !default;
@@ -73,22 +126,22 @@ $color-danger-bg-pressed:      -color-danger-emphasis !default;
 $color-danger-fg-pressed:      -color-fg-emphasis     !default;
 $color-danger-border-pressed:  transparent            !default;
 
-// olive
-$color-olive-bg:              -color-olive-emphasis !default;
-$color-olive-fg:              -color-fg-emphasis     !default;
-$color-olive-border:          -color-olive-emphasis !default;
+// red
+$color-red-bg:              -color-red-emphasis !default;
+$color-red-fg:              -color-fg-emphasis     !default;
+$color-red-border:          -color-red-emphasis !default;
 
-$color-olive-bg-hover:        -color-olive-emphasis !default;
-$color-olive-fg-hover:        -color-fg-emphasis     !default;
-$color-olive-border-hover:    -color-olive-emphasis !default;
+$color-red-bg-hover:        -color-red-emphasis !default;
+$color-red-fg-hover:        -color-fg-emphasis     !default;
+$color-red-border-hover:    -color-red-emphasis !default;
 
-$color-olive-bg-focused:      -color-olive-6        !default;
-$color-olive-fg-focused:      -color-fg-emphasis     !default;
-$color-olive-border-focused:  -color-olive-emphasis !default;
+$color-red-bg-focused:      -color-red-6        !default;
+$color-red-fg-focused:      -color-fg-emphasis     !default;
+$color-red-border-focused:  -color-red-emphasis !default;
 
-$color-olive-bg-pressed:      -color-olive-emphasis !default;
-$color-olive-fg-pressed:      -color-fg-emphasis     !default;
-$color-olive-border-pressed:  transparent            !default;
+$color-red-bg-pressed:      -color-red-emphasis !default;
+$color-red-fg-pressed:      -color-fg-emphasis     !default;
+$color-red-border-pressed:  transparent            !default;
 
 // orange
 $color-orange-bg:              -color-orange-emphasis !default;
@@ -107,6 +160,23 @@ $color-orange-bg-pressed:      -color-orange-emphasis !default;
 $color-orange-fg-pressed:      -color-fg-emphasis     !default;
 $color-orange-border-pressed:  transparent            !default;
 
+// amber
+$color-amber-bg:              -color-amber-emphasis !default;
+$color-amber-fg:              -color-fg-emphasis     !default;
+$color-amber-border:          -color-amber-emphasis !default;
+
+$color-amber-bg-hover:        -color-amber-emphasis !default;
+$color-amber-fg-hover:        -color-fg-emphasis     !default;
+$color-amber-border-hover:    -color-amber-emphasis !default;
+
+$color-amber-bg-focused:      -color-amber-6        !default;
+$color-amber-fg-focused:      -color-fg-emphasis     !default;
+$color-amber-border-focused:  -color-amber-emphasis !default;
+
+$color-amber-bg-pressed:      -color-amber-emphasis !default;
+$color-amber-fg-pressed:      -color-fg-emphasis     !default;
+$color-amber-border-pressed:  transparent            !default;
+
 // yellow
 $color-yellow-bg:              -color-yellow-emphasis !default;
 $color-yellow-fg:              -color-fg-emphasis     !default;
@@ -124,6 +194,57 @@ $color-yellow-bg-pressed:      -color-yellow-emphasis !default;
 $color-yellow-fg-pressed:      -color-fg-emphasis     !default;
 $color-yellow-border-pressed:  transparent            !default;
 
+// cyan
+$color-cyan-bg:              -color-cyan-emphasis !default;
+$color-cyan-fg:              -color-fg-emphasis     !default;
+$color-cyan-border:          -color-cyan-emphasis !default;
+
+$color-cyan-bg-hover:        -color-cyan-emphasis !default;
+$color-cyan-fg-hover:        -color-fg-emphasis     !default;
+$color-cyan-border-hover:    -color-cyan-emphasis !default;
+
+$color-cyan-bg-focused:      -color-cyan-6        !default;
+$color-cyan-fg-focused:      -color-fg-emphasis     !default;
+$color-cyan-border-focused:  -color-cyan-emphasis !default;
+
+$color-cyan-bg-pressed:      -color-cyan-emphasis !default;
+$color-cyan-fg-pressed:      -color-fg-emphasis     !default;
+$color-cyan-border-pressed:  transparent            !default;
+
+// blue-light
+$color-blue-light-bg:              -color-blue-light-emphasis !default;
+$color-blue-light-fg:              -color-fg-emphasis     !default;
+$color-blue-light-border:          -color-blue-light-emphasis !default;
+
+$color-blue-light-bg-hover:        -color-blue-light-emphasis !default;
+$color-blue-light-fg-hover:        -color-fg-emphasis     !default;
+$color-blue-light-border-hover:    -color-blue-light-emphasis !default;
+
+$color-blue-light-bg-focused:      -color-blue-light-6        !default;
+$color-blue-light-fg-focused:      -color-fg-emphasis     !default;
+$color-blue-light-border-focused:  -color-blue-light-emphasis !default;
+
+$color-blue-light-bg-pressed:      -color-blue-light-emphasis !default;
+$color-blue-light-fg-pressed:      -color-fg-emphasis     !default;
+$color-blue-light-border-pressed:  transparent            !default;
+
+// blue
+$color-blue-bg:              -color-blue-emphasis !default;
+$color-blue-fg:              -color-fg-emphasis     !default;
+$color-blue-border:          -color-blue-emphasis !default;
+
+$color-blue-bg-hover:        -color-blue-emphasis !default;
+$color-blue-fg-hover:        -color-fg-emphasis     !default;
+$color-blue-border-hover:    -color-blue-emphasis !default;
+
+$color-blue-bg-focused:      -color-blue-6        !default;
+$color-blue-fg-focused:      -color-fg-emphasis     !default;
+$color-blue-border-focused:  -color-blue-emphasis !default;
+
+$color-blue-bg-pressed:      -color-blue-emphasis !default;
+$color-blue-fg-pressed:      -color-fg-emphasis     !default;
+$color-blue-border-pressed:  transparent            !default;
+
 // teal
 $color-teal-bg:              -color-teal-emphasis !default;
 $color-teal-fg:              -color-fg-emphasis     !default;
@@ -140,6 +261,23 @@ $color-teal-border-focused:  -color-teal-emphasis !default;
 $color-teal-bg-pressed:      -color-teal-emphasis !default;
 $color-teal-fg-pressed:      -color-fg-emphasis     !default;
 $color-teal-border-pressed:  transparent            !default;
+
+// indigo
+$color-indigo-bg:              -color-indigo-emphasis !default;
+$color-indigo-fg:              -color-fg-emphasis     !default;
+$color-indigo-border:          -color-indigo-emphasis !default;
+
+$color-indigo-bg-hover:        -color-indigo-emphasis !default;
+$color-indigo-fg-hover:        -color-fg-emphasis     !default;
+$color-indigo-border-hover:    -color-indigo-emphasis !default;
+
+$color-indigo-bg-focused:      -color-indigo-6        !default;
+$color-indigo-fg-focused:      -color-fg-emphasis     !default;
+$color-indigo-border-focused:  -color-indigo-emphasis !default;
+
+$color-indigo-bg-pressed:      -color-indigo-emphasis !default;
+$color-indigo-fg-pressed:      -color-fg-emphasis     !default;
+$color-indigo-border-pressed:  transparent            !default;
 
 // violet
 $color-violet-bg:              -color-violet-emphasis !default;
@@ -174,6 +312,23 @@ $color-purple-border-focused:  -color-purple-emphasis !default;
 $color-purple-bg-pressed:      -color-purple-emphasis !default;
 $color-purple-fg-pressed:      -color-fg-emphasis     !default;
 $color-purple-border-pressed:  transparent            !default;
+
+// rose
+$color-rose-bg:              -color-rose-emphasis !default;
+$color-rose-fg:              -color-fg-emphasis     !default;
+$color-rose-border:          -color-rose-emphasis !default;
+
+$color-rose-bg-hover:        -color-rose-emphasis !default;
+$color-rose-fg-hover:        -color-fg-emphasis     !default;
+$color-rose-border-hover:    -color-rose-emphasis !default;
+
+$color-rose-bg-focused:      -color-rose-6        !default;
+$color-rose-fg-focused:      -color-fg-emphasis     !default;
+$color-rose-border-focused:  -color-rose-emphasis !default;
+
+$color-rose-bg-pressed:      -color-rose-emphasis !default;
+$color-rose-fg-pressed:      -color-fg-emphasis     !default;
+$color-rose-border-pressed:  transparent            !default;
 
 // flat
 $color-flat-fg:                -color-fg-default !default;
@@ -242,7 +397,7 @@ $use-shadow:   false !default;
 $color-shadow: -color-shadow-default !default;
 
 // basic style is shared with Button, ToggleButton and MenuButton
-@mixin base() {
+@mixin base($color) {
 
   // buttons can be configured via looked-up colors
   -color-button-bg:             $color-bg;
@@ -263,7 +418,7 @@ $color-shadow: -color-shadow-default !default;
 
   -color-button-shadow:         $color-shadow;
 
-  -fx-background-color:  -color-button-border, -color-button-bg;
+  -fx-background-color:  -color-border-default, -color-button-bg;
   -fx-background-insets: 0, cfg.$border-width;
   -fx-background-radius: cfg.$border-radius, cfg.$inner-border-radius;
   -fx-graphic-text-gap:  cfg.$graphic-gap;

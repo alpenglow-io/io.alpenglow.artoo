@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 
 @use "sass:color";
-@use "settings/utils" as utils;
+@use "utils" as utils;
 
 @forward "color-palette" with (
 
@@ -66,7 +66,7 @@
 
 @use "color-palette" as scale;
 
-@forward "settings/color-vars" with (
+@forward "color-vars" with (
 
   $fg-default:           scale.$base-1,
   $fg-muted:             scale.$base-3,
@@ -109,9 +109,9 @@
   $danger-subtle:        color.change(scale.$danger-4, $alpha: 0.15)
 );
 
-@forward "settings/config" with (
+@forward "config" with (
   $darkMode: true
 );
 
-@use "general";
-@use "components";
+@use "index";
+@use "index";

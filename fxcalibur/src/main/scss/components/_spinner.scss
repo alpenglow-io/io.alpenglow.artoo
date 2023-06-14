@@ -5,8 +5,13 @@
 
 $color-button-bg:    -color-bg-subtle  !default;
 $color-button-fg:    -color-fg-default !default;
+//noinspection CssInvalidFunction
 $color-button-hover: if(cfg.$darkMode, -color-base-6, -color-base-2) !default;
 $icon-padding-x:     0.25em !default;
+
+$padding_x: cfg.$padding-x;
+$padding_y: cfg.$padding-y;
+$border_width: cfg.$border-width;
 
 .spinner {
   -fx-background-color: -color-bg-default;
@@ -18,10 +23,10 @@ $icon-padding-x:     0.25em !default;
     -fx-background-radius: cfg.$border-radius 0 0 cfg.$border-radius;
     -fx-background-insets: 0;
     // align spinner (uses border) and text input height (uses background insets)
-    -fx-padding: calc(cfg.$padding-y - cfg.$border-width)
-                 calc(cfg.$padding-x - cfg.$border-width)
-                 calc(cfg.$padding-y - cfg.$border-width)
-                 calc(cfg.$padding-x - cfg.$border-width);
+    -fx-padding: calc($padding_y - $border_width)
+                 calc($padding_x - $border_width)
+                 calc($padding_y - $border_width)
+                 calc($padding_x - $border_width);
 
     &:readonly {
       -fx-background-color: -color-input-border, -color-input-bg;
@@ -72,6 +77,7 @@ $icon-padding-x:     0.25em !default;
     -fx-opacity: cfg.$opacity-disabled;
   }
 
+  //noinspection CssInvalidPseudoSelector
   &:focused,
   &:contains-focus {
     &:focused {

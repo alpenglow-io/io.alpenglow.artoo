@@ -23,16 +23,16 @@
   -color-base-8:      palette.$base-8;
   -color-base-9:      palette.$base-9;
 
-  -color-accent-0:    palette.$accent-0;
-  -color-accent-1:    palette.$accent-1;
-  -color-accent-2:    palette.$accent-2;
-  -color-accent-3:    palette.$accent-3;
-  -color-accent-4:    palette.$accent-4;
-  -color-accent-5:    palette.$accent-5;
-  -color-accent-6:    palette.$accent-6;
-  -color-accent-7:    palette.$accent-7;
-  -color-accent-8:    palette.$accent-8;
-  -color-accent-9:    palette.$accent-9;
+  -color-accent-0:    palette.$primary-0;
+  -color-accent-1:    palette.$primary-1;
+  -color-accent-2:    palette.$primary-2;
+  -color-accent-3:    palette.$primary-3;
+  -color-accent-4:    palette.$primary-4;
+  -color-accent-5:    palette.$primary-5;
+  -color-accent-6:    palette.$primary-6;
+  -color-accent-7:    palette.$primary-7;
+  -color-accent-8:    palette.$primary-8;
+  -color-accent-9:    palette.$primary-9;
 
   -color-success-0:   palette.$success-0;
   -color-success-1:   palette.$success-1;
@@ -66,17 +66,6 @@
   -color-danger-7:    palette.$danger-7;
   -color-danger-8:    palette.$danger-8;
   -color-danger-9:    palette.$danger-9;
-
-  -color-olive-0:    palette.$olive-0;
-  -color-olive-1:    palette.$olive-1;
-  -color-olive-2:    palette.$olive-2;
-  -color-olive-3:    palette.$olive-3;
-  -color-olive-4:    palette.$olive-4;
-  -color-olive-5:    palette.$olive-5;
-  -color-olive-6:    palette.$olive-6;
-  -color-olive-7:    palette.$olive-7;
-  -color-olive-8:    palette.$olive-8;
-  -color-olive-9:    palette.$olive-9;
 
   -color-yellow-0:    palette.$yellow-0;
   -color-yellow-1:    palette.$yellow-1;
@@ -173,11 +162,6 @@
   -color-danger-emphasis:       vars.$danger-emphasis;
   -color-danger-muted:          vars.$danger-muted;
   -color-danger-subtle:         vars.$danger-subtle;
-
-  -color-olive-fg:             vars.$olive-fg;
-  -color-olive-emphasis:       vars.$olive-emphasis;
-  -color-olive-muted:          vars.$olive-muted;
-  -color-olive-subtle:         vars.$olive-subtle;
 
   -color-orange-fg:             vars.$orange-fg;
   -color-orange-emphasis:       vars.$orange-emphasis;

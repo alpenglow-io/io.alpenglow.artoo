@@ -6,10 +6,12 @@
 $color-picker-rect-size:   8px !default;
 $color-button-bg-selected: if(cfg.$darkMode, -color-base-6, -color-base-1) !default;
 
+$border_width: cfg.$border-width;
+
 .html-editor {
   -fx-background-color: -color-border-default, -color-bg-default;
   -fx-background-insets: 0, cfg.$border-width;
-  -fx-padding: calc(cfg.$border-width + 1px);
+  -fx-padding: calc($border_width + 1px);
 
   &:contains-focus {
     -fx-background-color: -color-accent-emphasis, -color-bg-default;

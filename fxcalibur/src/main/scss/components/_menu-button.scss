@@ -10,6 +10,8 @@ $color-split-arrow-opacity: 0.75 !default;
 
 $arrow-button-width: 0.5em  !default;
 $separator-width:    0.75px !default;
+$padding_x: cfg.$padding-x;
+$border_width: cfg.$border-width;
 
 .menu-button,
 .split-menu-button {
@@ -43,6 +45,7 @@ $separator-width:    0.75px !default;
     }
   }
 
+  //noinspection CssInvalidPseudoSelector
   &:show-mnemonics {
     >.label {
       >.mnemonic-underline {
@@ -161,7 +164,7 @@ $separator-width:    0.75px !default;
 .split-menu-button {
 
   >.label {
-    -fx-padding: cfg.$padding-y calc(cfg.$padding-x / 2) cfg.$padding-y cfg.$padding-x;
+    -fx-padding: cfg.$padding-y calc($padding_x / 2) cfg.$padding-y cfg.$padding-x;
   }
 
   &:hover,
@@ -214,6 +217,6 @@ $separator-width:    0.75px !default;
     -fx-background-radius: 0 cfg.$inner-border-radius cfg.$inner-border-radius 0;
     -fx-border-color: -color-button-fg;
     -fx-border-width: 0 0 0 $separator-width;
-    -fx-border-insets: calc(cfg.$border-width + 6px) 0 calc(cfg.$border-width + 6px) 0;
+    -fx-border-insets: calc($border_width + 6px) 0 calc($border_width + 6px) 0;
   }
 }

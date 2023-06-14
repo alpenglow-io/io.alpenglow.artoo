@@ -11,5 +11,74 @@
 
   <artifactId>fxcalibur</artifactId>
   <name>Fxcalibur 🗡️</name>
-  <packaging>pom</packaging>
+
+  <properties>
+    <scss.inputDir>${project.basedir}/src/main/scss</scss.inputDir>
+    <css.outputDir>${scss.inputDir}/../resources/asset/css</css.outputDir>
+    <javafx.version>20</javafx.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>re.artoo</groupId>
+      <artifactId>lance</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-controls</artifactId>
+      <version>${javafx.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.github.mkpaz</groupId>
+      <artifactId>atlantafx-base</artifactId>
+      <version>2.0.0</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <!--    <resources>
+          &lt;!&ndash; include SASS sources to the resulting JAR file &ndash;&gt;
+          <resource>
+            <directory>src</directory>
+            <targetPath>fxcalibur/themes</targetPath>
+            <filtering>false</filtering>
+          </resource>
+        </resources>-->
+    <plugins>
+      <!-- compile SCSS -->
+      <plugin>
+        <groupId>us.hebi.sass</groupId>
+        <artifactId>sass-cli-maven-plugin</artifactId>
+        <version>1.0.3</version>
+        <configuration>
+          <sassVersion>1.62.0</sassVersion>
+          <args>
+            <arg>${scss.inputDir}/dragon.scss:${css.outputDir}/dragon.css</arg>
+            <!--            <arg>${scss.inputDir}/dragon-nim.scss:${css.outputDir}/semola-dark.css</arg>-->
+            <arg>--no-source-map</arg>
+          </args>
+        </configuration>
+        <executions>
+          <execution>
+            <id>run-sass</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>dev</id>
+      <properties>
+        <css.outputDir>${project.basedir}/../sampler/target/classes/atlantafx/sampler/theme-test</css.outputDir>
+        <sass.watch>true</sass.watch>
+      </properties>
+    </profile>
+  </profiles>
 </project>

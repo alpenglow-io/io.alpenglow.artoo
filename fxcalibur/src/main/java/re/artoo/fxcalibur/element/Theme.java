@@ -6,7 +6,7 @@ import re.artoo.fxcalibur.Asset;
 
 public interface Theme {
   enum Dragon implements atlantafx.base.theme.Theme {
-    Blue("Blue Dragon", "blue-dragon", "/asset/css/blue-dragon.bss");
+    Blue("Blue Dragon", "dragon", "/asset/css/dragon.bss");
 
     private final String name;
     private final Asset css;

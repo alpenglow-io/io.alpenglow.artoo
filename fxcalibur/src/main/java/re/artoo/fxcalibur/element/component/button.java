@@ -36,8 +36,8 @@ public interface button {
     @Override
     public void apply(button.Default button) {
       switch (this) {
-        case cancel -> button.setCancelButton(true);
         case submit -> button.setDefaultButton(true);
+        case cancel -> button.setCancelButton(true);
         case outline -> button.getStyleClass().add(BUTTON_OUTLINED);
         case flat -> button.getStyleClass().add(FLAT);
       }
@@ -53,23 +53,38 @@ public interface button {
     }
   }
 
-
   enum color implements button.Attribute {
     gradient, //linear-gradient(from 15% 15% to 55% 55%, rgb(255, 78, 205), rgb(0, 114, 245)
     accent,
     success,
     warning,
     danger,
-    olive,
-    yellow,
+    primary,
+    secondary,
+    positive,
+    negative,
+    red,
     orange,
+    amber,
+    yellow,
+    emerald,
+    green,
     teal,
+    cyan,
+    blue_light,
+    blue,
     violet,
-    purple;
+    purple,
+    rose,
+    gray_warm,
+    gray_true,
+    gray,
+    gray_cool,
+    gray_blue;
 
     @Override
     public void apply(button.Default button) {
-      button.getStyleClass().add(name());
+      button.getStyleClass().add(name().replace('_', '-'));
     }
   }
 

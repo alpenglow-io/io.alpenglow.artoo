@@ -28,7 +28,7 @@ public class Sample extends Application {
     setUserAgentStylesheet(Dragon.Blue.getUserAgentStylesheet());
     Font.loadFont(Asset.font("DMSans-Medium.tff").load(), 14);
     VBox box = new VBox(16,
-      new Default(type.basic, color.olive, value.text("Olive")),
+      new Default(type.basic, color.emerald, value.text("Emerald")),
       new Default(type.submit, color.yellow, value.text("Yellow")),
       new Default(type.submit, color.orange, value.text("Orange")),
       new Default(type.submit, color.teal, value.text("Teal")),

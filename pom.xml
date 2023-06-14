@@ -13,8 +13,6 @@
     <module>tintagel</module>
     <module>fxcalibur</module>
     <module>anacleto</module>
-    <module>fxcalibur/theme</module>
-    <module>fxcalibur/elements</module>
   </modules>
 
   <name>Artoo 👑</name>

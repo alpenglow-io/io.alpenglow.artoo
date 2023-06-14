@@ -1,0 +1,105 @@
+// SPDX-License-Identifier: MIT
+
+@use "sass:color";
+@use "color-palette" as scale;
+@use "color-palette_new" as palette;
+@use "utils";
+
+$fg-default:           palette.$base-9 !default;
+$fg-muted:             palette.$base-6 !default;
+$fg-subtle:            palette.$base-5 !default;
+$fg-onEmphasis:        palette.$light  !default;
+
+$canvas-default:       palette.$light  !default;
+$canvas-overlay:       palette.$light  !default;
+$canvas-inset:         palette.$base-0 !default;
+$canvas-subtle:        palette.$base-0 !default;
+
+$border-default:       palette.$base-2 !default;
+$border-muted:         lighten(palette.$base-2, 0.03) !default;
+$border-subtle:        utils.flattenColor(palette.$light, color.change(palette.$dark, $alpha: 0.15)) !default;
+$shadow-default:       palette.$base-2 !default;
+
+// neutral is used by the .split-menu-button,
+// note that you should maintain some contrast between neutral and canvas.subtle
+$neutral-emphasisPlus: palette.$base-9 !default;
+$neutral-emphasis:     palette.$base-5 !default;
+$neutral-muted:        color.change(palette.$base-3, $alpha: 0.2) !default;
+$neutral-subtle:       color.change(palette.$base-1, $alpha: 0.5) !default;
+
+$accent-fg:            palette.$primary-5 !default;
+$accent-emphasis:      palette.$primary-5 !default;
+$accent-muted:         color.change(palette.$primary-3, $alpha: 0.4) !default;
+$accent-subtle:        palette.$primary-0 !default;
+
+$success-fg:           palette.$success-5 !default;
+$success-emphasis:     palette.$success-4 !default;
+$success-muted:        color.change(palette.$success-3, $alpha: 0.4) !default;
+$success-subtle:       palette.$success-0 !default;
+
+$warning-fg:           palette.$warning-5 !default;
+$warning-emphasis:     palette.$warning-4 !default;
+$warning-muted:        color.change(palette.$warning-3, $alpha: 0.4) !default;
+$warning-subtle:       palette.$warning-0 !default;
+
+$danger-fg:            palette.$danger-5 !default;
+$danger-emphasis:      palette.$danger-5 !default;
+$danger-muted:         color.change(palette.$danger-3, $alpha: 0.4) !default;
+$danger-subtle:        palette.$danger-0 !default;
+
+$olive-fg:            palette.$olive-5 !default;
+$olive-emphasis:      palette.$olive-5 !default;
+$olive-muted:         color.change(palette.$olive-3, $alpha: 0.4) !default;
+$olive-subtle:        palette.$olive-0 !default;
+
+$orange-fg:            palette.$orange-5 !default;
+$orange-emphasis:      palette.$orange-5 !default;
+$orange-muted:         color.change(palette.$orange-3, $alpha: 0.4) !default;
+$orange-subtle:        palette.$orange-0 !default;
+
+$yellow-fg:            palette.$yellow-5 !default;
+$yellow-emphasis:      palette.$yellow-5 !default;
+$yellow-muted:         color.change(palette.$yellow-3, $alpha: 0.4) !default;
+$yellow-subtle:        palette.$yellow-0 !default;
+
+$teal-fg:            palette.$teal-5 !default;
+$teal-emphasis:      palette.$teal-5 !default;
+$teal-muted:         color.change(palette.$teal-3, $alpha: 0.4) !default;
+$teal-subtle:        palette.$teal-0 !default;
+
+$violet-fg:            palette.$violet-5 !default;
+$violet-emphasis:      palette.$violet-5 !default;
+$violet-muted:         color.change(palette.$violet-3, $alpha: 0.4) !default;
+$violet-subtle:        palette.$violet-0 !default;
+
+$purple-fg:            palette.$purple-5 !default;
+$purple-emphasis:      palette.$purple-5 !default;
+$purple-muted:         color.change(palette.$purple-3, $alpha: 0.4) !default;
+$purple-subtle:        palette.$purple-0 !default;
+
+$chart-1: #f3622d !default;
+$chart-2: #fba71b !default;
+$chart-3: #57b757 !default;
+$chart-4: #41a9c9 !default;
+$chart-5: #4258c9 !default;
+$chart-6: #9a42c8 !default;
+$chart-7: #c84164 !default;
+$chart-8: #888888 !default;
+
+$chart-1-alpha70: color.change($chart-1, $alpha: 0.7) !default;
+$chart-2-alpha70: color.change($chart-2, $alpha: 0.7) !default;
+$chart-3-alpha70: color.change($chart-3, $alpha: 0.7) !default;
+$chart-4-alpha70: color.change($chart-4, $alpha: 0.7) !default;
+$chart-5-alpha70: color.change($chart-5, $alpha: 0.7) !default;
+$chart-6-alpha70: color.change($chart-6, $alpha: 0.7) !default;
+$chart-7-alpha70: color.change($chart-7, $alpha: 0.7) !default;
+$chart-8-alpha70: color.change($chart-8, $alpha: 0.7) !default;
+
+$chart-1-alpha20: color.change($chart-1, $alpha: 0.2) !default;
+$chart-2-alpha20: color.change($chart-2, $alpha: 0.2) !default;
+$chart-3-alpha20: color.change($chart-3, $alpha: 0.2) !default;
+$chart-4-alpha20: color.change($chart-4, $alpha: 0.2) !default;
+$chart-5-alpha20: color.change($chart-5, $alpha: 0.2) !default;
+$chart-6-alpha20: color.change($chart-6, $alpha: 0.2) !default;
+$chart-7-alpha20: color.change($chart-7, $alpha: 0.2) !default;
+$chart-8-alpha20: color.change($chart-8, $alpha: 0.2) !default;

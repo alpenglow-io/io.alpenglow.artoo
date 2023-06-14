@@ -1,0 +1,261 @@
+// SPDX-License-Identifier: MIT
+
+@use "../settings/config" as cfg;
+@use "../settings/color-palette" as palette;
+@use "../settings/color-vars" as vars;
+
+//noinspection CssUnknownProperty
+.root {
+
+  // Color palette
+
+  -color-dark:        palette.$dark;
+  -color-light:       palette.$light;
+
+  -color-base-0:      palette.$base-0;
+  -color-base-1:      palette.$base-1;
+  -color-base-2:      palette.$base-2;
+  -color-base-3:      palette.$base-3;
+  -color-base-4:      palette.$base-4;
+  -color-base-5:      palette.$base-5;
+  -color-base-6:      palette.$base-6;
+  -color-base-7:      palette.$base-7;
+  -color-base-8:      palette.$base-8;
+  -color-base-9:      palette.$base-9;
+
+  -color-accent-0:    palette.$accent-0;
+  -color-accent-1:    palette.$accent-1;
+  -color-accent-2:    palette.$accent-2;
+  -color-accent-3:    palette.$accent-3;
+  -color-accent-4:    palette.$accent-4;
+  -color-accent-5:    palette.$accent-5;
+  -color-accent-6:    palette.$accent-6;
+  -color-accent-7:    palette.$accent-7;
+  -color-accent-8:    palette.$accent-8;
+  -color-accent-9:    palette.$accent-9;
+
+  -color-success-0:   palette.$success-0;
+  -color-success-1:   palette.$success-1;
+  -color-success-2:   palette.$success-2;
+  -color-success-3:   palette.$success-3;
+  -color-success-4:   palette.$success-4;
+  -color-success-5:   palette.$success-5;
+  -color-success-6:   palette.$success-6;
+  -color-success-7:   palette.$success-7;
+  -color-success-8:   palette.$success-8;
+  -color-success-9:   palette.$success-9;
+
+  -color-warning-0:   palette.$warning-0;
+  -color-warning-1:   palette.$warning-1;
+  -color-warning-2:   palette.$warning-2;
+  -color-warning-3:   palette.$warning-3;
+  -color-warning-4:   palette.$warning-4;
+  -color-warning-5:   palette.$warning-5;
+  -color-warning-6:   palette.$warning-6;
+  -color-warning-7:   palette.$warning-7;
+  -color-warning-8:   palette.$warning-8;
+  -color-warning-9:   palette.$warning-9;
+
+  -color-danger-0:    palette.$danger-0;
+  -color-danger-1:    palette.$danger-1;
+  -color-danger-2:    palette.$danger-2;
+  -color-danger-3:    palette.$danger-3;
+  -color-danger-4:    palette.$danger-4;
+  -color-danger-5:    palette.$danger-5;
+  -color-danger-6:    palette.$danger-6;
+  -color-danger-7:    palette.$danger-7;
+  -color-danger-8:    palette.$danger-8;
+  -color-danger-9:    palette.$danger-9;
+
+  -color-olive-0:    palette.$olive-0;
+  -color-olive-1:    palette.$olive-1;
+  -color-olive-2:    palette.$olive-2;
+  -color-olive-3:    palette.$olive-3;
+  -color-olive-4:    palette.$olive-4;
+  -color-olive-5:    palette.$olive-5;
+  -color-olive-6:    palette.$olive-6;
+  -color-olive-7:    palette.$olive-7;
+  -color-olive-8:    palette.$olive-8;
+  -color-olive-9:    palette.$olive-9;
+
+  -color-yellow-0:    palette.$yellow-0;
+  -color-yellow-1:    palette.$yellow-1;
+  -color-yellow-2:    palette.$yellow-2;
+  -color-yellow-3:    palette.$yellow-3;
+  -color-yellow-4:    palette.$yellow-4;
+  -color-yellow-5:    palette.$yellow-5;
+  -color-yellow-6:    palette.$yellow-6;
+  -color-yellow-7:    palette.$yellow-7;
+  -color-yellow-8:    palette.$yellow-8;
+  -color-yellow-9:    palette.$yellow-9;
+
+  -color-orange-0:    palette.$orange-0;
+  -color-orange-1:    palette.$orange-1;
+  -color-orange-2:    palette.$orange-2;
+  -color-orange-3:    palette.$orange-3;
+  -color-orange-4:    palette.$orange-4;
+  -color-orange-5:    palette.$orange-5;
+  -color-orange-6:    palette.$orange-6;
+  -color-orange-7:    palette.$orange-7;
+  -color-orange-8:    palette.$orange-8;
+  -color-orange-9:    palette.$orange-9;
+
+  -color-teal-0:    palette.$teal-0;
+  -color-teal-1:    palette.$teal-1;
+  -color-teal-2:    palette.$teal-2;
+  -color-teal-3:    palette.$teal-3;
+  -color-teal-4:    palette.$teal-4;
+  -color-teal-5:    palette.$teal-5;
+  -color-teal-6:    palette.$teal-6;
+  -color-teal-7:    palette.$teal-7;
+  -color-teal-8:    palette.$teal-8;
+  -color-teal-9:    palette.$teal-9;
+
+  -color-violet-0:    palette.$violet-0;
+  -color-violet-1:    palette.$violet-1;
+  -color-violet-2:    palette.$violet-2;
+  -color-violet-3:    palette.$violet-3;
+  -color-violet-4:    palette.$violet-4;
+  -color-violet-5:    palette.$violet-5;
+  -color-violet-6:    palette.$violet-6;
+  -color-violet-7:    palette.$violet-7;
+  -color-violet-8:    palette.$violet-8;
+  -color-violet-9:    palette.$violet-9;
+
+  -color-purple-0:    palette.$purple-0;
+  -color-purple-1:    palette.$purple-1;
+  -color-purple-2:    palette.$purple-2;
+  -color-purple-3:    palette.$purple-3;
+  -color-purple-4:    palette.$purple-4;
+  -color-purple-5:    palette.$purple-5;
+  -color-purple-6:    palette.$purple-6;
+  -color-purple-7:    palette.$purple-7;
+  -color-purple-8:    palette.$purple-8;
+  -color-purple-9:    palette.$purple-9;
+  // Functional variables
+
+  -color-fg-default:            vars.$fg-default;
+  -color-fg-muted:              vars.$fg-muted;
+  -color-fg-subtle:             vars.$fg-subtle;
+  -color-fg-emphasis:           vars.$fg-onEmphasis;
+
+  -color-bg-default:            vars.$canvas-default;
+  -color-bg-overlay:            vars.$canvas-overlay;
+  -color-bg-subtle:             vars.$canvas-subtle;
+  -color-bg-inset:              vars.$canvas-inset;
+
+  -color-border-default:        vars.$border-default;
+  -color-border-muted:          vars.$border-muted;
+  -color-border-subtle:         vars.$border-subtle;
+  -color-shadow-default:        vars.$shadow-default;
+
+  -color-neutral-emphasis-plus: vars.$neutral-emphasisPlus;
+  -color-neutral-emphasis:      vars.$neutral-emphasis;
+  -color-neutral-muted:         vars.$neutral-muted;
+  -color-neutral-subtle:        vars.$neutral-subtle;
+
+  -color-accent-fg:             vars.$accent-fg;
+  -color-accent-emphasis:       vars.$accent-emphasis;
+  -color-accent-muted:          vars.$accent-muted;
+  -color-accent-subtle:         vars.$accent-subtle;
+
+  -color-warning-fg:            vars.$warning-fg;
+  -color-warning-emphasis:      vars.$warning-emphasis;
+  -color-warning-muted:         vars.$warning-muted;
+  -color-warning-subtle:        vars.$warning-subtle;
+
+  -color-success-fg:            vars.$success-fg;
+  -color-success-emphasis:      vars.$success-emphasis;
+  -color-success-muted:         vars.$success-muted;
+  -color-success-subtle:        vars.$success-subtle;
+
+  -color-danger-fg:             vars.$danger-fg;
+  -color-danger-emphasis:       vars.$danger-emphasis;
+  -color-danger-muted:          vars.$danger-muted;
+  -color-danger-subtle:         vars.$danger-subtle;
+
+  -color-olive-fg:             vars.$olive-fg;
+  -color-olive-emphasis:       vars.$olive-emphasis;
+  -color-olive-muted:          vars.$olive-muted;
+  -color-olive-subtle:         vars.$olive-subtle;
+
+  -color-orange-fg:             vars.$orange-fg;
+  -color-orange-emphasis:       vars.$orange-emphasis;
+  -color-orange-muted:          vars.$orange-muted;
+  -color-orange-subtle:         vars.$orange-subtle;
+
+  -color-yellow-fg:             vars.$yellow-fg;
+  -color-yellow-emphasis:       vars.$yellow-emphasis;
+  -color-yellow-muted:          vars.$yellow-muted;
+  -color-yellow-subtle:         vars.$yellow-subtle;
+
+  -color-teal-fg:             vars.$teal-fg;
+  -color-teal-emphasis:       vars.$teal-emphasis;
+  -color-teal-muted:          vars.$teal-muted;
+  -color-teal-subtle:         vars.$teal-subtle;
+
+  -color-violet-fg:             vars.$violet-fg;
+  -color-violet-emphasis:       vars.$violet-emphasis;
+  -color-violet-muted:          vars.$violet-muted;
+  -color-violet-subtle:         vars.$violet-subtle;
+
+  -color-purple-fg:             vars.$purple-fg;
+  -color-purple-emphasis:       vars.$purple-emphasis;
+  -color-purple-muted:          vars.$purple-muted;
+  -color-purple-subtle:         vars.$purple-subtle;
+
+  -color-chart-1:               vars.$chart-1;
+  -color-chart-2:               vars.$chart-2;
+  -color-chart-3:               vars.$chart-3;
+  -color-chart-4:               vars.$chart-4;
+  -color-chart-5:               vars.$chart-5;
+  -color-chart-6:               vars.$chart-6;
+  -color-chart-7:               vars.$chart-7;
+  -color-chart-8:               vars.$chart-8;
+
+  -color-chart-1-alpha70:       vars.$chart-1-alpha70;
+  -color-chart-2-alpha70:       vars.$chart-2-alpha70;
+  -color-chart-3-alpha70:       vars.$chart-3-alpha70;
+  -color-chart-4-alpha70:       vars.$chart-4-alpha70;
+  -color-chart-5-alpha70:       vars.$chart-5-alpha70;
+  -color-chart-6-alpha70:       vars.$chart-6-alpha70;
+  -color-chart-7-alpha70:       vars.$chart-7-alpha70;
+  -color-chart-8-alpha70:       vars.$chart-8-alpha70;
+
+  -color-chart-1-alpha20:       vars.$chart-1-alpha20;
+  -color-chart-2-alpha20:       vars.$chart-2-alpha20;
+  -color-chart-3-alpha20:       vars.$chart-3-alpha20;
+  -color-chart-4-alpha20:       vars.$chart-4-alpha20;
+  -color-chart-5-alpha20:       vars.$chart-5-alpha20;
+  -color-chart-6-alpha20:       vars.$chart-6-alpha20;
+  -color-chart-7-alpha20:       vars.$chart-7-alpha20;
+  -color-chart-8-alpha20:       vars.$chart-8-alpha20;
+
+  // default props inherited by all nodes
+  -fx-background-color: -color-bg-default;
+  -fx-font-size: cfg.$font-default;
+
+  // these are needed for Popup
+  -fx-background-radius: inherit;
+  -fx-background-insets: inherit;
+  -fx-padding: inherit;
+
+  // make popups transparent
+  &.popup {
+    -fx-background-color: transparent;
+  }
+}
+
+// font icons
+.ikonli-font-icon {
+  -fx-icon-color: -color-fg-default;
+  -fx-fill: -color-fg-default;
+  -fx-icon-size: cfg.$icon-size;
+}
+
+// Hide mnemonic stroke by default. It can only appear when user holds
+// Meta button, which adds ":show-mnemonics" pseudo-class to each control
+// that set mnemonicParsing = true.
+.mnemonic-underline {
+  -fx-stroke: transparent;
+}

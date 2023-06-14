@@ -11,27 +11,5 @@
 
   <artifactId>fxcalibur</artifactId>
   <name>Fxcalibur 🗡️</name>
-
-  <properties>
-    <javafx.version>20</javafx.version>
-  </properties>
-
-  <dependencies>
-    <dependency>
-      <groupId>re.artoo</groupId>
-      <artifactId>lance</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>org.openjfx</groupId>
-      <artifactId>javafx-controls</artifactId>
-      <version>${javafx.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>io.github.mkpaz</groupId>
-      <artifactId>atlantafx-base</artifactId>
-      <version>2.0.0</version>
-    </dependency>
-  </dependencies>
-
+  <packaging>pom</packaging>
 </project>

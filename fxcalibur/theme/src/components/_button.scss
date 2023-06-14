@@ -1,0 +1,754 @@
+// SPDX-License-Identifier: MIT
+
+@use "../settings/config" as cfg;
+@use "../settings/icons";
+@use "../settings/utils";
+
+// ordinary
+$color-bg:                     -color-bg-subtle  !default;
+$color-fg:                     -color-fg-default !default;
+$color-border:                 -color-border-default !default;
+
+//noinspection CssInvalidFunction
+$color-bg-hover:               if(cfg.$darkMode, -color-base-6, -color-base-1) !default;
+$color-fg-hover:               -color-button-fg     !default;
+$color-border-hover:           -color-button-border !default;
+
+$color-bg-focused:             -color-button-bg       !default;
+$color-fg-focused:             -color-button-fg       !default;
+$color-border-focused:         -color-accent-emphasis !default;
+
+$color-bg-pressed:             -color-bg-subtle !default;
+$color-fg-pressed:             -color-button-fg !default;
+$color-border-pressed:         transparent      !default;
+
+// accent
+$color-accent-bg:              -color-accent-emphasis !default;
+$color-accent-fg:              -color-fg-emphasis     !default;
+$color-accent-border:          -color-accent-emphasis !default;
+
+$color-accent-bg-hover:        -color-accent-emphasis !default;
+$color-accent-fg-hover:        -color-fg-emphasis     !default;
+$color-accent-border-hover:    -color-accent-emphasis !default;
+
+$color-accent-bg-focused:      -color-accent-6        !default;
+$color-accent-fg-focused:      -color-fg-emphasis     !default;
+$color-accent-border-focused:  -color-accent-emphasis !default;
+
+$color-accent-bg-pressed:      -color-accent-emphasis !default;
+$color-accent-fg-pressed:      -color-fg-emphasis     !default;
+$color-accent-border-pressed:  transparent            !default;
+
+// success
+$color-success-bg:             -color-success-emphasis !default;
+$color-success-fg:             -color-fg-emphasis      !default;
+$color-success-border:         -color-success-emphasis !default;
+
+$color-success-bg-hover:       -color-success-emphasis !default;
+$color-success-fg-hover:       -color-fg-emphasis      !default;
+$color-success-border-hover:   -color-success-emphasis !default;
+
+$color-success-bg-focused:     if(cfg.$darkMode, -color-success-6, -color-success-5) !default;
+$color-success-fg-focused:     -color-fg-emphasis      !default;
+$color-success-border-focused: -color-success-emphasis !default;
+
+$color-success-bg-pressed:     -color-success-emphasis !default;
+$color-success-fg-pressed:     -color-fg-emphasis      !default;
+$color-success-border-pressed: transparent             !default;
+
+// danger
+$color-danger-bg:              -color-danger-emphasis !default;
+$color-danger-fg:              -color-fg-emphasis     !default;
+$color-danger-border:          -color-danger-emphasis !default;
+
+$color-danger-bg-hover:        -color-danger-emphasis !default;
+$color-danger-fg-hover:        -color-fg-emphasis     !default;
+$color-danger-border-hover:    -color-danger-emphasis !default;
+
+$color-danger-bg-focused:      -color-danger-6        !default;
+$color-danger-fg-focused:      -color-fg-emphasis     !default;
+$color-danger-border-focused:  -color-danger-emphasis !default;
+
+$color-danger-bg-pressed:      -color-danger-emphasis !default;
+$color-danger-fg-pressed:      -color-fg-emphasis     !default;
+$color-danger-border-pressed:  transparent            !default;
+
+// olive
+$color-olive-bg:              -color-olive-emphasis !default;
+$color-olive-fg:              -color-fg-emphasis     !default;
+$color-olive-border:          -color-olive-emphasis !default;
+
+$color-olive-bg-hover:        -color-olive-emphasis !default;
+$color-olive-fg-hover:        -color-fg-emphasis     !default;
+$color-olive-border-hover:    -color-olive-emphasis !default;
+
+$color-olive-bg-focused:      -color-olive-6        !default;
+$color-olive-fg-focused:      -color-fg-emphasis     !default;
+$color-olive-border-focused:  -color-olive-emphasis !default;
+
+$color-olive-bg-pressed:      -color-olive-emphasis !default;
+$color-olive-fg-pressed:      -color-fg-emphasis     !default;
+$color-olive-border-pressed:  transparent            !default;
+
+// orange
+$color-orange-bg:              -color-orange-emphasis !default;
+$color-orange-fg:              -color-fg-emphasis     !default;
+$color-orange-border:          -color-orange-emphasis !default;
+
+$color-orange-bg-hover:        -color-orange-emphasis !default;
+$color-orange-fg-hover:        -color-fg-emphasis     !default;
+$color-orange-border-hover:    -color-orange-emphasis !default;
+
+$color-orange-bg-focused:      -color-orange-6        !default;
+$color-orange-fg-focused:      -color-fg-emphasis     !default;
+$color-orange-border-focused:  -color-orange-emphasis !default;
+
+$color-orange-bg-pressed:      -color-orange-emphasis !default;
+$color-orange-fg-pressed:      -color-fg-emphasis     !default;
+$color-orange-border-pressed:  transparent            !default;
+
+// yellow
+$color-yellow-bg:              -color-yellow-emphasis !default;
+$color-yellow-fg:              -color-fg-emphasis     !default;
+$color-yellow-border:          -color-yellow-emphasis !default;
+
+$color-yellow-bg-hover:        -color-yellow-emphasis !default;
+$color-yellow-fg-hover:        -color-fg-emphasis     !default;
+$color-yellow-border-hover:    -color-yellow-emphasis !default;
+
+$color-yellow-bg-focused:      -color-yellow-6        !default;
+$color-yellow-fg-focused:      -color-fg-emphasis     !default;
+$color-yellow-border-focused:  -color-yellow-emphasis !default;
+
+$color-yellow-bg-pressed:      -color-yellow-emphasis !default;
+$color-yellow-fg-pressed:      -color-fg-emphasis     !default;
+$color-yellow-border-pressed:  transparent            !default;
+
+// teal
+$color-teal-bg:              -color-teal-emphasis !default;
+$color-teal-fg:              -color-fg-emphasis     !default;
+$color-teal-border:          -color-teal-emphasis !default;
+
+$color-teal-bg-hover:        -color-teal-emphasis !default;
+$color-teal-fg-hover:        -color-fg-emphasis     !default;
+$color-teal-border-hover:    -color-teal-emphasis !default;
+
+$color-teal-bg-focused:      -color-teal-6        !default;
+$color-teal-fg-focused:      -color-fg-emphasis     !default;
+$color-teal-border-focused:  -color-teal-emphasis !default;
+
+$color-teal-bg-pressed:      -color-teal-emphasis !default;
+$color-teal-fg-pressed:      -color-fg-emphasis     !default;
+$color-teal-border-pressed:  transparent            !default;
+
+// violet
+$color-violet-bg:              -color-violet-emphasis !default;
+$color-violet-fg:              -color-fg-emphasis     !default;
+$color-violet-border:          -color-violet-emphasis !default;
+
+$color-violet-bg-hover:        -color-violet-emphasis !default;
+$color-violet-fg-hover:        -color-fg-emphasis     !default;
+$color-violet-border-hover:    -color-violet-emphasis !default;
+
+$color-violet-bg-focused:      -color-violet-6        !default;
+$color-violet-fg-focused:      -color-fg-emphasis     !default;
+$color-violet-border-focused:  -color-violet-emphasis !default;
+
+$color-violet-bg-pressed:      -color-violet-emphasis !default;
+$color-violet-fg-pressed:      -color-fg-emphasis     !default;
+$color-violet-border-pressed:  transparent            !default;
+
+// purple
+$color-purple-bg:              -color-purple-emphasis !default;
+$color-purple-fg:              -color-fg-emphasis     !default;
+$color-purple-border:          -color-purple-emphasis !default;
+
+$color-purple-bg-hover:        -color-purple-emphasis !default;
+$color-purple-fg-hover:        -color-fg-emphasis     !default;
+$color-purple-border-hover:    -color-purple-emphasis !default;
+
+$color-purple-bg-focused:      -color-purple-6        !default;
+$color-purple-fg-focused:      -color-fg-emphasis     !default;
+$color-purple-border-focused:  -color-purple-emphasis !default;
+
+$color-purple-bg-pressed:      -color-purple-emphasis !default;
+$color-purple-fg-pressed:      -color-fg-emphasis     !default;
+$color-purple-border-pressed:  transparent            !default;
+
+// flat
+$color-flat-fg:                -color-fg-default !default;
+$color-flat-bg-hover:          -color-bg-subtle  !default;
+
+$color-flat-accent-fg:         -color-accent-fg     !default;
+$color-flat-accent-bg-hover:   -color-accent-subtle !default;
+
+$color-flat-success-fg:        -color-success-fg     !default;
+$color-flat-success-bg-hover:  -color-success-subtle !default;
+
+$color-flat-danger-fg:         -color-danger-fg      !default;
+$color-flat-danger-bg-hover:   -color-danger-subtle  !default;
+
+$color-flat-olive-fg:         -color-olive-fg      !default;
+$color-flat-olive-bg-hover:   -color-olive-subtle  !default;
+
+$color-flat-yellow-fg:         -color-yellow-fg      !default;
+$color-flat-yellow-bg-hover:   -color-yellow-subtle  !default;
+
+$color-flat-orange-fg:         -color-orange-fg      !default;
+$color-flat-orange-bg-hover:   -color-orange-subtle  !default;
+
+$color-flat-teal-fg:         -color-teal-fg      !default;
+$color-flat-teal-bg-hover:   -color-teal-subtle  !default;
+
+$color-flat-violet-fg:         -color-violet-fg      !default;
+$color-flat-violet-bg-hover:   -color-violet-subtle  !default;
+
+$color-flat-purple-fg:         -color-purple-fg      !default;
+$color-flat-purple-bg-hover:   -color-purple-subtle  !default;
+
+// outlined
+$color-accent-outlined-fg:        -color-accent-fg        !default;
+$color-accent-outlined-bg-hover:  $color-accent-bg-hover  !default;
+
+$color-success-outlined-fg:       -color-success-fg       !default;
+$color-success-outlined-bg-hover: $color-success-bg-hover !default;
+
+$color-danger-outlined-fg:        -color-danger-fg        !default;
+$color-danger-outlined-bg-hover:  $color-danger-bg-hover  !default;
+
+$color-olive-outlined-fg:        -color-olive-fg        !default;
+$color-olive-outlined-bg-hover:  $color-olive-bg-hover  !default;
+
+$color-yellow-outlined-fg:        -color-yellow-fg        !default;
+$color-yellow-outlined-bg-hover:  $color-yellow-bg-hover  !default;
+
+$color-orange-outlined-fg:        -color-orange-fg        !default;
+$color-orange-outlined-bg-hover:  $color-orange-bg-hover  !default;
+
+$color-teal-outlined-fg:        -color-teal-fg        !default;
+$color-teal-outlined-bg-hover:  $color-teal-bg-hover  !default;
+
+$color-violet-outlined-fg:        -color-violet-fg        !default;
+$color-violet-outlined-bg-hover:  $color-violet-bg-hover  !default;
+
+$color-purple-outlined-fg:        -color-purple-fg        !default;
+$color-purple-outlined-bg-hover:  $color-purple-bg-hover  !default;
+
+// opacity level for hover effect
+$opacity-hover: 0.9 !default;
+
+// shadow
+$use-shadow:   false !default;
+$color-shadow: -color-shadow-default !default;
+
+// basic style is shared with Button, ToggleButton and MenuButton
+@mixin base() {
+
+  // buttons can be configured via looked-up colors
+  -color-button-bg:             $color-bg;
+  -color-button-fg:             $color-fg;
+  -color-button-border:         $color-border;
+
+  -color-button-bg-hover:       $color-bg-hover;
+  -color-button-fg-hover:       $color-fg-hover;
+  -color-button-border-hover:   $color-border-hover;
+
+  -color-button-bg-focused:     $color-bg-focused;
+  -color-button-fg-focused:     $color-fg-focused;
+  -color-button-border-focused: $color-border-focused;
+
+  -color-button-bg-pressed:     $color-bg-pressed;
+  -color-button-fg-pressed:     $color-fg-pressed;
+  -color-button-border-pressed: $color-border-pressed;
+
+  -color-button-shadow:         $color-shadow;
+
+  -fx-background-color:  -color-button-border, -color-button-bg;
+  -fx-background-insets: 0, cfg.$border-width;
+  -fx-background-radius: cfg.$border-radius, cfg.$inner-border-radius;
+  -fx-graphic-text-gap:  cfg.$graphic-gap;
+  -fx-text-fill: -color-button-fg;
+  -fx-alignment: CENTER;
+
+  @if $use-shadow {
+    -fx-effect: dropshadow(gaussian, -color-button-shadow, 3px, -2, 0, 1);
+  }
+
+  #{cfg.$font-icon-selector} {
+    -fx-icon-color: -color-button-fg;
+    // Always add -fx-fill when styling font icons. There's at least one weird bug.
+    // If you set stylesheet to the scene without '-fx-fill' font icon fg will be
+    // applied correctly. But if you set exactly the same stylesheet via
+    // Application.setUserAgentStylesheet(), font icon fg won't be correct without
+    // using '-fx-fill' here.
+    -fx-fill: -color-button-fg;
+  }
+
+  &:disabled {
+    -fx-opacity: cfg.$opacity-disabled;
+    -fx-effect: none;
+  }
+
+  &:show-mnemonics {
+    >.mnemonic-underline {
+      -fx-stroke: -color-button-fg;
+    }
+  }
+
+  // Button calculates its height based on the internal text font size.
+  // So, button that has no text (or icon) will appear lower than regular
+  // buttons. There're no workarounds, but you can set escape char like
+  // \s or \f as button text.
+  &.button-icon {
+    -fx-padding: cfg.$padding-y;
+    -fx-content-display: graphic-only;
+  }
+
+  &.button-circle {
+    -fx-background-radius: 50;
+    -fx-padding: 6px 8px 6px 8px;
+    -fx-content-display: graphic-only;
+    -fx-effect:  none;
+  }
+
+  // toggle button + input group
+  &.left-pill {
+    -fx-background-radius: cfg.$border-radius 0 0 cfg.$border-radius, cfg.$inner-border-radius 0 0 cfg.$inner-border-radius;
+    -fx-background-insets: 0, cfg.$border-width 0 cfg.$border-width cfg.$border-width;
+    -fx-effect: none;
+
+    &:hover,
+    &:focused {
+      -fx-background-insets: 0, cfg.$border-width;
+    }
+  }
+
+  &.center-pill {
+    -fx-background-radius: 0;
+    -fx-background-insets: 0, cfg.$border-width 0 cfg.$border-width 0;
+    -fx-effect: none;
+
+    &:hover,
+    &:focused {
+      -fx-background-insets: 0, cfg.$border-width;
+    }
+  }
+
+  &.right-pill {
+    -fx-background-radius: 0 cfg.$border-radius cfg.$border-radius 0, 0 cfg.$inner-border-radius cfg.$inner-border-radius 0;
+    -fx-background-insets: 0, cfg.$border-width cfg.$border-width cfg.$border-width 0;
+    -fx-effect: none;
+
+    &:hover,
+    &:focused {
+      -fx-background-insets: 0, cfg.$border-width;
+    }
+  }
+}
+
+@mixin accent() {
+
+  -color-button-bg:             $color-accent-bg;
+  -color-button-fg:             $color-accent-fg;
+  -color-button-border:         $color-accent-border;
+
+  -color-button-bg-hover:       $color-accent-bg-hover;
+  -color-button-fg-hover:       $color-accent-fg-hover;
+  -color-button-border-hover:   $color-accent-border-hover;
+
+  -color-button-bg-focused:     $color-accent-bg-focused;
+  -color-button-fg-focused:     $color-accent-fg-focused;
+  -color-button-border-focused: $color-accent-border-focused;
+
+  -color-button-bg-pressed:     $color-accent-bg-pressed;
+  -color-button-fg-pressed:     $color-accent-fg-pressed;
+  -color-button-border-pressed: $color-accent-border-pressed;
+
+  &.button-outlined {
+    -color-button-bg:       -color-bg-default;
+    -color-button-fg:       $color-accent-outlined-fg;
+    -color-button-bg-hover: $color-accent-outlined-bg-hover;
+    -color-button-fg-hover: -color-fg-emphasis;
+  }
+
+  &.flat {
+    -color-button-fg:         $color-flat-accent-fg;
+    -color-button-bg-hover:   $color-flat-accent-bg-hover;
+  }
+}
+
+@mixin success() {
+
+  -color-button-bg:             $color-success-bg;
+  -color-button-fg:             $color-success-fg;
+  -color-button-border:         $color-success-border;
+
+  -color-button-bg-hover:       $color-success-bg-hover;
+  -color-button-fg-hover:       $color-success-fg-hover;
+  -color-button-border-hover:   $color-success-border-hover;
+
+  -color-button-bg-focused:     $color-success-bg-focused;
+  -color-button-fg-focused:     $color-success-fg-focused;
+  -color-button-border-focused: $color-success-border-focused;
+
+  -color-button-bg-pressed:     $color-success-bg-pressed;
+  -color-button-fg-pressed:     $color-success-fg-pressed;
+  -color-button-border-pressed: $color-success-border-pressed;
+
+  &.button-outlined {
+    -color-button-bg:       -color-bg-default;
+    -color-button-fg:       $color-success-outlined-fg;
+    -color-button-bg-hover: $color-success-outlined-bg-hover;
+    -color-button-fg-hover: -color-fg-emphasis;
+  }
+
+  &.flat {
+    -color-button-fg:         $color-flat-success-fg;
+    -color-button-bg-hover:   $color-flat-success-bg-hover;
+  }
+}
+
+@mixin danger() {
+
+  -color-button-bg:             $color-danger-bg;
+  -color-button-fg:             $color-danger-fg;
+  -color-button-border:         $color-danger-border;
+
+  -color-button-bg-hover:       $color-danger-bg-hover;
+  -color-button-fg-hover:       $color-danger-fg-hover;
+  -color-button-border-hover:   $color-danger-border-hover;
+
+  -color-button-bg-focused:     $color-danger-bg-focused;
+  -color-button-fg-focused:     $color-danger-fg-focused;
+  -color-button-border-focused: $color-danger-border-focused;
+
+  -color-button-bg-pressed:     $color-danger-bg-pressed;
+  -color-button-fg-pressed:     $color-danger-fg-pressed;
+  -color-button-border-pressed: $color-danger-border-pressed;
+
+  &.button-outlined {
+    -color-button-bg:       -color-bg-default;
+    -color-button-fg:       $color-danger-outlined-fg;
+    -color-button-bg-hover: $color-danger-outlined-bg-hover;
+    -color-button-fg-hover: -color-fg-emphasis;
+  }
+
+  &.flat {
+    -color-button-fg:         $color-flat-danger-fg;
+    -color-button-bg-hover:   $color-flat-danger-bg-hover;
+  }
+}
+
+@mixin olive() {
+
+  -color-button-bg:             $color-olive-bg;
+  -color-button-fg:             $color-olive-fg;
+  -color-button-border:         $color-olive-border;
+
+  -color-button-bg-hover:       $color-olive-bg-hover;
+  -color-button-fg-hover:       $color-olive-fg-hover;
+  -color-button-border-hover:   $color-olive-border-hover;
+
+  -color-button-bg-focused:     $color-olive-bg-focused;
+  -color-button-fg-focused:     $color-olive-fg-focused;
+  -color-button-border-focused: $color-olive-border-focused;
+
+  -color-button-bg-pressed:     $color-olive-bg-pressed;
+  -color-button-fg-pressed:     $color-olive-fg-pressed;
+  -color-button-border-pressed: $color-olive-border-pressed;
+
+  &.button-outlined {
+    -color-button-bg:       -color-bg-default;
+    -color-button-fg:       $color-olive-outlined-fg;
+    -color-button-bg-hover: $color-olive-outlined-bg-hover;
+    -color-button-fg-hover: -color-fg-emphasis;
+  }
+
+  &.flat {
+    -color-button-fg:         $color-flat-olive-fg;
+    -color-button-bg-hover:   $color-flat-olive-bg-hover;
+  }
+}
+
+@mixin yellow() {
+
+  -color-button-bg:             $color-yellow-bg;
+  -color-button-fg:             $color-yellow-fg;
+  -color-button-border:         $color-yellow-border;
+
+  -color-button-bg-hover:       $color-yellow-bg-hover;
+  -color-button-fg-hover:       $color-yellow-fg-hover;
+  -color-button-border-hover:   $color-yellow-border-hover;
+
+  -color-button-bg-focused:     $color-yellow-bg-focused;
+  -color-button-fg-focused:     $color-yellow-fg-focused;
+  -color-button-border-focused: $color-yellow-border-focused;
+
+  -color-button-bg-pressed:     $color-yellow-bg-pressed;
+  -color-button-fg-pressed:     $color-yellow-fg-pressed;
+  -color-button-border-pressed: $color-yellow-border-pressed;
+
+  &.button-outlined {
+    -color-button-bg:       -color-bg-default;
+    -color-button-fg:       $color-yellow-outlined-fg;
+    -color-button-bg-hover: $color-yellow-outlined-bg-hover;
+    -color-button-fg-hover: -color-fg-emphasis;
+  }
+
+  &.flat {
+    -color-button-fg:         $color-flat-yellow-fg;
+    -color-button-bg-hover:   $color-flat-yellow-bg-hover;
+  }
+}
+
+@mixin orange() {
+
+  -color-button-bg:             $color-orange-bg;
+  -color-button-fg:             $color-orange-fg;
+  -color-button-border:         $color-orange-border;
+
+  -color-button-bg-hover:       $color-orange-bg-hover;
+  -color-button-fg-hover:       $color-orange-fg-hover;
+  -color-button-border-hover:   $color-orange-border-hover;
+
+  -color-button-bg-focused:     $color-orange-bg-focused;
+  -color-button-fg-focused:     $color-orange-fg-focused;
+  -color-button-border-focused: $color-orange-border-focused;
+
+  -color-button-bg-pressed:     $color-orange-bg-pressed;
+  -color-button-fg-pressed:     $color-orange-fg-pressed;
+  -color-button-border-pressed: $color-orange-border-pressed;
+
+  &.button-outlined {
+    -color-button-bg:       -color-bg-default;
+    -color-button-fg:       $color-orange-outlined-fg;
+    -color-button-bg-hover: $color-orange-outlined-bg-hover;
+    -color-button-fg-hover: -color-fg-emphasis;
+  }
+
+  &.flat {
+    -color-button-fg:         $color-flat-orange-fg;
+    -color-button-bg-hover:   $color-flat-orange-bg-hover;
+  }
+}
+
+@mixin teal() {
+
+  -color-button-bg:             $color-teal-bg;
+  -color-button-fg:             $color-teal-fg;
+  -color-button-border:         $color-teal-border;
+
+  -color-button-bg-hover:       $color-teal-bg-hover;
+  -color-button-fg-hover:       $color-teal-fg-hover;
+  -color-button-border-hover:   $color-teal-border-hover;
+
+  -color-button-bg-focused:     $color-teal-bg-focused;
+  -color-button-fg-focused:     $color-teal-fg-focused;
+  -color-button-border-focused: $color-teal-border-focused;
+
+  -color-button-bg-pressed:     $color-teal-bg-pressed;
+  -color-button-fg-pressed:     $color-teal-fg-pressed;
+  -color-button-border-pressed: $color-teal-border-pressed;
+
+  &.button-outlined {
+    -color-button-bg:       -color-bg-default;
+    -color-button-fg:       $color-teal-outlined-fg;
+    -color-button-bg-hover: $color-teal-outlined-bg-hover;
+    -color-button-fg-hover: -color-fg-emphasis;
+  }
+
+  &.flat {
+    -color-button-fg:         $color-flat-teal-fg;
+    -color-button-bg-hover:   $color-flat-teal-bg-hover;
+  }
+}
+
+@mixin violet() {
+
+  -color-button-bg:             $color-violet-bg;
+  -color-button-fg:             $color-violet-fg;
+  -color-button-border:         $color-violet-border;
+
+  -color-button-bg-hover:       $color-violet-bg-hover;
+  -color-button-fg-hover:       $color-violet-fg-hover;
+  -color-button-border-hover:   $color-violet-border-hover;
+
+  -color-button-bg-focused:     $color-violet-bg-focused;
+  -color-button-fg-focused:     $color-violet-fg-focused;
+  -color-button-border-focused: $color-violet-border-focused;
+
+  -color-button-bg-pressed:     $color-violet-bg-pressed;
+  -color-button-fg-pressed:     $color-violet-fg-pressed;
+  -color-button-border-pressed: $color-violet-border-pressed;
+
+  &.button-outlined {
+    -color-button-bg:       -color-bg-default;
+    -color-button-fg:       $color-violet-outlined-fg;
+    -color-button-bg-hover: $color-violet-outlined-bg-hover;
+    -color-button-fg-hover: -color-fg-emphasis;
+  }
+
+  &.flat {
+    -color-button-fg:         $color-flat-violet-fg;
+    -color-button-bg-hover:   $color-flat-violet-bg-hover;
+  }
+}
+
+@mixin purple() {
+
+  -color-button-bg:             $color-purple-bg;
+  -color-button-fg:             $color-purple-fg;
+  -color-button-border:         $color-purple-border;
+
+  -color-button-bg-hover:       $color-purple-bg-hover;
+  -color-button-fg-hover:       $color-purple-fg-hover;
+  -color-button-border-hover:   $color-purple-border-hover;
+
+  -color-button-bg-focused:     $color-purple-bg-focused;
+  -color-button-fg-focused:     $color-purple-fg-focused;
+  -color-button-border-focused: $color-purple-border-focused;
+
+  -color-button-bg-pressed:     $color-purple-bg-pressed;
+  -color-button-fg-pressed:     $color-purple-fg-pressed;
+  -color-button-border-pressed: $color-purple-border-pressed;
+
+  &.button-outlined {
+    -color-button-bg:       -color-bg-default;
+    -color-button-fg:       $color-purple-outlined-fg;
+    -color-button-bg-hover: $color-purple-outlined-bg-hover;
+    -color-button-fg-hover: -color-fg-emphasis;
+  }
+
+  &.flat {
+    -color-button-fg:         $color-flat-purple-fg;
+    -color-button-bg-hover:   $color-flat-purple-bg-hover;
+  }
+}
+
+@mixin flat() {
+  -color-button-bg:             transparent;
+  -color-button-fg:             $color-flat-fg;
+  -color-button-border:         transparent;
+
+  -color-button-bg-hover:       $color-flat-bg-hover;
+  -color-button-fg-hover:       -color-button-fg;
+  -color-button-border-hover:   $color-flat-bg-hover;
+
+  -color-button-bg-focused:     -color-button-bg;
+  -color-button-fg-focused:     -color-button-fg;
+  -color-button-border-focused: -color-button-bg;
+
+  -color-button-bg-pressed:     -color-button-bg;
+  -color-button-fg-pressed:     -color-button-fg;
+  -color-button-border-pressed: transparent;
+
+  -fx-effect: none;
+}
+
+.button {
+  @include base();
+
+  -fx-padding: cfg.$padding-y cfg.$padding-x cfg.$padding-y cfg.$padding-x;
+
+  &:hover {
+    -fx-background-color: -color-button-border-hover, -color-button-bg-hover;
+    -fx-text-fill: -color-button-fg-hover;
+    -fx-opacity: $opacity-hover;
+
+    &:focused {
+      -fx-background-color: -color-button-border-focused, -color-button-bg-hover;
+    }
+
+    #{cfg.$font-icon-selector} {
+      -fx-icon-color: -color-button-fg-hover;
+      -fx-fill: -color-button-fg-hover;
+    }
+  }
+
+  &:focused {
+    -fx-background-color: -color-button-border-focused, -color-button-bg-focused;
+    -fx-text-fill: -color-button-fg-focused;
+
+    #{cfg.$font-icon-selector} {
+      -fx-icon-color: -color-button-fg-focused;
+      -fx-fill: -color-button-fg-focused;
+    }
+  }
+
+  &:armed,
+  &:focused:armed {
+    -fx-background-color: -color-button-border-pressed, -color-button-bg-pressed;
+    -fx-text-fill: -color-button-fg-pressed;
+
+    #{cfg.$font-icon-selector} {
+      -fx-icon-color: -color-button-fg-pressed;
+      -fx-fill: -color-button-fg-pressed;
+    }
+  }
+
+  &.button-outlined {
+    -color-button-bg:       -color-bg-default;
+    -color-button-fg:       $color-fg;
+    -color-button-bg-hover: $color-bg-hover;
+    -color-button-fg-hover: $color-fg-hover;
+  }
+
+  &:default,
+  &.accent {
+    @include accent();
+  }
+
+  &.success {
+    @include success();
+  }
+
+  &.danger {
+    @include danger();
+  }
+
+  &.olive {
+    @include olive();
+  }
+
+  &.yellow {
+    @include yellow();
+  }
+
+  &.orange {
+    @include orange();
+  }
+
+  &.teal {
+    @include teal();
+  }
+
+  &.violet {
+    @include violet();
+  }
+
+  &.purple {
+    @include purple();
+  }
+
+  &.flat {
+    @include flat();
+
+    &:hover {
+      -fx-underline: true;
+    }
+  }
+
+  &.small {
+    -fx-padding: cfg.$padding-y-small cfg.$padding-x-small cfg.$padding-y-small cfg.$padding-x-small;
+    -fx-font-size: cfg.$font-small;
+  }
+
+  &.large {
+    -fx-padding: cfg.$padding-y-large cfg.$padding-x-large cfg.$padding-y-large cfg.$padding-x-large;
+    -fx-font-size: cfg.$font-title-4;
+  }
+
+  &.rounded {
+    -fx-background-radius: 10em;
+  }
+}

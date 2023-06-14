@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>re.artoo</groupId>
+    <artifactId>fxcalibur</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <groupId>re.artoo.fxcalibur</groupId>
+  <artifactId>theme</artifactId>
+
+  <name>Fxcalibur Theme 🎨</name>
+
+  <properties>
+    <app.name>fxcalibur</app.name>
+    <app.version>0.0.1</app.version>
+    <scss.inputDir>${project.basedir}/src</scss.inputDir>
+    <css.outputDir>${project.basedir}/target</css.outputDir>
+  </properties>
+
+  <build>
+    <resources>
+      <!-- include SASS sources to the resulting JAR file -->
+      <resource>
+        <directory>src</directory>
+        <targetPath>fxcalibur/themes</targetPath>
+        <filtering>false</filtering>
+      </resource>
+    </resources>
+    <plugins>
+      <!-- compile SCSS -->
+      <plugin>
+        <groupId>us.hebi.sass</groupId>
+        <artifactId>sass-cli-maven-plugin</artifactId>
+        <version>1.0.1</version>
+        <configuration>
+          <args>
+            <arg>${scss.inputDir}/semola-light.scss:${css.outputDir}/semola-light.css</arg>
+            <arg>${scss.inputDir}/semola-dark.scss:${css.outputDir}/semola-dark.css</arg>
+            <arg>--no-source-map</arg>
+          </args>
+        </configuration>
+        <executions>
+          <execution>
+            <id>run-sass</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- compress resulting CSS into archive for distribution -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <outputDirectory>${project.build.directory}</outputDirectory>
+          <attach>false</attach>
+          <appendAssemblyId>false</appendAssemblyId>
+          <tarLongFileMode>posix</tarLongFileMode>
+        </configuration>
+        <executions>
+          <execution>
+            <id>assemble-themes</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <finalName>${app.name}-${app.version}-themes</finalName>
+              <descriptors>
+                <descriptor>assembly.xml</descriptor>
+              </descriptors>
+            </configuration>
+          </execution>
+          <execution>
+            <id>assemble-scenebuilder</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <finalName>${app.name}-${app.version}-scenebuilder-themes</finalName>
+              <descriptors>
+                <descriptor>scenebuilder.xml</descriptor>
+              </descriptors>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>dev</id>
+      <properties>
+        <css.outputDir>${project.basedir}/../sampler/target/classes/atlantafx/sampler/theme-test</css.outputDir>
+        <sass.watch>true</sass.watch>
+      </properties>
+    </profile>
+  </profiles>
+
+</project>

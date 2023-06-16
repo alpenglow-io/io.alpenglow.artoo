@@ -8,14 +8,21 @@ import static atlantafx.base.theme.Styles.BUTTON_OUTLINED;
 import static atlantafx.base.theme.Styles.FLAT;
 
 public interface button {
+  default Button primary(Attribute... attributes) { return new Default(emphasis.primary, attributes); }
   default Button submit(Attribute... attributes) {
-    return new Default(type.submit, attributes);
+    return new Default(behaviour.submit, attributes);
   }
-  default Button outline(Attribute... attributes) { return new Default(type.outline, attributes); }
-  default Button cancel(Attribute... attributes) { return new Default(type.cancel, attributes); }
-  default Button flat(Attribute... attributes) { return new Default(type.flat, attributes); }
+  default Button outline(Attribute... attributes) { return new Default(behaviour.outline, attributes); }
+  default Button cancel(Attribute... attributes) { return new Default(behaviour.cancel, attributes); }
+  default Button flat(Attribute... attributes) { return new Default(behaviour.flat, attributes); }
 
-  sealed interface Attribute extends re.artoo.fxcalibur.element.Attribute<button.Default> permits color, size, type, value {}
+  interface Attribute extends re.artoo.fxcalibur.element.Attribute<button.Default> {
+    default String name() { return ""; }
+    @Override
+    default void apply(Default button) {
+      button.getStyleClass().add(0, name());
+    }
+  }
 
   final class Default extends Button implements button {
     {
@@ -30,7 +37,9 @@ public interface button {
     }
   }
 
-  enum type implements button.Attribute {
+  enum emphasis implements button.Attribute { primary, secondary, positive, negative }
+
+  enum behaviour implements button.Attribute {
     basic, cancel, submit, outline, flat;
 
     @Override
@@ -44,12 +53,24 @@ public interface button {
     }
   }
 
-  non-sealed interface value extends button.Attribute {
+  enum type implements button.Attribute {basic, tertiary, inverted}
+
+  interface value extends button.Attribute {
     static value text(String value) {
-      return button -> button.setText(value);
+      return new value() {
+        @Override
+        public void apply(Default button) {
+          button.setText(value);
+        }
+      };
     }
     static value bind(Property<String> property) {
-      return button -> button.textProperty().bind(property);
+      return new value() {
+        @Override
+        public void apply(Default button) {
+          button.textProperty().bind(property);
+        }
+      };
     }
   }
 

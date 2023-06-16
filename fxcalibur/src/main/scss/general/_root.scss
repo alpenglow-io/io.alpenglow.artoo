@@ -4,19 +4,6 @@
 @use "../settings/color-palette" as palette;
 @use "../settings/color-vars" as vars;
 
-@mixin main($color) {
-  -color-base-0:      palette.$base-0;
-  -color-base-1:      palette.$base-1;
-  -color-base-2:      palette.$base-2;
-  -color-base-3:      palette.$base-3;
-  -color-base-4:      palette.$base-4;
-  -color-base-5:      palette.$base-5;
-  -color-base-6:      palette.$base-6;
-  -color-base-7:      palette.$base-7;
-  -color-base-8:      palette.$base-8;
-  -color-base-9:      palette.$base-9;
-}
-
 //noinspection CssUnknownProperty
 .root {
 

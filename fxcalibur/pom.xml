@@ -55,6 +55,7 @@
           <sassVersion>1.62.0</sassVersion>
           <args>
             <arg>${scss.inputDir}/dragon.scss:${css.outputDir}/dragon.css</arg>
+            <arg>${scss.inputDir}/mim.scss:${css.outputDir}/mim.css</arg>
             <!--            <arg>${scss.inputDir}/dragon-nim.scss:${css.outputDir}/semola-dark.css</arg>-->
             <arg>--no-source-map</arg>
           </args>

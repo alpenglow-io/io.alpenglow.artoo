@@ -1,25 +1,175 @@
-$pink-9: #831843 !default;
-$pink-8: #9d174d !default;
-$pink-7: #be185d !default;
-$pink-6: #db2777 !default;
-$pink-5: #ec4899 !default;
-$pink-4: #f472b6 !default;
-$pink-3: #f9a8d4 !default;
-$pink-2: #fbcfe8 !default;
-$pink-1: #fce7f3 !default;
-$pink-0: #fdf2f8 !default;
+@use "sass:map";
 
-$rose-9: #881337 !default;
-$rose-8: #9f1239 !default;
-$rose-7: #be123c !default;
-$rose-6: #e11d48 !default;
-$rose-5: #f43f5e !default;
-$rose-4: #fb7185 !default;
-$rose-3: #fda4af !default;
-$rose-2: #fecdd3 !default;
-$rose-1: #ffe4e6 !default;
-$rose-0: #fff1f2 !default;
+$text-color: white;
 
-@mixin button($color) {
+$red: (
+  "9": #7f1d1d,
+  "8": #991b1b,
+  "7": #b91c1c,
+  "6": #dc2626,
+  "5": #ef4444,
+  "4": #f87171,
+  "3": #fca5a5,
+  "2": #fecaca,
+  "1": #fee2e2,
+  "0": #fef2f2
+);
 
+$indigo: (
+  "9": #312e81,
+  "8": #3730a3,
+  "7": #4338ca,
+  "6": #4f46e5,
+  "5": #6366f1,
+  "4": #818cf8,
+  "3": #a5b4fc,
+  "2": #c7d2fe,
+  "1": #e0e7ff,
+  "0": #eef2ff
+);
+
+$pink: (
+  "9": #831843,
+  "8": #9d174d,
+  "7": #be185d,
+  "6": #db2777,
+  "5": #ec4899,
+  "4": #f472b6,
+  "3": #f9a8d4,
+  "2": #fbcfe8,
+  "1": #fce7f3,
+  "0": #fdf2f8
+);
+
+$rose:(
+  "9": #881337,
+  "8": #9f1239,
+  "7": #be123c,
+  "6": #e11d48,
+  "5": #f43f5e,
+  "4": #fb7185,
+  "3": #fda4af,
+  "2": #fecdd3,
+  "1": #ffe4e6,
+  "0": #fff1f2
+);
+
+$gray: (
+  "9": #18181b,
+  "8": #27272a,
+  "7": #3f3f46,
+  "6": #52525b,
+  "5": #71717a,
+  "4": #a1a1aa,
+  "3": #d4d4d8,
+  "2": #e4e4e7,
+  "1": #f4f4f5,
+  "0": #fafafa
+);
+
+$palette: (
+  "red": $red,
+  "indigo": $indigo,
+  "rose": $rose,
+  "pink": $pink,
+  "gray": $gray,
+  "danger": $red,
+  "primary": $indigo,
+  "negative": $red
+);
+
+@mixin palette($palette) {
+  @each $color, $tones in $palette {
+    // $color
+    @each $index, $hex in $tones {
+      -color-#{$color}-#{$index}: #{$hex}
+    }
+  }
 }
+
+@mixin button($palette) {
+  @each $color, $tones in $palette {
+    -button-#{$color}-background: map.get($tones, "5");
+    -button-#{$color}-foreground: map.get($tones, "1");
+    -button-#{$color}-hover: map.get($tones, "6");
+    -button-#{$color}-focused: map.get($tones, "6");
+    -button-#{$color}-pressed: map.get($tones, "7");
+  }
+}
+
+@function hex($color, $tone) {
+  @return map.get(map.get($palette, $color), $tone)
+}
+
+.root {
+  //@include palette($palette)
+}
+
+//noinspection ALL
+.button {
+  -fx-background-color: hex("gray", "2");
+  -fx-text-fill: hex("gray", "6");
+  -fx-background-insets: 0, 1px;
+  -fx-background-radius: 4px 4px 4px 4px;
+  -fx-border-radius: 4px 4px;
+  -fx-border-width: 2px;
+  -fx-border-style: solid;
+  -fx-border-color: hex("gray", "2");
+  -fx-padding: 10px 20px 10px 20px;
+  -fx-font-weight: bold;
+
+  &:hover {
+    -fx-cursor: hand;
+    -fx-background-color: hex("gray", "3");
+    -fx-border-color: hex("gray", "3");
+    -fx-text-fill: hex("gray", "7");
+  }
+
+
+  &:pressed {
+    -fx-background-color: hex("gray", "4");
+    -fx-border-color: transparent;
+    -fx-text-fill: hex("gray", "8");
+  }
+
+  &.tertiary {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-border-width: 2px;
+    -fx-padding: 6px 6px 6px 6px;
+    -fx-text-fill: hex("gray", "5");
+  }
+
+  @each $color, $tones in $palette {
+    &.#{$color} {
+      -fx-background-color: hex($color, "5");
+      -fx-border-color: hex($color, "5");
+      -fx-text-fill: $text-color;
+    }
+
+    &.#{$color}:hover {
+      -fx-background-color: hex($color, "6");
+      -fx-border-color: hex($color, "6");
+    }
+
+    &.#{$color}:pressed {
+      -fx-background-color: hex($color, "7");
+      -fx-border-color: hex($color, "7");
+    }
+
+    &.#{$color}tertiary {
+      -fx-background-color: transparent;
+      -fx-text-fill: hex($color, "5");
+    }
+
+    &.#{$color}tertiary:hover {
+      -fx-text-fill: hex($color, "6");
+      -fx-border-color: hex($color, "6");
+      -fx-border-width: 0 0 2px 0;
+    }
+  }
+}
+
+

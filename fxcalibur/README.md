@@ -8,7 +8,7 @@ Application app = () ->
         button.primary(button.size.bind(size), value("Primary"))
       ),
       grid(
-        button.secondary(size.auto, text.value("Secondary"), on.mouse.clicked(size::large)))
+        button.secondary(size.bind(size), value.text("Secondary"), mouse.clicked(size::large)))
       ),
       grid(() ->
         text.h1(font.family(""), font.size(12), font.ligature(true), value())

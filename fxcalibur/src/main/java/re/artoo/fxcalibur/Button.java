@@ -1,8 +1,7 @@
 package re.artoo.fxcalibur;
 
 import javafx.scene.Node;
-import re.artoo.fxcalibur.element.component.button;
-import re.artoo.fxcalibur.element.component.button.value;
+import re.artoo.fxcalibur.element.component.Button.value;
 import re.artoo.lance.func.TryConsumer1;
 
 import java.util.function.Supplier;
@@ -10,11 +9,7 @@ import java.util.function.Supplier;
 import static atlantafx.base.theme.Styles.*;
 
 public interface Button extends Supplier<Node> {
-  button button = new button() {};
 
-  default Node button(String text) {
-    return new button.Default(value.text(text));
-  }
 
   default Node button(TryConsumer1<javafx.scene.control.Button> apply) {
     return apply.autoAccept(new javafx.scene.control.Button());

@@ -1,59 +1,47 @@
 package re.artoo.fxcalibur;
 
-import javafx.application.Application;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import javafx.beans.value.WritableObjectValue;
 import re.artoo.fxcalibur.element.Bind;
+import re.artoo.fxcalibur.element.Fx;
+import re.artoo.fxcalibur.element.Window;
 
-import static re.artoo.fxcalibur.element.component.button.*;
+import static re.artoo.fxcalibur.element.Application.window;
+import static re.artoo.fxcalibur.element.component.Box.box;
+import static re.artoo.fxcalibur.element.component.Button.*;
 
-public class Sample extends Application {
-  private static final Asset buttonCss = Asset.css("button");
-  private static final Asset mim = Asset.css("mim");
+interface App {
+  SimpleStringProperty vote = new SimpleStringProperty("Vote");
+  SimpleObjectProperty<size> resizeable = Bind.button(size.medium);
 
-  public static void main(String[] args) {
-    launch(Sample.class);
-  }
+  Window window =       window(
+    box.vertical(
+      button.primary(value.text("Standard")),
+      button(variant.inverted, color.primary, value.text("Inverted Primary")),
+      button(type.link, color.rose, value.text("Inverted Primary")),
+      button(type.toggle, value.bind(vote), mouse.released(() -> {
+        switch (vote.get()) {
+          case "Vote" -> vote.set("Voted");
+          default -> vote.set("Vote");
+        }
+      })),
+      button.primary(size.bind(resizeable), value.text("Primary"), mouse.released(() -> resizeable.set(size.huge))),
+      button(variant.inverted, size.mini, value.text("Mini")),
+      button(variant.inverted, size.tiny, value.text("Tiny")),
+      button(variant.inverted, size.small, value.text("Small")),
+      button(variant.inverted, size.medium, value.text("Medium")),
+      button(variant.inverted, size.large, value.text("Large")),
+      button(variant.inverted, size.big, value.text("Big")),
+      button(variant.inverted, size.huge, value.text("Huge")),
+      button(type.link, color.pink, size.massive, value.text("Massive"))
+    )
+  );
+}
 
-  @Override
-  public void start(Stage stage) throws Exception {
-    //setUserAgentStylesheet(Dragon.Blue.getUserAgentStylesheet());
-    Font.loadFont(Asset.font("DMSans-Medium.tff").load(), 14);
-    var vote = new SimpleStringProperty("Vote");
-    var resizeable = Bind.button(() -> size.medium);
-    VBox box = new VBox(16,
-      new Default(emphasis.standard, value.text("Standard")),
-      new Default(variant.inverted, color.primary, value.text("Inverted Primary")),
-      new Default(type.link, color.rose, value.text("Link Rose")),
-      new Default(type.toggle, value.bind(vote), mouse.released(() -> {switch (vote.getValueSafe()) {
-        case "Vote" -> vote.set("Voted");
-        default -> vote.set("Vote");
-      }})),
-      new Default(emphasis.primary, size.bind(resizeable), value.text("Primary"), mouse.released(() -> resizeable.setValue(size.huge))),
-      new Default(emphasis.standard, variant.inverted, size.mini, value.text("Mini")),
-      new Default(emphasis.standard, variant.inverted, size.tiny, value.text("Tiny")),
-      new Default(emphasis.standard, variant.inverted, size.small, value.text("Small")),
-      new Default(emphasis.standard, variant.inverted, size.medium, value.text("Medium")),
-      new Default(emphasis.standard, variant.inverted, size.large, value.text("Large")),
-      new Default(emphasis.standard, variant.inverted, size.big, value.text("Big")),
-      new Default(emphasis.standard, variant.inverted, size.huge, value.text("Huge")),
-      new Default(emphasis.standard, variant.inverted, size.massive, value.text("Massive"))
-    );
-    box.setPadding(new Insets(16));
-    var scene = new Scene(box, 1024, 768);
-    //scene.getStylesheets().add(buttonCss.location().toExternalForm());
-    scene.getStylesheets().add(mim.location().toExternalForm());
-    box.setBackground(Background.fill(Color.TRANSPARENT));
-    scene.setFill(Color.TRANSPARENT);
-    stage.initStyle(StageStyle.TRANSPARENT);
-    stage.setScene(scene);
-    stage.show();
+interface Sample {
+  static void main(String... args) {
+    Fx.Calibur.show(App.window);
   }
 }

@@ -1,61 +1,40 @@
 package re.artoo.fxcalibur.element.component;
 
 import javafx.beans.property.Property;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.Event;
-import javafx.scene.control.Button;
+import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
+import re.artoo.fxcalibur.element.Element;
 import re.artoo.lance.func.TryConsumer1;
 
 import static atlantafx.base.theme.Styles.BUTTON_OUTLINED;
 import static atlantafx.base.theme.Styles.FLAT;
 
-public interface button {
-  default Button primary(Attribute... attributes) {
-    return new Default(emphasis.primary, attributes);
+public interface Button extends Element<Node> {
+  interface Attribute extends re.artoo.fxcalibur.element.Attribute<javafx.scene.control.Button> {
   }
 
-  default Button button(Attribute... attributes) {
-    return new Default(emphasis.standard, attributes);
+  Buttons button = Buttons.Factory;
+
+  private static Button btn(Attribute first, Attribute... rest) {
+    return () -> {
+      var btn = new javafx.scene.control.Button();
+      first.apply(btn);
+      for (var attribute : rest) attribute.apply(btn);
+      return btn;
+    };
   }
 
-  default Button submit(Attribute... attributes) {
-    return new Default(behaviour.submit, attributes);
+  static Button button(Attribute... attributes) {
+    return btn(emphasis.standard, attributes);
   }
 
-  default Button outline(Attribute... attributes) {
-    return new Default(behaviour.outline, attributes);
-  }
-
-  default Button cancel(Attribute... attributes) {
-    return new Default(behaviour.cancel, attributes);
-  }
-
-  default Button flat(Attribute... attributes) {
-    return new Default(behaviour.flat, attributes);
-  }
-
-  interface Attribute extends re.artoo.fxcalibur.element.Attribute<button.Default> {
-  }
 
   interface Style extends Attribute {
     String name();
 
     @Override
-    default void apply(Default button) {
+    default void apply(javafx.scene.control.Button button) {
       button.getStyleClass().add(1, name().replace('_', '-'));
-    }
-  }
-
-  final class Default extends Button implements button {
-    {
-      setMnemonicParsing(true);
-    }
-
-    public Default(Attribute first, Attribute... rest) {
-      first.apply(this);
-      for (var attribute : rest) attribute.apply(this);
     }
   }
 
@@ -63,7 +42,7 @@ public interface button {
     basic, cancel, submit, outline, flat;
 
     @Override
-    public void apply(button.Default button) {
+    public void apply(javafx.scene.control.Button button) {
       switch (this) {
         case submit -> button.setDefaultButton(true);
         case cancel -> button.setCancelButton(true);
@@ -73,21 +52,23 @@ public interface button {
     }
   }
 
-  enum type implements Style {link, submit, cancel, toggle {
-    @Override
-    public void apply(Default button) {
-      button.getStyleClass().addAll("standard", "toggle");
-      button.setOnMouseReleased(it -> {
-        if (button.getStyleClass().contains("primary")) {
-          button.getStyleClass().remove("primary");
-          button.getStyleClass().addAll("standard");
-        } else {
-          button.getStyleClass().remove("standard");
-          button.getStyleClass().addAll("primary");
-        }
-      });
+  enum type implements Style {
+    link, submit, cancel, toggle {
+      @Override
+      public void apply(javafx.scene.control.Button button) {
+        button.getStyleClass().addAll("standard", "toggle");
+        button.setOnMouseReleased(it -> {
+          if (button.getStyleClass().contains("primary")) {
+            button.getStyleClass().remove("primary");
+            button.getStyleClass().addAll("standard");
+          } else {
+            button.getStyleClass().remove("standard");
+            button.getStyleClass().addAll("primary");
+          }
+        });
+      }
     }
-  }}
+  }
 
   enum emphasis implements Style {standard, primary, secondary, positive, neutral, negative}
 
@@ -125,6 +106,7 @@ public interface button {
     blue,
     violet,
     purple,
+    pink,
     rose,
     gray_warm,
     gray_true,
@@ -148,8 +130,29 @@ public interface button {
     static Attribute released(TryConsumer1<? super MouseEvent> consumer) {
       return button -> button.addEventHandler(MouseEvent.MOUSE_RELEASED, consumer::accept);
     }
+
     static Attribute released(Runnable consumer) {
       return released(it -> consumer.run());
+    }
+  }
+
+  enum Buttons {
+    Factory;
+
+    public Button primary(Button.Attribute... attributes) {
+      return btn(emphasis.primary, attributes);
+    }
+
+    public Button secondary(Attribute... attributes) {
+      return btn(emphasis.secondary, attributes);
+    }
+
+    public Button positive(Attribute... attributes) {
+      return btn(emphasis.positive, attributes);
+    }
+
+    public Button negative(Attribute... attributes) {
+      return btn(emphasis.negative, attributes);
     }
   }
 }

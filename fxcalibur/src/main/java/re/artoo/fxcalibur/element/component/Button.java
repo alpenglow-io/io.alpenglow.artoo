@@ -9,23 +9,20 @@ import re.artoo.lance.func.TryConsumer1;
 import static atlantafx.base.theme.Styles.BUTTON_OUTLINED;
 import static atlantafx.base.theme.Styles.FLAT;
 
+@SuppressWarnings("MethodNameSameAsClassName")
 public interface Button extends Element<Node> {
   interface Attribute extends re.artoo.fxcalibur.element.Attribute<javafx.scene.control.Button> {
   }
 
-  Buttons button = Buttons.Factory;
+  Buttons Button = Buttons.Factory;
 
-  private static Button btn(Attribute first, Attribute... rest) {
+  static Button Button(Attribute... attributes) {
     return () -> {
       var btn = new javafx.scene.control.Button();
-      first.apply(btn);
-      for (var attribute : rest) attribute.apply(btn);
+      emphasis.standard.apply(btn);
+      for (var attribute : attributes) attribute.apply(btn);
       return btn;
     };
-  }
-
-  static Button button(Attribute... attributes) {
-    return btn(emphasis.standard, attributes);
   }
 
 
@@ -139,20 +136,40 @@ public interface Button extends Element<Node> {
   enum Buttons {
     Factory;
 
-    public Button primary(Button.Attribute... attributes) {
-      return btn(emphasis.primary, attributes);
+    public Button Primary(Button.Attribute... attributes) {
+      return () -> {
+        var btn = new javafx.scene.control.Button();
+        emphasis.standard.apply(btn);
+        for (var attribute : attributes) attribute.apply(btn);
+        return btn;
+      };
     }
 
     public Button secondary(Attribute... attributes) {
-      return btn(emphasis.secondary, attributes);
+      return () -> {
+        var btn = new javafx.scene.control.Button();
+        emphasis.standard.apply(btn);
+        for (var attribute : attributes) attribute.apply(btn);
+        return btn;
+      };
     }
 
     public Button positive(Attribute... attributes) {
-      return btn(emphasis.positive, attributes);
+      return () -> {
+        var btn = new javafx.scene.control.Button();
+        emphasis.standard.apply(btn);
+        for (var attribute : attributes) attribute.apply(btn);
+        return btn;
+      };
     }
 
     public Button negative(Attribute... attributes) {
-      return btn(emphasis.negative, attributes);
+      return () -> {
+        var btn = new javafx.scene.control.Button();
+        emphasis.standard.apply(btn);
+        for (var attribute : attributes) attribute.apply(btn);
+        return btn;
+      };
     }
   }
 }

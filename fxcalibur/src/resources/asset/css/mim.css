@@ -1,3 +1,44 @@
+.button.standard {
+  -fx-background-color: #e4e4e7;
+  -fx-text-fill: #52525b;
+  -fx-border-color: #e4e4e7;
+}
+.button.standard:hover {
+  -fx-background-color: #d4d4d8;
+  -fx-border-color: #d4d4d8;
+  -fx-text-fill: #3f3f46;
+}
+.button.standard:pressed {
+  -fx-background-color: #a1a1aa;
+  -fx-border-color: transparent;
+  -fx-text-fill: #27272a;
+}
+.button.standard.link {
+  -fx-text-fill: #e4e4e7;
+}
+.button.standard.link:hover {
+  -fx-background-color: transparent;
+  -fx-border-color: #e4e4e7;
+}
+.button.standard.link:pressed {
+  -fx-border-color: #d4d4d8;
+}
+.button.standard.inverted {
+  -fx-background-color: transparent;
+  -fx-text-fill: #e4e4e7;
+  -fx-border-color: #e4e4e7;
+}
+.button.standard.inverted:hover {
+  -fx-background-color: #e4e4e7;
+  -fx-border-color: #e4e4e7;
+  -fx-text-fill: #52525b;
+}
+.button.standard.inverted:pressed {
+  -fx-background-color: #d4d4d8;
+  -fx-border-color: transparent;
+  -fx-text-fill: #3f3f46;
+}
+
 .button {
   -fx-background-insets: 1px, 1px, 1px, 1px;
   -fx-background-radius: 4px 4px 4px 4px;
@@ -6,6 +47,38 @@
   -fx-border-style: solid;
   -fx-padding: 10px 20px 10px 20px;
   -fx-font-weight: bold;
+}
+.button.mini {
+  -fx-font-size: 10px;
+  -fx-padding: 7px 15px 7px 15px;
+}
+.button.tiny {
+  -fx-font-size: 10px;
+  -fx-padding: 8px 17px 8px 17px;
+}
+.button.small {
+  -fx-font-size: 12px;
+  -fx-padding: 9px 18px 9px 18px;
+}
+.button.medium {
+  -fx-font-size: 12px;
+  -fx-padding: 10px 20px 10px 20px;
+}
+.button.large {
+  -fx-font-size: 13px;
+  -fx-padding: 11px 22px 11px 22px;
+}
+.button.big {
+  -fx-font-size: 15px;
+  -fx-padding: 12px 23px 12px 23px;
+}
+.button.huge {
+  -fx-font-size: 18px;
+  -fx-padding: 14px 26px 14px 26px;
+}
+.button.massive {
+  -fx-font-size: 20px;
+  -fx-padding: 15px 28px 15px 28px;
 }
 .button:hover {
   -fx-cursor: hand;
@@ -23,43 +96,6 @@
 }
 .button.inverted {
   -fx-background-color: transparent;
-}
-.button.standard {
-  -fx-background-color: #e4e4e7;
-  -fx-border-color: #e4e4e7;
-  -fx-text-fill: white;
-}
-.button.standard:hover {
-  -fx-background-color: #d4d4d8;
-  -fx-border-color: #d4d4d8;
-}
-.button.standard:pressed {
-  -fx-background-color: #a1a1aa;
-  -fx-border-color: transparent;
-}
-.button.link.standard {
-  -fx-background-color: transparent;
-  -fx-border-color: transparent;
-  -fx-text-fill: #e4e4e7;
-}
-.button.link.standard:hover {
-  -fx-text-fill: #d4d4d8;
-  -fx-border-color: #d4d4d8;
-  -fx-border-width: 0 0 2px 0;
-}
-.button.inverted.standard {
-  -fx-background-color: transparent;
-  -fx-text-fill: #e4e4e7;
-  -fx-border-color: #e4e4e7;
-}
-.button.inverted.standard:hover {
-  -fx-background-color: #d4d4d8;
-  -fx-border-color: #d4d4d8;
-  -fx-text-fill: white;
-}
-.button.inverted.standard:pressed {
-  -fx-background-color: #a1a1aa;
-  -fx-border-color: transparent;
 }
 .button.red {
   -fx-background-color: #ef4444;
@@ -90,12 +126,12 @@
   -fx-border-color: #ef4444;
 }
 .button.inverted.red:hover {
-  -fx-background-color: #dc2626;
-  -fx-border-color: #dc2626;
+  -fx-background-color: #ef4444;
+  -fx-border-color: #ef4444;
   -fx-text-fill: white;
 }
 .button.inverted.red:pressed {
-  -fx-background-color: #b91c1c;
+  -fx-background-color: #dc2626;
   -fx-border-color: transparent;
 }
 .button.orange {
@@ -127,12 +163,12 @@
   -fx-border-color: #f97316;
 }
 .button.inverted.orange:hover {
-  -fx-background-color: #ea580c;
-  -fx-border-color: #ea580c;
+  -fx-background-color: #f97316;
+  -fx-border-color: #f97316;
   -fx-text-fill: white;
 }
 .button.inverted.orange:pressed {
-  -fx-background-color: #c2410c;
+  -fx-background-color: #ea580c;
   -fx-border-color: transparent;
 }
 .button.amber {
@@ -164,12 +200,12 @@
   -fx-border-color: #f59e0b;
 }
 .button.inverted.amber:hover {
-  -fx-background-color: #d97706;
-  -fx-border-color: #d97706;
+  -fx-background-color: #f59e0b;
+  -fx-border-color: #f59e0b;
   -fx-text-fill: white;
 }
 .button.inverted.amber:pressed {
-  -fx-background-color: #b45309;
+  -fx-background-color: #d97706;
   -fx-border-color: transparent;
 }
 .button.yellow {
@@ -201,12 +237,12 @@
   -fx-border-color: #eab308;
 }
 .button.inverted.yellow:hover {
-  -fx-background-color: #ca8a04;
-  -fx-border-color: #ca8a04;
+  -fx-background-color: #eab308;
+  -fx-border-color: #eab308;
   -fx-text-fill: white;
 }
 .button.inverted.yellow:pressed {
-  -fx-background-color: #a16207;
+  -fx-background-color: #ca8a04;
   -fx-border-color: transparent;
 }
 .button.lime {
@@ -238,12 +274,12 @@
   -fx-border-color: #84cc16;
 }
 .button.inverted.lime:hover {
-  -fx-background-color: #65a30d;
-  -fx-border-color: #65a30d;
+  -fx-background-color: #84cc16;
+  -fx-border-color: #84cc16;
   -fx-text-fill: white;
 }
 .button.inverted.lime:pressed {
-  -fx-background-color: #4d7c0f;
+  -fx-background-color: #65a30d;
   -fx-border-color: transparent;
 }
 .button.green {
@@ -275,12 +311,12 @@
   -fx-border-color: #22c55e;
 }
 .button.inverted.green:hover {
-  -fx-background-color: #16a34a;
-  -fx-border-color: #16a34a;
+  -fx-background-color: #22c55e;
+  -fx-border-color: #22c55e;
   -fx-text-fill: white;
 }
 .button.inverted.green:pressed {
-  -fx-background-color: #15803d;
+  -fx-background-color: #16a34a;
   -fx-border-color: transparent;
 }
 .button.emerald {
@@ -312,12 +348,12 @@
   -fx-border-color: #10b981;
 }
 .button.inverted.emerald:hover {
-  -fx-background-color: #059669;
-  -fx-border-color: #059669;
+  -fx-background-color: #10b981;
+  -fx-border-color: #10b981;
   -fx-text-fill: white;
 }
 .button.inverted.emerald:pressed {
-  -fx-background-color: #047857;
+  -fx-background-color: #059669;
   -fx-border-color: transparent;
 }
 .button.teal {
@@ -349,12 +385,12 @@
   -fx-border-color: #14b8a6;
 }
 .button.inverted.teal:hover {
-  -fx-background-color: #0d9488;
-  -fx-border-color: #0d9488;
+  -fx-background-color: #14b8a6;
+  -fx-border-color: #14b8a6;
   -fx-text-fill: white;
 }
 .button.inverted.teal:pressed {
-  -fx-background-color: #0f766e;
+  -fx-background-color: #0d9488;
   -fx-border-color: transparent;
 }
 .button.cyan {
@@ -386,12 +422,12 @@
   -fx-border-color: #06b6d4;
 }
 .button.inverted.cyan:hover {
-  -fx-background-color: #0891b2;
-  -fx-border-color: #0891b2;
+  -fx-background-color: #06b6d4;
+  -fx-border-color: #06b6d4;
   -fx-text-fill: white;
 }
 .button.inverted.cyan:pressed {
-  -fx-background-color: #0e7490;
+  -fx-background-color: #0891b2;
   -fx-border-color: transparent;
 }
 .button.blue-light {
@@ -423,12 +459,12 @@
   -fx-border-color: #0ea5e9;
 }
 .button.inverted.blue-light:hover {
-  -fx-background-color: #0284c7;
-  -fx-border-color: #0284c7;
+  -fx-background-color: #0ea5e9;
+  -fx-border-color: #0ea5e9;
   -fx-text-fill: white;
 }
 .button.inverted.blue-light:pressed {
-  -fx-background-color: #0369a1;
+  -fx-background-color: #0284c7;
   -fx-border-color: transparent;
 }
 .button.blue {
@@ -460,12 +496,12 @@
   -fx-border-color: #3b82f6;
 }
 .button.inverted.blue:hover {
-  -fx-background-color: #2563eb;
-  -fx-border-color: #2563eb;
+  -fx-background-color: #3b82f6;
+  -fx-border-color: #3b82f6;
   -fx-text-fill: white;
 }
 .button.inverted.blue:pressed {
-  -fx-background-color: #1d4ed8;
+  -fx-background-color: #2563eb;
   -fx-border-color: transparent;
 }
 .button.indigo {
@@ -497,12 +533,12 @@
   -fx-border-color: #6366f1;
 }
 .button.inverted.indigo:hover {
-  -fx-background-color: #4f46e5;
-  -fx-border-color: #4f46e5;
+  -fx-background-color: #6366f1;
+  -fx-border-color: #6366f1;
   -fx-text-fill: white;
 }
 .button.inverted.indigo:pressed {
-  -fx-background-color: #4338ca;
+  -fx-background-color: #4f46e5;
   -fx-border-color: transparent;
 }
 .button.violet {
@@ -534,12 +570,12 @@
   -fx-border-color: #8b5cf6;
 }
 .button.inverted.violet:hover {
-  -fx-background-color: #7c3aed;
-  -fx-border-color: #7c3aed;
+  -fx-background-color: #8b5cf6;
+  -fx-border-color: #8b5cf6;
   -fx-text-fill: white;
 }
 .button.inverted.violet:pressed {
-  -fx-background-color: #6d28d9;
+  -fx-background-color: #7c3aed;
   -fx-border-color: transparent;
 }
 .button.purple {
@@ -571,12 +607,12 @@
   -fx-border-color: #a855f7;
 }
 .button.inverted.purple:hover {
-  -fx-background-color: #9333ea;
-  -fx-border-color: #9333ea;
+  -fx-background-color: #a855f7;
+  -fx-border-color: #a855f7;
   -fx-text-fill: white;
 }
 .button.inverted.purple:pressed {
-  -fx-background-color: #7e22ce;
+  -fx-background-color: #9333ea;
   -fx-border-color: transparent;
 }
 .button.fuchsia {
@@ -608,12 +644,12 @@
   -fx-border-color: #d946ef;
 }
 .button.inverted.fuchsia:hover {
-  -fx-background-color: #c026d3;
-  -fx-border-color: #c026d3;
+  -fx-background-color: #d946ef;
+  -fx-border-color: #d946ef;
   -fx-text-fill: white;
 }
 .button.inverted.fuchsia:pressed {
-  -fx-background-color: #a21caf;
+  -fx-background-color: #c026d3;
   -fx-border-color: transparent;
 }
 .button.rose {
@@ -645,12 +681,12 @@
   -fx-border-color: #f43f5e;
 }
 .button.inverted.rose:hover {
-  -fx-background-color: #e11d48;
-  -fx-border-color: #e11d48;
+  -fx-background-color: #f43f5e;
+  -fx-border-color: #f43f5e;
   -fx-text-fill: white;
 }
 .button.inverted.rose:pressed {
-  -fx-background-color: #be123c;
+  -fx-background-color: #e11d48;
   -fx-border-color: transparent;
 }
 .button.pink {
@@ -682,12 +718,12 @@
   -fx-border-color: #ec4899;
 }
 .button.inverted.pink:hover {
-  -fx-background-color: #db2777;
-  -fx-border-color: #db2777;
+  -fx-background-color: #ec4899;
+  -fx-border-color: #ec4899;
   -fx-text-fill: white;
 }
 .button.inverted.pink:pressed {
-  -fx-background-color: #be185d;
+  -fx-background-color: #db2777;
   -fx-border-color: transparent;
 }
 .button.gray-warm {
@@ -719,12 +755,12 @@
   -fx-border-color: #78716c;
 }
 .button.inverted.gray-warm:hover {
-  -fx-background-color: #57534e;
-  -fx-border-color: #57534e;
+  -fx-background-color: #78716c;
+  -fx-border-color: #78716c;
   -fx-text-fill: white;
 }
 .button.inverted.gray-warm:pressed {
-  -fx-background-color: #44403c;
+  -fx-background-color: #57534e;
   -fx-border-color: transparent;
 }
 .button.gray-true {
@@ -756,12 +792,12 @@
   -fx-border-color: #737373;
 }
 .button.inverted.gray-true:hover {
-  -fx-background-color: #525252;
-  -fx-border-color: #525252;
+  -fx-background-color: #737373;
+  -fx-border-color: #737373;
   -fx-text-fill: white;
 }
 .button.inverted.gray-true:pressed {
-  -fx-background-color: #404040;
+  -fx-background-color: #525252;
   -fx-border-color: transparent;
 }
 .button.gray {
@@ -793,12 +829,12 @@
   -fx-border-color: #71717a;
 }
 .button.inverted.gray:hover {
-  -fx-background-color: #52525b;
-  -fx-border-color: #52525b;
+  -fx-background-color: #71717a;
+  -fx-border-color: #71717a;
   -fx-text-fill: white;
 }
 .button.inverted.gray:pressed {
-  -fx-background-color: #3f3f46;
+  -fx-background-color: #52525b;
   -fx-border-color: transparent;
 }
 .button.gray-cool {
@@ -830,12 +866,12 @@
   -fx-border-color: #6b7280;
 }
 .button.inverted.gray-cool:hover {
-  -fx-background-color: #4b5563;
-  -fx-border-color: #4b5563;
+  -fx-background-color: #6b7280;
+  -fx-border-color: #6b7280;
   -fx-text-fill: white;
 }
 .button.inverted.gray-cool:pressed {
-  -fx-background-color: #374151;
+  -fx-background-color: #4b5563;
   -fx-border-color: transparent;
 }
 .button.gray-blue {
@@ -867,197 +903,49 @@
   -fx-border-color: #64748b;
 }
 .button.inverted.gray-blue:hover {
-  -fx-background-color: #475569;
-  -fx-border-color: #475569;
+  -fx-background-color: #64748b;
+  -fx-border-color: #64748b;
   -fx-text-fill: white;
 }
 .button.inverted.gray-blue:pressed {
-  -fx-background-color: #334155;
+  -fx-background-color: #475569;
   -fx-border-color: transparent;
 }
-.button.success {
-  -fx-background-color: #22c55e;
-  -fx-border-color: #22c55e;
-  -fx-text-fill: white;
-}
-.button.success:hover {
-  -fx-background-color: #16a34a;
-  -fx-border-color: #16a34a;
-}
-.button.success:pressed {
-  -fx-background-color: #15803d;
-  -fx-border-color: transparent;
-}
-.button.link.success {
-  -fx-background-color: transparent;
-  -fx-border-color: transparent;
-  -fx-text-fill: #22c55e;
-}
-.button.link.success:hover {
-  -fx-text-fill: #16a34a;
-  -fx-border-color: #16a34a;
-  -fx-border-width: 0 0 2px 0;
-}
-.button.inverted.success {
-  -fx-background-color: transparent;
-  -fx-text-fill: #22c55e;
-  -fx-border-color: #22c55e;
-}
-.button.inverted.success:hover {
-  -fx-background-color: #16a34a;
-  -fx-border-color: #16a34a;
-  -fx-text-fill: white;
-}
-.button.inverted.success:pressed {
-  -fx-background-color: #15803d;
-  -fx-border-color: transparent;
-}
-.button.positive {
-  -fx-background-color: #22c55e;
-  -fx-border-color: #22c55e;
-  -fx-text-fill: white;
-}
-.button.positive:hover {
-  -fx-background-color: #16a34a;
-  -fx-border-color: #16a34a;
-}
-.button.positive:pressed {
-  -fx-background-color: #15803d;
-  -fx-border-color: transparent;
-}
-.button.link.positive {
-  -fx-background-color: transparent;
-  -fx-border-color: transparent;
-  -fx-text-fill: #22c55e;
-}
-.button.link.positive:hover {
-  -fx-text-fill: #16a34a;
-  -fx-border-color: #16a34a;
-  -fx-border-width: 0 0 2px 0;
-}
-.button.inverted.positive {
-  -fx-background-color: transparent;
-  -fx-text-fill: #22c55e;
-  -fx-border-color: #22c55e;
-}
-.button.inverted.positive:hover {
-  -fx-background-color: #16a34a;
-  -fx-border-color: #16a34a;
-  -fx-text-fill: white;
-}
-.button.inverted.positive:pressed {
-  -fx-background-color: #15803d;
-  -fx-border-color: transparent;
-}
-.button.warning {
-  -fx-background-color: #eab308;
-  -fx-border-color: #eab308;
-  -fx-text-fill: white;
-}
-.button.warning:hover {
-  -fx-background-color: #ca8a04;
-  -fx-border-color: #ca8a04;
-}
-.button.warning:pressed {
-  -fx-background-color: #a16207;
-  -fx-border-color: transparent;
-}
-.button.link.warning {
-  -fx-background-color: transparent;
-  -fx-border-color: transparent;
-  -fx-text-fill: #eab308;
-}
-.button.link.warning:hover {
-  -fx-text-fill: #ca8a04;
-  -fx-border-color: #ca8a04;
-  -fx-border-width: 0 0 2px 0;
-}
-.button.inverted.warning {
-  -fx-background-color: transparent;
-  -fx-text-fill: #eab308;
-  -fx-border-color: #eab308;
-}
-.button.inverted.warning:hover {
-  -fx-background-color: #ca8a04;
-  -fx-border-color: #ca8a04;
-  -fx-text-fill: white;
-}
-.button.inverted.warning:pressed {
-  -fx-background-color: #a16207;
-  -fx-border-color: transparent;
-}
-.button.failure {
+.button.danger {
   -fx-background-color: #ef4444;
   -fx-border-color: #ef4444;
   -fx-text-fill: white;
 }
-.button.failure:hover {
+.button.danger:hover {
   -fx-background-color: #dc2626;
   -fx-border-color: #dc2626;
 }
-.button.failure:pressed {
+.button.danger:pressed {
   -fx-background-color: #b91c1c;
   -fx-border-color: transparent;
 }
-.button.link.failure {
+.button.link.danger {
   -fx-background-color: transparent;
   -fx-border-color: transparent;
   -fx-text-fill: #ef4444;
 }
-.button.link.failure:hover {
+.button.link.danger:hover {
   -fx-text-fill: #dc2626;
   -fx-border-color: #dc2626;
   -fx-border-width: 0 0 2px 0;
 }
-.button.inverted.failure {
+.button.inverted.danger {
   -fx-background-color: transparent;
   -fx-text-fill: #ef4444;
   -fx-border-color: #ef4444;
 }
-.button.inverted.failure:hover {
-  -fx-background-color: #dc2626;
-  -fx-border-color: #dc2626;
-  -fx-text-fill: white;
-}
-.button.inverted.failure:pressed {
-  -fx-background-color: #b91c1c;
-  -fx-border-color: transparent;
-}
-.button.negative {
+.button.inverted.danger:hover {
   -fx-background-color: #ef4444;
   -fx-border-color: #ef4444;
   -fx-text-fill: white;
 }
-.button.negative:hover {
+.button.inverted.danger:pressed {
   -fx-background-color: #dc2626;
-  -fx-border-color: #dc2626;
-}
-.button.negative:pressed {
-  -fx-background-color: #b91c1c;
-  -fx-border-color: transparent;
-}
-.button.link.negative {
-  -fx-background-color: transparent;
-  -fx-border-color: transparent;
-  -fx-text-fill: #ef4444;
-}
-.button.link.negative:hover {
-  -fx-text-fill: #dc2626;
-  -fx-border-color: #dc2626;
-  -fx-border-width: 0 0 2px 0;
-}
-.button.inverted.negative {
-  -fx-background-color: transparent;
-  -fx-text-fill: #ef4444;
-  -fx-border-color: #ef4444;
-}
-.button.inverted.negative:hover {
-  -fx-background-color: #dc2626;
-  -fx-border-color: #dc2626;
-  -fx-text-fill: white;
-}
-.button.inverted.negative:pressed {
-  -fx-background-color: #b91c1c;
   -fx-border-color: transparent;
 }
 .button.primary {
@@ -1089,45 +977,50 @@
   -fx-border-color: #6366f1;
 }
 .button.inverted.primary:hover {
-  -fx-background-color: #4f46e5;
-  -fx-border-color: #4f46e5;
+  -fx-background-color: #6366f1;
+  -fx-border-color: #6366f1;
   -fx-text-fill: white;
 }
 .button.inverted.primary:pressed {
-  -fx-background-color: #4338ca;
+  -fx-background-color: #4f46e5;
   -fx-border-color: transparent;
 }
-.button.mini {
-  -fx-font-size: 10px;
-  -fx-padding: 4px 12px 4px 12px;
+.button.negative {
+  -fx-background-color: #ef4444;
+  -fx-border-color: #ef4444;
+  -fx-text-fill: white;
 }
-.button.tiny {
-  -fx-font-size: 10px;
-  -fx-padding: 8px 17px 8px 17px;
+.button.negative:hover {
+  -fx-background-color: #dc2626;
+  -fx-border-color: #dc2626;
 }
-.button.small {
-  -fx-font-size: 12px;
-  -fx-padding: 9px 18px 9px 18px;
+.button.negative:pressed {
+  -fx-background-color: #b91c1c;
+  -fx-border-color: transparent;
 }
-.button.medium {
-  -fx-font-size: 12px;
-  -fx-padding: 10px 20px 10px 20px;
+.button.link.negative {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-text-fill: #ef4444;
 }
-.button.large {
-  -fx-font-size: 13px;
-  -fx-padding: 11px 22px 11px 22px;
+.button.link.negative:hover {
+  -fx-text-fill: #dc2626;
+  -fx-border-color: #dc2626;
+  -fx-border-width: 0 0 2px 0;
 }
-.button.big {
-  -fx-font-size: 15px;
-  -fx-padding: 12px 23px 12px 23px;
+.button.inverted.negative {
+  -fx-background-color: transparent;
+  -fx-text-fill: #ef4444;
+  -fx-border-color: #ef4444;
 }
-.button.huge {
-  -fx-font-size: 18px;
-  -fx-padding: 14px 26px 14px 26px;
+.button.inverted.negative:hover {
+  -fx-background-color: #ef4444;
+  -fx-border-color: #ef4444;
+  -fx-text-fill: white;
 }
-.button.massive {
-  -fx-font-size: 20px;
-  -fx-padding: 15px 28px 15px 28px;
+.button.inverted.negative:pressed {
+  -fx-background-color: #dc2626;
+  -fx-border-color: transparent;
 }
 
 /*# sourceMappingURL=mim.css.map */

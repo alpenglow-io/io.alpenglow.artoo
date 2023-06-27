@@ -13,7 +13,7 @@ public interface Box extends Element<Pane> {
   enum Boxes {
     Factory;
 
-    public Box vertical(Element<?>... elements) {
+    public Box Vertical(Element<?>... elements) {
       return () -> new VBox(16,
         Array.of(elements)
           .map(Element::asNode)
@@ -25,5 +25,5 @@ public interface Box extends Element<Pane> {
     }
   }
 
-  Boxes box = Boxes.Factory;
+  Boxes Box = Boxes.Factory;
 }

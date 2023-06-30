@@ -5,6 +5,7 @@ import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import re.artoo.fxcalibur.element.Element;
 import re.artoo.lance.func.TryConsumer1;
+import re.artoo.lance.value.Array;
 
 import static atlantafx.base.theme.Styles.BUTTON_OUTLINED;
 import static atlantafx.base.theme.Styles.FLAT;
@@ -19,6 +20,7 @@ public interface Button extends Element<Node> {
   static Button Button(Attribute... attributes) {
     return () -> {
       var btn = new javafx.scene.control.Button();
+      if (Array.of(color.values()).includes())
       emphasis.standard.apply(btn);
       for (var attribute : attributes) attribute.apply(btn);
       return btn;

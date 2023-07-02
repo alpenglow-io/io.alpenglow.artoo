@@ -8,11 +8,8 @@ import re.artoo.fxcalibur.element.Component;
 import re.artoo.fxcalibur.element.Fx;
 import re.artoo.fxcalibur.element.Window;
 
-import static re.artoo.fxcalibur.element.Application.Window;
-import static re.artoo.fxcalibur.element.component.Box.box;
-import static re.artoo.fxcalibur.element.component.Box.elements.$;
+import static re.artoo.fxcalibur.element.layout.Box.elements.$;
 import static re.artoo.fxcalibur.element.component.Button.button;
-import static re.artoo.fxcalibur.element.component.Button.*;
 
 final class MainLayout implements Component {
   SimpleStringProperty vote = new SimpleStringProperty("Vote");

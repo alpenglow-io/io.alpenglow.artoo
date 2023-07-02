@@ -1,9 +1,6 @@
 package re.artoo.lance.value;
 
-import re.artoo.lance.func.TryFunction1;
-import re.artoo.lance.func.TryFunction2;
-import re.artoo.lance.func.TryIntFunction;
-import re.artoo.lance.func.TryPredicate1;
+import re.artoo.lance.func.*;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.value.array.None;
 import re.artoo.lance.value.array.Some;
@@ -154,8 +151,7 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
 
   private <TARGET> Array<TARGET> map(final int index, TryFunction1<? super ELEMENT, ? extends TARGET> operation) {
     return switch (this) {
-      case Some<ELEMENT>(var some) when index < some.length ->
-        Array.of(it -> it.concat(map(index + 1, operation)), operation.apply(some[index]));
+      case Some<ELEMENT>(var some) when index < some.length -> Array.of(it -> it.concat(map(index + 1, operation)), operation.apply(some[index]));
       default -> Array.none();
     };
   }
@@ -187,6 +183,16 @@ public sealed interface Array<ELEMENT> extends Iterable<ELEMENT>, RandomAccess p
   default <TARGET> TARGET fold(TARGET initial, TryFunction2<? super TARGET, ? super ELEMENT, ? extends TARGET> operation) {
     return switch (this) {
       case Some<ELEMENT>(var some) -> tail().fold(operation.apply(initial, some[0]), operation);
+      default -> initial;
+    };
+  }
+
+  default <TARGET> TARGET yield(TARGET initial, TryConsumer2<? super TARGET, ? super ELEMENT> operation) {
+    return switch (this) {
+      case Some<ELEMENT>(var some) -> {
+        operation.accept(initial, some[0]);
+        yield tail().yield(initial, operation);
+      }
       default -> initial;
     };
   }

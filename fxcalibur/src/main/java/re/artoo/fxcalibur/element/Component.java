@@ -1,6 +1,8 @@
 package re.artoo.fxcalibur.element;
 
-import re.artoo.fxcalibur.element.component.Button;
 
-public interface Component extends Button {
+import re.artoo.fxcalibur.element.layout.Box;
+import re.artoo.fxcalibur.element.input.Button;
+
+public interface Component extends Button, Box {
 }

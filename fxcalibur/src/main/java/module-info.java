@@ -3,6 +3,7 @@ module re.artoo.fxcalibur {
   exports re.artoo.fxcalibur.element;
   exports re.artoo.fxcalibur.element.component;
   exports re.artoo.fxcalibur.element.layout;
+  exports re.artoo.fxcalibur.element.layout;
 
   requires transitive re.artoo.lance;
 

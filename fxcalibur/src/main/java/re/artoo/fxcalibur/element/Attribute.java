@@ -1,5 +1,7 @@
 package re.artoo.fxcalibur.element;
 
-public interface Attribute<ELEMENT> {
-  void apply(ELEMENT element);
+import javafx.scene.Node;
+
+public interface Attribute {
+  void apply(Node node);
 }

@@ -22,7 +22,7 @@ public enum Fx {
     }
   }
 
-  public void show(Window window) {
+  public void execute(Window window) {
     Fx.Calibur.window = window;
     javafx.application.Application.launch(FxApplication.class);
   }

@@ -291,6 +291,13 @@ $gray-blue: (
 
 $palette: (
   "standard": $gray,
+  "success": $green,
+  "positive": $green,
+  "warning": $yellow,
+  "failure": $red,
+  "negative": $red,
+  "primary": $blue,
+  "accent": $indigo,
   "red": $red,
   "orange": $orange,
   "amber": $amber,
@@ -312,13 +319,7 @@ $palette: (
   "gray-true": $gray-true,
   "gray": $gray,
   "gray-cool": $gray-cool,
-  "gray-blue": $gray-blue,
-  "success": $green,
-  "positive": $green,
-  "warning": $yellow,
-  "failure": $red,
-  "negative": $red,
-  "primary": $indigo
+  "gray-blue": $gray-blue
 );
 
 @mixin pal($palette) {
@@ -381,7 +382,7 @@ $hover: "hover";
       @return hex($color, "8")
     }
   } @else {
-    @return $text-color
+    @return hex($color, "0")
   }
 }
 
@@ -474,7 +475,7 @@ $hover: "hover";
     &.#{$color} {
       -fx-background-color: background($color);
       -fx-border-color: background($color);
-      -fx-text-fill: $text-color;
+      -fx-text-fill: text($color);
     }
 
     &.#{$color}:hover {
@@ -508,7 +509,7 @@ $hover: "hover";
     &.inverted.#{$color}:hover {
       -fx-background-color: background($color, $hover);
       -fx-border-color: background($color, $hover);
-      -fx-text-fill: $text-color;
+      -fx-text-fill: text($color);
     }
 
     &.inverted.#{$color}:pressed {

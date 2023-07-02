@@ -1,68 +1,112 @@
 package re.artoo.fxcalibur.element.component;
 
 import javafx.beans.property.Property;
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import re.artoo.fxcalibur.element.Element;
+import re.artoo.fxcalibur.element.Fx;
 import re.artoo.lance.func.TryConsumer1;
-import re.artoo.lance.value.Array;
+import re.artoo.lance.func.TrySupplier1;
 
-import static atlantafx.base.theme.Styles.BUTTON_OUTLINED;
-import static atlantafx.base.theme.Styles.FLAT;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
+
+import static javafx.scene.input.MouseEvent.MOUSE_RELEASED;
+import static re.artoo.fxcalibur.element.component.Button.color.*;
+import static re.artoo.fxcalibur.element.component.Button.emphasis.standard;
+import static re.artoo.fxcalibur.element.component.Button.variant.inverted;
 
 @SuppressWarnings("MethodNameSameAsClassName")
-public interface Button extends Element<Node> {
+public interface Button extends Element {
   interface Attribute extends re.artoo.fxcalibur.element.Attribute<javafx.scene.control.Button> {
   }
 
-  Buttons Button = Buttons.Factory;
+  Buttons button = Buttons.Factory;
 
-  static Button Button(Attribute... attributes) {
+  static Button button(Attribute... attributes) {
     return () -> {
       var btn = new javafx.scene.control.Button();
-      if (Array.of(color.values()).includes())
-      emphasis.standard.apply(btn);
+      standard.apply(btn);
       for (var attribute : attributes) attribute.apply(btn);
       return btn;
     };
   }
 
+  @SafeVarargs
+  static Element fxbutton(TryConsumer1<FxButton>... applies) {
+    return new FxButton(applies);
+  }
+
+  @SafeVarargs
+  static Element fxButton(UnaryOperator<Attribute>... let) {
+    return null;
+  }
+
+  static Element fxButton() {
+    return fxbutton(
+      it -> it.variant = inverted,
+      it -> it.emphasis = standard,
+      it -> it.color = amber
+    );
+  }
+
+  static Element fxx() {
+    return fxButton(
+      round::low
+
+    );
+  }
 
   interface Style extends Attribute {
-    String name();
 
+    String name();
     @Override
     default void apply(javafx.scene.control.Button button) {
       button.getStyleClass().add(1, name().replace('_', '-'));
     }
+
   }
+  enum round implements Style {
+    low, average, high;
 
-  enum behaviour implements Style {
-    basic, cancel, submit, outline, flat;
+    public static Attribute low() { return low; }
+    public round average() { return average; }
+    public round high() { return high; }
 
-    @Override
-    public void apply(javafx.scene.control.Button button) {
-      switch (this) {
-        case submit -> button.setDefaultButton(true);
-        case cancel -> button.setCancelButton(true);
-        case outline -> button.getStyleClass().add(BUTTON_OUTLINED);
-        case flat -> button.getStyleClass().add(FLAT);
-      }
+    public static Attribute low(Attribute attribute) {
+      return null;
     }
   }
 
   enum type implements Style {
-    link, submit, cancel, toggle {
+    link,
+    submit {
+      @Override
+      public void apply(javafx.scene.control.Button button) {
+        button.setDefaultButton(true);
+      }
+    },
+    cancel {
+      @Override
+      public void apply(javafx.scene.control.Button button) {
+        button.setCancelButton(true);
+      }
+    },
+    toggle {
       @Override
       public void apply(javafx.scene.control.Button button) {
         button.getStyleClass().addAll("standard", "toggle");
-        button.setOnMouseReleased(it -> {
-          if (button.getStyleClass().contains("primary")) {
-            button.getStyleClass().remove("primary");
-            button.getStyleClass().addAll("standard");
-          } else {
-            button.getStyleClass().remove("standard");
-            button.getStyleClass().addAll("primary");
+        button.addEventHandler(MOUSE_RELEASED, it -> {
+          switch (button.getStyleClass()) {
+            case ObservableList<String> classes when classes.contains("primary") -> {
+              button.getStyleClass().remove("primary");
+              button.getStyleClass().addAll("standard");
+            }
+            default -> {
+              button.getStyleClass().remove("standard");
+              button.getStyleClass().addAll("primary");
+            }
           }
         });
       }
@@ -127,7 +171,7 @@ public interface Button extends Element<Node> {
 
   interface mouse extends Attribute {
     static Attribute released(TryConsumer1<? super MouseEvent> consumer) {
-      return button -> button.addEventHandler(MouseEvent.MOUSE_RELEASED, consumer::accept);
+      return button -> button.addEventHandler(MOUSE_RELEASED, consumer::accept);
     }
 
     static Attribute released(Runnable consumer) {
@@ -138,40 +182,32 @@ public interface Button extends Element<Node> {
   enum Buttons {
     Factory;
 
-    public Button Primary(Button.Attribute... attributes) {
-      return () -> {
-        var btn = new javafx.scene.control.Button();
-        emphasis.standard.apply(btn);
-        for (var attribute : attributes) attribute.apply(btn);
-        return btn;
-      };
+    public Node primary(Button.Attribute... attributes) {
+      var button = new javafx.scene.control.Button();
+      standard.apply(button);
+      for (var attribute : attributes) attribute.apply(button);
+      return button;
     }
 
-    public Button secondary(Attribute... attributes) {
-      return () -> {
-        var btn = new javafx.scene.control.Button();
-        emphasis.standard.apply(btn);
-        for (var attribute : attributes) attribute.apply(btn);
-        return btn;
-      };
+    public Node secondary(Attribute... attributes) {
+      var btn = new javafx.scene.control.Button();
+      standard.apply(btn);
+      for (var attribute : attributes) attribute.apply(btn);
+      return btn;
     }
 
-    public Button positive(Attribute... attributes) {
-      return () -> {
-        var btn = new javafx.scene.control.Button();
-        emphasis.standard.apply(btn);
-        for (var attribute : attributes) attribute.apply(btn);
-        return btn;
-      };
+    public Node positive(Attribute... attributes) {
+      var btn = new javafx.scene.control.Button();
+      standard.apply(btn);
+      for (var attribute : attributes) attribute.apply(btn);
+      return btn;
     }
 
-    public Button negative(Attribute... attributes) {
-      return () -> {
-        var btn = new javafx.scene.control.Button();
-        emphasis.standard.apply(btn);
-        for (var attribute : attributes) attribute.apply(btn);
-        return btn;
-      };
+    public Node negative(Attribute... attributes) {
+      var btn = new javafx.scene.control.Button();
+      standard.apply(btn);
+      for (var attribute : attributes) attribute.apply(btn);
+      return btn;
     }
   }
 }

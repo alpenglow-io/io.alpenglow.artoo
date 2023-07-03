@@ -1,6 +1,3 @@
-.pane {
-  -fx-background-color: red;
-}
 .pane.transparent {
   -fx-background-color: transparent;
   -fx-border-color: transparent;
@@ -1330,6 +1327,9 @@
 .button.massive {
   -fx-font-size: 20px;
   -fx-padding: 15px 28px 15px 28px;
+}
+.button.link.mini, .button.link.tiny, .button.link.small, .button.link.medium, .button.link.large, .button.link.big, .button.link.huge, .button.link.massive {
+  -fx-padding: 4px 4px 4px 4px;
 }
 
 /*# sourceMappingURL=mim.css.map */

@@ -405,58 +405,7 @@ $hover: "hover";
 }
 
 //noinspection ALL
-//.button.standard {
-//  -fx-background-color: hex("gray", "2");
-//  -fx-text-fill: hex("gray", "6");
-//  -fx-border-color: hex("gray", "2");
-//
-//  &:hover {
-//    -fx-background-color: hex("gray", "3");
-//    -fx-border-color: hex("gray", "3");
-//    -fx-text-fill: hex("gray", "7");
-//  }
-//
-//  &:pressed {
-//    -fx-background-color: hex("gray", "4");
-//    -fx-border-color: transparent;
-//    -fx-text-fill: hex("gray", "8");
-//  }
-//
-//  &.link {
-//    -fx-text-fill: hex("gray", "2")
-//  }
-//
-//  &.link:hover {
-//    -fx-background-color: transparent;
-//    -fx-border-color: hex("gray", "2")
-//  }
-//
-//  &.link:pressed {
-//    -fx-border-color: hex("gray", "3")
-//  }
-//
-//  &.inverted {
-//    -fx-background-color: transparent;
-//    -fx-text-fill: hex("gray", "2");
-//    -fx-border-color: hex("gray", "2");
-//  }
-//
-//  &.inverted:hover {
-//    -fx-background-color: hex("gray", "2");
-//    -fx-border-color: hex("gray", "2");
-//    -fx-text-fill: hex("gray", "6");
-//  }
-//
-//  &.inverted:pressed {
-//    -fx-background-color: hex("gray", "3");
-//    -fx-border-color: transparent;
-//    -fx-text-fill: hex("gray", "7");
-//  }
-//}
-
-//noinspection ALL
 .pane {
-  -fx-background-color: red;
   @each $color, $tones in $palette {
     &.#{$color} {
       -fx-background-color: background($color);
@@ -581,5 +530,9 @@ $hover: "hover";
   &.massive {
     -fx-font-size: 20px;
     -fx-padding: 15px 28px 15px 28px;
+  }
+
+  &.link.mini, &.link.tiny, &.link.small, &.link.medium, &.link.large, &.link.big, &.link.huge, &.link.massive  {
+    -fx-padding: 4px 4px 4px 4px;
   }
 }

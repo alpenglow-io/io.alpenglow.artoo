@@ -16,13 +16,13 @@ public enum Fx {
     @Override
     public void start(Stage stage) throws IOException {
       Font.loadFont(Asset.font("DMSans-Medium.tff").load(), 14);
-      stage.setScene(Fx.Calibur.window.render(stage));
+      stage.setScene(Fx.Calibur.window.show(stage));
       stage.initStyle(StageStyle.TRANSPARENT);
       stage.show();
     }
   }
 
-  public void execute(Window window) {
+  public void show(Window window) {
     Fx.Calibur.window = window;
     javafx.application.Application.launch(FxApplication.class);
   }

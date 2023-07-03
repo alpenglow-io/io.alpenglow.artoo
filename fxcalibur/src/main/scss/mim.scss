@@ -3,6 +3,19 @@
 
 $text-color: white;
 
+$transparent: (
+  "9": transparent,
+  "8": transparent,
+  "7": transparent,
+  "6": transparent,
+  "5": transparent,
+  "4": transparent,
+  "3": transparent,
+  "2": transparent,
+  "1": transparent,
+  "0": $text-color
+);
+
 $red: (
   "9": #7f1d1d,
   "8": #991b1b,
@@ -290,6 +303,7 @@ $gray-blue: (
 );
 
 $palette: (
+  "transparent": $transparent,
   "standard": $gray,
   "success": $green,
   "positive": $green,

@@ -24,6 +24,43 @@
 .button.inverted {
   -fx-background-color: transparent;
 }
+.button.transparent {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-text-fill: white;
+}
+.button.transparent:hover {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+}
+.button.transparent:pressed {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+}
+.button.link.transparent {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-text-fill: transparent;
+}
+.button.link.transparent:hover {
+  -fx-text-fill: transparent;
+  -fx-border-color: transparent;
+  -fx-border-width: 0 0 2px 0;
+}
+.button.inverted.transparent {
+  -fx-background-color: transparent;
+  -fx-text-fill: transparent;
+  -fx-border-color: transparent;
+}
+.button.inverted.transparent:hover {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-text-fill: white;
+}
+.button.inverted.transparent:pressed {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+}
 .button.standard {
   -fx-background-color: #e4e4e7;
   -fx-border-color: #e4e4e7;

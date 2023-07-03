@@ -1,3 +1,131 @@
+.pane {
+  -fx-background-color: red;
+}
+.pane.transparent {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+}
+.pane.standard {
+  -fx-background-color: #e4e4e7;
+  -fx-border-color: #e4e4e7;
+}
+.pane.success {
+  -fx-background-color: #22c55e;
+  -fx-border-color: #22c55e;
+}
+.pane.positive {
+  -fx-background-color: #22c55e;
+  -fx-border-color: #22c55e;
+}
+.pane.warning {
+  -fx-background-color: #eab308;
+  -fx-border-color: #eab308;
+}
+.pane.failure {
+  -fx-background-color: #ef4444;
+  -fx-border-color: #ef4444;
+}
+.pane.negative {
+  -fx-background-color: #ef4444;
+  -fx-border-color: #ef4444;
+}
+.pane.primary {
+  -fx-background-color: #3b82f6;
+  -fx-border-color: #3b82f6;
+}
+.pane.accent {
+  -fx-background-color: #6366f1;
+  -fx-border-color: #6366f1;
+}
+.pane.red {
+  -fx-background-color: #ef4444;
+  -fx-border-color: #ef4444;
+}
+.pane.orange {
+  -fx-background-color: #f97316;
+  -fx-border-color: #f97316;
+}
+.pane.amber {
+  -fx-background-color: #f59e0b;
+  -fx-border-color: #f59e0b;
+}
+.pane.yellow {
+  -fx-background-color: #eab308;
+  -fx-border-color: #eab308;
+}
+.pane.lime {
+  -fx-background-color: #84cc16;
+  -fx-border-color: #84cc16;
+}
+.pane.green {
+  -fx-background-color: #22c55e;
+  -fx-border-color: #22c55e;
+}
+.pane.emerald {
+  -fx-background-color: #10b981;
+  -fx-border-color: #10b981;
+}
+.pane.teal {
+  -fx-background-color: #14b8a6;
+  -fx-border-color: #14b8a6;
+}
+.pane.cyan {
+  -fx-background-color: #06b6d4;
+  -fx-border-color: #06b6d4;
+}
+.pane.blue-light {
+  -fx-background-color: #0ea5e9;
+  -fx-border-color: #0ea5e9;
+}
+.pane.blue {
+  -fx-background-color: #3b82f6;
+  -fx-border-color: #3b82f6;
+}
+.pane.indigo {
+  -fx-background-color: #6366f1;
+  -fx-border-color: #6366f1;
+}
+.pane.violet {
+  -fx-background-color: #8b5cf6;
+  -fx-border-color: #8b5cf6;
+}
+.pane.purple {
+  -fx-background-color: #a855f7;
+  -fx-border-color: #a855f7;
+}
+.pane.fuchsia {
+  -fx-background-color: #d946ef;
+  -fx-border-color: #d946ef;
+}
+.pane.rose {
+  -fx-background-color: #f43f5e;
+  -fx-border-color: #f43f5e;
+}
+.pane.pink {
+  -fx-background-color: #ec4899;
+  -fx-border-color: #ec4899;
+}
+.pane.gray-warm {
+  -fx-background-color: #78716c;
+  -fx-border-color: #78716c;
+}
+.pane.gray-true {
+  -fx-background-color: #737373;
+  -fx-border-color: #737373;
+}
+.pane.gray {
+  -fx-background-color: #71717a;
+  -fx-border-color: #71717a;
+}
+.pane.gray-cool {
+  -fx-background-color: #6b7280;
+  -fx-border-color: #6b7280;
+}
+.pane.gray-blue {
+  -fx-background-color: #64748b;
+  -fx-border-color: #64748b;
+}
+
 .button {
   -fx-background-insets: 1px, 1px, 1px, 1px;
   -fx-background-radius: 4px 4px 4px 4px;

@@ -1,6 +1,5 @@
 package re.artoo.fxcalibur.element;
 
-import javafx.css.Styleable;
 import javafx.scene.Node;
 
 public interface Style extends Attribute {

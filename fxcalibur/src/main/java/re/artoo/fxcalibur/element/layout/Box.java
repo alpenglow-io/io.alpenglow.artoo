@@ -3,6 +3,7 @@ package re.artoo.fxcalibur.element.layout;
 import javafx.scene.layout.VBox;
 import re.artoo.fxcalibur.element.Attribute;
 import re.artoo.fxcalibur.element.Element;
+import re.artoo.fxcalibur.element.attribute.layout;
 import re.artoo.lance.value.Array;
 
 public interface Box extends Element {
@@ -13,7 +14,9 @@ public interface Box extends Element {
     Factory;
 
     public Box vertical(Attribute... attributes) {
-      return () -> Array.of(attributes).yield(new VBox(), (pane, attribute) -> attribute.apply(pane));
+      return () -> Array.<Attribute>of(layout.pane)
+        .concat(attributes)
+        .yield(new VBox(), (pane, attribute) -> attribute.apply(pane));
     }
   }
 }

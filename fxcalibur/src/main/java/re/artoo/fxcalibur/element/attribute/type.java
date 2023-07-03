@@ -2,13 +2,19 @@ package re.artoo.fxcalibur.element.attribute;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import re.artoo.fxcalibur.element.Attribute;
 
 import static javafx.scene.input.MouseEvent.MOUSE_RELEASED;
 
 public enum type implements Attribute {
   input,
-  link,
+  link {
+    @Override
+    void apply(Button button) {
+      button.getStyleClass().add("link");
+    }
+  },
   submit {
     @Override
     public void apply(javafx.scene.control.Button button) {

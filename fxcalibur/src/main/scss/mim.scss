@@ -455,6 +455,17 @@ $hover: "hover";
 //}
 
 //noinspection ALL
+.pane {
+  -fx-background-color: red;
+  @each $color, $tones in $palette {
+    &.#{$color} {
+      -fx-background-color: background($color);
+      -fx-border-color: background($color);
+    }
+  }
+}
+
+//noinspection ALL
 .button {
   -fx-background-insets: 1px, 1px, 1px, 1px;
   -fx-background-radius: 4px 4px 4px 4px;

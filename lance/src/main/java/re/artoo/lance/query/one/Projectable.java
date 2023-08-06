@@ -11,7 +11,11 @@ public interface Projectable<ELEMENT> extends Queryable<ELEMENT> {
     return () -> cursor().map(then);
   }
 
-  default <TARGET> Many<TARGET> selection(final TryFunction1<? super ELEMENT, ? extends Queryable<TARGET>> operation) {
+  default <TARGET> One<TARGET> selection(final TryFunction1<? super ELEMENT, ? extends One<TARGET>> operation) {
+    return () -> cursor().map(operation).flatMap(Queryable::cursor);
+  }
+
+  default <TARGET> Many<TARGET> selections(final TryFunction1<? super ELEMENT, ? extends Many<TARGET>> operation) {
     return () -> cursor().map(operation).flatMap(Queryable::cursor);
   }
 

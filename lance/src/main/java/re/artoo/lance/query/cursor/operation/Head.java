@@ -36,7 +36,7 @@ public final class Head<ELEMENT> implements Cursor<ELEMENT>, Raiseable {
   @Override
   public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
     try {
-      return hasElement || hasElement() ? then.invoke(index, element) : raise(() -> Fetch.Exception.of("head", "head"));
+      return hasElement || hasElement() ? then.invoke(index, element) : checked.raise(() -> Fetch.Exception.of("head", "head"));
     } finally {
       hasElement = false;
     }

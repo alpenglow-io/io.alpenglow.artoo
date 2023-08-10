@@ -1,51 +1,40 @@
 package re.artoo.lance.task;
 
+import com.java.lang.Raiseable;
 import re.artoo.lance.func.*;
 
-import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.*;
-import java.util.function.Function;
 
-import static re.artoo.lance.task.Tasks.Pool;
+import static java.util.concurrent.CompletableFuture.*;
 
 enum Tasks {
   Pool;
 
-  final Map<UUID, Callable<?>> operations = new ConcurrentHashMap<>();
-  final Map<UUID, Future<?>> results = new ConcurrentHashMap<>();
-}
+  final ExecutorService threads = virtualThreadsExecutor();
 
-interface Awaitable extends Runnable {
-  @Override
-  default void run() {
-    try {
-      if (!Pool.operations.isEmpty()) {
-        System.out.println("Operations: " + Pool.operations.size());
-        try (final var tasks = Executors.newVirtualThreadPerTaskExecutor()) {
-          for (Map.Entry<UUID, Callable<?>> entry : Pool.operations.entrySet()) {
-            Pool.results.putIfAbsent(entry.getKey(), tasks.submit(entry.getValue()));
-            Pool.operations.remove(entry.getKey());
-          }
-
-          if (!tasks.awaitTermination(2, TimeUnit.SECONDS)) tasks.shutdown();
-        }
-      }
-    } catch (InterruptedException | IllegalStateException e) {
-      throw new InvokeException(e);
-    }
-  }
+  private ExecutorService virtualThreadsExecutor() {return Executors.newVirtualThreadPerTaskExecutor();}
 }
 
 @SuppressWarnings("unchecked")
 public sealed interface Task<T> {
-  final class Exception extends RuntimeException {
-    public Exception(Throwable throwable) {
-      super(throwable);
-    }
-
-    public Exception(String cause) {
-      super(cause);
+  static <A, B, C, D, E> Task<E> compose(
+    TrySupplier1<? extends Task<A>> operation1,
+    TryFunction1<? super A, ? extends Task<B>> operation2,
+    TryFunction2<? super A, ? super B, ? extends Task<C>> operation3,
+    TryFunction3<? super A, ? super B, ? super C, ? extends Task<D>> operation4,
+    TryFunction4<? super A, ? super B, ? super C, ? super D, ? extends Task<E>> operation5
+  ) {
+    try {
+      return operation1.invoke()
+        .flatMap(a -> operation2.invoke(a)
+          .flatMap(b -> operation3.invoke(a, b)
+            .flatMap(c -> operation4.invoke(a, b, c)
+              .flatMap(d -> operation5.invoke(a, b, c, d))
+            )
+          )
+        );
+    } catch (Throwable e) {
+      return failure(e);
     }
   }
 
@@ -54,7 +43,7 @@ public sealed interface Task<T> {
   }
 
   static <T> Task<T> nothing() {
-    return (Task<T>) Nothing.Default;
+    return (Task<T>) Nothing.Companion;
   }
 
   static <T> Task<T> success(T value) {
@@ -65,159 +54,229 @@ public sealed interface Task<T> {
     return new Failure<>(throwable);
   }
 
-  default <R> Task<R> then(TryFunction1<? super T, ? extends R> operation) {
-    throw new Task.Exception("Can't retrieve result for modifiable then operation, result is nothing");
+  default <R> Task<R> map(TryFunction1<? super T, ? extends R> operation) {
+    throw new Exception("Can't retrieve result for modifiable then operation, result is nothing");
   }
 
-  @FunctionalInterface
-  interface TaskFunction<T, R> extends TryFunction1<T, R> {
+  default <R> Task<R> flatMap(TryFunction1<? super T, ? extends Task<R>> operation) {
+    throw new Exception("Can't retrieve result for composable then operation, result is nothing");
   }
 
-  default <R> Task<R> then(TaskFunction<? super T, ? extends Task<R>> operation) {
-    throw new Task.Exception("Can't retrieve result for composable then operation, result is nothing");
+  default Task<T> filter(TryPredicate1<? super T> condition) {
+    throw new Exception("Can't retrieve result for conditional then, result is nothing");
   }
 
-  default <R> Task<R> then(Task<R> task, TryFunction2<? super T, ? super Task<R>, ? extends Task<R>> operation) {
-    throw new Task.Exception("Can't retrieve result for composable then operation, result is nothing");
+  default Task<T> peek(TryConsumer1<? super T> operation) {
+    throw new Exception("Can't retrieve result for unmodifiable then operation, result is nothing");
   }
 
-  default Task<T> when(TryPredicate1<? super T> condition) {
-    throw new Task.Exception("Can't retrieve result for conditional then, result is nothing");
-  }
-
-  default Task<T> then(TryConsumer1<? super T> operation) {
-    throw new Task.Exception("Can't retrieve result for unmodifiable then operation, result is nothing");
-  }
-
-  T await();
-
-  enum Nothing implements Task<Object>, Awaitable {
-    Default;
-
-    @Override
-    public Object await() {
-      run();
-      throw new Task.Exception("Can't retrieve result, result is nothing");
+  default Task<T> exceptionally(TryConsumer1<? super Throwable> operation) {
+    try {
+      operation.invoke(new Exception("Can't retrieve exception, no exception has been thrown"));
+      return this;
+    } catch (Throwable throwable) {
+      return failure(throwable);
     }
   }
 
-  @SuppressWarnings("unchecked")
-  record Success<T>(T result) implements Task<T>, Awaitable {
+  default Task<T> eventually(TryFunction1<? super Throwable, ? extends T> operation) {
+    try {
+      return switch (operation.invoke(new Exception("Can't retrieve exception, no exception has been thrown"))) {
+        case null -> nothing();
+        case T it -> success(it);
+      };
+    } catch (Throwable throwable) {
+      return failure(throwable);
+    }
+  }
+
+  default Task<T> otherwise(TrySupplier1<? extends T> operation) {
+    return async(operation::get);
+  }
+
+  default T await() {
+    throw new Exception("Can't await for any result, task is not running");
+  }
+
+  enum Nothing implements Task<Object> {Companion}
+
+  record Success<T>(T result) implements Task<T> {
     @Override
-    public <R> Task<R> then(TryFunction1<? super T, ? extends R> operation) {
-      return new Success<>(operation.apply(result));
+    public <R> Task<R> map(TryFunction1<? super T, ? extends R> operation) {
+      try {
+        return result == null ? nothing() : success(operation.invoke(result));
+      } catch (Throwable throwable) {
+        return failure(throwable);
+      }
     }
 
     @Override
-    public <R> Task<R> then(Task<R> task, TryFunction2<? super T, ? super Task<R>, ? extends Task<R>> operation) {
-      return operation.apply(result, task);
+    public <R> Task<R> flatMap(TryFunction1<? super T, ? extends Task<R>> operation) {
+      try {
+        return result == null ? nothing() : operation.invoke(result);
+      } catch (Throwable failure) {
+        return failure(failure);
+      }
     }
 
     @Override
-    public Task<T> when(TryPredicate1<? super T> condition) {
-      return condition.test(result) ? this : (Task<T>) Nothing.Default;
+    public Task<T> exceptionally(TryConsumer1<? super Throwable> operation) {
+      return this;
     }
 
     @Override
-    public Task<T> then(TryConsumer1<? super T> operation) {
-      operation.accept(result);
+    public Task<T> eventually(TryFunction1<? super Throwable, ? extends T> operation) {
+      return this;
+    }
+
+    @Override
+    public Task<T> otherwise(TrySupplier1<? extends T> operation) {
+      return this;
+    }
+
+    @Override
+    public Task<T> filter(TryPredicate1<? super T> condition) {
+      return result != null && condition.test(result) ? this : nothing();
+    }
+
+    @Override
+    public Task<T> peek(TryConsumer1<? super T> operation) {
+      if (result != null) {
+        try {
+          operation.invoke(result);
+        } catch (Throwable throwable) {
+          return failure(throwable);
+        }
+      }
       return this;
     }
 
     @Override
     public T await() {
-      run();
       return result;
     }
   }
 
-  record Failure<T>(Throwable throwable) implements Task<T>, Awaitable {
+  record Failure<T>(Throwable throwable) implements Task<T> {
     @Override
-    public <R> Task<R> then(TryFunction1<? super T, ? extends R> operation) {
-      throw new Task.Exception(throwable);
+    public <R> Task<R> map(TryFunction1<? super T, ? extends R> operation) {
+      return failure(throwable);
     }
 
     @Override
-    public <R> Task<R> then(Task<R> task, TryFunction2<? super T, ? super Task<R>, ? extends Task<R>> operation) {
-      throw new Task.Exception(throwable);
+    public <R> Task<R> flatMap(TryFunction1<? super T, ? extends Task<R>> operation) {
+      return failure(throwable);
     }
 
     @Override
-    public Task<T> when(TryPredicate1<? super T> condition) {
-      throw new Task.Exception(throwable);
+    public Task<T> exceptionally(TryConsumer1<? super Throwable> operation) {
+      try {
+        operation.invoke(throwable);
+      } catch (Throwable failure) {
+        return failure(failure);
+      }
+      return this;
     }
 
     @Override
-    public Task<T> then(TryConsumer1<? super T> operation) {
-      throw new Task.Exception(throwable);
+    public Task<T> eventually(TryFunction1<? super Throwable, ? extends T> operation) {
+      try {
+        return success(operation.invoke(throwable));
+      } catch (Throwable e) {
+        return failure(e);
+      }
+    }
+
+    @Override
+    public Task<T> filter(TryPredicate1<? super T> condition) {
+      return this;
+    }
+
+    @Override
+    public Task<T> peek(TryConsumer1<? super T> operation) {
+      return this;
     }
 
     @Override
     public T await() {
-      run();
-      throw new Task.Exception(throwable);
+      throw new Exception(throwable);
     }
   }
 
-  @SuppressWarnings("unchecked")
-  record Running<T>(CompletableFuture<T> future) implements Task<T>, Awaitable {
-    private static final Object NORESULT = new Object();
+  record Running<T>(CompletableFuture<T> future) implements Task<T>, Raiseable {
+    private static final Object NOTHING = new Object();
 
     Running(Callable<T> operation) {
-      this(CompletableFuture.supplyAsync((TrySupplier1<T>) operation::call, Executors.newVirtualThreadPerTaskExecutor()));
+      this(supplyAsync((TrySupplier1<T>) operation::call, Tasks.Pool.threads));
     }
 
     @Override
-    public <R> Task<R> then(TryFunction1<? super T, ? extends R> operation) {
+    public <R> Task<R> map(TryFunction1<? super T, ? extends R> operation) {
       return new Running<>(future.thenApplyAsync(operation));
     }
 
     @Override
-    public <R> Task<R> then(TaskFunction<? super T, ? extends Task<R>> operation) {
-      try {
-        return switch (future.thenComposeAsync(staging(operation)).get()) {
-          case Throwable throwable -> Task.failure(throwable);
-          case Object object when object.equals(NORESULT) -> Task.nothing();
-          case Object object -> Task.success((R) object);
-        };
-      } catch (InterruptedException | ExecutionException e) {
-        throw new RuntimeException(e);
-      }
-    }
-
-    private static <T, R> Function<T, CompletableFuture<Object>> staging(TaskFunction<? super T, ? extends Task<R>> operation) {
-      return it -> switch (operation.apply(it)) {
-        case Success<R> success -> CompletableFuture.completedFuture(success.result);
-        case Failure<R> failure -> CompletableFuture.failedFuture(failure.throwable);
-        case Nothing nothing -> CompletableFuture.completedFuture(NORESULT);
-        case Running<R> running -> running.future.thenApplyAsync(p -> p);
-      };
+    public <R> Task<R> flatMap(TryFunction1<? super T, ? extends Task<R>> operation) {
+      return new Running<>(future
+        .thenApplyAsync(operation)
+        .thenComposeAsync(it -> switch (it) {
+          case Success<R> success -> completedFuture(success.result);
+          case Failure<R> failure -> failedFuture(failure.throwable);
+          case Running<R> running -> running.future.thenApplyAsync(res -> res);
+          default -> completedFuture(null);
+        })
+      );
     }
 
     @Override
-    public <R> Task<R> then(Task<R> task, TryFunction2<? super T, ? super Task<R>, ? extends Task<R>> operation) {
-      return operation.apply(await(), task);
-    }
-
-    @Override
-    public Task<T> when(TryPredicate1<? super T> condition) {
-      return then(it -> condition.test(it) ? Task.success(it) : Task.nothing());
-    }
-
-    @Override
-    public Task<T> then(TryConsumer1<? super T> operation) {
-      return then((TryFunction1<? super T, ? extends T>) it -> {
+    public Task<T> exceptionally(TryConsumer1<? super Throwable> operation) {
+      return new Running<>(future.exceptionallyComposeAsync(it -> {
         operation.accept(it);
+        return failedFuture(it);
+      }));
+    }
+
+    @Override
+    public Task<T> eventually(TryFunction1<? super Throwable, ? extends T> operation) {
+      return new Running<>(future.exceptionallyAsync(operation::apply));
+    }
+
+    @Override
+    public Task<T> otherwise(TrySupplier1<? extends T> operation) {
+      return new Running<>(future.thenApplyAsync(it -> it == null ? operation.get() : it));
+    }
+
+    @Override
+    public Task<T> filter(TryPredicate1<? super T> condition) {
+      return new Running<>(future.thenApplyAsync(it -> it != null && condition.test(it) ? it : null));
+    }
+
+    @Override
+    public Task<T> peek(TryConsumer1<? super T> operation) {
+      return new Running<>(future.thenApplyAsync(it -> {
+        if (it != null) operation.accept(it);
         return it;
-      });
+      }));
     }
 
     public T await() {
       try {
-        return future.get();
+        var value = future.get();
+        return value != null ? value : unchecked.raise(() -> new Exception("Can't raise"));
       } catch (InterruptedException | ExecutionException e) {
-        throw new RuntimeException(e);
+        throw new Exception(e);
       }
     }
   }
+
+  final class Exception extends RuntimeException {
+    private Exception(Throwable throwable) {
+      super(throwable);
+    }
+
+    private Exception(String cause) {
+      super(cause);
+    }
+  }
+
 }

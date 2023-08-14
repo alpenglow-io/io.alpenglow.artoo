@@ -47,25 +47,4 @@ final class ReentrantLocked<T> implements Values<T> {
       return value;
     }
   }
-
-  interface AutoUnlock extends AutoCloseable {
-    Lock lock();
-
-    @Override
-    default void close() {
-      lock().unlock();
-    }
-  }
-
-  record WriteLock(Lock lock) implements AutoUnlock {
-    WriteLock(ReadWriteLock readWrite) {
-      this(readWrite.writeLock());
-    }
-  }
-
-  record ReadLock(Lock lock) implements AutoUnlock {
-    ReadLock(ReadWriteLock readWrite) {
-      this(readWrite.readLock());
-    }
-  }
 }

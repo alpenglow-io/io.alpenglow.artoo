@@ -1,6 +1,5 @@
 package re.artoo.lance;
 
-import re.artoo.lance.func.TryConsumer1;
 import re.artoo.lance.query.Cursor;
 
 import java.util.Iterator;
@@ -17,21 +16,8 @@ public interface Queryable<T> extends Iterable<T> {
     }
   }
 
-  default void eventually(final TryConsumer1<T> eventually) {
-    for (var pair : this) {
-      eventually.accept(pair);
-    }
+  default T fetch() {
+    for (final var value : this) return value;
+    throw new IllegalStateException("Can't retrieve any value eventually, no value has been found in queryable");
   }
-
-  @SuppressWarnings("StatementWithEmptyBody")
-  default void eventually() {
-    for (final var ignored : this)
-      ;
-  }
-
-  default <RETURN> RETURN eventually(RETURN returning) {
-    eventually();
-    return returning;
-  }
-
 }

@@ -3,7 +3,7 @@ package re.artoo.fxcalibur.element.input;
 import re.artoo.fxcalibur.element.Attribute;
 import re.artoo.fxcalibur.element.Element;
 import re.artoo.fxcalibur.element.attribute.emphasis;
-import re.artoo.lance.value.Array;
+import re.artoo.lance.experimental.Array;
 
 import static re.artoo.fxcalibur.element.attribute.emphasis.*;
 
@@ -21,7 +21,7 @@ public interface Button extends Element {
     private Button of(emphasis emphasis, Attribute... attributes) {
       return () -> Array.<Attribute>of(emphasis)
         .concat(attributes)
-        .yield(new javafx.scene.control.Button(), (button, attribute) -> attribute.apply(button));
+        .mutate(new javafx.scene.control.Button(), (button, attribute) -> attribute.apply(button));
     }
 
     public Button primary(Attribute... attributes) {

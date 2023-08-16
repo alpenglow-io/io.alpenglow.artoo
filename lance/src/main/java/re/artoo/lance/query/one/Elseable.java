@@ -7,7 +7,7 @@ import re.artoo.lance.query.One;
 
 public interface Elseable<ELEMENT> extends Queryable<ELEMENT> {
   default One<ELEMENT> or(final ELEMENT element) {
-    return or(One.value(element));
+    return or(One.of(element));
   }
 
   default <OTHER extends One<ELEMENT>> One<ELEMENT> or(final OTHER otherwise) {

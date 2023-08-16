@@ -14,8 +14,8 @@ enum None implements One<Object> {
 }
 
 @FunctionalInterface
-public interface One<T> extends Projectable<T>, Peekable<T>, Filterable<T>, Exceptionable<T>, Elseable<T> {
-  static <ELEMENT> One<ELEMENT> value(final ELEMENT element) {
+public interface One<T> extends Projectable<T>, Triggerable<T>, Filterable<T>, Exceptionable<T>, Elseable<T> {
+  static <ELEMENT> One<ELEMENT> of(final ELEMENT element) {
     return element != null ? new Lone<>(element) : One.none();
   }
 

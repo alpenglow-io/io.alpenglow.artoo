@@ -3,6 +3,7 @@ package re.artoo.lance.query.cursor.operation;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ErTest {
@@ -14,5 +15,7 @@ class ErTest {
     assertThatThrownBy(cursor::next)
       .isInstanceOf(IllegalStateException.class)
       .hasMessage("No elements found");
+
+    assertThat(cursor.hasNext()).isFalse();
   }
 }

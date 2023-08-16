@@ -16,7 +16,7 @@ public interface Many<T> extends
   Coalesceable<T>,
   Extremable<T>,
   Partitionable<T>,
-  Peekable<T>,
+  Triggerable<T>,
   Projectable<T>,
   Quantifiable<T>,
   Settable<T>,

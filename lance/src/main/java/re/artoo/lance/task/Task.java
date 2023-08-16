@@ -1,6 +1,6 @@
 package re.artoo.lance.task;
 
-import com.java.lang.Raiseable;
+import com.java.lang.Throwing;
 import re.artoo.lance.func.*;
 
 import java.util.concurrent.*;
@@ -203,7 +203,7 @@ public sealed interface Task<T> {
     }
   }
 
-  record Running<T>(CompletableFuture<T> future) implements Task<T>, Raiseable {
+  record Running<T>(CompletableFuture<T> future) implements Task<T>, Throwing {
     private static final Object NOTHING = new Object();
 
     Running(Callable<T> operation) {
@@ -262,7 +262,7 @@ public sealed interface Task<T> {
     public T await() {
       try {
         var value = future.get();
-        return value != null ? value : unchecked.raise(() -> new Exception("Can't raise"));
+        return value != null ? value : unchecked.withThrow(() -> new Exception("Can't raise"));
       } catch (InterruptedException | ExecutionException e) {
         throw new Exception(e);
       }

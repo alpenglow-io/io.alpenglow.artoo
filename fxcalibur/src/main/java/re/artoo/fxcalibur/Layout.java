@@ -8,7 +8,6 @@ import re.artoo.fxcalibur.Layout.Grids.Cell;
 import re.artoo.lance.func.TryConsumer1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.Many;
-import re.artoo.lance.value.Array;
 
 import java.util.function.Supplier;
 
@@ -137,7 +136,7 @@ public interface Layout extends Supplier<Node> {
         .coalesce()
         .select(Supplier::get)
         .keep(new AnchorPane(), (index, pane, node) -> pane.getChildren().add(index, node))
-        .peek(customize)
+        .fire(customize)
         .otherwise(IllegalStateException::new);
     }
 
@@ -158,7 +157,7 @@ public interface Layout extends Supplier<Node> {
             case 4 -> pane.setLeft(node);
           }
         })
-        .peek(customize)
+        .fire(customize)
         .otherwise(IllegalStateException::new);
     }
 
@@ -167,7 +166,7 @@ public interface Layout extends Supplier<Node> {
         .coalesce()
         .select(Supplier::get)
         .keep(pane.get(), (box, node) -> box.getChildren().add(node))
-        .peek(customize)
+        .fire(customize)
         .otherwise(IllegalStateException::new);
     }
   }

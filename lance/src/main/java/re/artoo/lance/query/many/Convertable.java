@@ -3,14 +3,14 @@ package re.artoo.lance.query.many;
 import re.artoo.lance.Queryable;
 import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.func.TryIntFunction;
-import re.artoo.lance.value.Array;
+import re.artoo.lance.experimental.Array;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static re.artoo.lance.scope.Nullability.nonNullable;
+import static re.artoo.lance.value.Nullability.nonNullable;
 
 public interface Convertable<T> extends Queryable<T> {
   default <K, E> Map<? extends K, ? extends E> asMap(final TryFunction1<? super T, ? extends K> key, final TryFunction1<? super T, ? extends E> element) {

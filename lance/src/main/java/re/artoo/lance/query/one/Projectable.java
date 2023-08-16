@@ -7,19 +7,19 @@ import re.artoo.lance.query.Many;
 import re.artoo.lance.query.One;
 
 public interface Projectable<ELEMENT> extends Queryable<ELEMENT> {
-  default <TARGET> One<TARGET> select(final TryFunction1<? super ELEMENT, ? extends TARGET> then) {
-    return () -> cursor().map(then);
+  default <TARGET> One<TARGET> select(final TryFunction1<? super ELEMENT, ? extends TARGET> projection) {
+    return () -> cursor().map(projection);
   }
 
-  default <TARGET> One<TARGET> selection(final TryFunction1<? super ELEMENT, ? extends One<TARGET>> operation) {
-    return () -> cursor().map(operation).flatMap(Queryable::cursor);
+  default <TARGET> One<TARGET> selectOne(final TryFunction1<? super ELEMENT, ? extends One<TARGET>> projection) {
+    return () -> cursor().map(projection).flatMap(Queryable::cursor);
   }
 
-  default <TARGET> Many<TARGET> selections(final TryFunction1<? super ELEMENT, ? extends Many<TARGET>> operation) {
-    return () -> cursor().map(operation).flatMap(Queryable::cursor);
+  default <TARGET> Many<TARGET> selectMany(final TryFunction1<? super ELEMENT, ? extends Many<TARGET>> projection) {
+    return () -> cursor().map(projection).flatMap(Queryable::cursor);
   }
 
-  default <TARGET> One<TARGET> select(final TrySupplier1<? extends TARGET> supplier) {
-    return () -> cursor().map(__ -> supplier.invoke());
+  default <TARGET> One<TARGET> select(final TrySupplier1<? extends TARGET> projection) {
+    return () -> cursor().map(__ -> projection.invoke());
   }
 }

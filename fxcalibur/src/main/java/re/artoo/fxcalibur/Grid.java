@@ -1,10 +1,9 @@
 package re.artoo.fxcalibur;
 
 import javafx.geometry.HPos;
-import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.layout.*;
-import re.artoo.lance.value.Array;
+import re.artoo.lance.experimental.Array;
 
 import java.util.function.Supplier;
 

@@ -1,11 +1,11 @@
 package re.artoo.lance.query.cursor.operation;
 
-import com.java.lang.Raiseable;
+import com.java.lang.Throwing;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.cursor.Fetch;
 
-public final class Rethrow<ELEMENT> implements Cursor<ELEMENT>, Raiseable {
+public final class Rethrow<ELEMENT> implements Cursor<ELEMENT>, Throwing {
   private final Fetch<ELEMENT> fetch;
   private final TryIntFunction1<? super Throwable, ? extends Throwable> feedback;
   private int index;

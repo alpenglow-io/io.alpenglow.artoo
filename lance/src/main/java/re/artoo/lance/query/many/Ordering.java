@@ -4,7 +4,7 @@ import re.artoo.lance.Queryable;
 import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.Many;
-import re.artoo.lance.value.Array;
+import re.artoo.lance.experimental.Array;
 
 import static re.artoo.lance.query.many.Ordering.Arrange.ascending;
 

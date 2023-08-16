@@ -1,11 +1,11 @@
 package re.artoo.lance.query.cursor.operation;
 
-import com.java.lang.Raiseable;
+import com.java.lang.Throwing;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.cursor.Fetch;
 
-public final class Append<ELEMENT> implements Cursor<ELEMENT>, Raiseable {
+public final class Append<ELEMENT> implements Cursor<ELEMENT>, Throwing {
   private final Fetch<ELEMENT> head;
   private final Fetch<ELEMENT> tail;
   private int index;
@@ -28,7 +28,7 @@ public final class Append<ELEMENT> implements Cursor<ELEMENT>, Raiseable {
         ? head.element(then)
         : tail.hasElement()
         ? tail.element((index, element) -> then.invoke(this.index, element))
-        : raise(() -> Fetch.Exception.of("append", "appendable"));
+        : throwing(() -> Fetch.Exception.of("append", "appendable"));
     } finally {
       index++;
     }

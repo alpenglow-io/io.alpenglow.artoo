@@ -1,22 +1,22 @@
 package re.artoo.lance.query.cursor.operation;
 
-import com.java.lang.Raiseable;
+import com.java.lang.Throwing;
 import org.junit.jupiter.api.Test;
 import re.artoo.lance.query.Cursor;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PeekTest implements Raiseable {
+class PeekTest implements Throwing {
   @Test
   void shouldPeek() {
     assertThat(
       new Peek<>(
         new Map<>(
           new Peek<>(
-            new Recover<>(
+            new Eventually<>(
               new Map<>(
                 new Open<>(1, 2, 3),
-                (index, element) -> index < 2 ? raise(IllegalArgumentException::new) : element),
+                (index, element) -> index < 2 ? throwing(IllegalArgumentException::new) : element),
               (index, throwable) -> {
                 System.err.printf("Error on index %d%n", index);
                 return 9;
@@ -34,7 +34,7 @@ class PeekTest implements Raiseable {
   @Test
   void shouldPeek2() {
     Cursor<Integer> cursor =
-      new Catch<>(
+      new Exceptionally<>(
         new Peek<>(
           new Open<>(1, 2, 3),
           (index, element) -> {

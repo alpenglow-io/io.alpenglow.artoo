@@ -10,10 +10,11 @@ import re.artoo.fxcalibur.element.attribute.*;
 import re.artoo.fxcalibur.element.event.mouse;
 
 import static re.artoo.fxcalibur.element.Application.window;
+import static re.artoo.fxcalibur.element.Attribute.attributes;
+import static re.artoo.fxcalibur.element.Attribute.content;
 import static re.artoo.fxcalibur.element.attribute.size.huge;
 import static re.artoo.fxcalibur.element.attribute.size.medium;
 import static re.artoo.fxcalibur.element.input.Button.button;
-import static re.artoo.lance.value.Unit.unit;
 
 
 interface Sample {
@@ -33,10 +34,12 @@ final class MainLayout implements Component {
     return
       template(
         box.vertical(
-          padding.same(16),
-          spacing.vertically(6),
-          color.transparent,
-          with.elements(
+          attributes(
+            padding.all(16),
+            spacing.vertically(6),
+            color.transparent
+          ),
+          content(
             button.primary(value.text("Standard")),
             button(variant.inverted, color.primary, value.text("Inverted Primary")),
             button(type.link, color.rose, value.text("Inverted Primary")),

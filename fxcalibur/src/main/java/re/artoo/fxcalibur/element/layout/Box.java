@@ -5,7 +5,7 @@ import javafx.scene.layout.VBox;
 import re.artoo.fxcalibur.element.Attribute;
 import re.artoo.fxcalibur.element.Element;
 import re.artoo.fxcalibur.element.attribute.layout;
-import re.artoo.lance.value.Array;
+import re.artoo.lance.experimental.Array;
 
 public interface Box extends Element {
 
@@ -14,16 +14,22 @@ public interface Box extends Element {
   enum Boxes {
     Factory;
 
-    public Box vertical(Attribute... attributes) {
+    public Box vertical(Attribute[] attributes, Element[] elements) {
       return () -> Array.<Attribute>of(layout.pane)
         .concat(attributes)
-        .yield(new VBox(), (pane, attribute) -> attribute.apply(pane));
+        .mutate(new VBox(), (pane, attribute) -> attribute.apply(pane));
     }
 
-    public Box horizontal(Attribute... attributes) {
+    public Box vertical(Attribute[] attributes) {
       return () -> Array.<Attribute>of(layout.pane)
         .concat(attributes)
-        .yield(new HBox(), (pane, attribute) -> attribute.apply(pane));
+        .mutate(new VBox(), (pane, attribute) -> attribute.apply(pane));
+    }
+
+    public Box horizontal(Attribute[] attributes) {
+      return () -> Array.<Attribute>of(layout.pane)
+        .concat(attributes)
+        .mutate(new HBox(), (pane, attribute) -> attribute.apply(pane));
     }
   }
 }

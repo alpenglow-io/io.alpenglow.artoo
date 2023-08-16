@@ -1,11 +1,10 @@
 package re.artoo.fxcalibur.element.attribute;
 
 import javafx.scene.Node;
-import javafx.scene.layout.Pane;
 import re.artoo.fxcalibur.element.Attribute;
 import re.artoo.fxcalibur.element.Element;
 import re.artoo.fxcalibur.element.PaneAttribute;
-import re.artoo.lance.value.Array;
+import re.artoo.lance.experimental.Array;
 
 public enum with {
   ;

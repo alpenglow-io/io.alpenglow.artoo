@@ -7,7 +7,7 @@ import re.artoo.fxcalibur.element.PaneAttribute;
 public enum padding {
   ;
 
-  public static Attribute same(double all) {
+  public static Attribute all(double all) {
     return (PaneAttribute) pane -> pane.setPadding(new Insets(all));
   }
   public static Attribute padding(double topBottom, double leftRight) {

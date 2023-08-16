@@ -5,9 +5,9 @@ import re.artoo.lance.func.TryIntPredicate1;
 import re.artoo.lance.func.TryPredicate1;
 import re.artoo.lance.func.TryPredicate2;
 import re.artoo.lance.query.Many;
-import re.artoo.lance.scope.Let;
+import re.artoo.lance.value.Let;
 
-import static re.artoo.lance.scope.Let.lazy;
+import static re.artoo.lance.value.Let.lazy;
 
 public interface Partitionable<T> extends Queryable<T> {
   default Many<T> skip(final int until) {

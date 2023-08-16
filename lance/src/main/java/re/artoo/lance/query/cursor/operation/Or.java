@@ -1,13 +1,13 @@
 package re.artoo.lance.query.cursor.operation;
 
-import com.java.lang.Raiseable;
+import com.java.lang.Throwing;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.cursor.Fetch;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-public final class Or<ELEMENT> implements Cursor<ELEMENT>, Raiseable {
+public final class Or<ELEMENT> implements Cursor<ELEMENT>, Throwing {
   private final Fetch<ELEMENT> fetch;
   private final AtomicReference<Fetch<ELEMENT>> otherwise;
 
@@ -35,6 +35,6 @@ public final class Or<ELEMENT> implements Cursor<ELEMENT>, Raiseable {
       ? fetch.element(then)
       : otherwise.get() != null && otherwise.get().hasElement()
       ? otherwise.get().element(then)
-      : raise(() -> Fetch.Exception.of("or", "elseable"));
+      : throwing(() -> Fetch.Exception.of("or", "elseable"));
   }
 }

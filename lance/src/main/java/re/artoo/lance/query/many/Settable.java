@@ -42,15 +42,15 @@ public interface Settable<T> extends Queryable<T> {
   }
 
   default <Q extends Queryable<T>> Many<T> union(final Q queryable) {
-    return Many.pseudo(cursor().union(queryable.cursor()));
+    return Many.pseudo(origin().union(queryable.origin()));
   }
 
   default Many<T> except(final T... steps) {
-    return Many.pseudo(cursor().except(steps));
+    return Many.pseudo(origin().except(steps));
   }
 
   default Many<T> intersect(final T... steps) {
-    return Many.pseudo(cursor().intersect(steps));
+    return Many.pseudo(origin().intersect(steps));
   }*/
 }
 

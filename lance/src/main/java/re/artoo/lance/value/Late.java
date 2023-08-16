@@ -36,7 +36,8 @@ public non-sealed interface Late<T> extends Let<T> {
     public <R> R let(final TryFunction1<? super T, ? extends R> func) {
       return lock
         .read(() -> func.invoke((T) value))
-        .otherwise("Can't invoke", InvokeException::new);
+        .raise("Can't invoke", InvokeException::new)
+        .yield();
     }
   }
 }

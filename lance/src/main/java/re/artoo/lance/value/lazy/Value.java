@@ -7,7 +7,7 @@ import re.artoo.lance.value.Lock;
 import static java.util.Objects.requireNonNull;
 
 public final class Value<T> implements Lazy<T> {
-  private static final Object NOTHING = new Object();
+  private static final Object NO_VALUE = new Object();
   private final Lock lock;
   private final TrySupplier1<? extends T> initialization;
   private volatile Object value;
@@ -19,15 +19,16 @@ public final class Value<T> implements Lazy<T> {
   private Value(Lock lock, TrySupplier1<? extends T> initialization) {
     this.lock = lock;
     this.initialization = initialization;
-    this.value = NOTHING;
+    this.value = NO_VALUE;
   }
 
   @SuppressWarnings("unchecked")
   @Override
   public T value() {
     return (T) lock.read(() -> value)
-      .where(it -> it.equals(NOTHING))
-      .selectOne(it -> lock.write(() -> (value = initialization.invoke())))
-      .otherwise(value);
+      .where(NO_VALUE::equals)
+      .selection(it -> lock.write(() -> (value = initialization.invoke())))
+      .coalesce(value)
+      .yield();
   }
 }

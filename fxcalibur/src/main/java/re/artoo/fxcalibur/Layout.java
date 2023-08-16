@@ -9,6 +9,7 @@ import re.artoo.lance.func.TryConsumer1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.Many;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public interface Layout extends Supplier<Node> {
@@ -135,9 +136,10 @@ public interface Layout extends Supplier<Node> {
       return Many.from(components)
         .coalesce()
         .select(Supplier::get)
-        .keep(new AnchorPane(), (index, pane, node) -> pane.getChildren().add(index, node))
+        .mutate(new AnchorPane(), (index, pane, node) -> pane.getChildren().add(index, node))
         .fire(customize)
-        .otherwise(IllegalStateException::new);
+        .raise(IllegalStateException::new).when(Objects::isNull)
+        .yield();
     }
 
     public Node border(Component... components) {
@@ -148,7 +150,7 @@ public interface Layout extends Supplier<Node> {
       return Many.from(components)
         .coalesce()
         .select(Supplier::get)
-        .keep(new BorderPane(), (index, pane, node) -> {
+        .mutate(new BorderPane(), (index, pane, node) -> {
           switch (index) {
             case 0 -> pane.setCenter(node);
             case 1 -> pane.setTop(node);
@@ -158,16 +160,18 @@ public interface Layout extends Supplier<Node> {
           }
         })
         .fire(customize)
-        .otherwise(IllegalStateException::new);
+        .raise(IllegalStateException::new).when(Objects::isNull)
+        .yield();
     }
 
     private <PANE extends Pane> Node pane(Supplier<PANE> pane, TryConsumer1<PANE> customize, Component... components) {
       return Many.from(components)
         .coalesce()
         .select(Supplier::get)
-        .keep(pane.get(), (box, node) -> box.getChildren().add(node))
+        .mutate(pane.get(), (box, node) -> box.getChildren().add(node))
         .fire(customize)
-        .otherwise(IllegalStateException::new);
+        .raise(IllegalStateException::new).when(Objects::isNull)
+        .yield();
     }
   }
 

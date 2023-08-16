@@ -80,7 +80,7 @@ $menu-button-padding-y:   cfg.$menu-padding-y - math.div(cfg.$menubar-padding-y,
   }
 
   // #javafx-bug Not possible to maintain hover font color here due to commented
-  //             styles applied always, even when menu is under cursor.
+  //             styles applied always, even when menu is under origin.
   // &:hover {
   //   .menu-up-arrow,
   //   .menu-down-arrow {

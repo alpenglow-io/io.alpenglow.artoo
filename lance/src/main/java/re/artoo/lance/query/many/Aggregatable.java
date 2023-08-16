@@ -35,11 +35,11 @@ public interface Aggregatable<LEFT> extends Queryable<LEFT> {
     return () -> cursor().fold(aggregated, operation);
   }
 
-  default <AGGREGATED> One<AGGREGATED> keep(AGGREGATED aggregated, TryIntConsumer2<? super AGGREGATED, ? super LEFT> operation) {
+  default <AGGREGATED> One<AGGREGATED> mutate(AGGREGATED aggregated, TryIntConsumer2<? super AGGREGATED, ? super LEFT> operation) {
     return () -> cursor().fold(aggregated, (index, aggr, left) -> { operation.invoke(index, aggr, left); return aggr; });
   }
 
-  default <AGGREGATED> One<AGGREGATED> keep(AGGREGATED aggregated, TryConsumer2<? super AGGREGATED, ? super LEFT> operation) {
+  default <AGGREGATED> One<AGGREGATED> mutate(AGGREGATED aggregated, TryConsumer2<? super AGGREGATED, ? super LEFT> operation) {
     return () -> cursor().fold(aggregated, (aggr, left) -> { operation.invoke(aggr, left); return aggr; });
   }
 

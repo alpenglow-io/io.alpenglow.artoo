@@ -1,12 +1,20 @@
 package re.artoo.lance.query.cursor;
 
-import re.artoo.lance.func.*;
+import re.artoo.lance.func.TryConsumer1;
+import re.artoo.lance.func.TryFunction1;
+import re.artoo.lance.func.TryIntConsumer1;
+import re.artoo.lance.func.TrySupplier1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.cursor.operation.*;
+import re.artoo.lance.query.cursor.operation.Er;
+import re.artoo.lance.query.cursor.operation.Eventually;
+import re.artoo.lance.query.cursor.operation.Exceptionally;
+import re.artoo.lance.query.cursor.operation.Or;
+
+import static re.artoo.lance.value.Lazy.lazy;
 
 public sealed interface Alternator<ELEMENT> extends Fetch<ELEMENT> permits Cursor {
-  default <FETCH extends Fetch<ELEMENT>> Cursor<ELEMENT> or(FETCH otherwise) {
-    return new Or<>(this, otherwise);
+  default Cursor<ELEMENT> or(TrySupplier1<? extends Fetch<ELEMENT>> vice) {
+    return new Or<>(this, vice);
   }
 
   default Cursor<ELEMENT> or(final String message, final TryFunction1<? super String, ? extends Throwable> exception) {

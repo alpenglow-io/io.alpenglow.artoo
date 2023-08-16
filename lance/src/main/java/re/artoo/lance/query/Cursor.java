@@ -1,15 +1,21 @@
 package re.artoo.lance.query;
 
+import re.artoo.lance.func.TrySupplier1;
 import re.artoo.lance.query.cursor.*;
-import re.artoo.lance.query.cursor.operation.Cause;
-import re.artoo.lance.query.cursor.operation.Empty;
-import re.artoo.lance.query.cursor.operation.Iterate;
-import re.artoo.lance.query.cursor.operation.Open;
+import re.artoo.lance.query.cursor.operation.*;
 
 public non-sealed interface Cursor<ELEMENT> extends Mappator<ELEMENT>, Folderator<ELEMENT>, Reduciator<ELEMENT>, Alternator<ELEMENT>, Appendor<ELEMENT>, Collector<ELEMENT>, Filterator<ELEMENT> {
   @SafeVarargs
   static <T> Cursor<T> open(T... elements) {
     return new Open<>(elements);
+  }
+
+  static <T> Cursor<T> lazyValues(TrySupplier1<? extends T[]> elements) {
+    return new LazyValues<>(elements);
+  }
+
+  static <T> Cursor<T> lazyValue(TrySupplier1<? extends T> element) {
+    return new LazyValue<>(element);
   }
 
   @SuppressWarnings("unchecked")

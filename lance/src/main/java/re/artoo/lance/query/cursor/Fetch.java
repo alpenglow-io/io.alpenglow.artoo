@@ -65,7 +65,7 @@ public interface Fetch<ELEMENT> extends Iterator<ELEMENT> {
     }
 
     public static <RETURN> RETURN of(String operation, String adjective) {
-      throw new Exception("Can't fetch next element for %s cursor (no more %s elements?)".formatted(operation, adjective));
+      throw new Exception("Can't fetch next element for %s origin (no more %s elements?)".formatted(operation, adjective));
     }
   }
 }

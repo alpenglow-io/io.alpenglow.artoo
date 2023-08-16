@@ -1,5 +1,6 @@
 package re.artoo.lance.query;
 
+import re.artoo.lance.Queryable;
 import re.artoo.lance.func.TrySupplier1;
 import re.artoo.lance.query.many.*;
 
@@ -13,7 +14,8 @@ public interface Many<T> extends
   Convertable<T>,
   Countable<T>,
   Filterable<T>,
-  Coalesceable<T>,
+  Elseable<T>,
+  Exceptionable<T>,
   Extremable<T>,
   Partitionable<T>,
   Triggerable<T>,
@@ -22,7 +24,7 @@ public interface Many<T> extends
   Settable<T>,
   Sortable<T>,
   Summable<T>,
-  Uniquable<T>, re.artoo.lance.Queryable<T> {
+  Uniquable<T> {
 
 
   @SafeVarargs
@@ -53,7 +55,6 @@ public interface Many<T> extends
   static <R> Many<R> from(List<R> list) {
     return () -> Cursor.from(list);
   }
-
 }
 
 final class Ints implements Many<Integer> {

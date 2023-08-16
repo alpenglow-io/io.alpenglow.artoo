@@ -46,4 +46,11 @@ class PeekTest implements Throwing {
 
     while (cursor.hasNext()) cursor.next();
   }
+
+  @Test
+  void shouldPeekTrivially() {
+    var cursor = new Peek<>(new Open<>(1, 2, 3), (index, element) -> System.out.println(element));
+
+    assertThat(cursor).toIterable().contains(1, 2, 3);
+  }
 }

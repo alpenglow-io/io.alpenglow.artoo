@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import re.artoo.lance.query.Many;
 import re.artoo.lance.Test.Pet;
 
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
@@ -18,11 +19,11 @@ public class TriggerableTest {
   public void shouldPeekElements() {
     final var touched = new AtomicInteger(0);
 
-    Many.from(1, 2, 3, 4)
-      .fire(it -> touched.set(touched.intValue() + it))
-      .fetch();
+    var many = Many.from(1, 2, 3, 4).fire(it -> touched.set(touched.intValue() + it)).when(Objects::nonNull);
 
-    assertThat(touched.intValue()).isEqualTo(10);
+    assertThat(many)
+      .contains(1, 2, 3, 4)
+      .matches(it -> touched.compareAndSet(10, -1));
   }
 
   @Test
@@ -31,29 +32,25 @@ public class TriggerableTest {
     final var reference = new AtomicReference<>("");
 
     Many.from(1, 2, 3)
-      .fire(it -> {
-        if (it < 3) throw new IllegalStateException("%d".formatted(it));
-      })
+      .raise("3", IllegalStateException::new).when(it -> it < 3)
       .trap(throwable -> reference.set(reference.get() + throwable.getMessage()))
       .coalesce(4, 5, 6)
-      .fire(out::println)
-      .fetch();
+      .fire(out::println);
 
     assertThat(reference.get()).isEqualTo("12");
   }
 
   @Test
   public void shouldPeekOrdered() {
-    Many.from(1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4)
-      .fire(it -> out.println("I'm " + it))
+    var many = Many.from(1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4)
+      .fire(it -> out.println("I'm " + it)).when(Objects::nonNull)
       .distinct(it -> {
         out.println("Hello: " + it);
         return true;
       })
       .select(it -> new Pet("No name", it))
-      .fire(pet -> out.println("Operating on Pet " + pet.age()))
-      .fire(pet -> out.println("Pet with " + pet.name() + " has " + pet.age() + " years"))
-      .fetch();
+      .fire(pet -> out.println("Operating on Pet " + pet.age())).when(Objects::nonNull)
+      .fire(pet -> out.println("Pet with " + pet.name() + " has " + pet.age() + " years")).when(Objects::nonNull);
 
     out.println("\n========\n");
 
@@ -83,9 +80,5 @@ public class TriggerableTest {
       .map(it -> new Pet("No name", it))
       .operation(pet -> out.println("Operating on Pet " + pet.age()))
       .forEach(pet -> out.println("Pet with " + pet.name() + " has " + pet.age() + " years"));*/
-  }
-
-  static public class Touched {
-    int value = 0;
   }
 }

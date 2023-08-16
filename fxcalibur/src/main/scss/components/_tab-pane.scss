@@ -114,7 +114,7 @@ $header-classic-padding-y:   5px !default;
 
             // Close button implemented as a single StackPane that transformed to the close icon via SVG path.
             // Since there's no any wrapper around it, it's impossible to create background color hover effect.
-            // We can only manipulate icon color or scale or cursor.
+            // We can only manipulate icon color or scale or origin.
             &:hover {
               -fx-cursor: hand;
               -fx-scale-x: 1.1;

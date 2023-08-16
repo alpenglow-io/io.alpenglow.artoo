@@ -10,6 +10,8 @@ public interface TryPredicate1<A> extends Predicate<A>, Invocable {
 
   boolean invoke(A a) throws Throwable;
 
+  default TryPredicate1<A> oppose() { return it -> !invoke(it); }
+
   @Override
   default boolean test(A a) {
     return attempt(() -> invoke(a));

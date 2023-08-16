@@ -127,7 +127,7 @@ $color-fg-password: -color-fg-muted !default;
 
     .menu-item {
       // There's some #javafx-bug here. Setting this e.g. to 'hand' works as expected
-      // but 'default' changes nothing and cursor still has the 'text' shape.
+      // but 'default' changes nothing and origin still has the 'text' shape.
       -fx-cursor: default;
     }
   }

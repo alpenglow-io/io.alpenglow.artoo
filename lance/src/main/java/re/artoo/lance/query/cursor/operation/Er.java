@@ -21,7 +21,12 @@ public final class Er<ELEMENT> implements Cursor<ELEMENT>, Throwing {
 
   @Override
   public boolean hasElement() throws Throwable {
-    return fetch.hasElement() || (!thrown && this.<Boolean>throwing(() -> exception.invoke(message)));
+    try {
+      return fetch.hasElement() || (!thrown && this.<Boolean>throwing(() -> exception.invoke(message)));
+    } catch (Throwable throwable) {
+      thrown = true;
+      throw throwable;
+    }
   }
 
   @Override

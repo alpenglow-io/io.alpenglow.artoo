@@ -29,7 +29,7 @@ class FilterTest {
     var filter =
       new Filter<>(
         new Filter<>(
-          new Open<>("Luke", null, "I'm", "your", null, "father", null, null, null, "fool"), // all null elements will be ignored by the presence-only cursor
+          new Open<>("Luke", null, "I'm", "your", null, "father", null, null, null, "fool"), // all null elements will be ignored by the presence-only origin
           presenceOnly()
         ),
         (index, element) -> element.length() == 4
@@ -78,7 +78,7 @@ class FilterTest {
   }
 
   @Test
-  @DisplayName("should coalesce cursor")
+  @DisplayName("should coalesce origin")
   void shouldCoalesceCursor() {
     var presenceOnly = new Filter<>(new Open<>(1, null, 2, null, 3, null, 4), presenceOnly());
 

@@ -43,7 +43,7 @@ public class UniquableTest {
   @Test
   @DisplayName("should get last element")
   public void shouldGetLast() {
-    final var last = from(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19).last().otherwise(-1);
+    final var last = from(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19).last().yield();
 
     assertThat(last).isEqualTo(19);
   }
@@ -52,7 +52,7 @@ public class UniquableTest {
   @DisplayName("should get last even number")
   public void shouldGetLastEvenNumber() {
 
-    final var last = from(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19).last(number -> number % 2 == 0).otherwise(-1);
+    final var last = from(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19).last(number -> number % 2 == 0).yield();
 
     assertThat(last).isEqualTo(12);
   }

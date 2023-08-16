@@ -14,7 +14,7 @@ enum None implements One<Object> {
 }
 
 @FunctionalInterface
-public interface One<T> extends Projectable<T>, Triggerable<T>, Filterable<T>, Exceptionable<T>, Elseable<T> {
+public interface One<T> extends Projectable<T>, Triggerable<T>, Filterable<T>, Exceptionable<T>, Coalesceable<T> {
   static <ELEMENT> One<ELEMENT> of(final ELEMENT element) {
     return element != null ? new Lone<>(element) : One.none();
   }
@@ -36,6 +36,10 @@ public interface One<T> extends Projectable<T>, Triggerable<T>, Filterable<T>, E
     return new Done<>(closeable, then);
   }
 
+  default T yield() {
+    for (var value : this) return value;
+    throw new IllegalStateException("Can't yield for any value, no value is queryable");
+  }
 }
 
 final class Lone<ELEMENT> implements One<ELEMENT> {

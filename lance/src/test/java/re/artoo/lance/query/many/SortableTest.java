@@ -3,20 +3,38 @@ package re.artoo.lance.query.many;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import re.artoo.lance.query.Many;
+import re.artoo.lance.query.many.Sortable.by;
 
+import java.util.Objects;
+
+import static java.lang.System.*;
 import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
 import static re.artoo.lance.query.Many.from;
-import static re.artoo.lance.query.many.Ordering.Arrange.ascending;
-import static re.artoo.lance.query.many.Ordering.Arrange.descending;
 
 public class SortableTest implements re.artoo.lance.Test {
   @Test
-  @DisplayName("should order by hashcode")
+  @DisplayName("should order by hashcode asc")
   public void shouldOrderByHashcode() {
-    final var ordered = Many.from(4, 3, 2, 1).order();
+    final var ordered = Many.from(4, 3, 2, 1).order(by::ascending);
 
     assertThat(ordered).containsExactly(1, 2, 3, 4);
+  }
+
+  @Test
+  @DisplayName("should order by hashcode desc")
+  public void shouldOrderByDescendingHashcode() {
+    final var ordered = Many.from(1, 2, 3, 4).order(by::descending);
+
+    assertThat(ordered).containsExactly(4, 3, 2, 1);
+  }
+
+  @Test
+  @DisplayName("should order by string desc")
+  public void shouldOrderByDescendingString() {
+    final var ordered = Many.from("A a", "b B", "C c", "D D").select(it -> it.toUpperCase()).order(by::descending);
+
+    assertThat(ordered.cursor()).toIterable().containsExactly("D D", "C C", "B B", "A A");
   }
 
   @Test
@@ -25,7 +43,7 @@ public class SortableTest implements re.artoo.lance.Test {
     final var ints = range(0, 1_000).map(it -> 999 - it).boxed().toArray(Integer[]::new);
     final var expected = range(0, 1_000).boxed().toArray(Integer[]::new);
 
-    final var actual = from(ints).order();
+    final var actual = from(ints).order(by::ascending);
 
     assertThat(actual).containsExactly(expected);
   }
@@ -44,7 +62,11 @@ public class SortableTest implements re.artoo.lance.Test {
       CUSTOMERS[64],
     };
 
-    final var names = from(customers).order().by(Customer::country).by(Customer::id, descending);
+    final var names = from(customers)
+      .order(
+        by -> by.ascending(Customer::country),
+        by -> by.descending(Customer::id)
+      );
 
     assertThat(names).containsExactly(
       CUSTOMERS[64],
@@ -73,12 +95,17 @@ public class SortableTest implements re.artoo.lance.Test {
 
     final var countries =
       from(customers)
-        .order()
-        .by(Customer::country, ascending)
-        .by(Customer::name, descending)
-        .by(Customer::id, descending);
+        .select(it -> {
+          out.println(it);
+          return it;
+        })
+        .order(
+          by -> by.ascending(Customer::country),
+          by -> by.descending(customer -> customer.name().toUpperCase()),
+          by -> by.descending(Customer::id)
+        );
 
-    assertThat(countries).containsExactly(
+    assertThat(countries.cursor()).toIterable().containsExactly(
       CUSTOMERS[64], // 64  	Rancho grande  	Sergio Gutiérrez  	Av. del Libertador 900  	Buenos Aires  	1010  	Argentina
       CUSTOMERS[54], // 54  	Océano Atlántico Ltda.  	Yvonne Moncada  	Ing. Gustavo Moncada 8585 Piso 20-A  	Buenos Aires  	1010  	Argentina
       CUSTOMERS[12], // 12  	Cactus Comidas para llevar  	Patricio Simpson  	Cerrito 333  	Buenos Aires  	1010  	Argentina
@@ -105,12 +132,13 @@ public class SortableTest implements re.artoo.lance.Test {
 
     final var ordered =
       from(customers)
-        .order()
-        .by(Customer::contact, descending)
-        .by(Customer::city, ascending)
-        .by(Customer::postalCode, descending)
-        .by(Customer::country, ascending)
-        .by(Customer::id, descending);
+        .order(
+          by -> by.descending(customer3 -> customer3.contact().toUpperCase()),
+          by -> by.ascending(customer -> customer.city().toUpperCase()),
+          by -> by.descending(customer2 -> customer2.postalCode().toUpperCase()),
+          by -> by.ascending(customer1 -> customer1.country().toUpperCase()),
+          by -> by.descending(Customer::id)
+        );
 
     assertThat(ordered).containsExactly(
       CUSTOMERS[91],

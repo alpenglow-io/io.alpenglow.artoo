@@ -7,13 +7,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class OrTest {
   @Test
-  @DisplayName("should fetch elements from second open cursor")
+  @DisplayName("should fetch elements from second open origin")
   void shouldFetchSecondOpen() throws Throwable {
     var cursor =
       new Peek<>(
         new Or<>(
           new Open<>(),
-          new Open<>(1, 2, 3)
+          () -> new Open<>(1, 2, 3)
         ),
         (index, element) -> System.out.println(element)
       );
@@ -22,13 +22,13 @@ class OrTest {
   }
 
   @Test
-  @DisplayName("should fetch elements from first open cursor")
+  @DisplayName("should fetch elements from first open origin")
   void shouldFetchFirstOpen() throws Throwable {
     var cursor =
       new Peek<>(
         new Or<>(
           new Open<>(1, 2),
-          new Open<>(1, 2, 3, 4)
+          () -> new Open<>(1, 2, 3, 4)
         ),
         (index, element) -> System.out.println(element)
       );

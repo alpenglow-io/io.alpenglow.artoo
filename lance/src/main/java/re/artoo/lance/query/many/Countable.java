@@ -5,13 +5,17 @@ import re.artoo.lance.func.TryIntPredicate1;
 import re.artoo.lance.func.TryPredicate1;
 import re.artoo.lance.query.One;
 
+import java.util.Objects;
+
 public interface Countable<T> extends Queryable<T> {
   default One<Integer> count() {
-    return () -> cursor().fold(0, (counted, element) -> counted + 1);
+    return () -> cursor()
+      .filter(Objects::nonNull)
+      .fold(0, (counted, element) -> counted + 1);
   }
 
   default One<Integer> count(TryIntPredicate1<? super T> where) {
-    return () -> cursor().filter(where).fold(0, (counted, element) -> counted + 1);
+    return () -> cursor().filter(Objects::nonNull).filter(where).fold(0, (counted, element) -> counted + 1);
   }
 
   default One<Integer> count(final TryPredicate1<? super T> where) {

@@ -133,10 +133,10 @@ public class SortableTest implements re.artoo.lance.Test {
     final var ordered =
       from(customers)
         .order(
-          by -> by.descending(customer3 -> customer3.contact().toUpperCase()),
-          by -> by.ascending(customer -> customer.city().toUpperCase()),
-          by -> by.descending(customer2 -> customer2.postalCode().toUpperCase()),
-          by -> by.ascending(customer1 -> customer1.country().toUpperCase()),
+          by -> by.descending(Customer::contact),
+          by -> by.ascending(Customer::city),
+          by -> by.descending(Customer::postalCode),
+          by -> by.ascending(Customer::country),
           by -> by.descending(Customer::id)
         );
 

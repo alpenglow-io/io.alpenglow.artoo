@@ -5,36 +5,42 @@ import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.func.TrySupplier1;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.cursor.Fetch;
-import re.artoo.lance.value.Lazy;
 
 public final class Or<ELEMENT> implements Cursor<ELEMENT>, Throwing {
   private final Fetch<ELEMENT> fetch;
-  private final Lazy<Fetch<ELEMENT>> defaults;
-  private boolean forked;
+  private final TrySupplier1<? extends Fetch<ELEMENT>> vice;
+  private boolean exhausted;
 
   public Or(Fetch<ELEMENT> fetch, TrySupplier1<? extends Fetch<ELEMENT>> vice) {
-    this(fetch, Lazy.lazy(vice));
-  }
-  private Or(Fetch<ELEMENT> fetch, Lazy<Fetch<ELEMENT>> defaults) {
     this.fetch = fetch;
-    this.defaults = defaults;
+    this.vice = new TrySupplier1<>() {
+      class lazy {
+        final Fetch<ELEMENT> fetch = vice.invoke();
+
+        lazy() throws Throwable {
+        }
+      }
+
+      @Override
+      public Fetch<ELEMENT> invoke() throws Throwable {
+        return new lazy().fetch;
+      }
+    };
   }
 
   @Override
   public boolean hasElement() throws Throwable {
-    try {
-      return fetch.hasElement() && !forked || (defaults.value() != null && defaults.value().hasElement());
-    } finally {
-      if (!fetch.hasElement()) forked = true;
-    }
+    boolean hasElement = fetch.hasElement();
+    if (hasElement) exhausted = true;
+    return hasElement || (!exhausted && vice.invoke() != null && vice.invoke().hasElement());
   }
 
   @Override
   public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
-    return hasElement() && fetch.hasElement() && !forked
+    return hasElement() && fetch.hasElement() && exhausted
       ? fetch.element(then)
-      : defaults.value() != null && defaults.value().hasElement()
-      ? defaults.value().element(then)
+      : !exhausted && vice.invoke() != null && vice.invoke().hasElement()
+      ? vice.invoke().element(then)
       : throwing(() -> Fetch.Exception.of("or", "elseable"));
   }
 }

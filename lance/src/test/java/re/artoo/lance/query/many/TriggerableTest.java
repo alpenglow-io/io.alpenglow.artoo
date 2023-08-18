@@ -13,10 +13,10 @@ import java.util.stream.Stream;
 import static java.lang.System.out;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TriggerableTest {
+class TriggerableTest {
   @Test
   @DisplayName("should operation every element in many")
-  public void shouldPeekElements() {
+  void shouldPeekElements() {
     final var touched = new AtomicInteger(0);
 
     var many = Many.from(1, 2, 3, 4).fire(it -> touched.set(touched.intValue() + it)).when(Objects::nonNull);
@@ -28,20 +28,21 @@ public class TriggerableTest {
 
   @Test
   @DisplayName("should exceptionally operation throwable")
-  public void shouldExceptionallyPeekThrowable() {
+  void shouldExceptionallyPeekThrowable() {
     final var reference = new AtomicReference<>("");
 
     Many.from(1, 2, 3)
-      .raise("3", IllegalStateException::new).when(it -> it < 3)
+      .raise("3", IllegalStateException::new).when(it -> it == 3)
       .trap(throwable -> reference.set(reference.get() + throwable.getMessage()))
-      .coalesce(4, 5, 6)
-      .fire(out::println);
+      .recover(() -> 3)
+      .count()
+      .yield();
 
-    assertThat(reference.get()).isEqualTo("12");
+    assertThat(reference.get()).isEqualTo("3");
   }
 
   @Test
-  public void shouldPeekOrdered() {
+  void shouldPeekOrdered() {
     var many = Many.from(1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4)
       .fire(it -> out.println("I'm " + it)).when(Objects::nonNull)
       .distinct(it -> {

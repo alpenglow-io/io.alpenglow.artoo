@@ -20,10 +20,11 @@ public final class Or<ELEMENT> implements Cursor<ELEMENT>, Throwing {
         lazy() throws Throwable {
         }
       }
+      private lazy lazy;
 
       @Override
       public Fetch<ELEMENT> invoke() throws Throwable {
-        return new lazy().fetch;
+        return (lazy == null ? (lazy = new lazy()) : lazy).fetch;
       }
     };
   }

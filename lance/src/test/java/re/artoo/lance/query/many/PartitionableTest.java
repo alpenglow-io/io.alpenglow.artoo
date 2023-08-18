@@ -19,7 +19,7 @@ public class PartitionableTest {
   @Test
   @DisplayName("should take all fruits until orange is met")
   public void shouldTakeAllUntilOrange() {
-    final var taken = Many.from("apple", "banana", "mango", "orange", "passionfruit", "grape").takeWhile(not(text -> text.equals("orange")));
+    final var taken = Many.from("apple", "banana", "mango", "orange", "passionfruit", "grape").takeWhile((text -> !text.equals("orange")));
 
     assertThat(taken).containsExactly("apple", "banana", "mango");
   }

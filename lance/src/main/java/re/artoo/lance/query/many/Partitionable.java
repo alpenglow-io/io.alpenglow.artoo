@@ -3,67 +3,51 @@ package re.artoo.lance.query.many;
 import re.artoo.lance.Queryable;
 import re.artoo.lance.func.TryIntPredicate1;
 import re.artoo.lance.func.TryPredicate1;
-import re.artoo.lance.func.TryPredicate2;
 import re.artoo.lance.query.Many;
-import re.artoo.lance.value.Let;
 
-import static re.artoo.lance.value.Let.lazy;
+final class ExhaustibleCondition<ELEMENT> implements TryIntPredicate1<ELEMENT> {
+  private final TryIntPredicate1<? super ELEMENT> condition;
+  private boolean exhausted;
 
-public interface Partitionable<T> extends Queryable<T> {
-  default Many<T> skip(final int until) {
-    return skipWhile((index, it) -> index < until);
+  ExhaustibleCondition(TryIntPredicate1<? super ELEMENT> condition) {
+    this.condition = condition;
   }
 
-  default Many<T> skipWhile(final TryPredicate1<? super T> where) {
-    return skipWhile((index, it) -> where.test(it));
-  }
-
-  default Many<T> skipWhile(final TryPredicate2<? super Integer, ? super T> where) {
-    return () -> cursor()
-      .<Keep<T>>fold(Keep.untilTrue(), (index, meanwhile, element) -> meanwhile.keep() && where.invoke(index, element)
-        ? Keep.untilTrue()
-        : Keep.untilFalse(element)
-      )
-      .map(Keep::element);
-  }
-
-  default Many<T> take(final int until) {
-    return takeWhile((index, it) -> index < until);
-  }
-
-  default Many<T> takeWhile(final TryPredicate1<? super T> where) {
-    return takeWhile((index, param) -> where.test(param));
-  }
-
-  default Many<T> takeWhile(final TryIntPredicate1<? super T> where) {
-    return () -> cursor()
-      .<Keep<T>>fold(Keep.untilTrue(), (index, meanwhile, element) ->
-        meanwhile.keep() && where.invoke(index, element)
-          ? Keep.untilTrue(element)
-          : Keep.untilFalse()
-      )
-      .map(Keep::element);
+  @Override
+  public boolean invoke(int index, ELEMENT element) throws Throwable {
+    return !(exhausted |= !exhausted && !condition.invoke(index, element));
   }
 }
 
-@SuppressWarnings("unchecked")
-record Keep<T>(boolean keep, T element) {
-  private static final Let<Keep<Object>> untilFalse = lazy(() -> new Keep<>(false, null));
-  private static final Let<Keep<Object>> untilTrue = lazy(() -> new Keep<>(true, null));
-
-  static <T> Keep<T> untilTrue() {
-    return (Keep<T>) untilTrue.let(it -> it);
+public interface Partitionable<ELEMENT> extends Queryable<ELEMENT> {
+  default Many<ELEMENT> skip(int until) {
+    return skipWhile((index, it) -> index < until);
   }
 
-  static <T> Keep<T> untilTrue(T element) {
-    return new Keep<>(true, element);
+  default Many<ELEMENT> skipWhile(TryPredicate1<? super ELEMENT> where) {
+    return skipWhile((index, it) -> where.test(it));
   }
 
-  static <T> Keep<T> untilFalse(T element) {
-    return new Keep<>(false, element);
+  default Many<ELEMENT> skipWhile(TryIntPredicate1<? super ELEMENT> where) {
+    return () -> cursor().filter(new ExhaustibleCondition<>(where).oppose());
   }
 
-  static <T> Keep<T> untilFalse() {
-    return (Keep<T>) untilFalse.let(it -> it);
+  default Many<ELEMENT> take(int until) {
+    return takeWhile((index, it) -> index < until);
+  }
+
+  default Many<ELEMENT> takeWhile(TryPredicate1<? super ELEMENT> where) {
+    return takeWhile((index, param) -> where.test(param));
+  }
+
+  default Many<ELEMENT> takeWhile(TryIntPredicate1<? super ELEMENT> where) {
+    return () -> cursor().filter(new TryIntPredicate1<>() {
+        private boolean exhausted;
+
+        @Override
+        public boolean invoke(int index, ELEMENT element) throws Throwable {
+            return !(exhausted |= !exhausted && !where.invoke(index, element));
+        }
+    });
   }
 }

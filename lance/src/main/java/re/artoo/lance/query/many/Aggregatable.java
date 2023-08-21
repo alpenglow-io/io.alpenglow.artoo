@@ -35,12 +35,12 @@ public interface Aggregatable<LEFT> extends Queryable<LEFT> {
     return () -> cursor().fold(aggregated, operation);
   }
 
-  default <AGGREGATED> One<AGGREGATED> mutate(AGGREGATED aggregated, TryIntConsumer2<? super AGGREGATED, ? super LEFT> operation) {
-    return () -> cursor().fold(aggregated, (index, aggr, left) -> { operation.invoke(index, aggr, left); return aggr; });
+  default <COLLECTED> One<COLLECTED> collect(COLLECTED collected, TryIntConsumer2<? super COLLECTED, ? super LEFT> operation) {
+    return () -> cursor().fold(collected, (index, aggr, left) -> { operation.invoke(index, aggr, left); return aggr; });
   }
 
-  default <AGGREGATED> One<AGGREGATED> mutate(AGGREGATED aggregated, TryConsumer2<? super AGGREGATED, ? super LEFT> operation) {
-    return () -> cursor().fold(aggregated, (aggr, left) -> { operation.invoke(aggr, left); return aggr; });
+  default <COLLECTED> One<COLLECTED> collect(COLLECTED collected, TryConsumer2<? super COLLECTED, ? super LEFT> operation) {
+    return () -> cursor().fold(collected, (aggr, left) -> { operation.invoke(aggr, left); return aggr; });
   }
 
   default One<LEFT> aggregate(TryFunction2<? super LEFT, ? super LEFT, ? extends LEFT> operation) {

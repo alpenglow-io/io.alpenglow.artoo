@@ -1,4 +1,4 @@
-package re.artoo.lance.task;
+package re.artoo.lance.experimental.task;
 
 import com.java.lang.Throwing;
 import re.artoo.lance.func.*;
@@ -12,7 +12,9 @@ enum Tasks {
 
   final ExecutorService threads = virtualThreadsExecutor();
 
-  private ExecutorService virtualThreadsExecutor() {return Executors.newVirtualThreadPerTaskExecutor();}
+  private ExecutorService virtualThreadsExecutor() {
+    return Executors.newVirtualThreadPerTaskExecutor();
+  }
 }
 
 @SuppressWarnings("unchecked")

@@ -1,7 +1,6 @@
 package re.artoo.lance.experimental.value;
 
 import re.artoo.lance.experimental.value.random.*;
-import re.artoo.lance.value.random.*;
 
 public sealed interface Random<N extends Number> extends Let<N> permits Binary, Decimal32, Decimal64, Gaussian, Int {
   static Random<Double> decimal64(final long seed) {

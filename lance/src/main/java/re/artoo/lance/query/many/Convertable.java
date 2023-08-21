@@ -1,44 +1,29 @@
 package re.artoo.lance.query.many;
 
 import re.artoo.lance.Queryable;
+import re.artoo.lance.value.Array;
 import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.func.TryIntFunction;
-import re.artoo.lance.experimental.Array;
+import re.artoo.lance.func.TrySupplier1;
+import re.artoo.lance.query.One;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static re.artoo.lance.experimental.value.Nullability.nonNullable;
 
-public interface Convertable<T> extends Queryable<T> {
-  default <K, E> Map<? extends K, ? extends E> asMap(final TryFunction1<? super T, ? extends K> key, final TryFunction1<? super T, ? extends E> element) {
-    nonNullable(key, "key");
-    nonNullable(element, "element");
-    final var map = new ConcurrentHashMap<K, E>();
-    for (final var value : this)
-      map.put(key.apply(value), element.apply(value));
-    return map;
+public interface Convertable<ELEMENT> extends Queryable<ELEMENT> {
+  default <KEY, VALUE> One<Map<KEY, VALUE>> asMap(TrySupplier1<? extends Map<KEY, VALUE>> map, TryFunction1<? super ELEMENT, ? extends KEY> key, TryFunction1<? super ELEMENT, ? extends VALUE> value) {
+    return () -> cursor().collect(map.invoke(), (index, element, mp) -> mp.put(key.invoke(element), value.invoke(element)));
   }
 
-  default List<T> asList() {
-    return cursor()
-      .fold(Array.<T>none(), Array::push)
-      .collect(Array::toList);
+  default One<List<ELEMENT>> asList(TrySupplier1<? extends List<ELEMENT>> list) {
+    return () -> cursor().collect(list.invoke(), (index, element, ls) -> ls.add(index, element));
   }
 
-  default Collection<T> asCollection() {
-    return asList();
-  }
-
-  default Iterable<T> asIterable() {
-    return asCollection();
-  }
-
-  default T[] asArray(TryIntFunction<T[]> array) {
-    return cursor()
-      .fold(Array.<T>none(), Array::push)
-      .collect(folded -> folded.copyTo(array));
+  default One<ELEMENT[]> asArray(TryIntFunction<ELEMENT[]> array) {
+    return () -> cursor()
+      .fold(Array.<ELEMENT>none(), Array::push)
+      .map(folded -> folded.copyTo(array));
   }
 }

@@ -1,6 +1,6 @@
 package re.artoo.lance.experimental.array;
 
-import re.artoo.lance.experimental.Array;
+import re.artoo.lance.value.Array;
 
 import java.util.Arrays;
 import java.util.Iterator;

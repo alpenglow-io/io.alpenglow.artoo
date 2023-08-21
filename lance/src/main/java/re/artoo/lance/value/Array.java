@@ -1,4 +1,4 @@
-package re.artoo.lance.experimental;
+package re.artoo.lance.value;
 
 import re.artoo.lance.func.*;
 import re.artoo.lance.query.Cursor;

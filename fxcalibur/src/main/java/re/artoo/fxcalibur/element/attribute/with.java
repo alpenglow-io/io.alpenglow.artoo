@@ -4,7 +4,7 @@ import javafx.scene.Node;
 import re.artoo.fxcalibur.element.Attribute;
 import re.artoo.fxcalibur.element.Element;
 import re.artoo.fxcalibur.element.PaneAttribute;
-import re.artoo.lance.experimental.Array;
+import re.artoo.lance.value.Array;
 
 public enum with {
   ;

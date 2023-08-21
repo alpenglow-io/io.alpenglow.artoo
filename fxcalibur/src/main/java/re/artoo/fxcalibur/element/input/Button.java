@@ -3,7 +3,7 @@ package re.artoo.fxcalibur.element.input;
 import re.artoo.fxcalibur.element.Attribute;
 import re.artoo.fxcalibur.element.Element;
 import re.artoo.fxcalibur.element.attribute.emphasis;
-import re.artoo.lance.experimental.Array;
+import re.artoo.lance.value.Array;
 
 import static re.artoo.fxcalibur.element.attribute.emphasis.*;
 

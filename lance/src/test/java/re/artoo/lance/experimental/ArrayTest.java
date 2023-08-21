@@ -2,6 +2,7 @@ package re.artoo.lance.experimental;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import re.artoo.lance.value.Array;
 
 import java.util.ArrayList;
 import java.util.stream.IntStream;

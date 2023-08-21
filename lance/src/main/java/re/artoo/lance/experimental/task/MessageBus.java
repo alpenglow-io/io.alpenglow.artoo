@@ -1,4 +1,4 @@
-package re.artoo.lance.task;
+package re.artoo.lance.experimental.task;
 
 import re.artoo.lance.func.TryConsumer1;
 

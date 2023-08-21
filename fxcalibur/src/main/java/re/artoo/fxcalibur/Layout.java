@@ -98,8 +98,8 @@ public interface Layout extends Supplier<Node> {
 
     public Node grid(TryConsumer1<GridPane> customize, Grids.Columns columns, Grids.Rows rows, Cell... cells) {
       final var pane = new GridPane();
-      pane.getColumnConstraints().addAll(columns.asArray(ColumnConstraints[]::new));
-      pane.getRowConstraints().addAll(rows.asArray(RowConstraints[]::new));
+      pane.getColumnConstraints().addAll(columns.asArray(ColumnConstraints[]::new).yield());
+      pane.getRowConstraints().addAll(rows.asArray(RowConstraints[]::new).yield());
       for (Cell(int column, int row, Component[] components) : cells) {
         for (var component : components) {
           pane.add(component.get(), column, row);
@@ -125,19 +125,19 @@ public interface Layout extends Supplier<Node> {
     }
 
     public Node stack(TryConsumer1<StackPane> customize, Component... components) {
-      return customize.autoAccept(new StackPane(Many.from(components).select(Supplier::get).asArray(Node[]::new)));
+      return customize.autoAccept(new StackPane(Many.from(components).select(Supplier::get).asArray(Node[]::new).yield()));
     }
 
     public Node stack(Component... components) {
-      return new StackPane(Many.from(components).select(Supplier::get).asArray(Node[]::new));
+      return new StackPane(Many.from(components).select(Supplier::get).asArray(Node[]::new).yield());
     }
 
     public Node anchor(TryConsumer1<AnchorPane> customize, Component... components) {
       return Many.from(components)
-        .coalesce()
-        .select(Supplier::get)
-        .mutate(new AnchorPane(), (index, pane, node) -> pane.getChildren().add(index, node))
-        .fire(customize)
+        .where(Objects::nonNull)
+        .select(Component::get)
+        .collect(new AnchorPane(), (index, pane, node) -> pane.getChildren().add(index, node))
+        .fire(customize).when(() -> customize != null)
         .raise(IllegalStateException::new).when(Objects::isNull)
         .yield();
     }
@@ -148,9 +148,9 @@ public interface Layout extends Supplier<Node> {
 
     public Node border(TryConsumer1<BorderPane> customize, Component... components) {
       return Many.from(components)
-        .coalesce()
+        .where(Objects::nonNull)
         .select(Supplier::get)
-        .mutate(new BorderPane(), (index, pane, node) -> {
+        .collect(new BorderPane(), (index, pane, node) -> {
           switch (index) {
             case 0 -> pane.setCenter(node);
             case 1 -> pane.setTop(node);
@@ -159,17 +159,17 @@ public interface Layout extends Supplier<Node> {
             case 4 -> pane.setLeft(node);
           }
         })
-        .fire(customize)
+        .fire(customize).when(() -> customize != null)
         .raise(IllegalStateException::new).when(Objects::isNull)
         .yield();
     }
 
     private <PANE extends Pane> Node pane(Supplier<PANE> pane, TryConsumer1<PANE> customize, Component... components) {
       return Many.from(components)
-        .coalesce()
+        .where(Objects::nonNull)
         .select(Supplier::get)
-        .mutate(pane.get(), (box, node) -> box.getChildren().add(node))
-        .fire(customize)
+        .collect(pane.get(), (box, node) -> box.getChildren().add(node))
+        .fire(customize).when(Objects::nonNull)
         .raise(IllegalStateException::new).when(Objects::isNull)
         .yield();
     }

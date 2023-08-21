@@ -1,9 +1,7 @@
-package re.artoo.lance.task;
+package re.artoo.lance.experimental.task;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import static re.artoo.lance.task.Task.*;
 
 interface Main {
   Map<Integer, Integer> numbersAsync = new ConcurrentHashMap<>();
@@ -23,14 +21,14 @@ interface Main {
 
   static Task<Integer> fibonacciAsync(Integer value) {
     return switch (value) {
-      case 0, 1 -> success(value);
-      case Integer it when numbersAsync.containsKey(it) -> success(numbersAsync.get(it));
-      default -> compose(
-        ()                     -> success(value),
+      case 0, 1 -> Task.success(value);
+      case Integer it when numbersAsync.containsKey(it) -> Task.success(numbersAsync.get(it));
+      default -> Task.compose(
+        ()                     -> Task.success(value),
         (val)                  -> fibonacciAsync(val - 1),
         (val, res1)            -> fibonacciAsync(val - 2),
-        (val, res1, res2)      -> success(res1 + res2),
-        (val, res1, res2, res) -> success(numbersAsync.computeIfAbsent(val, it -> res))
+        (val, res1, res2)      -> Task.success(res1 + res2),
+        (val, res1, res2, res) -> Task.success(numbersAsync.computeIfAbsent(val, it -> res))
       );
     };
   }

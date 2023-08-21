@@ -1,28 +1,17 @@
 package re.artoo.lance.query.cursor;
 
-import re.artoo.lance.func.TryFunction1;
-import re.artoo.lance.func.TryIntFunction1;
+import re.artoo.lance.func.TryConsumer2;
+import re.artoo.lance.func.TryIntConsumer2;
 import re.artoo.lance.query.Cursor;
+import re.artoo.lance.query.cursor.operation.Collect;
 
 public sealed interface Collector<ELEMENT> extends Fetch<ELEMENT> permits Cursor {
 
-  default <RETURN> RETURN collect(TryIntFunction1<? super ELEMENT, ? extends RETURN> returns) {
-    try {
-      return returns.invoke(0, this.next());
-    } catch (Throwable e) {
-      throw new RuntimeException(e);
-    }
+  default <COLLECTED> Cursor<COLLECTED> collect(COLLECTED initial, TryIntConsumer2<? super ELEMENT, ? super COLLECTED> operation) {
+    return new Collect<>(this, initial, operation);
   }
 
-  default <RETURN> RETURN collect(TryFunction1<? super ELEMENT, ? extends RETURN> returns) {
-    try {
-      return returns.invoke(this.next());
-    } catch (Throwable e) {
-      throw new RuntimeException(e);
-    }
-  }
-
-  default ELEMENT collect() {
-    return collect((index, it) -> it);
+  default <COLLECTED> Cursor<COLLECTED> collect(COLLECTED initial, TryConsumer2<? super ELEMENT, ? super COLLECTED> operation) {
+    return collect(initial, (index, reduced, element) -> operation.invoke(reduced, element));
   }
 }

@@ -1,7 +1,7 @@
 package re.artoo.lance.query.many;
 
 import re.artoo.lance.Queryable;
-import re.artoo.lance.experimental.Array;
+import re.artoo.lance.value.Array;
 import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.query.Many;
 

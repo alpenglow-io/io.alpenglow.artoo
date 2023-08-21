@@ -34,8 +34,5 @@ public sealed interface Alternator<ELEMENT> extends Fetch<ELEMENT> permits Curso
   default Cursor<ELEMENT> eventually(TrySupplier1<? extends ELEMENT> recover) {
     return new Eventually<>(this, (__, ___) -> recover.invoke());
   }
-
-  interface TryFunc1<T, R> extends TryFunction1<T, R> {
-  }
 }
 

@@ -4,7 +4,7 @@ import re.artoo.lance.func.TrySupplier1;
 import re.artoo.lance.query.cursor.*;
 import re.artoo.lance.query.cursor.operation.*;
 
-public non-sealed interface Cursor<ELEMENT> extends Mappator<ELEMENT>, Folderator<ELEMENT>, Reduciator<ELEMENT>, Alternator<ELEMENT>, Appendor<ELEMENT>, Collector<ELEMENT>, Filterator<ELEMENT> {
+public non-sealed interface Cursor<ELEMENT> extends Collector<ELEMENT>, Mappator<ELEMENT>, Folderator<ELEMENT>, Reduciator<ELEMENT>, Alternator<ELEMENT>, Appendor<ELEMENT>, Filterator<ELEMENT> {
   @SafeVarargs
   static <T> Cursor<T> open(T... elements) {
     return new Open<>(elements);

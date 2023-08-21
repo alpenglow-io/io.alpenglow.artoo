@@ -5,7 +5,7 @@ import re.artoo.lance.query.Cursor;
 import java.util.Iterator;
 
 public interface Queryable<T> extends Iterable<T> {
-  Cursor<T> cursor() throws Throwable;
+  Cursor<T> cursor();
 
   @Override
   default Iterator<T> iterator() {

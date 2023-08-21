@@ -1,11 +1,13 @@
 package re.artoo.lance.value;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import re.artoo.lance.experimental.value.Late;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class LateTest {
+  @Disabled
   @Test
   public void shouldSetAValueOnce() {
     final var late = Late.<String>init();

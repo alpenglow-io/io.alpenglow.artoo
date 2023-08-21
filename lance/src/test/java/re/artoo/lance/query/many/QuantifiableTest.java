@@ -34,8 +34,7 @@ public class QuantifiableTest {
   public void shouldNotStartAllWithB() {
     final var notEvery = Many.from(new Pet("Barley", 10), new Pet("Boots", 4), new Pet("Whiskers", 6))
       .every(pet -> pet.name().startsWith("B"))
-      .cursor()
-      .next();
+      .yield();
 
     assertThat(notEvery).isFalse();
   }

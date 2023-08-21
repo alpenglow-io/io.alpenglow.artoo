@@ -10,8 +10,6 @@ import re.artoo.lance.query.cursor.operation.Eventually;
 import re.artoo.lance.query.cursor.operation.Exceptionally;
 import re.artoo.lance.query.cursor.operation.Or;
 
-import static re.artoo.lance.value.Lazy.lazy;
-
 public sealed interface Alternator<ELEMENT> extends Fetch<ELEMENT> permits Cursor {
   default Cursor<ELEMENT> or(TrySupplier1<? extends Fetch<ELEMENT>> vice) {
     return new Or<>(this, vice);

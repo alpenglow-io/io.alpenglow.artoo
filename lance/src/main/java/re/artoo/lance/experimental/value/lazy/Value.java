@@ -1,8 +1,8 @@
-package re.artoo.lance.value.lazy;
+package re.artoo.lance.experimental.value.lazy;
 
+import re.artoo.lance.experimental.value.Lazy;
+import re.artoo.lance.experimental.value.Lock;
 import re.artoo.lance.func.TrySupplier1;
-import re.artoo.lance.value.Lazy;
-import re.artoo.lance.value.Lock;
 
 import static java.util.Objects.requireNonNull;
 

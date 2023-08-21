@@ -24,7 +24,8 @@ public interface Many<T> extends
   Settable<T>,
   Sortable<T>,
   Summable<T>,
-  Uniquable<T> {
+  Uniquable<T>,
+  Queryable<T> {
 
 
   @SafeVarargs

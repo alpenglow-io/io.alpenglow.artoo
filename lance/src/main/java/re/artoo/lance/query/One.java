@@ -1,5 +1,6 @@
 package re.artoo.lance.query;
 
+import re.artoo.lance.Queryable;
 import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.func.TrySupplier1;
 import re.artoo.lance.query.one.*;
@@ -14,7 +15,7 @@ enum None implements One<Object> {
 }
 
 @FunctionalInterface
-public interface One<T> extends Projectable<T>, Triggerable<T>, Filterable<T>, Exceptionable<T>, Coalesceable<T> {
+public interface One<T> extends Projectable<T>, Triggerable<T>, Filterable<T>, Exceptionable<T>, Coalesceable<T>, Queryable<T> {
   static <ELEMENT> One<ELEMENT> of(final ELEMENT element) {
     return element != null ? new Lone<>(element) : One.none();
   }

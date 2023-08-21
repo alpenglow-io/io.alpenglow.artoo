@@ -1,7 +1,7 @@
-package re.artoo.lance.value;
+package re.artoo.lance.experimental.value;
 
 import re.artoo.lance.func.TrySupplier1;
-import re.artoo.lance.value.lazy.Value;
+import re.artoo.lance.experimental.value.lazy.Value;
 
 import static java.util.Objects.requireNonNull;
 

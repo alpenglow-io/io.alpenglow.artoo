@@ -1,6 +1,7 @@
 package re.artoo.lance.value;
 
 import org.junit.jupiter.api.Test;
+import re.artoo.lance.experimental.value.Late;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

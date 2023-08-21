@@ -1,7 +1,7 @@
-package re.artoo.lance.value.random;
+package re.artoo.lance.experimental.value.random;
 
 import re.artoo.lance.func.TryFunction1;
-import re.artoo.lance.value.Random;
+import re.artoo.lance.experimental.value.Random;
 
 @SuppressWarnings("unchecked")
 public final class Int<T extends Number> implements Random<T> {

@@ -1,4 +1,4 @@
-package re.artoo.lance.value;
+package re.artoo.lance.experimental.value;
 
 import re.artoo.lance.func.InvokeException;
 import re.artoo.lance.func.TryRunnable;
@@ -7,8 +7,8 @@ import re.artoo.lance.query.One;
 
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import static re.artoo.lance.value.AutoUnlock.readLock;
-import static re.artoo.lance.value.AutoUnlock.writeLock;
+import static re.artoo.lance.experimental.value.AutoUnlock.readLock;
+import static re.artoo.lance.experimental.value.AutoUnlock.writeLock;
 
 
 public sealed interface Lock {

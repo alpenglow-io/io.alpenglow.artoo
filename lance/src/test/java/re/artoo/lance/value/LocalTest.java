@@ -2,6 +2,7 @@ package re.artoo.lance.value;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import re.artoo.lance.experimental.value.Let;
 import re.artoo.lance.func.TryRunnable;
 
 import java.util.List;

@@ -16,15 +16,11 @@ public interface Projectable<ELEMENT> extends Queryable<ELEMENT> {
     return () -> cursor().map(projection).flatMap(Queryable::cursor);
   }
 
-  default <TARGET> Many<TARGET> selectMany(final TryFunction1<? super ELEMENT, ? extends Many<TARGET>> projection) {
+  default <TARGET> Many<TARGET> selections(final TryFunction1<? super ELEMENT, ? extends Many<TARGET>> projection) {
     return () -> cursor().map(projection).flatMap(Queryable::cursor);
   }
 
   default <TARGET> One<TARGET> select(final TrySupplier1<? extends TARGET> projection) {
     return () -> cursor().map(__ -> projection.invoke());
-  }
-
-  default One<ELEMENT> each(TryConsumer1<? super ELEMENT> emptyProjection) {
-    return () -> cursor().peek(emptyProjection);
   }
 }

@@ -2,6 +2,7 @@ package re.artoo.lance.value;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import re.artoo.lance.experimental.value.Lazy;
 import re.artoo.lance.func.TrySupplier1;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;

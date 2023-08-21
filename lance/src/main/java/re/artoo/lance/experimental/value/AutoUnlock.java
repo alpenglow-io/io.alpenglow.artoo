@@ -1,4 +1,4 @@
-package re.artoo.lance.value;
+package re.artoo.lance.experimental.value;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;

@@ -2,7 +2,6 @@ package re.artoo.fxcalibur;
 
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
-import re.artoo.lance.value.Value;
 
 import java.util.Objects;
 import java.util.function.Supplier;

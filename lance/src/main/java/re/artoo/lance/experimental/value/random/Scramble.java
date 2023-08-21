@@ -1,4 +1,4 @@
-package re.artoo.lance.value.random;
+package re.artoo.lance.experimental.value.random;
 
 import re.artoo.lance.func.TryFunction3;
 import re.artoo.lance.query.Cursor;

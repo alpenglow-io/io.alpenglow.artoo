@@ -1,10 +1,12 @@
-package re.artoo.lance.value;
+package re.artoo.lance.experimental.value;
 
 import re.artoo.lance.func.InvokeException;
 import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.func.TrySupplier1;
 
-import static re.artoo.lance.value.Default.Nothing;
+import java.util.Objects;
+
+import static re.artoo.lance.experimental.value.Default.Nothing;
 
 public non-sealed interface Late<T> extends Let<T> {
   static <T> Late<T> init() {
@@ -36,7 +38,7 @@ public non-sealed interface Late<T> extends Let<T> {
     public <R> R let(final TryFunction1<? super T, ? extends R> func) {
       return lock
         .read(() -> func.invoke((T) value))
-        .raise("Can't invoke", InvokeException::new)
+        .raise("Can't invoke", InvokeException::new).when(Objects::isNull)
         .yield();
     }
   }

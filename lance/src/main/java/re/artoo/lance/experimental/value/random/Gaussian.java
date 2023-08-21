@@ -1,11 +1,11 @@
-package re.artoo.lance.value.random;
+package re.artoo.lance.experimental.value.random;
 
 import re.artoo.lance.func.TryFunction1;
-import re.artoo.lance.value.Random;
+import re.artoo.lance.experimental.value.Random;
 
 import static java.lang.StrictMath.log;
 import static java.lang.StrictMath.sqrt;
-import static re.artoo.lance.value.Default.Nothing;
+import static re.artoo.lance.experimental.value.Default.Nothing;
 
 public final class Gaussian implements Random<Double> {
   private final Random<Double> decimal;

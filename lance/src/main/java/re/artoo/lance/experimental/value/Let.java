@@ -1,11 +1,8 @@
-package re.artoo.lance.value;
+package re.artoo.lance.experimental.value;
 
 import re.artoo.lance.func.TryConsumer1;
 import re.artoo.lance.func.TryFunction1;
 import re.artoo.lance.func.TrySupplier1;
-
-import static re.artoo.lance.value.Default.Flushed;
-import static re.artoo.lance.value.Default.Nothing;
 
 public sealed interface Let<T> permits Late, Let.ReadOnly, Random {
   static <T> Let<T> lazy(final TrySupplier1<T> supplier) {
@@ -36,7 +33,7 @@ public sealed interface Let<T> permits Late, Let.ReadOnly, Random {
     private Lazy(final TrySupplier1<T> suppl) {
       this(
         suppl,
-        Nothing
+        Default.Nothing
       );
     }
 
@@ -49,10 +46,10 @@ public sealed interface Let<T> permits Late, Let.ReadOnly, Random {
     @Override
     public <R> R let(final TryFunction1<? super T, ? extends R> func) {
       final var unsyncd = value;
-      if (Nothing.equals(unsyncd)) {
+      if (Default.Nothing.equals(unsyncd)) {
         synchronized (this) {
           final var syncd = value;
-          if (Nothing.equals(syncd)) {
+          if (Default.Nothing.equals(syncd)) {
             final var supplied = suppl.get();
             if (supplied != null)
               this.value = supplied;
@@ -69,11 +66,11 @@ public sealed interface Let<T> permits Late, Let.ReadOnly, Random {
     @Override
     public Let<T> flush() {
       final var unsyncd = value;
-      if (!Flushed.equals(unsyncd)) {
+      if (!Default.Flushed.equals(unsyncd)) {
         synchronized (this) {
           final var syncd = value;
-          if (!Flushed.equals(syncd)) {
-            this.value = Flushed;
+          if (!Default.Flushed.equals(syncd)) {
+            this.value = Default.Flushed;
           }
         }
       }

@@ -1,7 +1,7 @@
-package re.artoo.lance.value.random;
+package re.artoo.lance.experimental.value.random;
 
+import re.artoo.lance.experimental.value.Random;
 import re.artoo.lance.func.TryFunction1;
-import re.artoo.lance.value.Random;
 
 public final class Decimal64 implements Random<Double> {
   private final Binary bit;

@@ -1,4 +1,4 @@
-package re.artoo.lance.value;
+package re.artoo.lance.experimental.value;
 
 final class ScopeException extends RuntimeException {
   ScopeException() {

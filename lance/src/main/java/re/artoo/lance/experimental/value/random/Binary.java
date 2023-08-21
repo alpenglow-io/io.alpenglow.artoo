@@ -1,7 +1,7 @@
-package re.artoo.lance.value.random;
+package re.artoo.lance.experimental.value.random;
 
 import re.artoo.lance.func.TryFunction1;
-import re.artoo.lance.value.Random;
+import re.artoo.lance.experimental.value.Random;
 
 public sealed interface Binary extends Random<Integer> permits Binary.Digit {
   @Override

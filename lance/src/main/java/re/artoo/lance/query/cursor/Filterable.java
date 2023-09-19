@@ -7,7 +7,7 @@ import re.artoo.lance.query.cursor.operation.Filter;
 
 import java.util.Objects;
 
-public sealed interface Filterator<ELEMENT> extends Fetch<ELEMENT> permits Cursor {
+public sealed interface Filterable<ELEMENT> extends Fetchable<ELEMENT> permits Cursor {
   default Cursor<ELEMENT> filter(TryIntPredicate1<? super ELEMENT> filter) {
     return new Filter<>(this, filter);
   }

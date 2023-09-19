@@ -1,44 +1,44 @@
 package re.artoo.lance.query.cursor.operation;
 
-import com.java.lang.Throwing;
+import com.java.lang.Exceptionable;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.cursor.Fetch;
+import re.artoo.lance.query.cursor.Fetchable;
 
-public final class Flat<ELEMENT> implements Cursor<ELEMENT>, Throwing {
-  private final Fetch<Fetch<ELEMENT>> fetch;
-  private Fetch<ELEMENT> flatten;
+public final class Flat<ELEMENT> implements Cursor<ELEMENT>, Exceptionable {
+  private final Fetchable<Fetchable<ELEMENT>> fetchable;
+  private Fetchable<ELEMENT> flatten;
   private int index;
   private ELEMENT element;
   private boolean hasElement;
 
-  public Flat(Fetch<Fetch<ELEMENT>> fetch) {
-    this(fetch, null);
+  public Flat(Fetchable<Fetchable<ELEMENT>> fetchable) {
+    this(fetchable, null);
   }
 
-  private Flat(Fetch<Fetch<ELEMENT>> fetch, Fetch<ELEMENT> flatten) {
-    this.fetch = fetch;
+  private Flat(Fetchable<Fetchable<ELEMENT>> fetchable, Fetchable<ELEMENT> flatten) {
+    this.fetchable = fetchable;
     this.flatten = flatten;
   }
 
   @Override
-  public boolean hasElement() throws Throwable {
+  public boolean canFetch() throws java.lang.Throwable {
     if (!hasElement) {
       do {
-        if (flatten == null && fetch.hasElement() || (flatten != null && !flatten.hasElement()))
-          flatten = fetch.hasElement() ? fetch.element((__, element) -> element) : null;
+        if (flatten == null && fetchable.canFetch() || (flatten != null && !flatten.canFetch()))
+          flatten = fetchable.canFetch() ? fetchable.fetch((__, element) -> element) : null;
 
-        if (flatten != null && (hasElement = flatten.hasElement()))
-          element = flatten.element((__, element) -> element);
-      } while (!hasElement && fetch.hasElement());
+        if (flatten != null && (hasElement = flatten.canFetch()))
+          element = flatten.fetch((__, element) -> element);
+      } while (!hasElement && fetchable.canFetch());
     }
     return hasElement;
   }
 
   @Override
-  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
+  public <NEXT> NEXT fetch(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws java.lang.Throwable {
     try {
-      return hasElement || hasElement() ? then.invoke(index, element) : throwing(() -> Fetch.Exception.of("flat", "flattable"));
+      return hasElement || canFetch() ? then.invoke(index, element) : throwing(() -> Fetchable.Exception.of("flat", "flattable"));
     } finally {
       index++;
       hasElement = false;

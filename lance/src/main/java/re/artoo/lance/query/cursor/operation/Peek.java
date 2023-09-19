@@ -1,33 +1,33 @@
 package re.artoo.lance.query.cursor.operation;
 
-import com.java.lang.Throwing;
+import com.java.lang.Exceptionable;
 import re.artoo.lance.func.TryIntConsumer1;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.cursor.Fetch;
+import re.artoo.lance.query.cursor.Fetchable;
 
-public final class Peek<ELEMENT> implements Cursor<ELEMENT>, Throwing {
-  private final Fetch<ELEMENT> fetch;
+public final class Peek<ELEMENT> implements Cursor<ELEMENT>, Exceptionable {
+  private final Fetchable<ELEMENT> fetchable;
   private final TryIntConsumer1<? super ELEMENT> operation;
 
-  public Peek(Fetch<ELEMENT> fetch, TryIntConsumer1<? super ELEMENT> operation) {
-    this.fetch = fetch;
+  public Peek(Fetchable<ELEMENT> fetchable, TryIntConsumer1<? super ELEMENT> operation) {
+    this.fetchable = fetchable;
     this.operation = operation;
   }
 
   @Override
-  public boolean hasElement() throws Throwable {
-    return fetch.hasElement();
+  public boolean canFetch() throws java.lang.Throwable {
+    return fetchable.canFetch();
   }
 
   @Override
-  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
-    return hasElement()
-      ? fetch
-      .element((index, element) -> {
+  public <NEXT> NEXT fetch(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws java.lang.Throwable {
+    return canFetch()
+      ? fetchable
+      .fetch((index, element) -> {
         operation.invoke(index, element);
         return then.invoke(index, element);
       })
-      : throwing(() -> Fetch.Exception.of("peek", "peekable"));
+      : throwing(() -> Fetchable.Exception.of("peek", "peekable"));
   }
 }

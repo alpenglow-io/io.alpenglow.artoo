@@ -18,9 +18,9 @@ public interface One<T> extends Projectable<T>, Triggerable<T>, Filterable<T>, E
   static <ELEMENT> One<ELEMENT> gone(final String message, final TryFunction1<? super String, ? extends RuntimeException> error) {
     return () -> {
       try {
-        return Cursor.cause(error.invoke(message));
+        return Cursor.fail(error.invoke(message));
       } catch (Throwable throwable) {
-        return Cursor.cause(throwable);
+        return Cursor.fail(throwable);
       }
     };
   }

@@ -1,6 +1,6 @@
 package re.artoo.lance.experimental.task;
 
-import com.java.lang.Throwing;
+import com.java.lang.Exceptionable;
 import re.artoo.lance.func.*;
 
 import java.util.concurrent.*;
@@ -35,7 +35,7 @@ public sealed interface Task<T> {
             )
           )
         );
-    } catch (Throwable e) {
+    } catch (java.lang.Throwable e) {
       return failure(e);
     }
   }
@@ -52,7 +52,7 @@ public sealed interface Task<T> {
     return new Success<>(value);
   }
 
-  static <T> Task<T> failure(Throwable throwable) {
+  static <T> Task<T> failure(java.lang.Throwable throwable) {
     return new Failure<>(throwable);
   }
 
@@ -72,22 +72,22 @@ public sealed interface Task<T> {
     throw new Exception("Can't retrieve result for unmodifiable then operation, result is nothing");
   }
 
-  default Task<T> exceptionally(TryConsumer1<? super Throwable> operation) {
+  default Task<T> exceptionally(TryConsumer1<? super java.lang.Throwable> operation) {
     try {
       operation.invoke(new Exception("Can't retrieve exception, no exception has been thrown"));
       return this;
-    } catch (Throwable throwable) {
+    } catch (java.lang.Throwable throwable) {
       return failure(throwable);
     }
   }
 
-  default Task<T> eventually(TryFunction1<? super Throwable, ? extends T> operation) {
+  default Task<T> eventually(TryFunction1<? super java.lang.Throwable, ? extends T> operation) {
     try {
       return switch (operation.invoke(new Exception("Can't retrieve exception, no exception has been thrown"))) {
         case null -> nothing();
         case T it -> success(it);
       };
-    } catch (Throwable throwable) {
+    } catch (java.lang.Throwable throwable) {
       return failure(throwable);
     }
   }
@@ -107,7 +107,7 @@ public sealed interface Task<T> {
     public <R> Task<R> map(TryFunction1<? super T, ? extends R> operation) {
       try {
         return result == null ? nothing() : success(operation.invoke(result));
-      } catch (Throwable throwable) {
+      } catch (java.lang.Throwable throwable) {
         return failure(throwable);
       }
     }
@@ -116,18 +116,18 @@ public sealed interface Task<T> {
     public <R> Task<R> flatMap(TryFunction1<? super T, ? extends Task<R>> operation) {
       try {
         return result == null ? nothing() : operation.invoke(result);
-      } catch (Throwable failure) {
+      } catch (java.lang.Throwable failure) {
         return failure(failure);
       }
     }
 
     @Override
-    public Task<T> exceptionally(TryConsumer1<? super Throwable> operation) {
+    public Task<T> exceptionally(TryConsumer1<? super java.lang.Throwable> operation) {
       return this;
     }
 
     @Override
-    public Task<T> eventually(TryFunction1<? super Throwable, ? extends T> operation) {
+    public Task<T> eventually(TryFunction1<? super java.lang.Throwable, ? extends T> operation) {
       return this;
     }
 
@@ -146,7 +146,7 @@ public sealed interface Task<T> {
       if (result != null) {
         try {
           operation.invoke(result);
-        } catch (Throwable throwable) {
+        } catch (java.lang.Throwable throwable) {
           return failure(throwable);
         }
       }
@@ -159,7 +159,7 @@ public sealed interface Task<T> {
     }
   }
 
-  record Failure<T>(Throwable throwable) implements Task<T> {
+  record Failure<T>(java.lang.Throwable throwable) implements Task<T> {
     @Override
     public <R> Task<R> map(TryFunction1<? super T, ? extends R> operation) {
       return failure(throwable);
@@ -171,20 +171,20 @@ public sealed interface Task<T> {
     }
 
     @Override
-    public Task<T> exceptionally(TryConsumer1<? super Throwable> operation) {
+    public Task<T> exceptionally(TryConsumer1<? super java.lang.Throwable> operation) {
       try {
         operation.invoke(throwable);
-      } catch (Throwable failure) {
+      } catch (java.lang.Throwable failure) {
         return failure(failure);
       }
       return this;
     }
 
     @Override
-    public Task<T> eventually(TryFunction1<? super Throwable, ? extends T> operation) {
+    public Task<T> eventually(TryFunction1<? super java.lang.Throwable, ? extends T> operation) {
       try {
         return success(operation.invoke(throwable));
-      } catch (Throwable e) {
+      } catch (java.lang.Throwable e) {
         return failure(e);
       }
     }
@@ -205,7 +205,7 @@ public sealed interface Task<T> {
     }
   }
 
-  record Running<T>(CompletableFuture<T> future) implements Task<T>, Throwing {
+  record Running<T>(CompletableFuture<T> future) implements Task<T>, Exceptionable {
     private static final Object NOTHING = new Object();
 
     Running(Callable<T> operation) {
@@ -231,7 +231,7 @@ public sealed interface Task<T> {
     }
 
     @Override
-    public Task<T> exceptionally(TryConsumer1<? super Throwable> operation) {
+    public Task<T> exceptionally(TryConsumer1<? super java.lang.Throwable> operation) {
       return new Running<>(future.exceptionallyComposeAsync(it -> {
         operation.accept(it);
         return failedFuture(it);
@@ -239,7 +239,7 @@ public sealed interface Task<T> {
     }
 
     @Override
-    public Task<T> eventually(TryFunction1<? super Throwable, ? extends T> operation) {
+    public Task<T> eventually(TryFunction1<? super java.lang.Throwable, ? extends T> operation) {
       return new Running<>(future.exceptionallyAsync(operation::apply));
     }
 
@@ -264,7 +264,7 @@ public sealed interface Task<T> {
     public T await() {
       try {
         var value = future.get();
-        return value != null ? value : unchecked.withThrow(() -> new Exception("Can't raise"));
+        return value != null ? value : unchecked.throwing(() -> new Exception("Can't raise"));
       } catch (InterruptedException | ExecutionException e) {
         throw new Exception(e);
       }
@@ -272,7 +272,7 @@ public sealed interface Task<T> {
   }
 
   final class Exception extends RuntimeException {
-    private Exception(Throwable throwable) {
+    private Exception(java.lang.Throwable throwable) {
       super(throwable);
     }
 

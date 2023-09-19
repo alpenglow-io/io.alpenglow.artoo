@@ -1,34 +1,34 @@
 package re.artoo.lance.query.cursor.operation;
 
-import com.java.lang.Throwing;
+import com.java.lang.Exceptionable;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.cursor.Fetch;
+import re.artoo.lance.query.cursor.Fetchable;
 
-public final class Append<ELEMENT> implements Cursor<ELEMENT>, Throwing {
-  private final Fetch<ELEMENT> head;
-  private final Fetch<ELEMENT> tail;
+public final class Append<ELEMENT> implements Cursor<ELEMENT>, Exceptionable {
+  private final Fetchable<ELEMENT> head;
+  private final Fetchable<ELEMENT> tail;
   private int index;
 
-  public Append(Fetch<ELEMENT> head, Fetch<ELEMENT> tail) {
+  public Append(Fetchable<ELEMENT> head, Fetchable<ELEMENT> tail) {
     this.head = head;
     this.tail = tail;
     this.index = 0;
   }
 
   @Override
-  public boolean hasElement() throws Throwable {
-    return head.hasElement() || tail.hasElement();
+  public boolean canFetch() throws Throwable {
+    return head.canFetch() || tail.canFetch();
   }
 
   @Override
-  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
+  public <NEXT> NEXT fetch(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
     try {
-      return head.hasElement()
-        ? head.element(then)
-        : tail.hasElement()
-        ? tail.element((index, element) -> then.invoke(this.index, element))
-        : throwing(() -> Fetch.Exception.of("append", "appendable"));
+      return head.canFetch()
+        ? head.fetch(then)
+        : tail.canFetch()
+        ? tail.fetch((index, element) -> then.invoke(this.index, element))
+        : throwing(() -> Fetchable.Exception.of("append", "appendable"));
     } finally {
       index++;
     }

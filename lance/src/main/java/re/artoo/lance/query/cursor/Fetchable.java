@@ -4,24 +4,24 @@ import re.artoo.lance.func.TryIntFunction1;
 
 import java.util.Iterator;
 
-public interface Fetch<ELEMENT> extends Iterator<ELEMENT> {
-  boolean hasElement() throws Throwable;
+public interface Fetchable<ELEMENT> extends Iterator<ELEMENT> {
+  boolean canFetch() throws Throwable;
 
-  <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable;
+  <NEXT> NEXT fetch(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable;
 
   @Override
   default boolean hasNext() {
     try {
-      return hasElement();
+      return canFetch();
     } catch (Throwable throwable) {
-      throw throwable instanceof RuntimeException exception ? exception : Exception.of("Can't check next element, since exception occurred: %s".formatted(throwable.getMessage()), throwable);
+      throw throwable instanceof RuntimeException exception ? exception : Exception.of("Can't check fot the next element: \n\t%s".formatted(throwable.getMessage()), throwable);
     }
   }
 
   @Override
   default ELEMENT next() {
     try {
-      return hasNext() ? element((index, element) -> element) : Exception.of("fetch", "fetchable");
+      return hasNext() ? fetch((index, element) -> element) : Exception.of("fetch", "fetchable");
     } catch (Throwable throwable) {
       throw throwable instanceof RuntimeException exception ? exception : Exception.of("Can't fetch next element, since exception occurred: %s".formatted(throwable.getMessage()), throwable);
     }

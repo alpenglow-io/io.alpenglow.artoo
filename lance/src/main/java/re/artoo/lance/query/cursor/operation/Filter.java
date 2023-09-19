@@ -1,20 +1,20 @@
 package re.artoo.lance.query.cursor.operation;
 
-import com.java.lang.Throwing;
+import com.java.lang.Exceptionable;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.func.TryIntPredicate1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.cursor.Fetch;
+import re.artoo.lance.query.cursor.Fetchable;
 
-public final class Filter<ELEMENT> implements Cursor<ELEMENT>, Throwing {
-  private final Fetch<ELEMENT> fetch;
+public final class Filter<ELEMENT> implements Cursor<ELEMENT>, Exceptionable {
+  private final Fetchable<ELEMENT> fetchable;
   private final TryIntPredicate1<? super ELEMENT> condition;
   private int index;
   private ELEMENT element;
   private boolean hasElement;
 
-  public Filter(Fetch<ELEMENT> fetch, TryIntPredicate1<? super ELEMENT> condition) {
-    this.fetch = fetch;
+  public Filter(Fetchable<ELEMENT> fetchable, TryIntPredicate1<? super ELEMENT> condition) {
+    this.fetchable = fetchable;
     this.condition = condition;
   }
 
@@ -23,22 +23,22 @@ public final class Filter<ELEMENT> implements Cursor<ELEMENT>, Throwing {
   }
 
   @Override
-  public boolean hasElement() throws Throwable {
-    if (!hasElement && (hasElement = fetch.hasElement())) {
+  public boolean canFetch() throws java.lang.Throwable {
+    if (!hasElement && (hasElement = fetchable.canFetch())) {
       do {
-        element = fetch.element((index, element) -> {
+        element = fetchable.fetch((index, element) -> {
           this.index = index;
           return element;
         });
-      } while (!condition.invoke(index, element) && (hasElement = fetch.hasElement()));
+      } while (!condition.invoke(index, element) && (hasElement = fetchable.canFetch()));
     }
     return hasElement;
   }
 
   @Override
-  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
+  public <NEXT> NEXT fetch(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws java.lang.Throwable {
     try {
-      return hasElement || hasElement() ? then.invoke(index, element) : throwing(() -> Fetch.Exception.of("filter", "filterable"));
+      return hasElement || canFetch() ? then.invoke(index, element) : throwing(() -> Fetchable.Exception.of("filter", "filterable"));
     } finally {
       hasElement = false;
     }

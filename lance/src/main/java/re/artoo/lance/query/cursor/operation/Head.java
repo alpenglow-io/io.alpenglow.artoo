@@ -1,31 +1,31 @@
 package re.artoo.lance.query.cursor.operation;
 
-import com.java.lang.Throwing;
+import com.java.lang.Exceptionable;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.cursor.Fetch;
+import re.artoo.lance.query.cursor.Fetchable;
 
-public final class Head<ELEMENT> implements Cursor<ELEMENT>, Throwing {
-  private final Fetch<ELEMENT> fetch;
+public final class Head<ELEMENT> implements Cursor<ELEMENT>, Exceptionable {
+  private final Fetchable<ELEMENT> fetchable;
   private int index;
   private ELEMENT element;
   private boolean hasElement;
 
-  public Head(Fetch<ELEMENT> fetch) {
-    this(fetch, 0, null, false);
+  public Head(Fetchable<ELEMENT> fetchable) {
+    this(fetchable, 0, null, false);
   }
 
-  private Head(Fetch<ELEMENT> fetch, int index, ELEMENT element, boolean hasElement) {
-    this.fetch = fetch;
+  private Head(Fetchable<ELEMENT> fetchable, int index, ELEMENT element, boolean hasElement) {
+    this.fetchable = fetchable;
     this.index = index;
     this.element = element;
     this.hasElement = hasElement;
   }
 
   @Override
-  public boolean hasElement() throws Throwable {
-    if (!hasElement && (hasElement = fetch.hasElement())) {
-      element = fetch.element((index, element) -> {
+  public boolean canFetch() throws Throwable {
+    if (!hasElement && (hasElement = fetchable.canFetch())) {
+      element = fetchable.fetch((index, element) -> {
         this.index = index;
         return element;
       });
@@ -34,9 +34,9 @@ public final class Head<ELEMENT> implements Cursor<ELEMENT>, Throwing {
   }
 
   @Override
-  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
+  public <NEXT> NEXT fetch(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
     try {
-      return hasElement || hasElement() ? then.invoke(index, element) : checked.withThrow(() -> Fetch.Exception.of("head", "head"));
+      return hasElement || canFetch() ? then.invoke(index, element) : checked.throwing(() -> Fetchable.Exception.of("head", "head"));
     } finally {
       hasElement = false;
     }

@@ -1,28 +1,28 @@
 package re.artoo.lance.query.cursor.operation;
 
-import com.java.lang.Throwing;
+import com.java.lang.Exceptionable;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.cursor.Fetch;
+import re.artoo.lance.query.cursor.Fetchable;
 
-public final class Eventually<ELEMENT> implements Cursor<ELEMENT>, Throwing {
-  private final Fetch<ELEMENT> fetch;
+public final class Eventually<ELEMENT> implements Cursor<ELEMENT>, Exceptionable {
+  private final Fetchable<ELEMENT> fetchable;
   private final TryIntFunction1<? super Throwable, ? extends ELEMENT> fallback;
   private int index;
   private ELEMENT element;
   private boolean hasElement;
 
-  public Eventually(Fetch<ELEMENT> fetch, TryIntFunction1<? super Throwable, ? extends ELEMENT> fallback) {
-    this.fetch = fetch;
+  public Eventually(Fetchable<ELEMENT> fetchable, TryIntFunction1<? super Throwable, ? extends ELEMENT> fallback) {
+    this.fetchable = fetchable;
     this.fallback = fallback;
   }
 
   @Override
-  public boolean hasElement() throws Throwable {
+  public boolean canFetch() throws Throwable {
     if (!hasElement) {
       try {
-        hasElement = fetch.hasElement();
-        if (hasElement) element = fetch.element((index, element) -> {
+        hasElement = fetchable.canFetch();
+        if (hasElement) element = fetchable.fetch((index, element) -> {
           this.index = index;
           return element;
         });
@@ -34,9 +34,9 @@ public final class Eventually<ELEMENT> implements Cursor<ELEMENT>, Throwing {
   }
 
   @Override
-  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
+  public <NEXT> NEXT fetch(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
     try {
-      return hasElement || hasElement() ? then.invoke(index, element) : throwing(() -> Fetch.Exception.of("recover", "recoverable"));
+      return hasElement || canFetch() ? then.invoke(index, element) : throwing(() -> Fetchable.Exception.of("recover", "recoverable"));
     } finally {
       index++;
       hasElement = false;

@@ -1,12 +1,12 @@
 package re.artoo.lance.query.cursor.operation;
 
-import com.java.lang.Throwing;
+import com.java.lang.Exceptionable;
 import org.junit.jupiter.api.Test;
 import re.artoo.lance.query.Cursor;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PeekTest implements Throwing {
+class PeekTest implements Exceptionable {
   @Test
   void shouldPeek() {
     assertThat(

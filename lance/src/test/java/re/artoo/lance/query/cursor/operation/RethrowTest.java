@@ -1,11 +1,11 @@
 package re.artoo.lance.query.cursor.operation;
 
-import com.java.lang.Throwing;
+import com.java.lang.Exceptionable;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class RethrowTest implements Throwing {
+class RethrowTest implements Exceptionable {
   @Test
   @DisplayName("should fetch element with a rethrow")
   void shouldFetchWithRethrow() {

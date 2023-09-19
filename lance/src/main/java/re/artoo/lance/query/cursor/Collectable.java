@@ -5,7 +5,7 @@ import re.artoo.lance.func.TryIntConsumer2;
 import re.artoo.lance.query.Cursor;
 import re.artoo.lance.query.cursor.operation.Collect;
 
-public sealed interface Collector<ELEMENT> extends Fetch<ELEMENT> permits Cursor {
+public sealed interface Collectable<ELEMENT> extends Fetchable<ELEMENT> permits Cursor {
 
   default <COLLECTED> Cursor<COLLECTED> collect(COLLECTED initial, TryIntConsumer2<? super ELEMENT, ? super COLLECTED> operation) {
     return new Collect<>(this, initial, operation);

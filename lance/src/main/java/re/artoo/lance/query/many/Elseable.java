@@ -12,7 +12,7 @@ public interface Elseable<T> extends Queryable<T> {
   }
 
   default Many<T> coalesce(TrySupplier1<? extends T[]> values) {
-    return () -> cursor().or(() -> Cursor.lazyValues(values));
+    return () -> cursor().or(() -> Cursor.openLazily(values));
   }
 
   default Many<T> coalesce(final Many<T> many) {

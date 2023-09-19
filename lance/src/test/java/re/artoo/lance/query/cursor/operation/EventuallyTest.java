@@ -1,12 +1,12 @@
 package re.artoo.lance.query.cursor.operation;
 
-import com.java.lang.Throwing;
+import com.java.lang.Exceptionable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class EventuallyTest implements Throwing {
+class EventuallyTest implements Exceptionable {
   @Test
   @DisplayName("should fetch by recover")
   void shouldRecover() {

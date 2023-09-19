@@ -10,8 +10,8 @@ import re.artoo.lance.query.cursor.operation.Eventually;
 import re.artoo.lance.query.cursor.operation.Exceptionally;
 import re.artoo.lance.query.cursor.operation.Or;
 
-public sealed interface Alternator<ELEMENT> extends Fetch<ELEMENT> permits Cursor {
-  default Cursor<ELEMENT> or(TrySupplier1<? extends Fetch<ELEMENT>> vice) {
+public sealed interface Alternatively<ELEMENT> extends Fetchable<ELEMENT> permits Cursor {
+  default Cursor<ELEMENT> or(TrySupplier1<? extends Fetchable<ELEMENT>> vice) {
     return new Or<>(this, vice);
   }
 

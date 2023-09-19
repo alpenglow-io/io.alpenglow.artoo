@@ -1,13 +1,13 @@
 package re.artoo.lance.query.cursor.operation;
 
-import com.java.lang.Throwing;
+import com.java.lang.Exceptionable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static java.lang.System.err;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ExceptionallyTest implements Throwing {
+class ExceptionallyTest implements Exceptionable {
   @Test
   @DisplayName("should fetch with no error prints")
   void shouldFetch() {

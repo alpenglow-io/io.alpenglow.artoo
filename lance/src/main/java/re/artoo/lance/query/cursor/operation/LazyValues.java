@@ -1,9 +1,9 @@
 package re.artoo.lance.query.cursor.operation;
 
+import re.artoo.lance.experimental.value.Lazy;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.func.TrySupplier1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.experimental.value.Lazy;
 
 public final class LazyValues<ELEMENT> implements Cursor<ELEMENT> {
   private final Lazy<ELEMENT[]> elements;
@@ -19,12 +19,12 @@ public final class LazyValues<ELEMENT> implements Cursor<ELEMENT> {
   }
 
   @Override
-  public boolean hasElement() {
+  public boolean canFetch() {
     return index < elements.value().length;
   }
 
   @Override
-  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> apply) throws Throwable {
+  public <NEXT> NEXT fetch(TryIntFunction1<? super ELEMENT, ? extends NEXT> apply) throws Throwable {
     try {
       return apply.invoke(index, elements.value()[index]);
     } finally {

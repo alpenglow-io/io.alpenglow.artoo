@@ -1,37 +1,37 @@
 package re.artoo.lance.query.cursor.operation;
 
-import com.java.lang.Throwing;
+import com.java.lang.Exceptionable;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.func.TryIntFunction2;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.cursor.Fetch;
+import re.artoo.lance.query.cursor.Fetchable;
 
-public final class Fold<ELEMENT, FOLDED> implements Cursor<FOLDED>, Throwing {
-  private final Fetch<ELEMENT> fetch;
+public final class Fold<ELEMENT, FOLDED> implements Cursor<FOLDED>, Exceptionable {
+  private final Fetchable<ELEMENT> fetchable;
   private final TryIntFunction2<? super FOLDED, ? super ELEMENT, ? extends FOLDED> operation;
   private FOLDED folded;
   private boolean hasFolded = true;
 
-  public Fold(Fetch<ELEMENT> fetch, FOLDED initial, TryIntFunction2<? super FOLDED, ? super ELEMENT, ? extends FOLDED> operation) {
-    this.fetch = fetch;
+  public Fold(Fetchable<ELEMENT> fetchable, FOLDED initial, TryIntFunction2<? super FOLDED, ? super ELEMENT, ? extends FOLDED> operation) {
+    this.fetchable = fetchable;
     this.operation = operation;
     this.folded = initial;
   }
 
   @Override
-  public boolean hasElement() throws Throwable {
+  public boolean canFetch() throws Throwable {
     if (hasFolded) {
-      while (fetch.hasElement()) {
-        folded = fetch.element((index, element) -> operation.invoke(index, folded, element));
+      while (fetchable.canFetch()) {
+        folded = fetchable.fetch((index, element) -> operation.invoke(index, folded, element));
       }
     }
     return hasFolded;
   }
 
   @Override
-  public <NEXT> NEXT element(TryIntFunction1<? super FOLDED, ? extends NEXT> then) throws Throwable {
+  public <NEXT> NEXT fetch(TryIntFunction1<? super FOLDED, ? extends NEXT> then) throws Throwable {
     try {
-      return hasFolded || hasElement() ? then.invoke(0, folded) : throwing(() -> Fetch.Exception.of("fold", "foldable"));
+      return hasFolded || canFetch() ? then.invoke(0, folded) : throwing(() -> Fetchable.Exception.of("fold", "foldable"));
     } finally {
       hasFolded = false;
     }

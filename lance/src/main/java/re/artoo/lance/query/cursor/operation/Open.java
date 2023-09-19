@@ -18,12 +18,12 @@ public final class Open<ELEMENT> implements Cursor<ELEMENT> {
   }
 
   @Override
-  public boolean hasElement() {
+  public boolean canFetch() {
     return index < elements.length;
   }
 
   @Override
-  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> apply) throws Throwable {
+  public <NEXT> NEXT fetch(TryIntFunction1<? super ELEMENT, ? extends NEXT> apply) throws Throwable {
     try {
       return apply.invoke(index, elements[index]);
     } finally {

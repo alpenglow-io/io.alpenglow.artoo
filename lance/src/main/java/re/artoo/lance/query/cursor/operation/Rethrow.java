@@ -1,32 +1,32 @@
 package re.artoo.lance.query.cursor.operation;
 
-import com.java.lang.Throwing;
+import com.java.lang.Exceptionable;
 import re.artoo.lance.func.TryIntFunction1;
 import re.artoo.lance.query.Cursor;
-import re.artoo.lance.query.cursor.Fetch;
+import re.artoo.lance.query.cursor.Fetchable;
 
-public final class Rethrow<ELEMENT> implements Cursor<ELEMENT>, Throwing {
-  private final Fetch<ELEMENT> fetch;
-  private final TryIntFunction1<? super Throwable, ? extends Throwable> feedback;
+public final class Rethrow<ELEMENT> implements Cursor<ELEMENT>, Exceptionable {
+  private final Fetchable<ELEMENT> fetchable;
+  private final TryIntFunction1<? super java.lang.Throwable, ? extends java.lang.Throwable> feedback;
   private int index;
   private ELEMENT element;
-  private Throwable throwable;
+  private java.lang.Throwable throwable;
   private boolean hasElement;
 
-  public Rethrow(Fetch<ELEMENT> fetch, TryIntFunction1<? super Throwable, ? extends Throwable> feedback) {
-    this.fetch = fetch;
+  public Rethrow(Fetchable<ELEMENT> fetchable, TryIntFunction1<? super java.lang.Throwable, ? extends java.lang.Throwable> feedback) {
+    this.fetchable = fetchable;
     this.feedback = feedback;
   }
 
   @Override
-  public boolean hasElement() throws Throwable {
-    if (!hasElement && (hasElement = fetch.hasElement())) {
+  public boolean canFetch() throws java.lang.Throwable {
+    if (!hasElement && (hasElement = fetchable.canFetch())) {
       try {
-        element = fetch.element((index, element) -> {
+        element = fetchable.fetch((index, element) -> {
           this.index = index;
           return element;
         });
-      } catch (Throwable throwable) {
+      } catch (java.lang.Throwable throwable) {
         this.throwable = feedback.invoke(index, throwable);
       }
     }
@@ -34,13 +34,13 @@ public final class Rethrow<ELEMENT> implements Cursor<ELEMENT>, Throwing {
   }
 
   @Override
-  public <NEXT> NEXT element(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws Throwable {
+  public <NEXT> NEXT fetch(TryIntFunction1<? super ELEMENT, ? extends NEXT> then) throws java.lang.Throwable {
     try {
-      if (hasElement || hasElement()) {
+      if (hasElement || canFetch()) {
         if (throwable == null) return then.invoke(index, element);
         throw throwable;
       }
-      return Fetch.Exception.of("rethrow", "rethrowable");
+      return Fetchable.Exception.of("rethrow", "rethrowable");
     } finally {
       index++;
       hasElement = false;

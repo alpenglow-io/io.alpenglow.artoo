@@ -31,7 +31,7 @@
     <annotations.version>24.0.1</annotations.version>
 
     <!-- test deps -->
-    <assertj.version>3.24.2</assertj.version>
+    <assertj.version>3.27.7</assertj.version>
     <awaitility.version>4.2.0</awaitility.version>
     <junit.version>5.10.0</junit.version>
     <mockito.version>4.10.0</mockito.version>
